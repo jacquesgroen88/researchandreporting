@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Growth Proposal for ThreeZero · ReviewTap</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            gold: { DEFAULT: '#C9A84C', light: '#E2C87A', dark: '#A0832E' },
+            ink: { DEFAULT: '#0A0A0B', card: '#111113', raised: '#18181B', border: '#232328', muted: '#2C2C32' }
+          },
+          fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: #0A0A0B; color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+
+    /* ── Design Tokens ── */
+    :root {
+      --gold: #C9A84C; --gold-light: #E2C87A; --gold-dark: #A0832E;
+      --ink: #0A0A0B; --ink-card: #111113; --ink-raised: #18181B;
+      --ink-border: #232328; --ink-muted: #2C2C32;
+      --text-primary: #FFFFFF; --text-secondary: #A1A1AA; --text-tertiary: #52525B;
+      --radius-sm: 10px; --radius-md: 16px; --radius-lg: 22px; --radius-xl: 28px;
+      --shadow-gold: 0 0 40px rgba(201,168,76,0.12);
+      --transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ── Typography ── */
+    .label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); }
+    .display { font-size: clamp(2.8rem, 6vw, 5.5rem); font-weight: 900; line-height: 1.0; letter-spacing: -0.02em; }
+    .heading-1 { font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; }
+    .heading-2 { font-size: clamp(1.5rem, 3vw, 2.2rem); font-weight: 800; line-height: 1.15; letter-spacing: -0.015em; }
+    .heading-3 { font-size: 1.15rem; font-weight: 700; line-height: 1.3; }
+    .body-lg { font-size: 1.05rem; line-height: 1.75; color: var(--text-secondary); }
+    .body { font-size: 0.9rem; line-height: 1.7; color: var(--text-secondary); }
+    .caption { font-size: 0.78rem; color: var(--text-tertiary); }
+
+    /* ── Gold gradient text ── */
+    .text-gold-gradient { background: linear-gradient(135deg, #E2C87A 0%, #C9A84C 55%, #A0832E 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+    /* ── Animations ── */
+    .fade-up { opacity: 0; transform: translateY(24px); transition: opacity 0.6s cubic-bezier(0.4,0,0.2,1), transform 0.6s cubic-bezier(0.4,0,0.2,1); }
+    .fade-up.visible { opacity: 1; transform: none; }
+    @keyframes pulseGlow { 0%,100%{opacity:1} 50%{opacity:0.4} }
+    .pulse { animation: pulseGlow 2.2s ease-in-out infinite; }
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+
+    /* ── Buttons ── */
+    .btn-primary {
+      background: linear-gradient(135deg, #E2C87A, #C9A84C);
+      color: #0A0A0B; font-weight: 800; font-size: 0.9rem; letter-spacing: 0.01em;
+      padding: 14px 28px; border-radius: 100px; display: inline-block; text-align: center; text-decoration: none;
+      transition: var(--transition); cursor: pointer; border: none; white-space: nowrap;
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(201,168,76,.35); }
+
+    .btn-secondary {
+      border: 1.5px solid rgba(201,168,76,.4); color: var(--gold);
+      font-weight: 600; font-size: 0.9rem; letter-spacing: 0.01em;
+      padding: 13px 28px; border-radius: 100px; display: inline-block; text-align: center; text-decoration: none;
+      background: transparent; transition: var(--transition); cursor: pointer; white-space: nowrap;
+    }
+    .btn-secondary:hover { background: rgba(201,168,76,.07); border-color: var(--gold); }
+
+    /* ── Surface cards ── */
+    .surface { background: var(--ink-card); border: 1px solid var(--ink-border); border-radius: var(--radius-lg); }
+    .surface-raised { background: var(--ink-raised); border: 1px solid var(--ink-border); border-radius: var(--radius-lg); }
+    .surface:hover { border-color: rgba(201,168,76,.22); transition: border-color 0.22s; }
+
+    /* ── Gold chip / badge ── */
+    .chip { display: inline-flex; align-items: center; gap: 7px; background: rgba(201,168,76,.1); border: 1px solid rgba(201,168,76,.2); border-radius: 100px; padding: 5px 14px; }
+
+    /* ── Dividers ── */
+    .divider { border: none; border-top: 1px solid var(--ink-border); }
+
+    /* ── Check / cross list ── */
+    .check { display: flex; align-items: flex-start; gap: 9px; }
+    .check::before { content: '✓'; color: var(--gold); font-weight: 800; font-size: 0.8rem; flex-shrink: 0; margin-top: 3px; }
+    .no { display: flex; align-items: flex-start; gap: 9px; opacity: 0.42; }
+    .no::before { content: '–'; color: var(--text-tertiary); font-weight: 600; flex-shrink: 0; margin-top: 3px; }
+
+    /* ── Pillar cards ── */
+    .pillar-card {
+      background: var(--ink-card);
+      border: 1px solid var(--ink-border);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      transition: var(--transition);
+      position: relative;
+    }
+    .pillar-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+      opacity: 0.8;
+    }
+    .pillar-card:hover { border-color: rgba(201,168,76,.28); transform: translateY(-3px); box-shadow: 0 20px 60px rgba(0,0,0,.4); }
+
+    /* Pillar accent colors */
+    .p1::before { background: linear-gradient(90deg, #3B82F6, #60A5FA); }
+    .p2::before { background: linear-gradient(90deg, #C9A84C, #E2C87A); }
+    .p3::before { background: linear-gradient(90deg, #8B5CF6, #A78BFA); }
+    .p4::before { background: linear-gradient(90deg, #10B981, #34D399); }
+    .p5::before { background: linear-gradient(90deg, #F59E0B, #FCD34D); }
+    .p6::before { background: linear-gradient(90deg, #06B6D4, #67E8F9); }
+
+    .p1-icon { background: rgba(59,130,246,.15); }
+    .p2-icon { background: rgba(201,168,76,.15); }
+    .p3-icon { background: rgba(139,92,246,.15); }
+    .p4-icon { background: rgba(16,185,129,.15); }
+    .p5-icon { background: rgba(245,158,11,.15); }
+    .p6-icon { background: rgba(6,182,212,.15); }
+
+    .pillar-num {
+      font-size: 0.68rem; font-weight: 800; letter-spacing: 0.1em;
+      color: var(--text-tertiary); text-transform: uppercase;
+    }
+
+    /* ── Pricing cards ── */
+    .price-card { background: var(--ink-card); border: 1px solid var(--ink-border); border-radius: var(--radius-xl); overflow: hidden; }
+    .price-featured {
+      background: linear-gradient(160deg, #1C1609 0%, #111113 60%);
+      border: 1.5px solid rgba(201,168,76,.35) !important;
+      overflow: visible !important;
+    }
+    .price-featured-badge { position: absolute; top: -18px; left: 50%; transform: translateX(-50%); white-space: nowrap; }
+
+    /* ── Problem severity ── */
+    .sev-critical { background: rgba(239,68,68,.12); border: 1px solid rgba(239,68,68,.2); color: #FCA5A5; }
+    .sev-high { background: rgba(249,115,22,.1); border: 1px solid rgba(249,115,22,.18); color: #FDBA74; }
+    .sev-medium { background: rgba(234,179,8,.1); border: 1px solid rgba(234,179,8,.18); color: #FDE047; }
+    .sev-brand { background: rgba(99,102,241,.1); border: 1px solid rgba(99,102,241,.18); color: #A5B4FC; }
+
+    /* ── Timeline ── */
+    .tl-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--gold); flex-shrink: 0; margin-top: 6px; }
+    .tl-line { width: 1px; background: var(--ink-border); flex: 1; min-height: 36px; margin: 3px 0; }
+
+    /* ── Sticky bar ── */
+    #sticky { position: fixed; bottom: 0; left: 0; right: 0; z-index: 100; background: rgba(10,10,11,.92); backdrop-filter: blur(24px) saturate(180%); border-top: 1px solid var(--ink-border); transform: translateY(100%); transition: transform 0.38s cubic-bezier(0.4,0,0.2,1); }
+    #sticky.show { transform: translateY(0); }
+
+    /* ── Section spacing ── */
+    .section { padding: 96px 0; }
+    .section-sm { padding: 64px 0; }
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 0 32px; }
+
+    /* ── Cover bg ── */
+    .cover-bg { background: radial-gradient(ellipse 80% 60% at 70% 40%, rgba(201,168,76,.06) 0%, transparent 60%), linear-gradient(180deg, #0A0A0B 0%, #111113 100%); }
+
+    @media(max-width:640px){ .wrap{padding:0 20px;} .section{padding:64px 0;} .section-sm{padding:48px 0;} }
+    @media print { body{background:#fff;color:#000;} #sticky{display:none;} }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     STICKY ACCEPT BAR
+══════════════════════════════════════════ -->
+<div id="sticky">
+  <div class="wrap" style="padding-top:16px;padding-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+    <div>
+      <p style="font-weight:700;font-size:.9rem">Ready to move forward, Andrew?</p>
+      <p class="caption">WhatsApp Jacques to lock in your package.</p>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <a href="https://wa.me/27795124292?text=Hi%20Jacques%2C%20I've%20reviewed%20the%20proposal%20and%20I'm%20ready%20to%20move%20forward." target="_blank" class="btn-primary" style="padding:11px 22px;font-size:.85rem">Accept on WhatsApp →</a>
+      <a href="#packages" class="btn-secondary" style="padding:10px 22px;font-size:.85rem">View Packages</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     COVER
+══════════════════════════════════════════ -->
+<header class="cover-bg" style="min-height:100vh;display:flex;flex-direction:column;position:relative;overflow:hidden">
+  <!-- Subtle glow -->
+  <div style="position:absolute;top:0;right:0;width:50%;height:100%;background:radial-gradient(ellipse at 80% 20%,rgba(201,168,76,.05) 0%,transparent 55%);pointer-events:none"></div>
+
+  <!-- Top bar -->
+  <div class="wrap" style="padding-top:36px;padding-bottom:0;display:flex;align-items:center;justify-content:space-between">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="width:32px;height:32px;border-radius:8px;background:rgba(201,168,76,.18);display:flex;align-items:center;justify-content:center">
+        <span style="font-size:.75rem;font-weight:900;color:var(--gold)">RT</span>
+      </div>
+      <span style="font-weight:600;font-size:.9rem;color:var(--text-secondary)">ReviewTap</span>
+    </div>
+    <p class="caption" style="text-align:right">Confidential · Prepared for Andrew<br>ThreeZero · Green Point, Cape Town</p>
+  </div>
+
+  <!-- Hero -->
+  <div class="wrap" style="flex:1;display:flex;flex-direction:column;justify-content:center;padding-top:80px;padding-bottom:60px">
+    <div style="max-width:680px">
+      <div class="chip label" style="margin-bottom:28px">
+        <span class="pulse" style="width:6px;height:6px;border-radius:50%;background:var(--gold);display:inline-block"></span>
+        Full Growth Partnership · May 2026
+      </div>
+
+      <h1 class="display" style="margin-bottom:24px">
+        Your gym is<br />brilliant.<br />
+        <span class="text-gold-gradient">Let's fill it.</span>
+      </h1>
+
+      <p class="body-lg" style="max-width:540px;margin-bottom:40px">
+        Andrew, this is a complete growth system for ThreeZero — website, reputation, content, and lead generation. Every piece is built to compound.
+      </p>
+
+      <div style="display:flex;flex-wrap:wrap;gap:32px;align-items:center">
+        <div>
+          <p class="label" style="margin-bottom:4px">Prepared by</p>
+          <p style="font-weight:700;font-size:1rem">Jacques Groenewald</p>
+          <p class="caption">ReviewTap · Growth Partner</p>
+        </div>
+        <div style="width:1px;height:36px;background:var(--ink-border)"></div>
+        <div>
+          <p class="label" style="margin-bottom:4px">Prepared for</p>
+          <p style="font-weight:700;font-size:1rem">Andrew · ThreeZero</p>
+          <p class="caption">Cape Quarter, Green Point</p>
+        </div>
+        <div style="width:1px;height:36px;background:var(--ink-border)"></div>
+        <div>
+          <p class="label" style="margin-bottom:4px">Valid until</p>
+          <p style="font-weight:700;font-size:1rem">31 May 2026</p>
+          <p class="caption">Pricing locked until 31 May</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap" style="padding-bottom:32px;text-align:center">
+    <p class="caption" style="margin-bottom:6px;letter-spacing:.1em;text-transform:uppercase;font-size:.68rem">Scroll to review</p>
+    <div style="color:var(--text-tertiary);animation:float 2s ease-in-out infinite">↓</div>
+  </div>
+</header>
+
+<!-- ══════════════════════════════════════════
+     EXECUTIVE SUMMARY
+══════════════════════════════════════════ -->
+<section class="section" style="background:var(--ink-card);border-bottom:1px solid var(--ink-border)">
+  <div class="wrap">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start" class="fade-up">
+
+      <div>
+        <p class="label" style="margin-bottom:16px">The Short Version</p>
+        <h2 class="heading-1" style="margin-bottom:20px">Brilliant product.<br />Leaky funnel.</h2>
+        <p class="body-lg" style="margin-bottom:16px">ThreeZero delivers something genuinely remarkable — AI-guided training, Technogym hardware, real transformations. But right now there's no system capturing the leads that visit, no fresh proof for new visitors to trust, and no pipeline bringing new prospects in the door.</p>
+        <p class="body-lg">This proposal outlines a complete growth partnership — from fixing the foundation to running ongoing campaigns that fill your trial calendar month after month.</p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div class="surface" style="padding:22px;text-align:center;border-radius:var(--radius-md)">
+          <p style="font-size:2.6rem;font-weight:900;line-height:1" class="text-gold-gradient">40–60%</p>
+          <p class="caption" style="margin-top:6px;line-height:1.4">of warm leads lost when forms go unanswered</p>
+        </div>
+        <div class="surface" style="padding:22px;text-align:center;border-radius:var(--radius-md)">
+          <p style="font-size:2.6rem;font-weight:900;line-height:1" class="text-gold-gradient">0</p>
+          <p class="caption" style="margin-top:6px;line-height:1.4">analytics installed — flying completely blind</p>
+        </div>
+        <div class="surface" style="padding:22px;text-align:center;border-radius:var(--radius-md)">
+          <p style="font-size:2.6rem;font-weight:900;line-height:1" class="text-gold-gradient">12</p>
+          <p class="caption" style="margin-top:6px;line-height:1.4">blog posts with zero CTAs driving trial bookings</p>
+        </div>
+        <div class="surface" style="padding:22px;text-align:center;border-radius:var(--radius-md)">
+          <p style="font-size:2.6rem;font-weight:900;line-height:1" class="text-gold-gradient">R0</p>
+          <p class="caption" style="margin-top:6px;line-height:1.4">currently spent re-engaging lapsed trial leads</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     AUDIT FINDINGS
+══════════════════════════════════════════ -->
+<section class="section">
+  <div class="wrap">
+    <div class="fade-up" style="text-align:center;margin-bottom:56px">
+      <p class="label" style="margin-bottom:12px">Site Audit</p>
+      <h2 class="heading-1">What's holding ThreeZero back</h2>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:14px">
+
+      <!-- Finding 1 -->
+      <div class="fade-up surface" style="padding:28px 32px;display:flex;gap:20px;align-items:flex-start;border-radius:var(--radius-lg)">
+        <div style="min-width:28px;height:28px;border-radius:8px;background:rgba(239,68,68,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">
+          <span style="font-size:.75rem;font-weight:800;color:#F87171">01</span>
+        </div>
+        <div style="flex:1">
+          <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px">
+            <h3 class="heading-3">No analytics — you're flying blind</h3>
+            <span class="sev-critical" style="font-size:.7rem;font-weight:700;padding:4px 12px;border-radius:100px">Critical</span>
+          </div>
+          <p class="body">There's no Google Analytics, no Google Tag Manager, and no Facebook Pixel installed on the site. You have no visibility into where your traffic comes from, which pages convert, how visitors behave, or which campaigns generate actual leads. Every decision is being made without data.</p>
+          <div style="margin-top:12px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.15);border-radius:10px;padding:12px 16px">
+            <p style="font-size:.82rem;font-weight:600;color:#FCA5A5">Fix: GA4 + Facebook Pixel installed in day one. Immediately unlocks conversion tracking, audience insights, and retargeting.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Finding 2 -->
+      <div class="fade-up surface" style="padding:28px 32px;display:flex;gap:20px;align-items:flex-start;border-radius:var(--radius-lg)">
+        <div style="min-width:28px;height:28px;border-radius:8px;background:rgba(249,115,22,.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">
+          <span style="font-size:.75rem;font-weight:800;color:#FB923C">02</span>
+        </div>
+        <div style="flex:1">
+          <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px">
+            <h3 class="heading-3">Trial forms submit into silence</h3>
+            <span class="sev-high" style="font-size:.7rem;font-weight:700;padding:4px 12px;border-radius:100px">High Impact</span>
+          </div>
+          <p class="body">When someone books a trial, nothing is triggered on the backend. No WhatsApp notification to you, no confirmation to them. A warm lead who just raised their hand goes cold before you've had a chance to respond. At premium price points, speed of follow-up is everything.</p>
+          <div style="margin-top:12px;background:rgba(249,115,22,.07);border:1px solid rgba(249,115,22,.15);border-radius:10px;padding:12px 16px">
+            <p style="font-size:.82rem;font-weight:600;color:#FDBA74">Fix: Instant WhatsApp trigger on form submission — to you and a confirmation to the lead. Response time drops from hours to seconds.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Finding 3 -->
+      <div class="fade-up surface" style="padding:28px 32px;display:flex;gap:20px;align-items:flex-start;border-radius:var(--radius-lg)">
+        <div style="min-width:28px;height:28px;border-radius:8px;background:rgba(234,179,8,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">
+          <span style="font-size:.75rem;font-weight:800;color:#FACC15">03</span>
+        </div>
+        <div style="flex:1">
+          <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px">
+            <h3 class="heading-3">Blog content earns traffic but loses visitors</h3>
+            <span class="sev-medium" style="font-size:.7rem;font-weight:700;padding:4px 12px;border-radius:100px">Medium Impact</span>
+          </div>
+          <p class="body">ThreeZero has 12 solid blog posts on topics people actively search — Ozempic and muscle loss, longevity training, women's fitness. These earn real organic traffic. But not one article ends with a CTA. Interested readers have nowhere to go.</p>
+          <div style="margin-top:12px;background:rgba(234,179,8,.07);border:1px solid rgba(234,179,8,.15);border-radius:10px;padding:12px 16px">
+            <p style="font-size:.82rem;font-weight:600;color:#FDE047">Fix: A clear "Book a free trial" CTA on every post, plus 6 new SEO articles per month to compound traffic over time.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Finding 4 -->
+      <div class="fade-up surface" style="padding:28px 32px;display:flex;gap:20px;align-items:flex-start;border-radius:var(--radius-lg)">
+        <div style="min-width:28px;height:28px;border-radius:8px;background:rgba(99,102,241,.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">
+          <span style="font-size:.75rem;font-weight:800;color:#A5B4FC">04</span>
+        </div>
+        <div style="flex:1">
+          <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px">
+            <h3 class="heading-3">The site's first impression underplays the product</h3>
+            <span class="sev-brand" style="font-size:.7rem;font-weight:700;padding:4px 12px;border-radius:100px">Brand Impact</span>
+          </div>
+          <p class="body">ThreeZero is running the most advanced 30-minute workout studio in South Africa — AI-guided machines, Technogym hardware, premium pricing. The current homepage doesn't signal any of that. A new visitor landing on the site doesn't immediately understand what makes this different. Member stories and transformation results — the most powerful conversion assets — aren't given enough visual weight.</p>
+          <div style="margin-top:12px;background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.15);border-radius:10px;padding:12px 16px">
+            <p style="font-size:.82rem;font-weight:600;color:#C7D2FE">Fix: Homepage refresh with a design that leads with the technology, surfaces member results, and builds trust on the first scroll.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     6 GROWTH PILLARS
+══════════════════════════════════════════ -->
+<section class="section" style="background:var(--ink-card);border-top:1px solid var(--ink-border);border-bottom:1px solid var(--ink-border)">
+  <div class="wrap">
+    <div class="fade-up" style="text-align:center;margin-bottom:16px">
+      <p class="label" style="margin-bottom:12px">What's on the Table</p>
+      <h2 class="heading-1" style="margin-bottom:14px">Six pillars. One growth system.</h2>
+      <p class="body-lg" style="max-width:560px;margin:0 auto">Each pillar solves a specific gap. Together they create a compound effect — more traffic, more trust, more conversions, month after month.</p>
+    </div>
+
+    <!-- Pillars grid -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:56px" class="fade-up">
+
+      <!-- Pillar 1: Website Refresh -->
+      <div class="pillar-card p1" style="padding:28px 26px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px">
+          <div style="width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.25rem" class="p1-icon">🎨</div>
+          <span class="pillar-num">Pillar 01</span>
+        </div>
+        <div style="display:inline-block;background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.2);color:#93C5FD;font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:100px;margin-bottom:14px">Once-off Setup</div>
+        <h3 class="heading-3" style="margin-bottom:10px">Website Refresh</h3>
+        <p class="body" style="font-size:.85rem;margin-bottom:18px">A premium redesign that matches ThreeZero's actual product — dark, modern, conversion-focused. Built to turn first impressions into trial bookings.</p>
+        <div style="display:flex;flex-direction:column;gap:7px">
+          <p class="check body" style="font-size:.8rem">Premium dark homepage design</p>
+          <p class="check body" style="font-size:.8rem">Member results given visual weight</p>
+          <p class="check body" style="font-size:.8rem">WhatsApp trigger on form submit</p>
+          <p class="check body" style="font-size:.8rem">CTAs on all 12 existing blog posts</p>
+          <p class="check body" style="font-size:.8rem">ReviewTap widget installed</p>
+          <p class="check body" style="font-size:.8rem">GA4 + Facebook Pixel setup</p>
+        </div>
+      </div>
+
+      <!-- Pillar 2: ReviewTap -->
+      <div class="pillar-card p2" style="padding:28px 26px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px">
+          <div style="width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.25rem" class="p2-icon">★</div>
+          <span class="pillar-num">Pillar 02</span>
+        </div>
+        <div style="display:inline-block;background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.25);color:#E2C87A;font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:100px;margin-bottom:14px">Monthly · Core</div>
+        <h3 class="heading-3" style="margin-bottom:10px">Reputation System</h3>
+        <p class="body" style="font-size:.85rem;margin-bottom:18px">A complete review engine that collects, displays, protects, and responds — so your reputation compounds automatically without any manual work.</p>
+        <div style="display:flex;flex-direction:column;gap:7px">
+          <p class="check body" style="font-size:.8rem">Live review feed on website</p>
+          <p class="check body" style="font-size:.8rem">Automated review campaign to members</p>
+          <p class="check body" style="font-size:.8rem">Follow-up sequence for non-reviewers</p>
+          <p class="check body" style="font-size:.8rem"><strong style="color:#fff">Negative Review Shield</strong> — sub-4★ intercepted privately</p>
+          <p class="check body" style="font-size:.8rem"><strong style="color:#fff">AI auto-responses</strong> to every Google review</p>
+          <p class="check body" style="font-size:.8rem">Monthly review growth report</p>
+        </div>
+      </div>
+
+      <!-- Pillar 3: Blog Content -->
+      <div class="pillar-card p3" style="padding:28px 26px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px">
+          <div style="width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.25rem" class="p3-icon">✍️</div>
+          <span class="pillar-num">Pillar 03</span>
+        </div>
+        <div style="display:inline-block;background:rgba(139,92,246,.12);border:1px solid rgba(139,92,246,.22);color:#C4B5FD;font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:100px;margin-bottom:14px">Monthly · Compounds</div>
+        <h3 class="heading-3" style="margin-bottom:10px">6 SEO Articles / Month</h3>
+        <p class="body" style="font-size:.85rem;margin-bottom:18px">High-quality articles written for ThreeZero's exact audience — weight loss, longevity, menopause, performance. Content that ranks, educates, and converts.</p>
+        <div style="display:flex;flex-direction:column;gap:7px">
+          <p class="check body" style="font-size:.8rem">6 articles/month (~1,000 words each)</p>
+          <p class="check body" style="font-size:.8rem">Keyword-researched for your audience</p>
+          <p class="check body" style="font-size:.8rem">SEO meta titles + descriptions included</p>
+          <p class="check body" style="font-size:.8rem">Each ends with a trial CTA</p>
+          <p class="check body" style="font-size:.8rem">Published to your WordPress site</p>
+          <p class="check body" style="font-size:.8rem">Content calendar planned 30 days out</p>
+        </div>
+      </div>
+
+      <!-- Pillar 4: WhatsApp Re-engagement -->
+      <div class="pillar-card p4" style="padding:28px 26px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px">
+          <div style="width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.25rem" class="p4-icon">💬</div>
+          <span class="pillar-num">Pillar 04</span>
+        </div>
+        <div style="display:inline-block;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.2);color:#6EE7B7;font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:100px;margin-bottom:14px">Monthly · High ROI</div>
+        <h3 class="heading-3" style="margin-bottom:10px">WhatsApp Re-engagement</h3>
+        <p class="body" style="font-size:.85rem;margin-bottom:18px">Monthly WhatsApp campaigns to people who did a trial but didn't sign up. These leads already know ThreeZero — they just need the right message at the right time.</p>
+        <div style="display:flex;flex-direction:column;gap:7px">
+          <p class="check body" style="font-size:.8rem">Monthly broadcast to lapsed trial leads</p>
+          <p class="check body" style="font-size:.8rem">Personalised copy (name + trial date)</p>
+          <p class="check body" style="font-size:.8rem">Seasonal campaign angles</p>
+          <p class="check body" style="font-size:.8rem">Direct replies go to your WhatsApp</p>
+          <p class="check body" style="font-size:.8rem">Conversion tracking + reporting</p>
+        </div>
+      </div>
+
+      <!-- Pillar 5: Facebook Lead Ads -->
+      <div class="pillar-card p5" style="padding:28px 26px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px">
+          <div style="width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.25rem" class="p5-icon">📣</div>
+          <span class="pillar-num">Pillar 05</span>
+        </div>
+        <div style="display:inline-block;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.2);color:#FCD34D;font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:100px;margin-bottom:14px">Add-on · Optional</div>
+        <h3 class="heading-3" style="margin-bottom:10px">Facebook Lead Campaigns</h3>
+        <p class="body" style="font-size:.85rem;margin-bottom:18px">Targeted Facebook and Instagram ads driving trial bookings from busy professionals and fitness-conscious locals in the Green Point catchment area.</p>
+        <div style="display:flex;flex-direction:column;gap:7px">
+          <p class="check body" style="font-size:.8rem">Audience targeting by area + profile</p>
+          <p class="check body" style="font-size:.8rem">Lead form ads (no landing page needed)</p>
+          <p class="check body" style="font-size:.8rem">Ad creative + copy designed monthly</p>
+          <p class="check body" style="font-size:.8rem">Weekly performance optimisation</p>
+          <p class="check body" style="font-size:.8rem">Ad spend managed separately (your control)</p>
+        </div>
+      </div>
+
+      <!-- Pillar 6: WhatsApp Drip -->
+      <div class="pillar-card p6" style="padding:28px 26px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px">
+          <div style="width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.25rem" class="p6-icon">🔁</div>
+          <span class="pillar-num">Pillar 06</span>
+        </div>
+        <div style="display:inline-block;background:rgba(6,182,212,.1);border:1px solid rgba(6,182,212,.2);color:#67E8F9;font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:100px;margin-bottom:14px">Add-on · Pairs with Pillar 5</div>
+        <h3 class="heading-3" style="margin-bottom:10px">WhatsApp Drip Sequences</h3>
+        <p class="body" style="font-size:.85rem;margin-bottom:18px">New Facebook leads enter an automated WhatsApp nurture sequence — a series of messages dripped over days that educate, build trust, and push toward booking.</p>
+        <div style="display:flex;flex-direction:column;gap:7px">
+          <p class="check body" style="font-size:.8rem">5–8 message automated sequence per lead</p>
+          <p class="check body" style="font-size:.8rem">Timed delivery (Day 1, 3, 7, 14…)</p>
+          <p class="check body" style="font-size:.8rem">Sends member stories, FAQs, programme info</p>
+          <p class="check body" style="font-size:.8rem">Ends with a direct trial booking push</p>
+          <p class="check body" style="font-size:.8rem">POPIA-compliant throughout</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- How they connect -->
+    <div class="fade-up" style="margin-top:40px;background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.15);border-radius:var(--radius-lg);padding:24px 28px;display:flex;align-items:center;gap:16px">
+      <div style="font-size:1.4rem;flex-shrink:0">⚡</div>
+      <div>
+        <p style="font-weight:700;font-size:.95rem;margin-bottom:4px">How the pillars connect</p>
+        <p class="body" style="font-size:.85rem">Pillar 1 fixes the foundation → Pillar 2 builds trust → Pillar 3 attracts organic traffic → Pillar 4 recaptures warm leads → Pillars 5 + 6 generate and nurture new cold leads. Each one feeds the next.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     DEMO CALLOUT
+══════════════════════════════════════════ -->
+<section class="section-sm">
+  <div class="wrap">
+    <div class="fade-up" style="background:linear-gradient(135deg,#1A1208 0%,#111113 100%);border:1.5px solid rgba(201,168,76,.28);border-radius:var(--radius-xl);overflow:hidden">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0">
+        <div style="padding:44px 48px;border-right:1px solid rgba(201,168,76,.12)">
+          <div class="chip label" style="margin-bottom:20px">
+            <span class="pulse" style="width:6px;height:6px;border-radius:50%;background:var(--gold);display:inline-block"></span>
+            Already built for you
+          </div>
+          <h2 class="heading-2" style="margin-bottom:16px">I've already built the optimised ThreeZero site.</h2>
+          <p class="body-lg" style="margin-bottom:24px">Before this meeting I built a complete working prototype of what the new homepage could look like — all 10 sections, premium dark design, member results featured, live ReviewTap feed, form automation mockup, and blog CTAs throughout.</p>
+          <a href="threezero-optimized-demo.html" target="_blank" class="btn-primary">View the Demo →</a>
+        </div>
+        <div style="padding:44px 48px">
+          <p class="label" style="margin-bottom:18px">What's in the demo</p>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <p class="check body" style="font-size:.88rem">Premium dark hero — dual CTAs, Biocircuit imagery</p>
+            <p class="check body" style="font-size:.88rem">Member transformation story as a visual hero card</p>
+            <p class="check body" style="font-size:.88rem">Live ReviewTap feed with 6 real member reviews</p>
+            <p class="check body" style="font-size:.88rem">All 5 programmes with trial CTA on each</p>
+            <p class="check body" style="font-size:.88rem">3 blog cards with "Book Trial" CTA buttons</p>
+            <p class="check body" style="font-size:.88rem">Form → WhatsApp success state simulation</p>
+            <p class="check body" style="font-size:.88rem">Persistent floating WhatsApp button</p>
+            <p class="check body" style="font-size:.88rem">Fully mobile-responsive layout</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     PACKAGES
+══════════════════════════════════════════ -->
+<section id="packages" class="section" style="background:var(--ink-card);border-top:1px solid var(--ink-border);border-bottom:1px solid var(--ink-border)">
+  <div class="wrap">
+    <div class="fade-up" style="text-align:center;margin-bottom:56px">
+      <p class="label" style="margin-bottom:12px">Investment</p>
+      <h2 class="heading-1" style="margin-bottom:14px">Choose your package</h2>
+      <p class="body-lg" style="max-width:480px;margin:0 auto">Start with what makes sense now. Add pillars as you grow. No lock-in.</p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;align-items:start;padding-top:36px;overflow:visible" class="fade-up">
+
+      <!-- Foundation -->
+      <div class="price-card" style="padding:32px 28px">
+        <p class="label" style="margin-bottom:12px">Foundation</p>
+        <div style="margin-bottom:6px">
+          <span style="font-size:2.6rem;font-weight:900;line-height:1">R1,999</span>
+          <span class="caption">/mo</span>
+        </div>
+        <p class="caption" style="margin-bottom:24px">+ R3,500 once-off website setup</p>
+        <hr class="divider" style="margin-bottom:22px" />
+        <div style="display:flex;flex-direction:column;gap:9px;margin-bottom:28px">
+          <p class="check body" style="font-size:.83rem">Website refresh <span class="caption">(once-off)</span></p>
+          <p class="check body" style="font-size:.83rem">GA4 + Facebook Pixel setup</p>
+          <p class="check body" style="font-size:.83rem">ReviewTap live feed on site</p>
+          <p class="check body" style="font-size:.83rem">Review campaign to existing members</p>
+          <p class="check body" style="font-size:.83rem">Negative Review Shield</p>
+          <p class="check body" style="font-size:.83rem">AI auto-responses to reviews</p>
+          <p class="check body" style="font-size:.83rem">WhatsApp form trigger</p>
+          <p class="check body" style="font-size:.83rem">CTAs on all existing blog posts</p>
+          <p class="no body" style="font-size:.83rem">Monthly blog articles</p>
+          <p class="no body" style="font-size:.83rem">WhatsApp re-engagement campaigns</p>
+          <p class="no body" style="font-size:.83rem">Facebook lead ads</p>
+          <p class="no body" style="font-size:.83rem">WhatsApp drip sequences</p>
+        </div>
+        <a href="https://wa.me/27795124292?text=Hi%20Jacques%2C%20I%20want%20the%20Foundation%20package%20for%20ThreeZero." target="_blank" class="btn-secondary" style="display:block;width:100%;text-align:center">Get Started</a>
+      </div>
+
+      <!-- Growth — Featured -->
+      <div class="price-card price-featured" style="padding:32px 28px;position:relative;padding-top:44px">
+        <div class="price-featured-badge">
+          <span style="background:var(--gold);color:#0A0A0B;font-size:.72rem;font-weight:800;padding:6px 16px;border-radius:100px">★ Recommended for ThreeZero</span>
+        </div>
+        <p class="label" style="margin-bottom:12px">Growth</p>
+        <div style="margin-bottom:6px">
+          <span style="font-size:2.6rem;font-weight:900;line-height:1">R4,299</span>
+          <span class="caption">/mo</span>
+        </div>
+        <p class="caption" style="margin-bottom:24px">+ R1,750 website setup · No lock-in</p>
+        <hr class="divider" style="margin-bottom:22px;border-color:rgba(201,168,76,.12)" />
+        <div style="display:flex;flex-direction:column;gap:9px;margin-bottom:28px">
+          <p class="check body" style="font-size:.83rem"><strong style="color:#fff">Website refresh</strong> <span style="color:var(--gold);font-size:.75rem;font-weight:600">included</span></p>
+          <p class="check body" style="font-size:.83rem">GA4 + Facebook Pixel setup</p>
+          <p class="check body" style="font-size:.83rem">ReviewTap live feed on site</p>
+          <p class="check body" style="font-size:.83rem">Review campaign to existing members</p>
+          <p class="check body" style="font-size:.83rem">Negative Review Shield</p>
+          <p class="check body" style="font-size:.83rem">AI auto-responses to reviews</p>
+          <p class="check body" style="font-size:.83rem">WhatsApp form trigger</p>
+          <p class="check body" style="font-size:.83rem">CTAs on all existing blog posts</p>
+          <p class="check body" style="font-size:.83rem"><strong style="color:#fff">6 SEO blog articles/month</strong></p>
+          <p class="check body" style="font-size:.83rem"><strong style="color:#fff">Monthly WhatsApp re-engagement</strong></p>
+          <p class="check body" style="font-size:.83rem">Monthly performance report</p>
+          <p class="check body" style="font-size:.83rem">Dedicated WhatsApp support</p>
+          <p class="no body" style="font-size:.83rem">Facebook lead ads</p>
+          <p class="no body" style="font-size:.83rem">WhatsApp drip sequences</p>
+        </div>
+        <a href="https://wa.me/27795124292?text=Hi%20Jacques%2C%20I%20want%20the%20Growth%20package%20for%20ThreeZero." target="_blank" class="btn-primary" style="display:block;width:100%;text-align:center">Accept This Package →</a>
+        <p class="caption" style="text-align:center;margin-top:10px">Most popular · cancel anytime</p>
+      </div>
+
+      <!-- Scale -->
+      <div class="price-card" style="padding:32px 28px">
+        <p class="label" style="margin-bottom:12px">Scale</p>
+        <div style="margin-bottom:6px">
+          <span style="font-size:2.6rem;font-weight:900;line-height:1">R6,500</span>
+          <span class="caption">/mo</span>
+        </div>
+        <p class="caption" style="margin-bottom:24px">Website setup included · + ad spend (your budget)</p>
+        <hr class="divider" style="margin-bottom:22px" />
+        <div style="display:flex;flex-direction:column;gap:9px;margin-bottom:28px">
+          <p class="check body" style="font-size:.83rem">Everything in Growth</p>
+          <p class="check body" style="font-size:.83rem"><strong style="color:#fff">Facebook & Instagram lead campaigns</strong></p>
+          <p class="check body" style="font-size:.83rem"><strong style="color:#fff">WhatsApp drip sequences for leads</strong></p>
+          <p class="check body" style="font-size:.83rem">Ad creative designed monthly</p>
+          <p class="check body" style="font-size:.83rem">Weekly ad performance optimisation</p>
+          <p class="check body" style="font-size:.83rem">Full funnel reporting</p>
+          <p class="check body" style="font-size:.83rem">Priority support (same-day)</p>
+        </div>
+        <a href="https://wa.me/27795124292?text=Hi%20Jacques%2C%20I%20want%20the%20Scale%20package%20for%20ThreeZero." target="_blank" class="btn-secondary" style="display:block;width:100%;text-align:center">Get Started</a>
+      </div>
+
+    </div>
+
+    <!-- ROI note -->
+    <div class="fade-up" style="margin-top:24px;background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.14);border-radius:var(--radius-lg);padding:22px 28px;display:flex;align-items:center;gap:16px">
+      <div style="font-size:1.3rem;flex-shrink:0">💡</div>
+      <p class="body" style="font-size:.88rem"><strong style="color:#fff">One new member covers the Growth package for 1–3 months.</strong> At ThreeZero's membership rates, the numbers work comfortably. These are member acquisition costs, not marketing expenses.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     TIMELINE + RISK REVERSAL
+══════════════════════════════════════════ -->
+<section class="section">
+  <div class="wrap">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:80px">
+
+      <!-- Timeline -->
+      <div class="fade-up">
+        <p class="label" style="margin-bottom:12px">From Yes to Live</p>
+        <h2 class="heading-2" style="margin-bottom:36px">What happens after<br />you accept</h2>
+
+        <div style="display:flex;flex-direction:column">
+          <div style="display:flex;gap:18px">
+            <div style="display:flex;flex-direction:column;align-items:center"><div class="tl-dot"></div><div class="tl-line"></div></div>
+            <div style="padding-bottom:28px"><p class="label" style="margin-bottom:4px;font-size:.68rem">Day 1</p><p style="font-weight:700;font-size:.95rem;margin-bottom:4px">WhatsApp kickoff</p><p class="body" style="font-size:.83rem">Confirm package, get Google Business access, align on design direction and first blog topics.</p></div>
+          </div>
+          <div style="display:flex;gap:18px">
+            <div style="display:flex;flex-direction:column;align-items:center"><div class="tl-dot"></div><div class="tl-line"></div></div>
+            <div style="padding-bottom:28px"><p class="label" style="margin-bottom:4px;font-size:.68rem">Days 2–3</p><p style="font-weight:700;font-size:.95rem;margin-bottom:4px">ReviewTap goes live + analytics installed</p><p class="body" style="font-size:.83rem">Review widget live on site. Review campaign sent to members. GA4 + Pixel tracking active.</p></div>
+          </div>
+          <div style="display:flex;gap:18px">
+            <div style="display:flex;flex-direction:column;align-items:center"><div class="tl-dot"></div><div class="tl-line"></div></div>
+            <div style="padding-bottom:28px"><p class="label" style="margin-bottom:4px;font-size:.68rem">Days 4–7</p><p style="font-weight:700;font-size:.95rem;margin-bottom:4px">WhatsApp trigger + blog CTAs</p><p class="body" style="font-size:.83rem">Form automation live. CTAs added to all 12 blog posts. No more leads falling through.</p></div>
+          </div>
+          <div style="display:flex;gap:18px">
+            <div style="display:flex;flex-direction:column;align-items:center"><div class="tl-dot"></div><div class="tl-line"></div></div>
+            <div style="padding-bottom:28px"><p class="label" style="margin-bottom:4px;font-size:.68rem">Week 2</p><p style="font-weight:700;font-size:.95rem;margin-bottom:4px">Homepage refresh deployed</p><p class="body" style="font-size:.83rem">New premium design live. First impression now matches the product you're delivering.</p></div>
+          </div>
+          <div style="display:flex;gap:18px">
+            <div style="display:flex;flex-direction:column;align-items:center"><div class="tl-dot"></div></div>
+            <div><p class="label" style="margin-bottom:4px;font-size:.68rem">Month 2+</p><p style="font-weight:700;font-size:.95rem;margin-bottom:4px">Full system running</p><p class="body" style="font-size:.83rem">Blog cadence, review collection, and WhatsApp campaigns (Growth/Scale) all running. Compound growth from here.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Risk reversal -->
+      <div class="fade-up">
+        <p class="label" style="margin-bottom:12px">Zero Risk</p>
+        <h2 class="heading-2" style="margin-bottom:36px">No lock-in.<br />No surprises.</h2>
+
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div class="surface" style="padding:20px 22px;display:flex;gap:14px;align-items:flex-start;border-radius:var(--radius-md)">
+            <span style="font-size:1.2rem;flex-shrink:0">🔓</span>
+            <div><p style="font-weight:700;font-size:.9rem;margin-bottom:4px">Cancel any time</p><p class="body" style="font-size:.82rem">Month-to-month rolling. No contracts. No cancellation fees. We keep your business by delivering results.</p></div>
+          </div>
+          <div class="surface" style="padding:20px 22px;display:flex;gap:14px;align-items:flex-start;border-radius:var(--radius-md)">
+            <span style="font-size:1.2rem;flex-shrink:0">⚡</span>
+            <div><p style="font-weight:700;font-size:.9rem;margin-bottom:4px">Your assets stay yours</p><p class="body" style="font-size:.82rem">Everything lives on your WordPress site, your Google account, your WhatsApp. We add to what you have.</p></div>
+          </div>
+          <div class="surface" style="padding:20px 22px;display:flex;gap:14px;align-items:flex-start;border-radius:var(--radius-md)">
+            <span style="font-size:1.2rem;flex-shrink:0">📊</span>
+            <div><p style="font-weight:700;font-size:.9rem;margin-bottom:4px">Monthly reporting, always</p><p class="body" style="font-size:.82rem">Trial form submissions, review growth, WhatsApp results, blog traffic. You see the numbers every month.</p></div>
+          </div>
+          <div class="surface" style="padding:20px 22px;display:flex;gap:14px;align-items:flex-start;border-radius:var(--radius-md)">
+            <span style="font-size:1.2rem;flex-shrink:0">🤝</span>
+            <div><p style="font-weight:700;font-size:.9rem;margin-bottom:4px">WhatsApp-first support</p><p class="body" style="font-size:.82rem">No ticketing systems. Message Jacques directly. Same-day response on every question.</p></div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     FINAL CTA
+══════════════════════════════════════════ -->
+<section class="section" style="background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(201,168,76,.07) 0%,transparent 60%), var(--ink-card);border-top:1px solid var(--ink-border)">
+  <div class="wrap" style="text-align:center">
+    <div class="fade-up" style="max-width:600px;margin:0 auto">
+      <p class="label" style="margin-bottom:16px">Your move, Andrew</p>
+      <h2 class="heading-1" style="margin-bottom:18px">
+        The product is already brilliant.<br />
+        <span class="text-gold-gradient">Now let's build the system around it.</span>
+      </h2>
+      <p class="body-lg" style="margin-bottom:40px">
+        Pick the package that fits where ThreeZero is right now. WhatsApp to accept and I'll have ReviewTap live within 48 hours of the word Go.
+      </p>
+
+      <!-- Package quick-pick -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:36px;text-align:left">
+        <div class="surface" style="padding:18px 20px;border-radius:var(--radius-md)">
+          <p class="label" style="margin-bottom:6px;font-size:.65rem">Foundation</p>
+          <p style="font-size:1.5rem;font-weight:900;margin-bottom:2px">R1,999<span class="caption" style="font-size:.8rem">/mo</span></p>
+          <p class="caption" style="margin-bottom:14px">+ R3,500 setup</p>
+          <a href="https://wa.me/27795124292?text=Hi%20Jacques%2C%20I%20want%20the%20Foundation%20package%20for%20ThreeZero." target="_blank" class="btn-secondary" style="display:block;text-align:center;padding:9px 16px;font-size:.8rem">Choose</a>
+        </div>
+        <div style="background:linear-gradient(160deg,#1C1609,#111113);border:1.5px solid rgba(201,168,76,.32);border-radius:var(--radius-md);padding:18px 20px">
+          <p style="font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:6px">Growth ★</p>
+          <p style="font-size:1.5rem;font-weight:900;margin-bottom:2px">R4,299<span class="caption" style="font-size:.8rem">/mo</span></p>
+          <p class="caption" style="margin-bottom:14px">+ R1,750 setup</p>
+          <a href="https://wa.me/27795124292?text=Hi%20Jacques%2C%20I%20want%20the%20Growth%20package%20for%20ThreeZero." target="_blank" class="btn-primary" style="display:block;text-align:center;padding:9px 16px;font-size:.8rem">Accept →</a>
+        </div>
+        <div class="surface" style="padding:18px 20px;border-radius:var(--radius-md)">
+          <p class="label" style="margin-bottom:6px;font-size:.65rem">Scale</p>
+          <p style="font-size:1.5rem;font-weight:900;margin-bottom:2px">R6,500<span class="caption" style="font-size:.8rem">/mo</span></p>
+          <p class="caption" style="margin-bottom:14px">+ your ad budget</p>
+          <a href="https://wa.me/27795124292?text=Hi%20Jacques%2C%20I%20want%20the%20Scale%20package%20for%20ThreeZero." target="_blank" class="btn-secondary" style="display:block;text-align:center;padding:9px 16px;font-size:.8rem">Choose</a>
+        </div>
+      </div>
+
+      <p class="caption" style="margin-bottom:40px">All packages · month-to-month · cancel anytime · valid until 31 May 2026</p>
+
+      <div style="display:flex;align-items:center;justify-content:center;gap:16px;padding-top:32px;border-top:1px solid var(--ink-border)">
+        <div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--gold-light),var(--gold-dark));display:flex;align-items:center;justify-content:center;font-weight:900;color:#0A0A0B">J</div>
+        <div style="text-align:left">
+          <p style="font-weight:700;font-size:.95rem">Jacques Groenewald</p>
+          <p class="caption">Founder · ReviewTap</p>
+        </div>
+        <div style="width:1px;height:30px;background:var(--ink-border);margin:0 8px"></div>
+        <a href="https://wa.me/27795124292" target="_blank" style="color:var(--gold);font-weight:600;font-size:.9rem;text-decoration:none">+27 79 512 4292 →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<div style="background:var(--ink-raised);border-top:1px solid var(--ink-border);padding:20px 0;text-align:center">
+  <p class="caption">Prepared by ReviewTap for ThreeZero · Cape Quarter · Confidential · May 2026</p>
+</div>
+
+<script>
+  // Fade-in on scroll
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08, rootMargin: '0px 0px -32px 0px' });
+  document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
+
+  // Trigger above-fold immediately
+  setTimeout(() => {
+    document.querySelectorAll('.fade-up').forEach(el => {
+      if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add('visible');
+    });
+  }, 60);
+
+  // Sticky bar after 400px
+  window.addEventListener('scroll', () => {
+    document.getElementById('sticky').classList.toggle('show', window.scrollY > 420);
+  });
+
+  // Responsive grid: collapse to 1 col on mobile
+  function applyGrid() {
+    const w = window.innerWidth;
+    document.querySelectorAll('.pillar-grid').forEach(g => {
+      g.style.gridTemplateColumns = w < 768 ? '1fr' : w < 1024 ? '1fr 1fr' : 'repeat(3,1fr)';
+    });
+  }
+</script>
+</body>
+</html>

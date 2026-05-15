@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ThreeZero -- JCE Media Reports</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; background: #0a0d14; color: #e2e8f0; min-height: 100vh; }
+    .site-header { background: #111520; border-bottom: 1px solid #1e2535; padding: 1rem 2rem; display: flex; align-items: center; gap: 1rem; }
+    .back-link { color: #a78bfa; text-decoration: none; font-size: 0.875rem; }
+    .back-link:hover { color: #c4b5fd; }
+    .site-name { color: #e2e8f0; font-weight: 600; font-size: 0.9rem; }
+    .hero { background: linear-gradient(135deg, #C9A84C, #8B6914); padding: 3rem 2rem; text-align: center; position: relative; overflow: hidden; }
+    .hero::before { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.5) 100%); }
+    .hero-content { position: relative; z-index: 1; }
+    .hero-avatar { width: 80px; height: 80px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 2rem; font-weight: 700; color: #fff; border: 3px solid rgba(255,255,255,0.4); }
+    .hero h1 { font-size: 2.2rem; font-weight: 700; color: #fff; margin-bottom: 0.5rem; }
+    .hero p { color: rgba(255,255,255,0.85); font-size: 1.05rem; max-width: 600px; margin: 0 auto 1.5rem; }
+    .hero-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center; }
+    .tag { background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.9); padding: 0.3rem 0.75rem; border-radius: 999px; font-size: 0.8rem; border: 1px solid rgba(255,255,255,0.25); }
+    .facts-strip { background: #111520; border-bottom: 1px solid #1e2535; display: flex; flex-wrap: wrap; justify-content: center; gap: 0; }
+    .fact { padding: 1.25rem 2rem; text-align: center; border-right: 1px solid #1e2535; }
+    .fact:last-child { border-right: none; }
+    .fact-val { display: block; font-size: 1.5rem; font-weight: 700; color: #e2e8f0; }
+    .fact-label { display: block; font-size: 0.75rem; color: #94a3b8; margin-top: 0.2rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .main { max-width: 1000px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+    .section-title { font-size: 1.3rem; font-weight: 600; color: #e2e8f0; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid #1e2535; }
+    .report-card { background: #111520; border: 1px solid #1e2535; border-radius: 12px; padding: 1.75rem; margin-bottom: 1rem; transition: border-color 0.2s; }
+    .report-card:hover { border-color: #2d3748; }
+    .report-card-header { margin-bottom: 1rem; }
+    .report-badge { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.75rem; font-weight: 600; margin-bottom: 0.5rem; }
+    .report-title { font-size: 1.2rem; font-weight: 600; color: #e2e8f0; margin: 0.3rem 0; }
+    .report-date-label { font-size: 0.8rem; color: #64748b; }
+    .report-description { color: #94a3b8; font-size: 0.9rem; line-height: 1.6; margin-bottom: 1rem; }
+    .report-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.25rem; }
+    .chip { background: #1a2035; color: #94a3b8; padding: 0.3rem 0.75rem; border-radius: 999px; font-size: 0.78rem; border: 1px solid #1e2535; }
+    .view-report-btn { display: inline-block; background: #1a2035; color: #a78bfa; padding: 0.6rem 1.25rem; border-radius: 8px; text-decoration: none; font-size: 0.875rem; font-weight: 500; border: 1px solid #2d3748; transition: background 0.2s; }
+    .view-report-btn:hover { background: #232b45; }
+    .layout { display: grid; grid-template-columns: 1fr 280px; gap: 2rem; align-items: start; }
+    .sidebar { background: #111520; border: 1px solid #1e2535; border-radius: 12px; padding: 1.5rem; }
+    .sidebar h3 { font-size: 0.9rem; font-weight: 600; color: #e2e8f0; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .sidebar p { color: #94a3b8; font-size: 0.875rem; line-height: 1.6; margin-bottom: 0.75rem; }
+    .sidebar a { color: #a78bfa; }
+    @media (max-width: 768px) { .layout { grid-template-columns: 1fr; } .fact { border-right: none; border-bottom: 1px solid #1e2535; width: 50%; } }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a href="../../" class="back-link">&#8592; All Clients</a>
+    <span style="color:#1e2535">|</span>
+    <span class="site-name">JCE Media Research Hub</span>
+  </header>
+  <div class="hero">
+    <div class="hero-content">
+      <div class="hero-avatar">T</div>
+      <h1>ThreeZero</h1>
+      <p>Premium AI-guided 30-minute workout studio using Technogym Biocircuit technology, Cape Quarter, Green Point, Cape Town.</p>
+      <div class="hero-tags"><span class="tag">South Africa</span> <span class="tag">Cape Town</span> <span class="tag">Fitness</span> <span class="tag">Gym</span> <span class="tag">ReviewTap</span></div>
+    </div>
+  </div>
+  <div class="facts-strip">
+    <div class="fact"><span class="fact-val">4</span><span class="fact-label">Audit Findings</span></div>
+        <div class="fact"><span class="fact-val">6</span><span class="fact-label">Growth Pillars</span></div>
+        <div class="fact"><span class="fact-val">R1,999</span><span class="fact-label">Monthly Retainer</span></div>
+        <div class="fact"><span class="fact-val">R3,500</span><span class="fact-label">Website Setup</span></div>
+        <div class="fact"><span class="fact-val">30 min</span><span class="fact-label">Biocircuit Sessions</span></div>
+  </div>
+  <main class="main">
+    <div class="layout">
+      <div>
+        <h2 class="section-title">Reports</h2>
+      <div class="report-card">
+        <div class="report-card-header"><div>
+          <span class="report-badge" style="background:#10b98120;color:#10b981;border:1px solid #10b98140">Strategy</span>
+          <h2 class="report-title">Growth Partnership Proposal</h2>
+          <p class="report-date-label">2026-05-15</p>
+        </div></div>
+        <p class="report-description">Full growth system proposal for ThreeZero covering website refresh, reputation management, content marketing, and lead generation. Includes site audit findings, 6 growth pillars, and tiered pricing.</p>
+        <div class="report-chips"><span class="chip">Site Audit</span><span class="chip">6 Growth Pillars</span><span class="chip">ReviewTap Integration</span><span class="chip">Foundation Package</span><span class="chip">R1,999/mo</span></div>
+        <a href="./reports/2026-05-15-growth-proposal/" class="view-report-btn">View Report</a>
+      </div>
+      <div class="report-card">
+        <div class="report-card-header"><div>
+          <span class="report-badge" style="background:#4f6ef720;color:#4f6ef7;border:1px solid #4f6ef740">Research</span>
+          <h2 class="report-title">Optimised Homepage Demo</h2>
+          <p class="report-date-label">2026-05-15</p>
+        </div></div>
+        <p class="report-description">High-fidelity working prototype of the ThreeZero homepage redesign — premium dark aesthetic, live ReviewTap review feed, Lara's transformation story, trial booking form with WhatsApp trigger, and blog CTAs throughout.</p>
+        <div class="report-chips"><span class="chip">Homepage Redesign</span><span class="chip">ReviewTap Feed</span><span class="chip">WhatsApp Trigger</span><span class="chip">10 Sections</span><span class="chip">Conversion Optimised</span></div>
+        <a href="./reports/2026-05-15-homepage-demo/" class="view-report-btn">View Report</a>
+      </div>
+      </div>
+      <aside>
+        <div class="sidebar">
+          <h3>Client Overview</h3>
+          <p>Premium AI-guided 30-minute workout studio using Technogym Biocircuit technology, Cape Quarter, Green Point, Cape Town.</p>
+<p><a href="https://threezero.co.za" style="color:#a78bfa" target="_blank">https://threezero.co.za</a></p>
+        </div>
+      </aside>
+    </div>
+  </main>
+</body>
+</html>

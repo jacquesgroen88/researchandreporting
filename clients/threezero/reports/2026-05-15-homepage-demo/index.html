@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ThreeZero — The Complete Workout. Done in 30 Minutes.</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            gold: { DEFAULT: '#C9A84C', light: '#E2C87A', dark: '#A0832E' },
+            charcoal: { DEFAULT: '#0D0D0D', card: '#141414', border: '#222222', muted: '#2A2A2A' }
+          },
+          fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { background-color: #0D0D0D; color: #ffffff; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+    /* Fade-in animation */
+    .fade-up { opacity: 0; transform: translateY(32px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    /* Gold gradient text */
+    .text-gold-gradient {
+      background: linear-gradient(135deg, #E2C87A 0%, #C9A84C 50%, #A0832E 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Hero background */
+    .hero-bg {
+      background: linear-gradient(135deg, #0D0D0D 0%, #141414 40%, #1a1208 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-bg::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 70%;
+      height: 200%;
+      background: radial-gradient(ellipse, rgba(201,168,76,0.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    /* Gold button */
+    .btn-gold {
+      background: linear-gradient(135deg, #E2C87A, #C9A84C);
+      color: #0D0D0D;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      transition: all 0.2s ease;
+      border: none;
+    }
+    .btn-gold:hover { background: linear-gradient(135deg, #C9A84C, #A0832E); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(201,168,76,0.3); }
+
+    /* Ghost button */
+    .btn-ghost {
+      border: 1.5px solid rgba(201,168,76,0.5);
+      color: #C9A84C;
+      background: transparent;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      transition: all 0.2s ease;
+    }
+    .btn-ghost:hover { border-color: #C9A84C; background: rgba(201,168,76,0.08); }
+
+    /* Card */
+    .card-dark { background: #141414; border: 1px solid #222222; }
+    .card-dark:hover { border-color: rgba(201,168,76,0.3); transition: border-color 0.2s ease; }
+
+    /* Stat block */
+    .stat-number { font-size: 3.5rem; font-weight: 900; line-height: 1; }
+
+    /* Review stars */
+    .stars { color: #C9A84C; }
+
+    /* Nav */
+    nav { backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+
+    /* Transformation card */
+    .lara-card {
+      background: linear-gradient(135deg, #141414 0%, #1a1208 100%);
+      border: 1px solid rgba(201,168,76,0.25);
+    }
+
+    /* ReviewTap badge */
+    .reviewtap-badge {
+      background: rgba(201,168,76,0.12);
+      border: 1px solid rgba(201,168,76,0.3);
+      border-radius: 999px;
+      padding: 4px 14px;
+      font-size: 0.75rem;
+      color: #C9A84C;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Pulse dot */
+    .pulse-dot {
+      width: 8px; height: 8px;
+      background: #C9A84C;
+      border-radius: 50%;
+      display: inline-block;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.8)} }
+
+    /* Step number */
+    .step-num {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      border: 2px solid #C9A84C;
+      color: #C9A84C;
+      font-weight: 800;
+      font-size: 1.1rem;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* WhatsApp float */
+    #wa-float {
+      position: fixed;
+      bottom: 28px; right: 28px;
+      z-index: 1000;
+      background: #25D366;
+      border-radius: 50%;
+      width: 58px; height: 58px;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 20px rgba(37,211,102,0.4);
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    #wa-float:hover { transform: scale(1.1); box-shadow: 0 6px 28px rgba(37,211,102,0.55); }
+
+    /* Form */
+    .form-input {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 10px;
+      padding: 14px 16px;
+      color: #fff;
+      font-family: inherit;
+      font-size: 0.95rem;
+      width: 100%;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-input:focus { border-color: #C9A84C; }
+    .form-input::placeholder { color: #555; }
+
+    /* Trust bar */
+    .trust-bar { border-top: 1px solid #1a1a1a; border-bottom: 1px solid #1a1a1a; }
+
+    /* Section divider */
+    .section-divider { border-color: #1e1e1e; }
+
+    /* Blog card image placeholder */
+    .blog-img {
+      background: linear-gradient(135deg, #1a1a1a, #222);
+      height: 180px;
+      border-radius: 10px 10px 0 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.5rem;
+    }
+
+    /* Programme card */
+    .prog-card {
+      background: #141414;
+      border: 1px solid #222;
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all 0.25s ease;
+    }
+    .prog-card:hover { border-color: rgba(201,168,76,0.4); transform: translateY(-3px); }
+
+    /* Success state */
+    #form-success { display: none; }
+
+    /* Mobile menu */
+    #mobile-menu { display: none; }
+    #mobile-menu.open { display: block; }
+  </style>
+</head>
+<body>
+
+<!-- ============================================================
+     FLOATING WHATSAPP BUTTON
+     ============================================================ -->
+<a id="wa-float" href="https://wa.me/27765880709?text=Hi%20ThreeZero!%20I'd%20like%20to%20book%20a%20free%20trial." target="_blank" aria-label="Chat on WhatsApp">
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </svg>
+</a>
+
+<!-- ============================================================
+     1. NAVIGATION
+     ============================================================ -->
+<nav class="fixed top-0 left-0 right-0 z-50 bg-black/80 border-b border-charcoal-border">
+  <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+    <!-- Logo -->
+    <a href="#" class="flex items-center gap-3">
+      <img src="./threezero-logo.png" alt="ThreeZero" class="h-9 w-auto" onerror="this.style.display='none';this.nextElementSibling.style.display='block'" />
+      <span style="display:none" class="text-white font-bold text-xl tracking-tight">THREE<span class="text-gold">ZERO</span></span>
+    </a>
+
+    <!-- Desktop nav -->
+    <div class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-400">
+      <a href="#how-it-works" class="hover:text-white transition-colors">How It Works</a>
+      <a href="#programmes" class="hover:text-white transition-colors">Programmes</a>
+      <a href="#lara" class="hover:text-white transition-colors">Results</a>
+      <a href="#reviews" class="hover:text-white transition-colors">Reviews</a>
+      <a href="#blog" class="hover:text-white transition-colors">Blog</a>
+      <a href="#faq" class="hover:text-white transition-colors">FAQ</a>
+    </div>
+
+    <!-- CTA + mobile toggle -->
+    <div class="flex items-center gap-3">
+      <a href="#trial" class="btn-gold px-5 py-2.5 rounded-full text-sm cursor-pointer hidden sm:inline-block">Book Free Trial</a>
+      <button id="nav-toggle" class="md:hidden text-gray-400 hover:text-white" onclick="document.getElementById('mobile-menu').classList.toggle('open')">
+        <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="border-t border-charcoal-border bg-black/95 px-6 py-4 space-y-3 text-sm font-medium">
+    <a href="#how-it-works" class="block text-gray-300 hover:text-white py-1">How It Works</a>
+    <a href="#programmes" class="block text-gray-300 hover:text-white py-1">Programmes</a>
+    <a href="#lara" class="block text-gray-300 hover:text-white py-1">Results</a>
+    <a href="#reviews" class="block text-gray-300 hover:text-white py-1">Reviews</a>
+    <a href="#blog" class="block text-gray-300 hover:text-white py-1">Blog</a>
+    <a href="#trial" class="btn-gold block text-center px-5 py-3 rounded-full mt-3 cursor-pointer">Book Free Trial</a>
+  </div>
+</nav>
+
+<!-- ============================================================
+     2. HERO
+     ============================================================ -->
+<section class="hero-bg min-h-screen flex items-center pt-16">
+  <div class="max-w-7xl mx-auto px-6 py-24 grid lg:grid-cols-2 gap-16 items-center w-full">
+    <!-- Left: copy -->
+    <div class="fade-up">
+      <div class="inline-flex items-center gap-2 bg-gold/10 border border-gold/20 rounded-full px-4 py-1.5 text-gold text-xs font-semibold tracking-widest uppercase mb-8">
+        <span>AI-Guided · Biocircuit · Technogym</span>
+      </div>
+      <h1 class="text-5xl sm:text-6xl lg:text-7xl font-black leading-[1.0] tracking-tight mb-6">
+        The Complete<br />
+        Workout.<br />
+        <span class="text-gold-gradient">Done in 30 Min.</span>
+      </h1>
+      <p class="text-gray-400 text-xl leading-relaxed mb-10 max-w-lg">
+        No waiting. No guesswork. No wasted time.<br />
+        ThreeZero's AI-powered Biocircuit gives you a full cardio and strength session — then you get on with your day.
+      </p>
+      <div class="flex flex-wrap gap-4">
+        <a href="#trial" class="btn-gold px-8 py-4 rounded-full text-base cursor-pointer inline-block">
+          Book Your Free Trial →
+        </a>
+        <a href="#how-it-works" class="btn-ghost px-8 py-4 rounded-full text-base cursor-pointer inline-block">
+          See How It Works
+        </a>
+      </div>
+
+      <!-- Mini social proof -->
+      <div class="flex items-center gap-4 mt-10">
+        <div class="flex -space-x-2">
+          <div class="w-9 h-9 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 border-2 border-black flex items-center justify-center text-black text-xs font-bold">N</div>
+          <div class="w-9 h-9 rounded-full bg-gradient-to-br from-green-400 to-teal-500 border-2 border-black flex items-center justify-center text-black text-xs font-bold">J</div>
+          <div class="w-9 h-9 rounded-full bg-gradient-to-br from-purple-400 to-pink-500 border-2 border-black flex items-center justify-center text-black text-xs font-bold">E</div>
+          <div class="w-9 h-9 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 border-2 border-black flex items-center justify-center text-white text-xs font-bold">+</div>
+        </div>
+        <div>
+          <div class="flex gap-0.5 stars text-sm mb-0.5">★★★★★</div>
+          <p class="text-gray-400 text-sm">Loved by <span class="text-white font-semibold">200+ Cape Town members</span></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: machine visual -->
+    <div class="fade-up relative hidden lg:flex items-center justify-center">
+      <div class="relative w-full max-w-md">
+        <!-- Glow behind -->
+        <div class="absolute inset-0 bg-gold/10 rounded-3xl blur-3xl scale-110"></div>
+        <!-- Image -->
+        <img
+          src="./Technogym-biocardio_biostrength-circuit-1024x768.jpg"
+          alt="ThreeZero Biocircuit machines"
+          class="relative rounded-3xl w-full object-cover border border-gold/20"
+          style="aspect-ratio:4/3"
+        />
+        <!-- Floating stat card -->
+        <div class="absolute -bottom-6 -left-6 bg-charcoal-card border border-charcoal-border rounded-2xl px-5 py-4 shadow-2xl">
+          <p class="text-gold text-xs font-semibold uppercase tracking-widest mb-1">Average Member Result</p>
+          <p class="text-white text-2xl font-black">–12 kg</p>
+          <p class="text-gray-500 text-xs">in the first 3 months</p>
+        </div>
+        <!-- Top right badge -->
+        <div class="absolute -top-4 -right-4 bg-gold text-black rounded-2xl px-4 py-3 text-center shadow-xl">
+          <p class="font-black text-2xl leading-none">30</p>
+          <p class="font-bold text-xs leading-none">MIN</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     3. TRUST BAR
+     ============================================================ -->
+<div class="trust-bar py-4 bg-charcoal-card">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="flex flex-wrap items-center justify-center gap-x-8 gap-y-2 text-sm text-gray-500 font-medium">
+      <span class="flex items-center gap-2"><span class="text-gold">✓</span> Technogym Biocircuit Technology</span>
+      <span class="hidden sm:inline text-charcoal-border">|</span>
+      <span class="flex items-center gap-2"><span class="text-gold">✓</span> Cape Quarter, Green Point</span>
+      <span class="hidden sm:inline text-charcoal-border">|</span>
+      <span class="flex items-center gap-2"><span class="text-gold">✓</span> 30-Minute Full-Body Sessions</span>
+      <span class="hidden sm:inline text-charcoal-border">|</span>
+      <span class="flex items-center gap-2"><span class="text-gold">✓</span> AI-Personalised Every Rep</span>
+      <span class="hidden sm:inline text-charcoal-border">|</span>
+      <span class="flex items-center gap-2"><span class="text-gold">✓</span> Qualified PTs On-Site</span>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     4. HOW IT WORKS
+     ============================================================ -->
+<section id="how-it-works" class="py-24">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="text-center mb-16 fade-up">
+      <p class="text-gold text-sm font-semibold uppercase tracking-widest mb-3">Simple. Intelligent. Effective.</p>
+      <h2 class="text-4xl sm:text-5xl font-black mb-4">Your 30 Minutes, Explained</h2>
+      <p class="text-gray-400 text-lg max-w-xl mx-auto">No PT required. No waiting for equipment. The machine knows you.</p>
+    </div>
+
+    <div class="grid sm:grid-cols-3 gap-8">
+      <!-- Step 1 -->
+      <div class="fade-up card-dark rounded-2xl p-8 text-center">
+        <div class="step-num mx-auto mb-6">1</div>
+        <h3 class="text-xl font-bold mb-3">Check In &amp; Load Your Profile</h3>
+        <p class="text-gray-400 leading-relaxed">The Biocircuit recognises you instantly. Your weight settings, resistance levels, and cardio targets load automatically — no adjustments needed.</p>
+      </div>
+      <!-- Step 2 -->
+      <div class="fade-up card-dark rounded-2xl p-8 text-center" style="transition-delay:0.1s">
+        <div class="step-num mx-auto mb-6">2</div>
+        <h3 class="text-xl font-bold mb-3">Follow the AI-Guided Circuit</h3>
+        <p class="text-gray-400 leading-relaxed">Move station to station as the system guides you. Strength and cardio alternate. Every set is optimised in real time based on your output that day.</p>
+      </div>
+      <!-- Step 3 -->
+      <div class="fade-up card-dark rounded-2xl p-8 text-center" style="transition-delay:0.2s">
+        <div class="step-num mx-auto mb-6">3</div>
+        <h3 class="text-xl font-bold mb-3">Done. Track Your Progress.</h3>
+        <p class="text-gray-400 leading-relaxed">30 minutes. Full-body session complete. Your data is saved. Your next session builds on this one. Get on with your day — you've already won it.</p>
+      </div>
+    </div>
+
+    <div class="text-center mt-12 fade-up">
+      <a href="#trial" class="btn-gold px-8 py-4 rounded-full text-base cursor-pointer inline-block">Try It Free — No Commitment</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     5. LARA'S TRANSFORMATION STORY
+     ============================================================ -->
+<section id="lara" class="py-24 bg-charcoal-card border-y border-charcoal-border">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="text-center mb-4 fade-up">
+      <p class="text-gold text-sm font-semibold uppercase tracking-widest">Real Member · Real Results</p>
+    </div>
+
+    <div class="lara-card rounded-3xl overflow-hidden fade-up">
+      <div class="grid lg:grid-cols-2 gap-0">
+        <!-- Left: visual / stats -->
+        <div class="bg-gradient-to-br from-[#1a1208] to-[#0D0D0D] p-10 lg:p-14 flex flex-col justify-center border-r border-gold/10">
+          <div class="mb-8">
+            <p class="text-gold text-xs font-bold uppercase tracking-widest mb-2">Member Since January</p>
+            <h2 class="text-4xl sm:text-5xl font-black leading-tight mb-2">Lara's Story</h2>
+            <p class="text-gray-400 text-lg">54 years old. Post-menopausal. <span class="text-white font-semibold">20 kg down in 5 months.</span></p>
+          </div>
+
+          <!-- Stats row -->
+          <div class="grid grid-cols-3 gap-4 mb-8">
+            <div class="text-center">
+              <p class="stat-number text-gold-gradient">–20<span class="text-2xl">kg</span></p>
+              <p class="text-gray-500 text-xs mt-1 uppercase tracking-wide">Lost</p>
+            </div>
+            <div class="text-center border-x border-gold/15">
+              <p class="stat-number text-white">5</p>
+              <p class="text-gray-500 text-xs mt-1 uppercase tracking-wide">Months</p>
+            </div>
+            <div class="text-center">
+              <p class="stat-number text-white">0</p>
+              <p class="text-gray-500 text-xs mt-1 uppercase tracking-wide">Muscle Lost</p>
+            </div>
+          </div>
+
+          <!-- Before / After weight -->
+          <div class="flex items-center gap-4 mb-8">
+            <div class="flex-1 bg-black/40 rounded-xl p-4 text-center">
+              <p class="text-gray-500 text-xs uppercase tracking-widest mb-1">Before</p>
+              <p class="text-3xl font-black text-white">89 <span class="text-lg text-gray-400">kg</span></p>
+            </div>
+            <div class="text-gold text-2xl font-black">→</div>
+            <div class="flex-1 bg-gold/10 border border-gold/20 rounded-xl p-4 text-center">
+              <p class="text-gold text-xs uppercase tracking-widest mb-1">After</p>
+              <p class="text-3xl font-black text-gold">69 <span class="text-lg text-gold/70">kg</span></p>
+            </div>
+          </div>
+
+          <a href="#trial" class="btn-gold px-7 py-3.5 rounded-full text-sm inline-block text-center cursor-pointer">Start Your Story →</a>
+        </div>
+
+        <!-- Right: quote + image placeholder -->
+        <div class="p-10 lg:p-14 flex flex-col justify-between">
+          <!-- Image placeholder -->
+          <div class="rounded-2xl overflow-hidden mb-8 bg-gradient-to-br from-[#1a1a1a] to-[#222] flex items-center justify-center" style="height:220px">
+            <img
+              src="./AdaptivePosture.jpg"
+              alt="ThreeZero member training"
+              class="w-full h-full object-cover opacity-80"
+              onerror="this.parentElement.innerHTML='<p class=\'text-gray-600 text-sm\'>Member photo</p>'"
+            />
+          </div>
+
+          <!-- Pull quote -->
+          <div>
+            <div class="text-gold text-5xl font-black leading-none mb-3 opacity-60">"</div>
+            <blockquote class="text-xl sm:text-2xl font-semibold text-white leading-snug mb-6">
+              I haven't lost muscle mass, I haven't starved myself, and I haven't pushed through misery to get here.
+            </blockquote>
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center text-black font-bold text-sm">L</div>
+              <div>
+                <p class="text-white font-semibold">Lara</p>
+                <p class="text-gray-500 text-sm">ThreeZero Member · 5 months · Age 54</p>
+              </div>
+              <div class="ml-auto flex gap-0.5 stars">★★★★★</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     6. LIVE REVIEWS FEED (ReviewTap)
+     ============================================================ -->
+<section id="reviews" class="py-24">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="text-center mb-4 fade-up">
+      <span class="reviewtap-badge mb-4">
+        <span class="pulse-dot"></span>
+        LIVE · Updated in Real Time · Powered by ReviewTap
+      </span>
+    </div>
+    <div class="text-center mb-14 fade-up">
+      <h2 class="text-4xl sm:text-5xl font-black mb-4">What Cape Town's Fittest Members<br class="hidden sm:block" /> Are Saying Right Now</h2>
+      <p class="text-gray-400 text-lg">Fresh reviews. Automatically displayed. No more 2-year-old screenshots.</p>
+    </div>
+
+    <!-- Review cards -->
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+      <!-- Card 1 -->
+      <div class="fade-up card-dark rounded-2xl p-6">
+        <div class="flex items-start justify-between mb-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center text-black font-bold text-sm">N</div>
+            <div>
+              <p class="text-white font-semibold text-sm">Nicole Carter</p>
+              <p class="text-gray-500 text-xs">2 days ago</p>
+            </div>
+          </div>
+          <div class="flex gap-0.5 stars text-sm">★★★★★</div>
+        </div>
+        <p class="text-gray-300 text-sm leading-relaxed">"This is my new favourite form of exercise! It is fast paced and intense — I love that I can get in and out in 30 minutes and feel like I've actually worked hard."</p>
+        <div class="mt-4 flex items-center gap-2">
+          <img src="./120px-Google_2015_logo.svg.png" alt="Google" class="h-4 opacity-60" />
+          <span class="text-gray-600 text-xs">Google Review</span>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="fade-up card-dark rounded-2xl p-6" style="transition-delay:0.1s">
+        <div class="flex items-start justify-between mb-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-white font-bold text-sm">E</div>
+            <div>
+              <p class="text-white font-semibold text-sm">Eugene van der Merwe</p>
+              <p class="text-gray-500 text-xs">1 week ago</p>
+            </div>
+          </div>
+          <div class="flex gap-0.5 stars text-sm">★★★★★</div>
+        </div>
+        <p class="text-gray-300 text-sm leading-relaxed">"Undoubtedly, this represents the future of gyms and personal training. The AI-guided circuit is unlike anything else in Cape Town — efficient, effective, and you leave feeling genuinely accomplished."</p>
+        <div class="mt-4 flex items-center gap-2">
+          <img src="./120px-Google_2015_logo.svg.png" alt="Google" class="h-4 opacity-60" />
+          <span class="text-gray-600 text-xs">Google Review</span>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="fade-up card-dark rounded-2xl p-6" style="transition-delay:0.2s">
+        <div class="flex items-start justify-between mb-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-green-400 to-teal-500 flex items-center justify-center text-black font-bold text-sm">A</div>
+            <div>
+              <p class="text-white font-semibold text-sm">Andy Griffin</p>
+              <p class="text-gray-500 text-xs">3 weeks ago</p>
+            </div>
+          </div>
+          <div class="flex gap-0.5 stars text-sm">★★★★★</div>
+        </div>
+        <p class="text-gray-300 text-sm leading-relaxed">"This is a diamond mine of a gym: 30 minutes of focused, personalised exercise that leaves you feeling you've had a complete workout. I've been using it for 4 months and the results speak for themselves."</p>
+        <div class="mt-4 flex items-center gap-2">
+          <img src="./120px-Google_2015_logo.svg.png" alt="Google" class="h-4 opacity-60" />
+          <span class="text-gray-600 text-xs">Google Review</span>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="fade-up card-dark rounded-2xl p-6">
+        <div class="flex items-start justify-between mb-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-purple-400 to-pink-500 flex items-center justify-center text-white font-bold text-sm">J</div>
+            <div>
+              <p class="text-white font-semibold text-sm">Jamie Lee Douglass</p>
+              <p class="text-gray-500 text-xs">5 days ago</p>
+            </div>
+          </div>
+          <div class="flex gap-0.5 stars text-sm">★★★★★</div>
+        </div>
+        <p class="text-gray-300 text-sm leading-relaxed">"I'm absolutely blown away by ThreeZero. The convenience and speed are unmatched — I get a complete workout in half the time of any other gym I've been to. Worth every cent."</p>
+        <div class="mt-4 flex items-center gap-2">
+          <img src="./120px-Google_2015_logo.svg.png" alt="Google" class="h-4 opacity-60" />
+          <span class="text-gray-600 text-xs">Google Review</span>
+        </div>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="fade-up card-dark rounded-2xl p-6" style="transition-delay:0.1s">
+        <div class="flex items-start justify-between mb-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-red-400 to-rose-500 flex items-center justify-center text-white font-bold text-sm">G</div>
+            <div>
+              <p class="text-white font-semibold text-sm">Gabriela Bedinelli</p>
+              <p class="text-gray-500 text-xs">2 weeks ago</p>
+            </div>
+          </div>
+          <div class="flex gap-0.5 stars text-sm">★★★★★</div>
+        </div>
+        <p class="text-gray-300 text-sm leading-relaxed">"I took a trial class and was really impressed with the technology and dynamism of the workout. The staff are amazing and the results are real. I signed up immediately."</p>
+        <div class="mt-4 flex items-center gap-2">
+          <img src="./120px-Google_2015_logo.svg.png" alt="Google" class="h-4 opacity-60" />
+          <span class="text-gray-600 text-xs">Google Review</span>
+        </div>
+      </div>
+
+      <!-- Card 6 -->
+      <div class="fade-up card-dark rounded-2xl p-6" style="transition-delay:0.2s">
+        <div class="flex items-start justify-between mb-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-amber-400 to-yellow-500 flex items-center justify-center text-black font-bold text-sm">S</div>
+            <div>
+              <p class="text-white font-semibold text-sm">Simeon Boshoff</p>
+              <p class="text-gray-500 text-xs">4 days ago</p>
+            </div>
+          </div>
+          <div class="flex gap-0.5 stars text-sm">★★★★★</div>
+        </div>
+        <p class="text-gray-300 text-sm leading-relaxed">"I usually go to Virgin Active, but this place has really elevated what a gym experience should be. The AI machine adapts to you every session — it's like having a PT without the cost."</p>
+        <div class="mt-4 flex items-center gap-2">
+          <img src="./120px-Google_2015_logo.svg.png" alt="Google" class="h-4 opacity-60" />
+          <span class="text-gray-600 text-xs">Google Review</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ReviewTap explainer -->
+    <div class="fade-up bg-charcoal-card border border-gold/15 rounded-2xl p-6 flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left">
+      <div class="w-12 h-12 rounded-full bg-gold/15 flex items-center justify-center flex-shrink-0">
+        <span class="text-gold text-xl">★</span>
+      </div>
+      <div class="flex-1">
+        <p class="text-white font-bold mb-1">This feed updates automatically with every new review.</p>
+        <p class="text-gray-400 text-sm">Powered by ReviewTap — fresh Google reviews display in real time, so new visitors always see current social proof, not stale screenshots from 2 years ago.</p>
+      </div>
+      <a href="#trial" class="btn-gold px-6 py-3 rounded-full text-sm cursor-pointer flex-shrink-0">See It In Action</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     7. PROGRAMMES
+     ============================================================ -->
+<section id="programmes" class="py-24 bg-charcoal-card border-y border-charcoal-border">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="text-center mb-16 fade-up">
+      <p class="text-gold text-sm font-semibold uppercase tracking-widest mb-3">Built for Every Body</p>
+      <h2 class="text-4xl sm:text-5xl font-black mb-4">Find Your Programme</h2>
+      <p class="text-gray-400 text-lg">The Biocircuit adapts to your goal. Every session. Every time.</p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5">
+      <!-- Programme cards -->
+      <div class="prog-card fade-up">
+        <div class="blog-img" style="background:linear-gradient(135deg,#1a2a1a,#0f1a0f)">🏃</div>
+        <div class="p-5">
+          <h3 class="text-white font-bold mb-2">Start Moving</h3>
+          <p class="text-gray-500 text-sm mb-4 leading-relaxed">Perfect entry point. Build the habit, feel the results.</p>
+          <div class="flex gap-2 flex-col">
+            <a href="#trial" class="btn-gold text-center px-4 py-2.5 rounded-full text-xs cursor-pointer block">Book Trial →</a>
+            <a href="https://threezero.co.za/programmes/" class="btn-ghost text-center px-4 py-2 rounded-full text-xs cursor-pointer block">Learn More</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="prog-card fade-up" style="transition-delay:0.05s">
+        <div class="blog-img" style="background:linear-gradient(135deg,#2a1a1a,#1a0f0f)">⚡</div>
+        <div class="p-5">
+          <h3 class="text-white font-bold mb-2">Lose Weight</h3>
+          <p class="text-gray-500 text-sm mb-4 leading-relaxed">Science-backed fat loss. Like Lara — 20 kg in 5 months.</p>
+          <div class="flex gap-2 flex-col">
+            <a href="#trial" class="btn-gold text-center px-4 py-2.5 rounded-full text-xs cursor-pointer block">Book Trial →</a>
+            <a href="https://threezero.co.za/programmes/" class="btn-ghost text-center px-4 py-2 rounded-full text-xs cursor-pointer block">Learn More</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="prog-card fade-up" style="transition-delay:0.1s">
+        <div class="blog-img" style="background:linear-gradient(135deg,#1a1a2a,#0f0f1a)">💪</div>
+        <div class="p-5">
+          <h3 class="text-white font-bold mb-2">Tone Up</h3>
+          <p class="text-gray-500 text-sm mb-4 leading-relaxed">Lean strength. The machine handles progressive overload automatically.</p>
+          <div class="flex gap-2 flex-col">
+            <a href="#trial" class="btn-gold text-center px-4 py-2.5 rounded-full text-xs cursor-pointer block">Book Trial →</a>
+            <a href="https://threezero.co.za/programmes/" class="btn-ghost text-center px-4 py-2 rounded-full text-xs cursor-pointer block">Learn More</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="prog-card fade-up" style="transition-delay:0.15s">
+        <div class="blog-img" style="background:linear-gradient(135deg,#2a2a1a,#1a1a0f)">🏆</div>
+        <div class="p-5">
+          <h3 class="text-white font-bold mb-2">Boost Performance</h3>
+          <p class="text-gray-500 text-sm mb-4 leading-relaxed">For athletes. Eccentric overloads, cardio intervals, power output.</p>
+          <div class="flex gap-2 flex-col">
+            <a href="#trial" class="btn-gold text-center px-4 py-2.5 rounded-full text-xs cursor-pointer block">Book Trial →</a>
+            <a href="https://threezero.co.za/programmes/" class="btn-ghost text-center px-4 py-2 rounded-full text-xs cursor-pointer block">Learn More</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="prog-card fade-up" style="transition-delay:0.2s">
+        <div class="blog-img" style="background:linear-gradient(135deg,#1a2a2a,#0f1a1a)">🌿</div>
+        <div class="p-5">
+          <h3 class="text-white font-bold mb-2">Stay Young</h3>
+          <p class="text-gray-500 text-sm mb-4 leading-relaxed">Longevity training. Low impact, high return. For every decade.</p>
+          <div class="flex gap-2 flex-col">
+            <a href="#trial" class="btn-gold text-center px-4 py-2.5 rounded-full text-xs cursor-pointer block">Book Trial →</a>
+            <a href="https://threezero.co.za/programmes/" class="btn-ghost text-center px-4 py-2 rounded-full text-xs cursor-pointer block">Learn More</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     8. BLOG WITH CTAs
+     ============================================================ -->
+<section id="blog" class="py-24">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-14 fade-up">
+      <div>
+        <p class="text-gold text-sm font-semibold uppercase tracking-widest mb-3">Science You Can Use</p>
+        <h2 class="text-4xl sm:text-5xl font-black">From the ThreeZero Blog</h2>
+      </div>
+      <a href="https://threezero.co.za/blog/" class="btn-ghost px-6 py-3 rounded-full text-sm cursor-pointer flex-shrink-0">View All Posts →</a>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-7">
+      <!-- Blog card 1 -->
+      <article class="fade-up card-dark rounded-2xl overflow-hidden flex flex-col">
+        <div class="blog-img">💊</div>
+        <div class="p-6 flex flex-col flex-1">
+          <p class="text-gold text-xs font-semibold uppercase tracking-widest mb-3">Weight Loss · Ozempic</p>
+          <h3 class="text-white font-bold text-lg leading-snug mb-3">On Ozempic or Wegovy? Here's the One Thing Your Prescription Doesn't Include</h3>
+          <p class="text-gray-400 text-sm leading-relaxed flex-1">GLP-1 drugs suppress appetite — but without resistance training, up to 40% of weight lost is muscle. ThreeZero's Biocircuit preserves it while the medication does its job.</p>
+          <div class="mt-6 flex flex-col gap-2">
+            <a href="https://threezero.co.za/on-ozempic-or-wegovy-heres-the-one-thing-your-prescription-doesnt-include/" class="text-gold text-sm font-semibold hover:underline">Read the Article →</a>
+            <a href="#trial" class="btn-gold text-center px-4 py-2.5 rounded-full text-xs cursor-pointer">Try It at ThreeZero — Book Free Trial</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Blog card 2 -->
+      <article class="fade-up card-dark rounded-2xl overflow-hidden flex flex-col" style="transition-delay:0.1s">
+        <div class="blog-img">🧬</div>
+        <div class="p-6 flex flex-col flex-1">
+          <p class="text-gold text-xs font-semibold uppercase tracking-widest mb-3">Longevity · Strength</p>
+          <h3 class="text-white font-bold text-lg leading-snug mb-3">Unlocking Longevity: The Science Behind Strength and Cardio Training</h3>
+          <p class="text-gray-400 text-sm leading-relaxed flex-1">The research is clear — combining strength and cardio is the single most powerful longevity intervention available. Here's the science, and how ThreeZero delivers both in 30 minutes.</p>
+          <div class="mt-6 flex flex-col gap-2">
+            <a href="https://threezero.co.za/unlocking-longevity-the-science-behind-strength-and-cardio-training/" class="text-gold text-sm font-semibold hover:underline">Read the Article →</a>
+            <a href="#trial" class="btn-gold text-center px-4 py-2.5 rounded-full text-xs cursor-pointer">Put the Science to Work — Book Free Trial</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Blog card 3 -->
+      <article class="fade-up card-dark rounded-2xl overflow-hidden flex flex-col" style="transition-delay:0.2s">
+        <div class="blog-img">🌸</div>
+        <div class="p-6 flex flex-col flex-1">
+          <p class="text-gold text-xs font-semibold uppercase tracking-widest mb-3">Women's Health · Menopause</p>
+          <h3 class="text-white font-bold text-lg leading-snug mb-3">Strength &amp; Cardio Training: Essential Benefits for Perimenopausal Women</h3>
+          <p class="text-gray-400 text-sm leading-relaxed flex-1">Like Lara, many of ThreeZero's most transformative results come from women navigating perimenopause. This is why the Biocircuit is uniquely suited to this stage of life.</p>
+          <div class="mt-6 flex flex-col gap-2">
+            <a href="https://threezero.co.za/strength-and-cardio-training-essential-benefits-for-perimenopausal-and-menopausal-women/" class="text-gold text-sm font-semibold hover:underline">Read the Article →</a>
+            <a href="#trial" class="btn-gold text-center px-4 py-2.5 rounded-full text-xs cursor-pointer">Start Your Story — Book Free Trial</a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     9. TRIAL BOOKING FORM
+     ============================================================ -->
+<section id="trial" class="py-24 bg-charcoal-card border-y border-charcoal-border">
+  <div class="max-w-3xl mx-auto px-6">
+    <div class="text-center mb-12 fade-up">
+      <p class="text-gold text-sm font-semibold uppercase tracking-widest mb-3">First Session Free</p>
+      <h2 class="text-4xl sm:text-5xl font-black mb-4">Book Your Free Trial</h2>
+      <p class="text-gray-400 text-lg">No joining fee. No commitment. Just 30 minutes that might change how you think about exercise.</p>
+    </div>
+
+    <!-- Form -->
+    <div id="form-container" class="fade-up card-dark rounded-3xl p-8 sm:p-10">
+      <form id="trial-form" onsubmit="handleFormSubmit(event)">
+        <div class="grid sm:grid-cols-2 gap-5 mb-5">
+          <div>
+            <label class="block text-gray-400 text-sm mb-2 font-medium">First Name</label>
+            <input type="text" class="form-input" placeholder="Your first name" required />
+          </div>
+          <div>
+            <label class="block text-gray-400 text-sm mb-2 font-medium">Surname</label>
+            <input type="text" class="form-input" placeholder="Your surname" required />
+          </div>
+        </div>
+        <div class="grid sm:grid-cols-2 gap-5 mb-5">
+          <div>
+            <label class="block text-gray-400 text-sm mb-2 font-medium">Phone / WhatsApp</label>
+            <input type="tel" class="form-input" placeholder="e.g. 082 000 0000" required />
+          </div>
+          <div>
+            <label class="block text-gray-400 text-sm mb-2 font-medium">Email</label>
+            <input type="email" class="form-input" placeholder="your@email.com" />
+          </div>
+        </div>
+        <div class="grid sm:grid-cols-2 gap-5 mb-5">
+          <div>
+            <label class="block text-gray-400 text-sm mb-2 font-medium">Preferred Date</label>
+            <input type="date" class="form-input" required />
+          </div>
+          <div>
+            <label class="block text-gray-400 text-sm mb-2 font-medium">Preferred Time</label>
+            <select class="form-input" required>
+              <option value="" disabled selected>Select a time</option>
+              <option>06:30 – 07:00 (Opening)</option>
+              <option>07:00 – 08:00</option>
+              <option>08:00 – 09:00</option>
+              <option>09:00 – 10:00</option>
+              <option>10:00 – 11:00</option>
+              <option>11:00 – 12:00</option>
+              <option>12:00 – 13:00</option>
+              <option>13:00 – 14:00</option>
+              <option>14:00 – 15:00</option>
+              <option>15:00 – 16:00</option>
+              <option>16:00 – 17:00</option>
+              <option>17:00 – 18:00</option>
+              <option>18:00 – 19:00 (Last session)</option>
+            </select>
+          </div>
+        </div>
+        <div class="mb-6">
+          <label class="flex items-start gap-3 cursor-pointer">
+            <input type="checkbox" class="mt-1 accent-amber-400" required />
+            <span class="text-gray-400 text-sm">I consent to ThreeZero contacting me via WhatsApp about my trial booking. <a href="https://threezero.co.za/privacy-policy/" class="text-gold hover:underline">Privacy Policy</a></span>
+          </label>
+        </div>
+        <button type="submit" class="btn-gold w-full py-4 rounded-full text-base font-bold cursor-pointer">
+          Book My Free Trial →
+        </button>
+        <p class="text-center text-gray-600 text-xs mt-4">No payment required. We'll confirm your trial via WhatsApp.</p>
+      </form>
+
+      <!-- Success state -->
+      <div id="form-success" class="text-center py-8">
+        <div class="w-16 h-16 bg-green-500/15 rounded-full flex items-center justify-center mx-auto mb-6">
+          <svg width="32" height="32" fill="none" stroke="#22c55e" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>
+        </div>
+        <h3 class="text-2xl font-black text-white mb-3">You're booked! 🎉</h3>
+        <p class="text-gray-300 text-lg mb-2">Andrew will WhatsApp you within <span class="text-gold font-bold">15 minutes</span> to confirm your trial.</p>
+        <p class="text-gray-500 text-sm mb-8">Can't wait? Message us directly:</p>
+        <a href="https://wa.me/27765880709?text=Hi%20Andrew!%20I%20just%20booked%20a%20trial%20on%20the%20website." target="_blank" class="inline-flex items-center gap-3 bg-[#25D366] text-white font-bold px-7 py-3.5 rounded-full hover:bg-[#1ebe5d] transition-colors">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          WhatsApp Andrew Now — 076 588 0709
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FAQ (abbreviated)
+     ============================================================ -->
+<section id="faq" class="py-20">
+  <div class="max-w-3xl mx-auto px-6">
+    <div class="text-center mb-12 fade-up">
+      <h2 class="text-3xl sm:text-4xl font-black mb-3">Quick Answers</h2>
+      <p class="text-gray-400">Everything you need to know before your first session.</p>
+    </div>
+    <div class="space-y-4">
+      <details class="fade-up card-dark rounded-2xl overflow-hidden group">
+        <summary class="px-6 py-5 cursor-pointer font-semibold text-white flex items-center justify-between list-none">
+          Do I need any gym experience?
+          <span class="text-gold group-open:rotate-180 transition-transform">▾</span>
+        </summary>
+        <p class="px-6 pb-5 text-gray-400 text-sm leading-relaxed">None at all. The Biocircuit guides you through every move. A ThreeZero trainer sets up your profile on your first visit and the machine handles the rest from there.</p>
+      </details>
+      <details class="fade-up card-dark rounded-2xl overflow-hidden group" style="transition-delay:0.05s">
+        <summary class="px-6 py-5 cursor-pointer font-semibold text-white flex items-center justify-between list-none">
+          How much does membership cost?
+          <span class="text-gold group-open:rotate-180 transition-transform">▾</span>
+        </summary>
+        <p class="px-6 pb-5 text-gray-400 text-sm leading-relaxed">Book a free trial first and we'll walk you through the membership options in person. No hard sell — just a conversation after your session.</p>
+      </details>
+      <details class="fade-up card-dark rounded-2xl overflow-hidden group" style="transition-delay:0.1s">
+        <summary class="px-6 py-5 cursor-pointer font-semibold text-white flex items-center justify-between list-none">
+          Where are you located?
+          <span class="text-gold group-open:rotate-180 transition-transform">▾</span>
+        </summary>
+        <p class="px-6 pb-5 text-gray-400 text-sm leading-relaxed">Cape Quarter Lifestyle Village, 27 Somerset Road, Green Point, Cape Town. Plenty of parking. Easy to find.</p>
+      </details>
+      <details class="fade-up card-dark rounded-2xl overflow-hidden group" style="transition-delay:0.15s">
+        <summary class="px-6 py-5 cursor-pointer font-semibold text-white flex items-center justify-between list-none">
+          What are your hours?
+          <span class="text-gold group-open:rotate-180 transition-transform">▾</span>
+        </summary>
+        <p class="px-6 pb-5 text-gray-400 text-sm leading-relaxed">Monday – Friday: 06:30 am – 7:00 pm &nbsp;|&nbsp; Saturday: 8:00 am – 1:00 pm</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     10. FOOTER
+     ============================================================ -->
+<footer class="bg-charcoal-card border-t border-charcoal-border">
+  <!-- CTA strip -->
+  <div class="hero-bg py-16">
+    <div class="max-w-3xl mx-auto px-6 text-center">
+      <h2 class="text-3xl sm:text-4xl font-black mb-4">Your 30 Minutes Starts Here.</h2>
+      <p class="text-gray-400 text-lg mb-8">Join Cape Town's most efficient gym. First trial is free.</p>
+      <div class="flex flex-wrap gap-4 justify-center">
+        <a href="#trial" class="btn-gold px-8 py-4 rounded-full text-base cursor-pointer inline-block">Book Free Trial →</a>
+        <a href="https://wa.me/27765880709" target="_blank" class="inline-flex items-center gap-2 bg-[#25D366] text-white font-bold px-8 py-4 rounded-full hover:bg-[#1ebe5d] transition-colors">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          WhatsApp Us
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer links -->
+  <div class="max-w-7xl mx-auto px-6 py-12">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-10">
+      <!-- Brand -->
+      <div>
+        <img src="./threezero-logo.png" alt="ThreeZero" class="h-8 w-auto mb-4 opacity-80" onerror="this.style.display='none'" />
+        <p class="text-gray-500 text-sm leading-relaxed">Cape Town's most advanced 30-minute gym. AI-guided. Science-backed. Results guaranteed.</p>
+      </div>
+      <!-- Visit -->
+      <div>
+        <h4 class="text-white font-bold mb-4 text-sm uppercase tracking-wider">Visit Us</h4>
+        <div class="space-y-2 text-gray-500 text-sm">
+          <p>Cape Quarter Lifestyle Village</p>
+          <p>27 Somerset Road</p>
+          <p>Green Point, Cape Town</p>
+          <p class="mt-3 text-gray-400">Mon–Fri: 06:30 – 19:00</p>
+          <p class="text-gray-400">Saturday: 08:00 – 13:00</p>
+        </div>
+      </div>
+      <!-- Contact -->
+      <div>
+        <h4 class="text-white font-bold mb-4 text-sm uppercase tracking-wider">Contact</h4>
+        <div class="space-y-2 text-sm">
+          <a href="tel:0217456653" class="block text-gray-500 hover:text-gold transition-colors">021 745 6653</a>
+          <a href="https://wa.me/27765880709" class="block text-gray-500 hover:text-gold transition-colors">076 588 0709 (WhatsApp)</a>
+          <a href="mailto:capequarter@threezero.co.za" class="block text-gray-500 hover:text-gold transition-colors">capequarter@threezero.co.za</a>
+        </div>
+      </div>
+      <!-- Links -->
+      <div>
+        <h4 class="text-white font-bold mb-4 text-sm uppercase tracking-wider">Quick Links</h4>
+        <div class="space-y-2 text-sm">
+          <a href="https://threezero.co.za/blog/" class="block text-gray-500 hover:text-white transition-colors">Blog</a>
+          <a href="https://threezero.co.za/faq/" class="block text-gray-500 hover:text-white transition-colors">FAQ</a>
+          <a href="https://threezero.co.za/terms-conditions/" class="block text-gray-500 hover:text-white transition-colors">Terms & Conditions</a>
+          <a href="https://threezero.co.za/privacy-policy/" class="block text-gray-500 hover:text-white transition-colors">Privacy Policy</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="border-t border-charcoal-border pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <p class="text-gray-600 text-xs">© 2026 ThreeZero. All rights reserved.</p>
+      <p class="text-gray-600 text-xs">
+        Reviews powered by <span class="text-gold font-semibold">ReviewTap</span> ·
+        <span class="text-gray-700">Demo built by Jacques · ReviewTap</span>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<!-- ============================================================
+     JAVASCRIPT
+     ============================================================ -->
+<script>
+  // Fade-in on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(el => {
+      if (el.isIntersecting) {
+        el.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // Form submit handler
+  function handleFormSubmit(e) {
+    e.preventDefault();
+    document.getElementById('trial-form').style.display = 'none';
+    document.getElementById('form-success').style.display = 'block';
+    // Scroll to show success state
+    document.getElementById('form-success').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  // Close mobile menu on nav link click
+  document.querySelectorAll('#mobile-menu a').forEach(link => {
+    link.addEventListener('click', () => {
+      document.getElementById('mobile-menu').classList.remove('open');
+    });
+  });
+
+  // Trigger fade-up for above-fold elements immediately
+  setTimeout(() => {
+    document.querySelectorAll('.fade-up').forEach(el => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight) {
+        el.classList.add('visible');
+      }
+    });
+  }, 100);
+</script>
+
+</body>
+</html>
