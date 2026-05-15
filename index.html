@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JCE Media — Research & Reports</title>
+<style>
+  :root {
+    --bg: #0a0d14;
+    --surface: #111520;
+    --surface2: #161c2d;
+    --border: rgba(255,255,255,0.07);
+    --accent: #4f6ef7;
+    --accent2: #7c3aed;
+    --text: #e8eaf0;
+    --muted: #6b7280;
+    --green: #10b981;
+    --orange: #f59e0b;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── NAV ── */
+  nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 40px; height: 64px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; z-index: 100;
+    backdrop-filter: blur(12px);
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 12px; text-decoration: none;
+  }
+  .nav-logo-mark {
+    width: 34px; height: 34px; border-radius: 8px;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 900; font-size: 14px; color: white; letter-spacing: -0.5px;
+  }
+  .nav-logo-text { font-weight: 700; font-size: 15px; color: var(--text); }
+  .nav-logo-sub { font-size: 11px; color: var(--muted); font-weight: 400; }
+  .nav-badge {
+    font-size: 11px; font-weight: 600; padding: 3px 10px;
+    border-radius: 20px; background: rgba(79,110,247,0.15);
+    color: var(--accent); border: 1px solid rgba(79,110,247,0.25);
+  }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 64px 40px 48px;
+    max-width: 1200px; margin: 0 auto;
+  }
+  .hero-eyebrow {
+    font-size: 12px; font-weight: 600; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--accent);
+    margin-bottom: 16px; display: flex; align-items: center; gap: 8px;
+  }
+  .hero-eyebrow::before {
+    content: ''; display: block; width: 20px; height: 2px;
+    background: var(--accent); border-radius: 2px;
+  }
+  .hero h1 {
+    font-size: clamp(32px, 4vw, 52px);
+    font-weight: 800; letter-spacing: -1.5px; line-height: 1.1;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.6) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero-sub {
+    font-size: 17px; color: var(--muted); line-height: 1.6;
+    max-width: 560px; margin-bottom: 36px;
+  }
+  .hero-stats {
+    display: flex; gap: 32px; flex-wrap: wrap;
+  }
+  .stat-item { text-align: left; }
+  .stat-num {
+    font-size: 28px; font-weight: 800; letter-spacing: -1px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .stat-label { font-size: 12px; color: var(--muted); font-weight: 500; margin-top: 2px; }
+
+  /* ── SECTION ── */
+  .section { max-width: 1200px; margin: 0 auto; padding: 0 40px 80px; }
+  .section-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 28px; padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-title {
+    font-size: 13px; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; color: var(--muted);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-title::before {
+    content: ''; display: block; width: 3px; height: 14px;
+    background: linear-gradient(var(--accent), var(--accent2));
+    border-radius: 3px;
+  }
+
+  /* ── CLIENT CARDS ── */
+  .clients-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 20px;
+  }
+  .client-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    text-decoration: none;
+    display: block;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+    position: relative; overflow: hidden;
+  }
+  .client-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    opacity: 0; transition: opacity 0.2s;
+  }
+  .client-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(79,110,247,0.3);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  }
+  .client-card:hover::before { opacity: 1; }
+
+  .client-card-top {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .client-avatar {
+    width: 52px; height: 52px; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 900; font-size: 18px; color: white; flex-shrink: 0;
+  }
+  .client-status {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 11px; font-weight: 600; color: var(--green);
+    background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.2);
+    padding: 4px 10px; border-radius: 20px;
+  }
+  .client-status::before {
+    content: ''; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 6px var(--green);
+  }
+  .client-name {
+    font-size: 20px; font-weight: 800; letter-spacing: -0.5px;
+    color: var(--text); margin-bottom: 6px;
+  }
+  .client-desc {
+    font-size: 13px; color: var(--muted); line-height: 1.5;
+    margin-bottom: 22px;
+  }
+  .client-meta {
+    display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 22px;
+  }
+  .meta-chip {
+    font-size: 11px; font-weight: 600; padding: 4px 10px;
+    border-radius: 8px; background: var(--surface2);
+    color: var(--muted); border: 1px solid var(--border);
+    display: flex; align-items: center; gap: 5px;
+  }
+  .client-reports-preview {
+    border-top: 1px solid var(--border); padding-top: 18px;
+  }
+  .reports-label {
+    font-size: 11px; font-weight: 600; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 10px;
+  }
+  .report-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 0; border-bottom: 1px solid var(--border);
+  }
+  .report-row:last-child { border-bottom: none; }
+  .report-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--accent); flex-shrink: 0;
+  }
+  .report-row-name {
+    font-size: 13px; color: var(--text); font-weight: 500; flex: 1;
+  }
+  .report-row-date { font-size: 11px; color: var(--muted); }
+
+  .card-cta {
+    display: flex; align-items: center; gap: 6px;
+    margin-top: 20px; font-size: 13px; font-weight: 600;
+    color: var(--accent);
+  }
+  .card-cta svg { transition: transform 0.2s; }
+  .client-card:hover .card-cta svg { transform: translateX(4px); }
+
+  /* ── ADD CLIENT CARD ── */
+  .add-client-card {
+    background: transparent;
+    border: 1px dashed rgba(255,255,255,0.12);
+    border-radius: 16px; padding: 28px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center; gap: 12px; min-height: 200px;
+    cursor: default;
+  }
+  .add-icon {
+    width: 44px; height: 44px; border-radius: 12px;
+    background: var(--surface2); display: flex; align-items: center;
+    justify-content: center; font-size: 22px;
+  }
+  .add-label { font-size: 14px; font-weight: 600; color: var(--muted); }
+  .add-sub { font-size: 12px; color: rgba(107,114,128,0.6); }
+
+  /* ── HOW IT WORKS ── */
+  .how-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+  }
+  .how-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px; padding: 24px;
+  }
+  .how-num {
+    font-size: 12px; font-weight: 700; color: var(--accent);
+    margin-bottom: 12px; letter-spacing: 1px;
+  }
+  .how-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+  .how-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 28px 40px;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 12px;
+    max-width: 100%;
+  }
+  .footer-brand { font-size: 13px; font-weight: 600; color: var(--muted); }
+  .footer-links { display: flex; gap: 20px; }
+  .footer-links a {
+    font-size: 12px; color: var(--muted); text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--text); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 680px) {
+    nav { padding: 0 20px; }
+    .hero { padding: 40px 20px 32px; }
+    .section { padding: 0 20px 60px; }
+    footer { padding: 24px 20px; }
+    .hero-stats { gap: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="/" class="nav-logo">
+    <div class="nav-logo-mark">JCE</div>
+    <div>
+      <div class="nav-logo-text">JCE Media</div>
+      <div class="nav-logo-sub">Research & Reports</div>
+    </div>
+  </a>
+  <span class="nav-badge">Internal</span>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">Research Intelligence Hub</div>
+  <h1>Client Research<br>&amp; Reports</h1>
+  <p class="hero-sub">Competitive intelligence, ad research, platform audits, and strategic reports — organised by client, searchable, and always up to date.</p>
+  <div class="hero-stats">
+    <div class="stat-item">
+      <div class="stat-num" id="stat-clients">1</div>
+      <div class="stat-label">Active Client</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num" id="stat-reports">1</div>
+      <div class="stat-label">Report Published</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">May 2026</div>
+      <div class="stat-label">Latest Research</div>
+    </div>
+  </div>
+</div>
+
+<!-- CLIENTS -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-title">Clients</div>
+  </div>
+
+  <div class="clients-grid">
+
+    <!-- ReviewTap -->
+    <a href="./clients/reviewtap/" class="client-card">
+      <div class="client-card-top">
+        <div class="client-avatar" style="background: linear-gradient(135deg,#4f6ef7,#7c3aed);">RT</div>
+        <div class="client-status">Active</div>
+      </div>
+      <div class="client-name">ReviewTap</div>
+      <div class="client-desc">NFC &amp; QR Google review devices for South African businesses. Physical stands and cards — tap to review, no app needed.</div>
+      <div class="client-meta">
+        <span class="meta-chip">🇿🇦 South Africa</span>
+        <span class="meta-chip">eCommerce</span>
+        <span class="meta-chip">Shopify</span>
+      </div>
+      <div class="client-reports-preview">
+        <div class="reports-label">Reports</div>
+        <div class="report-row">
+          <div class="report-dot"></div>
+          <div class="report-row-name">Competitor Ad Intelligence — Static &amp; Carousel</div>
+          <div class="report-row-date">May 15</div>
+        </div>
+      </div>
+      <div class="card-cta">
+        View client reports
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </div>
+    </a>
+
+    <!-- Placeholder -->
+    <div class="add-client-card">
+      <div class="add-icon">＋</div>
+      <div class="add-label">Add next client</div>
+      <div class="add-sub">New client folders appear here automatically</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-title">How It Works</div>
+  </div>
+  <div class="how-grid">
+    <div class="how-card">
+      <div class="how-num">01 — STRUCTURE</div>
+      <div class="how-title">Organised by client</div>
+      <div class="how-desc">Each client has their own folder. Inside: an overview README and a dated reports directory. New reports are added as dated subfolders.</div>
+    </div>
+    <div class="how-card">
+      <div class="how-num">02 — REPORTS</div>
+      <div class="how-title">Self-contained HTML</div>
+      <div class="how-desc">Every report is a standalone <code>index.html</code> — open in any browser, no login required, no dependencies. Designed to be read and shared.</div>
+    </div>
+    <div class="how-card">
+      <div class="how-num">03 — CONVENTIONS</div>
+      <div class="how-title">Dated folder naming</div>
+      <div class="how-desc">Reports follow <code>YYYY-MM-DD-slug</code> so they sort chronologically. The folder name is the permanent reference for that piece of research.</div>
+    </div>
+    <div class="how-card">
+      <div class="how-num">04 — TYPES</div>
+      <div class="how-title">Multiple research formats</div>
+      <div class="how-desc">Competitor ad intelligence, platform audits, keyword research, funnel analysis, creative swipe files, and market research — all live here.</div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">JCE Media Research &amp; Reports · Internal Knowledge Base</div>
+  <div class="footer-links">
+    <a href="https://github.com/jacquesgroen88/researchandreporting" target="_blank">GitHub</a>
+    <a href="https://jcemedia.co.za" target="_blank">JCE Media</a>
+  </div>
+</footer>
+
+</body>
+</html>
