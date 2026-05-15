@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Forever Baby — JCE Media Reports</title>
+<style>
+  :root {
+    --bg: #0a0d14;
+    --surface: #111520;
+    --surface2: #161c2d;
+    --border: rgba(255,255,255,0.07);
+    --accent: #c6766c;
+    --accent2: #433625;
+    --text: #e8eaf0;
+    --muted: #6b7280;
+    --green: #10b981;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 40px; height: 64px;
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; z-index: 100;
+  }
+  .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+  .nav-logo-mark {
+    width: 34px; height: 34px; border-radius: 8px;
+    background: linear-gradient(135deg, #4f6ef7, #7c3aed);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 900; font-size: 14px; color: white;
+  }
+  .nav-logo-text { font-weight: 700; font-size: 15px; color: var(--text); }
+  .nav-logo-sub { font-size: 11px; color: var(--muted); }
+  .nav-back { font-size: 13px; color: var(--muted); text-decoration: none; display: flex; align-items: center; gap: 6px; transition: color 0.2s; }
+  .nav-back:hover { color: var(--text); }
+
+  .hero {
+    padding: 56px 40px 40px;
+    max-width: 1100px; margin: 0 auto;
+    display: flex; align-items: flex-start; gap: 32px; flex-wrap: wrap;
+  }
+  .client-avatar-lg {
+    width: 80px; height: 80px; border-radius: 20px; flex-shrink: 0;
+    background: linear-gradient(135deg, #c6766c, #433625);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 900; font-size: 24px; color: white;
+  }
+  .hero-text h1 { font-size: 36px; font-weight: 800; letter-spacing: -1px; margin-bottom: 8px; }
+  .hero-text p { font-size: 15px; color: var(--muted); line-height: 1.6; max-width: 540px; margin-bottom: 16px; }
+  .hero-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+  .chip {
+    font-size: 11px; font-weight: 600; padding: 4px 10px;
+    border-radius: 8px; background: var(--surface2);
+    color: var(--muted); border: 1px solid var(--border);
+  }
+
+  .stats-row {
+    display: flex; gap: 0; background: var(--surface);
+    border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    max-width: 100%; overflow-x: auto;
+  }
+  .stat-block {
+    padding: 20px 36px; border-right: 1px solid var(--border); flex-shrink: 0;
+  }
+  .stat-block:last-child { border-right: none; }
+  .stat-val { font-size: 26px; font-weight: 800; color: #c6766c; letter-spacing: -0.5px; }
+  .stat-lbl { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; margin-top: 2px; }
+
+  .section { max-width: 1100px; margin: 0 auto; padding: 48px 40px 80px; }
+  .section-title {
+    font-size: 12px; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; color: var(--muted);
+    margin-bottom: 20px; padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-title::before {
+    content: ''; width: 3px; height: 14px;
+    background: linear-gradient(#c6766c, #433625); border-radius: 3px;
+  }
+
+  .reports-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
+  .report-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 16px; padding: 28px; text-decoration: none;
+    display: block; transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+    position: relative; overflow: hidden;
+  }
+  .report-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, #c6766c, #433625);
+  }
+  .report-card:hover { transform: translateY(-4px); border-color: rgba(198,118,108,0.4); box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+
+  .report-badge {
+    display: inline-block; padding: 3px 10px; border-radius: 20px;
+    font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .badge-audit { background: rgba(198,118,108,0.15); color: #c6766c; }
+  .badge-strategy { background: rgba(79,110,247,0.15); color: #4f6ef7; }
+  .badge-research { background: rgba(16,185,129,0.15); color: #10b981; }
+
+  .report-title { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; margin-bottom: 10px; }
+  .report-desc { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 16px; }
+  .report-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
+  .report-chip {
+    font-size: 11px; padding: 3px 8px; border-radius: 6px;
+    background: var(--surface2); color: var(--muted);
+    border: 1px solid var(--border);
+  }
+  .report-meta { font-size: 12px; color: var(--muted); display: flex; align-items: center; justify-content: space-between; }
+  .report-cta { font-size: 13px; font-weight: 600; color: #c6766c; display: flex; align-items: center; gap: 6px; }
+  .report-card:hover .report-cta svg { transform: translateX(4px); }
+  .report-cta svg { transition: transform 0.2s; }
+
+  footer {
+    border-top: 1px solid var(--border); padding: 24px 40px;
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 13px; color: var(--muted);
+  }
+  footer a { color: var(--muted); text-decoration: none; }
+  footer a:hover { color: var(--text); }
+
+  @media (max-width: 680px) {
+    nav { padding: 0 20px; }
+    .hero { padding: 32px 20px 28px; }
+    .section { padding: 32px 20px 60px; }
+    footer { padding: 20px; flex-direction: column; gap: 8px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <div class="nav-logo-mark">JCE</div>
+    <div>
+      <div class="nav-logo-text">JCE Media</div>
+      <div class="nav-logo-sub">Research & Reports</div>
+    </div>
+  </a>
+  <a href="/" class="nav-back">
+    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+    All Clients
+  </a>
+</nav>
+
+<div class="hero">
+  <div class="client-avatar-lg">MFB</div>
+  <div class="hero-text">
+    <h1>My Forever Baby</h1>
+    <p>South African Shopify store selling lifelike reborn baby dolls, priced from R699 to R4,999. CRO audit and Phase 1 implementation completed May 2026.</p>
+    <div class="hero-chips">
+      <span class="chip">🇿🇦 South Africa</span>
+      <span class="chip">E-commerce</span>
+      <span class="chip">Shopify</span>
+      <span class="chip">CRO</span>
+      <a href="https://myforeverbaby.co.za" target="_blank" rel="noopener" style="text-decoration:none;"><span class="chip">🌐 myforeverbaby.co.za</span></a>
+    </div>
+  </div>
+</div>
+
+<div class="stats-row">
+  <div class="stat-block"><div class="stat-val">23</div><div class="stat-lbl">Reviews imported</div></div>
+  <div class="stat-block"><div class="stat-val">5</div><div class="stat-lbl">Phase 1 changes</div></div>
+  <div class="stat-block"><div class="stat-val">8</div><div class="stat-lbl">In-stock dolls</div></div>
+  <div class="stat-block"><div class="stat-val">R699–R4,999</div><div class="stat-lbl">Price range</div></div>
+</div>
+
+<div class="section">
+  <div class="section-title">Reports</div>
+  <div class="reports-grid">
+
+    <a href="./reports/2026-05-15-cro-audit/" class="report-card">
+      <div class="report-badge badge-audit">Audit</div>
+      <div class="report-title">CRO Audit — My Forever Baby</div>
+      <div class="report-desc">Full conversion rate audit of the MyForeverBaby Shopify store. Covers stock status across 22 products, five critical CRO gaps identified, and a prioritised Phase 1 action plan.</div>
+      <div class="report-chips">
+        <span class="report-chip">22 products audited</span>
+        <span class="report-chip">9 sold-out dolls</span>
+        <span class="report-chip">5 issues found</span>
+        <span class="report-chip">Phase 1 roadmap</span>
+      </div>
+      <div class="report-meta">
+        <span>15 May 2026</span>
+        <span class="report-cta">Read report <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+      </div>
+    </a>
+
+    <a href="./reports/2026-05-15-cro-phase1-implementation/" class="report-card">
+      <div class="report-badge badge-strategy">Strategy</div>
+      <div class="report-title">Phase 1 CRO Implementation</div>
+      <div class="report-desc">Implementation report for Phase 1 CRO changes on the Dwell - CRO draft theme. Covers WhatsApp button, marquee update, per-product accessory templates, and 23 imported customer reviews.</div>
+      <div class="report-chips">
+        <span class="report-chip">WhatsApp button live</span>
+        <span class="report-chip">23 reviews imported</span>
+        <span class="report-chip">2 new templates</span>
+        <span class="report-chip">Marquee enabled</span>
+      </div>
+      <div class="report-meta">
+        <span>15 May 2026</span>
+        <span class="report-cta">Read report <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+      </div>
+    </a>
+
+  </div>
+</div>
+
+<footer>
+  <span>JCE Media · My Forever Baby · 2026</span>
+  <a href="/">← Back to all clients</a>
+</footer>
+
+</body>
+</html>

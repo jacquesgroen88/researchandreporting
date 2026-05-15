@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phase 1 CRO Implementation — My Forever Baby</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Georgia', serif; background: #f7f4f1; color: #2d2d2d; }
+
+  .hero {
+    background: linear-gradient(135deg, #433625, #c6766c);
+    color: white;
+    padding: 60px 48px 48px;
+  }
+  .hero-eyebrow { font-size: 12px; letter-spacing: 3px; text-transform: uppercase; opacity: 0.75; margin-bottom: 16px; font-family: sans-serif; }
+  .hero h1 { font-size: 42px; font-weight: normal; line-height: 1.2; margin-bottom: 12px; }
+  .hero-sub { font-size: 18px; opacity: 0.85; margin-bottom: 32px; font-family: sans-serif; font-weight: 300; }
+  .hero-meta { display: flex; gap: 32px; font-family: sans-serif; font-size: 13px; opacity: 0.7; }
+
+  .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-family: sans-serif; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; background: rgba(255,255,255,0.2); color: white; margin-bottom: 20px; }
+
+  .stats-bar { background: #c6766c; display: flex; }
+  .stat { flex: 1; padding: 24px 32px; border-right: 1px solid rgba(255,255,255,0.15); }
+  .stat:last-child { border-right: none; }
+  .stat-val { font-size: 32px; color: white; font-family: sans-serif; font-weight: 700; }
+  .stat-label { font-size: 12px; color: rgba(255,255,255,0.7); font-family: sans-serif; text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+
+  .container { max-width: 900px; margin: 0 auto; padding: 48px 32px; }
+
+  .section { margin-bottom: 52px; }
+  .section-title { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: #c6766c; font-family: sans-serif; font-weight: 600; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #c6766c; }
+  .section h2 { font-size: 28px; font-weight: normal; margin-bottom: 16px; color: #433625; }
+  .section p { font-size: 16px; line-height: 1.8; color: #444; margin-bottom: 12px; font-family: sans-serif; }
+
+  .change-card { background: white; border-radius: 12px; padding: 28px 32px; margin-bottom: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); display: flex; gap: 24px; align-items: flex-start; }
+  .change-icon { font-size: 32px; flex-shrink: 0; }
+  .change-body h3 { font-size: 17px; font-family: sans-serif; font-weight: 600; color: #433625; margin-bottom: 6px; }
+  .change-body p { font-size: 14px; line-height: 1.7; color: #555; font-family: sans-serif; margin-bottom: 8px; }
+  .change-meta { font-size: 12px; font-family: sans-serif; color: #999; font-style: italic; }
+  .change-tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-family: sans-serif; background: #e8f7ee; color: #2e7d51; font-weight: 600; margin-right: 6px; }
+  .change-tag.amber { background: #fff3cd; color: #856404; }
+
+  table { width: 100%; border-collapse: collapse; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.06); font-family: sans-serif; }
+  th { background: #433625; color: white; padding: 14px 20px; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; text-align: left; }
+  td { padding: 14px 20px; font-size: 14px; border-bottom: 1px solid #f0ede9; color: #444; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #fdf9f7; }
+
+  .pill { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-family: sans-serif; font-weight: 600; }
+  .pill-green { background: #e8f7ee; color: #2e7d51; }
+  .pill-amber { background: #fff3cd; color: #856404; }
+
+  .code-block { background: #2d2d2d; color: #e9c49a; padding: 20px 24px; border-radius: 10px; font-family: 'Courier New', monospace; font-size: 13px; line-height: 1.7; margin: 16px 0; overflow-x: auto; }
+
+  .next-steps { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .next-item { background: white; border-radius: 10px; padding: 20px 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); font-family: sans-serif; border-top: 3px solid #c6766c; }
+  .next-item.done { border-top-color: #4caf7d; }
+  .next-item h4 { font-size: 14px; font-weight: 600; color: #433625; margin-bottom: 6px; }
+  .next-item p { font-size: 13px; color: #666; line-height: 1.6; }
+
+  .review-dist { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .review-item { background: white; border-radius: 8px; padding: 16px; text-align: center; box-shadow: 0 2px 6px rgba(0,0,0,0.05); font-family: sans-serif; }
+  .review-count { font-size: 28px; font-weight: 700; color: #c6766c; }
+  .review-product { font-size: 12px; color: #666; margin-top: 4px; }
+
+  .footer { background: #433625; color: rgba(255,255,255,0.6); text-align: center; padding: 32px; font-family: sans-serif; font-size: 13px; }
+  .footer strong { color: #e9c49a; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge">Strategy</div>
+  <div class="hero-eyebrow">JCE Media · CRO Implementation</div>
+  <h1>My Forever Baby<br>Phase 1 Implementation Report</h1>
+  <div class="hero-sub">What was built, what went live, and what's next</div>
+  <div class="hero-meta">
+    <span>📅 May 2026</span>
+    <span>🎯 Theme: Dwell - CRO</span>
+    <span>🇿🇦 myforeverbaby.co.za</span>
+  </div>
+</div>
+
+<div class="stats-bar">
+  <div class="stat"><div class="stat-val">5</div><div class="stat-label">Changes shipped</div></div>
+  <div class="stat"><div class="stat-val">23</div><div class="stat-label">Reviews imported</div></div>
+  <div class="stat"><div class="stat-val">2</div><div class="stat-label">New templates</div></div>
+  <div class="stat"><div class="stat-val">Live</div><div class="stat-label">Status</div></div>
+</div>
+
+<div class="container">
+
+  <div class="section">
+    <div class="section-title">Summary</div>
+    <h2>What Was Done</h2>
+    <p>Phase 1 focused on the five highest-impact, lowest-effort CRO improvements identified in the audit. All theme code changes were made to the <strong>Dwell - CRO</strong> draft theme and pushed via Shopify CLI. Product template assignments were made in Shopify Admin. Judge.me was installed and seeded with 23 existing customer reviews.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Changes Delivered</div>
+    <h2>Implementation Detail</h2>
+
+    <div class="change-card">
+      <div class="change-icon">💬</div>
+      <div class="change-body">
+        <h3>WhatsApp Floating Button</h3>
+        <p>A fixed-position WhatsApp button was added to <code>layout/theme.liquid</code> — bottom-right, 58×58px, green (#25D366), with a pre-filled message: <em>"Hi, I'm interested in a baby doll from MyForeverBaby."</em> Opens directly to WhatsApp chat with the store number (072 236 5134). Visible on all pages, mobile and desktop.</p>
+        <div class="change-meta"><span class="change-tag">LIVE</span> layout/theme.liquid · pushed to Dwell - CRO</div>
+      </div>
+    </div>
+
+    <div class="change-card">
+      <div class="change-icon">📢</div>
+      <div class="change-body">
+        <h3>Marquee Enabled + Text Updated</h3>
+        <p>The homepage marquee section was enabled (<code>"disabled": false</code>) and the stale Christmas copy was replaced with current messaging: <em>"🌸 Free Nationwide Delivery · 14-Day Returns · New Babies Now In Stock · WhatsApp Us: 072 236 5134"</em>. Runs on every page load at zero cost.</p>
+        <div class="change-meta"><span class="change-tag">LIVE</span> templates/index.json · pushed to Dwell - CRO</div>
+      </div>
+    </div>
+
+    <div class="change-card">
+      <div class="change-icon">🧳</div>
+      <div class="change-body">
+        <h3>Travel Package — Correct Accessories List</h3>
+        <p>Created <code>product.travel-package.json</code> — a dedicated product template with the correct 8-item accessories list hardcoded: Baby Bag, Baby Carrier, 2 Extra Outfits, Baby Toy, Bib, Burp Cloth, Wash Cloth, 3 Nappies. Includes doll disclaimer. Template assigned to the Travel Package product in Shopify Admin.</p>
+        <div class="change-meta"><span class="change-tag">LIVE</span> templates/product.travel-package.json · assigned in Admin</div>
+      </div>
+    </div>
+
+    <div class="change-card">
+      <div class="change-icon">💄</div>
+      <div class="change-body">
+        <h3>Pamper Pack — Correct Accessories List</h3>
+        <p>Created <code>product.pamper-pack.json</code> — a dedicated product template with the correct 17-item accessories list: Hairband, Mirror, Brush, Hair Scrunchie, Nail File, Facial Sponge, Bracelet, Earrings, Butterfly Clip, Nail Polish, Sunglasses, Heart-shaped Pen, Finger/toe Separator, Sleeping Mask, Teddy Bear, Vanity Bag, Water Bottle. Includes doll disclaimer. Template assigned in Admin.</p>
+        <div class="change-meta"><span class="change-tag">LIVE</span> templates/product.pamper-pack.json · assigned in Admin</div>
+      </div>
+    </div>
+
+    <div class="change-card">
+      <div class="change-icon">⭐</div>
+      <div class="change-body">
+        <h3>Judge.me Installed + 23 Reviews Imported</h3>
+        <p>Judge.me review app installed (free plan). 23 existing customer reviews sourced from Facebook (19) and Google (4) were formatted and imported via direct CSV import. Reviews distributed across all in-stock doll products, weighted toward top sellers. Post-purchase automated email flow configured to collect new reviews going forward.</p>
+        <div class="change-meta"><span class="change-tag">LIVE</span> Judge.me · direct CSV import</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Reviews</div>
+    <h2>Review Distribution</h2>
+    <div class="review-dist">
+      <div class="review-item"><div class="review-count">5</div><div class="review-product">Baby Hope</div></div>
+      <div class="review-item"><div class="review-count">4</div><div class="review-product">Baby Hannah</div></div>
+      <div class="review-item"><div class="review-count">4</div><div class="review-product">Baby Elizabeth</div></div>
+      <div class="review-item"><div class="review-count">4</div><div class="review-product">Baby Chloe</div></div>
+      <div class="review-item"><div class="review-count">4</div><div class="review-product">Baby Anya</div></div>
+      <div class="review-item"><div class="review-count">1</div><div class="review-product">Baby Bonnie</div></div>
+      <div class="review-item"><div class="review-count">1</div><div class="review-product">Baby Hailey</div></div>
+      <div class="review-item"><div class="review-count">23</div><div class="review-product">Total imported</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Files Changed</div>
+    <h2>Technical Reference</h2>
+    <table>
+      <tr><th>File</th><th>Change</th><th>Theme</th></tr>
+      <tr><td><code>layout/theme.liquid</code></td><td>WhatsApp button before &lt;/body&gt;</td><td><span class="pill pill-green">Dwell - CRO</span></td></tr>
+      <tr><td><code>templates/index.json</code></td><td>Marquee enabled + text updated</td><td><span class="pill pill-green">Dwell - CRO</span></td></tr>
+      <tr><td><code>templates/product.json</code></td><td>Default accessories content restored</td><td><span class="pill pill-green">Dwell - CRO</span></td></tr>
+      <tr><td><code>templates/product.travel-package.json</code></td><td>New template — Travel Package accessories</td><td><span class="pill pill-green">Both themes</span></td></tr>
+      <tr><td><code>templates/product.pamper-pack.json</code></td><td>New template — Pamper Pack accessories</td><td><span class="pill pill-green">Both themes</span></td></tr>
+    </table>
+
+    <br>
+    <div class="code-block">
+# Push command used<br>
+shopify theme push --theme 147961217174 --store 0qceqf-cu.myshopify.com<br><br>
+# Theme IDs<br>
+Dwell - Dev (live):  #147927400598<br>
+Dwell - CRO (draft): #147961217174<br><br>
+# Preview URL<br>
+https://0qceqf-cu.myshopify.com?preview_theme_id=147961217174
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Still To Do</div>
+    <h2>Remaining Action Items</h2>
+    <div class="next-steps">
+      <div class="next-item">
+        <h4>🚀 Publish Dwell - CRO</h4>
+        <p>WhatsApp button and marquee are in draft. Publish from Shopify Admin → Online Store → Themes when ready.</p>
+      </div>
+      <div class="next-item">
+        <h4>🏷️ Apply Best-Seller Tags</h4>
+        <p>Add tag <code>best-seller</code> to Baby Hope, Hannah, Elizabeth, Chloe, Anya. Badge code is already live in the theme.</p>
+      </div>
+      <div class="next-item">
+        <h4>📦 Pre-Order Template Assignment</h4>
+        <p>Assign <code>product.preorder-babies</code> template to 9 sold-out dolls. Converts dead-end into a pre-order conversion path.</p>
+      </div>
+      <div class="next-item">
+        <h4>📧 Judge.me Email Flow</h4>
+        <p>Turn on post-purchase review request emails in Judge.me. Set delay of 7–14 days after fulfilment.</p>
+      </div>
+      <div class="next-item">
+        <h4>🌟 Phase 2 — Upsell Optimisation</h4>
+        <p>Review the Essential Upsell app configuration. Ensure Travel Package and Pamper Pack are being offered as add-ons on doll product pages.</p>
+      </div>
+      <div class="next-item">
+        <h4>📸 Baby Summer Reviews</h4>
+        <p>Baby Summer (baby-ashley-copy) is in stock but has no reviews yet. Will be covered by Judge.me automated emails as orders come in.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  Prepared by <strong>JCE Media</strong> · May 2026 · myforeverbaby.co.za
+</div>
+
+</body>
+</html>
