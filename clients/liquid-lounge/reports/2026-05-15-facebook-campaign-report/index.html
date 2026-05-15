@@ -1,0 +1,2629 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Liquid Lounge — Facebook Campaign Report</title>
+  <style>
+    /* ── Variables ─────────────────────────────────────────── */
+    :root {
+      --navy-deep:  #0A1628;
+      --navy-mid:   #0D2045;
+      --navy-light: #1A3560;
+      --gold:       #C9A84C;
+      --gold-light: #E8C97A;
+      --gold-pale:  #F5E6B8;
+      --white:      #FFFFFF;
+      --muted:      #A8BBCC;
+      --card-bg:    #132040;
+      --border:     #1E3A6E;
+      --green:      #2ECC71;
+      --blue-lead:  #3A6EA5;
+      --teal-lead:  #2A8080;
+      --radius:     8px;
+    }
+
+    /* ── Reset ─────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--navy-deep);
+      color: var(--white);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+    img { display: block; max-width: 100%; }
+    table { border-collapse: collapse; width: 100%; }
+
+    /* ── Layout helpers ────────────────────────────────────── */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+    section { padding: 64px 0; }
+    section + section { border-top: 1px solid var(--border); }
+
+    .section-heading {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--gold);
+      margin-bottom: 36px;
+      display: inline-block;
+    }
+
+    /* ── Header ────────────────────────────────────────────── */
+    .report-header {
+      background: radial-gradient(ellipse at 50% 0%, #0D2045 0%, var(--navy-deep) 70%);
+      padding: 0;
+      border-top: 4px solid var(--gold);
+      text-align: center;
+    }
+    .report-header .header-inner {
+      padding: 56px 32px 48px;
+    }
+    .report-header .logo-text {
+      font-size: 3rem;
+      font-weight: 800;
+      color: var(--gold);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .report-header .subtitle {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.65);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    .header-wave {
+      display: block;
+      width: 100%;
+      height: 32px;
+      margin: 8px auto 28px;
+    }
+    .campaign-badge {
+      display: inline-block;
+      background: var(--gold);
+      color: var(--navy-deep);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 8px 24px;
+      border-radius: 50px;
+      margin-bottom: 20px;
+    }
+    .header-prepared {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 8px;
+    }
+
+    /* ── KPI Cards ─────────────────────────────────────────── */
+    #executive-summary { background: var(--navy-mid); }
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .kpi-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      border-top: 3px solid var(--gold);
+      padding: 28px 24px;
+      box-shadow: 0 4px 20px rgba(201,168,76,0.12);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .kpi-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 28px rgba(201,168,76,0.22);
+    }
+    .kpi-card.highlight {
+      border-top-color: var(--gold-light);
+      box-shadow: 0 4px 24px rgba(201,168,76,0.28), inset 0 0 0 1px rgba(201,168,76,0.2);
+    }
+    .kpi-icon {
+      font-size: 1.4rem;
+      margin-bottom: 10px;
+      opacity: 0.85;
+    }
+    .kpi-value {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.1;
+      margin-bottom: 6px;
+    }
+    .kpi-label {
+      font-size: 0.7rem;
+      color: var(--gold-pale);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-weight: 600;
+    }
+    .kpi-sub {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* ── Campaign Overview ─────────────────────────────────── */
+    .overview-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+    .ad-set-list { list-style: none; margin: 16px 0; }
+    .ad-set-list li {
+      padding: 12px 0 12px 16px;
+      border-left: 3px solid var(--gold);
+      margin-bottom: 12px;
+      background: var(--card-bg);
+      padding: 14px 16px;
+      border-radius: 0 var(--radius) var(--radius) 0;
+    }
+    .ad-set-list li strong { color: var(--gold-light); display: block; margin-bottom: 3px; }
+    .ad-set-list li span { font-size: 0.85rem; color: var(--muted); }
+    .overview-meta { margin-top: 20px; }
+    .meta-item {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 8px;
+      font-size: 0.875rem;
+    }
+    .meta-label { color: var(--muted); min-width: 110px; }
+    .meta-value { color: var(--white); }
+
+    .services-menu {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .services-menu-header {
+      background: var(--gold);
+      color: var(--navy-deep);
+      text-align: center;
+      padding: 14px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .service-item {
+      padding: 22px 24px;
+      border-left: 4px solid var(--gold);
+      margin: 20px 16px;
+      border-radius: 0 var(--radius) var(--radius) 0;
+      background: var(--navy-mid);
+    }
+    .service-item + .service-item { margin-top: 0; }
+    .service-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 4px 16px;
+    }
+    .service-name {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--gold-light);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .service-desc { font-size: 0.82rem; color: var(--muted); margin-bottom: 10px; }
+    .service-price {
+      display: flex;
+      gap: 24px;
+      font-size: 0.88rem;
+    }
+    .price-item strong { color: var(--white); }
+    .price-item span { color: var(--muted); font-size: 0.78rem; display: block; }
+
+    /* ── Ad Creative Brief ─────────────────────────────────── */
+    #ad-brief { background: var(--navy-mid); }
+
+    .brief-grid { display: flex; flex-direction: column; gap: 36px; }
+
+    .brief-adset {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .brief-adset-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 20px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--white);
+      flex-wrap: wrap;
+      border-bottom: 1px solid var(--border);
+    }
+    .brief-adset-header.evergreen { background: rgba(201,168,76,0.12); }
+    .brief-adset-header.holidays  { background: rgba(58,110,165,0.15); }
+    .brief-adset-pill {
+      font-size: 0.65rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+    .evergreen .brief-adset-pill { background: var(--gold); color: var(--navy-deep); }
+    .holidays  .brief-adset-pill { background: var(--blue-lead); color: var(--white); }
+    .brief-adset-note {
+      font-size: 0.75rem;
+      color: var(--muted);
+      font-weight: 400;
+      margin-left: auto;
+      font-style: italic;
+    }
+
+    .brief-ad-group { padding: 20px 20px 4px; }
+    .brief-ad-group + .brief-ad-group { border-top: 1px solid var(--border); }
+    .brief-group-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--gold-light);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 14px;
+    }
+    .brief-ads-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .brief-ad-card {
+      background: var(--navy-mid);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+    }
+    .brief-ad-num {
+      font-size: 0.65rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+    .brief-ad-copy {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.7;
+      font-style: italic;
+      border-left: 3px solid var(--gold);
+      padding-left: 12px;
+      margin-bottom: 14px;
+    }
+    .brief-ad-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .brief-meta-item {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+    .brief-meta-item strong { color: var(--gold-light); }
+
+    .preview-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .preview-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--gold);
+      border-radius: var(--radius);
+      padding: 14px;
+    }
+    .preview-label {
+      font-size: 0.72rem;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    @media (max-width: 768px) {
+      .brief-ads-row { grid-template-columns: 1fr; }
+      .preview-grid  { grid-template-columns: 1fr; }
+      .brief-adset-note { margin-left: 0; width: 100%; }
+    }
+
+    /* ── Platform Performance ──────────────────────────────── */
+    #platform-performance { background: var(--navy-mid); }
+    .perf-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+    .chart-title {
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 12px;
+    }
+
+    /* SVG bar chart */
+    .bar-chart-svg { width: 100%; overflow: visible; }
+    .bar-bg { fill: var(--navy-light); rx: 3; }
+    .bar-fill { fill: var(--gold-pale); transition: width 0.6s ease; }
+    .bar-fill.top { fill: var(--gold); }
+    .bar-label { fill: var(--muted); font-size: 11px; }
+    .bar-value { fill: var(--gold-light); font-size: 11px; font-weight: 600; }
+    .chart-axis-label { fill: var(--muted); font-size: 10px; }
+
+    /* animate bars */
+    .bar-fill { transform-origin: left center; transform: scaleX(0); }
+    .chart-animated .bar-fill { animation: barGrow 0.7s ease forwards; }
+    .chart-animated .bar-fill:nth-child(1)  { animation-delay: 0.05s; }
+    .chart-animated .bar-fill:nth-child(2)  { animation-delay: 0.10s; }
+    .chart-animated .bar-fill:nth-child(3)  { animation-delay: 0.15s; }
+    .chart-animated .bar-fill:nth-child(4)  { animation-delay: 0.20s; }
+    .chart-animated .bar-fill:nth-child(5)  { animation-delay: 0.25s; }
+    .chart-animated .bar-fill:nth-child(6)  { animation-delay: 0.30s; }
+    .chart-animated .bar-fill:nth-child(7)  { animation-delay: 0.35s; }
+    .chart-animated .bar-fill:nth-child(8)  { animation-delay: 0.40s; }
+    .chart-animated .bar-fill:nth-child(9)  { animation-delay: 0.45s; }
+    .chart-animated .bar-fill:nth-child(10) { animation-delay: 0.50s; }
+    .chart-animated .bar-fill:nth-child(11) { animation-delay: 0.55s; }
+    @keyframes barGrow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+    /* Perf table */
+    .perf-table th {
+      background: var(--gold);
+      color: var(--navy-deep);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 10px 12px;
+      text-align: left;
+      font-weight: 700;
+    }
+    .perf-table td {
+      padding: 9px 12px;
+      font-size: 0.82rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .perf-table tr:nth-child(odd) td { background: var(--card-bg); }
+    .perf-table tr:nth-child(even) td { background: var(--navy-mid); }
+    .perf-table tr:hover td { background: var(--navy-light); }
+    .perf-table tr.top-row td { border-left: 3px solid var(--gold); }
+    .badge-best {
+      display: inline-block;
+      background: rgba(46,204,113,0.18);
+      color: var(--green);
+      font-size: 0.65rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+    .td-num { text-align: right; font-variant-numeric: tabular-nums; }
+
+    .insight-box {
+      margin-top: 24px;
+      background: var(--card-bg);
+      border-left: 4px solid var(--gold);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 16px 20px;
+      font-size: 0.875rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+    .insight-box strong { color: var(--gold-light); }
+
+    /* ── Lead Generation ───────────────────────────────────── */
+    .leads-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+
+    /* Donut chart */
+    .donut-wrap { text-align: center; }
+    .donut-ring {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      margin: 0 auto 16px;
+    }
+    .donut-svg { width: 200px; height: 200px; transform: rotate(-90deg); display: block; }
+    .donut-circle { fill: none; stroke-width: 35; }
+    .donut-bg { stroke: var(--navy-light); }
+    .donut-c1 { stroke: var(--gold); stroke-dasharray: 339.1 439.82; stroke-dashoffset: 0; }
+    .donut-c2 { stroke: var(--blue-lead); stroke-dasharray: 67.7 439.82; stroke-dashoffset: -339.1; }
+    .donut-c3 { stroke: var(--teal-lead); stroke-dasharray: 33.02 439.82; stroke-dashoffset: -406.8; }
+    .donut-c1, .donut-c2, .donut-c3 {
+      stroke-linecap: butt;
+      transform-origin: center;
+    }
+    .donut-label-wrap {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      width: 100px;
+    }
+    .donut-num {
+      font-size: 2.4rem;
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1;
+    }
+    .donut-sublabel {
+      font-size: 0.65rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      text-align: center;
+      margin-top: 4px;
+    }
+    .donut-legend { list-style: none; margin-top: 8px; text-align: left; display: inline-block; }
+    .donut-legend li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.82rem;
+      margin-bottom: 8px;
+    }
+    .legend-swatch {
+      width: 14px; height: 14px; border-radius: 3px; flex-shrink: 0;
+    }
+    .legend-count { margin-left: auto; color: var(--gold-light); font-weight: 700; padding-left: 16px; }
+
+    /* Stat callouts */
+    .stat-callout {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .stat-callout-num {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--gold);
+      min-width: 80px;
+      line-height: 1;
+    }
+    .stat-callout-text { font-size: 0.82rem; }
+    .stat-callout-text strong { display: block; color: var(--white); font-size: 0.9rem; }
+    .stat-callout-text span { color: var(--muted); }
+
+    /* Funnel */
+    .funnel { display: flex; flex-direction: column; align-items: center; gap: 0; }
+    .funnel-step {
+      background: var(--gold);
+      color: var(--navy-deep);
+      font-weight: 700;
+      text-align: center;
+      padding: 10px 16px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      line-height: 1.3;
+      transition: transform 0.15s;
+    }
+    .funnel-step:hover { transform: scale(1.02); }
+    .funnel-step .f-num { font-size: 1.2rem; display: block; }
+    .funnel-step .f-label { font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.8; }
+    .funnel-arrow {
+      width: 2px;
+      height: 14px;
+      background: var(--gold);
+      margin: 0 auto;
+      position: relative;
+    }
+    .funnel-arrow::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 7px solid var(--gold);
+    }
+    .funnel-step:nth-child(1)  { width: 100%; }
+    .funnel-step:nth-child(3)  { width: 85%; }
+    .funnel-step:nth-child(5)  { width: 65%; }
+    .funnel-step:nth-child(7)  { width: 50%; }
+    .funnel-step:nth-child(9)  { width: 35%; background: var(--gold-light); }
+
+    /* ── Confirmed Leads Table ─────────────────────────────── */
+    #confirmed-leads { background: var(--navy-mid); }
+    .leads-table th {
+      background: var(--gold);
+      color: var(--navy-deep);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 700;
+    }
+    .leads-table td {
+      padding: 11px 16px;
+      font-size: 0.875rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .leads-table tr:nth-child(odd) td { background: var(--card-bg); }
+    .leads-table tr:nth-child(even) td { background: var(--navy-mid); }
+    .leads-table tr:hover td { background: var(--navy-light); transition: background 0.15s; }
+    .row-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      background: rgba(201,168,76,0.15);
+      color: var(--gold);
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .badge-cruise { background: rgba(201,168,76,0.18); color: var(--gold-light); }
+    .badge-houseboat { background: rgba(58,110,165,0.25); color: #7BAEDD; }
+    .badge-charter { background: rgba(42,128,128,0.25); color: #5ABCBC; }
+    .leads-summary {
+      margin-top: 16px;
+      font-size: 0.82rem;
+      color: var(--muted);
+      text-align: center;
+    }
+    .leads-summary strong { color: var(--gold-light); }
+
+    /* ── Screenshots Gallery ───────────────────────────────── */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+    .gallery-card {
+      background: var(--navy-mid);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--gold);
+      border-radius: var(--radius);
+      padding: 14px;
+      overflow: hidden;
+    }
+    .gallery-card.full-width { grid-column: 1 / -1; }
+    .gallery-card-title {
+      font-size: 0.72rem;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .gallery-card img {
+      width: 100%;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+    }
+    .gallery-caption {
+      margin-top: 8px;
+      font-size: 0.73rem;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    /* ── Footer ────────────────────────────────────────────── */
+    footer {
+      background: var(--navy-deep);
+      border-top: 1px solid var(--gold);
+      padding: 40px 0;
+      text-align: center;
+    }
+    .footer-brand {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .footer-meta {
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+    .footer-wave { font-size: 1.4rem; margin: 12px 0 6px; opacity: 0.6; }
+    .footer-confidential {
+      margin-top: 16px;
+      font-size: 0.7rem;
+      color: rgba(168,187,204,0.5);
+    }
+
+    /* ── CRM Automation & Reviews ─────────────────────────── */
+    #crm-automation { background: var(--navy-mid); }
+
+    .wf-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-bottom: 32px; }
+
+    .wf-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .wf-card-header {
+      background: var(--navy-light);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .wf-icon { font-size: 1.6rem; line-height: 1; }
+    .wf-card-label { font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+    .wf-card-title { font-size: 1rem; font-weight: 700; color: var(--white); }
+    .wf-link-btn {
+      margin-left: auto;
+      background: rgba(201,168,76,0.15);
+      color: var(--gold-light);
+      border: 1px solid rgba(201,168,76,0.35);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+      transition: background 0.15s;
+    }
+    .wf-link-btn:hover { background: rgba(201,168,76,0.3); }
+
+    .wf-card-body { padding: 20px; }
+    .wf-desc { font-size: 0.83rem; color: var(--muted); line-height: 1.65; margin-bottom: 20px; }
+
+    /* Workflow diagram */
+    .wf-flow { display: flex; flex-direction: column; align-items: center; gap: 0; }
+    .wf-node {
+      width: 100%;
+      text-align: center;
+      padding: 9px 16px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      line-height: 1.35;
+    }
+    .wf-node.trigger { background: rgba(201,168,76,0.18); color: var(--gold-light); border: 1px solid rgba(201,168,76,0.35); }
+    .wf-node.check   { background: rgba(58,110,165,0.18); color: #8BBADF; border: 1px solid rgba(58,110,165,0.35); }
+    .wf-node.action  { background: rgba(42,128,128,0.18); color: #7ACECE; border: 1px solid rgba(42,128,128,0.35); }
+    .wf-arrow-down {
+      width: 2px; height: 14px;
+      background: var(--border);
+      margin: 0 auto;
+      position: relative;
+    }
+    .wf-arrow-down::after {
+      content: '';
+      position: absolute;
+      bottom: -5px; left: 50%;
+      transform: translateX(-50%);
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 6px solid var(--border);
+    }
+
+    /* Branches */
+    .wf-branches {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      width: 100%;
+      margin-top: 14px;
+    }
+    .wf-branch {
+      background: var(--navy-mid);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px;
+    }
+    .wf-branch-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      line-height: 1.3;
+    }
+    .wf-branch-label.cruise   { color: var(--gold-light); }
+    .wf-branch-label.private  { color: #8BBADF; }
+    .wf-branch-label.houseboat{ color: #7ACECE; }
+    .wf-branch-sub { font-size: 0.72rem; color: var(--muted); line-height: 1.6; }
+
+    /* Rating split */
+    .wf-rating-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      width: 100%;
+      margin-top: 14px;
+    }
+    .wf-rating-col {
+      border-radius: 6px;
+      padding: 12px;
+      border: 1px solid var(--border);
+    }
+    .wf-rating-col.low  { background: rgba(231,76,60,0.1); }
+    .wf-rating-col.high { background: rgba(46,204,113,0.1); }
+    .wf-rating-badge { font-size: 0.8rem; font-weight: 700; margin-bottom: 6px; }
+    .wf-rating-col.low  .wf-rating-badge { color: #E8837A; }
+    .wf-rating-col.high .wf-rating-badge { color: var(--green); }
+    .wf-rating-text { font-size: 0.73rem; color: var(--muted); line-height: 1.6; }
+
+    /* Performance bar */
+    .wf-perf-bar {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      background: var(--navy-mid);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-top: 20px;
+      overflow: hidden;
+    }
+    .wf-perf-stat {
+      flex: 1;
+      padding: 16px 14px;
+      text-align: center;
+    }
+    .wf-perf-num {
+      display: block;
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--gold);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .wf-perf-lbl { font-size: 0.7rem; color: var(--muted); line-height: 1.4; }
+    .wf-perf-divider { width: 1px; height: 48px; background: var(--border); flex-shrink: 0; }
+
+    /* Recommendation box */
+    .wf-recommendation {
+      background: var(--card-bg);
+      border: 1px solid rgba(201,168,76,0.3);
+      border-left: 4px solid var(--gold);
+      border-radius: var(--radius);
+      padding: 24px;
+      display: flex;
+      gap: 18px;
+      align-items: flex-start;
+    }
+    .wf-rec-icon { font-size: 1.6rem; line-height: 1; flex-shrink: 0; }
+    .wf-rec-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--gold-light);
+      margin-bottom: 10px;
+    }
+    .wf-rec-body { font-size: 0.85rem; color: var(--muted); line-height: 1.7; margin-bottom: 14px; }
+    .wf-rec-body strong { color: var(--white); }
+    .wf-rec-steps { display: flex; flex-direction: column; gap: 8px; }
+    .wf-rec-step {
+      display: flex;
+      gap: 10px;
+      font-size: 0.83rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    @media (max-width: 900px) {
+      .wf-grid { grid-template-columns: 1fr; }
+      .wf-branches { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      .wf-card-header { flex-direction: column; align-items: flex-start; }
+      .wf-link-btn { margin-left: 0; }
+      .wf-perf-bar { flex-direction: column; }
+      .wf-perf-divider { width: 100%; height: 1px; }
+    }
+
+    /* ── Reviewtap Physical Cards ──────────────────────────── */
+    .section-subheading {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--gold-light);
+      margin-bottom: 14px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .rt-overview-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.6fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    .rt-review-header {
+      font-size: 0.7rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+    .rt-review-status {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+    }
+    .rt-stars-row {
+      display: flex;
+      align-items: stretch;
+      background: var(--navy-mid);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .rt-star-stat {
+      flex: 1;
+      padding: 14px 10px;
+      text-align: center;
+    }
+    .rt-star-num {
+      display: block;
+      font-size: 1.7rem;
+      font-weight: 800;
+      color: var(--gold);
+      line-height: 1;
+      margin-bottom: 5px;
+    }
+    .rt-star-label {
+      font-size: 0.68rem;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+    .rt-star-divider { width: 1px; background: var(--border); flex-shrink: 0; }
+
+    .rt-cards-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+    }
+    .rt-screenshots-pair {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+
+    /* Deployment cards */
+    .rt-deploy-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 16px;
+    }
+    .rt-deploy-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+    }
+    .rt-deploy-card.primary {
+      border-top-color: var(--gold);
+      box-shadow: 0 4px 16px rgba(201,168,76,0.12);
+    }
+    .rt-deploy-icon { font-size: 1.6rem; margin-bottom: 10px; }
+    .rt-deploy-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .rt-deploy-badge {
+      font-size: 0.62rem;
+      background: rgba(201,168,76,0.18);
+      color: var(--gold);
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .rt-deploy-body {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.65;
+      margin-bottom: 12px;
+    }
+    .rt-deploy-tip {
+      font-size: 0.78rem;
+      color: var(--muted);
+      background: var(--navy-mid);
+      border-left: 3px solid var(--gold);
+      padding: 8px 12px;
+      border-radius: 0 4px 4px 0;
+      font-style: italic;
+      line-height: 1.5;
+    }
+    .rt-deploy-tip strong { color: var(--gold-light); font-style: normal; }
+
+    /* Impact projection */
+    .rt-impact-box {
+      margin-top: 28px;
+      background: var(--card-bg);
+      border: 1px solid rgba(46,204,113,0.25);
+      border-left: 4px solid var(--green);
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+    .rt-impact-header {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--green);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 20px;
+    }
+    .rt-impact-grid {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      flex-wrap: wrap;
+      background: var(--navy-mid);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .rt-impact-item {
+      flex: 1;
+      min-width: 120px;
+      padding: 18px 16px;
+      text-align: center;
+    }
+    .rt-impact-num {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--green);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .rt-impact-lbl {
+      font-size: 0.73rem;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.4;
+    }
+    .rt-impact-lbl span { font-size: 0.65rem; color: var(--muted); font-weight: 400; display: block; margin-top: 2px; }
+    .rt-impact-sep {
+      font-size: 1.2rem;
+      color: var(--gold);
+      padding: 0 4px;
+      flex-shrink: 0;
+      font-weight: 700;
+    }
+
+    @media (max-width: 900px) {
+      .rt-overview-grid { grid-template-columns: 1fr; }
+      .rt-deploy-grid { grid-template-columns: 1fr; }
+      .rt-impact-grid { flex-direction: column; }
+      .rt-impact-sep { transform: rotate(90deg); }
+    }
+    @media (max-width: 600px) {
+      .rt-screenshots-pair { grid-template-columns: 1fr; }
+      .rt-stars-row { flex-direction: column; }
+      .rt-star-divider { width: 100%; height: 1px; }
+    }
+
+    /* ── 90-Day Action Plan ────────────────────────────────── */
+    #action-plan { background: var(--navy-deep); }
+
+    .ap-phases { display: flex; flex-direction: column; gap: 40px; }
+
+    .ap-phase {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .ap-phase-header {
+      background: var(--card-bg);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .ap-phase-badge {
+      background: var(--gold);
+      color: var(--navy-deep);
+      font-size: 0.7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 5px 14px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+    .ap-phase-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--white);
+    }
+    .ap-phase-body { padding: 28px 24px; display: flex; flex-direction: column; gap: 32px; }
+
+    .ap-block-title {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--gold-light);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* Sales steps */
+    .ap-steps { display: flex; flex-direction: column; gap: 12px; }
+    .ap-step {
+      display: flex;
+      gap: 16px;
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      align-items: flex-start;
+    }
+    .ap-step-num {
+      background: var(--gold);
+      color: var(--navy-deep);
+      font-weight: 800;
+      font-size: 0.8rem;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .ap-step-content { flex: 1; }
+    .ap-step-content strong { display: block; color: var(--white); font-size: 0.88rem; margin-bottom: 3px; }
+    .ap-step-content span { font-size: 0.81rem; color: var(--muted); line-height: 1.55; display: block; }
+    .ap-script {
+      margin-top: 8px;
+      background: var(--navy-mid);
+      border-left: 3px solid var(--gold);
+      padding: 8px 12px;
+      font-size: 0.8rem;
+      color: var(--gold-pale);
+      font-style: italic;
+      border-radius: 0 4px 4px 0;
+      line-height: 1.5;
+    }
+
+    /* Broadcast cards */
+    .ap-cards-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+    .ap-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--gold);
+      border-radius: var(--radius);
+      padding: 16px;
+    }
+    .ap-card-label {
+      font-size: 0.65rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 4px;
+    }
+    .ap-card-subject {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--gold-light);
+      margin-bottom: 8px;
+    }
+    .ap-card-body { font-size: 0.81rem; color: var(--muted); line-height: 1.6; }
+
+    /* Action items */
+    .ap-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .ap-action-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.83rem;
+      color: var(--muted);
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+    .ap-action-item strong { color: var(--white); }
+    .ap-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 6px;
+    }
+    .ap-dot.gold { background: var(--gold); }
+    .ap-dot.muted { background: var(--border); }
+
+    /* KPI targets row */
+    .ap-kpi-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    .ap-kpi-box {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--teal-lead);
+      border-radius: var(--radius);
+      padding: 20px 16px;
+      text-align: center;
+    }
+    .ap-kpi-val {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--gold-light);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .ap-kpi-lbl {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--white);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      line-height: 1.4;
+    }
+    .ap-kpi-lbl span { font-size: 0.68rem; color: var(--muted); font-weight: 400; text-transform: none; letter-spacing: 0; display: block; margin-top: 2px; }
+
+    @media (max-width: 768px) {
+      .ap-two-col { grid-template-columns: 1fr; }
+      .ap-kpi-row { grid-template-columns: repeat(2, 1fr); }
+      .ap-phase-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+    }
+    @media (max-width: 480px) {
+      .ap-kpi-row { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* ── Responsive ────────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .leads-grid { grid-template-columns: 1fr 1fr; }
+      .leads-grid > :last-child { grid-column: 1 / -1; }
+    }
+    @media (max-width: 768px) {
+      .container { padding: 0 16px; }
+      section { padding: 40px 0; }
+      .report-header .logo-text { font-size: 2rem; }
+      .kpi-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
+      .overview-grid, .perf-grid, .leads-grid { grid-template-columns: 1fr; }
+      .bar-chart-svg { font-size: 10px; }
+      .gallery-grid { grid-template-columns: 1fr; }
+      .gallery-card.full-width { grid-column: auto; }
+    }
+    @media (max-width: 480px) {
+      .kpi-grid { grid-template-columns: 1fr; }
+      .kpi-value { font-size: 1.8rem; }
+    }
+
+    /* ── Print ─────────────────────────────────────────────── */
+    @media print {
+      body { background: white; color: black; font-size: 12px; }
+      .report-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .kpi-card, .gallery-card, .perf-table tr, .leads-table tr {
+        -webkit-print-color-adjust: exact; print-color-adjust: exact;
+      }
+      section { page-break-inside: avoid; padding: 24px 0; }
+      .gallery-card { page-break-inside: avoid; }
+      footer { page-break-before: always; }
+      .kpi-card:hover { transform: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════
+     1. HEADER
+══════════════════════════════════════════════════════════════ -->
+<header class="report-header">
+  <div class="header-inner">
+    <div class="logo-text">Liquid Lounge</div>
+    <div class="subtitle">Vaal River Leisure Cruises</div>
+
+    <!-- Inline SVG wave -->
+    <svg class="header-wave" viewBox="0 0 1200 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M0,16 C150,0 300,32 450,16 C600,0 750,32 900,16 C1050,0 1150,28 1200,16"
+            fill="none" stroke="#C9A84C" stroke-width="2" opacity="0.7"/>
+      <path d="M0,22 C200,6 400,36 600,20 C800,4 1000,34 1200,20"
+            fill="none" stroke="#C9A84C" stroke-width="1" opacity="0.35"/>
+    </svg>
+
+    <div class="campaign-badge">Facebook Ad Campaign Report &nbsp;|&nbsp; 24 March – 11 May 2026</div>
+    <div class="header-prepared">Prepared: May 2026 &nbsp;·&nbsp; South Africa</div>
+  </div>
+</header>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     2. EXECUTIVE SUMMARY
+══════════════════════════════════════════════════════════════ -->
+<section id="executive-summary">
+  <div class="container">
+    <h2 class="section-heading">Executive Summary</h2>
+    <div class="kpi-grid">
+
+      <div class="kpi-card">
+        <div class="kpi-icon">💰</div>
+        <div class="kpi-value">R1,158.87</div>
+        <div class="kpi-label">Total Ad Spend</div>
+        <div class="kpi-sub">Total campaign budget</div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icon">👁</div>
+        <div class="kpi-value">71,306</div>
+        <div class="kpi-label">Total Impressions</div>
+        <div class="kpi-sub">Unique accounts reached: 38,525</div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icon">💬</div>
+        <div class="kpi-value">371</div>
+        <div class="kpi-label">WhatsApp Conversations</div>
+        <div class="kpi-sub">Total results generated</div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icon">📊</div>
+        <div class="kpi-value">R3.12</div>
+        <div class="kpi-label">Cost per Result</div>
+        <div class="kpi-sub">Per WhatsApp conversation started</div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icon">👥</div>
+        <div class="kpi-value">386</div>
+        <div class="kpi-label">CRM Contacts Generated</div>
+        <div class="kpi-sub">Captured in Reviewtap CRM via Facebook campaign</div>
+      </div>
+
+      <div class="kpi-card highlight">
+        <div class="kpi-icon">✅</div>
+        <div class="kpi-value">13</div>
+        <div class="kpi-label">Confirmed Booking Leads</div>
+        <div class="kpi-sub">Completed full booking process &nbsp;·&nbsp; 3.37% conversion</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     3. CAMPAIGN OVERVIEW
+══════════════════════════════════════════════════════════════ -->
+<section id="campaign-overview">
+  <div class="container">
+    <h2 class="section-heading">Campaign Overview</h2>
+    <div class="overview-grid">
+
+      <div>
+        <p style="color:var(--muted); margin-bottom:20px; font-size:0.9rem; line-height:1.75;">
+          Liquid Lounge ran two Facebook ad sets between 24 March and 11 May 2026,
+          targeting South Africans interested in riverside leisure experiences on the Vaal River.
+          The campaign objective was <strong style="color:var(--white);">WhatsApp conversation starts</strong>,
+          routing prospective guests directly to the booking team via WhatsApp.
+        </p>
+
+        <ul class="ad-set-list">
+          <li>
+            <strong>LL Public Cruises — Evergreen Ad Set</strong>
+            <span>Ran 24 Mar – 11 Apr 2026. Targeted ongoing Sunday leisure cruises and evergreen interest audiences. Primary spend driver.</span>
+          </li>
+          <li>
+            <strong>LL Public Cruises — Upcoming Public Holidays Ad Set</strong>
+            <span>Ran 24 Mar – 17 Apr 2026. Targeted specific upcoming public holiday dates with time-sensitive creative. Strong cost-efficiency results.</span>
+          </li>
+        </ul>
+
+        <div class="overview-meta">
+          <div class="meta-item">
+            <span class="meta-label">Objective</span>
+            <span class="meta-value">WhatsApp Conversations (7-day click / 1-day view)</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Platforms</span>
+            <span class="meta-value">Facebook, Instagram, WhatsApp</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Age Targeting</span>
+            <span class="meta-value">18 – 65+ (all age brackets)</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">CRM</span>
+            <span class="meta-value">Reviewtap CRM with Shopify integration</span>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="services-menu">
+          <div class="services-menu-header">Services Advertised</div>
+
+          <div class="service-item">
+            <div class="service-name">Sunday Leisure Cruise</div>
+            <div class="service-desc">1-hour river cruise &nbsp;·&nbsp; Sundays &amp; Public Holidays, 10:30 – 11:30</div>
+            <div class="service-price">
+              <div class="price-item">
+                <strong>R250</strong>
+                <span>per adult</span>
+              </div>
+              <div class="price-item">
+                <strong>R125</strong>
+                <span>per child U/12</span>
+              </div>
+            </div>
+          </div>
+
+          <hr class="service-divider">
+
+          <div class="service-item" style="margin-top:0; margin-bottom:20px;">
+            <div class="service-name">2-Hour Lunch Cruise</div>
+            <div class="service-desc">Full buffet meal &amp; live entertainment &nbsp;·&nbsp; Sundays, 13:00 – 15:00</div>
+            <div class="service-price">
+              <div class="price-item">
+                <strong>R680</strong>
+                <span>per adult</span>
+              </div>
+              <div class="price-item">
+                <strong>R340</strong>
+                <span>per child U/12</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     4. AD CREATIVE BRIEF & PREVIEWS
+══════════════════════════════════════════════════════════════ -->
+<section id="ad-brief">
+  <div class="container">
+    <h2 class="section-heading">Approved Ad Creative Brief &amp; Previews</h2>
+    <p style="color:var(--muted);font-size:0.9rem;margin-bottom:36px;max-width:780px;">
+      The following ad copy and creatives were approved prior to campaign launch. Two ad sets were created —
+      an Evergreen set for ongoing Sunday cruises, and a Public Holidays set for time-sensitive promotions.
+      Each set contained ads for both the 1-Hour Leisure Cruise and the 2-Hour Sunday Lunch Cruise.
+    </p>
+
+    <!-- Ad set tabs layout -->
+    <div class="brief-grid">
+
+      <!-- EVERGREEN ADS -->
+      <div class="brief-adset">
+        <div class="brief-adset-header evergreen">
+          <span class="brief-adset-pill">Evergreen</span>
+          LL Public Cruises — Evergreen Ads
+          <span class="brief-adset-note">Can be switched on/off when seats need to be filled</span>
+        </div>
+
+        <div class="brief-ad-group">
+          <div class="brief-group-label">🚢 Leisure Cruise Ads</div>
+          <div class="brief-ads-row">
+            <div class="brief-ad-card">
+              <div class="brief-ad-num">Ad 1</div>
+              <div class="brief-ad-copy">"Looking for something different this weekend?<br><br>Join our 1-hour Leisure Cruise on the Vaal River<br>R250.00 per adult | R125.00 per child U/12<br><br>• Scenic river views<br>• Relaxed atmosphere<br>• Fully stocked cash bar<br><br>Times: Sundays &amp; public holidays 10H30 – 11H30<br>Limited spots available – book your seat now.<br>WhatsApp to book your seat 083 749 0224"</div>
+              <div class="brief-ad-meta">
+                <span class="brief-meta-item"><strong>Headline:</strong> 1-Hour Vaal Cruise from R250</span>
+                <span class="brief-meta-item"><strong>CTA:</strong> Book Now</span>
+              </div>
+            </div>
+            <div class="brief-ad-card">
+              <div class="brief-ad-num">Ad 2</div>
+              <div class="brief-ad-copy">"A simple, relaxing escape on the water.<br><br>Our Leisure Cruise is a 1-hour experience on the Vaal River, perfect for a quick outing with friends or family.<br><br>@ R250.00 per adult | R125.00 per child U/12<br>(No food – drinks available on board)<br><br>Runs Sundays &amp; public holidays<br>Spots are limited – secure yours now.<br>WhatsApp to book your seat 083 749 0224"</div>
+              <div class="brief-ad-meta">
+                <span class="brief-meta-item"><strong>Headline:</strong> Quick Escape on the Vaal River</span>
+                <span class="brief-meta-item"><strong>CTA:</strong> Book Now</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="brief-ad-group">
+          <div class="brief-group-label">🍽 Sunday Lunch Cruise Ads</div>
+          <div class="brief-ads-row">
+            <div class="brief-ad-card">
+              <div class="brief-ad-num">Ad 1</div>
+              <div class="brief-ad-copy">"Turn your Sunday into something special.<br><br>Enjoy a 2-hour cruise + buffet lunch on the Vaal River<br>R680.00 per adult | R340.00 per child U/12<br><br>• Full buffet meal<br>• Live entertainment<br>• Scenic river views<br><br>Time: Sundays 13H00 – 15H00<br>Limited availability – book your table today.<br>WhatsApp to book your seat 083 749 0224"</div>
+              <div class="brief-ad-meta">
+                <span class="brief-meta-item"><strong>Headline:</strong> 2-Hour Lunch Cruise from R680</span>
+                <span class="brief-meta-item"><strong>CTA:</strong> Reserve Your Spot</span>
+              </div>
+            </div>
+            <div class="brief-ad-card">
+              <div class="brief-ad-num">Ad 2</div>
+              <div class="brief-ad-copy">"Good food. Great views. No stress.<br><br>Join our Sunday Lunch Cruise and enjoy a full buffet while cruising the Vaal River.<br><br>2-hour experience | R680.00 per adult | R340.00 per child U/12<br><br>Perfect for birthdays, family days, or just getting out of the house.<br>Seats fill up quickly – don't miss out.<br>WhatsApp to book your seat 083 749 0224"</div>
+              <div class="brief-ad-meta">
+                <span class="brief-meta-item"><strong>Headline:</strong> Sunday Lunch on the Water</span>
+                <span class="brief-meta-item"><strong>CTA:</strong> Book Now</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PUBLIC HOLIDAYS ADS -->
+      <div class="brief-adset">
+        <div class="brief-adset-header holidays">
+          <span class="brief-adset-pill">Public Holidays</span>
+          LL Public Cruises — Upcoming Public Holidays
+          <span class="brief-adset-note">Promoted before each upcoming public holiday</span>
+        </div>
+
+        <div class="brief-ad-group">
+          <div class="brief-group-label">🚢 Leisure Cruise — Public Holiday Ad</div>
+          <div class="brief-ads-row">
+            <div class="brief-ad-card">
+              <div class="brief-ad-num">Ad</div>
+              <div class="brief-ad-copy">"Got plans for the upcoming public holiday?<br><br>Join us on the Vaal River for a relaxing 1-hour Leisure Cruise – the perfect way to spend your day off.<br>R250.00 per adult | R125.00 per child U/12<br><br>• Scenic views<br>• Cash bar on board<br>• Easy, laid-back experience<br><br>We'll be sailing on all upcoming public holidays – spots are limited, so book early.<br>WhatsApp to book your seat 083 749 0224"</div>
+              <div class="brief-ad-meta">
+                <span class="brief-meta-item"><strong>Headline:</strong> Public Holiday Cruises Now Booking</span>
+                <span class="brief-meta-item"><strong>CTA:</strong> Book Now</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="brief-ad-group">
+          <div class="brief-group-label">🍽 Sunday Lunch Cruise — Public Holiday Ad</div>
+          <div class="brief-ads-row">
+            <div class="brief-ad-card">
+              <div class="brief-ad-num">Ad</div>
+              <div class="brief-ad-copy">"Make your public holiday feel like an actual break.<br><br>Join our 2-hour Lunch Cruise on the Vaal River – complete with a full buffet, entertainment, and beautiful views.<br>R680.00 per adult | R340.00 per child U/12<br><br>We'll be running special cruises on upcoming public holidays – perfect for families, celebrations, or just getting out.<br>Limited availability – book your table now.<br>WhatsApp to book your seat 083 749 0224"</div>
+              <div class="brief-ad-meta">
+                <span class="brief-meta-item"><strong>Headline:</strong> Public Holiday Lunch Cruises</span>
+                <span class="brief-meta-item"><strong>CTA:</strong> Reserve Your Spot</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /.brief-grid -->
+
+    <!-- Ad Previews -->
+    <div style="margin-top:48px;">
+      <h3 class="section-subheading">How the Ads Appeared on Facebook &amp; Instagram</h3>
+      <p style="color:var(--muted);font-size:0.85rem;margin-bottom:20px;">
+        Facebook Ads Manager automatically generated multiple creative formats — single image, video slideshow, and collection — from the approved assets. Below are previews of how the ads rendered across placements.
+      </p>
+      <div class="preview-grid">
+        <div class="preview-card">
+          <div class="preview-label">Evergreen — 1-Hour Leisure Cruise (Facebook Feed &amp; Instagram)</div>
+          <img src="https://jacquesgroen88.github.io/llreportmay/fbadpreview.jpg" alt="Facebook ad previews for 1-Hour Leisure Cruise" style="width:100%;border-radius:4px;border:1px solid var(--border);">
+          <div class="gallery-caption">Facebook Feed (default, single media, video slideshow, collection) and Instagram Feed. "Looking for something different this weekend?" — WhatsApp CTA. 40 reactions, 4 comments, 1 share.</div>
+        </div>
+        <div class="preview-card">
+          <div class="preview-label">Evergreen — 2-Hour Sunday Lunch Cruise (Facebook Feed)</div>
+          <img src="https://jacquesgroen88.github.io/llreportmay/fbadpreview2.jpg" alt="Facebook ad previews for 2-Hour Sunday Lunch Cruise" style="width:100%;border-radius:4px;border:1px solid var(--border);">
+          <div class="gallery-caption">Facebook Feed across single media, collection, and video slideshow formats. "Turn your Sunday into something special." — WhatsApp CTA. 14 reactions.</div>
+        </div>
+        <div class="preview-card">
+          <div class="preview-label">Public Holidays — 2-Hour Lunch Cruise (Instagram Reels, Facebook Reels &amp; WhatsApp Status)</div>
+          <img src="https://jacquesgroen88.github.io/llreportmay/fbadpreview3.jpg" alt="Public Holidays Lunch Cruise ad previews across Reels and WhatsApp Status" style="width:100%;border-radius:4px;border:1px solid var(--border);">
+          <div class="gallery-caption">Instagram Reels, Instagram profile feed, Facebook Reels, WhatsApp Status, and Facebook profile feed. "Need a real break this public holiday? Join our 2-hour Vaal River Lunch…" — 10 reactions, 1 comment.</div>
+        </div>
+        <div class="preview-card">
+          <div class="preview-label">Public Holidays — 1-Hour Leisure Cruise (Facebook, Instagram, Stories &amp; Marketplace)</div>
+          <img src="https://jacquesgroen88.github.io/llreportmay/fbadpreview4.jpg" alt="Public Holidays Leisure Cruise ad previews across Facebook, Instagram Stories and Marketplace" style="width:100%;border-radius:4px;border:1px solid var(--border);">
+          <div class="gallery-caption">Facebook Feed, Instagram Feed, Instagram Stories, Facebook Stories, and Facebook Marketplace. "Got plans for the upcoming public holiday?" — WhatsApp CTA. 47 reactions, 2 comments.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     5. PLATFORM PERFORMANCE
+══════════════════════════════════════════════════════════════ -->
+<section id="platform-performance">
+  <div class="container">
+    <h2 class="section-heading">Platform &amp; Placement Performance</h2>
+    <div class="perf-grid">
+
+      <!-- Bar Chart -->
+      <div>
+        <div class="chart-title">Results by Placement (WhatsApp Conversations Started)</div>
+        <svg id="barChart" class="bar-chart-svg" viewBox="0 0 480 370" xmlns="http://www.w3.org/2000/svg">
+          <!-- Scale: max 160 results → 260px bar width. Labels start x=185, bars from x=185 -->
+          <!-- Row height: 30px bars, 4px gap = 34px per row -->
+
+          <!-- Row 1: FB Feed Evergreen - 160 -->
+          <rect x="0" y="4" width="184" height="26" fill="transparent"/>
+          <text x="180" y="21" text-anchor="end" class="bar-label">FB Feed (Evergreen)</text>
+          <rect x="185" y="4" width="260" height="26" rx="3" class="bar-bg"/>
+          <rect x="185" y="4" width="260" height="26" rx="3" class="bar-fill top"/>
+          <text x="450" y="21" class="bar-value"> 160</text>
+
+          <!-- Row 2: FB Feed Public Holidays - 153 -->
+          <text x="180" y="55" text-anchor="end" class="bar-label">FB Feed (Public Holidays)</text>
+          <rect x="185" y="38" width="260" height="26" rx="3" class="bar-bg"/>
+          <rect x="185" y="38" width="249.1" height="26" rx="3" class="bar-fill top"/>
+          <text x="438" y="55" class="bar-value"> 153</text>
+
+          <!-- Row 3: FB Reels Public Holidays - 33 -->
+          <text x="180" y="89" text-anchor="end" class="bar-label">FB Reels (Public Holidays)</text>
+          <rect x="185" y="72" width="260" height="26" rx="3" class="bar-bg"/>
+          <rect x="185" y="72" width="53.6" height="26" rx="3" class="bar-fill"/>
+          <text x="242" y="89" class="bar-value"> 33</text>
+
+          <!-- Row 4: FB Reels Evergreen - 7 -->
+          <text x="180" y="123" text-anchor="end" class="bar-label">FB Reels (Evergreen)</text>
+          <rect x="185" y="106" width="260" height="26" rx="3" class="bar-bg"/>
+          <rect x="185" y="106" width="11.4" height="26" rx="3" class="bar-fill"/>
+          <text x="200" y="123" class="bar-value"> 7</text>
+
+          <!-- Row 5: Search Results - 7 -->
+          <text x="180" y="157" text-anchor="end" class="bar-label">Search Results (Both)</text>
+          <rect x="185" y="140" width="260" height="26" rx="3" class="bar-bg"/>
+          <rect x="185" y="140" width="11.4" height="26" rx="3" class="bar-fill"/>
+          <text x="200" y="157" class="bar-value"> 7</text>
+
+          <!-- Row 6: Marketplace - 4 -->
+          <text x="180" y="191" text-anchor="end" class="bar-label">Marketplace (Both)</text>
+          <rect x="185" y="174" width="260" height="26" rx="3" class="bar-bg"/>
+          <rect x="185" y="174" width="6.5" height="26" rx="3" class="bar-fill"/>
+          <text x="195" y="191" class="bar-value"> 4</text>
+
+          <!-- Row 7: FB Feed Mobile Web - 3 -->
+          <text x="180" y="225" text-anchor="end" class="bar-label">FB Feed Mobile Web</text>
+          <rect x="185" y="208" width="260" height="26" rx="3" class="bar-bg"/>
+          <rect x="185" y="208" width="4.9" height="26" rx="3" class="bar-fill"/>
+          <text x="194" y="225" class="bar-value"> 3</text>
+
+          <!-- Row 8: WhatsApp Status - 2 -->
+          <text x="180" y="259" text-anchor="end" class="bar-label">WhatsApp Status</text>
+          <rect x="185" y="242" width="260" height="26" rx="3" class="bar-bg"/>
+          <rect x="185" y="242" width="3.25" height="26" rx="3" class="bar-fill"/>
+          <text x="192" y="259" class="bar-value"> 2</text>
+
+          <!-- Row 9: Instagram Stories - 1 -->
+          <text x="180" y="293" text-anchor="end" class="bar-label">Instagram Stories</text>
+          <rect x="185" y="276" width="260" height="26" rx="3" class="bar-bg"/>
+          <rect x="185" y="276" width="1.6" height="26" rx="3" class="bar-fill"/>
+          <text x="190" y="293" class="bar-value"> 1</text>
+
+          <!-- Row 10: Ads on FB Reels - 1 -->
+          <text x="180" y="327" text-anchor="end" class="bar-label">Ads on FB Reels</text>
+          <rect x="185" y="310" width="260" height="26" rx="3" class="bar-bg"/>
+          <rect x="185" y="310" width="1.6" height="26" rx="3" class="bar-fill"/>
+          <text x="190" y="327" class="bar-value"> 1</text>
+
+          <!-- Row 11: In-stream Reels - 1 -->
+          <text x="180" y="361" text-anchor="end" class="bar-label">In-stream Reels</text>
+          <rect x="185" y="344" width="260" height="26" rx="3" class="bar-bg"/>
+          <rect x="185" y="344" width="1.6" height="26" rx="3" class="bar-fill"/>
+          <text x="190" y="361" class="bar-value"> 1</text>
+        </svg>
+
+        <div class="insight-box">
+          <strong>Facebook Feed dominated</strong> with 313 of 371 total results (84%) while accounting for 88% of spend.
+          <strong>Facebook Reels (Public Holidays)</strong> delivered the strongest efficiency at R1.77/result.
+          <strong>WhatsApp Status</strong> generated 2 results at R1.40 CPR from only 325 impressions — a cost-efficient sleeper placement worth scaling.
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div>
+        <div class="chart-title">Detailed Placement Breakdown</div>
+        <table class="perf-table">
+          <thead>
+            <tr>
+              <th>Placement</th>
+              <th class="td-num">Results</th>
+              <th class="td-num">Spend (R)</th>
+              <th class="td-num">Impressions</th>
+              <th class="td-num">CPR</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="top-row">
+              <td>FB Feed (Evergreen)</td>
+              <td class="td-num">160</td>
+              <td class="td-num">729.50</td>
+              <td class="td-num">38,642</td>
+              <td class="td-num">R4.56</td>
+            </tr>
+            <tr class="top-row">
+              <td>FB Feed (Public Holidays)</td>
+              <td class="td-num">153</td>
+              <td class="td-num">302.52</td>
+              <td class="td-num">26,509</td>
+              <td class="td-num">R1.98</td>
+            </tr>
+            <tr>
+              <td>FB Reels (Public Holidays)</td>
+              <td class="td-num">33</td>
+              <td class="td-num">58.36</td>
+              <td class="td-num">2,943</td>
+              <td class="td-num">R1.77</td>
+            </tr>
+            <tr>
+              <td>FB Reels (Evergreen)</td>
+              <td class="td-num">7</td>
+              <td class="td-num">19.16</td>
+              <td class="td-num">595</td>
+              <td class="td-num">R2.74</td>
+            </tr>
+            <tr>
+              <td>Search Results <span class="badge-best">Best CPR</span></td>
+              <td class="td-num">7</td>
+              <td class="td-num">10.43</td>
+              <td class="td-num">618</td>
+              <td class="td-num">R1.49</td>
+            </tr>
+            <tr>
+              <td>Marketplace</td>
+              <td class="td-num">4</td>
+              <td class="td-num">9.31</td>
+              <td class="td-num">604</td>
+              <td class="td-num">R2.33</td>
+            </tr>
+            <tr>
+              <td>FB Feed Mobile Web</td>
+              <td class="td-num">3</td>
+              <td class="td-num">4.63</td>
+              <td class="td-num">311</td>
+              <td class="td-num">R1.54</td>
+            </tr>
+            <tr>
+              <td>WhatsApp Status</td>
+              <td class="td-num">2</td>
+              <td class="td-num">2.79</td>
+              <td class="td-num">325</td>
+              <td class="td-num">R1.40</td>
+            </tr>
+            <tr>
+              <td>Instagram Stories</td>
+              <td class="td-num">1</td>
+              <td class="td-num">1.85</td>
+              <td class="td-num">50</td>
+              <td class="td-num">R1.85</td>
+            </tr>
+            <tr>
+              <td>Ads on FB Reels</td>
+              <td class="td-num">1</td>
+              <td class="td-num">0.37</td>
+              <td class="td-num">35</td>
+              <td class="td-num">R0.37</td>
+            </tr>
+            <tr>
+              <td>In-stream Reels</td>
+              <td class="td-num">1</td>
+              <td class="td-num">0.27</td>
+              <td class="td-num">8</td>
+              <td class="td-num">R0.27</td>
+            </tr>
+            <tr style="background: var(--gold) !important;">
+              <td style="background:rgba(201,168,76,0.2);font-weight:700;color:var(--gold-light);">TOTAL</td>
+              <td class="td-num" style="background:rgba(201,168,76,0.2);font-weight:700;color:var(--gold-light);">371</td>
+              <td class="td-num" style="background:rgba(201,168,76,0.2);font-weight:700;color:var(--gold-light);">1,158.87</td>
+              <td class="td-num" style="background:rgba(201,168,76,0.2);font-weight:700;color:var(--gold-light);">71,306</td>
+              <td class="td-num" style="background:rgba(201,168,76,0.2);font-weight:700;color:var(--gold-light);">R3.12</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     5. LEAD GENERATION
+══════════════════════════════════════════════════════════════ -->
+<section id="lead-generation">
+  <div class="container">
+    <h2 class="section-heading">Lead Generation</h2>
+    <div class="leads-grid">
+
+      <!-- Donut chart -->
+      <div class="donut-wrap">
+        <div class="donut-ring">
+          <svg class="donut-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" id="donutChart">
+            <circle class="donut-circle donut-bg" cx="100" cy="100" r="70"/>
+            <circle class="donut-circle donut-c1" cx="100" cy="100" r="70"/>
+            <circle class="donut-circle donut-c2" cx="100" cy="100" r="70"/>
+            <circle class="donut-circle donut-c3" cx="100" cy="100" r="70"/>
+          </svg>
+          <div class="donut-label-wrap">
+            <div class="donut-num">13</div>
+            <div class="donut-sublabel">Confirmed<br>Leads</div>
+          </div>
+        </div>
+        <ul class="donut-legend">
+          <li>
+            <span class="legend-swatch" style="background:var(--gold);"></span>
+            Sunday Leisure Cruise
+            <span class="legend-count">10</span>
+          </li>
+          <li>
+            <span class="legend-swatch" style="background:var(--blue-lead);"></span>
+            Houseboat
+            <span class="legend-count">2</span>
+          </li>
+          <li>
+            <span class="legend-swatch" style="background:var(--teal-lead);"></span>
+            Private Charter
+            <span class="legend-count">1</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Stat callouts -->
+      <div>
+        <div class="stat-callout">
+          <div class="stat-callout-num">386</div>
+          <div class="stat-callout-text">
+            <strong>Total Contacts Generated</strong>
+            <span>Captured in Reviewtap CRM during campaign period</span>
+          </div>
+        </div>
+        <div class="stat-callout">
+          <div class="stat-callout-num">13</div>
+          <div class="stat-callout-text">
+            <strong>Confirmed Booking Leads</strong>
+            <span>Contacts who completed the full booking enquiry process</span>
+          </div>
+        </div>
+        <div class="stat-callout">
+          <div class="stat-callout-num" style="color:var(--green);">3.37%</div>
+          <div class="stat-callout-text">
+            <strong>Lead-to-Booking Conversion Rate</strong>
+            <span>13 confirmed leads from 386 total contacts</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Conversion Funnel -->
+      <div>
+        <div class="chart-title">Conversion Funnel</div>
+        <div class="funnel">
+          <div class="funnel-step">
+            <span class="f-num">71,306</span>
+            <span class="f-label">Impressions</span>
+          </div>
+          <div class="funnel-arrow"></div>
+          <div class="funnel-step">
+            <span class="f-num">38,525</span>
+            <span class="f-label">People Reached</span>
+          </div>
+          <div class="funnel-arrow"></div>
+          <div class="funnel-step">
+            <span class="f-num">371</span>
+            <span class="f-label">WhatsApp Conversations</span>
+          </div>
+          <div class="funnel-arrow"></div>
+          <div class="funnel-step">
+            <span class="f-num">386</span>
+            <span class="f-label">CRM Contacts</span>
+          </div>
+          <div class="funnel-arrow"></div>
+          <div class="funnel-step">
+            <span class="f-num">13</span>
+            <span class="f-label">Confirmed Booking Leads</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     6. CONFIRMED LEADS TABLE
+══════════════════════════════════════════════════════════════ -->
+<section id="confirmed-leads">
+  <div class="container">
+    <h2 class="section-heading">Confirmed Booking Leads</h2>
+    <table class="leads-table">
+      <thead>
+        <tr>
+          <th style="width:48px;">#</th>
+          <th>Name</th>
+          <th>Lead Type</th>
+          <th>Date Created</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="row-num">1</span></td>
+          <td>Charlene Flowers</td>
+          <td><span class="badge badge-cruise">Sunday Leisure Cruise</span></td>
+          <td>27 Mar 2026</td>
+        </tr>
+        <tr>
+          <td><span class="row-num">2</span></td>
+          <td>Sarah Ngobeni</td>
+          <td><span class="badge badge-cruise">Sunday Leisure Cruise</span></td>
+          <td>29 Mar 2026</td>
+        </tr>
+        <tr>
+          <td><span class="row-num">3</span></td>
+          <td>Belinda Mulelu</td>
+          <td><span class="badge badge-houseboat">Houseboat</span></td>
+          <td>30 Mar 2026</td>
+        </tr>
+        <tr>
+          <td><span class="row-num">4</span></td>
+          <td>Lebelo Sam</td>
+          <td><span class="badge badge-cruise">Sunday Leisure Cruise</span></td>
+          <td>30 Mar 2026</td>
+        </tr>
+        <tr>
+          <td><span class="row-num">5</span></td>
+          <td>Nombuso Khutshwa</td>
+          <td><span class="badge badge-cruise">Sunday Leisure Cruise</span></td>
+          <td>31 Mar 2026</td>
+        </tr>
+        <tr>
+          <td><span class="row-num">6</span></td>
+          <td>Johannes Motloung</td>
+          <td><span class="badge badge-cruise">Sunday Leisure Cruise</span></td>
+          <td>1 Apr 2026</td>
+        </tr>
+        <tr>
+          <td><span class="row-num">7</span></td>
+          <td>Petrus Gumede</td>
+          <td><span class="badge badge-cruise">Sunday Leisure Cruise</span></td>
+          <td>3 Apr 2026</td>
+        </tr>
+        <tr>
+          <td><span class="row-num">8</span></td>
+          <td>Floyd Makhubu</td>
+          <td><span class="badge badge-cruise">Sunday Leisure Cruise</span></td>
+          <td>3 Apr 2026</td>
+        </tr>
+        <tr>
+          <td><span class="row-num">9</span></td>
+          <td>Nomsa Queen Ngwenya</td>
+          <td><span class="badge badge-houseboat">Houseboat</span></td>
+          <td>4 Apr 2026</td>
+        </tr>
+        <tr>
+          <td><span class="row-num">10</span></td>
+          <td>Lorrain Ntshangase</td>
+          <td><span class="badge badge-cruise">Sunday Leisure Cruise</span></td>
+          <td>6 Apr 2026</td>
+        </tr>
+        <tr>
+          <td><span class="row-num">11</span></td>
+          <td>Desiree Kgosimore</td>
+          <td><span class="badge badge-cruise">Sunday Leisure Cruise</span></td>
+          <td>6 Apr 2026</td>
+        </tr>
+        <tr>
+          <td><span class="row-num">12</span></td>
+          <td>Mandlenkosi Dube</td>
+          <td><span class="badge badge-cruise">Sunday Leisure Cruise</span></td>
+          <td>7 Apr 2026</td>
+        </tr>
+        <tr>
+          <td><span class="row-num">13</span></td>
+          <td>Merice Thompson</td>
+          <td><span class="badge badge-charter">Private Charter</span></td>
+          <td>7 Apr 2026</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="leads-summary">
+      <strong>13 confirmed leads</strong> &nbsp;·&nbsp;
+      <strong>10</strong> Sunday Leisure Cruise &nbsp;·&nbsp;
+      <strong>2</strong> Houseboat &nbsp;·&nbsp;
+      <strong>1</strong> Private Charter
+    </p>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     7. SCREENSHOTS GALLERY
+══════════════════════════════════════════════════════════════ -->
+<section id="screenshots">
+  <div class="container">
+    <h2 class="section-heading">Supporting Screenshots</h2>
+    <div class="gallery-grid">
+
+      <div class="gallery-card">
+        <div class="gallery-card-title">Reviewtap CRM — 13 Confirmed Booking Leads</div>
+        <img src="https://jacquesgroen88.github.io/llreportmay/GHL All confirmed booking leads.png" alt="Reviewtap CRM confirmed booking leads list" loading="lazy">
+        <div class="gallery-caption">Full list of 13 contacts who went through the complete booking enquiry process.</div>
+      </div>
+
+      <div class="gallery-card">
+        <div class="gallery-card-title">Reviewtap CRM — All 386 Campaign Contacts</div>
+        <img src="https://jacquesgroen88.github.io/llreportmay/GHL All Contacts for FB campaign time period.png" alt="Reviewtap CRM all contacts from Facebook campaign" loading="lazy">
+        <div class="gallery-caption">Total contact list filtered to the campaign period (24 Mar – 14 Apr 2026). 386 contacts captured.</div>
+      </div>
+
+      <div class="gallery-card full-width">
+        <div class="gallery-card-title">Shopify — Orders During Campaign Period</div>
+        <img src="https://jacquesgroen88.github.io/llreportmay/Shopify Orders during FB Campaign period.png" alt="Shopify orders during Facebook campaign period" loading="lazy">
+        <div class="gallery-caption">Online store orders correlated to the campaign timeline — revenue evidence alongside lead data.</div>
+      </div>
+
+      <div class="gallery-card">
+        <div class="gallery-card-title">Reviewtap — Charlene Flowers &amp; Early Leads (27 Mar)</div>
+        <img src="https://jacquesgroen88.github.io/llreportmay/Screenshot_13.png" alt="First confirmed leads in Reviewtap CRM" loading="lazy">
+        <div class="gallery-caption">First confirmed leads entering the system — Charlene Flowers (27 Mar).</div>
+      </div>
+
+      <div class="gallery-card">
+        <div class="gallery-card-title">Reviewtap — Sarah Ngobeni (29 Mar)</div>
+        <img src="https://jacquesgroen88.github.io/llreportmay/Screenshot_11.png" alt="Sarah Ngobeni GHL contact record" loading="lazy">
+        <div class="gallery-caption">Second confirmed lead — Sunday Leisure Cruise enquiry.</div>
+      </div>
+
+      <div class="gallery-card">
+        <div class="gallery-card-title">Reviewtap — Belinda Mulelu &amp; Lebelo Sam (30 Mar)</div>
+        <img src="https://jacquesgroen88.github.io/llreportmay/Screenshot_10.png" alt="Belinda Mulelu and Lebelo Sam GHL records" loading="lazy">
+        <div class="gallery-caption">Houseboat and Sunday Cruise leads on the same day.</div>
+      </div>
+
+      <div class="gallery-card">
+        <div class="gallery-card-title">Reviewtap — Nombuso Khutshwa (31 Mar)</div>
+        <img src="https://jacquesgroen88.github.io/llreportmay/Screenshot_9.png" alt="Nombuso Khutshwa GHL contact record" loading="lazy">
+        <div class="gallery-caption">Sunday Leisure Cruise lead.</div>
+      </div>
+
+      <div class="gallery-card">
+        <div class="gallery-card-title">Reviewtap — Johannes Motloung (1 Apr)</div>
+        <img src="https://jacquesgroen88.github.io/llreportmay/Screenshot_8.png" alt="Johannes Motloung GHL contact record" loading="lazy">
+        <div class="gallery-caption">Sunday Leisure Cruise lead entering April pipeline.</div>
+      </div>
+
+      <div class="gallery-card">
+        <div class="gallery-card-title">Reviewtap — Floyd Makhubu &amp; Petrus Gumede (3 Apr)</div>
+        <img src="https://jacquesgroen88.github.io/llreportmay/Screenshot_7.png" alt="Floyd Makhubu and Petrus Gumede GHL records" loading="lazy">
+        <div class="gallery-caption">Two Sunday Cruise leads on the same day.</div>
+      </div>
+
+      <div class="gallery-card">
+        <div class="gallery-card-title">Reviewtap — Nomsa Queen Ngwenya (4 Apr) — Houseboat Lead</div>
+        <img src="https://jacquesgroen88.github.io/llreportmay/Screenshot_6.png" alt="Nomsa Queen Ngwenya GHL contact record" loading="lazy">
+        <div class="gallery-caption">Notable houseboat enquiry — second houseboat lead of the campaign.</div>
+      </div>
+
+      <div class="gallery-card">
+        <div class="gallery-card-title">Reviewtap — Desiree Kgosimore &amp; Lorrain Ntshangase (6 Apr)</div>
+        <img src="https://jacquesgroen88.github.io/llreportmay/Screenshot_5.png" alt="Desiree Kgosimore and Lorrain Ntshangase GHL records" loading="lazy">
+        <div class="gallery-caption">Two Sunday Leisure Cruise leads on the same day.</div>
+      </div>
+
+      <div class="gallery-card">
+        <div class="gallery-card-title">Reviewtap — Mandlenkosi Dube (7 Apr)</div>
+        <img src="https://jacquesgroen88.github.io/llreportmay/Screenshot_4.png" alt="Mandlenkosi Dube GHL contact record" loading="lazy">
+        <div class="gallery-caption">Sunday Leisure Cruise lead — 7 April.</div>
+      </div>
+
+      <div class="gallery-card full-width">
+        <div class="gallery-card-title">Reviewtap — Merice Thompson (7 Apr) — Private Charter Lead</div>
+        <img src="https://jacquesgroen88.github.io/llreportmay/Screenshot_3.png" alt="Merice Thompson GHL contact record — Private Charter" loading="lazy">
+        <div class="gallery-caption">Only Private Charter confirmed lead of the campaign — highest-value service enquiry.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     8. CRM AUTOMATION & REVIEWS
+══════════════════════════════════════════════════════════════ -->
+<section id="crm-automation">
+  <div class="container">
+    <h2 class="section-heading">CRM Automation &amp; Review Campaigns</h2>
+    <p style="color:var(--muted);font-size:0.9rem;margin-bottom:36px;max-width:780px;">
+      Two Reviewtap CRM workflows handle the full customer journey — from initial enquiry to post-cruise review collection.
+      The review campaign has already driven the <strong style="color:var(--white);">highest volume of Google reviews</strong> of any channel,
+      but only <strong style="color:var(--white);">100 contacts</strong> have entered the flow to date. Running it at least 2× per month is the single highest-leverage action available.
+    </p>
+
+    <!-- Workflow cards -->
+    <div class="wf-grid">
+
+      <!-- Welcome Workflow -->
+      <div class="wf-card">
+        <div class="wf-card-header">
+          <div class="wf-icon">💬</div>
+          <div>
+            <div class="wf-card-label">Booking Enquiry Workflow</div>
+            <div class="wf-card-title">Welcome &amp; Booking Flow</div>
+          </div>
+          <a href="https://app.reviewtap.co.za/location/mTK4bFHRVSllNwEOXTZH/workflow/ba447988-7503-488a-8a2b-2930e332bbea"
+             target="_blank" rel="noopener" class="wf-link-btn">View Workflow ↗</a>
+        </div>
+        <div class="wf-card-body">
+          <p class="wf-desc">Triggered when a customer replies via WhatsApp. Checks whether they are already in another workflow and whether they have a rating tag, then routes them through the booking menu.</p>
+
+          <div class="wf-flow">
+            <div class="wf-node trigger">Customer Replies via WhatsApp</div>
+            <div class="wf-arrow-down"></div>
+            <div class="wf-node check">Checks: not in another workflow &amp; no rating tag</div>
+            <div class="wf-arrow-down"></div>
+            <div class="wf-node action">Sends Welcome Message — "How can we assist you?"</div>
+            <div class="wf-arrow-down"></div>
+            <div class="wf-branches">
+              <div class="wf-branch">
+                <div class="wf-branch-label cruise">🚢 Public &amp; Sharing Cruises</div>
+                <div class="wf-branch-sub">→ 1-Hour Leisure Cruise<br>→ 2-Hour Lunch Cruise<br>→ Back to Start</div>
+              </div>
+              <div class="wf-branch">
+                <div class="wf-branch-label private">🎉 Private Function / Event</div>
+                <div class="wf-branch-sub">→ 1–12 guests<br>→ 13–20 guests<br>→ 20+ guests<br>(tailored quotes)</div>
+              </div>
+              <div class="wf-branch">
+                <div class="wf-branch-label houseboat">⚓ Houseboat Accommodation</div>
+                <div class="wf-branch-sub">→ Download info PDF<br>→ Complete booking form<br>→ Back to Start</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Review Workflow -->
+      <div class="wf-card">
+        <div class="wf-card-header">
+          <div class="wf-icon">⭐</div>
+          <div>
+            <div class="wf-card-label">Post-Cruise Review Workflow</div>
+            <div class="wf-card-title">Rating &amp; Google Review Flow</div>
+          </div>
+          <a href="https://app.reviewtap.co.za/location/mTK4bFHRVSllNwEOXTZH/workflow/9cc6b23d-8bec-4457-845f-3a7fe437cec7"
+             target="_blank" rel="noopener" class="wf-link-btn">View Workflow ↗</a>
+        </div>
+        <div class="wf-card-body">
+          <p class="wf-desc">Triggered when an opportunity status changes to <em>"Won"</em>. Waits 24 hours, then sends a WhatsApp rating request. Routes 4–5 star guests to Google review; captures feedback from 1–3 star guests internally.</p>
+
+          <div class="wf-flow">
+            <div class="wf-node trigger">Opportunity Marked "Won"</div>
+            <div class="wf-arrow-down"></div>
+            <div class="wf-node check">Wait 24 hours · Check not in another workflow</div>
+            <div class="wf-arrow-down"></div>
+            <div class="wf-node action">WhatsApp: "Rate your experience 1–5" · Wait 24h for reply</div>
+            <div class="wf-arrow-down"></div>
+            <div class="wf-rating-row">
+              <div class="wf-rating-col low">
+                <div class="wf-rating-badge">⭐ 1–3</div>
+                <div class="wf-rating-text">Tag added (rating_low_1/2/3)<br>Follow-up message asking for feedback<br>Handled internally</div>
+              </div>
+              <div class="wf-rating-col high">
+                <div class="wf-rating-badge">⭐⭐⭐⭐ 4–5</div>
+                <div class="wf-rating-text">Tag added (rating_4/5_star)<br>Thank-you message sent<br>Google Review link shared</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Performance callout -->
+          <div class="wf-perf-bar">
+            <div class="wf-perf-stat">
+              <span class="wf-perf-num">100</span>
+              <span class="wf-perf-lbl">Contacts entered<br>this flow to date</span>
+            </div>
+            <div class="wf-perf-divider"></div>
+            <div class="wf-perf-stat">
+              <span class="wf-perf-num" style="color:var(--green);">#1</span>
+              <span class="wf-perf-lbl">Highest source of<br>Google reviews received</span>
+            </div>
+            <div class="wf-perf-divider"></div>
+            <div class="wf-perf-stat">
+              <span class="wf-perf-num" style="color:var(--gold-light);">2×</span>
+              <span class="wf-perf-lbl">Minimum campaigns<br>recommended per month</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /.wf-grid -->
+
+    <!-- Review campaign recommendation -->
+    <div class="wf-recommendation">
+      <div class="wf-rec-icon">💡</div>
+      <div>
+        <div class="wf-rec-title">Review Campaign Recommendation</div>
+        <p class="wf-rec-body">
+          The post-cruise review workflow is already the <strong>top driver of Google reviews</strong>, yet only 100 contacts have entered it.
+          Every guest who books and cruises should be marked as "Won" in Reviewtap CRM to trigger this workflow automatically.
+          In addition, run a <strong>manual broadcast-style review campaign</strong> at least <strong>twice per month</strong>
+          targeting all contacts who have been on a cruise but have not yet received a rating request.
+          Even a 20% response rate from the existing 386 contacts could generate 77+ new Google reviews.
+        </p>
+        <div class="wf-rec-steps">
+          <div class="wf-rec-step"><span class="ap-dot gold" style="margin-top:4px;"></span>After every cruise, mark all guests as "Won" in Reviewtap CRM immediately — this auto-triggers the 24h review request.</div>
+          <div class="wf-rec-step"><span class="ap-dot gold" style="margin-top:4px;"></span>Run a manual review campaign on the 1st and 15th of each month to any past guests not yet in the flow.</div>
+          <div class="wf-rec-step"><span class="ap-dot gold" style="margin-top:4px;"></span>Monitor the 1–3 star feedback responses closely — these contain actionable service improvement data.</div>
+          <div class="wf-rec-step"><span class="ap-dot gold" style="margin-top:4px;"></span>Use 4–5 star reviewer names (with permission) in ad creative and on the Shopify/booking page for social proof.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─────────────────────────────────────────────────────────
+         PHYSICAL REVIEWTAP CARDS & STANDS
+    ──────────────────────────────────────────────────────────── -->
+    <div style="margin-top:48px;">
+      <h3 class="section-subheading">Physical Reviewtap Cards &amp; Stands — Untapped Opportunity</h3>
+      <p style="color:var(--muted);font-size:0.9rem;margin-bottom:28px;max-width:780px;">
+        Five Reviewtap QR cards and stands were set up in November 2025 and provided to Liquid Lounge.
+        Despite being live for over 5 months, they have collectively recorded only <strong style="color:#E8837A;">7 scans</strong> — meaning they have not been deployed with guests.
+        Activating these at the point of peak guest emotion (stepping off the cruise) can unlock a consistent, high-volume review stream.
+      </p>
+
+      <!-- Current reviews + card scan stats side by side -->
+      <div class="rt-overview-grid">
+
+        <!-- Google review status -->
+        <div class="rt-review-status">
+          <div class="rt-review-header">Current Google Business Profile</div>
+          <img src="https://jacquesgroen88.github.io/llreportmay/liquidloungereviews.jpeg" alt="Liquid Lounge Google reviews — 4.5 stars, 191 reviews" style="width:100%;border-radius:4px;border:1px solid var(--border);margin-bottom:16px;">
+          <div class="rt-stars-row">
+            <div class="rt-star-stat">
+              <span class="rt-star-num">4.5</span>
+              <span class="rt-star-label">Current avg rating<br><span style="color:#C9A84C;">★★★★½</span></span>
+            </div>
+            <div class="rt-star-divider"></div>
+            <div class="rt-star-stat">
+              <span class="rt-star-num">191</span>
+              <span class="rt-star-label">Total Google<br>reviews to date</span>
+            </div>
+            <div class="rt-star-divider"></div>
+            <div class="rt-star-stat">
+              <span class="rt-star-num" style="color:var(--green);">4.8</span>
+              <span class="rt-star-label">Avg rating on<br>Reviewtap devices<br><span style="font-size:0.68rem;">(1,000+ device benchmark)</span></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card scan dashboard screenshots -->
+        <div class="rt-cards-panel">
+          <div class="rt-review-header">Reviewtap Card &amp; Stand Dashboard — Scan Activity</div>
+          <div class="rt-screenshots-pair">
+            <div>
+              <img src="https://jacquesgroen88.github.io/llreportmay/Reviewtap Stand and Card Use 2.jpeg" alt="Reviewtap dashboard — Liquid Lounge card 1 and original card" style="width:100%;border-radius:4px;border:1px solid var(--border);">
+            </div>
+            <div>
+              <img src="https://jacquesgroen88.github.io/llreportmay/Reviewtap Stand and Card Use 1.jpeg" alt="Reviewtap dashboard — Liquid Lounge cards 2, 3, 4" style="width:100%;border-radius:4px;border:1px solid var(--border);">
+            </div>
+          </div>
+          <!-- Scan count table -->
+          <table style="width:100%;margin-top:14px;font-size:0.8rem;border-collapse:collapse;">
+            <thead>
+              <tr>
+                <th style="background:var(--gold);color:var(--navy-deep);padding:7px 10px;text-align:left;font-size:0.68rem;letter-spacing:0.08em;text-transform:uppercase;">Card / Stand</th>
+                <th style="background:var(--gold);color:var(--navy-deep);padding:7px 10px;text-align:left;font-size:0.68rem;letter-spacing:0.08em;text-transform:uppercase;">Created</th>
+                <th style="background:var(--gold);color:var(--navy-deep);padding:7px 10px;text-align:right;font-size:0.68rem;letter-spacing:0.08em;text-transform:uppercase;">Scans</th>
+                <th style="background:var(--gold);color:var(--navy-deep);padding:7px 10px;text-align:left;font-size:0.68rem;letter-spacing:0.08em;text-transform:uppercase;">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="background:var(--card-bg);">
+                <td style="padding:7px 10px;border-bottom:1px solid var(--border);color:var(--white);">Liquid Lounge (original)</td>
+                <td style="padding:7px 10px;border-bottom:1px solid var(--border);color:var(--muted);">18 Nov 2025</td>
+                <td style="padding:7px 10px;border-bottom:1px solid var(--border);text-align:right;color:var(--gold-light);font-weight:700;">4</td>
+                <td style="padding:7px 10px;border-bottom:1px solid var(--border);"><span style="background:rgba(201,168,76,0.15);color:var(--gold-light);padding:2px 8px;border-radius:4px;font-size:0.68rem;">Minimal use</span></td>
+              </tr>
+              <tr style="background:var(--navy-mid);">
+                <td style="padding:7px 10px;border-bottom:1px solid var(--border);color:var(--white);">Liquid Lounge card 1</td>
+                <td style="padding:7px 10px;border-bottom:1px solid var(--border);color:var(--muted);">18 Nov 2025</td>
+                <td style="padding:7px 10px;border-bottom:1px solid var(--border);text-align:right;color:#E8837A;font-weight:700;">0</td>
+                <td style="padding:7px 10px;border-bottom:1px solid var(--border);"><span style="background:rgba(231,76,60,0.12);color:#E8837A;padding:2px 8px;border-radius:4px;font-size:0.68rem;">Not deployed</span></td>
+              </tr>
+              <tr style="background:var(--card-bg);">
+                <td style="padding:7px 10px;border-bottom:1px solid var(--border);color:var(--white);">Liquid Lounge card 2</td>
+                <td style="padding:7px 10px;border-bottom:1px solid var(--border);color:var(--muted);">19 Nov 2025</td>
+                <td style="padding:7px 10px;border-bottom:1px solid var(--border);text-align:right;color:var(--gold-light);font-weight:700;">2</td>
+                <td style="padding:7px 10px;border-bottom:1px solid var(--border);"><span style="background:rgba(201,168,76,0.15);color:var(--gold-light);padding:2px 8px;border-radius:4px;font-size:0.68rem;">Minimal use</span></td>
+              </tr>
+              <tr style="background:var(--navy-mid);">
+                <td style="padding:7px 10px;border-bottom:1px solid var(--border);color:var(--white);">Liquid Lounge card 3</td>
+                <td style="padding:7px 10px;border-bottom:1px solid var(--border);color:var(--muted);">19 Nov 2025</td>
+                <td style="padding:7px 10px;border-bottom:1px solid var(--border);text-align:right;color:var(--gold-light);font-weight:700;">1</td>
+                <td style="padding:7px 10px;border-bottom:1px solid var(--border);"><span style="background:rgba(231,76,60,0.12);color:#E8837A;padding:2px 8px;border-radius:4px;font-size:0.68rem;">Not deployed</span></td>
+              </tr>
+              <tr style="background:var(--card-bg);">
+                <td style="padding:7px 10px;border-bottom:1px solid var(--border);color:var(--white);">Liquid Lounge card 4</td>
+                <td style="padding:7px 10px;border-bottom:1px solid var(--border);color:var(--muted);">19 Nov 2025</td>
+                <td style="padding:7px 10px;border-bottom:1px solid var(--border);text-align:right;color:#E8837A;font-weight:700;">0</td>
+                <td style="padding:7px 10px;border-bottom:1px solid var(--border);"><span style="background:rgba(231,76,60,0.12);color:#E8837A;padding:2px 8px;border-radius:4px;font-size:0.68rem;">Not deployed</span></td>
+              </tr>
+              <tr>
+                <td style="padding:8px 10px;background:rgba(201,168,76,0.12);color:var(--gold-light);font-weight:700;">TOTAL — 5 cards since Nov 2025</td>
+                <td style="padding:8px 10px;background:rgba(201,168,76,0.12);"></td>
+                <td style="padding:8px 10px;background:rgba(201,168,76,0.12);text-align:right;color:#E8837A;font-weight:800;font-size:1rem;">7</td>
+                <td style="padding:8px 10px;background:rgba(201,168,76,0.12);color:#E8837A;font-size:0.78rem;">Effectively unused</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div><!-- /.rt-overview-grid -->
+
+      <!-- Deployment strategy -->
+      <div style="margin-top:32px;">
+        <div class="ap-block-title">Where &amp; How to Deploy the Cards and Stands</div>
+        <div class="rt-deploy-grid">
+
+          <div class="rt-deploy-card primary">
+            <div class="rt-deploy-icon">🚢</div>
+            <div class="rt-deploy-title">Public &amp; Sharing Cruises <span class="rt-deploy-badge">Highest Volume</span></div>
+            <div class="rt-deploy-body">
+              The guest services crew member or cruise operator holds the Reviewtap card as guests disembark at the end of the cruise.
+              Guests scan the QR code while the positive emotion of the experience is still fresh — this is the single most effective moment to capture a review.
+            </div>
+            <div class="rt-deploy-tip">💡 <strong>Tip:</strong> Crew should say: "Loved having you on board — would you mind leaving us a quick Google review? It takes 10 seconds, just scan here."</div>
+          </div>
+
+          <div class="rt-deploy-card">
+            <div class="rt-deploy-icon">⚓</div>
+            <div class="rt-deploy-title">Houseboat Accommodation</div>
+            <div class="rt-deploy-body">
+              Place the Reviewtap stand on the dining room table or in a visible common area of the houseboat. Guests will notice it during their stay and can scan at any point.
+              The extended stay gives multiple opportunities for a natural, unprompted scan.
+            </div>
+            <div class="rt-deploy-tip">💡 <strong>Tip:</strong> Add a small handwritten card alongside: "Enjoying your stay? Let us know — scan to leave a review. Your feedback helps us improve."</div>
+          </div>
+
+          <div class="rt-deploy-card">
+            <div class="rt-deploy-icon">🎉</div>
+            <div class="rt-deploy-title">Private Functions &amp; Events</div>
+            <div class="rt-deploy-body">
+              Place a stand on the bar or catering table during the event. As the event winds down, the host or crew can also do a personal hand-held card scan prompt with the group organiser.
+              Groups are socially motivated — one person scanning often prompts others.
+            </div>
+            <div class="rt-deploy-tip">💡 <strong>Tip:</strong> Ask the event organiser in advance to encourage their group to scan — mention it can be done during the cruise, not just at the end.</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Impact projection -->
+      <div class="rt-impact-box">
+        <div class="rt-impact-header">📈 Projected Review Impact — Physical Cards Activated</div>
+        <div class="rt-impact-grid">
+          <div class="rt-impact-item">
+            <div class="rt-impact-num">4.8★</div>
+            <div class="rt-impact-lbl">Expected avg rating<br><span>based on 1,000+ Reviewtap device benchmark</span></div>
+          </div>
+          <div class="rt-impact-sep">→</div>
+          <div class="rt-impact-item">
+            <div class="rt-impact-num">~20</div>
+            <div class="rt-impact-lbl">New Google reviews<br><span>per cruise with active card use</span></div>
+          </div>
+          <div class="rt-impact-sep">→</div>
+          <div class="rt-impact-item">
+            <div class="rt-impact-num">+10%</div>
+            <div class="rt-impact-lbl">Increase in total reviews<br><span>from just 1 cruise per month</span></div>
+          </div>
+          <div class="rt-impact-sep">→</div>
+          <div class="rt-impact-item">
+            <div class="rt-impact-num">4.6–4.7★</div>
+            <div class="rt-impact-lbl">Projected new avg rating<br><span>as 4.8★ reviews dilute lower historic scores</span></div>
+          </div>
+        </div>
+        <p style="font-size:0.8rem;color:var(--muted);margin-top:16px;line-height:1.6;">
+          Liquid Lounge currently has <strong style="color:var(--white);">191 reviews at 4.5 stars</strong>.
+          Adding 20 reviews per cruise at the Reviewtap benchmark of 4.8★ would lift the overall rating within 3 months of consistent use.
+          Combined with the WhatsApp review workflow (2× per month), a 250+ review count at 4.6+ stars is achievable within 90 days —
+          significantly strengthening organic search ranking and social proof for the ad campaigns.
+        </p>
+      </div>
+
+    </div><!-- /physical cards section -->
+
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     9. 90-DAY ACTION PLAN
+══════════════════════════════════════════════════════════════ -->
+<section id="action-plan">
+  <div class="container">
+    <h2 class="section-heading">90-Day Action Plan</h2>
+    <p style="color:var(--muted);font-size:0.9rem;margin-bottom:36px;max-width:780px;">
+      Based on the campaign results, the following plan prioritises converting the 13 confirmed leads,
+      re-engaging the 373 non-booking enquirers via broadcast, and scaling the highest-performing placements.
+    </p>
+
+    <!-- Phase timeline -->
+    <div class="ap-phases">
+
+      <!-- Month 1 -->
+      <div class="ap-phase">
+        <div class="ap-phase-header">
+          <div class="ap-phase-badge">Month 1</div>
+          <div class="ap-phase-title">Days 1 – 30 &nbsp;·&nbsp; Activate &amp; Convert</div>
+        </div>
+        <div class="ap-phase-body">
+
+          <div class="ap-block">
+            <div class="ap-block-title">📞 Sales Follow-Up Process — 13 Confirmed Leads</div>
+            <div class="ap-steps">
+              <div class="ap-step">
+                <div class="ap-step-num">1</div>
+                <div class="ap-step-content">
+                  <strong>Same-day WhatsApp outreach (within 2 hours)</strong>
+                  <span>Send a warm, personalised message referencing their specific enquiry type (Leisure Cruise / Houseboat / Private Charter). Introduce yourself and confirm their interest.</span>
+                  <div class="ap-script">"Hi [Name] 👋 Thanks for reaching out about our [service]! I'm [Name] from Liquid Lounge. Are you still interested in joining us? I'd love to help you secure your spot."</div>
+                </div>
+              </div>
+              <div class="ap-step">
+                <div class="ap-step-num">2</div>
+                <div class="ap-step-content">
+                  <strong>Qualify &amp; confirm details</strong>
+                  <span>Ask how many adults/children, preferred date, and which service. For Houseboat/Charter leads, ask about group size and budget.</span>
+                  <div class="ap-script">"How many people will be joining you? And is there a specific Sunday or public holiday that works best for your group?"</div>
+                </div>
+              </div>
+              <div class="ap-step">
+                <div class="ap-step-num">3</div>
+                <div class="ap-step-content">
+                  <strong>Send availability &amp; pricing confirmation</strong>
+                  <span>Share the next 3 available dates with pricing. Highlight limited spots to create urgency.</span>
+                  <div class="ap-script">"We have spots available on [Date 1], [Date 2] and [Date 3]. At R250/adult it fills up fast — shall I pencil you in?"</div>
+                </div>
+              </div>
+              <div class="ap-step">
+                <div class="ap-step-num">4</div>
+                <div class="ap-step-content">
+                  <strong>Send booking link / payment details</strong>
+                  <span>Direct them to the Shopify booking page or share EFT/payment details. Confirm the booking in writing once payment is received.</span>
+                </div>
+              </div>
+              <div class="ap-step">
+                <div class="ap-step-num">5</div>
+                <div class="ap-step-content">
+                  <strong>48-hour follow-up if no response</strong>
+                  <span>If no reply after 48 hours, send one gentle nudge. If still no response after 5 days, move to the broadcast nurture list.</span>
+                  <div class="ap-script">"Hi [Name], just checking in — we still have space on [Date]. Let me know if you have any questions! 😊"</div>
+                </div>
+              </div>
+              <div class="ap-step">
+                <div class="ap-step-num">6</div>
+                <div class="ap-step-content">
+                  <strong>Post-booking: pre-arrival WhatsApp message</strong>
+                  <span>Send 48 hours before their cruise date: what to bring, parking, arrival time, what to expect. Builds excitement and reduces no-shows.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ap-block">
+            <div class="ap-block-title">📣 Broadcast — 373 Non-Booking Enquirers</div>
+            <div class="ap-cards-row">
+              <div class="ap-card">
+                <div class="ap-card-label">Week 1 Broadcast</div>
+                <div class="ap-card-subject">Upcoming Sunday Reminder</div>
+                <div class="ap-card-body">Re-introduce the cruise offer to all contacts who enquired but didn't book. Include the next Sunday date, price, and a direct WhatsApp booking link. Keep it short and friendly.</div>
+              </div>
+              <div class="ap-card">
+                <div class="ap-card-label">Week 3 Broadcast</div>
+                <div class="ap-card-subject">Limited Spots — Urgency Push</div>
+                <div class="ap-card-body">"Only a few spots left this Sunday!" message. Use scarcity to prompt fence-sitters to commit. Include a photo or video of the cruise if available.</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Month 2 -->
+      <div class="ap-phase">
+        <div class="ap-phase-header">
+          <div class="ap-phase-badge" style="background:var(--blue-lead);">Month 2</div>
+          <div class="ap-phase-title">Days 31 – 60 &nbsp;·&nbsp; Nurture &amp; Re-engage</div>
+        </div>
+        <div class="ap-phase-body">
+
+          <div class="ap-block">
+            <div class="ap-block-title">📣 Ongoing Broadcast Strategy — Non-Bookers</div>
+            <p style="font-size:0.85rem;color:var(--muted);margin-bottom:16px;">
+              You have <strong style="color:var(--white);">373 warm contacts</strong> in Reviewtap CRM who showed interest but didn't book.
+              These are your most cost-effective marketing channel — reaching them costs nothing.
+              Send 2 broadcasts per month via WhatsApp.
+            </p>
+            <div class="ap-cards-row">
+              <div class="ap-card">
+                <div class="ap-card-label">Broadcast A — Value</div>
+                <div class="ap-card-subject">Group Booking Offer</div>
+                <div class="ap-card-body">Offer a group incentive — e.g. book 5+ people and get a complimentary welcome drink. Encourages contacts to bring friends, increasing booking value.</div>
+              </div>
+              <div class="ap-card">
+                <div class="ap-card-label">Broadcast B — Social Proof</div>
+                <div class="ap-card-subject">Guest Experience Highlight</div>
+                <div class="ap-card-body">Share a testimonial, photo, or short video from a recent cruise. "Here's what guests said about their Sunday on the Vaal…" Builds trust for undecided contacts.</div>
+              </div>
+              <div class="ap-card">
+                <div class="ap-card-label">Broadcast C — Houseboat/Charter</div>
+                <div class="ap-card-subject">Premium Experiences</div>
+                <div class="ap-card-body">Specifically target the broader list with houseboat and private charter options. These are higher-value bookings — even 1–2 conversions significantly impact revenue.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ap-block">
+            <div class="ap-block-title">📢 Continue &amp; Increase Ad Spend</div>
+            <div class="insight-box" style="margin-bottom:20px;">
+              <strong>The campaign must continue running.</strong> At R1,158.87 total spend over 7 weeks, this campaign generated 371 WhatsApp conversations, 386 CRM contacts, and 13 confirmed booking leads — a highly cost-effective result. Pausing now leaves momentum on the table. The recommendation is to <strong>increase the monthly budget to at least R2,500–R3,500/month</strong> to meaningfully scale results, particularly ahead of the winter public holiday season (June–August).
+            </div>
+            <div class="ap-two-col">
+              <div>
+                <div class="ap-action-item"><span class="ap-dot gold"></span><strong>Restart both ad sets immediately</strong> — Evergreen for ongoing Sundays, Public Holidays targeting June 16 (Youth Day) and other upcoming dates.</div>
+                <div class="ap-action-item"><span class="ap-dot gold"></span><strong>Increase overall monthly budget</strong> — from ~R660/month to R2,500–R3,500/month. At R3.12 CPR this could yield 800–1,100 conversations per month.</div>
+                <div class="ap-action-item"><span class="ap-dot gold"></span><strong>Scale Facebook Reels (Public Holidays)</strong> — best efficiency at R1.77/result. Prioritise in budget split.</div>
+              </div>
+              <div>
+                <div class="ap-action-item"><span class="ap-dot gold"></span><strong>Test Search Results &amp; WhatsApp Status</strong> — lowest CPR placements (R1.40–R1.49). Allocate dedicated budget to validate at scale.</div>
+                <div class="ap-action-item"><span class="ap-dot muted"></span>Reduce Facebook Feed (Evergreen) allocation — R4.56 CPR is 2× less efficient than the Public Holidays version.</div>
+                <div class="ap-action-item"><span class="ap-dot muted"></span>Test new creative — video testimonials and Reels-native content. Refresh assets every 4–6 weeks to prevent creative fatigue.</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Month 3 -->
+      <div class="ap-phase">
+        <div class="ap-phase-header">
+          <div class="ap-phase-badge" style="background:var(--teal-lead);">Month 3</div>
+          <div class="ap-phase-title">Days 61 – 90 &nbsp;·&nbsp; Scale &amp; Retain</div>
+        </div>
+        <div class="ap-phase-body">
+
+          <div class="ap-block">
+            <div class="ap-block-title">🔁 Retention &amp; Referral</div>
+            <div class="ap-cards-row">
+              <div class="ap-card">
+                <div class="ap-card-label">Post-Cruise Follow-Up</div>
+                <div class="ap-card-subject">Turn Guests Into Advocates</div>
+                <div class="ap-card-body">Send a WhatsApp message 24 hours after their cruise: thank them, ask for a Google/Facebook review, and offer a return-booking discount. Every review builds organic reach.</div>
+              </div>
+              <div class="ap-card">
+                <div class="ap-card-label">Referral Programme</div>
+                <div class="ap-card-subject">"Bring a Friend" Incentive</div>
+                <div class="ap-card-body">Offer existing guests a discount (e.g. R50 off) for every new booking they refer. Announce via broadcast to all past bookers. Word-of-mouth is the highest-converting channel for experiences.</div>
+              </div>
+              <div class="ap-card">
+                <div class="ap-card-label">Seasonal Campaign</div>
+                <div class="ap-card-subject">Winter / Mid-Year Promotions</div>
+                <div class="ap-card-body">Plan a mid-year public holiday push targeting school holidays and Youth Day (16 June). Reactivate the Public Holidays ad set with new creative. Target both warm audiences (previous contacts) and cold lookalikes.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ap-block">
+            <div class="ap-block-title">🎯 90-Day KPI Targets</div>
+            <div class="ap-kpi-row">
+              <div class="ap-kpi-box">
+                <div class="ap-kpi-val">30+</div>
+                <div class="ap-kpi-lbl">Confirmed Bookings<br><span>from leads + broadcasts</span></div>
+              </div>
+              <div class="ap-kpi-box">
+                <div class="ap-kpi-val">R2.50</div>
+                <div class="ap-kpi-lbl">Target CPR<br><span>optimised placements</span></div>
+              </div>
+              <div class="ap-kpi-box">
+                <div class="ap-kpi-val">2×</div>
+                <div class="ap-kpi-lbl">Monthly broadcast<br><span>to 373+ contacts</span></div>
+              </div>
+              <div class="ap-kpi-box">
+                <div class="ap-kpi-val">10+</div>
+                <div class="ap-kpi-lbl">New Google/Facebook<br><span>reviews from guests</span></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div><!-- /.ap-phases -->
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     9. FOOTER
+══════════════════════════════════════════════════════════════ -->
+<footer>
+  <div class="container">
+    <div class="footer-wave">〰</div>
+    <div class="footer-brand">Liquid Lounge</div>
+    <div class="footer-meta">
+      Vaal River, South Africa<br>
+      Facebook Ad Campaign Report &nbsp;·&nbsp; 24 March – 11 May 2026<br>
+      Prepared: May 2026 &nbsp;·&nbsp; Data sources: Meta Ads Manager, Reviewtap CRM, Shopify
+    </div>
+    <div class="footer-confidential">This report is prepared for internal use by Liquid Lounge management.</div>
+  </div>
+</footer>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     JAVASCRIPT — animations only
+══════════════════════════════════════════════════════════════ -->
+<script>
+  // Animate bar chart when it scrolls into view
+  const barChart = document.getElementById('barChart');
+  const donutChart = document.getElementById('donutChart');
+
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('chart-animated');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+
+    if (barChart) observer.observe(barChart);
+  } else {
+    // Fallback: show immediately
+    if (barChart) barChart.classList.add('chart-animated');
+  }
+
+  // Print mode
+  window.onbeforeprint = () => document.body.classList.add('print-mode');
+  window.onafterprint  = () => document.body.classList.remove('print-mode');
+</script>
+
+</body>
+</html>
+

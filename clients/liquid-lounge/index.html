@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Liquid Lounge — JCE Media Research</title>
+<style>
+  :root {
+    --bg: #0a0d14;
+    --surface: #111520;
+    --surface2: #161c2d;
+    --border: rgba(255,255,255,0.07);
+    --accent: #4f6ef7;
+    --accent2: #7c3aed;
+    --text: #e8eaf0;
+    --muted: #6b7280;
+    --green: #10b981;
+    --orange: #f59e0b;
+    --red: #ef4444;
+    --gold: #C9A84C;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  /* NAV */
+  nav {
+    display: flex; align-items: center; gap: 0;
+    padding: 0 40px; height: 64px;
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; z-index: 100;
+  }
+  .nav-home {
+    display: flex; align-items: center; gap: 10px;
+    text-decoration: none; color: var(--muted);
+    font-size: 13px; font-weight: 500;
+    transition: color 0.15s;
+  }
+  .nav-home:hover { color: var(--text); }
+  .nav-sep { color: var(--border); margin: 0 12px; font-size: 18px; }
+  .nav-current {
+    font-size: 13px; font-weight: 700; color: var(--text);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .nav-avatar {
+    width: 26px; height: 26px; border-radius: 7px;
+    background: linear-gradient(135deg, #C9A84C, #8B6914);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 900; color: white;
+  }
+
+  /* CLIENT HERO */
+  .client-hero {
+    padding: 56px 40px 48px; max-width: 1200px; margin: 0 auto;
+    display: flex; align-items: flex-start; gap: 40px; flex-wrap: wrap;
+  }
+  .client-avatar-lg {
+    width: 80px; height: 80px; border-radius: 20px;
+    background: linear-gradient(135deg, #C9A84C, #8B6914);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px; font-weight: 900; color: white; flex-shrink: 0;
+  }
+  .client-info { flex: 1; }
+  .client-eyebrow {
+    font-size: 11px; font-weight: 600; letter-spacing: 1.2px;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 10px;
+  }
+  .client-name-lg {
+    font-size: 42px; font-weight: 800; letter-spacing: -1.5px; margin-bottom: 10px;
+    background: linear-gradient(135deg, #fff, rgba(255,255,255,0.6));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .client-desc-lg {
+    font-size: 15px; color: var(--muted); line-height: 1.6; max-width: 580px;
+    margin-bottom: 20px;
+  }
+  .client-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+  .tag {
+    font-size: 12px; font-weight: 600; padding: 5px 12px; border-radius: 8px;
+    background: var(--surface2); border: 1px solid var(--border); color: var(--muted);
+  }
+
+  /* KEY FACTS */
+  .facts-strip {
+    background: var(--surface); border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border); padding: 24px 40px;
+  }
+  .facts-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: flex; gap: 40px; flex-wrap: wrap; align-items: center;
+  }
+  .fact-item { text-align: left; }
+  .fact-val { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; color: var(--text); }
+  .fact-label { font-size: 11px; color: var(--muted); font-weight: 500; margin-top: 2px; }
+  .fact-divider { width: 1px; height: 40px; background: var(--border); flex-shrink: 0; }
+
+  /* MAIN CONTENT */
+  .main { max-width: 1200px; margin: 0 auto; padding: 48px 40px 80px; display: grid; grid-template-columns: 1fr 320px; gap: 32px; }
+  @media (max-width: 900px) { .main { grid-template-columns: 1fr; } }
+
+  /* REPORTS LIST */
+  .section-head {
+    font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 20px; display: flex; align-items: center; gap: 8px;
+  }
+  .section-head::before {
+    content: ''; display: block; width: 3px; height: 14px;
+    background: linear-gradient(#C9A84C, #8B6914); border-radius: 3px;
+  }
+
+  .report-card {
+    display: block; text-decoration: none;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px; padding: 24px 28px; margin-bottom: 16px;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+    position: relative; overflow: hidden;
+  }
+  .report-card::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+    background: linear-gradient(#C9A84C, #8B6914); opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .report-card:hover { transform: translateX(4px); border-color: rgba(201,168,76,0.3); box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+  .report-card:hover::before { opacity: 1; }
+
+  .report-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 10px; }
+  .report-type-badge {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase;
+    padding: 3px 9px; border-radius: 6px; white-space: nowrap; flex-shrink: 0;
+  }
+  .badge-audit { background: rgba(245,158,11,0.15); color: var(--orange); border: 1px solid rgba(245,158,11,0.2); }
+  .badge-strategy { background: rgba(16,185,129,0.15); color: var(--green); border: 1px solid rgba(16,185,129,0.2); }
+  .badge-research { background: rgba(79,110,247,0.15); color: var(--accent); border: 1px solid rgba(79,110,247,0.2); }
+
+  .report-title { font-size: 17px; font-weight: 700; color: var(--text); line-height: 1.3; margin-bottom: 8px; }
+  .report-desc { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 16px; }
+
+  .report-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+  .rchip {
+    font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 6px;
+    background: var(--surface2); color: var(--muted); border: 1px solid var(--border);
+  }
+
+  .report-footer { display: flex; align-items: center; justify-content: space-between; }
+  .report-date { font-size: 12px; color: var(--muted); }
+  .report-cta {
+    font-size: 13px; font-weight: 600; color: var(--gold);
+    display: flex; align-items: center; gap: 5px;
+  }
+  .report-cta svg { transition: transform 0.2s; }
+  .report-card:hover .report-cta svg { transform: translateX(3px); }
+
+  /* SIDEBAR */
+  .sidebar-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px; padding: 24px; margin-bottom: 20px;
+  }
+  .sidebar-title { font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
+  .sidebar-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .sidebar-row:last-child { border-bottom: none; }
+  .sidebar-key { color: var(--muted); }
+  .sidebar-val { color: var(--text); font-weight: 600; text-align: right; }
+
+  .backlog-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13px;
+  }
+  .backlog-item:last-child { border-bottom: none; }
+  .backlog-check {
+    width: 16px; height: 16px; border-radius: 4px; border: 1.5px solid var(--border);
+    flex-shrink: 0; margin-top: 1px;
+  }
+  .backlog-check.done {
+    background: var(--green); border-color: var(--green);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .backlog-text { color: var(--muted); line-height: 1.4; }
+  .backlog-text.done { color: var(--text); }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border); padding: 24px 40px;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 12px;
+  }
+  .footer-brand { font-size: 13px; font-weight: 600; color: var(--muted); }
+  .footer-links { display: flex; gap: 20px; }
+  .footer-links a { font-size: 12px; color: var(--muted); text-decoration: none; }
+  .footer-links a:hover { color: var(--text); }
+
+  @media (max-width: 680px) {
+    nav, .facts-strip, footer { padding-left: 20px; padding-right: 20px; }
+    .client-hero { padding: 36px 20px 32px; }
+    .main { padding: 32px 20px 60px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="../../" class="nav-home">
+    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    JCE Media Reports
+  </a>
+  <span class="nav-sep">/</span>
+  <div class="nav-current">
+    <div class="nav-avatar">LL</div>
+    Liquid Lounge
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="client-hero">
+  <div class="client-avatar-lg">LL</div>
+  <div class="client-info">
+    <div class="client-eyebrow">Client Research Hub</div>
+    <div class="client-name-lg">Liquid Lounge</div>
+    <div class="client-desc-lg">Leisure and dining cruises on the Vaal River, Vanderbijlpark. Sunday sailings, public holiday specials, houseboat hire, and private charters — one of Gauteng's most unique waterfront experiences.</div>
+    <div class="client-tags">
+      <span class="tag">🇿🇦 Vanderbijlpark, Gauteng</span>
+      <span class="tag">Hospitality &amp; Tourism</span>
+      <span class="tag">Facebook &amp; Instagram Ads</span>
+      <span class="tag">WhatsApp Conversions</span>
+    </div>
+  </div>
+</div>
+
+<!-- FACTS STRIP -->
+<div class="facts-strip">
+  <div class="facts-inner">
+    <div class="fact-item">
+      <div class="fact-val">R1,158.87</div>
+      <div class="fact-label">Ad spend (Mar–May 2026)</div>
+    </div>
+    <div class="fact-divider"></div>
+    <div class="fact-item">
+      <div class="fact-val">371</div>
+      <div class="fact-label">WhatsApp conversations</div>
+    </div>
+    <div class="fact-divider"></div>
+    <div class="fact-item">
+      <div class="fact-val">R3.12</div>
+      <div class="fact-label">Cost per result</div>
+    </div>
+    <div class="fact-divider"></div>
+    <div class="fact-item">
+      <div class="fact-val">386</div>
+      <div class="fact-label">CRM contacts generated</div>
+    </div>
+    <div class="fact-divider"></div>
+    <div class="fact-item">
+      <div class="fact-val">13</div>
+      <div class="fact-label">Confirmed booking leads</div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN + SIDEBAR -->
+<div class="main">
+
+  <!-- REPORTS -->
+  <div>
+    <div class="section-head">Reports</div>
+
+    <!-- Campaign Report -->
+    <a href="./reports/2026-05-15-facebook-campaign-report/" class="report-card">
+      <div class="report-card-top">
+        <div class="report-title">Facebook Campaign Report — 24 March to 11 May 2026</div>
+        <span class="report-type-badge badge-audit">Audit</span>
+      </div>
+      <div class="report-desc">Full-scope campaign performance report covering both ad sets (Evergreen and Public Holidays). Includes placement breakdown, lead generation funnel, 13 confirmed booking leads, CRM automation workflows, Reviewtap physical card analysis, ad creative brief, and a 90-day action plan.</div>
+      <div class="report-chips">
+        <span class="rchip">R1,158.87 spend</span>
+        <span class="rchip">71,306 impressions</span>
+        <span class="rchip">371 conversations</span>
+        <span class="rchip">13 booking leads</span>
+        <span class="rchip">90-day action plan</span>
+        <span class="rchip">CRM automation</span>
+      </div>
+      <div class="report-footer">
+        <div class="report-date">15 May 2026</div>
+        <div class="report-cta">
+          Open report
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </div>
+      </div>
+    </a>
+
+    <!-- Strategy Report -->
+    <a href="./reports/2026-05-15-facebook-campaign-strategy/" class="report-card">
+      <div class="report-card-top">
+        <div class="report-title">Facebook Campaign Strategy — Competitive Intelligence &amp; Growth Plan</div>
+        <span class="report-type-badge badge-strategy">Strategy</span>
+      </div>
+      <div class="report-desc">Data-driven strategy document covering the Vaal River cruise competitive landscape, SWOT analysis, 7 unique market insights, brand positioning, campaign architecture, and 3-scenario revenue projections ranging from R23K to R73K per month.</div>
+      <div class="report-chips">
+        <span class="rchip">Competitor analysis</span>
+        <span class="rchip">SWOT</span>
+        <span class="rchip">7 strategic insights</span>
+        <span class="rchip">Revenue projections</span>
+        <span class="rchip">Campaign architecture</span>
+        <span class="rchip">Brand positioning</span>
+      </div>
+      <div class="report-footer">
+        <div class="report-date">15 May 2026</div>
+        <div class="report-cta">
+          Open report
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </div>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- SIDEBAR -->
+  <div>
+    <!-- Client overview -->
+    <div class="sidebar-card">
+      <div class="sidebar-title">Client Overview</div>
+      <div class="sidebar-row"><span class="sidebar-key">Location</span><span class="sidebar-val">Vanderbijlpark, Gauteng</span></div>
+      <div class="sidebar-row"><span class="sidebar-key">Platform</span><span class="sidebar-val">Facebook &amp; Instagram</span></div>
+      <div class="sidebar-row"><span class="sidebar-key">CRM</span><span class="sidebar-val">Reviewtap CRM</span></div>
+      <div class="sidebar-row"><span class="sidebar-key">Category</span><span class="sidebar-val">Leisure Cruises</span></div>
+      <div class="sidebar-row"><span class="sidebar-key">Leisure Cruise</span><span class="sidebar-val">R250 / adult</span></div>
+      <div class="sidebar-row"><span class="sidebar-key">Lunch Cruise</span><span class="sidebar-val">R680 / adult</span></div>
+      <div class="sidebar-row"><span class="sidebar-key">Google Rating</span><span class="sidebar-val">4.5★ (191 reviews)</span></div>
+      <div class="sidebar-row"><span class="sidebar-key">Campaign Period</span><span class="sidebar-val">24 Mar – 11 May 2026</span></div>
+    </div>
+
+    <!-- Research backlog -->
+    <div class="sidebar-card">
+      <div class="sidebar-title">Research Backlog</div>
+      <div class="backlog-item">
+        <div class="backlog-check done">
+          <svg width="10" height="10" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+        </div>
+        <div class="backlog-text done">Facebook campaign audit — placement performance &amp; lead analysis</div>
+      </div>
+      <div class="backlog-item">
+        <div class="backlog-check done">
+          <svg width="10" height="10" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+        </div>
+        <div class="backlog-text done">Strategy &amp; competitor research document</div>
+      </div>
+      <div class="backlog-item">
+        <div class="backlog-check"></div>
+        <div class="backlog-text">Month 2 — WhatsApp broadcast campaign performance review</div>
+      </div>
+      <div class="backlog-item">
+        <div class="backlog-check"></div>
+        <div class="backlog-text">Q3 2026 public holiday campaign setup &amp; brief</div>
+      </div>
+      <div class="backlog-item">
+        <div class="backlog-check"></div>
+        <div class="backlog-text">Retargeting audience build &amp; warm contact re-engagement</div>
+      </div>
+      <div class="backlog-item">
+        <div class="backlog-check"></div>
+        <div class="backlog-text">Reviewtap card scan audit — 3-month review growth tracking</div>
+      </div>
+    </div>
+
+    <!-- Campaign performance -->
+    <div class="sidebar-card">
+      <div class="sidebar-title">Campaign Snapshot</div>
+      <div class="sidebar-row"><span class="sidebar-key">Total Spend</span><span class="sidebar-val">R1,158.87</span></div>
+      <div class="sidebar-row"><span class="sidebar-key">Impressions</span><span class="sidebar-val">71,306</span></div>
+      <div class="sidebar-row"><span class="sidebar-key">Reach</span><span class="sidebar-val">38,525</span></div>
+      <div class="sidebar-row"><span class="sidebar-key">Conversations</span><span class="sidebar-val">371</span></div>
+      <div class="sidebar-row"><span class="sidebar-key">Cost / Result</span><span class="sidebar-val" style="color:var(--green);">R3.12</span></div>
+      <div class="sidebar-row"><span class="sidebar-key">CRM Contacts</span><span class="sidebar-val">386</span></div>
+      <div class="sidebar-row"><span class="sidebar-key">Booking Leads</span><span class="sidebar-val" style="color:var(--gold);">13</span></div>
+      <div class="sidebar-row"><span class="sidebar-key">Conversion Rate</span><span class="sidebar-val">3.37%</span></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">JCE Media Research &amp; Reports</div>
+  <div class="footer-links">
+    <a href="../../">← All Clients</a>
+    <a href="https://jacquesgroen88.github.io/llreportmay/report.html" target="_blank">Live Report ↗</a>
+  </div>
+</footer>
+
+</body>
+</html>
