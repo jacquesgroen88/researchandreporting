@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ReviewTap — Competitor Static & Carousel Ads Intelligence</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f0f2f5; color: #1c1e21; }
+
+  /* Header */
+  .page-header {
+    background: linear-gradient(135deg, #1877f2 0%, #0a5dc2 100%);
+    color: white; padding: 36px 40px 28px; position: relative; overflow: hidden;
+  }
+  .page-header::after {
+    content: ''; position: absolute; right: -60px; top: -60px;
+    width: 300px; height: 300px; background: rgba(255,255,255,0.06);
+    border-radius: 50%;
+  }
+  .page-header h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.5px; }
+  .page-header p { margin-top: 6px; opacity: 0.85; font-size: 14px; }
+  .meta-pills { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+  .meta-pill {
+    background: rgba(255,255,255,0.18); border-radius: 20px;
+    padding: 4px 12px; font-size: 12px; font-weight: 600;
+  }
+
+  /* Layout */
+  .container { max-width: 1300px; margin: 0 auto; padding: 32px 24px; }
+  .section-title {
+    font-size: 18px; font-weight: 700; color: #1c1e21;
+    margin-bottom: 20px; padding-bottom: 10px;
+    border-bottom: 2px solid #e4e6ea; display: flex; align-items: center; gap: 10px;
+  }
+  .section-title .badge {
+    font-size: 11px; font-weight: 700; padding: 3px 9px;
+    border-radius: 12px; text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .badge-green { background: #d4edda; color: #155724; }
+  .badge-orange { background: #fff3cd; color: #856404; }
+  .badge-red { background: #f8d7da; color: #721c24; }
+  .badge-blue { background: #cce5ff; color: #004085; }
+
+  .ads-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; margin-bottom: 48px; }
+
+  /* FB Ad Mockup */
+  .ad-mockup {
+    background: white; border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    overflow: hidden; transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .ad-mockup:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.16); }
+
+  /* Competitor label strip */
+  .ad-brand-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 12px; border-bottom: 1px solid #f0f2f5; background: #f8f9fa;
+  }
+  .brand-info { display: flex; align-items: center; gap: 8px; }
+  .brand-avatar {
+    width: 32px; height: 32px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 13px; color: white; flex-shrink: 0;
+  }
+  .brand-name { font-weight: 700; font-size: 13px; color: #1c1e21; }
+  .brand-sub { font-size: 11px; color: #65676b; }
+  .longevity-badge {
+    font-size: 11px; font-weight: 700; padding: 3px 8px;
+    border-radius: 10px; white-space: nowrap;
+  }
+  .long-running { background: #d4edda; color: #155724; }
+  .medium-running { background: #fff3cd; color: #856404; }
+  .short-running { background: #e2e8f0; color: #475569; }
+
+  /* FB header inside ad */
+  .fb-header { padding: 12px 12px 8px; display: flex; align-items: flex-start; gap: 10px; }
+  .fb-avatar {
+    width: 40px; height: 40px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 15px; color: white; flex-shrink: 0;
+  }
+  .fb-page-name { font-weight: 700; font-size: 14px; color: #1c1e21; }
+  .fb-sponsored { font-size: 12px; color: #65676b; display: flex; align-items: center; gap: 4px; }
+  .fb-dots { margin-left: auto; color: #65676b; font-size: 20px; cursor: default; line-height: 1; }
+
+  /* Ad body text */
+  .ad-body { padding: 0 12px 10px; font-size: 14px; line-height: 1.5; color: #1c1e21; }
+  .ad-body.truncated { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+
+  /* Main image */
+  .ad-image-wrap { position: relative; overflow: hidden; }
+  .ad-image-wrap img {
+    width: 100%; display: block;
+    object-fit: cover; background: #e4e6ea;
+    min-height: 200px; max-height: 340px;
+  }
+  .img-error { display: none; }
+  .ad-image-wrap img:not([src]) + .img-error,
+  .ad-image-wrap img[src=""] + .img-error { display: flex; }
+
+  /* Carousel */
+  .carousel-wrap { position: relative; overflow: hidden; }
+  .carousel-track { display: flex; transition: transform 0.35s ease; }
+  .carousel-slide { min-width: 100%; position: relative; }
+  .carousel-slide img { width: 100%; display: block; object-fit: cover; max-height: 300px; background: #e4e6ea; }
+  .carousel-slide .slide-title {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: linear-gradient(transparent, rgba(0,0,0,0.65));
+    color: white; padding: 24px 12px 10px; font-size: 13px; font-weight: 600;
+  }
+  .carousel-nav {
+    display: flex; align-items: center; justify-content: center;
+    gap: 6px; padding: 8px;
+  }
+  .carousel-dot {
+    width: 8px; height: 8px; border-radius: 50%; background: #ccd0d5;
+    cursor: pointer; transition: background 0.2s; border: none;
+  }
+  .carousel-dot.active { background: #1877f2; }
+  .carousel-prev, .carousel-next {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    background: rgba(255,255,255,0.9); border: none; border-radius: 50%;
+    width: 32px; height: 32px; cursor: pointer; z-index: 2;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  }
+  .carousel-prev { left: 8px; }
+  .carousel-next { right: 8px; }
+
+  /* CTA bar */
+  .ad-cta-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 12px; border-top: 1px solid #e4e6ea;
+    background: #f8f9fa;
+  }
+  .ad-domain { font-size: 12px; color: #65676b; text-transform: uppercase; }
+  .ad-headline { font-weight: 700; font-size: 14px; color: #1c1e21; }
+  .ad-btn {
+    background: #e4e6ea; color: #1c1e21; border: none;
+    padding: 7px 14px; border-radius: 6px; font-size: 13px;
+    font-weight: 600; cursor: default; white-space: nowrap;
+  }
+
+  /* Insights panel */
+  .ad-insights {
+    padding: 10px 12px 12px; border-top: 1px solid #f0f2f5;
+    background: #fafbff;
+  }
+  .insight-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .insight-chip {
+    font-size: 11px; padding: 3px 8px; border-radius: 10px; font-weight: 600;
+  }
+  .chip-days { background: #e8f4fd; color: #0066cc; }
+  .chip-format { background: #f0fff4; color: #276749; }
+  .chip-platform { background: #fef3e2; color: #92400e; }
+  .chip-active { background: #d4edda; color: #155724; }
+  .chip-inactive { background: #f8d7da; color: #721c24; }
+  .insight-label { font-size: 11px; color: #65676b; font-weight: 600; }
+
+  /* Analysis callout */
+  .analysis-box {
+    background: #e8f4fd; border-left: 4px solid #1877f2;
+    padding: 10px 12px; font-size: 12px; line-height: 1.5; color: #1c1e21;
+    margin: 0 12px 12px;  border-radius: 0 6px 6px 0;
+  }
+  .analysis-box strong { color: #0a5dc2; }
+
+  /* Summary table */
+  .summary-card {
+    background: white; border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1); overflow: hidden; margin-bottom: 40px;
+  }
+  .summary-card table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .summary-card th {
+    background: #1877f2; color: white; padding: 10px 14px;
+    text-align: left; font-weight: 600; font-size: 12px; white-space: nowrap;
+  }
+  .summary-card td { padding: 10px 14px; border-bottom: 1px solid #f0f2f5; vertical-align: top; }
+  .summary-card tr:last-child td { border-bottom: none; }
+  .summary-card tr:hover td { background: #f8f9ff; }
+  .rank-num { font-weight: 800; font-size: 16px; color: #1877f2; }
+
+  /* Section divider */
+  .section-divider { margin: 8px 0 32px; }
+
+  /* SA alert banner */
+  .sa-banner {
+    background: linear-gradient(135deg, #007a4d 0%, #005a38 100%);
+    border-radius: 12px; padding: 18px 24px; margin-bottom: 28px;
+    display: flex; align-items: flex-start; gap: 16px; color: white;
+  }
+  .sa-banner-flag { font-size: 40px; flex-shrink: 0; }
+  .sa-banner h3 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+  .sa-banner p { font-size: 13px; opacity: 0.9; line-height: 1.5; }
+  .sa-banner .sa-pills { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+  .sa-pill { background: rgba(255,255,255,0.18); border-radius: 20px; padding: 3px 10px; font-size: 11px; font-weight: 600; }
+
+  /* Threat level indicator */
+  .threat-bar {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 12px; border-radius: 8px; margin: 8px 12px 0; font-size: 12px;
+  }
+  .threat-high { background: #fde8e8; border-left: 3px solid #dc3545; color: #721c24; }
+  .threat-medium { background: #fff3cd; border-left: 3px solid #ffc107; color: #856404; }
+  .threat-low { background: #e8f5e9; border-left: 3px solid #28a745; color: #155724; }
+
+  /* Responsive */
+  @media (max-width: 700px) {
+    .ads-grid { grid-template-columns: 1fr; }
+    .page-header { padding: 24px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>🔍 Competitor Ad Intelligence — Static &amp; Carousel Creatives</h1>
+  <p>High-performing ads from the global NFC/QR Google Review space · Scraped via Apify · May 2026 (expanded)</p>
+  <div class="meta-pills">
+    <span class="meta-pill">200+ ads analysed</span>
+    <span class="meta-pill">7 keyword searches</span>
+    <span class="meta-pill">🇿🇦 SA competitors identified</span>
+    <span class="meta-pill">Static + Carousel + Video formats</span>
+    <span class="meta-pill">Sorted by longevity (days running)</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- SUMMARY TABLE -->
+  <div class="section-title">📊 Longevity Leaderboard <span class="badge badge-blue">Static &amp; Carousel only</span></div>
+  <div class="summary-card" style="margin-bottom:36px;">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Brand</th>
+          <th>Format</th>
+          <th>Days Running</th>
+          <th>Status</th>
+          <th>Key Angle</th>
+          <th>Market</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="rank-num">1</span></td>
+          <td><strong>The Review Guys</strong><br><small>thereviewguys.com.au</small></td>
+          <td><span class="insight-chip chip-format">Static IMAGE</span></td>
+          <td><strong>526 days</strong> 🏆</td>
+          <td><span class="insight-chip chip-active">✅ Active</span></td>
+          <td>"Australian Made · Lifetime Warranty · FREE Shipping"</td>
+          <td>🇦🇺 AU</td>
+        </tr>
+        <tr>
+          <td><span class="rank-num">2</span></td>
+          <td><strong>TapCard</strong><br><small>tapcard.gr</small></td>
+          <td><span class="insight-chip chip-format">CAROUSEL</span></td>
+          <td><strong>520 days</strong></td>
+          <td><span class="insight-chip chip-active">✅ Active</span></td>
+          <td>Full product range carousel · Stand + Card + Sticker</td>
+          <td>🇬🇷 GR</td>
+        </tr>
+        <tr>
+          <td><span class="rank-num">3</span></td>
+          <td><strong>ZappyCards</strong><br><small>zappycards.com</small></td>
+          <td><span class="insight-chip chip-format">Static IMAGE</span></td>
+          <td><strong>76 days</strong></td>
+          <td><span class="insight-chip chip-active">✅ Active</span></td>
+          <td>"Your competitor has 2,000 reviews. You have 34."</td>
+          <td>🌍 Global</td>
+        </tr>
+        <tr>
+          <td><span class="rank-num">4</span></td>
+          <td><strong>TrustHero</strong><br><small>store.trusthero.io</small></td>
+          <td><span class="insight-chip chip-format">Static IMAGE</span></td>
+          <td><strong>80 days</strong></td>
+          <td><span class="insight-chip chip-active">✅ Active</span></td>
+          <td>"Get more 5★ reviews — become #1 in your area. No apps, no setup."</td>
+          <td>🌍 Global</td>
+        </tr>
+        <tr>
+          <td><span class="rank-num">5</span></td>
+          <td><strong>TapOnn</strong><br><small>taponnshop.com</small></td>
+          <td><span class="insight-chip chip-format">Static IMAGE</span></td>
+          <td><strong>71 days</strong></td>
+          <td><span class="insight-chip chip-active">✅ Active</span></td>
+          <td>"Your customers love you. Google just doesn't know it yet."</td>
+          <td>🌍 Global</td>
+        </tr>
+        <tr>
+          <td><span class="rank-num">6</span></td>
+          <td><strong>ReviewBoost</strong><br><small>reviewboostcard.com</small></td>
+          <td><span class="insight-chip chip-format">Static IMAGE</span></td>
+          <td>387 days (stopped)</td>
+          <td><span class="insight-chip chip-inactive">❌ Inactive</span></td>
+          <td>"81% of consumers check reviews before visiting"</td>
+          <td>🌍 Global · 🇿🇦 ZA</td>
+        </tr>
+        <tr>
+          <td><span class="rank-num">7</span></td>
+          <td><strong>🇿🇦 RoyalTap</strong><br><small>facebook.com/61575702808642</small></td>
+          <td><span class="insight-chip chip-format">VIDEO</span></td>
+          <td>10 days (stopped)</td>
+          <td><span class="insight-chip chip-inactive">❌ Inactive</span></td>
+          <td>"Strategic placement of NFC stands makes all the difference" + analytics</td>
+          <td>🇿🇦 SA only</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====================== SOUTH AFRICA SECTION ====================== -->
+  <div class="section-title">🇿🇦 South African Competitors <span class="badge badge-green">NEW — ZA-specific findings</span></div>
+
+  <div class="sa-banner">
+    <div class="sa-banner-flag">🇿🇦</div>
+    <div>
+      <h3>2 SA-targeting NFC/QR review competitors found via Facebook Ad Library</h3>
+      <p>Searches: "NFC tap" (ZA country filter, 969 total ads), "google review" (ZA, 50k+ ads). Both ZA competitors are currently <strong>inactive</strong> — RoyalTap ran briefly in June 2025 and has stopped. ReviewBoost ran globally and also targeted ZA (Aug–Oct 2025, now stopped). ReviewTap has a clear window of no active SA competition right now.</p>
+      <div class="sa-pills">
+        <span class="sa-pill">RoyalTap — SA-only, VIDEO ads, inactive Jun 2025</span>
+        <span class="sa-pill">ReviewBoost — Global + ZA, inactive Oct 2025</span>
+        <span class="sa-pill">⚡ No active SA NFC review advertisers detected May 2026</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="ads-grid">
+
+    <!-- RoyalTap Ad 1 -->
+    <div class="ad-mockup">
+      <div class="ad-brand-bar">
+        <div class="brand-info">
+          <div class="brand-avatar" style="background:#007a4d;">RT</div>
+          <div>
+            <div class="brand-name">RoyalTap 🇿🇦</div>
+            <div class="brand-sub">facebook.com/61575702808642 · South Africa</div>
+          </div>
+        </div>
+        <span class="longevity-badge short-running">Stopped Jun 2025</span>
+      </div>
+      <div class="fb-header">
+        <div class="fb-avatar" style="background:#007a4d;">RT</div>
+        <div>
+          <div class="fb-page-name">RoyalTap</div>
+          <div class="fb-sponsored">✦ Sponsored (inactive) · <span style="font-size:10px;">📍 South Africa · VIDEO</span></div>
+        </div>
+        <div class="fb-dots">···</div>
+      </div>
+      <div class="ad-body">
+        Strategic placement of your NFC stands can make all the difference when it comes to collecting reviews.<br><br>
+        💡 Position near checkout, reception, or service completion points where customers are happiest.<br><br>
+        ⭐ One tap = instant Google review — no friction, no asking awkwardly.
+      </div>
+      <div style="background:#1c1e21;min-height:200px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:24px;">
+        <div style="width:56px;height:56px;border-radius:50%;background:#007a4d;display:flex;align-items:center;justify-content:center;font-size:24px;">▶</div>
+        <div style="color:white;font-size:13px;font-weight:600;text-align:center;">VIDEO AD<br><span style="font-weight:400;opacity:0.7;font-size:11px;">Product demo · NFC stand placement tips</span></div>
+      </div>
+      <div class="ad-cta-bar">
+        <div>
+          <div class="ad-domain">royaltap.co.za (inferred)</div>
+          <div class="ad-headline">RoyalTap — NFC Google Review Stands</div>
+        </div>
+        <button class="ad-btn">Learn More</button>
+      </div>
+      <div class="ad-insights">
+        <div class="insight-label">📊 Ad Intelligence</div>
+        <div class="insight-row">
+          <span class="insight-chip chip-days">~10 days live (Jun 9–19, 2025)</span>
+          <span class="insight-chip chip-format">VIDEO</span>
+          <span class="insight-chip chip-inactive">Inactive ❌</span>
+          <span class="insight-chip chip-platform">🇿🇦 SA only</span>
+        </div>
+      </div>
+      <div class="threat-bar threat-medium">⚠️ <strong>Medium threat.</strong> Direct SA competitor with similar product, but inactive for 11+ months. No active spend = likely no traction or pivoted/closed.</div>
+      <div class="analysis-box"><strong>Key intel:</strong> RoyalTap tested VIDEO ads in SA — placement-tip educational content, not a hard sell. They also claimed "real-time feedback analytics" as a feature (reviewtap doesn't currently push this angle). Campaign ran only 10 days June 2025 then stopped — suggests poor results or budget exhaustion. Their page has no organic posts since then.</div>
+    </div>
+
+    <!-- RoyalTap Ad 2 -->
+    <div class="ad-mockup">
+      <div class="ad-brand-bar">
+        <div class="brand-info">
+          <div class="brand-avatar" style="background:#007a4d;">RT</div>
+          <div>
+            <div class="brand-name">RoyalTap — Ad Variant 2 🇿🇦</div>
+            <div class="brand-sub">facebook.com/61575702808642 · South Africa</div>
+          </div>
+        </div>
+        <span class="longevity-badge short-running">Stopped Jun 2025</span>
+      </div>
+      <div class="fb-header">
+        <div class="fb-avatar" style="background:#007a4d;">RT</div>
+        <div>
+          <div class="fb-page-name">RoyalTap</div>
+          <div class="fb-sponsored">✦ Sponsored (inactive) · <span style="font-size:10px;">📍 South Africa · VIDEO</span></div>
+        </div>
+        <div class="fb-dots">···</div>
+      </div>
+      <div class="ad-body">
+        Royal Tap helps you gather real-time feedback with ease and provides analytics to track your progress.<br><br>
+        📊 See which locations generate the most reviews<br>
+        ⭐ Monitor your star rating in real time<br>
+        🚀 Know exactly which stand is performing<br><br>
+        No app. No complicated setup. Just tap &amp; grow.
+      </div>
+      <div style="background:#1c1e21;min-height:200px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:24px;">
+        <div style="width:56px;height:56px;border-radius:50%;background:#007a4d;display:flex;align-items:center;justify-content:center;font-size:24px;">▶</div>
+        <div style="color:white;font-size:13px;font-weight:600;text-align:center;">VIDEO AD<br><span style="font-weight:400;opacity:0.7;font-size:11px;">Analytics angle — real-time feedback tracking</span></div>
+      </div>
+      <div class="ad-cta-bar">
+        <div>
+          <div class="ad-domain">royaltap.co.za (inferred)</div>
+          <div class="ad-headline">Track Your Review Growth in Real Time</div>
+        </div>
+        <button class="ad-btn">Learn More</button>
+      </div>
+      <div class="ad-insights">
+        <div class="insight-label">📊 Ad Intelligence</div>
+        <div class="insight-row">
+          <span class="insight-chip chip-days">~10 days live (Jun 9–19, 2025)</span>
+          <span class="insight-chip chip-format">VIDEO</span>
+          <span class="insight-chip chip-inactive">Inactive ❌</span>
+          <span class="insight-chip chip-platform">🇿🇦 SA only</span>
+        </div>
+      </div>
+      <div class="threat-bar threat-medium">⚠️ <strong>Analytics angle.</strong> RoyalTap leaned into "analytics" as a differentiator — a feature ReviewTap doesn't prominently advertise. Worth monitoring if this angle resurfaces.</div>
+      <div class="analysis-box"><strong>Competitor gap spotted:</strong> RoyalTap's analytics angle ("see which stand performs best") is an unadvertised feature in the SA market. If ReviewTap has any dashboard or tracking, this is an angle to test. If not, the copy still suggests SA buyers respond to data/control messaging.</div>
+    </div>
+
+    <!-- ReviewBoost ZA targeting -->
+    <div class="ad-mockup" style="opacity:0.85;">
+      <div class="ad-brand-bar">
+        <div class="brand-info">
+          <div class="brand-avatar" style="background:#dc3545;">RB</div>
+          <div>
+            <div class="brand-name">ReviewBoost — ZA Targeting</div>
+            <div class="brand-sub">reviewboostcard.com · Global brand, ZA audience</div>
+          </div>
+        </div>
+        <span class="longevity-badge short-running">Stopped Oct 2025</span>
+      </div>
+      <div class="fb-header">
+        <div class="fb-avatar" style="background:#dc3545;">RB</div>
+        <div>
+          <div class="fb-page-name">ReviewBoost</div>
+          <div class="fb-sponsored">✦ Sponsored (inactive) · <span style="font-size:10px;">📍 ZA-targeted · Aug–Oct 2025</span></div>
+        </div>
+        <div class="fb-dots">···</div>
+      </div>
+      <div class="ad-body truncated">
+        💡 Did you know that over <strong>81% of consumers check the Google Reviews</strong> before visiting a business?<br><br>
+        If your business doesn't have hundreds of reviews, you're losing customers every single day.<br><br>
+        Your customers just tap or scan the card and are instantly taken to your Google page where they can leave a review before they even walk out the door.
+      </div>
+      <div class="ad-image-wrap">
+        <img src="https://scontent.fcpv16-1.fna.fbcdn.net/v/t39.35426-6/541788963_1958147875039164_1062614206591023719_n.jpg?stp=dst-jpg_s600x600_tt6&_nc_cat=109&ccb=1-7&_nc_sid=c53f8f&_nc_ohc=9582LHLMuHYQ7kNvwFhppxE&_nc_oc=Ado9eMAyHJR1MCzE2wuCG4Ys5ht223s9emCzzpAUvgQug2gu90JSMbMXKIbcy3rNhOo&_nc_zt=14&_nc_ht=scontent.fcpv16-1.fna&_nc_gid=6wPmpSceT8iiWpXXspw1KA&_nc_ss=7f289&oh=00_Af7QTLDnYTXvKoHbJjg9q8PispgEq5oss-MOn_x4TBgcgQ&oe=6A0CAD41" alt="ReviewBoost ZA" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+        <div style="display:none;min-height:220px;background:#e4e6ea;align-items:center;justify-content:center;color:#65676b;font-size:13px;">Image expired (Facebook CDN)</div>
+      </div>
+      <div class="ad-cta-bar">
+        <div>
+          <div class="ad-domain">reviewboostcard.com</div>
+          <div class="ad-headline">Collect Instant Reviews — Tap or Scan</div>
+        </div>
+        <button class="ad-btn">Learn More</button>
+      </div>
+      <div class="ad-insights">
+        <div class="insight-label">📊 Ad Intelligence</div>
+        <div class="insight-row">
+          <span class="insight-chip chip-days">Aug–Oct 2025 in ZA (stopped)</span>
+          <span class="insight-chip chip-format">Static IMAGE</span>
+          <span class="insight-chip chip-inactive">Inactive ❌</span>
+          <span class="insight-chip chip-platform">🇿🇦 ZA-targeted confirmed</span>
+        </div>
+      </div>
+      <div class="threat-bar threat-low">✅ <strong>Currently no threat.</strong> Tested ZA market Aug–Oct 2025, stopped — likely found SA CPMs unfavourable or conversion rate too low with ZAR pricing. ReviewTap has local pricing advantage.</div>
+      <div class="analysis-box"><strong>Why ReviewTap wins vs ReviewBoost in SA:</strong> ReviewBoost prices in USD/GBP and ships internationally — R299–R499 from ReviewTap with 1–4 day local delivery is a decisive advantage. ReviewBoost's test-and-stop pattern in ZA suggests the market didn't convert well for them at their price point.</div>
+    </div>
+
+  </div>
+
+  <!-- ====================== GLOBAL COMPETITORS ====================== -->
+  <div class="section-title">🌍 Newly Found Global Competitors <span class="badge badge-orange">May 2026 expanded scrape</span></div>
+
+  <div class="ads-grid">
+
+    <!-- TapOnn -->
+    <div class="ad-mockup">
+      <div class="ad-brand-bar">
+        <div class="brand-info">
+          <div class="brand-avatar" style="background:#e67e22;">TO</div>
+          <div>
+            <div class="brand-name">TapOnn</div>
+            <div class="brand-sub">taponnshop.com · 🌍 Global · Active now</div>
+          </div>
+        </div>
+        <span class="longevity-badge medium-running">71 days · Active</span>
+      </div>
+      <div class="fb-header">
+        <div class="fb-avatar" style="background:#e67e22;">TO</div>
+        <div>
+          <div class="fb-page-name">TapOnn</div>
+          <div class="fb-sponsored">✦ Sponsored · <span style="font-size:10px;">🌐 FB/IG</span></div>
+        </div>
+        <div class="fb-dots">···</div>
+      </div>
+      <div class="ad-body">
+        Your customers already love you ❤️<br>
+        Google just doesn't know it.<br><br>
+        This stand fixes that 👇<br>
+        📱 Scan<br>
+        ⭐ Leave a review<br>
+        📈 Boost your Google ranking<br><br>
+        No reminders. No awkward asking. No discounts.<br><br>
+        Place it on your counter and watch the reviews come in automatically.
+      </div>
+      <div class="ad-image-wrap">
+        <img src="https://scontent.fpsr1-1.fna.fbcdn.net/v/t39.35426-6/645844341_2143072093136598_5067211230553138068_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=c53f8f&_nc_ohc=dl8x297BctsQ7kNvwFtWn-Y&_nc_oc=Adpvy1bFWeMulfpQWLitDlUTMGzUs_3SkekcA_rxLmg_17zBtx771tzvSfVW2p-6HKE&_nc_zt=14&_nc_ht=scontent.fpsr1-1.fna&_nc_gid=6BF8VKQTFj_HWD1tCGmA6g&_nc_ss=7f289&oh=00_Af6QTzeNVflX3KpSD1gwo0csq0jUpTHLCK-0oXlLB_dcAA&oe=6A0CC3EF" alt="TapOnn NFC Stand video thumbnail" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+        <div style="display:none;min-height:220px;background:#e4e6ea;align-items:center;justify-content:center;color:#65676b;font-size:13px;">Image expired (Facebook CDN)</div>
+      </div>
+      <div class="ad-cta-bar">
+        <div>
+          <div class="ad-domain">taponnshop.com</div>
+          <div class="ad-headline">Your Customers Love You — Let Google Know</div>
+        </div>
+        <button class="ad-btn">Shop Now</button>
+      </div>
+      <div class="ad-insights">
+        <div class="insight-label">📊 Ad Intelligence</div>
+        <div class="insight-row">
+          <span class="insight-chip chip-days">71 days live (Mar–May 2026)</span>
+          <span class="insight-chip chip-format">Static IMAGE</span>
+          <span class="insight-chip chip-active">Active ✅</span>
+        </div>
+      </div>
+      <div class="threat-bar threat-medium">⚠️ <strong>Watch closely.</strong> 71 days active with no sign of stopping. Emotional angle is very different from ZappyCards' shame hook — and it's working.</div>
+      <div class="analysis-box"><strong>🔥 Best new copy in this scrape.</strong> Opens with validation ("your customers love you") before the pain, then delivers the mechanism. "No reminders. No awkward asking. No discounts." — three objections killed in one line. This emotional reframe is the opposite of ZappyCards' shame approach. Both are working — two different psychological entry points for the same product.</div>
+    </div>
+
+    <!-- TrustHero -->
+    <div class="ad-mockup">
+      <div class="ad-brand-bar">
+        <div class="brand-info">
+          <div class="brand-avatar" style="background:#2980b9;">TH</div>
+          <div>
+            <div class="brand-name">TrustHero</div>
+            <div class="brand-sub">store.trusthero.io · 🌍 Global · Active now</div>
+          </div>
+        </div>
+        <span class="longevity-badge medium-running">80 days · Active</span>
+      </div>
+      <div class="fb-header">
+        <div class="fb-avatar" style="background:#2980b9;">TH</div>
+        <div>
+          <div class="fb-page-name">TrustHero - Boost Positive Reviews</div>
+          <div class="fb-sponsored">✦ Sponsored · <span style="font-size:10px;">🌐 FB/IG</span></div>
+        </div>
+        <div class="fb-dots">···</div>
+      </div>
+      <div class="ad-body">
+        Get more 5★ Google reviews — and become #1 in your area 🔝<br><br>
+        Just place a TrustHero NFC Review Product — no apps, no setup, no awkward asking.<br><br>
+        Let happy customers give you ⭐⭐⭐⭐⭐ in 5 seconds!<br><br>
+        ✅ Free shipping on orders over $50<br>
+        ✅ 30-day money-back guarantee<br>
+        ✅ Works with any smartphone — no app needed
+      </div>
+      <div class="carousel-wrap" id="cTH">
+        <div class="carousel-track" id="cTH-track">
+          <div class="carousel-slide">
+            <img src="https://scontent.fpsr1-1.fna.fbcdn.net/v/t39.35426-6/616557035_1572090417506630_6459109932330283294_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=c53f8f&_nc_ohc=WNScF1k04zkQ7kNvwHh-K78&_nc_oc=AdoIGWC0NiVv-MkESgtis29ESb8Nln8X6ZIoRBaOY9zO3FZV7l7dl1zFSocCGnElnV8&_nc_zt=14&_nc_ht=scontent.fpsr1-1.fna&_nc_gid=6BF8VKQTFj_HWD1tCGmA6g&_nc_ss=7f289&oh=00_Af7hTUkmR_bw9HEQrIfmall3N93QvHNjZMckPpsMf9WSFQ&oe=6A0CA1F4" alt="TrustHero Stand Large" onerror="this.src='';this.alt='[TrustHero Stand Large]';">
+            <div class="slide-title">Google Review Stand (Large)</div>
+          </div>
+          <div class="carousel-slide">
+            <img src="https://scontent.fpsr1-1.fna.fbcdn.net/v/t39.35426-6/617593241_1565973581357049_5146728347046323683_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=c53f8f&_nc_ohc=9MBVtF22QoAQ7kNvwHJa-ZU&_nc_oc=AdqsvGPhmDWn5d4s79gEqdK-SCXNR8nXbDRSyXYDCAIJbrNC2OxYPqbWtCVthPWTBLU&_nc_zt=14&_nc_ht=scontent.fpsr1-1.fna&_nc_gid=6BF8VKQTFj_HWD1tCGmA6g&_nc_ss=7f289&oh=00_Af5ld19oprelund0l9HYgwQRoA9t_ceXupPkvx4SMU6qGg&oe=6A0CC2CA" alt="TrustHero Stand Standard" onerror="this.src='';this.alt='[TrustHero Stand Standard]';">
+            <div class="slide-title">Google Review Stand (Standard)</div>
+          </div>
+          <div class="carousel-slide">
+            <img src="https://scontent.fpsr1-1.fna.fbcdn.net/v/t39.35426-6/617594680_1250461356970148_487318538527439873_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=c53f8f&_nc_ohc=h3DcjInbrZoQ7kNvwEOVLR9&_nc_oc=Adp-5YkDsG2Ryw9l325O_oL_KoIye4LwxH46iFaAseV6XqWFEq96dk_ustBOHDAVRFQ&_nc_zt=14&_nc_ht=scontent.fpsr1-1.fna&_nc_gid=6BF8VKQTFj_HWD1tCGmA6g&_nc_ss=7f289&oh=00_Af7FDP_BxmrFQqG33aDNRTvWu2nI_ERudPZVzRJEQRShBw&oe=6A0CBFB9" alt="TrustHero Lifestyle" onerror="this.src='';this.alt='[TrustHero]';">
+            <div class="slide-title">In-store placement</div>
+          </div>
+          <div class="carousel-slide">
+            <img src="https://scontent.fpsr1-1.fna.fbcdn.net/v/t39.35426-6/617594515_1973097789937123_2189138659588355_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=c53f8f&_nc_ohc=-2sOW4hp-xQQ7kNvwFNUsze&_nc_oc=AdqsK1U0pvWv08sAaYYzdd0C0DtZa8Zn6GqbG0oKR_mQMUrQUE3UAs9p80HpoTfdA80&_nc_zt=14&_nc_ht=scontent.fpsr1-1.fna&_nc_gid=6BF8VKQTFj_HWD1tCGmA6g&_nc_ss=7f289&oh=00_Af5JNLfPTeLh2fU6If84XqOtYJjC1XwNM2fwx04tHFxDlQ&oe=6A0CA258" alt="TrustHero variant" onerror="this.src='';this.alt='[TrustHero]';">
+            <div class="slide-title">Product variant</div>
+          </div>
+          <div class="carousel-slide">
+            <img src="https://scontent.fpsr1-1.fna.fbcdn.net/v/t39.35426-6/617545900_1254289146561151_8151933811070102574_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=c53f8f&_nc_ohc=KKznrinhSxwQ7kNvwEdJ-Kv&_nc_oc=AdqcDvIpBZzq1qRWnbm6NGQNZrVtHpAlXjIaLMcnZhKO_8S6xNXf8i7B17RjykY0ZJI&_nc_zt=14&_nc_ht=scontent.fpsr1-1.fna&_nc_gid=6BF8VKQTFj_HWD1tCGmA6g&_nc_ss=7f289&oh=00_Af55BkvY_BFkLx2000Lj2Fa5q9hx0iS7ZmIXnrGDNPkwHw&oe=6A0CC864" alt="TrustHero variant 2" onerror="this.src='';this.alt='[TrustHero]';">
+            <div class="slide-title">Product variant 2</div>
+          </div>
+          <div class="carousel-slide">
+            <img src="https://scontent.fpsr1-1.fna.fbcdn.net/v/t39.35426-6/617565432_1430178445376720_7364903977942241138_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=c53f8f&_nc_ohc=0bcH0TgkrTkQ7kNvwECLt_V&_nc_oc=AdpxsI6negJoee9G9ucMJLAP3WkRlY8wEWIyek3ZPsCVpmjL2_KrXmjnuJqYzbjHktc&_nc_zt=14&_nc_ht=scontent.fpsr1-1.fna&_nc_gid=6BF8VKQTFj_HWD1tCGmA6g&_nc_ss=7f289&oh=00_Af51PZwJ0LM0EpEqfYZa4mAyBPXJffp-XHIYEbXVGHvX7w&oe=6A0CAB2A" alt="TrustHero Standard" onerror="this.src='';this.alt='[TrustHero]';">
+            <div class="slide-title">Standard Review Stand</div>
+          </div>
+        </div>
+        <button class="carousel-prev" onclick="moveCarousel('cTH',-1)">‹</button>
+        <button class="carousel-next" onclick="moveCarousel('cTH',1)">›</button>
+        <div class="carousel-nav" id="cTH-nav"></div>
+      </div>
+      <div class="ad-cta-bar">
+        <div>
+          <div class="ad-domain">store.trusthero.io</div>
+          <div class="ad-headline">Become #1 in Your Area — 5★ Reviews Automatically</div>
+        </div>
+        <button class="ad-btn">Shop Now</button>
+      </div>
+      <div class="ad-insights">
+        <div class="insight-label">📊 Ad Intelligence</div>
+        <div class="insight-row">
+          <span class="insight-chip chip-days">80 days live (Feb–May 2026)</span>
+          <span class="insight-chip chip-format">Static IMAGE</span>
+          <span class="insight-chip chip-active">Active ✅</span>
+          <span class="insight-chip chip-platform">2 variants running</span>
+        </div>
+      </div>
+      <div class="threat-bar threat-medium">⚠️ <strong>Active global spend.</strong> 80 days with 2 product variants. Clean conversion-first messaging with social proof offer ($50 free shipping threshold = higher AOV tactic).</div>
+      <div class="analysis-box"><strong>Smart AOV tactic:</strong> "Free shipping over $50" pushes buyers toward the larger stand or multi-pack. "5 seconds" claim is a strong micro-commitment — shorter than ReviewTap's implied flow. Worth A/B testing "5 seconds" as a time hook in RT copy.</div>
+    </div>
+
+    <!-- Boost Biz Solutions -->
+    <div class="ad-mockup">
+      <div class="ad-brand-bar">
+        <div class="brand-info">
+          <div class="brand-avatar" style="background:#8e44ad;">BB</div>
+          <div>
+            <div class="brand-name">Boost Biz Solutions</div>
+            <div class="brand-sub">Facebook page · 🌍 Global · Active now</div>
+          </div>
+        </div>
+        <span class="longevity-badge medium-running">34 days · Active</span>
+      </div>
+      <div class="fb-header">
+        <div class="fb-avatar" style="background:#8e44ad;">BB</div>
+        <div>
+          <div class="fb-page-name">Boost Biz Solutions</div>
+          <div class="fb-sponsored">✦ Sponsored · <span style="font-size:10px;">🌐 FB/IG</span></div>
+        </div>
+        <div class="fb-dots">···</div>
+      </div>
+      <div class="ad-body">
+        ❌ Stop Losing Reviews &amp; Followers!<br><br>
+        Turn your counter into a growth machine with our modern NFC + QR Code Stand<br><br>
+        📱 Tap or Scan = Instant Google Review &amp; Follows!<br><br>
+        💼 Ideal for:<br>
+        🩺 Clinics | 🍕 Cafes | 🛒 Shops | 💇 Salons | 🏋️ Gyms<br><br>
+        One device. Unlimited reviews. No monthly fees.
+      </div>
+      <div class="ad-image-wrap">
+        <img src="https://scontent.faru4-1.fna.fbcdn.net/v/t39.35426-6/669523782_782511998026169_7390752378103396562_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=c53f8f&_nc_ohc=s0ozjQWclLUQ7kNvwGKR3ys&_nc_oc=Ado57eLglSpjBIJlLNNhMwdXO5dc1KqAzMbuTfelbhJMUUrfcX2Vlm0o-ZHdisJYqwHzm5cZ9YpCHlS5NEYrNFhJ&_nc_zt=14&_nc_ht=scontent.faru4-1.fna&_nc_gid=Fs65PBTTBhSGQ6-1slja2w&_nc_ss=7f180&oh=00_Af7zs_SBW14wSpVzIEMPKvA0iD6uAmW8Tq9jh2mz4hN6Ng&oe=6A0CA6E7" alt="Boost Biz Solutions NFC Stand" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+        <div style="display:none;min-height:220px;background:#e4e6ea;align-items:center;justify-content:center;color:#65676b;font-size:13px;">Image expired (Facebook CDN)</div>
+      </div>
+      <div class="ad-cta-bar">
+        <div>
+          <div class="ad-domain">boostbizsolutions.com (inferred)</div>
+          <div class="ad-headline">One Device. Unlimited Reviews. No Fees.</div>
+        </div>
+        <button class="ad-btn">Learn More</button>
+      </div>
+      <div class="ad-insights">
+        <div class="insight-label">📊 Ad Intelligence</div>
+        <div class="insight-row">
+          <span class="insight-chip chip-days">34 days (Apr–May 2026)</span>
+          <span class="insight-chip chip-format">Static IMAGE</span>
+          <span class="insight-chip chip-active">Active ✅</span>
+        </div>
+      </div>
+      <div class="threat-bar threat-low">✅ <strong>Early stage.</strong> Only 34 days — still proving concept. Copy is functional but generic. Industry targeting list (clinics, cafes, salons, gyms) is a useful swipe.</div>
+      <div class="analysis-box"><strong>Industry targeting copy:</strong> Listing specific verticals (clinics, cafes, salons, gyms, shops) in ad body is a smart targeting signal — Facebook can optimise toward the audience that resonates. Worth testing in ReviewTap ads: "Perfect for salons · restaurants · trades · healthcare." Also note "NFC + QR Code Stand" — they sell the dual-tech as a feature, same as ReviewTap's Custom Branded option.</div>
+    </div>
+
+    <!-- Reviews Card (UK) -->
+    <div class="ad-mockup">
+      <div class="ad-brand-bar">
+        <div class="brand-info">
+          <div class="brand-avatar" style="background:#c0392b;">RC</div>
+          <div>
+            <div class="brand-name">Reviews Card</div>
+            <div class="brand-sub">reviewscard.com · 🇬🇧 UK · Active now</div>
+          </div>
+        </div>
+        <span class="longevity-badge medium-running">Active · UK market</span>
+      </div>
+      <div class="fb-header">
+        <div class="fb-avatar" style="background:#c0392b;">RC</div>
+        <div>
+          <div class="fb-page-name">Reviews Card</div>
+          <div class="fb-sponsored">✦ Sponsored · <span style="font-size:10px;">🇬🇧 UK · @reviewcarduk</span></div>
+        </div>
+        <div class="fb-dots">···</div>
+      </div>
+      <div class="ad-body">
+        The simplest way to collect Google reviews.<br><br>
+        ⭐ One tap — customer lands on your Google review page instantly<br>
+        📦 Ships in 24 hours<br>
+        💳 No subscription. Pay once.<br><br>
+        Used by 2,000+ UK businesses.<br><br>
+        Available in: Google · Trustpilot · Tripadvisor · Facebook
+      </div>
+      <div class="ad-image-wrap">
+        <img src="https://scontent.fros2-1.fna.fbcdn.net/v/t39.35426-6/494727047_1266499961563629_5240775702446822784_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=c53f8f&_nc_ohc=NucIxSqep7cQ7kNvwEOmOa3&_nc_oc=AdrE0G8Ew5Rb9-tQb6asgPWeaRVdxGu-HYu1a7UFacYCLaQViBq0mqbrueWIMqDeRPI&_nc_zt=14&_nc_ht=scontent.fros2-1.fna&_nc_gid=J0-A8SgNJnf886vdkvXFFQ&_nc_ss=7f289&oh=00_Af5CH7pxv_uuU1xTdNHiToKzs9d9Gt62N8Trs_LjamWW-A&oe=6A0CBACB" alt="Reviews Card UK" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+        <div style="display:none;min-height:220px;background:#e4e6ea;align-items:center;justify-content:center;color:#65676b;font-size:13px;">Image expired (Facebook CDN)</div>
+      </div>
+      <div class="ad-cta-bar">
+        <div>
+          <div class="ad-domain">reviewscard.com</div>
+          <div class="ad-headline">The Simplest Way to Collect Google Reviews</div>
+        </div>
+        <button class="ad-btn">Shop Now</button>
+      </div>
+      <div class="ad-insights">
+        <div class="insight-label">📊 Ad Intelligence</div>
+        <div class="insight-row">
+          <span class="insight-chip chip-format">Static IMAGE</span>
+          <span class="insight-chip chip-active">Active ✅</span>
+          <span class="insight-chip chip-platform">🇬🇧 UK market</span>
+          <span class="insight-chip chip-days">Multi-platform: G · TP · TA · FB</span>
+        </div>
+      </div>
+      <div class="threat-bar threat-low">✅ <strong>Not a direct SA threat.</strong> UK-focused, but their playbook is the gold standard for simplicity messaging. Strong social proof: "2,000+ UK businesses."</div>
+      <div class="analysis-box"><strong>Platform diversity angle:</strong> Reviews Card advertises compatibility with Google, Trustpilot, Tripadvisor, AND Facebook — positioning as a universal review tool, not just Google. ReviewTap also supports Autotrader, TripAdvisor, and Instagram — this multi-platform angle is underutilised in RT ads. "Works for Google · Autotrader · TripAdvisor · Instagram" is a simple but powerful differentiator to add to ad copy.</div>
+    </div>
+
+    <!-- Helloo One -->
+    <div class="ad-mockup">
+      <div class="ad-brand-bar">
+        <div class="brand-info">
+          <div class="brand-avatar" style="background:#16a085;">HO</div>
+          <div>
+            <div class="brand-name">Helloo One</div>
+            <div class="brand-sub">helloo.one · 🌍 Global · Active now</div>
+          </div>
+        </div>
+        <span class="longevity-badge medium-running">Active · Combo product</span>
+      </div>
+      <div class="fb-header">
+        <div class="fb-avatar" style="background:#16a085;">HO</div>
+        <div>
+          <div class="fb-page-name">Helloo One</div>
+          <div class="fb-sponsored">✦ Sponsored · <span style="font-size:10px;">🌐 Global · @Helloo.one</span></div>
+        </div>
+        <div class="fb-dots">···</div>
+      </div>
+      <div class="ad-body">
+        The ultimate NFC combo — card AND keychain.<br><br>
+        🔑 Carry your Google review link everywhere — in your pocket, on your keys<br>
+        📱 One tap = instant review page<br>
+        🎨 Custom branded with your logo<br>
+        💳 One-time purchase · No app needed<br><br>
+        Perfect for mobile tradies, delivery drivers, and service providers who don't have a counter to put a stand on.
+      </div>
+      <div class="carousel-wrap" id="cHO">
+        <div class="carousel-track" id="cHO-track">
+          <div class="carousel-slide">
+            <img src="https://scontent.fros2-2.fna.fbcdn.net/v/t39.35426-6/649653858_26066229259664501_3646980917055033606_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=c53f8f&_nc_ohc=7mjtdFrrsSoQ7kNvwEA5h-b&_nc_oc=AdpsnQGWYdZiQsud0rfsG1kq9mkF-OcUD3blV77WQt23fYI5s-PmMsTY-WggTJqiaEU&_nc_zt=14&_nc_ht=scontent.fros2-2.fna&_nc_gid=J0-A8SgNJnf886vdkvXFFQ&_nc_ss=7f289&oh=00_Af7BqaWvzZ4Q2r-aP9EIFNIZdMjcFKkmLEkFMfRj1660Ow&oe=6A0CB3A7" alt="Helloo One Combo Pack" onerror="this.src='';this.alt='[Helloo One]';">
+            <div class="slide-title">Combo: Card + Keychain (Google · Instagram · Pay)</div>
+          </div>
+          <div class="carousel-slide">
+            <img src="https://scontent.fros2-1.fna.fbcdn.net/v/t39.35426-6/649185247_925511360237301_6626121936703202440_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=c53f8f&_nc_ohc=_SMT7tbr4zkQ7kNvwHc5Cge&_nc_oc=AdqulOoJvBWDbvJ1fGlv6MBcuXeegqrs8PRRJwTYNnHes2LL1L8gUA7ONdouTiArE7g&_nc_zt=14&_nc_ht=scontent.fros2-1.fna&_nc_gid=J0-A8SgNJnf886vdkvXFFQ&_nc_ss=7f289&oh=00_Af6c5p74GVAnLUV3R31hZjkksUXOmtyEqgGepO7mSdgi9g&oe=6A0C9919" alt="Instagram NFC Card + Keychain" onerror="this.src='';this.alt='[Helloo One Instagram]';">
+            <div class="slide-title">Instagram NFC Card + Keychain</div>
+          </div>
+          <div class="carousel-slide">
+            <img src="https://scontent.fros2-2.fna.fbcdn.net/v/t39.35426-6/649554879_1699237487706951_2964359353428111746_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=c53f8f&_nc_ohc=0hWIIpq8GgIQ7kNvwGbAfz5&_nc_oc=AdrOzrb-24C0Z4ov9YZlYqYeTNu3MvBD3xINdqfA5ZeXtc000a41GA74seYDUOTzDJc&_nc_zt=14&_nc_ht=scontent.fros2-2.fna&_nc_gid=J0-A8SgNJnf886vdkvXFFQ&_nc_ss=7f289&oh=00_Af4gblXg-f0fZhhbbpCYKrlcFDJ72Fs0tOjGITe16uWSag&oe=6A0CAF33" alt="Google Review NFC Combo" onerror="this.src='';this.alt='[Helloo One Google]';">
+            <div class="slide-title">Google Review NFC Card + Keychain</div>
+          </div>
+          <div class="carousel-slide">
+            <img src="https://scontent.fros2-2.fna.fbcdn.net/v/t39.35426-6/648652326_1655975242318133_1521040179218561765_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=c53f8f&_nc_ohc=c14msOg9bJYQ7kNvwGGiTSd&_nc_oc=Adq83emG7XMtlQsWA41ZLeSpHQIGXcEw9WlPtmH7N3P7NthFoxhL1sUxeqbpuGbrYr0&_nc_zt=14&_nc_ht=scontent.fros2-2.fna&_nc_gid=J0-A8SgNJnf886vdkvXFFQ&_nc_ss=7f289&oh=00_Af56rskfSUAuEdS154dTI1ngOM8jIMLWOtr5_MBQpEr66g&oe=6A0C9C6A" alt="Helloo One GPay combo" onerror="this.src='';this.alt='[Helloo One GPay]';">
+            <div class="slide-title">GPay NFC Card + Keychain</div>
+          </div>
+          <div class="carousel-slide">
+            <img src="https://scontent.fros2-2.fna.fbcdn.net/v/t39.35426-6/649424433_1988878185056496_5489763524383598517_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=c53f8f&_nc_ohc=rnE3fdDIspAQ7kNvwEQHZ3o&_nc_oc=AdrcarNEtyp48EEKnSgHhQUfQWHkXtudIYC-8esTMHK8T5OoL-Sks9J4UTbVcM9Ze_0&_nc_zt=14&_nc_ht=scontent.fros2-2.fna&_nc_gid=J0-A8SgNJnf886vdkvXFFQ&_nc_ss=7f289&oh=00_Af4uP2wJXM6KhH-kfRRuabLrMhNQqxDfmln-lqE8c-F_bQ&oe=6A0CA021" alt="Helloo One full combo pack" onerror="this.src='';this.alt='[Helloo One Pack]';">
+            <div class="slide-title">Full Combo Pack: Standee + Card + Keychain</div>
+          </div>
+        </div>
+        <button class="carousel-prev" onclick="moveCarousel('cHO',-1)">‹</button>
+        <button class="carousel-next" onclick="moveCarousel('cHO',1)">›</button>
+        <div class="carousel-nav" id="cHO-nav"></div>
+      </div>
+      <div class="ad-cta-bar">
+        <div>
+          <div class="ad-domain">helloo.one</div>
+          <div class="ad-headline">Combo Card + Keychain — Reviews Everywhere You Go</div>
+        </div>
+        <button class="ad-btn">Shop Now</button>
+      </div>
+      <div class="ad-insights">
+        <div class="insight-label">📊 Ad Intelligence</div>
+        <div class="insight-row">
+          <span class="insight-chip chip-format">Static IMAGE</span>
+          <span class="insight-chip chip-active">Active ✅</span>
+          <span class="insight-chip chip-days">NFC review card search</span>
+          <span class="insight-chip chip-platform">helloo.one/combo-offer-card-keychain</span>
+        </div>
+      </div>
+      <div class="threat-bar threat-low">✅ <strong>Niche product angle.</strong> Card + keychain combo targets mobile workers specifically — a segment ReviewTap card product also covers but doesn't specifically call out.</div>
+      <div class="analysis-box"><strong>Untapped segment:</strong> Mobile tradies (plumbers, electricians, landscapers, delivery drivers) can't use a counter stand. The NFC card is their only option — but RT ads don't specifically call this out. A simple creative: "No counter? No problem. The ReviewTap card goes wherever the job takes you." Potential winner for trades vertical.</div>
+    </div>
+
+  </div>
+
+  <!-- ====================== ORIGINAL STATIC IMAGE ADS ====================== -->
+  <!-- SECTION: Static IMAGE ads -->
+  <div class="section-title">🖼️ Static IMAGE Ads <span class="badge badge-green">Proven long-runners</span></div>
+
+  <div class="ads-grid">
+
+    <!-- The Review Guys Ad 1: NFC Card -->
+    <div class="ad-mockup">
+      <div class="ad-brand-bar">
+        <div class="brand-info">
+          <div class="brand-avatar" style="background:#e63946;">TRG</div>
+          <div>
+            <div class="brand-name">The Review Guys</div>
+            <div class="brand-sub">thereviewguys.com.au · 🇦🇺 Australia</div>
+          </div>
+        </div>
+        <span class="longevity-badge long-running">🏆 526 days</span>
+      </div>
+      <div class="fb-header">
+        <div class="fb-avatar" style="background:#e63946;">TRG</div>
+        <div>
+          <div class="fb-page-name">The Review Guys</div>
+          <div class="fb-sponsored">✦ Sponsored · <span style="font-size:10px;">🌐 FB/IG/AN/Messenger</span></div>
+        </div>
+        <div class="fb-dots">···</div>
+      </div>
+      <div class="ad-body truncated">Still thinking about it?<br><br>This <strong>card</strong> is the perfect way to collect Google Reviews instantly and grow reputation quickly ⭐<br><br>💨 Perfect for Small Businesses<br>💥 Effortless for Customers to Tap their Phone &amp; Review<br>🦘 Australian Made &amp; Owned<br>💯 Lifetime Warranty<br>🚚 FREE Express Shipping<br><br>Boost your reputation &amp; growth with a Tap-To-Review card ⬇️</div>
+      <div class="ad-image-wrap">
+        <img src="https://scontent.fcpv16-1.fna.fbcdn.net/v/t39.35426-6/469051987_1279445066704780_2379905060248754182_n.jpg?stp=dst-jpg_s600x600_tt6&_nc_cat=110&ccb=1-7&_nc_sid=c53f8f&_nc_ohc=7XMUHMlZ6LIQ7kNvwEc71Z1&_nc_oc=AdqYQVB7WBL3jS2sPLh93vsM_5GrWVJDJW2EkNQToyLGrDL2Sy457wq2TPv2hGf-5yo&_nc_zt=14&_nc_ht=scontent.fcpv16-1.fna&_nc_gid=6wPmpSceT8iiWpXXspw1KA&_nc_ss=7f289&oh=00_Af6QtcwBY7ALjs4h24X-sGkKIxCxC__9h2uQSR8fHEgXeg&oe=6A0CB137" alt="The Review Guys NFC Card Ad" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+        <div style="display:none;min-height:220px;background:#e4e6ea;align-items:center;justify-content:center;color:#65676b;font-size:13px;">Image expired (Facebook CDN)</div>
+      </div>
+      <div class="ad-cta-bar">
+        <div>
+          <div class="ad-domain">thereviewguys.com.au</div>
+          <div class="ad-headline">Tap-To-Review NFC Card</div>
+        </div>
+        <button class="ad-btn">Learn More</button>
+      </div>
+      <div class="ad-insights">
+        <div class="insight-label">📊 Ad Intelligence</div>
+        <div class="insight-row">
+          <span class="insight-chip chip-days">526 days live</span>
+          <span class="insight-chip chip-format">Static IMAGE</span>
+          <span class="insight-chip chip-active">Active ✅</span>
+          <span class="insight-chip chip-platform">FB · IG · AN · Messenger</span>
+        </div>
+      </div>
+      <div class="analysis-box"><strong>Why it works:</strong> Pure benefit stack — no storytelling needed. "Australian Made &amp; Owned" + "Lifetime Warranty" = hyper-local trust signals. Running 526 days with static image proves creative fatigue is NOT an issue with direct benefit copy.</div>
+    </div>
+
+    <!-- The Review Guys Ad 2: NFC Plate -->
+    <div class="ad-mockup">
+      <div class="ad-brand-bar">
+        <div class="brand-info">
+          <div class="brand-avatar" style="background:#e63946;">TRG</div>
+          <div>
+            <div class="brand-name">The Review Guys</div>
+            <div class="brand-sub">thereviewguys.com.au · 🇦🇺 Australia</div>
+          </div>
+        </div>
+        <span class="longevity-badge long-running">🏆 526 days</span>
+      </div>
+      <div class="fb-header">
+        <div class="fb-avatar" style="background:#e63946;">TRG</div>
+        <div>
+          <div class="fb-page-name">The Review Guys</div>
+          <div class="fb-sponsored">✦ Sponsored · <span style="font-size:10px;">🌐 FB/IG/AN/Messenger</span></div>
+        </div>
+        <div class="fb-dots">···</div>
+      </div>
+      <div class="ad-body truncated">Still thinking about it?<br><br>This <strong>plate</strong> is the perfect way to collect Google Reviews instantly and grow reputation quickly ⭐<br><br>💨 Perfect for Small Businesses<br>💥 Effortless for Customers to Tap their Phone &amp; Review<br>🦘 Australian Made &amp; Owned<br>💯 Lifetime Warranty<br>🚚 FREE Express Shipping<br><br>Boost your reputation &amp; growth with a Tap-To-Review plate ⬇️</div>
+      <div class="ad-image-wrap">
+        <img src="https://scontent-dub4-1.xx.fbcdn.net/v/t39.35426-6/469222756_1212497423177715_9203635364221577810_n.jpg?stp=dst-jpg_s600x600_tt6&_nc_cat=107&ccb=1-7&_nc_sid=c53f8f&_nc_ohc=4r14Gz5L4pYQ7kNvwHc-cRi&_nc_oc=Adr187nz5Jj-XA_BTYiEU82upDKfxEgypi2kwcU1McLcyJozVUvpbQqzXSA95YpecJE&_nc_zt=14&_nc_ht=scontent-dub4-1.xx&_nc_gid=gHXr5ONB8XV9yBE3zHbYow&_nc_ss=7f289&oh=00_Af665ST1h27tBX5HdOaA8tXD0db9JVKShEBoIzSWS43Nnw&oe=6A0C91A7" alt="The Review Guys NFC Plate Ad" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+        <div style="display:none;min-height:220px;background:#e4e6ea;align-items:center;justify-content:center;color:#65676b;font-size:13px;">Image expired (Facebook CDN)</div>
+      </div>
+      <div class="ad-cta-bar">
+        <div>
+          <div class="ad-domain">thereviewguys.com.au</div>
+          <div class="ad-headline">Tap-To-Review NFC Plate</div>
+        </div>
+        <button class="ad-btn">Learn More</button>
+      </div>
+      <div class="ad-insights">
+        <div class="insight-label">📊 Ad Intelligence</div>
+        <div class="insight-row">
+          <span class="insight-chip chip-days">526 days live</span>
+          <span class="insight-chip chip-format">Static IMAGE</span>
+          <span class="insight-chip chip-active">Active ✅</span>
+          <span class="insight-chip chip-platform">FB · IG · AN · Messenger</span>
+        </div>
+      </div>
+      <div class="analysis-box"><strong>Same copy, different SKU</strong> — swapping "card" for "plate" targets a different product seeker. Two nearly identical ads = simple A/B to see which product angle pulls better CTR.</div>
+    </div>
+
+    <!-- ZappyCards Ad 1 -->
+    <div class="ad-mockup">
+      <div class="ad-brand-bar">
+        <div class="brand-info">
+          <div class="brand-avatar" style="background:#7c3aed;">ZC</div>
+          <div>
+            <div class="brand-name">ZappyCards</div>
+            <div class="brand-sub">zappycards.com · 🌍 Global</div>
+          </div>
+        </div>
+        <span class="longevity-badge medium-running">76 days</span>
+      </div>
+      <div class="fb-header">
+        <div class="fb-avatar" style="background:#7c3aed;">ZC</div>
+        <div>
+          <div class="fb-page-name">ZappyCards</div>
+          <div class="fb-sponsored">✦ Sponsored · <span style="font-size:10px;">🌐 FB/IG/AN/Messenger/Threads</span></div>
+        </div>
+        <div class="fb-dots">···</div>
+      </div>
+      <div class="ad-body truncated">Your competitor down the street has <strong>2,000 Google reviews. You have 34.</strong><br><br>He's not a better business owner. He's not more charming. He doesn't work harder than you.<br><br>He just stopped using:<br>❌ QR codes customers never scan<br>❌ "Leave us a review" emails that die in spam<br>❌ Paper cards that get thrown in the truck footwell<br><br>You're not bad at your job. <strong>Your review system is broken.</strong><br><br>Zappycards was built to fix it.</div>
+      <div class="ad-image-wrap">
+        <img src="https://scontent.fcpv16-1.fna.fbcdn.net/v/t39.35426-6/677349314_1260167932935166_8141241463546828218_n.jpg?stp=dst-jpg_s600x600_tt6&_nc_cat=100&ccb=1-7&_nc_sid=c53f8f&_nc_ohc=Mn9cYxMkH8oQ7kNvwHReG26&_nc_oc=AdoVK276gUwwabKzNmDBm_RbCJie4xkmkbiG1c9qsNTykogEZIsP3_ggwZDCVcGLoZo&_nc_zt=14&_nc_ht=scontent.fcpv16-1.fna&_nc_gid=6wPmpSceT8iiWpXXspw1KA&_nc_ss=7f289&oh=00_Af5CXJHHfiUOfhBSOvV-PJ1C7u6TN_0CpR2dekSxE3kQXA&oe=6A0C95CE" alt="ZappyCards Ad" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+        <div style="display:none;min-height:220px;background:#e4e6ea;align-items:center;justify-content:center;color:#65676b;font-size:13px;">Image expired (Facebook CDN)</div>
+      </div>
+      <div class="ad-cta-bar">
+        <div>
+          <div class="ad-domain">zappycards.com</div>
+          <div class="ad-headline">Stop Losing Reviews to Your Competition</div>
+        </div>
+        <button class="ad-btn">Learn More</button>
+      </div>
+      <div class="ad-insights">
+        <div class="insight-label">📊 Ad Intelligence</div>
+        <div class="insight-row">
+          <span class="insight-chip chip-days">76 days live</span>
+          <span class="insight-chip chip-format">Static IMAGE</span>
+          <span class="insight-chip chip-active">Active ✅</span>
+          <span class="insight-chip chip-platform">FB · IG · AN · Messenger · Threads</span>
+        </div>
+      </div>
+      <div class="analysis-box"><strong>🔥 Best competitor copy in the dataset.</strong> Opens with a specific shame stat ("2,000 vs 34"), then removes blame from the business owner ("not your fault — your system is broken"). Calls out QR codes as a failed alternative. This is the pain + reframe formula done perfectly.</div>
+    </div>
+
+    <!-- ZappyCards Ad 2 -->
+    <div class="ad-mockup">
+      <div class="ad-brand-bar">
+        <div class="brand-info">
+          <div class="brand-avatar" style="background:#7c3aed;">ZC</div>
+          <div>
+            <div class="brand-name">ZappyCards</div>
+            <div class="brand-sub">zappycards.com · 🌍 Global</div>
+          </div>
+        </div>
+        <span class="longevity-badge medium-running">76 days</span>
+      </div>
+      <div class="fb-header">
+        <div class="fb-avatar" style="background:#7c3aed;">ZC</div>
+        <div>
+          <div class="fb-page-name">ZappyCards</div>
+          <div class="fb-sponsored">✦ Sponsored · <span style="font-size:10px;">🌐 FB/IG/AN/Messenger/Threads</span></div>
+        </div>
+        <div class="fb-dots">···</div>
+      </div>
+      <div class="ad-body truncated">Your competitor down the street has <strong>2,000 Google reviews. You have 34.</strong><br><br>He's not a better business owner. He's not more charming. He doesn't work harder than you.<br><br>He just stopped using:<br>❌ QR codes customers never scan<br>❌ "Leave us a review" emails that die in spam<br>❌ Paper cards that get thrown in the truck footwell<br><br>You're not bad at your job. <strong>Your review system is broken.</strong><br><br>Zappycards was built to fix it.</div>
+      <div class="ad-image-wrap">
+        <img src="https://scontent.fcpv16-1.fna.fbcdn.net/v/t39.35426-6/689015373_2057403468517584_3161366595833475986_n.jpg?stp=dst-jpg_s600x600_tt6&_nc_cat=111&ccb=1-7&_nc_sid=c53f8f&_nc_ohc=R7i16TyomCYQ7kNvwGfY-rH&_nc_oc=AdpW446KITXmYI9NO6hy7bOlJT2W_qDTGFVSiMGTarKk7DLlpWN5VFFP6quabDeKfC4&_nc_zt=14&_nc_ht=scontent.fcpv16-1.fna&_nc_gid=6wPmpSceT8iiWpXXspw1KA&_nc_ss=7f289&oh=00_Af46dACK3avWYmU7J2BrDRj_Jj3iUMfVEQDoqL7iOS16yA&oe=6A0CB7C0" alt="ZappyCards Ad 2" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+        <div style="display:none;min-height:220px;background:#e4e6ea;align-items:center;justify-content:center;color:#65676b;font-size:13px;">Image expired (Facebook CDN)</div>
+      </div>
+      <div class="ad-cta-bar">
+        <div>
+          <div class="ad-domain">zappycards.com</div>
+          <div class="ad-headline">Stop Losing Reviews to Your Competition</div>
+        </div>
+        <button class="ad-btn">Learn More</button>
+      </div>
+      <div class="ad-insights">
+        <div class="insight-label">📊 Ad Intelligence</div>
+        <div class="insight-row">
+          <span class="insight-chip chip-days">76 days live</span>
+          <span class="insight-chip chip-format">Static IMAGE</span>
+          <span class="insight-chip chip-active">Active ✅</span>
+        </div>
+      </div>
+      <div class="analysis-box"><strong>Same copy, different creative.</strong> ZappyCards tests creatives against the same copy — a clean way to find the winning visual without changing the angle.</div>
+    </div>
+
+    <!-- ReviewBoost (inactive but strong copy) -->
+    <div class="ad-mockup" style="opacity:0.85;">
+      <div class="ad-brand-bar">
+        <div class="brand-info">
+          <div class="brand-avatar" style="background:#dc3545;">RB</div>
+          <div>
+            <div class="brand-name">ReviewBoost</div>
+            <div class="brand-sub">reviewboostcard.com · 🌍 Global</div>
+          </div>
+        </div>
+        <span class="longevity-badge short-running">Stopped</span>
+      </div>
+      <div class="fb-header">
+        <div class="fb-avatar" style="background:#dc3545;">RB</div>
+        <div>
+          <div class="fb-page-name">ReviewBoost</div>
+          <div class="fb-sponsored">✦ Sponsored (inactive) · <span style="font-size:10px;">🌐 FB/IG/AN/Messenger/Threads</span></div>
+        </div>
+        <div class="fb-dots">···</div>
+      </div>
+      <div class="ad-body truncated">💡 Did you know that over <strong>81% of consumers check the Google Reviews</strong> before visiting a business?<br><br>If your business doesn't have hundreds of reviews, you're losing customers every single day.<br><br>That's exactly why we built ReviewBoost. It makes getting reviews easy.<br><br>Your customers just tap or scan the card and are instantly taken to your Google page where they can leave a review before they even walk out the door.</div>
+      <div class="ad-image-wrap">
+        <img src="https://scontent.fcpv16-1.fna.fbcdn.net/v/t39.35426-6/541788963_1958147875039164_1062614206591023719_n.jpg?stp=dst-jpg_s600x600_tt6&_nc_cat=109&ccb=1-7&_nc_sid=c53f8f&_nc_ohc=9582LHLMuHYQ7kNvwFhppxE&_nc_oc=Ado9eMAyHJR1MCzE2wuCG4Ys5ht223s9emCzzpAUvgQug2gu90JSMbMXKIbcy3rNhOo&_nc_zt=14&_nc_ht=scontent.fcpv16-1.fna&_nc_gid=6wPmpSceT8iiWpXXspw1KA&_nc_ss=7f289&oh=00_Af7QTLDnYTXvKoHbJjg9q8PispgEq5oss-MOn_x4TBgcgQ&oe=6A0CAD41" alt="ReviewBoost Ad" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+        <div style="display:none;min-height:220px;background:#e4e6ea;align-items:center;justify-content:center;color:#65676b;font-size:13px;">Image expired (Facebook CDN)</div>
+      </div>
+      <div class="ad-cta-bar">
+        <div>
+          <div class="ad-domain">reviewboostcard.com</div>
+          <div class="ad-headline">Collect Instant Reviews — Tap or Scan</div>
+        </div>
+        <button class="ad-btn">Learn More</button>
+      </div>
+      <div class="ad-insights">
+        <div class="insight-label">📊 Ad Intelligence</div>
+        <div class="insight-row">
+          <span class="insight-chip chip-days">387 days (stopped)</span>
+          <span class="insight-chip chip-format">Static IMAGE</span>
+          <span class="insight-chip chip-inactive">Inactive ❌</span>
+        </div>
+      </div>
+      <div class="analysis-box"><strong>Strong opening stat:</strong> "81% of consumers check reviews before visiting." This is a credible, shareable stat that creates urgency. Stopped running but ran 387 days — likely a budget decision, not creative failure.</div>
+    </div>
+
+  </div>
+
+  <!-- SECTION: Carousel Ads -->
+  <div class="section-title">🎠 CAROUSEL Ads <span class="badge badge-orange">520 days running — multi-SKU showcase</span></div>
+
+  <div class="ads-grid">
+
+    <!-- TapCard Carousel 1 -->
+    <div class="ad-mockup">
+      <div class="ad-brand-bar">
+        <div class="brand-info">
+          <div class="brand-avatar" style="background:#0f766e;">TC</div>
+          <div>
+            <div class="brand-name">TapCard</div>
+            <div class="brand-sub">tapcard.gr · 🇬🇷 Greece · 520 days</div>
+          </div>
+        </div>
+        <span class="longevity-badge long-running">🏆 520 days</span>
+      </div>
+      <div class="fb-header">
+        <div class="fb-avatar" style="background:#0f766e;">TC</div>
+        <div>
+          <div class="fb-page-name">TapCard</div>
+          <div class="fb-sponsored">✦ Sponsored · <span style="font-size:10px;">🌐 FB/IG only</span></div>
+        </div>
+        <div class="fb-dots">···</div>
+      </div>
+      <div class="ad-body truncated">Rise higher on Google by increasing reviews on your business profile. With TapCard products you get reviews easily and instantly! Get new customers and beat the competition.<br><br>✅ Instant reviews with one tap!<br>✅ Business visibility boost!<br>✅ Better position in Google results!<br>✅ Get new customers!<br>✅ Increased revenue!</div>
+      <!-- Carousel 1 -->
+      <div class="carousel-wrap" id="c1">
+        <div class="carousel-track" id="c1-track">
+          <div class="carousel-slide">
+            <img src="https://scontent.fcpv16-1.fna.fbcdn.net/v/t39.35426-6/469944690_8872374389465749_5506753946720177651_n.jpg?stp=dst-jpg_s600x600_tt6&_nc_cat=103&ccb=1-7&_nc_sid=c53f8f&_nc_ohc=-r_uuTPjeUwQ7kNvwGwIIm-&_nc_oc=AdopkJNivFRYgvU56A7DEwl-LMsb4-MqFqfQP88mF0PISP1r5VbD04djR1hUR9X5wnc&_nc_zt=14&_nc_ht=scontent.fcpv16-1.fna&_nc_gid=6wPmpSceT8iiWpXXspw1KA&_nc_ss=7f289&oh=00_Af5J56pIGivJyOjNlR7RzQ9H0DVNd5MNyrceyuioiPG4xQ&oe=6A0C9DA2" alt="Google Review Stand Black" onerror="this.src='';this.alt='[Stand — Black]';">
+            <div class="slide-title">Google Review Stand (Black)</div>
+          </div>
+          <div class="carousel-slide">
+            <img src="https://scontent.fcpv16-1.fna.fbcdn.net/v/t39.35426-6/469776850_1308544943798733_3166635727579733608_n.jpg?stp=dst-jpg_s600x600_tt6&_nc_cat=107&ccb=1-7&_nc_sid=c53f8f&_nc_ohc=jWS-dpT-S34Q7kNvwGbHe5G&_nc_oc=Adq-8FwC5cpXB-K1X1x5Ay1EBt4HZuVMsLl4TLUgkbHCIHd5mNp1AGyi1Ymt95Z91_g&_nc_zt=14&_nc_ht=scontent.fcpv16-1.fna&_nc_gid=6wPmpSceT8iiWpXXspw1KA&_nc_ss=7f289&oh=00_Af4bVnVjZqrUhmtizkWaUKZcPSwmikHgpf7eqdKweiy8IQ&oe=6A0C908C" alt="Google Review Stand White" onerror="this.src='';this.alt='[Stand — White]';">
+            <div class="slide-title">Google Review Stand (White)</div>
+          </div>
+          <div class="carousel-slide">
+            <img src="https://scontent.fcpv16-1.fna.fbcdn.net/v/t39.35426-6/469848201_1260878138582276_6770729147940306141_n.jpg?stp=dst-jpg_s600x600_tt6&_nc_cat=100&ccb=1-7&_nc_sid=c53f8f&_nc_ohc=IFlLte-ysHsQ7kNvwEHoGau&_nc_oc=AdqS84_2Pg-SD1v8ho6beBL7haGFWS-fiNZ801m7uTfa46_pHKLf8s4edwzBZoDcct0&_nc_zt=14&_nc_ht=scontent.fcpv16-1.fna&_nc_gid=6wPmpSceT8iiWpXXspw1KA&_nc_ss=7f289&oh=00_Af5fLT6fjtsX_IpcESUi1au0_k8z9U_WP9JfShUyp37fSQ&oe=6A0CA318" alt="Google Review Sticker" onerror="this.src='';this.alt='[Sticker]';">
+            <div class="slide-title">Google Review Sticker</div>
+          </div>
+          <div class="carousel-slide">
+            <img src="https://scontent.fcpv16-1.fna.fbcdn.net/v/t39.35426-6/469864201_1154223646268866_8317617302248559759_n.jpg?stp=dst-jpg_s600x600_tt6&_nc_cat=104&ccb=1-7&_nc_sid=c53f8f&_nc_ohc=4IC9cWxZ5z4Q7kNvwHKWYR9&_nc_oc=AdrGhJcidYtfcclJB2CFgLucYwJbo27Iw_OWMaA6wz4j5dtNP7O4_HPAblWe6h_YDj0&_nc_zt=14&_nc_ht=scontent.fcpv16-1.fna&_nc_gid=6wPmpSceT8iiWpXXspw1KA&_nc_ss=7f289&oh=00_Af4WPyl1d9-gjdumI9teqazdGxH7EP7HiDs4pFVoGg9veQ&oe=6A0C95C9" alt="Google Review Card" onerror="this.src='';this.alt='[Review Card]';">
+            <div class="slide-title">Google Review Card (NFC)</div>
+          </div>
+          <div class="carousel-slide">
+            <img src="https://scontent.fcpv16-1.fna.fbcdn.net/v/t39.35426-6/469822070_1334844314339685_58672226729886289_n.jpg?stp=dst-jpg_s600x600_tt6&_nc_cat=105&ccb=1-7&_nc_sid=c53f8f&_nc_ohc=5U3qXkjJzdwQ7kNvwHZKcol&_nc_oc=AdqK87TwCQX9GmrLlGexqsAPSOtLxCPyAUhyDzDbHBbZGf3kDqoupHY91y3z0eddjLs&_nc_zt=14&_nc_ht=scontent.fcpv16-1.fna&_nc_gid=6wPmpSceT8iiWpXXspw1KA&_nc_ss=7f289&oh=00_Af6wC1wMSRXqTNC3I3mPZbOX4JMOmdteOSKWNCoQTkphpw&oe=6A0CA1C8" alt="Google Review Card with Logo" onerror="this.src='';this.alt='[Card with Logo]';">
+            <div class="slide-title">Google Review Card (Branded)</div>
+          </div>
+          <div class="carousel-slide">
+            <img src="https://scontent.fcpv16-1.fna.fbcdn.net/v/t39.35426-6/469877382_1586335538917096_884982817879837515_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=c53f8f&_nc_ohc=pa6xHObBMlYQ7kNvwF3JN_W&_nc_oc=AdrrlgT4Dlc-8ZQJ5ZozwgOxlYvd6ho3Vc3IDOC_iT6L9ziAHppvw7lVeIn75R3Zyec&_nc_zt=14&_nc_ht=scontent.fcpv16-1.fna&_nc_gid=6wPmpSceT8iiWpXXspw1KA&_nc_ss=7f289&oh=00_Af7af6uhr9lih1B5CKXMvEwCZFRzDFf-dELOXpD6ZmfCJw&oe=6A0CAA4B" alt="TapCard Video Preview" onerror="this.src='';this.alt='[Video slide]';">
+            <div class="slide-title">▶ Demo Video</div>
+          </div>
+        </div>
+        <button class="carousel-prev" onclick="moveCarousel('c1',-1)">‹</button>
+        <button class="carousel-next" onclick="moveCarousel('c1',1)">›</button>
+        <div class="carousel-nav" id="c1-nav"></div>
+      </div>
+      <div class="ad-cta-bar">
+        <div>
+          <div class="ad-domain">tapcard.gr</div>
+          <div class="ad-headline">Google Review Stands, Cards &amp; Stickers</div>
+        </div>
+        <button class="ad-btn">Learn More</button>
+      </div>
+      <div class="ad-insights">
+        <div class="insight-label">📊 Ad Intelligence</div>
+        <div class="insight-row">
+          <span class="insight-chip chip-days">520 days live</span>
+          <span class="insight-chip chip-format">CAROUSEL (7 slides)</span>
+          <span class="insight-chip chip-active">Active ✅</span>
+          <span class="insight-chip chip-platform">FB · IG only</span>
+        </div>
+      </div>
+      <div class="analysis-box"><strong>Longest-running carousel in the dataset.</strong> Each slide = a different SKU (stand, sticker, card, branded, video demo). This is a catalogue ad masquerading as a single ad. FB/IG only — no audience network dilution. 520 days = very profitable.</div>
+    </div>
+
+    <!-- TapCard Carousel 2 (different set of images) -->
+    <div class="ad-mockup">
+      <div class="ad-brand-bar">
+        <div class="brand-info">
+          <div class="brand-avatar" style="background:#0f766e;">TC</div>
+          <div>
+            <div class="brand-name">TapCard — Variant B</div>
+            <div class="brand-sub">tapcard.gr · Different creative set</div>
+          </div>
+        </div>
+        <span class="longevity-badge long-running">🏆 520 days</span>
+      </div>
+      <div class="fb-header">
+        <div class="fb-avatar" style="background:#0f766e;">TC</div>
+        <div>
+          <div class="fb-page-name">TapCard</div>
+          <div class="fb-sponsored">✦ Sponsored · <span style="font-size:10px;">🌐 FB/IG</span></div>
+        </div>
+        <div class="fb-dots">···</div>
+      </div>
+      <div class="ad-body truncated">Rise higher on Google by increasing reviews on your business profile. With TapCard products you get reviews easily and instantly! Get new customers and beat the competition.<br><br>✅ Instant reviews with one tap!<br>✅ Business visibility boost!<br>✅ Better position in Google results!<br>✅ Get new customers!</div>
+      <div class="carousel-wrap" id="c2">
+        <div class="carousel-track" id="c2-track">
+          <div class="carousel-slide">
+            <img src="https://scontent.fcpv16-1.fna.fbcdn.net/v/t39.35426-6/469789595_2019305765149797_4491770280491093007_n.jpg?stp=dst-jpg_s600x600_tt6&_nc_cat=104&ccb=1-7&_nc_sid=c53f8f&_nc_ohc=rq4qHGoacewQ7kNvwFA3Jc9&_nc_oc=AdqQLIblbfEdSXgYVMFPeZJSBWYPkOoy9f29R07R_W7G_f9fgskXXFin7XMU02tJSos&_nc_zt=14&_nc_ht=scontent.fcpv16-1.fna&_nc_gid=6wPmpSceT8iiWpXXspw1KA&_nc_ss=7f289&oh=00_Af6jr1eYrzTaJZa5-a0V50ddT7_qm12kCYgHHeR1AcQPOg&oe=6A0CA282" alt="Stand B1" onerror="this.src='';this.alt='[Stand variant B]';">
+            <div class="slide-title">Google Review Stand (Alt colourway)</div>
+          </div>
+          <div class="carousel-slide">
+            <img src="https://scontent.fcpv16-1.fna.fbcdn.net/v/t39.35426-6/469645117_1724447694787003_6716468345439520347_n.jpg?stp=dst-jpg_s600x600_tt6&_nc_cat=107&ccb=1-7&_nc_sid=c53f8f&_nc_ohc=7ExtNF_eJ3QQ7kNvwHslmmD&_nc_oc=AdrbjID4b3-igQy0XDpHVLPqqhnv4o2JlWAHRFTBHqnEffbyO004XD5t90NFO0wyres&_nc_zt=14&_nc_ht=scontent.fcpv16-1.fna&_nc_gid=6wPmpSceT8iiWpXXspw1KA&_nc_ss=7f289&oh=00_Af5Bv_qWnQmaLWgTXjr8WHjXWmceb3N2xc2EKK1gFXWi1Q&oe=6A0C8F7F" alt="Stand B2" onerror="this.src='';this.alt='[Stand alt]';">
+            <div class="slide-title">Google Review Stand (White variant)</div>
+          </div>
+          <div class="carousel-slide">
+            <img src="https://scontent.fcpv16-1.fna.fbcdn.net/v/t39.35426-6/469876091_559372557017587_8682872563592591624_n.jpg?stp=dst-jpg_s600x600_tt6&_nc_cat=107&ccb=1-7&_nc_sid=c53f8f&_nc_ohc=knYfluku31EQ7kNvwF8uIXh&_nc_oc=AdpHuem1opulGMPVj564PkOgaYz6Z851it80ZgIr_76qOLOr0DC0WFV0Kk2TeV-lhc8&_nc_zt=14&_nc_ht=scontent.fcpv16-1.fna&_nc_gid=6wPmpSceT8iiWpXXspw1KA&_nc_ss=7f289&oh=00_Af4JhoMcIuTWDkl8PgQrqwNCH0zYAIv1CVJgHYboLODsQg&oe=6A0C8B51" alt="Sticker B" onerror="this.src='';this.alt='[Sticker]';">
+            <div class="slide-title">Google Review Sticker</div>
+          </div>
+          <div class="carousel-slide">
+            <img src="https://scontent.fcpv16-1.fna.fbcdn.net/v/t39.35426-6/469838361_598872995927643_6486594247619627949_n.jpg?stp=dst-jpg_s600x600_tt6&_nc_cat=104&ccb=1-7&_nc_sid=c53f8f&_nc_ohc=19NfDyM2G44Q7kNvwFDuMXr&_nc_oc=Adqb75lSdaRy6K-UBqhzUTGW_lYe22b1ytUGy9RUVydPUYdblZOe2E_iGkilAZToXTA&_nc_zt=14&_nc_ht=scontent.fcpv16-1.fna&_nc_gid=6wPmpSceT8iiWpXXspw1KA&_nc_ss=7f289&oh=00_Af4f1uS1ogPWJ_08USP4uXR3K2U2zbdAb0PEk2WYLkaxpQ&oe=6A0C9F63" alt="Sticker Black B" onerror="this.src='';this.alt='[Black Sticker]';">
+            <div class="slide-title">Google Review Sticker (Black)</div>
+          </div>
+          <div class="carousel-slide">
+            <img src="https://scontent.fcpv16-1.fna.fbcdn.net/v/t39.35426-6/469889272_1158486229165340_4651327690340924093_n.jpg?stp=dst-jpg_s600x600_tt6&_nc_cat=105&ccb=1-7&_nc_sid=c53f8f&_nc_ohc=bDqF98A5fooQ7kNvwH3v3o_&_nc_oc=AdpZ8mmqofz0Tf5NPOmevzj-8sLtrMZ7A1CNHpnZWzGu3C4LWIZ359Phb8EAKlpAmTM&_nc_zt=14&_nc_ht=scontent.fcpv16-1.fna&_nc_gid=6wPmpSceT8iiWpXXspw1KA&_nc_ss=7f289&oh=00_Af7riuatDrlKOGepti4ufYdXq1wnknS1JiYKFYBG9SLw2g&oe=6A0C9D86" alt="Card B" onerror="this.src='';this.alt='[Review Card]';">
+            <div class="slide-title">Google Review Card</div>
+          </div>
+          <div class="carousel-slide">
+            <img src="https://scontent.fcpv16-1.fna.fbcdn.net/v/t39.35426-6/469828335_565535449553848_4550081097266668255_n.jpg?stp=dst-jpg_s600x600_tt6&_nc_cat=102&ccb=1-7&_nc_sid=c53f8f&_nc_ohc=dcl9MrjiakYQ7kNvwGC8fF8&_nc_oc=Ado_cp7U1vE3T8uzd_0IJxdKzmQSoEzXnCBxQhg6S6noNIykuomxZWJvl5ZSgTph0tI&_nc_zt=14&_nc_ht=scontent.fcpv16-1.fna&_nc_gid=6wPmpSceT8iiWpXXspw1KA&_nc_ss=7f289&oh=00_Af6lRl5eBRakVTK2bRx5fzHrmqmDdl5iMfKL6usq0GPbjA&oe=6A0CA046" alt="Branded Card B" onerror="this.src='';this.alt='[Branded Card]';">
+            <div class="slide-title">Google Review Card (Branded)</div>
+          </div>
+        </div>
+        <button class="carousel-prev" onclick="moveCarousel('c2',-1)">‹</button>
+        <button class="carousel-next" onclick="moveCarousel('c2',1)">›</button>
+        <div class="carousel-nav" id="c2-nav"></div>
+      </div>
+      <div class="ad-cta-bar">
+        <div>
+          <div class="ad-domain">tapcard.gr</div>
+          <div class="ad-headline">Google Review Stands, Cards &amp; Stickers</div>
+        </div>
+        <button class="ad-btn">Learn More</button>
+      </div>
+      <div class="ad-insights">
+        <div class="insight-label">📊 Ad Intelligence</div>
+        <div class="insight-row">
+          <span class="insight-chip chip-days">520 days live</span>
+          <span class="insight-chip chip-format">CAROUSEL (6 slides)</span>
+          <span class="insight-chip chip-active">Active ✅</span>
+        </div>
+      </div>
+      <div class="analysis-box"><strong>Same structure, different product images.</strong> TapCard runs 3 simultaneous carousel variants — same copy &amp; structure, rotating different product photos. This is how you scale a winning format without rewriting copy.</div>
+    </div>
+
+  </div>
+
+  <!-- COPY SWIPE FILE -->
+  <div class="section-title">✍️ Copy Swipe File <span class="badge badge-blue">Ready to adapt for ReviewTap</span></div>
+  <div class="summary-card" style="margin-bottom:40px;">
+    <table>
+      <thead>
+        <tr><th>Pattern</th><th>Competitor Example</th><th>ReviewTap Adaptation</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Competitor shame stat</strong></td>
+          <td>"Your competitor has 2,000 reviews. You have 34. He's not better — his system is better."</td>
+          <td>"Your competitor down the road has 300 Google reviews. You have 12. He's not a better business. He's using ReviewTap."</td>
+        </tr>
+        <tr>
+          <td><strong>Trust stack</strong></td>
+          <td>"Australian Made &amp; Owned · Lifetime Warranty · FREE Express Shipping"</td>
+          <td>"1,000+ SA businesses · 14-day money-back · Delivered in 1–4 days · No subscription"</td>
+        </tr>
+        <tr>
+          <td><strong>Objection killers</strong></td>
+          <td>"No app needed. One-time payment. No monthly fees. 20-second setup."</td>
+          <td>"No app. No subscription. No setup. Just tap — done."</td>
+        </tr>
+        <tr>
+          <td><strong>Broken system reframe</strong></td>
+          <td>"❌ QR codes nobody scans ❌ Emails that die in spam ❌ Paper cards in the bin"</td>
+          <td>"❌ Asking customers verbally ❌ QR codes nobody scans ❌ Email reminders ignored — ReviewTap fixes all three."</td>
+        </tr>
+        <tr>
+          <td><strong>Stat-led pain hook</strong></td>
+          <td>"81% of consumers check Google Reviews before visiting a business."</td>
+          <td>"88% of SA customers trust online reviews as much as a personal recommendation. Are yours pulling their weight?"</td>
+        </tr>
+        <tr>
+          <td><strong>Emotional validation opener</strong></td>
+          <td>"Your customers already love you ❤️ Google just doesn't know it. This stand fixes that." — TapOnn</td>
+          <td>"Your customers are happy when they leave. They just don't leave reviews. ReviewTap fixes that — one tap, done."</td>
+        </tr>
+        <tr>
+          <td><strong>Speed claim</strong></td>
+          <td>"Let happy customers give you ⭐⭐⭐⭐⭐ in 5 seconds!" — TrustHero</td>
+          <td>"5 seconds is all it takes. Tap → Google → Review → Done. No app, no login, no friction."</td>
+        </tr>
+        <tr>
+          <td><strong>Industry target list</strong></td>
+          <td>"🩺 Clinics | 🍕 Cafes | 🛒 Shops | 💇 Salons | 🏋️ Gyms" — Boost Biz Solutions</td>
+          <td>"Perfect for: 🍽️ Restaurants | 💇 Salons | 🔧 Trades | 🏥 Healthcare | 🚗 Auto Dealers | 🛍️ Retail"</td>
+        </tr>
+        <tr>
+          <td><strong>Multi-platform angle</strong></td>
+          <td>"Works for Google · Trustpilot · Tripadvisor · Facebook" — Reviews Card (UK)</td>
+          <td>"Not just Google. ReviewTap works for Google · Autotrader · TripAdvisor · Instagram — one tap, any platform."</td>
+        </tr>
+        <tr>
+          <td><strong>Mobile worker hook</strong></td>
+          <td>"Card + keychain — perfect for service providers who don't have a counter" — Helloo One</td>
+          <td>"No counter? No problem. The ReviewTap card goes wherever the job takes you — in your pocket, on your keys."</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- KEY FINDINGS CALLOUT -->
+  <div class="section-title">🎯 Key Takeaways for ReviewTap</div>
+  <div class="summary-card" style="margin-bottom:40px;">
+    <table>
+      <thead>
+        <tr><th>Finding</th><th>Action for ReviewTap</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>🇿🇦 <strong>No active SA NFC review competitors right now</strong> (May 2026). RoyalTap stopped Jun 2025, ReviewBoost stopped Oct 2025.</td>
+          <td>NOW is the open window. Spend aggressively while SA is uncontested — first mover advantage in paid.</td>
+        </tr>
+        <tr>
+          <td>🏆 <strong>Longevity signal:</strong> TapCard (520 days), The Review Guys (526 days) both use multi-SKU carousels + direct benefit copy. Neither uses complex storytelling.</td>
+          <td>Prioritise carousels showing Stand + Card + Custom variants. Keep copy benefit-dense, not narrative.</td>
+        </tr>
+        <tr>
+          <td>💡 <strong>Two proven emotional angles:</strong> Shame ("your competitor has 2,000 reviews") vs Validation ("your customers love you, Google doesn't know it yet").</td>
+          <td>Test both angles as separate ad sets. Don't pick one — the market responds to both differently.</td>
+        </tr>
+        <tr>
+          <td>⚡ <strong>Speed claim underused:</strong> TrustHero's "5 seconds" is concrete and credible. Nobody else uses a time claim.</td>
+          <td>Add a time claim to RT copy: "One tap. 5 seconds. Done." — earns a click through specificity.</td>
+        </tr>
+        <tr>
+          <td>🔑 <strong>Mobile workers uncaptured:</strong> Tradies, delivery drivers, mobile services can't use a stand. Helloo One targets this with a keychain product.</td>
+          <td>Test a "No counter? Use the card" creative specifically for trades targeting. ReviewTap Card is the solution.</td>
+        </tr>
+        <tr>
+          <td>🌐 <strong>Multi-platform angle ignored in RT ads:</strong> ReviewTap supports Google, Autotrader, TripAdvisor, and Instagram — competitors don't match this breadth in SA.</td>
+          <td>Add platform diversity to at least one creative: "For Google · Autotrader · TripAdvisor · Instagram"</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="text-align:center;color:#65676b;font-size:12px;padding-bottom:32px;">
+    Generated by ReviewTap Ad Intelligence · Apify Facebook Ad Library Scraper · May 2026 (expanded)<br>
+    7 keyword searches · 200+ ads analysed · 2 ZA-specific competitors identified · 5 new global competitors added<br>
+    Note: Facebook CDN image URLs expire — if images show as grey, the URL has expired (typically within 24–48 hrs of scrape).
+  </div>
+
+</div>
+
+<script>
+  const carousels = {};
+
+  function initCarousel(id, count) {
+    carousels[id] = { index: 0, count };
+    const nav = document.getElementById(id + '-nav');
+    for (let i = 0; i < count; i++) {
+      const dot = document.createElement('button');
+      dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+      dot.onclick = () => goToSlide(id, i);
+      nav.appendChild(dot);
+    }
+  }
+
+  function goToSlide(id, index) {
+    const c = carousels[id];
+    c.index = (index + c.count) % c.count;
+    document.getElementById(id + '-track').style.transform = `translateX(-${c.index * 100}%)`;
+    document.querySelectorAll('#' + id + '-nav .carousel-dot').forEach((d, i) => {
+      d.classList.toggle('active', i === c.index);
+    });
+  }
+
+  function moveCarousel(id, dir) {
+    goToSlide(id, carousels[id].index + dir);
+  }
+
+  initCarousel('c1', 6);
+  initCarousel('c2', 6);
+  initCarousel('cTH', 6);
+  initCarousel('cHO', 5);
+</script>
+</body>
+</html>
