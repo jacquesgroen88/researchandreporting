@@ -1,0 +1,1471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI for Business — TikTok Content Hub</title>
+<style>
+  :root {
+    --bg: #0e0e11;
+    --surface: #17171c;
+    --surface2: #1e1e26;
+    --border: #2a2a35;
+    --accent: #7c6af7;
+    --accent2: #5eead4;
+    --accent3: #f472b6;
+    --text: #e8e8f0;
+    --muted: #6b6b80;
+    --green: #22c55e;
+    --yellow: #fbbf24;
+    --red: #f87171;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* ── Sidebar ── */
+  nav {
+    width: 220px;
+    min-height: 100vh;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    position: fixed;
+    top: 0; left: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 24px 0;
+    z-index: 100;
+  }
+
+  .nav-logo {
+    padding: 0 20px 24px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 16px;
+  }
+
+  .nav-logo h1 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1.3;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .nav-logo p {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  nav a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.15s;
+    border-left: 2px solid transparent;
+  }
+
+  nav a:hover, nav a.active {
+    color: var(--text);
+    background: var(--surface2);
+    border-left-color: var(--accent);
+  }
+
+  nav a span.icon { font-size: 15px; }
+
+  /* ── Main ── */
+  main {
+    margin-left: 220px;
+    padding: 40px 48px;
+    flex: 1;
+    max-width: 1100px;
+  }
+
+  section {
+    margin-bottom: 64px;
+    scroll-margin-top: 24px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-header h2 {
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  .badge {
+    padding: 3px 10px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .badge-purple { background: rgba(124,106,247,0.2); color: var(--accent); }
+  .badge-teal   { background: rgba(94,234,212,0.15); color: var(--accent2); }
+  .badge-pink   { background: rgba(244,114,182,0.15); color: var(--accent3); }
+  .badge-green  { background: rgba(34,197,94,0.15);  color: var(--green); }
+  .badge-yellow { background: rgba(251,191,36,0.15); color: var(--yellow); }
+
+  /* ── Cards ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+
+  .card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .card-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .card-sub {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  /* ── Script blocks ── */
+  .script-block {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+
+  .script-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 14px;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .script-label span {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+
+  .script-label .timing {
+    font-size: 11px;
+    color: var(--accent2);
+    font-weight: 600;
+  }
+
+  .script-text {
+    padding: 12px 14px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text);
+    white-space: pre-wrap;
+  }
+
+  /* ── Copy button ── */
+  .btn-copy {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  .btn-copy:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-copy.copied { border-color: var(--green); color: var(--green); }
+
+  /* ── Checklist ── */
+  .checklist-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+  }
+
+  .checklist-item:last-child { border-bottom: none; }
+
+  .checklist-item input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--accent);
+    cursor: pointer;
+    margin-top: 1px;
+    flex-shrink: 0;
+  }
+
+  .checklist-item label {
+    font-size: 14px;
+    cursor: pointer;
+    line-height: 1.5;
+  }
+
+  .checklist-item label small {
+    display: block;
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .checklist-item.done label {
+    text-decoration: line-through;
+    color: var(--muted);
+  }
+
+  /* ── Grid ── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+
+  /* ── Hook bank ── */
+  .hook-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+
+  .hook-item p { font-size: 14px; line-height: 1.5; flex: 1; }
+
+  /* ── Hashtag sets ── */
+  .hashtag-set {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+
+  .hashtag-set h4 { font-size: 13px; font-weight: 700; margin-bottom: 10px; color: var(--accent2); }
+
+  .tag {
+    display: inline-block;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 3px 10px;
+    font-size: 12px;
+    color: var(--text);
+    margin: 3px 2px;
+  }
+
+  .hashtag-set .copy-row {
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  /* ── Platform captions ── */
+  .platform-tab-group { margin-bottom: 20px; }
+
+  .caption-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+
+  .caption-platform {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .caption-platform strong { font-size: 13px; font-weight: 700; }
+
+  .caption-body {
+    padding: 14px 16px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text);
+    white-space: pre-wrap;
+  }
+
+  /* ── Algorithm rules ── */
+  .rule-item {
+    display: flex;
+    gap: 16px;
+    padding: 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    align-items: flex-start;
+  }
+
+  .rule-number {
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--accent);
+    min-width: 36px;
+    line-height: 1;
+  }
+
+  .rule-content h4 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+  .rule-content p { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+  /* ── Milestones ── */
+  .milestone {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    align-items: flex-start;
+  }
+
+  .milestone-followers {
+    font-size: 18px;
+    font-weight: 900;
+    color: var(--accent2);
+    min-width: 80px;
+    line-height: 1.2;
+  }
+
+  .milestone-content h4 { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+  .milestone-content ul { list-style: none; }
+  .milestone-content ul li { font-size: 13px; color: var(--muted); padding: 3px 0; }
+  .milestone-content ul li::before { content: "→ "; color: var(--accent2); }
+
+  /* ── Table ── */
+  table { width: 100%; border-collapse: collapse; }
+  th { text-align: left; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); padding: 10px 12px; border-bottom: 1px solid var(--border); }
+  td { padding: 12px; font-size: 13px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--surface2); }
+
+  /* ── Video counter ── */
+  .daily-counter {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .counter-box {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .counter-box .num {
+    font-size: 42px;
+    font-weight: 900;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .counter-box .label {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  /* ── Tier badge on script card ── */
+  .tier1-border { border-left: 3px solid var(--accent); }
+
+  /* ── Misc ── */
+  .tip {
+    background: rgba(124,106,247,0.08);
+    border: 1px solid rgba(124,106,247,0.25);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: var(--text);
+    margin-bottom: 20px;
+    line-height: 1.5;
+  }
+
+  .tip strong { color: var(--accent); }
+
+  .divider { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+
+  @media (max-width: 900px) {
+    nav { display: none; }
+    main { margin-left: 0; padding: 24px 20px; }
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════ SIDEBAR ═══════════════════════════════ -->
+<nav>
+  <div class="nav-logo">
+    <h1>AI for Business</h1>
+    <p>TikTok Content Hub</p>
+  </div>
+  <a href="#dashboard" class="active"><span class="icon">📋</span> Daily Dashboard</a>
+  <a href="#scripts"><span class="icon">🎬</span> Video Scripts</a>
+  <a href="#evergreen"><span class="icon">🌿</span> Evergreen Ideas</a>
+  <a href="#hooks"><span class="icon">🪝</span> Hook Bank</a>
+  <a href="#hashtags"><span class="icon">#</span> Hashtag Bank</a>
+  <a href="#captions"><span class="icon">💬</span> Platform Captions</a>
+  <a href="#algorithm"><span class="icon">⚡</span> Algorithm Rules</a>
+  <a href="#monetization"><span class="icon">💰</span> Monetization</a>
+</nav>
+
+<!-- ═══════════════════════════════ MAIN ═══════════════════════════════ -->
+<main>
+
+<!-- ── DASHBOARD ── -->
+<section id="dashboard">
+  <div class="section-header">
+    <h2>Daily Dashboard</h2>
+    <span class="badge badge-green">2 Videos / Day</span>
+  </div>
+
+  <div class="daily-counter">
+    <div class="counter-box">
+      <div class="num" id="day-counter">1</div>
+      <div class="label">Day #</div>
+    </div>
+    <div class="counter-box">
+      <div class="num" id="video-counter">0</div>
+      <div class="label">Videos Made Today</div>
+    </div>
+    <div class="counter-box">
+      <div class="num" id="total-counter">0</div>
+      <div class="label">Total Videos</div>
+    </div>
+    <div class="counter-box">
+      <div class="num" id="days-to-goal">60</div>
+      <div class="label">Days to 1K Goal</div>
+    </div>
+  </div>
+
+  <div class="tip">
+    <strong>Phase 1 (Days 1–60):</strong> 2 videos per day. Video 1 = trend-jacking (new AI tool/feature). Video 2 = evergreen tutorial or list. Completion rate &gt;70% is your only metric that matters right now.
+  </div>
+
+  <div class="grid-2">
+    <!-- Morning Routine -->
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">☀️ Morning Routine (15 min)</div>
+          <div class="card-sub">Do this before filming anything</div>
+        </div>
+      </div>
+      <div id="morning-checklist">
+        <div class="checklist-item" onclick="toggleCheck(this)">
+          <input type="checkbox" id="m1">
+          <label for="m1">Check TikTok Creative Center for trending sounds today
+            <small>tiktok.com/business/en/creative-center → Trending Audio</small>
+          </label>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this)">
+          <input type="checkbox" id="m2">
+          <label for="m2">Check Product Hunt for new AI tool launches
+            <small>producthunt.com → filter by "AI"</small>
+          </label>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this)">
+          <input type="checkbox" id="m3">
+          <label for="m3">Scan Twitter/X AI community for feature drops
+            <small>Search: "just launched AI" or "new feature" — last 24 hours</small>
+          </label>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this)">
+          <input type="checkbox" id="m4">
+          <label for="m4">Pick Video 1 topic (trend) and Video 2 topic (evergreen)
+            <small>Choose from the Scripts or Evergreen sections below</small>
+          </label>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this)">
+          <input type="checkbox" id="m5">
+          <label for="m5">Write 3 hook variations for Video 1
+            <small>Test different openers — pick the strongest one to film</small>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Production Checklist -->
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">🎬 Per-Video Checklist</div>
+          <div class="card-sub">Run through this for every video you film</div>
+        </div>
+      </div>
+      <div id="video-checklist">
+        <div class="checklist-item" onclick="toggleCheck(this)">
+          <input type="checkbox" id="v1">
+          <label for="v1">Read script out loud once before filming
+            <small>Smooth delivery = higher completion rate</small>
+          </label>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this)">
+          <input type="checkbox" id="v2">
+          <label for="v2">Screen record or film demo (keep raw footage under 90s)
+            <small>Film hook intro, then screen record the tool demo</small>
+          </label>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this)">
+          <input type="checkbox" id="v3">
+          <label for="v3">Edit in CapCut — trim all dead air aggressively
+            <small>Cut anything &gt;0.5 seconds of silence or dead space</small>
+          </label>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this)">
+          <input type="checkbox" id="v4">
+          <label for="v4">Add auto-captions (Captions App or CapCut built-in)
+            <small>Required — 85% of TikTok is watched without sound</small>
+          </label>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this)">
+          <input type="checkbox" id="v5">
+          <label for="v5">Add pattern interrupt every 3-5 seconds
+            <small>Text overlay, zoom cut, B-roll, or graphic</small>
+          </label>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this)">
+          <input type="checkbox" id="v6">
+          <label for="v6">Add trending sound from morning research
+            <small>Use at low volume (10-20%) under your voiceover</small>
+          </label>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this)">
+          <input type="checkbox" id="v7">
+          <label for="v7">Write caption + 3-6 hashtags (copy from Hashtag Bank)
+          </label>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this)">
+          <input type="checkbox" id="v8">
+          <label for="v8">Post to TikTok → wait 15 min → post to Reels → wait 15 min → post to YT Shorts
+            <small>Remove TikTok watermark before reposting. Customize caption per platform.</small>
+          </label>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this)">
+          <input type="checkbox" id="v9">
+          <label for="v9">Check completion rate at 4 hours
+            <small>If &gt;70%, film a follow-up same day to ride the wave</small>
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:0">
+    <div class="card-header">
+      <div>
+        <div class="card-title">🔴 Today's Video Slots</div>
+        <div class="card-sub">Click a topic to jump to its script</div>
+      </div>
+      <button class="btn-copy" onclick="resetDay()">Reset Day</button>
+    </div>
+    <div class="grid-2" style="gap:12px">
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:16px">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:8px">Video 1 — Trend</div>
+        <select id="video1-select" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:6px;width:100%;font-size:13px">
+          <option value="">— Pick today's trend topic —</option>
+          <option>Canva Magic Layers</option>
+          <option>HeyGen Avatar V</option>
+          <option>Kling 3.0 Native 4K</option>
+          <option>Midjourney V8 Speed</option>
+          <option>ChatGPT Memory</option>
+          <option>Adobe Firefly AI Markup</option>
+          <option>Gemini Computer Use</option>
+          <option>ElevenLabs v3 Dialogue</option>
+          <option>Runway Gen-4.5 Mocap</option>
+          <option>Perplexity Computer</option>
+        </select>
+      </div>
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:16px">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2);margin-bottom:8px">Video 2 — Evergreen</div>
+        <select id="video2-select" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:6px;width:100%;font-size:13px">
+          <option value="">— Pick today's evergreen topic —</option>
+          <option>ChatGPT vs Claude vs Gemini comparison</option>
+          <option>5 Canva AI features nobody uses</option>
+          <option>Full marketing campaign with AI in 1 hour</option>
+          <option>Best AI tools for social media captions</option>
+          <option>Repurpose 1 blog post into 10 pieces with AI</option>
+          <option>Notion AI full workflow walkthrough</option>
+          <option>AI tools that replaced $400/month in subscriptions</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── VIDEO SCRIPTS ── -->
+<section id="scripts">
+  <div class="section-header">
+    <h2>Video Scripts</h2>
+    <span class="badge badge-purple">Tier 1 — Film These First</span>
+  </div>
+
+  <div class="tip">
+    <strong>How to use:</strong> Pick a script, read it once out loud, then film. Each script is 30–60 seconds. The hook is what you say on camera (or as VO over a visual). The value/depth sections guide your screen recording. Copy individual sections using the buttons.
+  </div>
+
+  <!-- Script 1: Canva Magic Layers -->
+  <div class="card tier1-border">
+    <div class="card-header">
+      <div>
+        <div class="card-title">1. Canva Magic Layers</div>
+        <div class="card-sub">Released March 2026 · Still hot · Highest wow moment · Screen recording video</div>
+      </div>
+      <span class="badge badge-yellow">Film This Week</span>
+    </div>
+
+    <div class="script-block">
+      <div class="script-label">
+        <span>🪝 Hook</span>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span class="timing">0–3s</span>
+          <button class="btn-copy" onclick="copyText(this, 'Canva just made every AI-generated image editable. I\'m not joking — watch.')">Copy</button>
+        </div>
+      </div>
+      <div class="script-text">Canva just made every AI-generated image editable. I'm not joking — watch.</div>
+    </div>
+
+    <div class="script-block">
+      <div class="script-label">
+        <span>💎 Value</span>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span class="timing">3–25s</span>
+          <button class="btn-copy" onclick="copyText(this, 'So I took this flat Midjourney image — couldn\'t change a single thing. Uploaded it to Canva, hit Magic Layers. In 5 seconds: the background became its own layer, the text turned into a live text box, the product became a movable object. Every element, independently editable.')">Copy</button>
+        </div>
+      </div>
+      <div class="script-text">So I took this flat Midjourney image — couldn't change a single thing. Uploaded it to Canva, hit Magic Layers. In 5 seconds: the background became its own layer, the text turned into a live text box, the product became a movable object. Every element, independently editable.</div>
+    </div>
+
+    <div class="script-block">
+      <div class="script-label">
+        <span>🏢 Business Depth</span>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span class="timing">25–50s</span>
+          <button class="btn-copy" onclick="copyText(this, 'This is massive for anyone using AI images for social media, ads, or client work. Before this, if something was off you rebuilt from scratch. Now you just upload and unlock. Works on images from Midjourney, ChatGPT, DALL-E — any AI tool.')">Copy</button>
+        </div>
+      </div>
+      <div class="script-text">This is massive for anyone using AI images for social media, ads, or client work. Before this, if something was off you rebuilt from scratch. Now you just upload and unlock. Works on images from Midjourney, ChatGPT, DALL-E — any AI tool.</div>
+    </div>
+
+    <div class="script-block">
+      <div class="script-label">
+        <span>📣 CTA</span>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span class="timing">50–60s</span>
+          <button class="btn-copy" onclick="copyText(this, 'Testing this on 5 different use cases this week — follow so you don\'t miss the breakdown.')">Copy</button>
+        </div>
+      </div>
+      <div class="script-text">Testing this on 5 different use cases this week — follow so you don't miss the breakdown.</div>
+    </div>
+
+    <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+      <span style="font-size:12px;color:var(--muted)">Hashtags:</span>
+      <span class="tag">#CanvaTips</span><span class="tag">#AIdesign</span><span class="tag">#CanvaMagic</span><span class="tag">#AItools</span><span class="tag">#graphicdesign</span>
+      <button class="btn-copy" style="margin-left:auto" onclick="copyText(this, '#CanvaTips #AIdesign #CanvaMagic #AItools #graphicdesign')">Copy Tags</button>
+    </div>
+    <div style="margin-top:10px;font-size:12px;color:var(--muted)"><strong style="color:var(--accent2)">Visual structure:</strong> Film talking head hook → screen record: open Canva → upload Midjourney image → click Magic Layers → watch layers appear → click text layer → edit it → move object → final result</div>
+  </div>
+
+  <!-- Script 2: HeyGen Avatar V -->
+  <div class="card tier1-border">
+    <div class="card-header">
+      <div>
+        <div class="card-title">2. HeyGen Avatar V</div>
+        <div class="card-sub">Released April 2026 · 15-second selfie → photorealistic digital twin</div>
+      </div>
+      <span class="badge badge-yellow">Film This Week</span>
+    </div>
+
+    <div class="script-block">
+      <div class="script-label"><span>🪝 Hook</span><div style="display:flex;align-items:center;gap:10px"><span class="timing">0–3s</span><button class="btn-copy" onclick="copyText(this, 'I filmed myself for 15 seconds. Now I have a digital clone that makes videos for me.')">Copy</button></div></div>
+      <div class="script-text">I filmed myself for 15 seconds. Now I have a digital clone that makes videos for me.</div>
+    </div>
+
+    <div class="script-block">
+      <div class="script-label"><span>💎 Value</span><div style="display:flex;align-items:center;gap:10px"><span class="timing">3–25s</span><button class="btn-copy" onclick="copyText(this, 'Here\'s what I actually did: opened HeyGen, hit Create Avatar, recorded a 15-second clip following their prompts. That\'s it. Within minutes I had a photorealistic digital twin — same face, same voice, same mannerisms. I can now generate unlimited videos of \"me\" without turning on a camera.')">Copy</button></div></div>
+      <div class="script-text">Here's what I actually did: opened HeyGen, hit Create Avatar, recorded a 15-second clip following their prompts. That's it. Within minutes I had a photorealistic digital twin — same face, same voice, same mannerisms. I can now generate unlimited videos of "me" without turning on a camera.</div>
+    </div>
+
+    <div class="script-block">
+      <div class="script-label"><span>🏢 Business Depth</span><div style="display:flex;align-items:center;gap:10px"><span class="timing">25–50s</span><button class="btn-copy" onclick="copyText(this, 'For business owners this is insane. Training videos, product demos, customer FAQs, sales pitches — generate all of it from your avatar. One recording session, infinite content. And with their Seedance 2.0 integration the quality is actually cinematic now.')">Copy</button></div></div>
+      <div class="script-text">For business owners this is insane. Training videos, product demos, customer FAQs, sales pitches — generate all of it from your avatar. One recording session, infinite content. And with their Seedance 2.0 integration the quality is actually cinematic now.</div>
+    </div>
+
+    <div class="script-block">
+      <div class="script-label"><span>📣 CTA</span><div style="display:flex;align-items:center;gap:10px"><span class="timing">50–60s</span><button class="btn-copy" onclick="copyText(this, 'I\'m going to show what types of videos I\'m making with it. Follow for part 2.')">Copy</button></div></div>
+      <div class="script-text">I'm going to show what types of videos I'm making with it. Follow for part 2.</div>
+    </div>
+
+    <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+      <span style="font-size:12px;color:var(--muted)">Hashtags:</span>
+      <span class="tag">#HeyGen</span><span class="tag">#AIavatar</span><span class="tag">#AItools</span><span class="tag">#AIforBusiness</span><span class="tag">#contentcreator</span>
+      <button class="btn-copy" style="margin-left:auto" onclick="copyText(this, '#HeyGen #AIavatar #AItools #AIforBusiness #contentcreator')">Copy Tags</button>
+    </div>
+    <div style="margin-top:10px;font-size:12px;color:var(--muted)"><strong style="color:var(--accent2)">Visual structure:</strong> Film yourself talking → cut to screen: HeyGen dashboard → Create Avatar → record selfie clip → show the output avatar video side-by-side with original</div>
+  </div>
+
+  <!-- Script 3: Kling 3.0 -->
+  <div class="card tier1-border">
+    <div class="card-header">
+      <div>
+        <div class="card-title">3. Kling 3.0 — Native 4K AI Video</div>
+        <div class="card-sub">Released Feb 2026 · #1 on ELO benchmark · Physics-accurate motion · Extreme visual wow</div>
+      </div>
+      <span class="badge badge-purple">High Virality</span>
+    </div>
+
+    <div class="script-block">
+      <div class="script-label"><span>🪝 Hook</span><div style="display:flex;align-items:center;gap:10px"><span class="timing">0–3s</span><button class="btn-copy" onclick="copyText(this, 'AI video just crossed the line into photorealism. I did a side-by-side and my jaw dropped.')">Copy</button></div></div>
+      <div class="script-text">AI video just crossed the line into photorealism. I did a side-by-side and my jaw dropped.</div>
+    </div>
+
+    <div class="script-block">
+      <div class="script-label"><span>💎 Value</span><div style="display:flex;align-items:center;gap:10px"><span class="timing">3–25s</span><button class="btn-copy" onclick="copyText(this, 'This is Kling 3.0. It\'s the first AI video model that generates native 4K at 60fps — not upscaled, native. But the real thing is the physics. Watch the hair move. Watch the fabric react. Watch the liquid. Old AI video looked like plastic. This looks like a film set.')">Copy</button></div></div>
+      <div class="script-text">This is Kling 3.0. It's the first AI video model that generates native 4K at 60fps — not upscaled, native. But the real thing is the physics. Watch the hair move. Watch the fabric react. Watch the liquid. Old AI video looked like plastic. This looks like a film set.</div>
+    </div>
+
+    <div class="script-block">
+      <div class="script-label"><span>🏢 Business Depth</span><div style="display:flex;align-items:center;gap:10px"><span class="timing">25–50s</span><button class="btn-copy" onclick="copyText(this, 'For marketers and content creators, this matters because AI video is finally production-ready. You can generate product videos, brand visuals, B-roll — all without a camera crew. Kling 3.0 is number one on the ELO benchmark right now, above Runway and Google Veo.')">Copy</button></div></div>
+      <div class="script-text">For marketers and content creators, this matters because AI video is finally production-ready. You can generate product videos, brand visuals, B-roll — all without a camera crew. Kling 3.0 is number one on the ELO benchmark right now, above Runway and Google Veo.</div>
+    </div>
+
+    <div class="script-block">
+      <div class="script-label"><span>📣 CTA</span><div style="display:flex;align-items:center;gap:10px"><span class="timing">50–60s</span><button class="btn-copy" onclick="copyText(this, 'I\'ll show you exactly how to use it for business content next week. Save this so you remember to check it out.')">Copy</button></div></div>
+      <div class="script-text">I'll show you exactly how to use it for business content next week. Save this so you remember to check it out.</div>
+    </div>
+
+    <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+      <span style="font-size:12px;color:var(--muted)">Hashtags:</span>
+      <span class="tag">#AIvideo</span><span class="tag">#KlingAI</span><span class="tag">#AItools</span><span class="tag">#futuretech</span><span class="tag">#AIforBusiness</span>
+      <button class="btn-copy" style="margin-left:auto" onclick="copyText(this, '#AIvideo #KlingAI #AItools #futuretech #AIforBusiness')">Copy Tags</button>
+    </div>
+    <div style="margin-top:10px;font-size:12px;color:var(--muted)"><strong style="color:var(--accent2)">Visual structure:</strong> Open with old AI video clip → cut to Kling 3.0 output (hair/fabric/liquid physics) → side-by-side comparison → show the generation interface</div>
+  </div>
+
+  <!-- Script 4: Midjourney V8 -->
+  <div class="card tier1-border">
+    <div class="card-header">
+      <div>
+        <div class="card-title">4. Midjourney V8 — 5x Speed</div>
+        <div class="card-sub">Released March 2026 · V7 vs V8 timer comparison · Readable text in images</div>
+      </div>
+      <span class="badge badge-teal">Comparison Bait</span>
+    </div>
+
+    <div class="script-block">
+      <div class="script-label"><span>🪝 Hook</span><div style="display:flex;align-items:center;gap:10px"><span class="timing">0–3s</span><button class="btn-copy" onclick="copyText(this, 'Midjourney just got 5x faster. I literally timed it — watch.')">Copy</button></div></div>
+      <div class="script-text">Midjourney just got 5x faster. I literally timed it — watch.</div>
+    </div>
+
+    <div class="script-block">
+      <div class="script-label"><span>💎 Value</span><div style="display:flex;align-items:center;gap:10px"><span class="timing">3–25s</span><button class="btn-copy" onclick="copyText(this, 'Old version: 58 seconds. Midjourney V8: 9 seconds. Same prompt. That\'s not a small jump — that\'s a completely different workflow. And look at this — I asked it to generate a poster with text. In V7 the text was garbage. In V8 it\'s completely readable.')">Copy</button></div></div>
+      <div class="script-text">Old version: 58 seconds. Midjourney V8: 9 seconds. Same prompt. That's not a small jump — that's a completely different workflow. And look at this — I asked it to generate a poster with text. In V7 the text was garbage. In V8 it's completely readable.</div>
+    </div>
+
+    <div class="script-block">
+      <div class="script-label"><span>🏢 Business Depth</span><div style="display:flex;align-items:center;gap:10px"><span class="timing">25–50s</span><button class="btn-copy" onclick="copyText(this, 'This changes how you use Midjourney professionally. You can now iterate in real-time on client calls. Generate, get feedback, adjust, regenerate — the whole loop happens in under a minute. Plus native 2K resolution, no upscaling needed.')">Copy</button></div></div>
+      <div class="script-text">This changes how you use Midjourney professionally. You can now iterate in real-time on client calls. Generate, get feedback, adjust, regenerate — the whole loop happens in under a minute. Plus native 2K resolution, no upscaling needed.</div>
+    </div>
+
+    <div class="script-block">
+      <div class="script-label"><span>📣 CTA</span><div style="display:flex;align-items:center;gap:10px"><span class="timing">50–60s</span><button class="btn-copy" onclick="copyText(this, 'Drop a comment if you want me to show my full client pitch workflow using V8.')">Copy</button></div></div>
+      <div class="script-text">Drop a comment if you want me to show my full client pitch workflow using V8.</div>
+    </div>
+
+    <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+      <span style="font-size:12px;color:var(--muted)">Hashtags:</span>
+      <span class="tag">#Midjourney</span><span class="tag">#AIart</span><span class="tag">#AItools</span><span class="tag">#AIforBusiness</span><span class="tag">#designhacks</span>
+      <button class="btn-copy" style="margin-left:auto" onclick="copyText(this, '#Midjourney #AIart #AItools #AIforBusiness #designhacks')">Copy Tags</button>
+    </div>
+    <div style="margin-top:10px;font-size:12px;color:var(--muted)"><strong style="color:var(--accent2)">Visual structure:</strong> Screen record — run same prompt in V7 with timer visible → run in V8 with timer → side-by-side text comparison (V7 garbled text vs V8 readable text)</div>
+  </div>
+
+  <!-- Script 5: ChatGPT Memory -->
+  <div class="card tier1-border">
+    <div class="card-header">
+      <div>
+        <div class="card-title">5. ChatGPT Memory + GPT-5.5 Personalization</div>
+        <div class="card-sub">May 2026 · Remembers your business, clients, style across all conversations</div>
+      </div>
+      <span class="badge badge-purple">Relatable Hook</span>
+    </div>
+
+    <div class="script-block">
+      <div class="script-label"><span>🪝 Hook</span><div style="display:flex;align-items:center;gap:10px"><span class="timing">0–3s</span><button class="btn-copy" onclick="copyText(this, 'I asked ChatGPT a question with zero context. Its answer stopped me cold.')">Copy</button></div></div>
+      <div class="script-text">I asked ChatGPT a question with zero context. Its answer stopped me cold.</div>
+    </div>
+
+    <div class="script-block">
+      <div class="script-label"><span>💎 Value</span><div style="display:flex;align-items:center;gap:10px"><span class="timing">3–25s</span><button class="btn-copy" onclick="copyText(this, 'I just typed: "What should I focus on this week?" No context, no setup. ChatGPT replied with my actual business goals, my current clients, my content strategy — things I\'d mentioned in conversations weeks ago. It remembered everything and gave me a personalized weekly plan without me saying a word.')">Copy</button></div></div>
+      <div class="script-text">I just typed: "What should I focus on this week?" No context, no setup. ChatGPT replied with my actual business goals, my current clients, my content strategy — things I'd mentioned in conversations weeks ago. It remembered everything and gave me a personalized weekly plan without me saying a word.</div>
+    </div>
+
+    <div class="script-block">
+      <div class="script-label"><span>🏢 Business Depth</span><div style="display:flex;align-items:center;gap:10px"><span class="timing">25–50s</span><button class="btn-copy" onclick="copyText(this, 'GPT-5.5 now builds a memory of you across every conversation — your business, your writing style, your preferences. It also connects to your Gmail and files. So instead of re-explaining your situation every single session, it already knows you. This alone saves me hours per week.')">Copy</button></div></div>
+      <div class="script-text">GPT-5.5 now builds a memory of you across every conversation — your business, your writing style, your preferences. It also connects to your Gmail and files. So instead of re-explaining your situation every single session, it already knows you. This alone saves me hours per week.</div>
+    </div>
+
+    <div class="script-block">
+      <div class="script-label"><span>📣 CTA</span><div style="display:flex;align-items:center;gap:10px"><span class="timing">50–60s</span><button class="btn-copy" onclick="copyText(this, 'I\'ll show you how to set this up properly and what to tell it to remember. Follow so you catch that one.')">Copy</button></div></div>
+      <div class="script-text">I'll show you how to set this up properly and what to tell it to remember. Follow so you catch that one.</div>
+    </div>
+
+    <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+      <span style="font-size:12px;color:var(--muted)">Hashtags:</span>
+      <span class="tag">#ChatGPT</span><span class="tag">#GPT5</span><span class="tag">#AItools</span><span class="tag">#AIforBusiness</span><span class="tag">#productivity</span>
+      <button class="btn-copy" style="margin-left:auto" onclick="copyText(this, '#ChatGPT #GPT5 #AItools #AIforBusiness #productivity')">Copy Tags</button>
+    </div>
+    <div style="margin-top:10px;font-size:12px;color:var(--muted)"><strong style="color:var(--accent2)">Visual structure:</strong> Screen record — open ChatGPT → type vague question → scroll through the shockingly specific personalized response → show the memory settings panel</div>
+  </div>
+
+  <!-- Script 6: Adobe Firefly -->
+  <div class="card tier1-border">
+    <div class="card-header">
+      <div>
+        <div class="card-title">6. Adobe Firefly — AI Markup</div>
+        <div class="card-sub">April 2026 · Draw a box → type instruction → AI edits with perfect blending. No skills needed.</div>
+      </div>
+    </div>
+
+    <div class="script-block">
+      <div class="script-label"><span>🪝 Hook</span><div style="display:flex;align-items:center;gap:10px"><span class="timing">0–3s</span><button class="btn-copy" onclick="copyText(this, 'Draw a box. Type what you want. Adobe does the rest. No Photoshop skills needed.')">Copy</button></div></div>
+      <div class="script-text">Draw a box. Type what you want. Adobe does the rest. No Photoshop skills needed.</div>
+    </div>
+
+    <div class="script-block">
+      <div class="script-label"><span>💎 Value</span><div style="display:flex;align-items:center;gap:10px"><span class="timing">3–25s</span><button class="btn-copy" onclick="copyText(this, 'I had a product photo with a cluttered background. I drew a rough rectangle around it, typed "clean white studio background," and Adobe Firefly blended it perfectly — looks like a professional shoot. Then I selected the model\'s expression, typed "confident smile," and it changed naturally. No masks, no layers, no skill required.')">Copy</button></div></div>
+      <div class="script-text">I had a product photo with a cluttered background. I drew a rough rectangle around it, typed "clean white studio background," and Adobe Firefly blended it perfectly — looks like a professional shoot. Then I selected the model's expression, typed "confident smile," and it changed naturally. No masks, no layers, no skill required.</div>
+    </div>
+
+    <div class="script-block">
+      <div class="script-label"><span>🏢 Business Depth</span><div style="display:flex;align-items:center;gap:10px"><span class="timing">25–50s</span><button class="btn-copy" onclick="copyText(this, 'This is a game-changer for small businesses who can\'t afford a photo studio or retoucher. E-commerce photos, headshots, marketing assets — all fixable in seconds. It\'s in beta right now through Creative Cloud.')">Copy</button></div></div>
+      <div class="script-text">This is a game-changer for small businesses who can't afford a photo studio or retoucher. E-commerce photos, headshots, marketing assets — all fixable in seconds. It's in beta right now through Creative Cloud.</div>
+    </div>
+
+    <div class="script-block">
+      <div class="script-label"><span>📣 CTA</span><div style="display:flex;align-items:center;gap:10px"><span class="timing">50–60s</span><button class="btn-copy" onclick="copyText(this, 'Save this for when you need to fix a photo fast. Which feature do you want me to test next?')">Copy</button></div></div>
+      <div class="script-text">Save this for when you need to fix a photo fast. Which feature do you want me to test next?</div>
+    </div>
+
+    <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+      <span style="font-size:12px;color:var(--muted)">Hashtags:</span>
+      <span class="tag">#AdobeFirefly</span><span class="tag">#AIphoto</span><span class="tag">#AItools</span><span class="tag">#Photoshop</span><span class="tag">#smallbusiness</span>
+      <button class="btn-copy" style="margin-left:auto" onclick="copyText(this, '#AdobeFirefly #AIphoto #AItools #Photoshop #smallbusiness')">Copy Tags</button>
+    </div>
+  </div>
+
+  <!-- Script 7: Gemini Computer Use -->
+  <div class="card tier1-border">
+    <div class="card-header">
+      <div>
+        <div class="card-title">7. Gemini Computer Use</div>
+        <div class="card-sub">May 2026 · AI clicks, fills forms, and navigates UIs autonomously from a text command</div>
+      </div>
+    </div>
+
+    <div class="script-block">
+      <div class="script-label"><span>🪝 Hook</span><div style="display:flex;align-items:center;gap:10px"><span class="timing">0–3s</span><button class="btn-copy" onclick="copyText(this, 'Google\'s AI just used my computer like a human. I just watched it work.')">Copy</button></div></div>
+      <div class="script-text">Google's AI just used my computer like a human. I just watched it work.</div>
+    </div>
+
+    <div class="script-block">
+      <div class="script-label"><span>💎 Value</span><div style="display:flex;align-items:center;gap:10px"><span class="timing">3–25s</span><button class="btn-copy" onclick="copyText(this, 'I gave Gemini one instruction: "Fill out this client intake form, pull the info from last week\'s email, and send a confirmation." I didn\'t click a thing. It opened the form, found the email, extracted the details, filled every field, and sent it. Autonomously. While I watched.')">Copy</button></div></div>
+      <div class="script-text">I gave Gemini one instruction: "Fill out this client intake form, pull the info from last week's email, and send a confirmation." I didn't click a thing. It opened the form, found the email, extracted the details, filled every field, and sent it. Autonomously. While I watched.</div>
+    </div>
+
+    <div class="script-block">
+      <div class="script-label"><span>🏢 Business Depth</span><div style="display:flex;align-items:center;gap:10px"><span class="timing">25–50s</span><button class="btn-copy" onclick="copyText(this, 'For business owners doing repetitive admin work, this is massive. Client onboarding, data entry, scheduling, reporting — Gemini Computer Use just does it. You give it a task in plain English, it navigates your screen like a human assistant.')">Copy</button></div></div>
+      <div class="script-text">For business owners doing repetitive admin work, this is massive. Client onboarding, data entry, scheduling, reporting — Gemini Computer Use just does it. You give it a task in plain English, it navigates your screen like a human assistant.</div>
+    </div>
+
+    <div class="script-block">
+      <div class="script-label"><span>📣 CTA</span><div style="display:flex;align-items:center;gap:10px"><span class="timing">50–60s</span><button class="btn-copy" onclick="copyText(this, 'I\'m going to spend a week delegating my most repetitive tasks to Gemini and report what actually works. Follow for that breakdown.')">Copy</button></div></div>
+      <div class="script-text">I'm going to spend a week delegating my most repetitive tasks to Gemini and report what actually works. Follow for that breakdown.</div>
+    </div>
+
+    <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+      <span style="font-size:12px;color:var(--muted)">Hashtags:</span>
+      <span class="tag">#Gemini</span><span class="tag">#GoogleAI</span><span class="tag">#AIautomation</span><span class="tag">#AItools</span><span class="tag">#productivity</span>
+      <button class="btn-copy" style="margin-left:auto" onclick="copyText(this, '#Gemini #GoogleAI #AIautomation #AItools #productivity')">Copy Tags</button>
+    </div>
+  </div>
+
+  <!-- Script 8: ElevenLabs -->
+  <div class="card tier1-border">
+    <div class="card-header">
+      <div>
+        <div class="card-title">8. ElevenLabs v3 — Text-to-Dialogue</div>
+        <div class="card-sub">2026 · Full AI conversations with emotional voice tags · 70+ languages</div>
+      </div>
+    </div>
+
+    <div class="script-block">
+      <div class="script-label"><span>🪝 Hook</span><div style="display:flex;align-items:center;gap:10px"><span class="timing">0–3s</span><button class="btn-copy" onclick="copyText(this, 'This entire conversation you\'re about to hear was 100% generated by AI. Try to spot it.')">Copy</button></div></div>
+      <div class="script-text">This entire conversation you're about to hear was 100% generated by AI. Try to spot it.</div>
+    </div>
+
+    <div class="script-block">
+      <div class="script-label"><span>💎 Value</span><div style="display:flex;align-items:center;gap:10px"><span class="timing">3–25s</span><button class="btn-copy" onclick="copyText(this, 'Play the AI dialogue clip here. Then reveal: That was two AI voices from ElevenLabs v3 having a realistic back-and-forth. No human voice work at all. I used audio tags — things like [whispers], [laughs], [excited] — to direct the performance. The pacing, the emotion, the interruptions — all from a text file.')">Copy</button></div></div>
+      <div class="script-text">[Play AI dialogue clip] That was two AI voices from ElevenLabs v3 having a realistic back-and-forth. No human voice work at all. I used audio tags — things like [whispers], [laughs], [excited] — to direct the performance. The pacing, the emotion, the interruptions — all from a text file.</div>
+    </div>
+
+    <div class="script-block">
+      <div class="script-label"><span>🏢 Business Depth</span><div style="display:flex;align-items:center;gap:10px"><span class="timing">25–50s</span><button class="btn-copy" onclick="copyText(this, 'For business content this opens up insane possibilities. Podcasts, explainer videos, training materials, customer service demos — all without recording a single line of audio. And with 70 plus languages, you can localize everything instantly.')">Copy</button></div></div>
+      <div class="script-text">For business content this opens up insane possibilities. Podcasts, explainer videos, training materials, customer service demos — all without recording a single line of audio. And with 70+ languages, you can localize everything instantly.</div>
+    </div>
+
+    <div class="script-block">
+      <div class="script-label"><span>📣 CTA</span><div style="display:flex;align-items:center;gap:10px"><span class="timing">50–60s</span><button class="btn-copy" onclick="copyText(this, 'Drop a comment: what would you use AI voices for in your business?')">Copy</button></div></div>
+      <div class="script-text">Drop a comment: what would you use AI voices for in your business?</div>
+    </div>
+
+    <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+      <span style="font-size:12px;color:var(--muted)">Hashtags:</span>
+      <span class="tag">#ElevenLabs</span><span class="tag">#AIvoice</span><span class="tag">#AItools</span><span class="tag">#AIpodcast</span><span class="tag">#contentcreator</span>
+      <button class="btn-copy" style="margin-left:auto" onclick="copyText(this, '#ElevenLabs #AIvoice #AItools #AIpodcast #contentcreator')">Copy Tags</button>
+    </div>
+  </div>
+
+  <!-- Script 9: Runway -->
+  <div class="card tier1-border">
+    <div class="card-header">
+      <div>
+        <div class="card-title">9. Runway Gen-4.5 — Act-Two Motion Capture</div>
+        <div class="card-sub">April 2026 · Film yourself → your motion mapped to any AI character. Mocap for everyone.</div>
+      </div>
+    </div>
+
+    <div class="script-block">
+      <div class="script-label"><span>🪝 Hook</span><div style="display:flex;align-items:center;gap:10px"><span class="timing">0–3s</span><button class="btn-copy" onclick="copyText(this, 'I filmed myself for 15 seconds. Runway turned me into a movie character.')">Copy</button></div></div>
+      <div class="script-text">I filmed myself for 15 seconds. Runway turned me into a movie character.</div>
+    </div>
+
+    <div class="script-block">
+      <div class="script-label"><span>💎 Value</span><div style="display:flex;align-items:center;gap:10px"><span class="timing">3–25s</span><button class="btn-copy" onclick="copyText(this, 'Here\'s the actual clip I recorded — just me acting out a scene on my phone. Then I gave Runway a character reference image and hit Act-Two. Watch what happened. My exact movements, mapped onto a completely different character, in a completely different environment. Cinematic quality, no green screen, no crew.')">Copy</button></div></div>
+      <div class="script-text">Here's the actual clip I recorded — just me acting out a scene on my phone. Then I gave Runway a character reference image and hit Act-Two. Watch what happened. My exact movements, mapped onto a completely different character, in a completely different environment. Cinematic quality, no green screen, no crew.</div>
+    </div>
+
+    <div class="script-block">
+      <div class="script-label"><span>🏢 Business Depth</span><div style="display:flex;align-items:center;gap:10px"><span class="timing">25–50s</span><button class="btn-copy" onclick="copyText(this, 'For content creators, you can put yourself in any scenario — fantasy world, sci-fi setting, historical scene. For businesses, think product demos in branded environments, or training simulations. One person, infinite sets.')">Copy</button></div></div>
+      <div class="script-text">For content creators, you can put yourself in any scenario — fantasy world, sci-fi setting, historical scene. For businesses, think product demos in branded environments, or training simulations. One person, infinite sets.</div>
+    </div>
+
+    <div class="script-block">
+      <div class="script-label"><span>📣 CTA</span><div style="display:flex;align-items:center;gap:10px"><span class="timing">50–60s</span><button class="btn-copy" onclick="copyText(this, 'I want to test this for a business pitch video next. Follow so you see how it turns out.')">Copy</button></div></div>
+      <div class="script-text">I want to test this for a business pitch video next. Follow so you see how it turns out.</div>
+    </div>
+
+    <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+      <span style="font-size:12px;color:var(--muted)">Hashtags:</span>
+      <span class="tag">#RunwayAI</span><span class="tag">#AIvideo</span><span class="tag">#AItools</span><span class="tag">#AIfilmmaking</span><span class="tag">#contentcreator</span>
+      <button class="btn-copy" style="margin-left:auto" onclick="copyText(this, '#RunwayAI #AIvideo #AItools #AIfilmmaking #contentcreator')">Copy Tags</button>
+    </div>
+  </div>
+
+  <!-- Script 10: Perplexity -->
+  <div class="card tier1-border">
+    <div class="card-header">
+      <div>
+        <div class="card-title">10. Perplexity Computer — Autonomous Agents</div>
+        <div class="card-sub">2026 · Orchestrates 19 AI models, spawns sub-agents, completes multi-step projects autonomously</div>
+      </div>
+    </div>
+
+    <div class="script-block">
+      <div class="script-label"><span>🪝 Hook</span><div style="display:flex;align-items:center;gap:10px"><span class="timing">0–3s</span><button class="btn-copy" onclick="copyText(this, 'I gave this AI one task. It finished a project that would have taken me 4 hours — in 12 minutes.')">Copy</button></div></div>
+      <div class="script-text">I gave this AI one task. It finished a project that would have taken me 4 hours — in 12 minutes.</div>
+    </div>
+
+    <div class="script-block">
+      <div class="script-label"><span>💎 Value</span><div style="display:flex;align-items:center;gap:10px"><span class="timing">3–25s</span><button class="btn-copy" onclick="copyText(this, 'Here\'s what I asked Perplexity Computer: "Research my top 3 competitors, analyze their pricing and positioning, draft a competitive response strategy, and put it in a slide deck." I didn\'t do anything else. It spawned agents, ran research in parallel, synthesized everything, built the deck, and pinged me when it was done.')">Copy</button></div></div>
+      <div class="script-text">Here's what I asked Perplexity Computer: "Research my top 3 competitors, analyze their pricing and positioning, draft a competitive response strategy, and put it in a slide deck." I didn't do anything else. It spawned agents, ran research in parallel, synthesized everything, built the deck, and pinged me when it was done.</div>
+    </div>
+
+    <div class="script-block">
+      <div class="script-label"><span>🏢 Business Depth</span><div style="display:flex;align-items:center;gap:10px"><span class="timing">25–50s</span><button class="btn-copy" onclick="copyText(this, 'This is agentic AI — it doesn\'t just answer questions, it completes work. Perplexity Computer orchestrates 19 different AI models and picks the right one for each step. For solo founders and small teams, this is like hiring an analyst who works at machine speed.')">Copy</button></div></div>
+      <div class="script-text">This is agentic AI — it doesn't just answer questions, it completes work. Perplexity Computer orchestrates 19 different AI models and picks the right one for each step. For solo founders and small teams, this is like hiring an analyst who works at machine speed.</div>
+    </div>
+
+    <div class="script-block">
+      <div class="script-label"><span>📣 CTA</span><div style="display:flex;align-items:center;gap:10px"><span class="timing">50–60s</span><button class="btn-copy" onclick="copyText(this, 'I\'m going to run a live experiment — give it a full week\'s worth of tasks and see what it actually delivers. Save this to follow along.')">Copy</button></div></div>
+      <div class="script-text">I'm going to run a live experiment — give it a full week's worth of tasks and see what it actually delivers. Save this to follow along.</div>
+    </div>
+
+    <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+      <span style="font-size:12px;color:var(--muted)">Hashtags:</span>
+      <span class="tag">#Perplexity</span><span class="tag">#AIagents</span><span class="tag">#AItools</span><span class="tag">#AIautomation</span><span class="tag">#AIforBusiness</span>
+      <button class="btn-copy" style="margin-left:auto" onclick="copyText(this, '#Perplexity #AIagents #AItools #AIautomation #AIforBusiness')">Copy Tags</button>
+    </div>
+  </div>
+</section>
+
+<!-- ── EVERGREEN IDEAS ── -->
+<section id="evergreen">
+  <div class="section-header">
+    <h2>Evergreen Ideas</h2>
+    <span class="badge badge-teal">Tier 2 — Film Ongoing</span>
+  </div>
+  <div class="tip">These videos have no expiry date — they pick up search traffic month after month. Use them as your daily Video 2 slot.</div>
+  <div class="card" style="padding:0;overflow:hidden">
+    <table>
+      <thead>
+        <tr>
+          <th>Topic</th>
+          <th>Format</th>
+          <th>Hook</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>ChatGPT vs Claude vs Gemini for content creation</td><td>Comparison</td><td>"I ran the same brief through 3 AIs. Here's who won."</td></tr>
+        <tr><td>5 Canva AI features nobody uses</td><td>List</td><td>"Canva has AI features that would take you hours manually."</td></tr>
+        <tr><td>Build a full marketing campaign with AI in 1 hour</td><td>Tutorial</td><td>"I built a full campaign in 60 minutes. No team. No agency."</td></tr>
+        <tr><td>Best AI tools for social media captions</td><td>List</td><td>"Stop writing captions from scratch. Use these instead."</td></tr>
+        <tr><td>Repurpose 1 blog post into 10 pieces with AI</td><td>Tutorial</td><td>"One blog post → 10 pieces of content. Here's my AI workflow."</td></tr>
+        <tr><td>Notion AI full workflow walkthrough</td><td>Tutorial</td><td>"My entire project management runs on Notion AI now."</td></tr>
+        <tr><td>AI tools that replaced $400/month in subscriptions</td><td>List</td><td>"I cancelled $400/month in tools. AI replaced all of them."</td></tr>
+        <tr><td>How to write a cold email with AI that gets replies</td><td>Tutorial</td><td>"I sent 50 AI-written cold emails. Here's what actually worked."</td></tr>
+        <tr><td>5 ChatGPT prompts every business owner should save</td><td>List</td><td>"Save these 5 prompts. You'll use them every week."</td></tr>
+        <tr><td>AI tools for creating a pitch deck in under 30 minutes</td><td>Tutorial</td><td>"From blank slide to full pitch deck in 25 minutes using AI."</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ── HOOK BANK ── -->
+<section id="hooks">
+  <div class="section-header">
+    <h2>Hook Bank</h2>
+    <span class="badge badge-pink">Templates</span>
+  </div>
+  <div class="tip"><strong>Rule:</strong> You have exactly 3 seconds. The hook must create a "3-second hold" — if someone scrolls past in the first 3 seconds, the algorithm kills distribution. Test 3 variants per video.</div>
+
+  <div style="margin-bottom:20px">
+    <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:12px">⚡ Urgency / FOMO</div>
+    <div class="hook-item"><p>"This AI feature just dropped and nobody's talking about it yet."</p><button class="btn-copy" onclick="copyText(this, 'This AI feature just dropped and nobody\'s talking about it yet.')">Copy</button></div>
+    <div class="hook-item"><p>"[Tool] just released something that changes everything. Watch before it goes viral."</p><button class="btn-copy" onclick="copyText(this, '[Tool] just released something that changes everything. Watch before it goes viral.')">Copy</button></div>
+    <div class="hook-item"><p>"If you use [tool] for business, you need to see this update."</p><button class="btn-copy" onclick="copyText(this, 'If you use [tool] for business, you need to see this update.')">Copy</button></div>
+  </div>
+
+  <div style="margin-bottom:20px">
+    <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:12px">⏱️ Time-Saving</div>
+    <div class="hook-item"><p>"This AI tool just saved me [X] hours. Here's exactly how."</p><button class="btn-copy" onclick="copyText(this, 'This AI tool just saved me [X] hours. Here\'s exactly how.')">Copy</button></div>
+    <div class="hook-item"><p>"Stop doing [task] manually. This AI does it in 30 seconds."</p><button class="btn-copy" onclick="copyText(this, 'Stop doing [task] manually. This AI does it in 30 seconds.')">Copy</button></div>
+    <div class="hook-item"><p>"What used to take my team 3 days now takes 20 minutes."</p><button class="btn-copy" onclick="copyText(this, 'What used to take my team 3 days now takes 20 minutes.')">Copy</button></div>
+  </div>
+
+  <div style="margin-bottom:20px">
+    <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:12px">😮 Jaw Drop / Shock</div>
+    <div class="hook-item"><p>"I tested [tool] for 24 hours. Here's what actually happened."</p><button class="btn-copy" onclick="copyText(this, 'I tested [tool] for 24 hours. Here\'s what actually happened.')">Copy</button></div>
+    <div class="hook-item"><p>"AI just did something I genuinely didn't think was possible yet."</p><button class="btn-copy" onclick="copyText(this, 'AI just did something I genuinely didn\'t think was possible yet.')">Copy</button></div>
+    <div class="hook-item"><p>"I asked AI to do my entire workday. Here's what it actually completed."</p><button class="btn-copy" onclick="copyText(this, 'I asked AI to do my entire workday. Here\'s what it actually completed.')">Copy</button></div>
+  </div>
+
+  <div style="margin-bottom:20px">
+    <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:12px">💬 Question / Curiosity</div>
+    <div class="hook-item"><p>"Why is nobody talking about this AI tool? It's free and it's insane."</p><button class="btn-copy" onclick="copyText(this, 'Why is nobody talking about this AI tool? It\'s free and it\'s insane.')">Copy</button></div>
+    <div class="hook-item"><p>"What if you could do [expensive thing] for free with AI?"</p><button class="btn-copy" onclick="copyText(this, 'What if you could do [expensive thing] for free with AI?')">Copy</button></div>
+    <div class="hook-item"><p>"Can AI actually replace [job/task]? I tested it."</p><button class="btn-copy" onclick="copyText(this, 'Can AI actually replace [job/task]? I tested it.')">Copy</button></div>
+  </div>
+</section>
+
+<!-- ── HASHTAG BANK ── -->
+<section id="hashtags">
+  <div class="section-header">
+    <h2>Hashtag Bank</h2>
+    <span class="badge badge-purple">Pre-built Sets</span>
+  </div>
+  <div class="tip">Use <strong>3–6 hashtags max</strong> per video. Pick 1-2 from Broad + 2-3 from a Niche set. Place in the first 3 lines of your caption.</div>
+  <div class="grid-3">
+    <div class="hashtag-set">
+      <h4>Broad AI (always include 1-2)</h4>
+      <span class="tag">#AItools</span><span class="tag">#AI</span><span class="tag">#ChatGPT</span><span class="tag">#AIforBusiness</span><span class="tag">#artificialintelligence</span>
+      <div class="copy-row"><button class="btn-copy" onclick="copyText(this, '#AItools #AI #AIforBusiness')">Copy Set</button></div>
+    </div>
+    <div class="hashtag-set">
+      <h4>Productivity / Business</h4>
+      <span class="tag">#productivity</span><span class="tag">#businesstips</span><span class="tag">#worksmarter</span><span class="tag">#entrepreneur</span><span class="tag">#smallbusiness</span>
+      <div class="copy-row"><button class="btn-copy" onclick="copyText(this, '#productivity #businesstips #worksmarter #entrepreneur')">Copy Set</button></div>
+    </div>
+    <div class="hashtag-set">
+      <h4>Content Creation</h4>
+      <span class="tag">#contentcreator</span><span class="tag">#socialmediatips</span><span class="tag">#contentmarketing</span><span class="tag">#marketingtips</span>
+      <div class="copy-row"><button class="btn-copy" onclick="copyText(this, '#contentcreator #socialmediatips #contentmarketing #marketingtips')">Copy Set</button></div>
+    </div>
+    <div class="hashtag-set">
+      <h4>Design / Visual Tools</h4>
+      <span class="tag">#Canva</span><span class="tag">#AIdesign</span><span class="tag">#graphicdesign</span><span class="tag">#Midjourney</span><span class="tag">#designhacks</span>
+      <div class="copy-row"><button class="btn-copy" onclick="copyText(this, '#Canva #AIdesign #graphicdesign #designhacks')">Copy Set</button></div>
+    </div>
+    <div class="hashtag-set">
+      <h4>AI Video / Avatars</h4>
+      <span class="tag">#AIvideo</span><span class="tag">#HeyGen</span><span class="tag">#RunwayAI</span><span class="tag">#KlingAI</span><span class="tag">#AIfilmmaking</span>
+      <div class="copy-row"><button class="btn-copy" onclick="copyText(this, '#AIvideo #HeyGen #KlingAI #AIfilmmaking')">Copy Set</button></div>
+    </div>
+    <div class="hashtag-set">
+      <h4>Automation / Agents</h4>
+      <span class="tag">#AIautomation</span><span class="tag">#AIagents</span><span class="tag">#Gemini</span><span class="tag">#Perplexity</span><span class="tag">#workflow</span>
+      <div class="copy-row"><button class="btn-copy" onclick="copyText(this, '#AIautomation #AIagents #workflow #productivity')">Copy Set</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PLATFORM CAPTIONS ── -->
+<section id="captions">
+  <div class="section-header">
+    <h2>Platform Captions</h2>
+    <span class="badge badge-teal">Customize Per Platform</span>
+  </div>
+  <div class="tip"><strong>Never paste the same caption everywhere.</strong> TikTok = hook + trend language. Instagram Reels = conversational + question. YouTube Shorts = SEO keyword title. Customize each one.</div>
+
+  <div style="font-size:13px;font-weight:700;margin-bottom:12px;color:var(--accent)">Example: Canva Magic Layers</div>
+
+  <div class="caption-card">
+    <div class="caption-platform">
+      <strong>TikTok</strong>
+      <button class="btn-copy" onclick="copyText(this, 'Canva just made every AI-generated image editable and I can\'t stop using it 👀\n\nUpload any image → Magic Layers → every element becomes independently editable. Works on Midjourney, ChatGPT, DALL-E images.\n\nThis just saved me 3 hours.\n\n#CanvaTips #AIdesign #CanvaMagic #AItools #graphicdesign')">Copy</button>
+    </div>
+    <div class="caption-body">Canva just made every AI-generated image editable and I can't stop using it 👀
+
+Upload any image → Magic Layers → every element becomes independently editable. Works on Midjourney, ChatGPT, DALL-E images.
+
+This just saved me 3 hours.
+
+#CanvaTips #AIdesign #CanvaMagic #AItools #graphicdesign</div>
+  </div>
+
+  <div class="caption-card">
+    <div class="caption-platform">
+      <strong>Instagram Reels</strong>
+      <button class="btn-copy" onclick="copyText(this, 'Has anyone tried Canva Magic Layers yet?\n\nI uploaded a flat Midjourney image and within 5 seconds every single element was independently editable — text boxes, movable objects, separate background. No more rebuilding from scratch.\n\nThis is the feature I\'ve been waiting for. What AI images are you working with right now?')">Copy</button>
+    </div>
+    <div class="caption-body">Has anyone tried Canva Magic Layers yet?
+
+I uploaded a flat Midjourney image and within 5 seconds every single element was independently editable — text boxes, movable objects, separate background. No more rebuilding from scratch.
+
+This is the feature I've been waiting for. What AI images are you working with right now?</div>
+  </div>
+
+  <div class="caption-card">
+    <div class="caption-platform">
+      <strong>YouTube Shorts</strong>
+      <button class="btn-copy" onclick="copyText(this, 'Canva Magic Layers Review 2026 — Turn Any AI Image Into an Editable Design')">Copy</button>
+    </div>
+    <div class="caption-body">Canva Magic Layers Review 2026 — Turn Any AI Image Into an Editable Design</div>
+  </div>
+</section>
+
+<!-- ── ALGORITHM RULES ── -->
+<section id="algorithm">
+  <div class="section-header">
+    <h2>Algorithm Rules</h2>
+    <span class="badge badge-yellow">Non-Negotiable</span>
+  </div>
+
+  <div class="rule-item">
+    <div class="rule-number">1</div>
+    <div class="rule-content">
+      <h4>Completion Rate &gt;70% is your only early metric</h4>
+      <p>If viewers scroll before finishing your video, the algorithm buries it. Every edit decision (trim dead air, add pattern interrupts, cut anything boring) serves this number. Check it 4 hours after posting.</p>
+    </div>
+  </div>
+
+  <div class="rule-item">
+    <div class="rule-number">2</div>
+    <div class="rule-content">
+      <h4>Shares and saves beat likes 3:1</h4>
+      <p>The algorithm weighs saves heavily — they signal "I want to come back to this." Always include a "save this" CTA. Never just ask for likes.</p>
+    </div>
+  </div>
+
+  <div class="rule-item">
+    <div class="rule-number">3</div>
+    <div class="rule-content">
+      <h4>Pattern interrupt every 3–5 seconds</h4>
+      <p>Add a text overlay, zoom cut, B-roll clip, or on-screen graphic every few seconds. This resets the viewer's attention and prevents scroll-aways mid-video.</p>
+    </div>
+  </div>
+
+  <div class="rule-item">
+    <div class="rule-number">4</div>
+    <div class="rule-content">
+      <h4>Trend-jack within 48 hours or it's too late</h4>
+      <p>When a new AI tool or feature drops, post within 24–48 hours. You'll rank in TikTok search before the competition crowds in. First-mover gets 10x the views.</p>
+    </div>
+  </div>
+
+  <div class="rule-item">
+    <div class="rule-number">5</div>
+    <div class="rule-content">
+      <h4>If a video hits &gt;70% completion in 4 hours → film a follow-up immediately</h4>
+      <p>A video riding the algorithm wave lifts your next video too. Film a Part 2 or "more detail" video the same day and post it within a few hours.</p>
+    </div>
+  </div>
+
+  <div class="rule-item">
+    <div class="rule-number">6</div>
+    <div class="rule-content">
+      <h4>1080p minimum, good lighting, clear audio — no exceptions</h4>
+      <p>Blurry or re-encoded clips are algorithmically downranked 40–60%. Film in front of a window (natural light) or invest in a cheap ring light. Use your phone's back camera.</p>
+    </div>
+  </div>
+
+  <div class="rule-item">
+    <div class="rule-number">7</div>
+    <div class="rule-content">
+      <h4>Stagger cross-posting by 15–30 minutes</h4>
+      <p>TikTok first. Then Instagram Reels (remove watermark first — Instagram downranks TikTok-watermarked content). Then YouTube Shorts with a keyword title.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── MONETIZATION ── -->
+<section id="monetization">
+  <div class="section-header">
+    <h2>Monetization Milestones</h2>
+    <span class="badge badge-green">Roadmap</span>
+  </div>
+
+  <div class="milestone">
+    <div class="milestone-followers">1K<br><span style="font-size:12px;color:var(--muted);font-weight:400">followers</span></div>
+    <div class="milestone-content">
+      <h4>Setup Phase (Month 1–2)</h4>
+      <ul>
+        <li>Post 2 videos/day consistently</li>
+        <li>Create profile on TikTok Creator Marketplace</li>
+        <li>Set up Beacons or Linktree in bio</li>
+        <li>Apply to AI tool affiliate programs (Canva Pro, HeyGen, ElevenLabs)</li>
+        <li>Start building email list — offer a free AI prompt template as lead magnet</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="milestone">
+    <div class="milestone-followers">10K<br><span style="font-size:12px;color:var(--muted);font-weight:400">followers</span></div>
+    <div class="milestone-content">
+      <h4>Creator Rewards + Affiliates (Month 3)</h4>
+      <ul>
+        <li>Apply for TikTok Creator Rewards Program ($0.40–$1.00 per 1K qualified views)</li>
+        <li>Requires 10K followers + 100K views in last 30 days</li>
+        <li>Push affiliate links in bio — AI tool audience converts well (high purchase intent)</li>
+        <li>Unlock TikTok Playlist feature — create "AI Business Tools 101" series</li>
+        <li>Start cross-posting to Reels + YouTube Shorts systematically</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="milestone">
+    <div class="milestone-followers">25K<br><span style="font-size:12px;color:var(--muted);font-weight:400">followers</span></div>
+    <div class="milestone-content">
+      <h4>First Brand Deals (Month 4–5)</h4>
+      <ul>
+        <li>Reach out directly to AI tool companies — email their marketing team</li>
+        <li>B2B niche rates at 25K engaged followers: $500–$2,500 per sponsored post</li>
+        <li>List on Collabstr, Grin, or AspireIQ creator marketplaces</li>
+        <li>Launch first digital product: "50 AI Prompts for Business" ($19–$49)</li>
+        <li>Goal: 4–5 brand deals/month = $2K–$10K/month</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="milestone">
+    <div class="milestone-followers">50K+<br><span style="font-size:12px;color:var(--muted);font-weight:400">followers</span></div>
+    <div class="milestone-content">
+      <h4>Scale — Multiple Income Streams (Month 6+)</h4>
+      <ul>
+        <li>Brand deals scale to $2,000–$10,000 per post in B2B/AI niche</li>
+        <li>Launch course or workshop: "AI for Business Masterclass"</li>
+        <li>Offer 1:1 AI workflow consulting ($500–$2,000/session)</li>
+        <li>YouTube hits 1K subscribers → unlock AdSense monetization</li>
+        <li>Newsletter monetization — sponsored issues to engaged list</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<script>
+  // ── Navigation active state ──
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('nav a');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(a => a.classList.remove('active'));
+        const active = document.querySelector(`nav a[href="#${entry.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { threshold: 0.3 });
+
+  sections.forEach(s => observer.observe(s));
+
+  // ── Copy to clipboard ──
+  function copyText(btn, text) {
+    navigator.clipboard.writeText(text).then(() => {
+      const original = btn.textContent;
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = original;
+        btn.classList.remove('copied');
+      }, 1500);
+    });
+  }
+
+  // ── Checklist persistence ──
+  function toggleCheck(item) {
+    const cb = item.querySelector('input[type="checkbox"]');
+    cb.checked = !cb.checked;
+    item.classList.toggle('done', cb.checked);
+    saveChecks();
+  }
+
+  function saveChecks() {
+    const state = {};
+    document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+      state[cb.id] = cb.checked;
+    });
+    localStorage.setItem('checklist', JSON.stringify(state));
+  }
+
+  function loadChecks() {
+    const state = JSON.parse(localStorage.getItem('checklist') || '{}');
+    document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+      if (state[cb.id]) {
+        cb.checked = true;
+        cb.closest('.checklist-item')?.classList.add('done');
+      }
+    });
+  }
+
+  function resetDay() {
+    document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+      cb.checked = false;
+      cb.closest('.checklist-item')?.classList.remove('done');
+    });
+    localStorage.removeItem('checklist');
+
+    const todayVids = parseInt(localStorage.getItem('videos_today') || '0');
+    const total = parseInt(localStorage.getItem('total_videos') || '0');
+    localStorage.setItem('total_videos', total + todayVids);
+    localStorage.setItem('videos_today', '0');
+    localStorage.setItem('last_reset', new Date().toDateString());
+    updateCounters();
+  }
+
+  // ── Counters ──
+  function updateCounters() {
+    const startDate = localStorage.getItem('start_date');
+    if (!startDate) {
+      localStorage.setItem('start_date', new Date().toDateString());
+    }
+    const start = new Date(localStorage.getItem('start_date'));
+    const today = new Date();
+    const dayNum = Math.floor((today - start) / (1000 * 60 * 60 * 24)) + 1;
+    document.getElementById('day-counter').textContent = dayNum;
+
+    const total = parseInt(localStorage.getItem('total_videos') || '0');
+    const todayVids = parseInt(localStorage.getItem('videos_today') || '0');
+    document.getElementById('video-counter').textContent = todayVids;
+    document.getElementById('total-counter').textContent = total + todayVids;
+
+    const daysLeft = Math.max(0, 60 - dayNum);
+    document.getElementById('days-to-goal').textContent = daysLeft;
+  }
+
+  // ── Video slot tracking ──
+  document.getElementById('video1-select').addEventListener('change', function() {
+    if (this.value) trackVideo();
+  });
+  document.getElementById('video2-select').addEventListener('change', function() {
+    if (this.value) trackVideo();
+  });
+
+  let trackedVideos = new Set();
+  function trackVideo() {
+    const v1 = document.getElementById('video1-select').value;
+    const v2 = document.getElementById('video2-select').value;
+    const newSet = new Set([v1, v2].filter(Boolean));
+    const diff = [...newSet].filter(v => !trackedVideos.has(v));
+    if (diff.length > 0) {
+      const current = parseInt(localStorage.getItem('videos_today') || '0');
+      localStorage.setItem('videos_today', current + diff.length);
+      diff.forEach(v => trackedVideos.add(v));
+      updateCounters();
+    }
+  }
+
+  // ── Auto-reset daily ──
+  function checkDailyReset() {
+    const lastReset = localStorage.getItem('last_reset');
+    const today = new Date().toDateString();
+    if (lastReset && lastReset !== today) {
+      const todayVids = parseInt(localStorage.getItem('videos_today') || '0');
+      const total = parseInt(localStorage.getItem('total_videos') || '0');
+      localStorage.setItem('total_videos', total + todayVids);
+      localStorage.setItem('videos_today', '0');
+      localStorage.setItem('last_reset', today);
+    }
+    if (!lastReset) localStorage.setItem('last_reset', today);
+  }
+
+  // ── Init ──
+  checkDailyReset();
+  loadChecks();
+  updateCounters();
+</script>
+</body>
+</html>
