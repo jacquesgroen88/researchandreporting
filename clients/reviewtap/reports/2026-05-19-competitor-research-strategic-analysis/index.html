@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ReviewTap — Competitor Research & Strategic Analysis</title>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --bg2: #12121a;
+      --bg3: #1a1a26;
+      --border: rgba(255,255,255,0.07);
+      --text: #f0f0f5;
+      --text2: rgba(240,240,245,0.60);
+      --text3: rgba(240,240,245,0.35);
+      --accent: #6366f1;
+      --accent2: #818cf8;
+      --green: #22c55e;
+      --red: #ef4444;
+      --amber: #f59e0b;
+      --blue: #3b82f6;
+      --purple: #a855f7;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    /* ── Layout ── */
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+    /* ── Hero ── */
+    .hero {
+      background: radial-gradient(ellipse at 50% -20%, rgba(99,102,241,0.20) 0%, transparent 60%);
+      border-bottom: 1px solid var(--border);
+      padding: 60px 0 48px;
+      text-align: center;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(99,102,241,0.15);
+      border: 1px solid rgba(99,102,241,0.35);
+      color: var(--accent2);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      padding: 4px 14px;
+      border-radius: 99px;
+      margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-size: clamp(28px, 5vw, 46px);
+      font-weight: 800;
+      letter-spacing: -0.8px;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+    .hero h1 span { color: var(--accent2); }
+    .hero p {
+      font-size: 17px;
+      color: var(--text2);
+      max-width: 560px;
+      margin: 0 auto;
+    }
+    .meta { margin-top: 24px; font-size: 13px; color: var(--text3); }
+
+    /* ── TOC ── */
+    .toc {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 32px;
+      margin: 40px 0;
+    }
+    .toc h2 { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text3); margin-bottom: 16px; }
+    .toc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; }
+    .toc a {
+      display: flex; align-items: center; gap: 8px;
+      color: var(--text2); text-decoration: none; font-size: 14px;
+      padding: 7px 10px; border-radius: 8px; transition: all 0.15s;
+    }
+    .toc a:hover { background: rgba(99,102,241,0.10); color: var(--accent2); }
+    .toc a .num { font-weight: 700; color: var(--accent); font-size: 13px; min-width: 20px; }
+
+    /* ── Sections ── */
+    section { padding: 60px 0; border-bottom: 1px solid var(--border); }
+    section:last-child { border-bottom: none; }
+    .section-label {
+      display: inline-block;
+      font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+      color: var(--accent2); margin-bottom: 12px;
+    }
+    h2.section-title {
+      font-size: clamp(22px, 3vw, 32px);
+      font-weight: 800; letter-spacing: -0.4px; margin-bottom: 8px;
+    }
+    .section-desc { color: var(--text2); font-size: 15px; margin-bottom: 36px; max-width: 660px; }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+    }
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+
+    /* ── Competitor cards ── */
+    .competitor-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      transition: border-color 0.2s;
+    }
+    .competitor-card:hover { border-color: rgba(99,102,241,0.25); }
+    .comp-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .comp-name { font-size: 18px; font-weight: 800; }
+    .comp-rating {
+      display: flex; align-items: center; gap: 5px;
+      background: rgba(245,158,11,0.12);
+      border: 1px solid rgba(245,158,11,0.25);
+      padding: 3px 10px; border-radius: 99px;
+      font-size: 13px; font-weight: 600; color: var(--amber);
+    }
+    .comp-tagline { font-size: 13px; color: var(--text3); margin-bottom: 16px; font-style: italic; }
+    .comp-pricing { margin-bottom: 16px; }
+    .pricing-tier {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 14px;
+    }
+    .pricing-tier:last-child { border-bottom: none; }
+    .tier-name { color: var(--text2); }
+    .tier-price { font-weight: 700; color: var(--text); }
+    .tier-free { color: var(--green); font-weight: 700; }
+    .features-list { list-style: none; }
+    .features-list li { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; color: var(--text2); padding: 4px 0; }
+    .features-list li::before { content: "•"; color: var(--accent2); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+    .comp-tag {
+      display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 8px;
+      border-radius: 99px; margin: 2px;
+    }
+    .tag-green { background: rgba(34,197,94,0.12); color: var(--green); border: 1px solid rgba(34,197,94,0.2); }
+    .tag-red { background: rgba(239,68,68,0.12); color: var(--red); border: 1px solid rgba(239,68,68,0.2); }
+    .tag-amber { background: rgba(245,158,11,0.12); color: var(--amber); border: 1px solid rgba(245,158,11,0.2); }
+    .tag-blue { background: rgba(59,130,246,0.12); color: var(--blue); border: 1px solid rgba(59,130,246,0.2); }
+
+    /* ── Feature comparison table ── */
+    .table-wrap { overflow-x: auto; border-radius: 16px; border: 1px solid var(--border); }
+    table { width: 100%; border-collapse: collapse; min-width: 800px; }
+    thead tr { background: var(--bg3); }
+    th {
+      padding: 14px 16px; text-align: left; font-size: 12px; font-weight: 700;
+      letter-spacing: 0.5px; text-transform: uppercase; color: var(--text3);
+      border-bottom: 1px solid var(--border);
+    }
+    th:first-child { min-width: 200px; }
+    td {
+      padding: 13px 16px; font-size: 14px; border-bottom: 1px solid rgba(255,255,255,0.04);
+      vertical-align: middle;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(255,255,255,0.015); }
+    .reviewtap-col { background: rgba(99,102,241,0.05); }
+    .reviewtap-col td { color: var(--accent2); font-weight: 600; }
+    .check { color: var(--green); font-size: 16px; }
+    .cross { color: rgba(255,255,255,0.2); font-size: 16px; }
+    .partial { color: var(--amber); font-size: 16px; }
+    .feature-name { font-weight: 600; color: var(--text); }
+    .feature-sub { font-size: 12px; color: var(--text3); display: block; margin-top: 1px; }
+
+    /* ── Pricing comparison ── */
+    .pricing-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 16px; }
+    .price-card {
+      background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 20px 16px; text-align: center;
+    }
+    .price-card.reviewtap-highlight {
+      background: rgba(99,102,241,0.08);
+      border-color: rgba(99,102,241,0.35);
+    }
+    .price-brand { font-size: 13px; font-weight: 700; color: var(--text2); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .price-main { font-size: 26px; font-weight: 800; color: var(--text); line-height: 1; }
+    .price-period { font-size: 12px; color: var(--text3); margin-top: 4px; }
+    .price-note { font-size: 12px; color: var(--text2); margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
+
+    /* ── SWOT ── */
+    .swot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media (max-width: 640px) { .swot-grid { grid-template-columns: 1fr; } }
+    .swot-card {
+      border-radius: 16px; padding: 28px;
+    }
+    .swot-s { background: rgba(34,197,94,0.07); border: 1px solid rgba(34,197,94,0.15); }
+    .swot-w { background: rgba(239,68,68,0.07); border: 1px solid rgba(239,68,68,0.15); }
+    .swot-o { background: rgba(59,130,246,0.07); border: 1px solid rgba(59,130,246,0.15); }
+    .swot-t { background: rgba(245,158,11,0.07); border: 1px solid rgba(245,158,11,0.15); }
+    .swot-header { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+    .swot-icon { font-size: 22px; }
+    .swot-title { font-size: 16px; font-weight: 800; }
+    .swot-s .swot-title { color: var(--green); }
+    .swot-w .swot-title { color: var(--red); }
+    .swot-o .swot-title { color: var(--blue); }
+    .swot-t .swot-title { color: var(--amber); }
+    .swot-list { list-style: none; }
+    .swot-list li {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 14px; color: var(--text2); padding: 6px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .swot-list li:last-child { border-bottom: none; }
+    .swot-list li .dot { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+    .swot-s .dot { color: var(--green); }
+    .swot-w .dot { color: var(--red); }
+    .swot-o .dot { color: var(--blue); }
+    .swot-t .dot { color: var(--amber); }
+
+    /* ── UI Audit ── */
+    .audit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media (max-width: 700px) { .audit-grid { grid-template-columns: 1fr; } }
+    .audit-item {
+      background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 22px;
+    }
+    .audit-severity {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;
+      padding: 3px 10px; border-radius: 99px; margin-bottom: 12px;
+    }
+    .sev-critical { background: rgba(239,68,68,0.12); color: var(--red); border: 1px solid rgba(239,68,68,0.25); }
+    .sev-high { background: rgba(245,158,11,0.12); color: var(--amber); border: 1px solid rgba(245,158,11,0.25); }
+    .sev-medium { background: rgba(59,130,246,0.12); color: var(--blue); border: 1px solid rgba(59,130,246,0.25); }
+    .sev-low { background: rgba(34,197,94,0.12); color: var(--green); border: 1px solid rgba(34,197,94,0.25); }
+    .audit-title { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+    .audit-desc { font-size: 13px; color: var(--text2); line-height: 1.6; margin-bottom: 10px; }
+    .audit-fix {
+      background: rgba(99,102,241,0.08); border: 1px solid rgba(99,102,241,0.15);
+      border-radius: 8px; padding: 10px 14px; font-size: 13px; color: var(--accent2);
+    }
+    .audit-fix strong { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px; opacity: 0.7; }
+
+    /* ── Priority roadmap ── */
+    .roadmap-list { display: flex; flex-direction: column; gap: 12px; }
+    .roadmap-item {
+      display: flex; align-items: flex-start; gap: 16px;
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 14px; padding: 20px 24px;
+      transition: border-color 0.2s;
+    }
+    .roadmap-item:hover { border-color: rgba(99,102,241,0.25); }
+    .roadmap-num {
+      width: 32px; height: 32px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 800; flex-shrink: 0;
+    }
+    .p1 { background: rgba(239,68,68,0.15); color: var(--red); }
+    .p2 { background: rgba(245,158,11,0.15); color: var(--amber); }
+    .p3 { background: rgba(59,130,246,0.15); color: var(--blue); }
+    .p4 { background: rgba(168,85,247,0.15); color: var(--purple); }
+    .p5 { background: rgba(34,197,94,0.15); color: var(--green); }
+    .roadmap-body { flex: 1; }
+    .roadmap-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+    .roadmap-desc { font-size: 13px; color: var(--text2); line-height: 1.6; }
+    .roadmap-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+    .roadmap-impact {
+      font-size: 12px; font-weight: 600; padding: 2px 10px; border-radius: 99px;
+    }
+    .impact-high { background: rgba(34,197,94,0.1); color: var(--green); border: 1px solid rgba(34,197,94,0.2); }
+    .impact-med { background: rgba(59,130,246,0.1); color: var(--blue); border: 1px solid rgba(59,130,246,0.2); }
+    .impact-low { background: rgba(255,255,255,0.05); color: var(--text3); border: 1px solid var(--border); }
+    .effort-tag { font-size: 12px; color: var(--text3); padding: 2px 10px; border-radius: 99px; background: rgba(255,255,255,0.04); border: 1px solid var(--border); }
+
+    /* ── Callout ── */
+    .callout {
+      border-radius: 14px; padding: 20px 24px; margin: 24px 0;
+      display: flex; gap: 14px; align-items: flex-start;
+    }
+    .callout-green { background: rgba(34,197,94,0.07); border: 1px solid rgba(34,197,94,0.18); }
+    .callout-red { background: rgba(239,68,68,0.07); border: 1px solid rgba(239,68,68,0.18); }
+    .callout-amber { background: rgba(245,158,11,0.07); border: 1px solid rgba(245,158,11,0.18); }
+    .callout-blue { background: rgba(59,130,246,0.07); border: 1px solid rgba(59,130,246,0.18); }
+    .callout-icon { font-size: 20px; flex-shrink: 0; line-height: 1.5; }
+    .callout-body { flex: 1; font-size: 14px; color: var(--text2); line-height: 1.65; }
+    .callout-body strong { color: var(--text); font-weight: 700; }
+
+    /* ── Divider ── */
+    hr { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+
+    /* ── Responsive ── */
+    @media (max-width: 640px) {
+      .card-grid { grid-template-columns: 1fr; }
+      .pricing-grid { grid-template-columns: repeat(2, 1fr); }
+      section { padding: 40px 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="container">
+      <div class="hero-badge">Strategic Research — May 2026</div>
+      <h1>ReviewTap vs the<br><span>Digital Card Market</span></h1>
+      <p>Deep-dive into 7 top competitors, a feature-by-feature gap analysis, a SWOT assessment, and a full UI/UX audit of the current ReviewTap experience.</p>
+      <p class="meta">Research scope: HiHello · Popl · Blinq · Tapni · V1CE · Mobilo · Linq &nbsp;|&nbsp; Compiled May 2026</p>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- TOC -->
+    <div class="toc">
+      <h2>Table of Contents</h2>
+      <div class="toc-grid">
+        <a href="#market"><span class="num">01</span> Market Overview</a>
+        <a href="#competitors"><span class="num">02</span> Competitor Profiles</a>
+        <a href="#features"><span class="num">03</span> Feature Comparison</a>
+        <a href="#pricing"><span class="num">04</span> Pricing Comparison</a>
+        <a href="#swot"><span class="num">05</span> SWOT Analysis</a>
+        <a href="#ui-audit"><span class="num">06</span> UI / UX Audit</a>
+        <a href="#gaps"><span class="num">07</span> Key Gaps to Close</a>
+        <a href="#roadmap"><span class="num">08</span> Priority Roadmap</a>
+      </div>
+    </div>
+
+    <!-- 01 MARKET OVERVIEW -->
+    <section id="market">
+      <span class="section-label">01 — Context</span>
+      <h2 class="section-title">Market Overview</h2>
+      <p class="section-desc">The digital business card market is growing fast but fragmented. Here's where the industry stands and where ReviewTap fits.</p>
+
+      <div class="card-grid">
+        <div class="card">
+          <div style="font-size:28px;margin-bottom:10px;">📈</div>
+          <div style="font-size:18px;font-weight:800;margin-bottom:8px;">$242M → $600M+</div>
+          <div style="font-size:13px;color:var(--text2)">Global digital business card market. Projected CAGR of ~11% through 2030 driven by hybrid work, sustainability mandates, and CRM integration demand.</div>
+        </div>
+        <div class="card">
+          <div style="font-size:28px;margin-bottom:10px;">🏷️</div>
+          <div style="font-size:18px;font-weight:800;margin-bottom:8px;">Two buyer types</div>
+          <div style="font-size:13px;color:var(--text2)"><strong style="color:var(--text)">SMB/Consumer</strong>: HiHello, Blinq, Tapni. Cheap or free, self-serve, profile-link focus. <strong style="color:var(--text)">Enterprise</strong>: Mobilo, V1CE. Per-user pricing, SSO, CRM, admin control panels. ReviewTap sits between both with a physical NFC card as the entry point.</div>
+        </div>
+        <div class="card">
+          <div style="font-size:28px;margin-bottom:10px;">📱</div>
+          <div style="font-size:18px;font-weight:800;margin-bottom:8px;">NFC as a differentiator</div>
+          <div style="font-size:13px;color:var(--text2)">Popl pioneered the "NFC card + app" bundle. Tapni now includes free NFC cards with Pro plans. Mobilo sells cards at $5–$139. ReviewTap's R649 all-in pricing (card + profile + setup) is competitive but the value story isn't told on the card page.</div>
+        </div>
+        <div class="card">
+          <div style="font-size:28px;margin-bottom:10px;">🤖</div>
+          <div style="font-size:18px;font-weight:800;margin-bottom:8px;">AI is the new battlefield</div>
+          <div style="font-size:13px;color:var(--text2)">Blinq launched AI-powered contact enrichment and a "notetaker" that takes notes during calls. Popl added AI-assisted OCR for business card scanning. Whoever offers the smartest post-tap workflow will win enterprise accounts.</div>
+        </div>
+      </div>
+
+      <div class="callout callout-amber" style="margin-top:24px;">
+        <div class="callout-icon">⚠️</div>
+        <div class="callout-body"><strong>The big shift in 2025:</strong> Linq (once NFC-card focused) has completely pivoted to AI messaging APIs. This is a warning sign — standalone digital card platforms that don't build deeper value (analytics, CRM, lead capture) risk becoming commoditised or irrelevant. ReviewTap must build stickiness beyond the physical card.</div>
+      </div>
+    </section>
+
+    <!-- 02 COMPETITOR PROFILES -->
+    <section id="competitors">
+      <span class="section-label">02 — Competitors</span>
+      <h2 class="section-title">Competitor Profiles</h2>
+      <p class="section-desc">Seven players, each with a distinct positioning. Understanding what makes each one tick reveals where ReviewTap can win.</p>
+
+      <div class="card-grid">
+
+        <!-- HiHello -->
+        <div class="competitor-card">
+          <div class="comp-header">
+            <div class="comp-name">HiHello</div>
+            <div class="comp-rating">★ 4.7</div>
+          </div>
+          <div class="comp-tagline">"The most feature-rich free option"</div>
+          <div class="comp-pricing">
+            <div class="pricing-tier">
+              <span class="tier-name">Free</span>
+              <span class="tier-free">Free — 4 cards</span>
+            </div>
+            <div class="pricing-tier">
+              <span class="tier-name">Professional</span>
+              <span class="tier-price">$6–$8 / mo</span>
+            </div>
+            <div class="pricing-tier">
+              <span class="tier-name">Business</span>
+              <span class="tier-price">$5–$6 / user / mo</span>
+            </div>
+          </div>
+          <ul class="features-list">
+            <li>Full card analytics (views, clicks per link)</li>
+            <li>Email signature generator with live card</li>
+            <li>Business card scanner (OCR + AI)</li>
+            <li>CRM integrations (Salesforce, HubSpot)</li>
+            <li>Virtual backgrounds with card overlay</li>
+            <li>Multiple cards per account</li>
+            <li>NFC cards available as add-on purchase</li>
+          </ul>
+          <div style="margin-top:14px;">
+            <span class="comp-tag tag-green">Analytics</span>
+            <span class="comp-tag tag-green">Email sig</span>
+            <span class="comp-tag tag-blue">CRM sync</span>
+            <span class="comp-tag tag-amber">Free tier strong</span>
+          </div>
+        </div>
+
+        <!-- Popl -->
+        <div class="competitor-card">
+          <div class="comp-header">
+            <div class="comp-name">Popl</div>
+            <div class="comp-rating">★ 4.6</div>
+          </div>
+          <div class="comp-tagline">"Pioneer of NFC + profile, now GTM-focused"</div>
+          <div class="comp-pricing">
+            <div class="pricing-tier">
+              <span class="tier-name">Free</span>
+              <span class="tier-free">Free</span>
+            </div>
+            <div class="pricing-tier">
+              <span class="tier-name">Pro</span>
+              <span class="tier-price">$6.49–$7.99 / mo</span>
+            </div>
+            <div class="pricing-tier">
+              <span class="tier-name">Pro+</span>
+              <span class="tier-price">$14.99 / mo</span>
+            </div>
+          </div>
+          <ul class="features-list">
+            <li>AI-powered business card OCR scanner</li>
+            <li>Lead capture with customisable fields</li>
+            <li>CRM integrations (50+ via Zapier)</li>
+            <li>Team management + admin dashboard</li>
+            <li>Auto follow-up email / SMS sequences</li>
+            <li>Physical NFC card products ($17–$80)</li>
+            <li>Profile analytics with link click tracking</li>
+          </ul>
+          <div style="margin-top:14px;">
+            <span class="comp-tag tag-green">Lead capture</span>
+            <span class="comp-tag tag-green">Auto follow-up</span>
+            <span class="comp-tag tag-blue">CRM</span>
+            <span class="comp-tag tag-amber">Strong hardware</span>
+          </div>
+        </div>
+
+        <!-- Blinq -->
+        <div class="competitor-card">
+          <div class="comp-header">
+            <div class="comp-name">Blinq</div>
+            <div class="comp-rating">★ 4.9</div>
+          </div>
+          <div class="comp-tagline">"Fastest-growing, cleanest UX, no-branding free tier"</div>
+          <div class="comp-pricing">
+            <div class="pricing-tier">
+              <span class="tier-name">Free</span>
+              <span class="tier-free">Free — 2 cards, NO watermark</span>
+            </div>
+            <div class="pricing-tier">
+              <span class="tier-name">Premium</span>
+              <span class="tier-price">$7.33 / mo (annual)</span>
+            </div>
+            <div class="pricing-tier">
+              <span class="tier-name">Business</span>
+              <span class="tier-price">$4.99 / user / mo</span>
+            </div>
+          </div>
+          <ul class="features-list">
+            <li>2.5M+ users — fastest growing platform</li>
+            <li>AI contact enrichment from LinkedIn data</li>
+            <li>AI "notetaker" for calls & meetings</li>
+            <li>No ReviewTap branding even on free tier</li>
+            <li>Apple/Google Wallet passes built-in</li>
+            <li>Deep CRM integrations</li>
+            <li>NFC cards + QR stickers from $15</li>
+          </ul>
+          <div style="margin-top:14px;">
+            <span class="comp-tag tag-green">No branding free</span>
+            <span class="comp-tag tag-green">AI enrichment</span>
+            <span class="comp-tag tag-blue">Wallet passes</span>
+            <span class="comp-tag tag-red">Most threatening</span>
+          </div>
+        </div>
+
+        <!-- Tapni -->
+        <div class="competitor-card">
+          <div class="comp-header">
+            <div class="comp-name">Tapni</div>
+            <div class="comp-rating">★ 4.5</div>
+          </div>
+          <div class="comp-tagline">"Best value for money, European focus"</div>
+          <div class="comp-pricing">
+            <div class="pricing-tier">
+              <span class="tier-name">Free</span>
+              <span class="tier-free">Free — basic</span>
+            </div>
+            <div class="pricing-tier">
+              <span class="tier-name">Pro</span>
+              <span class="tier-price">$2.49 / mo — includes lifetime analytics</span>
+            </div>
+            <div class="pricing-tier">
+              <span class="tier-name">Business</span>
+              <span class="tier-price">$4.99 / user / mo — includes free NFC cards</span>
+            </div>
+          </div>
+          <ul class="features-list">
+            <li>Cheapest paid tier with analytics in market</li>
+            <li>Business plan INCLUDES free NFC cards</li>
+            <li>Lifetime analytics (not lost on downgrade)</li>
+            <li>Custom domain support</li>
+            <li>Team dashboard and bulk card creation</li>
+            <li>Multiple card designs / templates</li>
+            <li>Android and iOS app with widget</li>
+          </ul>
+          <div style="margin-top:14px;">
+            <span class="comp-tag tag-green">Best value</span>
+            <span class="comp-tag tag-green">Cards included</span>
+            <span class="comp-tag tag-blue">Custom domain</span>
+          </div>
+        </div>
+
+        <!-- V1CE -->
+        <div class="competitor-card">
+          <div class="comp-header">
+            <div class="comp-name">V1CE</div>
+            <div class="comp-rating">★ 4.4</div>
+          </div>
+          <div class="comp-tagline">"Premium hardware-first brand"</div>
+          <div class="comp-pricing">
+            <div class="pricing-tier">
+              <span class="tier-name">Platform</span>
+              <span class="tier-price">$197 flat / unlimited users</span>
+            </div>
+            <div class="pricing-tier">
+              <span class="tier-name">NFC Cards</span>
+              <span class="tier-price">$79–$450 each</span>
+            </div>
+            <div class="pricing-tier">
+              <span class="tier-name">Trial</span>
+              <span class="tier-price">30 days free</span>
+            </div>
+          </div>
+          <ul class="features-list">
+            <li>Premium metal and wood card options</li>
+            <li>Flat platform fee — unlimited users</li>
+            <li>Google and Apple Wallet support</li>
+            <li>Profile analytics</li>
+            <li>Automated follow-up sequences</li>
+            <li>CRM integrations (HubSpot, Salesforce)</li>
+            <li>Custom branding for teams</li>
+          </ul>
+          <div style="margin-top:14px;">
+            <span class="comp-tag tag-green">Flat pricing</span>
+            <span class="comp-tag tag-green">Premium cards</span>
+            <span class="comp-tag tag-amber">High hardware cost</span>
+          </div>
+        </div>
+
+        <!-- Mobilo -->
+        <div class="competitor-card">
+          <div class="comp-header">
+            <div class="comp-name">Mobilo</div>
+            <div class="comp-rating">★ 4.6</div>
+          </div>
+          <div class="comp-tagline">"#1 enterprise platform, lead-gen focused"</div>
+          <div class="comp-pricing">
+            <div class="pricing-tier">
+              <span class="tier-name">No free tier</span>
+              <span class="tier-price" style="color:var(--red)">Cards required to start</span>
+            </div>
+            <div class="pricing-tier">
+              <span class="tier-name">Cards</span>
+              <span class="tier-price">$5–$139 each</span>
+            </div>
+            <div class="pricing-tier">
+              <span class="tier-name">Platform</span>
+              <span class="tier-price">$6.99 / user / mo</span>
+            </div>
+          </div>
+          <ul class="features-list">
+            <li>Real-time analytics with geolocation</li>
+            <li>Lead gen mode — visitor fills YOUR form</li>
+            <li>Native Salesforce / HubSpot integration</li>
+            <li>SSO + admin controls for enterprise</li>
+            <li>Custom landing page builder</li>
+            <li>NFC + QR + link all on one card</li>
+            <li>Mass card management for large teams</li>
+          </ul>
+          <div style="margin-top:14px;">
+            <span class="comp-tag tag-green">Enterprise #1</span>
+            <span class="comp-tag tag-green">Geo analytics</span>
+            <span class="comp-tag tag-red">No free tier</span>
+            <span class="comp-tag tag-blue">Salesforce native</span>
+          </div>
+        </div>
+
+        <!-- Linq -->
+        <div class="competitor-card">
+          <div class="comp-header">
+            <div class="comp-name">Linq</div>
+            <div class="comp-rating">★ 3.8</div>
+          </div>
+          <div class="comp-tagline">"Pivoted away — cautionary tale"</div>
+          <div class="comp-pricing">
+            <div class="pricing-tier">
+              <span class="tier-name">Status (2025)</span>
+              <span class="tier-price" style="color:var(--red)">Pivoted to AI APIs</span>
+            </div>
+          </div>
+          <ul class="features-list">
+            <li>Formerly NFC card + profile platform</li>
+            <li>Early 2025: abandoned consumer cards</li>
+            <li>Now: B2B AI messaging API product</li>
+            <li>Proved digital cards alone aren't a business</li>
+            <li>Key lesson: need deep value beyond profile link</li>
+          </ul>
+          <div style="margin-top:14px;">
+            <span class="comp-tag tag-red">Pivoted away</span>
+            <span class="comp-tag tag-amber">Cautionary tale</span>
+          </div>
+          <div class="callout callout-amber" style="margin-top:14px;padding:12px 14px;">
+            <div class="callout-icon" style="font-size:16px;">💡</div>
+            <div class="callout-body" style="font-size:13px;"><strong>Lesson for ReviewTap:</strong> Pure "profile link" platforms without analytics, CRM, or business value get commoditised. Build the stickiness layer early.</div>
+          </div>
+        </div>
+
+      </div><!-- /card-grid -->
+    </section>
+
+    <!-- 03 FEATURE COMPARISON -->
+    <section id="features">
+      <span class="section-label">03 — Features</span>
+      <h2 class="section-title">Feature Comparison</h2>
+      <p class="section-desc">Where ReviewTap stands today against the top 5 active competitors.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th class="reviewtap-col" style="color:var(--accent2);">ReviewTap ✦</th>
+              <th>HiHello</th>
+              <th>Blinq</th>
+              <th>Popl</th>
+              <th>Tapni</th>
+              <th>Mobilo</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Profile basics -->
+            <tr>
+              <td><span class="feature-name">Custom profile page</span><span class="feature-sub">Name, photo, bio, links</span></td>
+              <td class="reviewtap-col"><span class="check">✓</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="check">✓</span></td>
+            </tr>
+            <tr>
+              <td><span class="feature-name">Multiple card layouts</span><span class="feature-sub">Classic, Minimal, Bold</span></td>
+              <td class="reviewtap-col"><span class="check">✓</span></td>
+              <td><span class="partial">~</span></td>
+              <td><span class="partial">~</span></td>
+              <td><span class="partial">~</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="check">✓</span></td>
+            </tr>
+            <tr>
+              <td><span class="feature-name">Light &amp; dark theme</span></td>
+              <td class="reviewtap-col"><span class="check">✓</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="check">✓</span></td>
+            </tr>
+            <tr>
+              <td><span class="feature-name">Brand colour customisation</span></td>
+              <td class="reviewtap-col"><span class="check">✓</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="partial">~</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="check">✓</span></td>
+            </tr>
+            <tr>
+              <td><span class="feature-name">Cover / banner image</span><span class="feature-sub">LinkedIn-style header</span></td>
+              <td class="reviewtap-col"><span class="check">✓</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="cross">✗</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="partial">~</span></td>
+              <td><span class="check">✓</span></td>
+            </tr>
+            <tr>
+              <td><span class="feature-name">NFC physical card</span></td>
+              <td class="reviewtap-col"><span class="check">✓</span></td>
+              <td><span class="partial">~ add-on</span></td>
+              <td><span class="partial">~ add-on</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="check">✓ incl.</span></td>
+              <td><span class="check">✓</span></td>
+            </tr>
+            <tr>
+              <td><span class="feature-name">vCard / Save Contact (.vcf)</span></td>
+              <td class="reviewtap-col"><span class="check">✓</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="check">✓</span></td>
+            </tr>
+            <tr>
+              <td><span class="feature-name">QR code generation</span></td>
+              <td class="reviewtap-col"><span class="check">✓</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="check">✓</span></td>
+            </tr>
+            <tr>
+              <td><span class="feature-name">Google Wallet pass</span></td>
+              <td class="reviewtap-col"><span class="check">✓</span></td>
+              <td><span class="cross">✗</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="cross">✗</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="check">✓</span></td>
+            </tr>
+            <!-- Lead gen -->
+            <tr style="background:rgba(255,255,255,0.01)">
+              <td><span class="feature-name">Lead capture form</span><span class="feature-sub">Visitor leaves their details</span></td>
+              <td class="reviewtap-col"><span class="check">✓</span></td>
+              <td><span class="cross">✗</span></td>
+              <td><span class="cross">✗</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="partial">~</span></td>
+              <td><span class="check">✓</span></td>
+            </tr>
+            <tr>
+              <td><span class="feature-name">Lead dashboard (admin)</span></td>
+              <td class="reviewtap-col"><span class="check">✓</span></td>
+              <td><span class="cross">✗</span></td>
+              <td><span class="cross">✗</span></td>
+              <td><span class="check">✓ CRM</span></td>
+              <td><span class="partial">~</span></td>
+              <td><span class="check">✓</span></td>
+            </tr>
+            <tr>
+              <td><span class="feature-name">Card analytics</span><span class="feature-sub">Views, link clicks per card</span></td>
+              <td class="reviewtap-col"><span class="cross" style="color:var(--red);">✗ Missing</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="check">✓ + geo</span></td>
+            </tr>
+            <tr>
+              <td><span class="feature-name">CRM integrations</span></td>
+              <td class="reviewtap-col"><span class="cross" style="color:var(--red);">✗ Missing</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="check">✓ 50+</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="check">✓ native</span></td>
+            </tr>
+            <!-- Self-service -->
+            <tr style="background:rgba(255,255,255,0.01)">
+              <td><span class="feature-name">Magic edit link (self-service)</span><span class="feature-sub">Client updates card without admin</span></td>
+              <td class="reviewtap-col"><span class="partial" style="color:var(--amber);">~ token exists, not shown</span></td>
+              <td><span class="check">✓ full app</span></td>
+              <td><span class="check">✓ full app</span></td>
+              <td><span class="check">✓ full app</span></td>
+              <td><span class="check">✓ full app</span></td>
+              <td><span class="check">✓ full app</span></td>
+            </tr>
+            <tr>
+              <td><span class="feature-name">Post-creation success screen</span><span class="feature-sub">Shows card URL, edit link, share</span></td>
+              <td class="reviewtap-col"><span class="cross" style="color:var(--red);">✗ Redirects immediately</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="check">✓</span></td>
+            </tr>
+            <tr>
+              <td><span class="feature-name">Email signature generation</span></td>
+              <td class="reviewtap-col"><span class="cross" style="color:var(--red);">✗ Missing</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="cross">✗</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="cross">✗</span></td>
+              <td><span class="check">✓</span></td>
+            </tr>
+            <tr>
+              <td><span class="feature-name">Link emoji / visual thumbnails</span></td>
+              <td class="reviewtap-col"><span class="cross" style="color:var(--red);">✗ Missing</span></td>
+              <td><span class="cross">✗</span></td>
+              <td><span class="cross">✗</span></td>
+              <td><span class="cross">✗</span></td>
+              <td><span class="partial">~</span></td>
+              <td><span class="cross">✗</span></td>
+            </tr>
+            <tr>
+              <td><span class="feature-name">AI contact enrichment</span></td>
+              <td class="reviewtap-col"><span class="cross" style="color:var(--red);">✗ Missing</span></td>
+              <td><span class="check">✓ OCR</span></td>
+              <td><span class="check">✓ AI enrich</span></td>
+              <td><span class="check">✓ OCR</span></td>
+              <td><span class="cross">✗</span></td>
+              <td><span class="cross">✗</span></td>
+            </tr>
+            <tr>
+              <td><span class="feature-name">Google Review direct link</span><span class="feature-sub">One tap to leave a review</span></td>
+              <td class="reviewtap-col"><span class="check" style="font-weight:800;color:#22c55e;">✓ Unique feature</span></td>
+              <td><span class="cross">✗</span></td>
+              <td><span class="cross">✗</span></td>
+              <td><span class="cross">✗</span></td>
+              <td><span class="cross">✗</span></td>
+              <td><span class="cross">✗</span></td>
+            </tr>
+            <tr>
+              <td><span class="feature-name">Mobile app (iOS/Android)</span></td>
+              <td class="reviewtap-col"><span class="cross" style="color:var(--amber);">✗ Web only</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="check">✓</span></td>
+            </tr>
+            <tr>
+              <td><span class="feature-name">Custom domain support</span></td>
+              <td class="reviewtap-col"><span class="cross" style="color:var(--amber);">✗ Netlify URL only</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="check">✓</span></td>
+            </tr>
+            <tr>
+              <td><span class="feature-name">Automatic follow-up (email/SMS)</span></td>
+              <td class="reviewtap-col"><span class="cross" style="color:var(--red);">✗ Missing</span></td>
+              <td><span class="cross">✗</span></td>
+              <td><span class="cross">✗</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="cross">✗</span></td>
+              <td><span class="check">✓</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout callout-green" style="margin-top:24px;">
+        <div class="callout-icon">🏆</div>
+        <div class="callout-body"><strong>ReviewTap's unique advantage:</strong> The <strong>Google Review direct-link button</strong> is completely absent from every competitor. This is a genuine differentiator — a local business owner who gets a card review tap converts to a Google review immediately, with zero friction. No one else has this. Lead with it in all marketing.</div>
+      </div>
+    </section>
+
+    <!-- 04 PRICING -->
+    <section id="pricing">
+      <span class="section-label">04 — Pricing</span>
+      <h2 class="section-title">Pricing Comparison</h2>
+      <p class="section-desc">How ReviewTap's R649 all-in price stacks up against the market — and how to frame it to win.</p>
+
+      <div class="pricing-grid">
+        <div class="price-card reviewtap-highlight">
+          <div class="price-brand">ReviewTap ✦</div>
+          <div class="price-main">R649</div>
+          <div class="price-period">once-off (card + profile + setup)</div>
+          <div class="price-note">Includes physical NFC card, custom profile, setup assistance. No ongoing fees currently.</div>
+        </div>
+        <div class="price-card">
+          <div class="price-brand">HiHello</div>
+          <div class="price-main">Free</div>
+          <div class="price-period">then $6–8/mo</div>
+          <div class="price-note">Free tier is strong. Paid adds analytics + signatures.</div>
+        </div>
+        <div class="price-card">
+          <div class="price-brand">Popl</div>
+          <div class="price-main">Free</div>
+          <div class="price-period">then $7.99/mo</div>
+          <div class="price-note">NFC card $17–$80 extra. Pro+ $14.99/mo for lead gen.</div>
+        </div>
+        <div class="price-card">
+          <div class="price-brand">Blinq</div>
+          <div class="price-main">Free</div>
+          <div class="price-period">then $7.33/mo</div>
+          <div class="price-note">No branding on free. NFC $15. Strongest free offer.</div>
+        </div>
+        <div class="price-card">
+          <div class="price-brand">Tapni</div>
+          <div class="price-main">$2.49</div>
+          <div class="price-period">per month (incl. analytics)</div>
+          <div class="price-note">Business plan $4.99/user includes free NFC cards — industry best bundle.</div>
+        </div>
+        <div class="price-card">
+          <div class="price-brand">V1CE</div>
+          <div class="price-main">$197</div>
+          <div class="price-period">flat / unlimited users</div>
+          <div class="price-note">Cards extra at $79–$450. Good for large teams.</div>
+        </div>
+        <div class="price-card">
+          <div class="price-brand">Mobilo</div>
+          <div class="price-main">$6.99</div>
+          <div class="price-period">per user / month</div>
+          <div class="price-note">Card purchase required to start. No free tier. Enterprise focus.</div>
+        </div>
+      </div>
+
+      <div class="callout callout-blue" style="margin-top:28px;">
+        <div class="callout-icon">💡</div>
+        <div class="callout-body">
+          <strong>Pricing strategy insight:</strong> ReviewTap's R649 once-off is competitive when framed correctly.
+          A Popl user paying $7.99/mo + $50 card = $146/year. ReviewTap at R649 (~$35 USD) + no subscription = massive value — <em>but only if clients actually use the card.</em>
+          The risk is churn through inactivity: clients forget the card exists. A subscription model (even small) creates engagement touch points and revenue predictability. Consider a R99/mo "Pro" tier with analytics + leads as the upgrade hook.
+        </div>
+      </div>
+    </section>
+
+    <!-- 05 SWOT -->
+    <section id="swot">
+      <span class="section-label">05 — Strategy</span>
+      <h2 class="section-title">SWOT Analysis</h2>
+      <p class="section-desc">An honest assessment of ReviewTap's position in the market today.</p>
+
+      <div class="swot-grid">
+        <div class="swot-card swot-s">
+          <div class="swot-header">
+            <div class="swot-icon">💪</div>
+            <div class="swot-title">Strengths</div>
+          </div>
+          <ul class="swot-list">
+            <li><span class="dot">●</span>Google Review link is a unique, high-value feature no competitor offers — directly ties card to business reputation</li>
+            <li><span class="dot">●</span>Premium visual design (glassmorphism, brand colours, 3 layouts) rivals or exceeds HiHello and Blinq aesthetically</li>
+            <li><span class="dot">●</span>Built-in lead capture — visitors can leave details on the card itself</li>
+            <li><span class="dot">●</span>Full self-service intake form — admin workload is minimal once set up</li>
+            <li><span class="dot">●</span>Magic edit token system — clients own their link without creating accounts</li>
+            <li><span class="dot">●</span>Local SA market focus — competitors don't localise for ZAR pricing, Afrikaans context, local business patterns</li>
+            <li><span class="dot">●</span>Full-stack ownership — can iterate fast, no platform restrictions</li>
+            <li><span class="dot">●</span>Once-off pricing is a compelling offer vs monthly subscriptions</li>
+          </ul>
+        </div>
+
+        <div class="swot-card swot-w">
+          <div class="swot-header">
+            <div class="swot-icon">⚠️</div>
+            <div class="swot-title">Weaknesses</div>
+          </div>
+          <ul class="swot-list">
+            <li><span class="dot">●</span><strong>No analytics whatsoever</strong> — card owners have zero visibility into who viewed or tapped their card. This is the #1 retention killer.</li>
+            <li><span class="dot">●</span><strong>Edit link never shown to client</strong> — token generated but discarded. Clients can't self-serve updates; admin becomes a bottleneck.</li>
+            <li><span class="dot">●</span>No success screen after card creation — client is immediately redirected with no confirmation, no sharing tools</li>
+            <li><span class="dot">●</span>No mobile app — all competitors have native apps for quick profile sharing and camera scanning</li>
+            <li><span class="dot">●</span>No custom domain — URL is reviewtap.netlify.app which looks unprofessional and isn't memorable</li>
+            <li><span class="dot">●</span>No email signature generation — a common use case that drives daily card engagement</li>
+            <li><span class="dot">●</span>No CRM integrations — leads stay in ReviewTap, not in client's sales workflow</li>
+            <li><span class="dot">●</span>Links look plain — no emoji/icons, no visual differentiation between links</li>
+          </ul>
+        </div>
+
+        <div class="swot-card swot-o">
+          <div class="swot-header">
+            <div class="swot-icon">🚀</div>
+            <div class="swot-title">Opportunities</div>
+          </div>
+          <ul class="swot-list">
+            <li><span class="dot">●</span>SA market is largely unserved — global competitors don't localise for ZAR, SA banking integrations, or local SMB needs</li>
+            <li><span class="dot">●</span>Bundle with ReviewTap's core product — NFC card + Google Review strategy is a natural cross-sell</li>
+            <li><span class="dot">●</span>Analytics + subscription tier = recurring revenue model that turns once-off sales into ARR</li>
+            <li><span class="dot">●</span>Agency / reseller model — design agencies and IT companies can white-label for their clients</li>
+            <li><span class="dot">●</span>Team / business plan — estate agencies, law firms, medical practices with 5–50 staff all need matching digital cards</li>
+            <li><span class="dot">●</span>Email signature generator would dramatically increase daily usage and reduce churn</li>
+            <li><span class="dot">●</span>Lead capture + auto-follow-up (WhatsApp / email) is a strong Enterprise sales hook</li>
+          </ul>
+        </div>
+
+        <div class="swot-card swot-t">
+          <div class="swot-header">
+            <div class="swot-icon">🔥</div>
+            <div class="swot-title">Threats</div>
+          </div>
+          <ul class="swot-list">
+            <li><span class="dot">●</span>Blinq's no-watermark free tier makes it nearly impossible to compete on price in the consumer market</li>
+            <li><span class="dot">●</span>Linq's pivot is a warning — pure digital card platforms without deep business value risk obsolescence</li>
+            <li><span class="dot">●</span>Linktree entering the "professional card" space with their brand recognition would be devastating</li>
+            <li><span class="dot">●</span>AI tools (like ChatGPT plugins, LinkedIn integration) could automate card creation and sharing, commoditising the product</li>
+            <li><span class="dot">●</span>Competitor analytics features are a major reason clients choose them — without this, ReviewTap cards feel like "dead" products after setup</li>
+            <li><span class="dot">●</span>No app means clients can't quickly share their card mid-conversation — the core use case</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 06 UI AUDIT -->
+    <section id="ui-audit">
+      <span class="section-label">06 — UX Evaluation</span>
+      <h2 class="section-title">UI / UX Audit: Client Pain Points</h2>
+      <p class="section-desc">Issues a real client would experience from card creation to daily use. Rated by severity and impact.</p>
+
+      <div class="audit-grid">
+
+        <div class="audit-item">
+          <div class="audit-severity sev-critical">🔴 Critical</div>
+          <div class="audit-title">No success screen after card creation</div>
+          <div class="audit-desc">After submitting the intake form, the user is immediately redirected to their public card. There's no confirmation, no "here's your card link", no "here's how to update it later", no QR code to save. The client doesn't know what happened — this is a broken experience that causes instant support requests.</div>
+          <div class="audit-fix"><strong>Fix (Phase 5)</strong>Show a full success screen with card URL, edit link, copy buttons, WhatsApp share, and a QR code of the card.</div>
+        </div>
+
+        <div class="audit-item">
+          <div class="audit-severity sev-critical">🔴 Critical</div>
+          <div class="audit-title">Edit link is generated but never shown</div>
+          <div class="audit-desc">The edit_token UUID is created server-side and returned in the API response, but IntakeForm.tsx discards it and calls router.push(). Clients have absolutely no way to update their card without contacting admin. This defeats the "self-service" promise and creates support overhead for every single update request.</div>
+          <div class="audit-fix"><strong>Fix (Phase 5)</strong>Show the edit link prominently on the success screen with a "Bookmark this" prompt and copy button. The token IS the auth — share it once, securely.</div>
+        </div>
+
+        <div class="audit-item">
+          <div class="audit-severity sev-critical">🔴 Critical</div>
+          <div class="audit-title">No card analytics for the owner</div>
+          <div class="audit-desc">Clients have zero visibility into whether anyone has tapped or viewed their card. This is the #1 reason people churn from digital card platforms — the card feels like a dead-end product. Without analytics, there's no reason to come back, no success metric, no "wow this is working" moment. Every competitor offers this.</div>
+          <div class="audit-fix"><strong>Fix (Phase 6)</strong>Track page views + contact button taps + link clicks in a card_events table. Show a simple stats card on the /edit/[token] page. Even basic numbers create massive engagement uplift.</div>
+        </div>
+
+        <div class="audit-item">
+          <div class="audit-severity sev-high">🟡 High</div>
+          <div class="audit-title">QR code points to localhost in development</div>
+          <div class="audit-desc">The QR code generated in CardPage.tsx uses window.location.origin which is correct — but the NEXT_PUBLIC_APP_URL env var is not set on Netlify, so any server-rendered path defaults to localhost. Clients sharing their QR code link to a dead URL. This is a live bug affecting all deployed cards.</div>
+          <div class="audit-fix"><strong>Fix (immediate)</strong>Set NEXT_PUBLIC_APP_URL=https://reviewtap.netlify.app on Netlify. Confirm QR codes on all 5 demo cards resolve correctly after deploy.</div>
+        </div>
+
+        <div class="audit-item">
+          <div class="audit-severity sev-high">🟡 High</div>
+          <div class="audit-title">Links have no visual identity</div>
+          <div class="audit-desc">Custom links display as plain text with a generic external link icon. On Linktree and competitors, links use icons, thumbnails, or emojis to create visual hierarchy. Plain link lists get lower click-through rates because nothing draws the eye to any specific link. A business website link looks identical to a booking link.</div>
+          <div class="audit-fix"><strong>Fix (Phase 5)</strong>Add optional emoji field per custom link. Show emoji as visual prefix before the label. 16 common emojis in a one-tap picker. Zero infrastructure — stored in existing JSONB field.</div>
+        </div>
+
+        <div class="audit-item">
+          <div class="audit-severity sev-high">🟡 High</div>
+          <div class="audit-title">"Save Contact" is buried and unclear</div>
+          <div class="audit-desc">The primary call-to-action (saving the contact to phone) is a glassmorphism button that visually competes with the action tiles above it. On mobile, recipients often don't scroll far enough to see it. Industry research shows "Save Contact" is the most failed action on digital card pages — people tap Call or leave instead.</div>
+          <div class="audit-fix"><strong>Fix</strong>Test placing "Save Contact" ABOVE the Call/Email/WhatsApp tiles, or make it sticky at the bottom as a floating pill. It should be the #1 visual action — not the 4th element in a list.</div>
+        </div>
+
+        <div class="audit-item">
+          <div class="audit-severity sev-high">🟡 High</div>
+          <div class="audit-title">No way to share the card mid-conversation</div>
+          <div class="audit-desc">No mobile app means clients can't pull up their digital card quickly when networking. Competitors let users open their app and show their QR code in 2 taps. With ReviewTap, the user has to navigate to a URL they may not have bookmarked. The NFC chip solves this at close range, but across a table or via messaging requires a saved link.</div>
+          <div class="audit-fix"><strong>Fix (Success screen)</strong>Make the WhatsApp share and "copy link" the primary actions on the success screen so clients immediately save the link to themselves / their contacts.</div>
+        </div>
+
+        <div class="audit-item">
+          <div class="audit-severity sev-medium">🔵 Medium</div>
+          <div class="audit-title">Intake form has no progress persistence</div>
+          <div class="audit-desc">If a client fills 4 steps of the intake form and then closes the browser (accidentally or due to distraction), all their data is lost. They have to start over. On mobile this is common. Competitors save draft data to localStorage or the user's account automatically.</div>
+          <div class="audit-fix"><strong>Fix</strong>Save form data to localStorage after each step change. Restore on next visit with a "Continue where you left off?" banner. This dramatically reduces incomplete submissions.</div>
+        </div>
+
+        <div class="audit-item">
+          <div class="audit-severity sev-medium">🔵 Medium</div>
+          <div class="audit-title">URL is reviewtap.netlify.app — unprofessional</div>
+          <div class="audit-desc">Clients share their card as reviewtap.netlify.app/cards/your-name. This immediately reads as a demo/prototype rather than a finished product. The custom domain cards.reviewtap.co.za was planned but not yet configured. Netlify provides this for free — this is a Netlify DNS configuration task, not a code change.</div>
+          <div class="audit-fix"><strong>Fix (immediate — 10 mins)</strong>Configure cards.reviewtap.co.za as a custom domain in Netlify. Add CNAME record in DNS. All existing card URLs auto-redirect.</div>
+        </div>
+
+        <div class="audit-item">
+          <div class="audit-severity sev-medium">🔵 Medium</div>
+          <div class="audit-title">Google Review button not prominently positioned</div>
+          <div class="audit-desc">ReviewTap's most unique feature — the Google Review direct link — is buried in the links list as a generic link item with a gold star. It should be a hero element. Clients buying ReviewTap are often local businesses who live and die by Google reviews. The review CTA should be impossible to miss on the card.</div>
+          <div class="audit-fix"><strong>Fix</strong>Give the Google Review link a dedicated, visually distinct section above the custom links. Star icon, amber colour treatment, larger tap target. Consider a "Leave us a ⭐ review" badge with distinctive styling separate from the links list.</div>
+        </div>
+
+        <div class="audit-item">
+          <div class="audit-severity sev-medium">🔵 Medium</div>
+          <div class="audit-title">Photo upload UX is friction-heavy on mobile</div>
+          <div class="audit-desc">Photo upload uses a standard file input which on mobile shows "Choose File" — not camera-optimised. Competitors open the native camera directly. The drag-to-reposition feature (photo_x/photo_y) also has no visual affordance that it's draggable — users who accidentally skip it get poor photo framing.</div>
+          <div class="audit-fix"><strong>Fix</strong>Add accept="image/*" capture="user" to the file input to trigger the front camera by default on mobile. Add a visual "drag to reposition" label/indicator over the photo preview.</div>
+        </div>
+
+        <div class="audit-item">
+          <div class="audit-severity sev-low">🟢 Low</div>
+          <div class="audit-title">No accessibility baseline</div>
+          <div class="audit-desc">Contact buttons rely on icon + label but have no aria-label for screen readers. Colour contrast on subtext (rgba 60% opacity) may fail WCAG AA on light theme. No focus-visible styling on interactive elements means keyboard navigation is broken. Unlikely to be a legal concern now, but worth addressing as the product matures.</div>
+          <div class="audit-fix"><strong>Fix (low priority)</strong>Add aria-label to all icon-only or icon-led buttons. Audit colour contrast ratios. Add :focus-visible ring styles to all interactive elements.</div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 07 KEY GAPS -->
+    <section id="gaps">
+      <span class="section-label">07 — Gaps</span>
+      <h2 class="section-title">Key Gaps to Close</h2>
+      <p class="section-desc">Ranked by business impact. These are the features that clients notice are missing and that competitors use to win deals.</p>
+
+      <div class="card-grid">
+        <div class="card" style="border-color:rgba(239,68,68,0.25);">
+          <div style="font-size:24px;margin-bottom:10px;">📊</div>
+          <div style="font-size:16px;font-weight:800;color:var(--red);margin-bottom:8px;">#1 Analytics</div>
+          <div style="font-size:13px;color:var(--text2);">Every single competitor offers card view counts and link click tracking. Without this, clients have no reason to stay engaged. Analytics is the #1 driver of subscription upgrades and renewal intent across the entire category. This is the retention engine.</div>
+        </div>
+        <div class="card" style="border-color:rgba(239,68,68,0.25);">
+          <div style="font-size:24px;margin-bottom:10px;">✏️</div>
+          <div style="font-size:16px;font-weight:800;color:var(--red);margin-bottom:8px;">#2 Edit Link (self-service)</div>
+          <div style="font-size:13px;color:var(--text2);">The edit_token exists but is never shown to the client. This is a completed feature stuck behind a UX bug. Every support request for "can you update my card?" is admin cost. Showing the edit link on the success screen is a 30-minute fix that eliminates this entirely.</div>
+        </div>
+        <div class="card" style="border-color:rgba(245,158,11,0.25);">
+          <div style="font-size:24px;margin-bottom:10px;">🎉</div>
+          <div style="font-size:16px;font-weight:800;color:var(--amber);margin-bottom:8px;">#3 Success Screen</div>
+          <div style="font-size:13px;color:var(--text2);">Zero wow moment after card creation. No sharing options, no edit link, no QR. This is the first impression the client has of their finished card — it should be a celebration. HiHello and Blinq nail this with animated success states that immediately drive sharing.</div>
+        </div>
+        <div class="card" style="border-color:rgba(245,158,11,0.25);">
+          <div style="font-size:24px;margin-bottom:10px;">🌐</div>
+          <div style="font-size:16px;font-weight:800;color:var(--amber);margin-bottom:8px;">#4 Custom Domain</div>
+          <div style="font-size:13px;color:var(--text2);">cards.reviewtap.co.za is planned but not configured. The Netlify URL reads as a demo. This is a 10-minute DNS + Netlify configuration — no code change needed. Every day without this is a missed opportunity to look professional.</div>
+        </div>
+        <div class="card" style="border-color:rgba(59,130,246,0.25);">
+          <div style="font-size:24px;margin-bottom:10px;">✉️</div>
+          <div style="font-size:16px;font-weight:800;color:var(--blue);margin-bottom:8px;">#5 Email Signature Generator</div>
+          <div style="font-size:13px;color:var(--text2);">HiHello and Popl both offer this as a key upsell. An email signature with a "View my digital card" link drives daily impressions and new card views passively. Generates a copyable HTML block — straightforward to build.</div>
+        </div>
+        <div class="card" style="border-color:rgba(59,130,246,0.25);">
+          <div style="font-size:24px;margin-bottom:10px;">🔗</div>
+          <div style="font-size:16px;font-weight:800;color:var(--blue);margin-bottom:8px;">#6 Link Visual Identity</div>
+          <div style="font-size:13px;color:var(--text2);">Plain text links get lower engagement. An emoji picker per link (zero DB changes, zero uploads) is the fastest visual upgrade. Already in the Phase 5 plan. Consider also adding link click tracking as part of the analytics feature.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 08 PRIORITY ROADMAP -->
+    <section id="roadmap">
+      <span class="section-label">08 — Roadmap</span>
+      <h2 class="section-title">Recommended Priority Roadmap</h2>
+      <p class="section-desc">Ordered by impact-to-effort ratio. Quick wins first, then the features that drive long-term retention.</p>
+
+      <div class="roadmap-list">
+
+        <div class="roadmap-item">
+          <div class="roadmap-num p1">1</div>
+          <div class="roadmap-body">
+            <div class="roadmap-title">Custom domain — cards.reviewtap.co.za</div>
+            <div class="roadmap-desc">Configure Netlify custom domain + DNS CNAME record. No code change. Makes every existing and future card instantly look more professional. This is a 10-minute task that affects every client card currently live.</div>
+            <div class="roadmap-tags">
+              <span class="roadmap-impact impact-high">High Impact</span>
+              <span class="effort-tag">Effort: 10 mins</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="roadmap-item">
+          <div class="roadmap-num p1">2</div>
+          <div class="roadmap-body">
+            <div class="roadmap-title">Success screen + edit link reveal (Phase 5)</div>
+            <div class="roadmap-desc">Replace the post-creation router.push() with a rich success screen showing: card URL with copy button, edit link with copy button and "keep this safe" notice, WhatsApp share, and a QR code. The edit_token already exists — it just needs to be surfaced. Fixes two critical issues in one change.</div>
+            <div class="roadmap-tags">
+              <span class="roadmap-impact impact-high">High Impact</span>
+              <span class="effort-tag">Effort: 2–3 hrs</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="roadmap-item">
+          <div class="roadmap-num p2">3</div>
+          <div class="roadmap-body">
+            <div class="roadmap-title">Link emoji picker (Phase 5)</div>
+            <div class="roadmap-desc">Add optional emoji field to CustomLink type and StepLinks. No DB migration — JSONB stores it automatically. Render emoji prefix in LinksList. One-tap emoji popover with 16 common emojis. Small change, big visual improvement to the card.</div>
+            <div class="roadmap-tags">
+              <span class="roadmap-impact impact-high">High Impact</span>
+              <span class="effort-tag">Effort: 2 hrs</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="roadmap-item">
+          <div class="roadmap-num p3">4</div>
+          <div class="roadmap-body">
+            <div class="roadmap-title">Card analytics (Phase 6 — most critical retention feature)</div>
+            <div class="roadmap-desc">Create a card_events table (card_id, event_type, created_at). Track: page_view, save_contact_tap, call_tap, email_tap, whatsapp_tap, link_click. Expose a simple stats view at /edit/[token] or /stats/[token]. Even "142 views this month" creates massive engagement and gives clients a reason to share more. This is the feature that prevents churn.</div>
+            <div class="roadmap-tags">
+              <span class="roadmap-impact impact-high">High Impact</span>
+              <span class="effort-tag">Effort: 1–2 days</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="roadmap-item">
+          <div class="roadmap-num p3">5</div>
+          <div class="roadmap-body">
+            <div class="roadmap-title">LocalStorage draft save for intake form</div>
+            <div class="roadmap-desc">Save form state to localStorage after each step. Restore on next visit. Banner: "You have a draft card — continue?" This reduces lost submissions (likely 30–50% on mobile) and creates a better experience for clients interrupted during the setup process.</div>
+            <div class="roadmap-tags">
+              <span class="roadmap-impact impact-med">Medium Impact</span>
+              <span class="effort-tag">Effort: 2 hrs</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="roadmap-item">
+          <div class="roadmap-num p4">6</div>
+          <div class="roadmap-body">
+            <div class="roadmap-title">Email signature generator</div>
+            <div class="roadmap-desc">A page at /edit/[token]/signature (or a tab in the edit flow) that generates a copyable HTML email signature block with: name, title, phone, and a "View my card" button linking to their card URL. Drives passive card views from every email sent. HiHello treats this as a top feature.</div>
+            <div class="roadmap-tags">
+              <span class="roadmap-impact impact-med">Medium Impact</span>
+              <span class="effort-tag">Effort: 4 hrs</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="roadmap-item">
+          <div class="roadmap-num p4">7</div>
+          <div class="roadmap-body">
+            <div class="roadmap-title">Google Review section — dedicated visual treatment</div>
+            <div class="roadmap-desc">Move the Google Review CTA out of the links list and into its own visually distinct section. Amber/gold badge, star icon, larger tap target, copy like "Leave us a Google Review ⭐". This is ReviewTap's unique differentiator — it should be impossible to miss, not buried in a list. Lead with it in all marketing too.</div>
+            <div class="roadmap-tags">
+              <span class="roadmap-impact impact-high">High Impact</span>
+              <span class="effort-tag">Effort: 1 hr</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="roadmap-item">
+          <div class="roadmap-num p5">8</div>
+          <div class="roadmap-body">
+            <div class="roadmap-title">Subscription / Pro tier monetisation</div>
+            <div class="roadmap-desc">Introduce a R99/mo "Pro" tier that unlocks: analytics dashboard, lead export CSV, email signature generator, unlimited links, custom accent themes. This converts ReviewTap from a once-off R649 sale into an ARR business. Analytics is the gate — build it first, then monetise around it. Free tier = 1 card, basic links, no analytics.</div>
+            <div class="roadmap-tags">
+              <span class="roadmap-impact impact-high">High Impact</span>
+              <span class="effort-tag">Effort: 1 week+</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="callout callout-green" style="margin-top:32px;">
+        <div class="callout-icon">🎯</div>
+        <div class="callout-body">
+          <strong>Bottom line:</strong> ReviewTap is already ahead of most competitors on design quality and unique features (Google Review link, lead capture). The gaps are almost entirely in <em>post-creation experience</em> — analytics, success screen, edit link visibility, and domain. These are all solvable in Phase 5 and 6. The Google Review feature alone is a strong enough differentiator to build an entire SA SMB marketing story around. Lead with that, close the post-creation gaps, and add analytics — then the product is defensible.
+        </div>
+      </div>
+
+    </section>
+
+    <div style="text-align:center;padding:40px 0 20px;color:var(--text3);font-size:12px;">
+      ReviewTap Strategic Research · Compiled May 2026 · For internal use only
+    </div>
+
+  </div><!-- /container -->
+
+</body>
+</html>
