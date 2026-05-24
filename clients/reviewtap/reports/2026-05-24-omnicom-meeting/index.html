@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ReviewTap × Omnicom Media Group — Meeting Brief</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --black: #09090b;
+    --dark: #111318;
+    --card: #16191f;
+    --card2: #1c2028;
+    --border: #252932;
+    --accent: #6366f1;
+    --accent2: #8b5cf6;
+    --green: #22c55e;
+    --amber: #f59e0b;
+    --red: #ef4444;
+    --blue: #3b82f6;
+    --cyan: #06b6d4;
+    --pink: #ec4899;
+    --orange: #f97316;
+    --text: #e8eaf0;
+    --muted: #8b909e;
+    --label: #5b6070;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--black);
+    color: var(--text);
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* NAV */
+  .nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(9,9,11,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 40px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-brand { font-size: 13px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.5px; }
+  .nav-links { display: flex; gap: 22px; list-style: none; }
+  .nav-links a { font-size: 12px; color: var(--muted); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--text); }
+
+  /* HERO */
+  .hero {
+    padding: 70px 40px 50px;
+    max-width: 1080px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: center;
+  }
+  .hero-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px;
+    color: var(--accent); background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.25);
+    border-radius: 20px; padding: 4px 12px; margin-bottom: 18px;
+  }
+  .hero h1 { font-size: 38px; font-weight: 800; letter-spacing: -1px; color: #fff; line-height: 1.15; margin-bottom: 14px; }
+  .hero h1 span { background: linear-gradient(135deg, var(--accent), var(--cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .hero-sub { font-size: 15px; color: var(--muted); line-height: 1.7; max-width: 520px; margin-bottom: 28px; }
+  .hero-meta { display: flex; gap: 24px; flex-wrap: wrap; }
+  .hero-meta-item { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+  .hero-meta-item strong { color: var(--text); }
+  .hero-logo-pair {
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+    padding: 24px 28px; min-width: 180px;
+  }
+  .logo-box {
+    width: 80px; height: 44px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase;
+  }
+  .logo-rt { background: rgba(99,102,241,0.15); border: 1px solid rgba(99,102,241,0.3); color: var(--accent); }
+  .logo-omg { background: rgba(6,182,212,0.1); border: 1px solid rgba(6,182,212,0.25); color: var(--cyan); }
+  .hero-logo-pair .x { font-size: 18px; color: var(--label); font-weight: 300; }
+
+  /* CONTAINER */
+  .container { max-width: 1080px; margin: 0 auto; padding: 0 40px 80px; }
+
+  /* SECTION HEADERS */
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; padding-top: 52px; }
+  .section-icon { width: 36px; height: 36px; background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.2); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+  .section-title { font-size: 20px; font-weight: 700; color: #fff; }
+  .section-sub { font-size: 13px; color: var(--muted); margin-top: 2px; }
+
+  /* CARDS */
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; }
+  .card-sm { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; }
+
+  /* GRIDS */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+
+  /* BADGES */
+  .badge { display: inline-block; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; padding: 2px 8px; border-radius: 20px; white-space: nowrap; }
+  .badge-green  { background: rgba(34,197,94,0.12);  color: var(--green);  border: 1px solid rgba(34,197,94,0.2); }
+  .badge-amber  { background: rgba(245,158,11,0.12); color: var(--amber);  border: 1px solid rgba(245,158,11,0.2); }
+  .badge-blue   { background: rgba(59,130,246,0.12); color: var(--blue);   border: 1px solid rgba(59,130,246,0.2); }
+  .badge-purple { background: rgba(99,102,241,0.12); color: var(--accent); border: 1px solid rgba(99,102,241,0.2); }
+  .badge-cyan   { background: rgba(6,182,212,0.12);  color: var(--cyan);   border: 1px solid rgba(6,182,212,0.2); }
+  .badge-orange { background: rgba(249,115,22,0.12); color: var(--orange); border: 1px solid rgba(249,115,22,0.2); }
+  .badge-red    { background: rgba(239,68,68,0.12);  color: var(--red);    border: 1px solid rgba(239,68,68,0.2); }
+
+  /* CONTEXT CARDS */
+  .context-split { display: grid; grid-template-columns: 1fr 1px 1fr; gap: 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .context-col { padding: 24px; }
+  .context-divider { background: var(--border); }
+  .context-col h3 { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+  .context-col .sub { font-size: 12px; color: var(--accent); font-weight: 600; margin-bottom: 14px; }
+  .context-col p { font-size: 13px; color: var(--muted); line-height: 1.65; margin-bottom: 10px; }
+  .stat-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+  .stat-pill { background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 6px; padding: 6px 12px; font-size: 12px; color: var(--text); }
+  .stat-pill strong { color: #fff; font-weight: 700; }
+
+  /* OPPORTUNITY CARDS */
+  .opp-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 14px; }
+  .opp-header { padding: 18px 22px; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+  .opp-header-left h3 { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+  .opp-header-left p { font-size: 12px; color: var(--muted); line-height: 1.4; }
+  .opp-body { display: grid; grid-template-columns: 1fr 1fr; }
+  .opp-col { padding: 20px 22px; }
+  .opp-col:first-child { border-right: 1px solid var(--border); }
+  .opp-col-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--label); margin-bottom: 12px; }
+  .point-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .point-list li { font-size: 13px; color: var(--text); padding-left: 16px; position: relative; line-height: 1.5; }
+  .point-list li::before { content: '→'; position: absolute; left: 0; color: var(--accent); font-size: 11px; top: 2px; }
+  .point-list li.muted { color: var(--muted); }
+
+  /* PITCH TALK TRACKS */
+  .talk-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 12px; overflow: hidden; }
+  .talk-header { padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+  .talk-header .num { width: 26px; height: 26px; border-radius: 50%; background: rgba(99,102,241,0.15); border: 1px solid rgba(99,102,241,0.3); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: var(--accent); flex-shrink: 0; font-family: 'JetBrains Mono', monospace; }
+  .talk-header .title { font-size: 14px; font-weight: 700; color: #fff; }
+  .talk-header .sub { font-size: 11px; color: var(--muted); margin-top: 1px; }
+  .talk-body { display: grid; grid-template-columns: 1fr 1fr; }
+  .talk-col { padding: 16px 18px; font-size: 13px; color: var(--text); line-height: 1.65; }
+  .talk-col:first-child { border-right: 1px solid var(--border); background: rgba(255,255,255,0.01); }
+  .talk-col .col-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--label); margin-bottom: 10px; }
+  .talk-col .say { font-size: 13px; color: var(--text); line-height: 1.7; font-style: italic; background: rgba(99,102,241,0.04); border: 1px solid rgba(99,102,241,0.1); border-radius: 7px; padding: 12px; }
+  .talk-col p { color: var(--muted); margin-bottom: 6px; }
+  .talk-col p strong { color: var(--text); }
+
+  /* OBJECTION HANDLER */
+  .obj-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 10px; }
+  .obj-q { padding: 12px 16px; background: rgba(239,68,68,0.04); border-bottom: 1px solid var(--border); font-size: 13px; color: var(--red); font-weight: 600; display: flex; gap: 8px; align-items: flex-start; }
+  .obj-q::before { content: '?'; width: 18px; height: 18px; border-radius: 50%; background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.3); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; flex-shrink: 0; margin-top: 1px; }
+  .obj-a { padding: 12px 16px; font-size: 13px; color: var(--text); line-height: 1.65; }
+  .obj-a strong { color: var(--green); }
+
+  /* PARTNERSHIP MODELS */
+  .model-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px; }
+  .model-card h4 { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+  .model-card .model-sub { font-size: 12px; color: var(--muted); margin-bottom: 14px; line-height: 1.5; }
+  .model-card .model-terms { font-size: 12px; color: var(--accent); font-weight: 600; font-family: 'JetBrains Mono', monospace; background: rgba(99,102,241,0.06); border: 1px solid rgba(99,102,241,0.15); border-radius: 6px; padding: 8px 12px; margin-top: 10px; }
+
+  /* QUESTIONS */
+  .q-list { list-style: none; display: flex; flex-direction: column; gap: 0; }
+  .q-item { padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; gap: 14px; align-items: flex-start; }
+  .q-item:last-child { border-bottom: none; }
+  .q-num { font-size: 11px; font-weight: 700; font-family: 'JetBrains Mono', monospace; color: var(--accent); width: 24px; flex-shrink: 0; margin-top: 2px; }
+  .q-text { font-size: 13px; color: var(--text); line-height: 1.5; }
+  .q-why { font-size: 12px; color: var(--muted); margin-top: 4px; line-height: 1.4; }
+
+  /* CLIENT TABLE */
+  .client-table { width: 100%; border-collapse: collapse; }
+  .client-table th { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; color: var(--label); text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--border); background: rgba(255,255,255,0.02); }
+  .client-table td { padding: 13px 14px; border-bottom: 1px solid rgba(37,41,50,0.6); font-size: 13px; color: var(--text); vertical-align: top; line-height: 1.5; }
+  .client-table tr:last-child td { border-bottom: none; }
+  .client-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+  /* NEXT STEPS */
+  .step-list { list-style: none; display: flex; flex-direction: column; gap: 0; }
+  .step-item { display: grid; grid-template-columns: 32px 1fr; gap: 14px; padding: 16px 0; border-bottom: 1px solid var(--border); align-items: flex-start; }
+  .step-item:last-child { border-bottom: none; }
+  .step-dot { width: 32px; height: 32px; border-radius: 50%; background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.25); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: var(--accent); flex-shrink: 0; margin-top: 2px; }
+  .step-content h4 { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+  .step-content p { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+  /* FOOTER */
+  .footer { text-align: center; padding: 40px; font-size: 12px; color: var(--label); border-top: 1px solid var(--border); }
+
+  @media (max-width: 768px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .hero { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 26px; }
+    .context-split, .opp-body, .talk-body { grid-template-columns: 1fr; }
+    .context-divider { display: none; }
+    .opp-col:first-child, .talk-col:first-child { border-right: none; border-bottom: 1px solid var(--border); }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-brand">ReviewTap × Omnicom — Meeting Brief</div>
+  <ul class="nav-links">
+    <li><a href="#context">Context</a></li>
+    <li><a href="#opportunity">The Opportunity</a></li>
+    <li><a href="#clients">Client Fit</a></li>
+    <li><a href="#pitch">Talk Tracks</a></li>
+    <li><a href="#models">Partnership Models</a></li>
+    <li><a href="#objections">Objections</a></li>
+    <li><a href="#questions">Questions to Ask</a></li>
+    <li><a href="#next">Next Steps</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div>
+    <div class="hero-chip">🗓 Meeting Prep Brief</div>
+    <h1>ReviewTap meets<br><span>Omnicom Media Group</span></h1>
+    <p class="hero-sub">A partnership opportunity at the intersection of physical-digital reputation management, local SEO performance, and enterprise brand deployment across South Africa's largest media agency group.</p>
+    <div class="hero-meta">
+      <div class="hero-meta-item"><strong>ReviewTap</strong> — NFC + QR review generation platform</div>
+      <div class="hero-meta-item"><strong>Omnicom SA</strong> — R4B+ in billings, 250 staff, OMD + PHD</div>
+      <div class="hero-meta-item"><strong>Goal</strong> — Establish a white-label or agency partnership</div>
+    </div>
+  </div>
+  <div class="hero-logo-pair">
+    <div class="logo-box logo-rt">Review<br>Tap</div>
+    <div class="x">×</div>
+    <div class="logo-box logo-omg">Omnicom<br>Media</div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- CONTEXT -->
+  <div id="context" class="section-header">
+    <div class="section-icon">🏢</div>
+    <div>
+      <div class="section-title">Who You're Sitting Across From</div>
+      <div class="section-sub">Know the room before you walk in</div>
+    </div>
+  </div>
+
+  <div class="context-split">
+    <div class="context-col">
+      <h3>🟣 ReviewTap</h3>
+      <div class="sub">Your product — what it is and what matters to them</div>
+      <p>ReviewTap is a physical NFC and QR code device that lets customers leave Google reviews with a single tap. Sold as a stand or card, it requires no app, no training, and no setup. The result is 3–5x more reviews in the first month for most businesses.</p>
+      <p>Currently targeting SMBs directly, with R129K+ MRR in early growth phase. 1,000+ customers, 4.8/5 rating. Also supports TripAdvisor, AutoTrader, and social platforms.</p>
+      <p><strong style="color:#fff;">The gap you're trying to close:</strong> ReviewTap is built for enterprise scale but currently selling one-by-one to small businesses. Omnicom is the distribution lever that unlocks hundreds of brand locations at once.</p>
+      <div class="stat-row">
+        <div class="stat-pill"><strong>R129K+</strong> MRR</div>
+        <div class="stat-pill"><strong>1,000+</strong> Customers</div>
+        <div class="stat-pill"><strong>4.8/5</strong> Rating</div>
+        <div class="stat-pill"><strong>3–5x</strong> Review uplift</div>
+      </div>
+    </div>
+    <div class="context-divider"></div>
+    <div class="context-col">
+      <h3>🔵 Omnicom Media Group SA</h3>
+      <div class="sub">Who they are and what they care about</div>
+      <p>South Africa's largest media agency group. R4B+ in annual billings. Home to OMD and PHD — the two agencies managing media for brands like MTN, Diageo, Red Bull, Unilever, Pepsi, and SA Tourism across Africa.</p>
+      <p>Their digital division handles strategy, planning, buying, and measurement across all digital and mobile environments. They are currently pushing a data-first narrative via the Omni platform — a unified data and AI layer connecting identity, media buying, and creative performance.</p>
+      <p><strong style="color:#fff;">What their digital lead cares about:</strong> adding measurable value for clients, differentiated services that win pitches, and performance data that justifies their media recommendations. ReviewTap touches all three.</p>
+      <div class="stat-row">
+        <div class="stat-pill"><strong>R4B+</strong> Annual billings</div>
+        <div class="stat-pill"><strong>250</strong> Staff in SA</div>
+        <div class="stat-pill"><strong>OMD + PHD</strong> Agencies</div>
+        <div class="stat-pill"><strong>Omni</strong> AI platform</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- THE CORE OPPORTUNITY -->
+  <div id="opportunity" class="section-header">
+    <div class="section-icon">💡</div>
+    <div>
+      <div class="section-title">The Core Opportunity</div>
+      <div class="section-sub">Four angles — lead with the one most relevant to how they open the conversation</div>
+    </div>
+  </div>
+
+  <!-- OPP 1 -->
+  <div class="opp-card">
+    <div class="opp-header">
+      <div class="opp-header-left">
+        <h3>1. ReviewTap as a client value-add that Omnicom deploys at scale</h3>
+        <p>Omnicom's clients have hundreds of physical touchpoints. ReviewTap turns every one of them into a review engine. This is the primary pitch.</p>
+      </div>
+      <span class="badge badge-green">Lead Angle</span>
+    </div>
+    <div class="opp-body">
+      <div class="opp-col">
+        <div class="opp-col-label">The Argument</div>
+        <ul class="point-list">
+          <li>Omnicom manages media for brands with large physical footprints — MTN stores, Diageo on-trade venues (bars, restaurants), Unilever retail, SA Tourism properties</li>
+          <li>Every one of those locations has a Google Business Profile. Most have too few reviews to rank prominently on Google Maps</li>
+          <li>ReviewTap solves this at the location level — one tap, one review, zero friction for the customer</li>
+          <li>For Omnicom, this becomes a productised offering they recommend alongside their digital media strategy — and it makes their paid campaigns perform better because the destination is review-optimised</li>
+          <li>The more reviews a location has, the higher it ranks on Google Maps, the more organic traffic it receives, and the lower the effective CPL from Omnicom's paid media</li>
+        </ul>
+      </div>
+      <div class="opp-col">
+        <div class="opp-col-label">The Numbers That Land This</div>
+        <ul class="point-list">
+          <li>Google reviews are the #1 local SEO ranking factor — more reviews = better Maps visibility = more organic traffic without ad spend</li>
+          <li>Businesses with 100+ reviews convert at 3.5x the rate of businesses with under 10 reviews</li>
+          <li>ReviewTap delivers 3–5x more reviews in month one — a result Omnicom can show their clients immediately</li>
+          <li>For a brand like MTN with 200+ SA stores: a single ReviewTap card per location is R60,000 in product. A full branded rollout across all locations is R200K–R400K. That's a meaningful new revenue line for Omnicom to recommend</li>
+          <li class="muted">Pilot ask: propose a 10-location test with one client. Results in 30 days. Then scale.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- OPP 2 -->
+  <div class="opp-card">
+    <div class="opp-header">
+      <div class="opp-header-left">
+        <h3>2. Reputation as a paid media performance lever</h3>
+        <p>Omnicom spends billions on media buying. ReviewTap makes that spend more efficient by improving what happens after the click.</p>
+      </div>
+      <span class="badge badge-blue">Performance Angle</span>
+    </div>
+    <div class="opp-body">
+      <div class="opp-col">
+        <div class="opp-col-label">The Argument</div>
+        <ul class="point-list">
+          <li>When Omnicom runs a Google or Meta campaign for a hospitality or retail client, that ad drives traffic to a location or a Google Business Profile</li>
+          <li>If that profile has 14 reviews at 3.8 stars, the conversion from ad click to visit or purchase is significantly lower than a profile with 200 reviews at 4.7 stars</li>
+          <li>Omnicom is paying to drive traffic to a leaky funnel. ReviewTap fixes the funnel.</li>
+          <li>Framed correctly, ReviewTap is not a standalone product — it's a media efficiency tool that improves the ROI of campaigns Omnicom is already running</li>
+        </ul>
+      </div>
+      <div class="opp-col">
+        <div class="opp-col-label">How to Frame It for the Digital Lead</div>
+        <ul class="point-list">
+          <li>"Your campaigns are driving traffic to locations. We can ensure those locations convert that traffic at the highest possible rate."</li>
+          <li>Position ReviewTap as the "last mile" performance layer — after the media buy, before the conversion</li>
+          <li>This connects directly to Omnicom's Omni platform narrative — they're building a connected performance stack, and ReviewTap slots into the local reputation layer</li>
+          <li class="muted">Ask: "What does your current local SEO and reputation offering look like for clients with physical locations?"</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- OPP 3 -->
+  <div class="opp-card">
+    <div class="opp-header">
+      <div class="opp-header-left">
+        <h3>3. White-label for Omnicom's agency brands</h3>
+        <p>Branded ReviewTap devices carrying the client's brand — deployed under an Omnicom agency recommendation.</p>
+      </div>
+      <span class="badge badge-purple">Partnership Angle</span>
+    </div>
+    <div class="opp-body">
+      <div class="opp-col">
+        <div class="opp-col-label">The Proposition</div>
+        <ul class="point-list">
+          <li>ReviewTap already offers custom-branded stands and cards (NFC + QR) — the product is built for white-label</li>
+          <li>Omnicom recommends branded ReviewTap devices to clients as part of their digital performance stack — devices carry the client's branding, not ReviewTap's</li>
+          <li>OMD or PHD earns a margin on every deployment they recommend — creating a new recurring revenue stream tied to client campaigns</li>
+          <li>ReviewTap handles manufacturing, shipping, and fulfilment — Omnicom handles the client relationship and takes a distribution margin</li>
+        </ul>
+      </div>
+      <div class="opp-col">
+        <div class="opp-col-label">What a Pilot Looks Like</div>
+        <ul class="point-list">
+          <li>Choose one Omnicom client with 10–20 physical locations (a hospitality group, retail chain, or quick-service restaurant brand)</li>
+          <li>Deploy branded ReviewTap cards at all locations — cost to client is modest, result is measurable within 30 days</li>
+          <li>Omnicom presents the review volume uplift and Maps ranking improvement as a case study — can be used in future client pitches</li>
+          <li>If results hold, scale to full client base — Omnicom becomes ReviewTap's enterprise distribution channel in SA</li>
+          <li class="muted">Pilot pricing: offer Omnicom a significant discount on the pilot batch in exchange for a case study and preferred agency status</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- OPP 4 -->
+  <div class="opp-card">
+    <div class="opp-header">
+      <div class="opp-header-left">
+        <h3>4. First-mover advantage before competitors enter SA</h3>
+        <p>The NFC review space in SA is early. Omnicom can lock in the category with ReviewTap before a competitor arrives.</p>
+      </div>
+      <span class="badge badge-amber">Strategic Angle</span>
+    </div>
+    <div class="opp-body">
+      <div class="opp-col">
+        <div class="opp-col-label">The Argument</div>
+        <ul class="point-list">
+          <li>NFC-based review generation is well established in the UK, US, and Australia — it's entering SA now</li>
+          <li>ReviewTap is the only established local player — SA-built, SA-priced, with 1,000+ customers already</li>
+          <li>International competitors will arrive. The agency that partners first owns the category narrative for their clients</li>
+          <li>For Omnicom, being the agency that introduced this technology to their clients is a differentiation story worth more than the product margin</li>
+        </ul>
+      </div>
+      <div class="opp-col">
+        <div class="opp-col-label">Why This Matters Strategically</div>
+        <ul class="point-list">
+          <li>Omnicom is investing in its Omni platform and "data-fuelled" positioning — partnering with an innovative local tech product fits that narrative</li>
+          <li>Agency pitches increasingly require tangible innovation stories — "we deployed NFC review technology across 200 client locations" is a strong one</li>
+          <li>Being locked in as ReviewTap's preferred SA agency partner means no competitor agency can offer the same product</li>
+          <li class="muted">Ask: "Is Omnicom currently offering any physical-digital reputation management products to clients?"</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- CLIENT FIT -->
+  <div id="clients" class="section-header">
+    <div class="section-icon">🏷️</div>
+    <div>
+      <div class="section-title">Omnicom Client Fit Analysis</div>
+      <div class="section-sub">Known Omnicom SA clients and why ReviewTap is specifically relevant to each</div>
+    </div>
+  </div>
+
+  <div class="card" style="padding:0;overflow:hidden;">
+    <table class="client-table">
+      <thead>
+        <tr>
+          <th>Client</th>
+          <th>Why ReviewTap Fits</th>
+          <th>Locations / Scale</th>
+          <th>Suggested Pilot</th>
+          <th>Priority</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>MTN</strong></td>
+          <td>Hundreds of SA retail stores and franchise outlets — all with Google Business Profiles, most with very few reviews. High-footfall locations where customer reviews directly impact walk-in traffic from Maps.</td>
+          <td>200+ SA retail touchpoints</td>
+          <td>10 Johannesburg stores, branded cards, 30-day review uplift report</td>
+          <td><span class="badge badge-green">Tier 1</span></td>
+        </tr>
+        <tr>
+          <td><strong>Diageo</strong></td>
+          <td>On-trade venues (bars, restaurants, nightclubs) carrying Diageo brands. Diageo invests heavily in venue experience — ReviewTap fits naturally as a "your experience matters" tool at point of exit.</td>
+          <td>On-trade venue network across SA</td>
+          <td>TripAdvisor + Google device for top 20 Diageo-partnered venues in JHB/CT</td>
+          <td><span class="badge badge-green">Tier 1</span></td>
+        </tr>
+        <tr>
+          <td><strong>SA Tourism</strong></td>
+          <td>Tourism-facing accommodation, attractions, and experiences depend entirely on review volume and rating for booking decisions. A direct tie to TripAdvisor and Google reviews is exactly what SA Tourism operators need.</td>
+          <td>Tourism operators across SA</td>
+          <td>Partner with SA Tourism to offer ReviewTap to registered member businesses at a discounted rate</td>
+          <td><span class="badge badge-blue">Tier 2</span></td>
+        </tr>
+        <tr>
+          <td><strong>Red Bull</strong></td>
+          <td>Events and venue-based activations — ReviewTap as part of event brand experience. "Tap to rate your experience" at Red Bull events creates both reviews and social amplification.</td>
+          <td>Events, retail, experience locations</td>
+          <td>Branded Red Bull ReviewTap stand at one major SA event activation</td>
+          <td><span class="badge badge-blue">Tier 2</span></td>
+        </tr>
+        <tr>
+          <td><strong>Unilever</strong></td>
+          <td>Retail shelf presence — ReviewTap QR codes on packaging or at POS driving product reviews on Google or retailer platforms. Different application but same technology.</td>
+          <td>Mass retail across SA</td>
+          <td>Explore POS and packaging QR applications — requires product expansion discussion</td>
+          <td><span class="badge badge-amber">Tier 3</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- TALK TRACKS -->
+  <div id="pitch" class="section-header">
+    <div class="section-icon">💬</div>
+    <div>
+      <div class="section-title">Talk Tracks — What to Say and When</div>
+      <div class="section-sub">Use these as guides, not scripts. Adapt to where the conversation goes.</div>
+    </div>
+  </div>
+
+  <div class="talk-card">
+    <div class="talk-header">
+      <div class="num">01</div>
+      <div><div class="title">The Opening — How to Frame ReviewTap in the First 60 Seconds</div><div class="sub">Use when they ask "tell me about ReviewTap"</div></div>
+    </div>
+    <div class="talk-body">
+      <div class="talk-col">
+        <div class="col-label">Say This</div>
+        <div class="say">"ReviewTap is a physical NFC and QR device that lets customers leave a Google review with a single tap of their phone. No app, no friction, no typing a URL. We're seeing 3–5x more reviews for businesses in the first month.<br><br>We've built it for the SA market specifically and we're at 1,000+ customers already. What I want to explore with you today is whether there's a fit to take this into the enterprise space through Omnicom's client base — because the brands you work with have the exact footprint this is built for."</div>
+      </div>
+      <div class="talk-col">
+        <div class="col-label">Why This Opening Works</div>
+        <p>It's specific, not vague — "single tap, no app, no friction" is a real product claim, not marketing language.</p>
+        <p>The 1,000+ customers line establishes that this isn't a concept — it's a working product with real adoption.</p>
+        <p><strong>It immediately frames the conversation as a partnership pitch,</strong> not a product demo. You're not asking them to become a customer — you're asking them to become a distribution partner. That's a much more interesting conversation for a digital lead at a media group.</p>
+        <p>The phrase "the brands you work with have the exact footprint this is built for" shows you've done your homework without having to list their clients — it invites them to self-identify the fit.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="talk-card">
+    <div class="talk-header">
+      <div class="num">02</div>
+      <div><div class="title">The Media ROI Bridge — Connecting ReviewTap to Their Core Business</div><div class="sub">Use when they ask "how does this connect to what we do?"</div></div>
+    </div>
+    <div class="talk-body">
+      <div class="talk-col">
+        <div class="col-label">Say This</div>
+        <div class="say">"When you run a local campaign for a retail or hospitality client — Google Ads, Meta, whatever the channel — that campaign drives traffic to a physical location or a Google Business Profile. If that profile has 12 reviews at 3.6 stars, a meaningful percentage of that traffic doesn't convert. You've paid to get them there and the destination let you down.<br><br>ReviewTap fixes the destination. More reviews, higher rating, better Maps ranking, higher conversion on the traffic you're already buying. It's the last-mile performance layer that most media plans are missing."</div>
+      </div>
+      <div class="talk-col">
+        <div class="col-label">Why This Works</div>
+        <p>A digital lead at a media group thinks in performance metrics and ROI. Framing ReviewTap as a media efficiency tool — not a standalone product — speaks their language directly.</p>
+        <p><strong>"The destination let you down"</strong> is a tactful way of identifying a problem they've probably felt but never named. It creates the "that's exactly what happens" moment.</p>
+        <p>The phrase "last-mile performance layer" gives them a way to describe ReviewTap internally to their leadership and to clients — it slots into their existing vocabulary around performance marketing.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="talk-card">
+    <div class="talk-header">
+      <div class="num">03</div>
+      <div><div class="title">The Enterprise Pitch — Reframing ReviewTap from SMB to Scale</div><div class="sub">Use when they say "this looks like a small business product"</div></div>
+    </div>
+    <div class="talk-body">
+      <div class="talk-col">
+        <div class="col-label">Say This</div>
+        <div class="say">"The current product is SMB-priced because that's where we started. But the technology is enterprise-ready. What I'm proposing is a version designed for your clients — custom branded devices carrying the client's logo and colours, bulk pricing, a management dashboard showing review volume and rating trends across all locations, and white-label reporting that Omnicom presents as part of your digital performance delivery.<br><br>You're not reselling a review stand. You're delivering a branded reputation management capability to your clients. That's a different conversation."</div>
+      </div>
+      <div class="talk-col">
+        <div class="col-label">Why This Works</div>
+        <p>It proactively addresses the "that's for small businesses" objection before it becomes a dead end.</p>
+        <p><strong>The white-label framing is critical.</strong> A media group doesn't want to recommend a third-party product — they want to present a service they own. Positioning it as "a branded reputation management capability" gives them ownership of the offering even if ReviewTap is the underlying product.</p>
+        <p>The mention of a "management dashboard" and "white-label reporting" signals that the enterprise version is real and buildable — even if you need to develop those features. It's worth discussing the roadmap honestly if they bite.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="talk-card">
+    <div class="talk-header">
+      <div class="num">04</div>
+      <div><div class="title">The Pilot Close — How to End the Meeting with a Commitment</div><div class="sub">Use in the last 10 minutes to drive a concrete next step</div></div>
+    </div>
+    <div class="talk-body">
+      <div class="talk-col">
+        <div class="col-label">Say This</div>
+        <div class="say">"I'm not asking for a full commitment today. What I'd like to propose is a small pilot — pick one client with 10 to 20 physical locations. We deploy branded ReviewTap devices, run it for 30 days, and I give you a clean results report showing review volume before and after, Maps ranking movement, and any measurable traffic change.<br><br>If the results hold — and they will — you have a case study, a new client offering, and a repeatable model. If they don't, you've spent very little to find that out. Which client comes to mind first?"</div>
+      </div>
+      <div class="talk-col">
+        <div class="col-label">Why This Works</div>
+        <p><strong>"Which client comes to mind first?"</strong> is the pivot that moves from hypothetical to real. It's a question that's easy to answer — and answering it means they've mentally accepted the pilot concept.</p>
+        <p>The "if the results hold — and they will" phrasing projects confidence without being arrogant. You're not asking for permission — you're describing what will happen.</p>
+        <p>Offering a clean results report (not just "it went well") shows you're thinking in the language of a media agency — they need data they can put in front of clients and leadership.</p>
+        <p><strong>The low-risk framing</strong> ("very little to find out") removes the fear of commitment. Most agencies won't say no to a structured pilot with minimal downside.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PARTNERSHIP MODELS -->
+  <div id="models" class="section-header">
+    <div class="section-icon">🤝</div>
+    <div>
+      <div class="section-title">Partnership Models to Propose</div>
+      <div class="section-sub">Present these as options — let them choose the structure they're most comfortable with</div>
+    </div>
+  </div>
+
+  <div class="grid-3">
+    <div class="model-card" style="border-top: 3px solid var(--green);">
+      <h4>🔁 Reseller Model <span class="badge badge-green">Easiest to Close</span></h4>
+      <div class="model-sub">Omnicom recommends ReviewTap to clients and earns a margin on every deployment. No white-labelling, no exclusivity. The lowest commitment ask and the fastest to activate.</div>
+      <ul class="point-list" style="font-size:12px;margin-bottom:12px;">
+        <li>Omnicom earns 20–30% margin on all client referrals</li>
+        <li>ReviewTap handles all fulfilment and support</li>
+        <li>Omnicom positions it as a recommended tool, not a proprietary product</li>
+        <li>Can start immediately with no product development required</li>
+      </ul>
+      <div class="model-terms">Commission: 25% margin on all referred sales<br>Start: Immediately after MOU signing</div>
+    </div>
+
+    <div class="model-card" style="border-top: 3px solid var(--accent);">
+      <h4>🏷️ White-Label Model <span class="badge badge-purple">Best Long-Term</span></h4>
+      <div class="model-sub">Omnicom deploys custom-branded ReviewTap devices under their own or their client's brand. ReviewTap is invisible in the client relationship. Omnicom owns the service narrative.</div>
+      <ul class="point-list" style="font-size:12px;margin-bottom:12px;">
+        <li>Devices branded with client logo and colours</li>
+        <li>Omnicom presents as a proprietary digital service</li>
+        <li>Dashboard and reporting co-branded or Omnicom-branded</li>
+        <li>Higher margin for Omnicom, deeper relationship, harder to commoditise</li>
+      </ul>
+      <div class="model-terms">Pricing: cost + 35% agency margin<br>Requires: branding agreement + 3-month pilot commitment</div>
+    </div>
+
+    <div class="model-card" style="border-top: 3px solid var(--cyan);">
+      <h4>📦 Bundled Retainer <span class="badge badge-cyan">Highest Value</span></h4>
+      <div class="model-sub">ReviewTap becomes a line item in Omnicom's ongoing digital retainer for clients — deployed, monitored, and reported on monthly as part of their performance dashboard.</div>
+      <ul class="point-list" style="font-size:12px;margin-bottom:12px;">
+        <li>Included in Omnicom's digital performance retainer as a managed service</li>
+        <li>Monthly reporting on review volume, rating trends, and Maps position</li>
+        <li>Device replacement and expansion handled automatically</li>
+        <li>Creates recurring revenue for both ReviewTap and Omnicom</li>
+      </ul>
+      <div class="model-terms">Monthly retainer per location: R150–R300<br>Minimum: 20 locations to activate</div>
+    </div>
+  </div>
+
+  <!-- OBJECTIONS -->
+  <div id="objections" class="section-header">
+    <div class="section-icon">🛡️</div>
+    <div>
+      <div class="section-title">Objections &amp; How to Handle Them</div>
+      <div class="section-sub">Every likely pushback — answered before it stops the conversation</div>
+    </div>
+  </div>
+
+  <div class="card" style="padding:0;overflow:hidden;">
+    <div class="obj-card" style="border:none;border-radius:0;margin:0;border-bottom: 1px solid var(--border);">
+      <div class="obj-q">This feels like a small business product — our clients are enterprise.</div>
+      <div class="obj-a">The current retail pricing is SMB-positioned, but the technology is the same one used by enterprise brands globally. What we're proposing isn't the R299 card — it's a custom-branded, multi-location deployment with a management dashboard and white-label reporting. <strong>The product scales — the question is whether the commercial model works for your clients.</strong> That's what the pilot is designed to test.</div>
+    </div>
+    <div class="obj-card" style="border:none;border-radius:0;margin:0;border-bottom: 1px solid var(--border);">
+      <div class="obj-q">Google's terms of service say you can't incentivise or direct customers to leave reviews.</div>
+      <div class="obj-a">ReviewTap doesn't incentivise reviews — there's no reward, no discount, no prompt to leave a positive review specifically. The device simply makes the act of leaving a review faster and frictionless. <strong>Reducing friction is not the same as incentivising.</strong> Google's guidelines prohibit fake reviews and review gating — ReviewTap does neither. It's the equivalent of putting a "review us on Google" sign at your counter, except it works.</div>
+    </div>
+    <div class="obj-card" style="border:none;border-radius:0;margin:0;border-bottom: 1px solid var(--border);">
+      <div class="obj-q">We already have a reputation management or local SEO offering.</div>
+      <div class="obj-a">That's actually good to hear — it means the client need is already validated. The question is what that offering looks like at the location level. <strong>Most reputation tools are monitoring and response tools — they manage reviews but don't generate them.</strong> ReviewTap generates volume at the physical touchpoint, which most digital tools can't touch. It complements an existing reputation offering rather than replacing it.</div>
+    </div>
+    <div class="obj-card" style="border:none;border-radius:0;margin:0;border-bottom: 1px solid var(--border);">
+      <div class="obj-q">We'd need exclusivity or we can't commit.</div>
+      <div class="obj-a">Exclusivity is on the table for the right structure. If Omnicom commits to a minimum deployment volume and a defined rollout timeline, <strong>we can agree to preferred agency status in SA</strong> — meaning ReviewTap won't actively pursue or partner with your direct competitors (PHD/OMD competitors). Full exclusivity depends on the commercial commitment level, but preferred status is achievable immediately.</div>
+    </div>
+    <div class="obj-card" style="border:none;border-radius:0;margin:0;">
+      <div class="obj-q">Our clients manage their own vendors — we don't typically recommend products like this.</div>
+      <div class="obj-a">Understood — and this doesn't have to be a formal recommendation. <strong>The lightest version of this partnership is simply introducing us to two or three relevant client contacts</strong> where you can see the fit. We handle the client conversation, close the deal, and Omnicom earns a referral fee. No endorsement required, no formal partnership documentation needed to start.</div>
+    </div>
+  </div>
+
+  <!-- QUESTIONS TO ASK -->
+  <div id="questions" class="section-header">
+    <div class="section-icon">❓</div>
+    <div>
+      <div class="section-title">Questions to Ask the Digital Lead</div>
+      <div class="section-sub">Ask these to qualify the opportunity and understand where the real fit is</div>
+    </div>
+  </div>
+
+  <div class="card" style="padding:0;overflow:hidden;">
+    <ul class="q-list">
+      <li class="q-item">
+        <div class="q-num">01</div>
+        <div>
+          <div class="q-text">"What does your current local SEO and reputation management offering look like for clients with physical locations?"</div>
+          <div class="q-why">This tells you whether there's a gap to fill or a competing service to position against. If they have nothing, ReviewTap is an easy add. If they have something, you need to differentiate at the generation layer.</div>
+        </div>
+      </li>
+      <li class="q-item">
+        <div class="q-num">02</div>
+        <div>
+          <div class="q-text">"Which of your clients would feel the most immediate impact from an improvement in their Google Maps visibility?"</div>
+          <div class="q-why">Gets them thinking in specifics rather than abstractions. The client name they give you is your pilot target — and it signals they've mentally accepted the premise.</div>
+        </div>
+      </li>
+      <li class="q-item">
+        <div class="q-num">03</div>
+        <div>
+          <div class="q-text">"When you present performance reports to your clients, is local search ranking or Google Business Profile performance part of that reporting?"</div>
+          <div class="q-why">If the answer is no, ReviewTap helps them add a new performance metric to their client reporting — which strengthens their retention. If yes, they already care about this data and ReviewTap improves it.</div>
+        </div>
+      </li>
+      <li class="q-item">
+        <div class="q-num">04</div>
+        <div>
+          <div class="q-text">"Are there clients where you're running paid local campaigns but feel the conversion rate at the location level is lower than it should be?"</div>
+          <div class="q-why">This is the media ROI angle. A yes answer means ReviewTap directly solves a problem they've already identified — and the sale becomes about the solution, not the problem.</div>
+        </div>
+      </li>
+      <li class="q-item">
+        <div class="q-num">05</div>
+        <div>
+          <div class="q-text">"How does Omnicom typically evaluate new technology partnerships — is there a formal procurement process, or can you move quickly at the digital division level?"</div>
+          <div class="q-why">Tells you who else needs to be in the room and how long the decision process will take. Large agency groups can have long procurement cycles — knowing this early prevents wasted time chasing the wrong approval path.</div>
+        </div>
+      </li>
+      <li class="q-item">
+        <div class="q-num">06</div>
+        <div>
+          <div class="q-text">"Is there an innovation or new products budget within your digital division, or does this need to be funded through client campaigns?"</div>
+          <div class="q-why">Determines where the money comes from. If there's a discretionary innovation budget, a pilot is much faster to approve. If it needs to go through a client campaign, you need a specific client to champion it.</div>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- NEXT STEPS -->
+  <div id="next" class="section-header">
+    <div class="section-icon">🚀</div>
+    <div>
+      <div class="section-title">Ideal Outcomes from This Meeting</div>
+      <div class="section-sub">Leave with at least one of these — in order of preference</div>
+    </div>
+  </div>
+
+  <div class="card" style="padding: 0 28px;">
+    <ul class="step-list">
+      <li class="step-item">
+        <div class="step-dot">1</div>
+        <div class="step-content">
+          <h4>A named pilot client and a 2-week timeline to scope it</h4>
+          <p>The digital lead names a specific client, agrees to introduce you to their contact, and commits to a 30-day pilot. This is the best possible outcome — everything else flows from a successful pilot.</p>
+        </div>
+      </li>
+      <li class="step-item">
+        <div class="step-dot">2</div>
+        <div class="step-content">
+          <h4>A follow-up meeting with the relevant client team or account director</h4>
+          <p>If they can't commit to a pilot today, getting an introduction to the account director managing the right client is the next best outcome. You're one conversation closer to the decision-maker.</p>
+        </div>
+      </li>
+      <li class="step-item">
+        <div class="step-dot">3</div>
+        <div class="step-content">
+          <h4>Agreement to present a formal partnership proposal</h4>
+          <p>They're interested but need a written proposal to take internally. If this is the outcome, ask them to specify exactly what the proposal needs to include and who else needs to see it. Send it within 48 hours.</p>
+        </div>
+      </li>
+      <li class="step-item">
+        <div class="step-dot">4</div>
+        <div class="step-content">
+          <h4>A clear "not now" with a specific reason</h4>
+          <p>Even a no is valuable if you understand why. A "we don't do vendor partnerships at the digital division level" tells you to approach a different door. A "timing isn't right" tells you when to come back. Clarity is better than ambiguity.</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- THINGS TO BRING -->
+  <div class="section-header">
+    <div class="section-icon">📁</div>
+    <div>
+      <div class="section-title">Bring to the Meeting</div>
+    </div>
+  </div>
+  <div class="grid-3">
+    <div class="card-sm">
+      <div style="font-size:20px;margin-bottom:8px;">📦</div>
+      <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:6px;">A physical ReviewTap device</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.5;">Bring both a stand and a card. Let them tap it and experience the product in the room. Nothing closes faster than a live demo. Put your own Google review link on it so they land on something real.</div>
+    </div>
+    <div class="card-sm">
+      <div style="font-size:20px;margin-bottom:8px;">📊</div>
+      <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:6px;">A one-page results summary</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.5;">One page. Before/after review volumes for 3 real clients. Location, time period, review count before, review count after, rating change. Numbers only — no fluff. Leave it behind.</div>
+    </div>
+    <div class="card-sm">
+      <div style="font-size:20px;margin-bottom:8px;">💡</div>
+      <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:6px;">A pre-built pilot proposal</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.5;">A 1-page pilot scope doc: 10 locations, 30 days, branded devices, results report. Have it ready to hand over if they say "send me something." Getting paper in front of them before they leave the room is always better than "I'll send it this week."</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">JCE Media · ReviewTap × Omnicom Media Group Meeting Brief · May 2026 · Confidential</div>
+
+</body>
+</html>

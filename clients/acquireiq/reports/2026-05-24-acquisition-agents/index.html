@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AcquireIQ — AI-Powered Deal Intelligence</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+  :root {
+    --bg: #080c14;
+    --bg2: #0d1220;
+    --bg3: #111827;
+    --border: rgba(255,255,255,0.07);
+    --border-glow: rgba(99,179,255,0.25);
+    --cyan: #38bdf8;
+    --cyan-dim: rgba(56,189,248,0.12);
+    --gold: #f59e0b;
+    --gold-dim: rgba(245,158,11,0.12);
+    --green: #10b981;
+    --green-dim: rgba(16,185,129,0.12);
+    --red: #ef4444;
+    --purple: #a78bfa;
+    --purple-dim: rgba(167,139,250,0.12);
+    --text: #e2e8f0;
+    --text-muted: #64748b;
+    --text-dim: #94a3b8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ---- BACKGROUND GRID ---- */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(56,189,248,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(56,189,248,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ---- GLOW ORBS ---- */
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(120px);
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.35;
+  }
+  .orb-1 { width: 600px; height: 600px; background: #0ea5e9; top: -200px; left: -150px; }
+  .orb-2 { width: 500px; height: 500px; background: #7c3aed; bottom: -200px; right: -100px; }
+  .orb-3 { width: 300px; height: 300px; background: #f59e0b; top: 40%; left: 50%; transform: translateX(-50%); opacity: 0.12; }
+
+  /* ---- LAYOUT ---- */
+  .wrapper { position: relative; z-index: 1; }
+
+  /* ---- NAVBAR ---- */
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 48px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(8,12,20,0.8);
+    backdrop-filter: blur(20px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 800;
+    font-size: 1.2rem;
+    letter-spacing: -0.5px;
+  }
+
+  .logo-icon {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, var(--cyan), #6366f1);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    box-shadow: 0 0 20px rgba(56,189,248,0.4);
+  }
+
+  .logo span { color: var(--cyan); }
+
+  .nav-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    background: var(--green-dim);
+    border: 1px solid rgba(16,185,129,0.2);
+    border-radius: 100px;
+    padding: 6px 14px;
+  }
+
+  .pulse-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 8px var(--green);
+    animation: pulse-glow 2s infinite;
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { opacity: 1; box-shadow: 0 0 8px var(--green); }
+    50% { opacity: 0.5; box-shadow: 0 0 16px var(--green); }
+  }
+
+  /* ---- TOOLBAR ---- */
+  .toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 48px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(8,12,20,0.6);
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .toolbar-left { display: flex; align-items: center; gap: 24px; }
+  .toolbar-right { display: flex; align-items: center; gap: 16px; }
+
+  .toolbar-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .toolbar-item .label { color: var(--text-muted); }
+  .toolbar-item .val { color: var(--text-dim); font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+  .toolbar-item .val.green { color: var(--green); }
+  .toolbar-item .val.gold { color: var(--gold); }
+  .toolbar-item .val.cyan { color: var(--cyan); }
+  .toolbar-item .val.red { color: var(--red); }
+
+  .toolbar-sep { width: 1px; height: 16px; background: var(--border); }
+
+  .toolbar-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 5px 12px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .toolbar-btn:hover { border-color: var(--border-glow); color: var(--text); }
+
+  /* ---- STATS ROW ---- */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 32px;
+  }
+
+  .stat-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+
+  .stat-card:hover {
+    border-color: var(--border-glow);
+    transform: translateY(-2px);
+  }
+
+  .stat-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .stat-card:hover::after { opacity: 1; }
+
+  .stat-label { font-size: 0.75rem; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+  .stat-value { font-size: 2rem; font-weight: 800; letter-spacing: -1px; }
+  .stat-value.cyan { color: var(--cyan); }
+  .stat-value.gold { color: var(--gold); }
+  .stat-value.green { color: var(--green); }
+  .stat-value.purple { color: var(--purple); }
+  .stat-sub { font-size: 0.75rem; color: var(--text-muted); margin-top: 6px; }
+  .stat-change { display: inline-flex; align-items: center; gap: 4px; font-size: 0.72rem; color: var(--green); background: var(--green-dim); border-radius: 6px; padding: 2px 8px; margin-top: 6px; }
+
+  /* ---- SECTION TITLES ---- */
+  .section { padding: 0 48px 64px; max-width: 1400px; margin: 0 auto; }
+  .section-title {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .section-heading { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 32px; }
+
+  /* ---- AGENT GRID ---- */
+  .agents-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .agent-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.35s;
+    cursor: default;
+  }
+
+  .agent-card:hover {
+    border-color: var(--border-glow);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(56,189,248,0.1);
+  }
+
+  .agent-card .glow-bg {
+    position: absolute;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    filter: blur(60px);
+    top: -60px; right: -60px;
+    opacity: 0.12;
+    transition: opacity 0.35s;
+  }
+
+  .agent-card:hover .glow-bg { opacity: 0.22; }
+
+  .agent-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 18px;
+  }
+
+  .agent-icon {
+    width: 48px; height: 48px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+
+  .agent-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 100px;
+  }
+
+  .status-active { background: var(--green-dim); color: var(--green); border: 1px solid rgba(16,185,129,0.25); }
+  .status-scanning { background: var(--cyan-dim); color: var(--cyan); border: 1px solid rgba(56,189,248,0.25); }
+  .status-processing { background: var(--purple-dim); color: var(--purple); border: 1px solid rgba(167,139,250,0.25); }
+  .status-standby { background: var(--gold-dim); color: var(--gold); border: 1px solid rgba(245,158,11,0.25); }
+
+  .agent-name { font-size: 1.05rem; font-weight: 700; margin-bottom: 4px; }
+  .agent-role { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 14px; }
+
+  .agent-capabilities {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-bottom: 20px;
+  }
+
+  .agent-capabilities li {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    line-height: 1.4;
+  }
+
+  .agent-capabilities li::before {
+    content: '';
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    margin-top: 5px;
+    flex-shrink: 0;
+  }
+
+  .cap-cyan::before { background: var(--cyan); box-shadow: 0 0 6px var(--cyan); }
+  .cap-gold::before { background: var(--gold); box-shadow: 0 0 6px var(--gold); }
+  .cap-green::before { background: var(--green); box-shadow: 0 0 6px var(--green); }
+  .cap-purple::before { background: var(--purple); box-shadow: 0 0 6px var(--purple); }
+
+  .agent-metric {
+    display: flex;
+    justify-content: space-between;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 0.75rem;
+  }
+
+  .metric-label { color: var(--text-muted); }
+  .metric-value { font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+
+  /* ---- PIPELINE ---- */
+  .pipeline-wrapper {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 40px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .pipeline-title {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 36px;
+    color: var(--text-dim);
+  }
+
+  .pipeline-track {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0;
+    align-items: center;
+    position: relative;
+  }
+
+  .pipeline-track::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 40px;
+    right: 40px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--cyan), #6366f1, var(--gold));
+    transform: translateY(-50%);
+    z-index: 0;
+    opacity: 0.3;
+  }
+
+  .pipe-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .pipe-icon {
+    width: 56px; height: 56px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    position: relative;
+    transition: transform 0.3s;
+    border: 1px solid var(--border);
+  }
+
+  .pipe-icon:hover { transform: scale(1.1); }
+
+  .pipe-icon.active {
+    border-color: var(--cyan);
+    box-shadow: 0 0 24px rgba(56,189,248,0.3);
+  }
+
+  .pipe-label {
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-align: center;
+    color: var(--text-dim);
+    line-height: 1.3;
+    max-width: 72px;
+  }
+
+  .pipe-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-size: 14px;
+  }
+
+  /* ---- LIVE FEED ---- */
+  .two-col { display: grid; grid-template-columns: 1fr 400px; gap: 20px; }
+
+  .feed-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 28px;
+    height: 460px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .feed-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+  .feed-title { font-size: 0.95rem; font-weight: 700; }
+
+  .live-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--red);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .live-dot {
+    width: 6px; height: 6px;
+    background: var(--red);
+    border-radius: 50%;
+    box-shadow: 0 0 6px var(--red);
+    animation: pulse-glow 1s infinite;
+  }
+
+  .feed-list { display: flex; flex-direction: column; gap: 2px; overflow: hidden; }
+
+  .feed-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    font-size: 0.78rem;
+    transition: background 0.2s;
+    animation: slideIn 0.4s ease-out;
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(-10px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  .feed-item:hover { background: rgba(255,255,255,0.03); }
+
+  .feed-time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.67rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+    padding-top: 1px;
+    min-width: 44px;
+  }
+
+  .feed-agent-tag {
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 5px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .tag-scout { background: var(--cyan-dim); color: var(--cyan); }
+  .tag-screen { background: var(--gold-dim); color: var(--gold); }
+  .tag-traffic { background: var(--purple-dim); color: var(--purple); }
+  .tag-revenue { background: var(--green-dim); color: var(--green); }
+  .tag-seo { background: rgba(239,68,68,0.1); color: var(--red); }
+  .tag-val { background: rgba(251,191,36,0.1); color: #fbbf24; }
+  .tag-memo { background: rgba(99,102,241,0.15); color: #818cf8; }
+
+  .feed-msg { color: var(--text-dim); line-height: 1.4; }
+  .feed-msg strong { color: var(--text); font-weight: 600; }
+
+  /* ---- MEMO PREVIEW ---- */
+  .memo-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 28px;
+    height: 460px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .memo-header { margin-bottom: 20px; }
+  .memo-tag { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--gold); margin-bottom: 8px; }
+  .memo-title { font-size: 1rem; font-weight: 800; margin-bottom: 4px; }
+  .memo-sub { font-size: 0.72rem; color: var(--text-muted); }
+
+  .memo-divider { height: 1px; background: var(--border); margin: 16px 0; }
+
+  .memo-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 7px 0;
+    font-size: 0.78rem;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .memo-row-label { color: var(--text-muted); }
+  .memo-row-value { font-weight: 600; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; }
+
+  .risk-bar-wrap { margin-top: 16px; }
+  .risk-bar-label { display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--text-muted); margin-bottom: 5px; }
+  .risk-bar { height: 5px; border-radius: 99px; background: rgba(255,255,255,0.07); overflow: hidden; margin-bottom: 8px; }
+  .risk-fill { height: 100%; border-radius: 99px; }
+
+  .verdict-box {
+    margin-top: 16px;
+    padding: 14px 18px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .verdict-negotiate {
+    background: rgba(245,158,11,0.08);
+    border: 1px solid rgba(245,158,11,0.2);
+  }
+
+  .verdict-label { font-size: 0.7rem; color: var(--text-muted); margin-bottom: 3px; }
+  .verdict-value { font-size: 1.1rem; font-weight: 900; color: var(--gold); letter-spacing: -0.5px; }
+  .verdict-price { text-align: right; }
+  .verdict-price .price-label { font-size: 0.7rem; color: var(--text-muted); margin-bottom: 3px; }
+  .verdict-price .price-value { font-size: 0.9rem; font-weight: 700; font-family: 'JetBrains Mono', monospace; color: var(--text); }
+
+  /* ---- BOTTOM SECTION ---- */
+  .platforms-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-top: 24px;
+  }
+
+  .platform-chip {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 18px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-dim);
+    transition: all 0.3s;
+  }
+
+  .platform-chip:hover {
+    border-color: var(--border-glow);
+    color: var(--text);
+  }
+
+  .platform-chip span { font-size: 20px; }
+
+  /* ---- CTA FOOTER ---- */
+  .cta-section {
+    margin: 48px 48px 60px;
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 48px;
+  }
+
+  .cta-box {
+    background: linear-gradient(135deg, rgba(56,189,248,0.08) 0%, rgba(99,102,241,0.08) 50%, rgba(245,158,11,0.05) 100%);
+    border: 1px solid rgba(56,189,248,0.2);
+    border-radius: 24px;
+    padding: 52px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-box::before {
+    content: '';
+    position: absolute;
+    top: -1px; left: 20%; right: 20%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--cyan), #6366f1, var(--gold), transparent);
+  }
+
+  .cta-box h2 { font-size: 2rem; font-weight: 900; letter-spacing: -1px; margin-bottom: 16px; }
+  .cta-box p { color: var(--text-dim); font-size: 0.95rem; max-width: 480px; margin: 0 auto 32px; line-height: 1.7; }
+
+  .cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(135deg, var(--cyan), #6366f1);
+    color: white;
+    font-weight: 700;
+    font-size: 0.95rem;
+    padding: 14px 32px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 0 40px rgba(56,189,248,0.3);
+    transition: all 0.3s;
+    text-decoration: none;
+  }
+
+  .cta-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 60px rgba(56,189,248,0.5);
+  }
+
+  /* ---- SCANLINE ANIMATION ---- */
+  @keyframes scan {
+    0% { top: -2px; }
+    100% { top: calc(100% + 2px); }
+  }
+
+  .scanning-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+    opacity: 0.4;
+    animation: scan 3s linear infinite;
+    pointer-events: none;
+  }
+
+  /* ---- COUNTER ANIMATION ---- */
+  .count-up { display: inline; }
+
+  /* ---- SCROLLBAR ---- */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+
+  /* ---- RESPONSIVE ---- */
+  @media (max-width: 1100px) {
+    .agents-grid { grid-template-columns: repeat(2, 1fr); }
+    .pipeline-track { grid-template-columns: repeat(4, 1fr); }
+    .two-col { grid-template-columns: 1fr; }
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    .hero, .section { padding-left: 24px; padding-right: 24px; }
+    .hero h1 { font-size: 2.2rem; }
+    .agents-grid { grid-template-columns: 1fr; }
+    .stats-row { grid-template-columns: 1fr 1fr; }
+    .platforms-row { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* ---- TOOLTIP ---- */
+  [data-tooltip] { position: relative; }
+  [data-tooltip]:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1e293b;
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-size: 0.7rem;
+    padding: 5px 10px;
+    border-radius: 7px;
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 200;
+  }
+
+  .fade-gradient {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 100px;
+    background: linear-gradient(to bottom, transparent, var(--bg2));
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+<div class="wrapper">
+
+  <!-- NAVBAR -->
+  <nav>
+    <div class="logo">
+      <div class="logo-icon">⚡</div>
+      Acquire<span>IQ</span>
+    </div>
+    <div class="nav-status">
+      <div class="pulse-dot"></div>
+      All 7 agents operational
+    </div>
+  </nav>
+
+  <!-- TOOLBAR -->
+  <div class="toolbar">
+    <div class="toolbar-left">
+      <div class="toolbar-item">
+        <span class="label">Session</span>
+        <span class="val cyan" id="session-date"></span>
+      </div>
+      <div class="toolbar-sep"></div>
+      <div class="toolbar-item">
+        <span class="label">Pipeline</span>
+        <span class="val">3 shortlisted &nbsp;/&nbsp; <span style="color:var(--gold)">8 watchlist</span> &nbsp;/&nbsp; <span style="color:var(--text-muted)">41 rejected</span></span>
+      </div>
+      <div class="toolbar-sep"></div>
+      <div class="toolbar-item">
+        <span class="label">Active deal</span>
+        <span class="val gold">Flippa #829341</span>
+      </div>
+      <div class="toolbar-sep"></div>
+      <div class="toolbar-item">
+        <span class="label">Uptime</span>
+        <span class="val green" id="uptime-val">14d 6h 22m</span>
+      </div>
+    </div>
+    <div class="toolbar-right">
+      <div class="toolbar-btn">⬇ Export Pipeline</div>
+      <div class="toolbar-btn">+ New Criteria Set</div>
+      <div class="toolbar-btn" style="border-color:rgba(16,185,129,0.3);color:var(--green);">⚙ Agent Config</div>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div style="padding: 28px 48px 0; max-width:1400px; margin:0 auto;">
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-label">Listings Screened</div>
+        <div class="stat-value cyan" id="s1">0</div>
+        <div class="stat-sub">Across Flippa, Acquire.com, Empire Flippers</div>
+        <div class="stat-change">↑ 47 this week</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Avg. Deal Review Time</div>
+        <div class="stat-value gold">4.2<span style="font-size:1rem;font-weight:500"> hrs</span></div>
+        <div class="stat-sub">From listing to final memo</div>
+        <div class="stat-change">↓ 83% vs manual process</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Red Flags Caught</div>
+        <div class="stat-value green" id="s3">0</div>
+        <div class="stat-sub">Revenue anomalies, SEO spikes, hidden costs</div>
+        <div class="stat-change">↑ 12 flagged this month</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Deals Recommended</div>
+        <div class="stat-value purple" id="s4">0</div>
+        <div class="stat-sub">Strong Buy or Negotiate</div>
+        <div class="stat-change">8.3% of total screened</div>
+      </div>
+    </div>
+  </div><!-- /stats-row -->
+  </div><!-- /stats wrapper -->
+
+  <!-- AGENTS -->
+  <div class="section">
+    <div class="section-title">Agent Network — 7/7 Online</div>
+    <div class="section-heading">Active Agents</div>
+
+    <div class="agents-grid">
+
+      <!-- AGENT 1: SCOUT -->
+      <div class="agent-card">
+        <div class="glow-bg" style="background:#38bdf8"></div>
+        <div class="agent-header">
+          <div class="agent-icon" style="background:rgba(56,189,248,0.1); border:1px solid rgba(56,189,248,0.2);">🔍</div>
+          <div class="agent-status status-scanning">
+            <div class="pulse-dot" style="background:var(--cyan);box-shadow:0 0 8px var(--cyan);"></div>
+            Scanning
+          </div>
+        </div>
+        <div class="agent-name">Scout Agent</div>
+        <div class="agent-role">Deal Sourcing &amp; Market Monitoring</div>
+        <ul class="agent-capabilities">
+          <li class="cap-cyan">Monitors Flippa, Acquire.com, and Empire Flippers continuously for new listings</li>
+          <li class="cap-cyan">Filters by revenue range, multiple, niche, and business model</li>
+          <li class="cap-cyan">Alerts on newly listed deals matching acquisition criteria within minutes</li>
+          <li class="cap-cyan">Tracks price drops and listing age to identify motivated sellers</li>
+        </ul>
+        <div class="agent-metric">
+          <span class="metric-label">Last scan</span>
+          <span class="metric-value cyan" id="last-scan">2m 14s ago</span>
+        </div>
+        <div class="scanning-overlay" style="animation-duration:4s;"></div>
+      </div>
+
+      <!-- AGENT 2: SCREEN -->
+      <div class="agent-card">
+        <div class="glow-bg" style="background:#f59e0b"></div>
+        <div class="agent-header">
+          <div class="agent-icon" style="background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.2);">⚡</div>
+          <div class="agent-status status-active">
+            <div class="pulse-dot"></div>
+            Active
+          </div>
+        </div>
+        <div class="agent-name">Screen Agent</div>
+        <div class="agent-role">Rapid Deal Scoring &amp; Pipeline Management</div>
+        <ul class="agent-capabilities">
+          <li class="cap-gold">Scores each listing against 22 weighted criteria in under 60 seconds</li>
+          <li class="cap-gold">Tags deals: Rejected / Watchlist / Shortlisted automatically</li>
+          <li class="cap-gold">Eliminates low-quality listings before human review is needed</li>
+          <li class="cap-gold">Maintains and updates the live pipeline dashboard in real time</li>
+        </ul>
+        <div class="agent-metric">
+          <span class="metric-label">Pipeline today</span>
+          <span class="metric-value gold">3 shortlisted / 41 rejected</span>
+        </div>
+      </div>
+
+      <!-- AGENT 3: TRAFFIC -->
+      <div class="agent-card">
+        <div class="glow-bg" style="background:#a78bfa"></div>
+        <div class="agent-header">
+          <div class="agent-icon" style="background:rgba(167,139,250,0.1); border:1px solid rgba(167,139,250,0.2);">📊</div>
+          <div class="agent-status status-processing">
+            <div class="pulse-dot" style="background:var(--purple);box-shadow:0 0 8px var(--purple);"></div>
+            Processing
+          </div>
+        </div>
+        <div class="agent-name">Traffic Analyst</div>
+        <div class="agent-role">SEO &amp; Audience Intelligence</div>
+        <ul class="agent-capabilities">
+          <li class="cap-purple">Parses GA4, Google Search Console, Ahrefs, and SEMrush exports automatically</li>
+          <li class="cap-purple">Maps traffic source breakdown: organic vs direct vs referral vs paid</li>
+          <li class="cap-purple">Detects pre-sale traffic spikes and artificial inflation patterns</li>
+          <li class="cap-purple">Identifies keyword concentration risk and top-page dependency</li>
+        </ul>
+        <div class="agent-metric">
+          <span class="metric-label">Analysing</span>
+          <span class="metric-value purple">GA export — flippa-#829341</span>
+        </div>
+        <div class="scanning-overlay" style="animation-duration:2s;background:linear-gradient(90deg,transparent,var(--purple),transparent);"></div>
+      </div>
+
+      <!-- AGENT 4: REVENUE -->
+      <div class="agent-card">
+        <div class="glow-bg" style="background:#10b981"></div>
+        <div class="agent-header">
+          <div class="agent-icon" style="background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.2);">💰</div>
+          <div class="agent-status status-active">
+            <div class="pulse-dot"></div>
+            Active
+          </div>
+        </div>
+        <div class="agent-name">Revenue Verifier</div>
+        <div class="agent-role">Financial Statement Cross-Reference Engine</div>
+        <ul class="agent-capabilities">
+          <li class="cap-green">Reconciles P&L against bank statements, Stripe, PayPal, Wise, and Payoneer exports</li>
+          <li class="cap-green">Flags revenue gaps, unexplained refunds, and suspicious transaction timing</li>
+          <li class="cap-green">Calculates normalised EBITDA stripping owner salary and one-off items</li>
+          <li class="cap-green">Detects client or platform revenue concentration above safe thresholds</li>
+        </ul>
+        <div class="agent-metric">
+          <span class="metric-label">Discrepancies found this month</span>
+          <span class="metric-value green">7 flagged</span>
+        </div>
+      </div>
+
+      <!-- AGENT 5: SEO RISK -->
+      <div class="agent-card">
+        <div class="glow-bg" style="background:#ef4444"></div>
+        <div class="agent-header">
+          <div class="agent-icon" style="background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.2);">🛡️</div>
+          <div class="agent-status status-active">
+            <div class="pulse-dot"></div>
+            Active
+          </div>
+        </div>
+        <div class="agent-name">SEO Risk Agent</div>
+        <div class="agent-role">Google Vulnerability &amp; Backlink Analysis</div>
+        <ul class="agent-capabilities">
+          <li style="display:flex;align-items:flex-start;gap:8px;font-size:0.8rem;color:var(--text-dim);line-height:1.4;">
+            <span style="width:5px;height:5px;border-radius:50%;background:var(--red);box-shadow:0 0 6px var(--red);flex-shrink:0;margin-top:5px;"></span>
+            Maps keyword ranking history against Google core update dates
+          </li>
+          <li style="display:flex;align-items:flex-start;gap:8px;font-size:0.8rem;color:var(--text-dim);line-height:1.4;">
+            <span style="width:5px;height:5px;border-radius:50%;background:var(--red);box-shadow:0 0 6px var(--red);flex-shrink:0;margin-top:5px;"></span>
+            Scores backlink profile quality: toxic links, PBN patterns, anchor ratios
+          </li>
+          <li style="display:flex;align-items:flex-start;gap:8px;font-size:0.8rem;color:var(--text-dim);line-height:1.4;">
+            <span style="width:5px;height:5px;border-radius:50%;background:var(--red);box-shadow:0 0 6px var(--red);flex-shrink:0;margin-top:5px;"></span>
+            Detects thin content, AI-generated pages, and policy violation exposure
+          </li>
+          <li style="display:flex;align-items:flex-start;gap:8px;font-size:0.8rem;color:var(--text-dim);line-height:1.4;">
+            <span style="width:5px;height:5px;border-radius:50%;background:var(--red);box-shadow:0 0 6px var(--red);flex-shrink:0;margin-top:5px;"></span>
+            Outputs an SEO Risk Score: Low / Medium / High / Critical
+          </li>
+        </ul>
+        <div class="agent-metric">
+          <span class="metric-label">Avg. SEO Risk Score (deals reviewed)</span>
+          <span class="metric-value" style="color:var(--red);">Medium-High</span>
+        </div>
+      </div>
+
+      <!-- AGENT 6: VALUATION -->
+      <div class="agent-card">
+        <div class="glow-bg" style="background:#fbbf24"></div>
+        <div class="agent-header">
+          <div class="agent-icon" style="background:rgba(251,191,36,0.1); border:1px solid rgba(251,191,36,0.2);">⚖️</div>
+          <div class="agent-status status-standby">
+            <div class="pulse-dot" style="background:var(--gold);box-shadow:0 0 8px var(--gold);"></div>
+            Standby
+          </div>
+        </div>
+        <div class="agent-name">Valuation Engine</div>
+        <div class="agent-role">Deal Pricing &amp; Multiple Analysis</div>
+        <ul class="agent-capabilities">
+          <li class="cap-gold">Calculates fair SDE and EBITDA multiples benchmarked against recent comparable sales</li>
+          <li class="cap-gold">Models risk-adjusted valuation ranges based on traffic and revenue stability scores</li>
+          <li class="cap-gold">Outputs target offer price, walkaway price, and opening bid suggestion</li>
+          <li class="cap-gold">Tracks multiple compression trends across niches and business models</li>
+        </ul>
+        <div class="agent-metric">
+          <span class="metric-label">Comparables in database</span>
+          <span class="metric-value" style="color:#fbbf24;">2,400+ deals</span>
+        </div>
+      </div>
+
+      <!-- AGENT 7: MEMO -->
+      <div class="agent-card" style="grid-column: span 3;">
+        <div class="glow-bg" style="background:#818cf8; left:-60px; right:auto;"></div>
+        <div class="agent-header">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <div class="agent-icon" style="background:rgba(99,102,241,0.15); border:1px solid rgba(99,102,241,0.3);">📋</div>
+            <div>
+              <div class="agent-name">Memo Writer</div>
+              <div class="agent-role">Investment Memo Generation — Final Stage Output</div>
+            </div>
+          </div>
+          <div class="agent-status status-active">
+            <div class="pulse-dot"></div>
+            Active
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:8px;">
+          <div style="background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:12px;padding:14px;">
+            <div style="font-size:0.68rem;color:var(--text-muted);margin-bottom:6px;">OUTPUT</div>
+            <div style="font-size:0.82rem;font-weight:600;line-height:1.5;color:var(--text-dim);">Structured investment memo: deal summary, normalised revenue, risk matrix, valuation range, and clear Buy / Negotiate / Pass recommendation</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:12px;padding:14px;">
+            <div style="font-size:0.68rem;color:var(--text-muted);margin-bottom:6px;">FORMAT</div>
+            <div style="font-size:0.82rem;font-weight:600;line-height:1.5;color:var(--text-dim);">Clean written report delivered ready to read — no raw data dumps, no jargon. Designed so you can make a decision in 5 minutes</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:12px;padding:14px;">
+            <div style="font-size:0.68rem;color:var(--text-muted);margin-bottom:6px;">SOURCED FROM</div>
+            <div style="font-size:0.82rem;font-weight:600;line-height:1.5;color:var(--text-dim);">Synthesises outputs from all 6 upstream agents — Traffic, Revenue, SEO Risk, Valuation — into one coherent view</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:12px;padding:14px;">
+            <div style="font-size:0.68rem;color:var(--text-muted);margin-bottom:6px;">DELIVERY TIME</div>
+            <div style="font-size:0.82rem;font-weight:600;line-height:1.5;color:var(--text-dim);">Full memo delivered within 4 hours of receiving seller data. Rush 2-hour delivery available for time-sensitive listings</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PIPELINE FLOW -->
+  <div class="section">
+    <div class="section-title">Workflow</div>
+    <div class="section-heading">Deal Pipeline</div>
+
+    <div class="pipeline-wrapper">
+      <div class="pipeline-title" style="color:var(--text-muted);font-size:0.75rem;text-transform:uppercase;letter-spacing:1px;font-weight:600;">Every deal flows through the same rigorous 7-stage process</div>
+      <div class="pipeline-track">
+
+        <div class="pipe-step">
+          <div class="pipe-icon active" style="background:rgba(56,189,248,0.12);" data-tooltip="Monitors 3 platforms 24/7">🔍</div>
+          <div class="pipe-label">Scout &amp; Source</div>
+        </div>
+
+        <div class="pipe-arrow">→</div>
+
+        <div class="pipe-step">
+          <div class="pipe-icon" style="background:rgba(245,158,11,0.12);" data-tooltip="22-point scoring in 60s">⚡</div>
+          <div class="pipe-label">Rapid Screen</div>
+        </div>
+
+        <div class="pipe-arrow">→</div>
+
+        <div class="pipe-step">
+          <div class="pipe-icon" style="background:rgba(167,139,250,0.12);" data-tooltip="GA4, GSC, Ahrefs, SEMrush">📊</div>
+          <div class="pipe-label">Traffic Analysis</div>
+        </div>
+
+        <div class="pipe-arrow">→</div>
+
+        <div class="pipe-step">
+          <div class="pipe-icon" style="background:rgba(16,185,129,0.12);" data-tooltip="P&L vs bank statements">💰</div>
+          <div class="pipe-label">Revenue Verify</div>
+        </div>
+
+        <div class="pipe-arrow">→</div>
+
+        <div class="pipe-step">
+          <div class="pipe-icon" style="background:rgba(239,68,68,0.12);" data-tooltip="Google update history + backlinks">🛡️</div>
+          <div class="pipe-label">SEO Risk Score</div>
+        </div>
+
+        <div class="pipe-arrow">→</div>
+
+        <div class="pipe-step">
+          <div class="pipe-icon" style="background:rgba(251,191,36,0.12);" data-tooltip="Benchmarked against 2,400+ deals">⚖️</div>
+          <div class="pipe-label">Valuation Range</div>
+        </div>
+
+        <div class="pipe-arrow">→</div>
+
+        <div class="pipe-step">
+          <div class="pipe-icon" style="background:rgba(99,102,241,0.15);" data-tooltip="Buy / Negotiate / Pass">📋</div>
+          <div class="pipe-label">Investment Memo</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- LIVE FEED + MEMO PREVIEW -->
+  <div class="section">
+    <div class="section-title">Live Output</div>
+    <div class="section-heading">Agent Activity</div>
+
+    <div class="two-col">
+
+      <!-- LIVE FEED -->
+      <div class="feed-card">
+        <div class="feed-header">
+          <div class="feed-title">Agent Activity Feed</div>
+          <div class="live-badge"><div class="live-dot"></div> Live</div>
+        </div>
+        <div class="feed-list" id="feed-list">
+          <!-- injected by JS -->
+        </div>
+        <div class="fade-gradient"></div>
+      </div>
+
+      <!-- MEMO PREVIEW -->
+      <div class="memo-card">
+        <div class="memo-header">
+          <div class="memo-tag">Sample Investment Memo</div>
+          <div class="memo-title">Home Decor Affiliate Blog</div>
+          <div class="memo-sub">Flippa Listing #829341 — Listed at $68,000 (38x)</div>
+        </div>
+        <div class="memo-divider"></div>
+
+        <div class="memo-row">
+          <span class="memo-row-label">Claimed Monthly Revenue</span>
+          <span class="memo-row-value">$3,200</span>
+        </div>
+        <div class="memo-row">
+          <span class="memo-row-label">Verified Revenue (3-mo avg)</span>
+          <span class="memo-row-value" style="color:var(--gold);">$2,840</span>
+        </div>
+        <div class="memo-row">
+          <span class="memo-row-label">Normalised Net Profit</span>
+          <span class="memo-row-value" style="color:var(--green);">$1,920 / mo</span>
+        </div>
+        <div class="memo-row">
+          <span class="memo-row-label">Traffic Source (Organic)</span>
+          <span class="memo-row-value" style="color:var(--red);">74% — HIGH RISK</span>
+        </div>
+        <div class="memo-row">
+          <span class="memo-row-label">Top 3 Keywords (% of traffic)</span>
+          <span class="memo-row-value" style="color:var(--red);">81%</span>
+        </div>
+
+        <div class="risk-bar-wrap" style="margin-top:14px;">
+          <div class="risk-bar-label"><span>SEO Concentration Risk</span><span style="color:var(--red);">High</span></div>
+          <div class="risk-bar"><div class="risk-fill" style="width:78%;background:linear-gradient(90deg,var(--gold),var(--red));"></div></div>
+          <div class="risk-bar-label"><span>Revenue Authenticity</span><span style="color:var(--gold);">Moderate</span></div>
+          <div class="risk-bar"><div class="risk-fill" style="width:55%;background:linear-gradient(90deg,var(--green),var(--gold));"></div></div>
+          <div class="risk-bar-label"><span>Business Quality Score</span><span style="color:var(--gold);">62 / 100</span></div>
+          <div class="risk-bar"><div class="risk-fill" style="width:62%;background:linear-gradient(90deg,var(--cyan),#6366f1);"></div></div>
+        </div>
+
+        <div class="verdict-box verdict-negotiate">
+          <div>
+            <div class="verdict-label">Recommendation</div>
+            <div class="verdict-value">NEGOTIATE</div>
+          </div>
+          <div class="verdict-price">
+            <div class="price-label">Target Offer</div>
+            <div class="price-value">$38,000–$42,000</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PLATFORMS -->
+  <div class="section">
+    <div class="section-title">Data Sources</div>
+    <div class="section-heading">Connected Integrations</div>
+    <div class="platforms-row">
+      <div class="platform-chip"><span>🌐</span> Flippa</div>
+      <div class="platform-chip"><span>🚀</span> Acquire.com</div>
+      <div class="platform-chip"><span>👑</span> Empire Flippers</div>
+      <div class="platform-chip"><span>📈</span> Google Analytics 4</div>
+      <div class="platform-chip"><span>🔎</span> Google Search Console</div>
+      <div class="platform-chip"><span>🏹</span> Ahrefs</div>
+      <div class="platform-chip"><span>📡</span> SEMrush</div>
+      <div class="platform-chip"><span>💳</span> Stripe / PayPal / Wise</div>
+    </div>
+  </div>
+
+
+</div><!-- /wrapper -->
+
+<script>
+// ---- TOOLBAR ----
+const sessionDateEl = document.getElementById('session-date');
+if (sessionDateEl) {
+  const now = new Date();
+  sessionDateEl.textContent = now.toLocaleDateString('en-GB', { weekday:'short', day:'numeric', month:'short', year:'numeric' });
+}
+
+let uptimeSeconds = 14 * 86400 + 6 * 3600 + 22 * 60;
+const uptimeEl = document.getElementById('uptime-val');
+function formatUptime(s) {
+  const d = Math.floor(s / 86400);
+  const h = Math.floor((s % 86400) / 3600);
+  const m = Math.floor((s % 3600) / 60);
+  return `${d}d ${h}h ${m}m`;
+}
+setInterval(() => {
+  uptimeSeconds++;
+  if (uptimeEl) uptimeEl.textContent = formatUptime(uptimeSeconds);
+}, 1000);
+
+// ---- COUNTER ANIMATION ----
+function animateCount(id, target, duration, prefix) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  let start = 0;
+  const step = Math.ceil(target / (duration / 16));
+  const timer = setInterval(() => {
+    start = Math.min(start + step, target);
+    el.textContent = (prefix || '') + start.toLocaleString();
+    if (start >= target) clearInterval(timer);
+  }, 16);
+}
+
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    animateCount('s1', 2847, 1800);
+    animateCount('s3', 143, 1600);
+    animateCount('s4', 237, 1400);
+  }, 300);
+});
+
+// ---- LIVE FEED ----
+const feedMessages = [
+  { agent: 'scout', tag: 'tag-scout', label: 'Scout', msg: 'New listing detected on <strong>Flippa</strong> — SaaS tool, $4,200/mo revenue, listed at 32x. Flagging for Screen Agent.' },
+  { agent: 'screen', tag: 'tag-screen', label: 'Screen', msg: 'Flippa #832110 scored <strong>71/100</strong>. Moved to Shortlist. Dispatching to Traffic Analyst.' },
+  { agent: 'traffic', tag: 'tag-traffic', label: 'Traffic', msg: 'GA4 export parsed for listing #829341. Organic share: 74%. Spike detected in Feb 2024 — correlates with listing prep window.' },
+  { agent: 'seo', tag: 'tag-seo', label: 'SEO Risk', msg: '<strong>Red flag:</strong> 81% of traffic from 3 keywords. KD 4–8. High vulnerability to next core update. Risk: HIGH.' },
+  { agent: 'revenue', tag: 'tag-revenue', label: 'Revenue', msg: 'P&L reconciled against Wise statements. $360 monthly gap identified — possible undisclosed contractor.' },
+  { agent: 'scout', tag: 'tag-scout', label: 'Scout', msg: 'Acquire.com — content site in personal finance niche, $6,800/mo claimed, 28x multiple. Screening now.' },
+  { agent: 'val', tag: 'tag-val', label: 'Valuation', msg: 'Fair range for #829341 calculated: <strong>$38,000–$42,000</strong>. Listed price of $68,000 exceeds risk-adjusted ceiling by 42%.' },
+  { agent: 'memo', tag: 'tag-memo', label: 'Memo', msg: 'Investment memo for #829341 complete. Verdict: <strong>NEGOTIATE</strong>. Target offer $40,000 delivered to client.' },
+  { agent: 'screen', tag: 'tag-screen', label: 'Screen', msg: 'Acquire.com listing #71204 — scored 39/100. Rejected. Revenue claimed not matching Stripe screenshot timestamps.' },
+  { agent: 'traffic', tag: 'tag-traffic', label: 'Traffic', msg: 'Empire Flippers deal analysed. Traffic clean — 58% organic, 7 keyword spread, no update correlation. Proceeding.' },
+  { agent: 'seo', tag: 'tag-seo', label: 'SEO Risk', msg: 'Backlink audit complete. 12% toxic link ratio. PBN pattern detected on 3 referring domains. Flagged.' },
+  { agent: 'revenue', tag: 'tag-revenue', label: 'Revenue', msg: 'AdSense export verified. Revenue consistent over 18 months. No seasonal anomalies. Confidence: HIGH.' },
+];
+
+let msgIndex = 0;
+const feedList = document.getElementById('feed-list');
+
+function getTime() {
+  const now = new Date();
+  return now.getHours().toString().padStart(2,'0') + ':' +
+         now.getMinutes().toString().padStart(2,'0') + ':' +
+         now.getSeconds().toString().padStart(2,'0');
+}
+
+function addFeedItem() {
+  const msg = feedMessages[msgIndex % feedMessages.length];
+  msgIndex++;
+
+  const item = document.createElement('div');
+  item.className = 'feed-item';
+  item.innerHTML = `
+    <span class="feed-time">${getTime()}</span>
+    <span class="feed-agent-tag ${msg.tag}">${msg.label}</span>
+    <span class="feed-msg">${msg.msg}</span>
+  `;
+
+  feedList.insertBefore(item, feedList.firstChild);
+
+  // keep max 9 items
+  const items = feedList.querySelectorAll('.feed-item');
+  if (items.length > 9) {
+    feedList.removeChild(feedList.lastChild);
+  }
+}
+
+// seed with 5 items
+for (let i = 0; i < 5; i++) {
+  addFeedItem();
+}
+
+// add new item every 3.5s
+setInterval(addFeedItem, 3500);
+
+// ---- LIVE SCAN TIMER ----
+let scanSeconds = 134;
+const scanEl = document.getElementById('last-scan');
+setInterval(() => {
+  scanSeconds++;
+  if (scanSeconds >= 180) scanSeconds = 0;
+  const m = Math.floor(scanSeconds / 60);
+  const s = scanSeconds % 60;
+  if (m > 0) {
+    scanEl.textContent = `${m}m ${s}s ago`;
+  } else {
+    scanEl.textContent = `${s}s ago`;
+  }
+}, 1000);
+
+// ---- SCROLL REVEAL ----
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = '1';
+      entry.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.agent-card, .stat-card, .platform-chip').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(20px)';
+  el.style.transition = 'opacity 0.5s ease, transform 0.5s ease, border-color 0.3s, box-shadow 0.3s';
+  observer.observe(el);
+});
+</script>
+</body>
+</html>

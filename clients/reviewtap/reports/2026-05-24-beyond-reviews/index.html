@@ -1,0 +1,1638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ReviewTap — Beyond Reviews</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+
+/* =========================================================
+   BASE
+   ========================================================= */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg:        #06101E;
+  --surface:   #0C1B30;
+  --card:      #0F2040;
+  --card-hi:   #162B50;
+  --border:    rgba(255,255,255,0.06);
+  --border-hi: rgba(255,255,255,0.12);
+  --gold:      #F2A919;
+  --gold-lt:   #FFCD6A;
+  --gold-dk:   #C07815;
+  --blue:      #3D8EFF;
+  --blue-lt:   #7CB8FF;
+  --green:     #0FCFA0;
+  --green-lt:  #7FFFDA;
+  --wa:        #25D366;
+  --wa-lt:     #4AE080;
+  --wa-dk:     #128C7E;
+  --purple:    #A855F7;
+  --purple-lt: #D09EFF;
+  --orange:    #FB923C;
+  --red:       #FF6B6B;
+  --text:      #EFF4FC;
+  --text-2:    #8FA8C4;
+  --text-3:    #4D657E;
+  --r:         14px;
+  --r-lg:      22px;
+  --r-xl:      30px;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background: var(--bg); color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.6;
+}
+
+/* =========================================================
+   NAV
+   ========================================================= */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(6,16,30,0.85);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 40px;
+  display: flex; align-items: center; gap: 0;
+  height: 56px;
+}
+.nav-logo { font-size: 16px; font-weight: 800; color: var(--gold); margin-right: 40px; letter-spacing: -0.02em; white-space: nowrap; }
+.nav-links { display: flex; gap: 4px; overflow-x: auto; }
+.nav-links a {
+  padding: 6px 14px; border-radius: 8px;
+  font-size: 13px; font-weight: 500; color: var(--text-2);
+  text-decoration: none; white-space: nowrap;
+  transition: all 0.2s;
+}
+.nav-links a:hover { color: var(--text); background: rgba(255,255,255,0.06); }
+
+/* =========================================================
+   LAYOUT
+   ========================================================= */
+section { padding: 96px 0; }
+.container { max-width: 1160px; margin: 0 auto; padding: 0 40px; }
+.container-wide { max-width: 1280px; margin: 0 auto; padding: 0 40px; }
+
+/* =========================================================
+   TYPOGRAPHY
+   ========================================================= */
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 13px; border-radius: 100px;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase;
+  margin-bottom: 18px;
+}
+.ey-gold   { background: rgba(242,169,25,0.1);  color: var(--gold);      border: 1px solid rgba(242,169,25,0.2); }
+.ey-blue   { background: rgba(61,142,255,0.1);  color: var(--blue-lt);   border: 1px solid rgba(61,142,255,0.2); }
+.ey-green  { background: rgba(15,207,160,0.1);  color: var(--green);     border: 1px solid rgba(15,207,160,0.2); }
+.ey-wa     { background: rgba(37,211,102,0.1);  color: var(--wa-lt);     border: 1px solid rgba(37,211,102,0.2); }
+.ey-purple { background: rgba(168,85,247,0.1);  color: var(--purple-lt); border: 1px solid rgba(168,85,247,0.2); }
+.ey-orange { background: rgba(251,146,60,0.1);  color: var(--orange);    border: 1px solid rgba(251,146,60,0.2); }
+
+h1.page-title {
+  font-size: clamp(42px, 5vw, 68px); font-weight: 900;
+  line-height: 1.08; letter-spacing: -0.04em;
+}
+h2.sec-title {
+  font-size: clamp(30px, 3.5vw, 46px); font-weight: 800;
+  line-height: 1.12; letter-spacing: -0.03em;
+}
+h3.card-title { font-size: 18px; font-weight: 700; letter-spacing: -0.01em; }
+.sec-sub { font-size: 18px; color: var(--text-2); line-height: 1.65; max-width: 680px; margin-top: 14px; }
+
+.g-gold   { background: linear-gradient(130deg,var(--gold),var(--gold-lt)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.g-blue   { background: linear-gradient(130deg,var(--blue),var(--blue-lt)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.g-green  { background: linear-gradient(130deg,var(--green),var(--green-lt)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.g-wa     { background: linear-gradient(130deg,var(--wa),var(--wa-lt)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.g-purple { background: linear-gradient(130deg,var(--purple),var(--purple-lt)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+
+/* =========================================================
+   HERO
+   ========================================================= */
+.hero {
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse 100% 70% at 50% 65%, rgba(242,169,25,0.1) 0%, transparent 60%),
+    radial-gradient(ellipse 70% 50% at 15% 25%, rgba(61,142,255,0.07) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 40% at 85% 80%, rgba(37,211,102,0.05) 0%, transparent 50%),
+    var(--bg);
+  display: flex; align-items: center;
+  padding: 120px 0 80px;
+  position: relative; overflow: hidden;
+}
+.hero-bg-grid {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.016) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.016) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+.hero-inner { position: relative; z-index: 1; }
+.hero-sub-text { font-size: 20px; color: var(--text-2); line-height: 1.65; max-width: 680px; margin-top: 20px; }
+
+.hero-destinations {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px; margin-top: 56px;
+}
+.dest-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--r-lg); padding: 22px 20px;
+  display: flex; flex-direction: column; gap: 10px;
+  transition: transform 0.25s ease, border-color 0.25s ease;
+  cursor: default;
+}
+.dest-card:hover { transform: translateY(-3px); }
+.dest-card.gold   { border-color: rgba(242,169,25,0.2); }
+.dest-card.blue   { border-color: rgba(61,142,255,0.2); }
+.dest-card.wa     { border-color: rgba(37,211,102,0.2); }
+.dest-card.purple { border-color: rgba(168,85,247,0.2); }
+.dest-card.orange { border-color: rgba(251,146,60,0.2); }
+.dest-card.green  { border-color: rgba(15,207,160,0.2); }
+.dest-card.red    { border-color: rgba(255,107,107,0.2); }
+.dest-icon {
+  width: 44px; height: 44px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center; font-size: 20px;
+}
+.di-gold   { background: rgba(242,169,25,0.12); }
+.di-blue   { background: rgba(61,142,255,0.12); }
+.di-wa     { background: rgba(37,211,102,0.12); }
+.di-purple { background: rgba(168,85,247,0.12); }
+.di-orange { background: rgba(251,146,60,0.12); }
+.di-green  { background: rgba(15,207,160,0.12); }
+.di-red    { background: rgba(255,107,107,0.12); }
+.dest-title { font-size: 14px; font-weight: 700; }
+.dest-body  { font-size: 12px; color: var(--text-2); line-height: 1.55; }
+
+/* =========================================================
+   TRIGGER VISUAL
+   ========================================================= */
+.trigger-wrap {
+  display: flex; align-items: center; gap: 60px;
+  margin-top: 60px; max-width: 1000px;
+}
+.trigger-center {
+  flex-shrink: 0;
+  width: 140px; height: 140px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(242,169,25,0.15), rgba(242,169,25,0.03));
+  border: 2px solid rgba(242,169,25,0.3);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+  box-shadow: 0 0 60px rgba(242,169,25,0.15), 0 0 120px rgba(242,169,25,0.08);
+  position: relative;
+}
+.trigger-center::before, .trigger-center::after {
+  content: ''; position: absolute;
+  border: 1px solid rgba(242,169,25,0.15);
+  border-radius: 50%; animation: pulse-ring 2.5s ease-out infinite;
+}
+.trigger-center::before { width: 170px; height: 170px; animation-delay: 0s; }
+.trigger-center::after  { width: 200px; height: 200px; animation-delay: 0.8s; }
+
+@keyframes pulse-ring {
+  0%   { opacity: 0.8; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.15); }
+}
+.trigger-icon { font-size: 42px; }
+.trigger-label { font-size: 12px; font-weight: 700; color: var(--gold); letter-spacing: 0.06em; text-transform: uppercase; }
+
+.trigger-outcomes {
+  flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+}
+.tc-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 16px; background: var(--card);
+  border: 1px solid var(--border); border-radius: 12px;
+  font-size: 13px; font-weight: 600;
+}
+.tc-row .ico { font-size: 18px; flex-shrink: 0; }
+
+/* =========================================================
+   SECTION DIVIDER
+   ========================================================= */
+.sec-divider {
+  height: 1px; background: linear-gradient(90deg, transparent, var(--border-hi), transparent);
+  margin: 0;
+}
+
+/* =========================================================
+   ACTIVATION CARDS
+   ========================================================= */
+.activation-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 22px; margin-top: 48px;
+}
+.act-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--r-lg); overflow: hidden;
+  display: flex; flex-direction: column;
+  transition: transform 0.25s, border-color 0.25s;
+}
+.act-card:hover { transform: translateY(-4px); }
+.act-card-header {
+  padding: 28px 28px 20px;
+  position: relative; overflow: hidden;
+}
+.act-card-header::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+}
+.act-card.gold .act-card-header::before  { background: linear-gradient(90deg,var(--gold),transparent); }
+.act-card.blue .act-card-header::before  { background: linear-gradient(90deg,var(--blue),transparent); }
+.act-card.wa .act-card-header::before    { background: linear-gradient(90deg,var(--wa),transparent); }
+.act-card.purple .act-card-header::before{ background: linear-gradient(90deg,var(--purple),transparent); }
+.act-card.orange .act-card-header::before{ background: linear-gradient(90deg,var(--orange),transparent); }
+.act-card.green .act-card-header::before { background: linear-gradient(90deg,var(--green),transparent); }
+
+.act-big-icon { font-size: 36px; margin-bottom: 14px; display: block; }
+.act-card-body { padding: 0 28px 28px; flex: 1; display: flex; flex-direction: column; gap: 14px; }
+.act-desc { font-size: 14px; color: var(--text-2); line-height: 1.65; }
+.act-list { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+.act-list li { font-size: 13px; color: var(--text-2); display: flex; gap: 8px; align-items: flex-start; }
+.act-list li::before { content: '→'; flex-shrink: 0; font-weight: 600; margin-top: 1px; }
+.act-card.gold   .act-list li::before { color: var(--gold); }
+.act-card.blue   .act-list li::before { color: var(--blue-lt); }
+.act-card.wa     .act-list li::before { color: var(--wa); }
+.act-card.purple .act-list li::before { color: var(--purple-lt); }
+.act-card.orange .act-list li::before { color: var(--orange); }
+.act-card.green  .act-list li::before { color: var(--green); }
+
+/* =========================================================
+   FLOW DIAGRAM
+   ========================================================= */
+.flow-wrap {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--r-xl); padding: 40px 36px;
+  margin-top: 20px;
+}
+.flow-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.09em; color: var(--text-3); margin-bottom: 20px; }
+.flow-row {
+  display: flex; align-items: center; gap: 0;
+  overflow-x: auto; padding-bottom: 4px;
+}
+.flow-node {
+  flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 8px;
+  min-width: 110px; text-align: center;
+}
+.flow-ico {
+  width: 54px; height: 54px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; font-size: 22px;
+  border: 2px solid transparent;
+}
+.flow-ico.gold   { background: rgba(242,169,25,0.12);  border-color: rgba(242,169,25,0.3); }
+.flow-ico.blue   { background: rgba(61,142,255,0.12);  border-color: rgba(61,142,255,0.3); }
+.flow-ico.wa     { background: rgba(37,211,102,0.12);  border-color: rgba(37,211,102,0.3); }
+.flow-ico.purple { background: rgba(168,85,247,0.12);  border-color: rgba(168,85,247,0.3); }
+.flow-ico.green  { background: rgba(15,207,160,0.12);  border-color: rgba(15,207,160,0.3); }
+.flow-ico.orange { background: rgba(251,146,60,0.12);  border-color: rgba(251,146,60,0.3); }
+.flow-ico.gray   { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.1); }
+
+.flow-name { font-size: 12px; font-weight: 600; }
+.flow-hint { font-size: 11px; color: var(--text-3); line-height: 1.4; max-width: 100px; }
+.flow-arrow {
+  flex-shrink: 0; width: 36px; height: 2px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.1), rgba(255,255,255,0.25));
+  position: relative; margin: -24px 0 0;
+}
+.flow-arrow::after {
+  content: ''; position: absolute; right: -1px; top: -4px;
+  width: 0; height: 0;
+  border-left: 8px solid rgba(255,255,255,0.25);
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+}
+
+/* =========================================================
+   WHATSAPP SECTION
+   ========================================================= */
+.wa-section {
+  background: linear-gradient(180deg, var(--bg) 0%, rgba(37,211,102,0.04) 50%, var(--bg) 100%);
+}
+
+.wa-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 48px; align-items: start;
+  margin-top: 60px;
+}
+
+/* Phone frame */
+.phone-wrap { display: flex; justify-content: center; }
+.phone-frame {
+  width: 300px;
+  background: #111;
+  border-radius: 40px;
+  border: 3px solid #333;
+  overflow: hidden;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.05), inset 0 1px 0 rgba(255,255,255,0.1);
+  position: relative;
+}
+.phone-notch {
+  height: 28px; background: #111;
+  display: flex; align-items: center; justify-content: center;
+  position: relative; z-index: 1;
+}
+.phone-notch::after {
+  content: ''; width: 70px; height: 16px;
+  background: #222; border-radius: 0 0 10px 10px;
+}
+.wa-header {
+  background: var(--wa-dk); padding: 10px 16px;
+  display: flex; align-items: center; gap: 12px;
+}
+.wa-avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--wa); display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0;
+}
+.wa-header-name  { font-size: 14px; font-weight: 600; color: #fff; }
+.wa-header-sub   { font-size: 11px; color: rgba(255,255,255,0.6); }
+
+.wa-chat {
+  background: #0B141A;
+  padding: 12px 10px;
+  display: flex; flex-direction: column; gap: 6px;
+  min-height: 480px;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.01'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E");
+}
+.wa-bubble {
+  max-width: 85%; padding: 8px 12px;
+  border-radius: 8px; font-size: 12px; line-height: 1.5;
+  position: relative;
+}
+.wa-bubble.sent {
+  background: #005C4B; color: #fff;
+  align-self: flex-end; border-radius: 8px 0 8px 8px;
+}
+.wa-bubble.recv {
+  background: #1F2C34; color: #e9e9e9;
+  align-self: flex-start; border-radius: 0 8px 8px 8px;
+}
+.wa-bubble .ts { font-size: 10px; opacity: 0.55; text-align: right; margin-top: 3px; }
+.wa-bubble .tick { color: #53BDEB; }
+.wa-input-bar {
+  background: #1F2C34; padding: 10px 14px;
+  display: flex; align-items: center; gap: 10px;
+}
+.wa-input-field {
+  flex: 1; background: #2A3942; border-radius: 20px;
+  padding: 8px 14px; font-size: 12px; color: #aaa;
+}
+.wa-send-btn {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--wa); display: flex;
+  align-items: center; justify-content: center; font-size: 14px;
+}
+
+/* WA how it works steps */
+.wa-steps { display: flex; flex-direction: column; gap: 24px; }
+.wa-step {
+  display: flex; gap: 20px; align-items: flex-start;
+}
+.wa-step-num {
+  width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+  background: rgba(37,211,102,0.12); border: 1.5px solid rgba(37,211,102,0.3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; font-weight: 800; color: var(--wa);
+}
+.wa-step h4 { font-size: 15px; font-weight: 700; margin-bottom: 5px; }
+.wa-step p  { font-size: 13px; color: var(--text-2); line-height: 1.6; }
+.wa-step code {
+  display: inline-block; background: rgba(37,211,102,0.1); color: var(--wa-lt);
+  padding: 2px 8px; border-radius: 6px; font-size: 11px; font-family: monospace;
+  border: 1px solid rgba(37,211,102,0.2); margin-top: 5px; word-break: break-all;
+}
+
+/* =========================================================
+   FLOW SCENARIOS
+   ========================================================= */
+.scenario-list { display: flex; flex-direction: column; gap: 32px; margin-top: 52px; }
+.scenario {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--r-xl); overflow: hidden;
+}
+.scenario-header {
+  padding: 28px 32px 20px;
+  display: flex; align-items: flex-start; gap: 20px;
+}
+.scenario-ico {
+  width: 56px; height: 56px; border-radius: 16px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; font-size: 26px;
+}
+.sico-wa     { background: rgba(37,211,102,0.12); }
+.sico-gold   { background: rgba(242,169,25,0.12); }
+.sico-purple { background: rgba(168,85,247,0.12); }
+.sico-orange { background: rgba(251,146,60,0.12); }
+.scenario-header h3 { font-size: 20px; font-weight: 800; margin-bottom: 5px; }
+.scenario-header p  { font-size: 14px; color: var(--text-2); line-height: 1.55; }
+
+.scenario-body {
+  padding: 0 32px 32px;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+.scenario-flow { display: flex; flex-direction: column; gap: 10px; }
+.scenario-flow-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-3); margin-bottom: 6px; }
+.sflow-step {
+  display: flex; gap: 12px; align-items: flex-start;
+  padding: 12px 14px; border-radius: 10px;
+  background: rgba(255,255,255,0.03);
+}
+.sflow-num {
+  width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 800;
+}
+.sflow-step strong { display: block; font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+.sflow-step span   { font-size: 12px; color: var(--text-2); line-height: 1.5; }
+
+.scenario-outcome {
+  background: rgba(255,255,255,0.03); border-radius: 16px;
+  padding: 20px; display: flex; flex-direction: column; gap: 12px;
+}
+.scenario-outcome-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-3); }
+.out-item { display: flex; gap: 10px; align-items: center; font-size: 13px; }
+.out-item .oi { font-size: 16px; flex-shrink: 0; }
+
+/* =========================================================
+   BLUEPRINT SECTION
+   ========================================================= */
+.blueprint {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--r-xl); padding: 40px;
+  margin-top: 52px;
+}
+.bp-title { font-size: 20px; font-weight: 800; margin-bottom: 6px; }
+.bp-sub   { font-size: 14px; color: var(--text-2); margin-bottom: 32px; }
+
+.bp-modules {
+  display: flex; align-items: stretch; gap: 0; overflow-x: auto;
+  padding-bottom: 8px;
+}
+.bp-module {
+  flex-shrink: 0; min-width: 160px; max-width: 190px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 14px; padding: 18px 16px;
+  display: flex; flex-direction: column; gap: 10px;
+  position: relative;
+}
+.bp-module + .bp-module { margin-left: 10px; }
+.bp-mod-num {
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.1em; color: var(--text-3);
+}
+.bp-mod-ico { font-size: 24px; }
+.bp-mod-name { font-size: 13px; font-weight: 700; }
+.bp-mod-desc { font-size: 11px; color: var(--text-2); line-height: 1.5; }
+.bp-mod-app {
+  display: inline-block; padding: 3px 9px; border-radius: 6px;
+  font-size: 10px; font-weight: 700; margin-top: auto;
+}
+.app-wa     { background: rgba(37,211,102,0.15);  color: var(--wa-lt); }
+.app-make   { background: rgba(168,85,247,0.15);  color: var(--purple-lt); }
+.app-ghl    { background: rgba(251,146,60,0.15);  color: var(--orange); }
+.app-sheets { background: rgba(61,142,255,0.15);  color: var(--blue-lt); }
+.app-ai     { background: rgba(242,169,25,0.15);  color: var(--gold-lt); }
+
+.bp-arrow {
+  flex-shrink: 0; align-self: center; margin: 0 4px;
+  font-size: 16px; color: var(--text-3);
+}
+
+/* Router node */
+.bp-router {
+  flex-shrink: 0; width: 60px; align-self: stretch;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 6px; margin: 0 4px;
+}
+.bp-router-ico {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: rgba(242,169,25,0.12); border: 2px solid rgba(242,169,25,0.3);
+  display: flex; align-items: center; justify-content: center; font-size: 18px;
+}
+.bp-router span { font-size: 10px; color: var(--gold); font-weight: 700; letter-spacing: 0.06em; }
+
+.bp-branches {
+  display: flex; flex-direction: column; gap: 10px; margin-left: 10px;
+}
+.bp-branch {
+  display: flex; align-items: center; gap: 10px;
+}
+.bp-branch-label {
+  font-size: 10px; font-weight: 700; color: var(--text-3);
+  text-transform: uppercase; letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+.bp-mini {
+  flex-shrink: 0; min-width: 130px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border); border-radius: 10px;
+  padding: 10px 12px; display: flex; flex-direction: column; gap: 5px;
+}
+.bp-mini-name { font-size: 12px; font-weight: 700; }
+.bp-mini-desc { font-size: 10px; color: var(--text-2); line-height: 1.4; }
+
+/* =========================================================
+   CLIENT USE CASES
+   ========================================================= */
+.client-cases {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 22px; margin-top: 52px;
+}
+.client-case {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--r-xl); overflow: hidden;
+}
+.cc-header {
+  padding: 24px 28px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 16px;
+}
+.cc-brand { font-size: 20px; font-weight: 800; }
+.cc-vertical { font-size: 12px; color: var(--text-3); margin-top: 2px; }
+.cc-badge {
+  margin-left: auto; padding: 5px 12px; border-radius: 100px;
+  font-size: 11px; font-weight: 700;
+}
+.cc-body { padding: 20px 28px 28px; display: flex; flex-direction: column; gap: 14px; }
+.cc-use { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+.cc-desc { font-size: 13px; color: var(--text-2); line-height: 1.6; }
+.cc-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.cc-tag {
+  padding: 3px 10px; border-radius: 100px;
+  font-size: 11px; font-weight: 600;
+  background: rgba(255,255,255,0.05); color: var(--text-2);
+  border: 1px solid var(--border-hi);
+}
+
+/* =========================================================
+   DATA SECTION
+   ========================================================= */
+.data-grid {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 20px; margin-top: 48px;
+}
+.data-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--r-lg); padding: 28px;
+  display: flex; flex-direction: column; gap: 14px;
+}
+.data-card h3 { font-size: 16px; font-weight: 700; }
+.data-card p  { font-size: 13px; color: var(--text-2); line-height: 1.65; }
+.data-ico { font-size: 28px; }
+
+/* =========================================================
+   CTA SECTION
+   ========================================================= */
+.cta-section {
+  background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(242,169,25,0.08) 0%, transparent 60%), var(--bg);
+  text-align: center; padding: 100px 0;
+}
+.cta-box-inner {
+  max-width: 680px; margin: 0 auto;
+  display: flex; flex-direction: column; align-items: center; gap: 24px;
+}
+
+/* =========================================================
+   MISC
+   ========================================================= */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+.inline-note {
+  background: rgba(37,211,102,0.06); border: 1px solid rgba(37,211,102,0.15);
+  border-radius: 12px; padding: 16px 20px;
+  font-size: 13px; color: var(--text-2); line-height: 1.65;
+  display: flex; gap: 12px; align-items: flex-start; margin-top: 12px;
+}
+.inline-note .ni { font-size: 18px; flex-shrink: 0; }
+
+@media (max-width: 900px) {
+  .hero-destinations { grid-template-columns: repeat(2,1fr); }
+  .activation-grid   { grid-template-columns: 1fr 1fr; }
+  .wa-grid, .two-col { grid-template-columns: 1fr; }
+  .scenario-body     { grid-template-columns: 1fr; }
+  .client-cases      { grid-template-columns: 1fr; }
+  .data-grid         { grid-template-columns: 1fr 1fr; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- ─────────────────────────────────────────────
+     NAV
+───────────────────────────────────────────── -->
+<nav>
+  <div class="nav-logo">ReviewTap</div>
+  <div class="nav-links">
+    <a href="#beyond">Beyond Reviews</a>
+    <a href="#activations">Activations</a>
+    <a href="#whatsapp">WhatsApp</a>
+    <a href="#flows">Automation Flows</a>
+    <a href="#blueprint">Make.com Blueprint</a>
+    <a href="#clients">Client Use Cases</a>
+  </div>
+</nav>
+
+
+<!-- ─────────────────────────────────────────────
+     HERO
+───────────────────────────────────────────── -->
+<section class="hero" id="top">
+  <div class="hero-bg-grid"></div>
+  <div class="container hero-inner">
+    <div class="eyebrow ey-gold">ReviewTap — The Full Picture</div>
+    <h1 class="page-title">
+      The tap is just<br>the <span class="g-gold">beginning</span>
+    </h1>
+    <p class="hero-sub-text">
+      ReviewTap uses NFC cards and QR codes as physical triggers — but what happens after the tap is entirely configurable. Reviews are one destination. Here's everything else the platform can power.
+    </p>
+
+    <div class="hero-destinations">
+      <div class="dest-card gold">
+        <div class="dest-icon di-gold">⭐</div>
+        <div class="dest-title">Google Reviews</div>
+        <div class="dest-body">The core use case — direct to Google, TripAdvisor, Facebook or any review platform in 60 seconds.</div>
+      </div>
+      <div class="dest-card wa">
+        <div class="dest-icon di-wa">💬</div>
+        <div class="dest-title">WhatsApp Automation</div>
+        <div class="dest-body">Tap opens a pre-filled WhatsApp message. Bot takes over instantly — qualifying, rewarding, following up.</div>
+      </div>
+      <div class="dest-card purple">
+        <div class="dest-icon di-purple">🎁</div>
+        <div class="dest-title">Competition Entry</div>
+        <div class="dest-body">One tap to enter a competition or giveaway — no form to fill, just confirm and you're in.</div>
+      </div>
+      <div class="dest-card blue">
+        <div class="dest-icon di-blue">👤</div>
+        <div class="dest-title">Lead Capture</div>
+        <div class="dest-body">Tap to share contact details, opt into a database or book a follow-up — all without a clipboard or barcode scanner.</div>
+      </div>
+      <div class="dest-card orange">
+        <div class="dest-icon di-orange">🏆</div>
+        <div class="dest-title">Loyalty Enrollment</div>
+        <div class="dest-body">Tap to join a rewards program, claim points or redeem a voucher — no app download needed.</div>
+      </div>
+      <div class="dest-card green">
+        <div class="dest-icon di-green">📋</div>
+        <div class="dest-title">Surveys & Feedback</div>
+        <div class="dest-body">Tap to complete a post-experience survey — NPS, CSAT or custom question set — captured in real time.</div>
+      </div>
+      <div class="dest-card" style="border-color:rgba(255,107,107,0.2);">
+        <div class="dest-icon di-red">📲</div>
+        <div class="dest-title">Social Follow</div>
+        <div class="dest-body">Tap to follow on Instagram, TikTok or YouTube at the moment of highest brand affinity — right after a great experience.</div>
+      </div>
+      <div class="dest-card" style="border-color:rgba(61,142,255,0.2);">
+        <div class="dest-icon di-blue">📦</div>
+        <div class="dest-title">Content Delivery</div>
+        <div class="dest-body">Tap to receive a menu, brochure, event playlist, recipe, product sheet or exclusive digital asset instantly.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="sec-divider"></div>
+
+
+<!-- ─────────────────────────────────────────────
+     BEYOND REVIEWS
+───────────────────────────────────────────── -->
+<section id="beyond">
+  <div class="container">
+    <div class="eyebrow ey-blue">The Platform</div>
+    <h2 class="sec-title">One device. Infinite<br>customer journeys.</h2>
+    <p class="sec-sub">Every NFC card and QR code is a programmable trigger. The destination is set by you — and it can change per campaign, per location, or per event with zero hardware changes.</p>
+
+    <!-- Trigger visual -->
+    <div class="trigger-wrap">
+      <div class="trigger-center">
+        <div class="trigger-icon">📲</div>
+        <div class="trigger-label">NFC Tap</div>
+      </div>
+
+      <div style="font-size:22px;color:var(--text-3);flex-shrink:0;">→</div>
+
+      <div class="trigger-outcomes">
+        <div class="tc-row">
+          <span class="ico">⭐</span> <span>Google / TripAdvisor Review</span>
+        </div>
+        <div class="tc-row">
+          <span class="ico">💬</span> <span>WhatsApp Chat &amp; Bot</span>
+        </div>
+        <div class="tc-row">
+          <span class="ico">🎁</span> <span>Competition Entry Form</span>
+        </div>
+        <div class="tc-row">
+          <span class="ico">👤</span> <span>Lead Capture &amp; CRM</span>
+        </div>
+        <div class="tc-row">
+          <span class="ico">🏆</span> <span>Loyalty Program Signup</span>
+        </div>
+        <div class="tc-row">
+          <span class="ico">📋</span> <span>Survey / NPS / Feedback</span>
+        </div>
+        <div class="tc-row">
+          <span class="ico">📲</span> <span>Instagram / TikTok Follow</span>
+        </div>
+        <div class="tc-row">
+          <span class="ico">📦</span> <span>Digital Content Delivery</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="inline-note" style="margin-top:40px;background:rgba(61,142,255,0.05);border-color:rgba(61,142,255,0.15);">
+      <span class="ni">💡</span>
+      <div><strong style="color:var(--text);">Multi-destination support:</strong> A single tap can deliver multiple actions simultaneously — for example, trigger a WhatsApp message <em>and</em> log the customer's location + timestamp to a spreadsheet <em>and</em> add them to a CRM sequence — all from one physical tap. No extra steps for the customer.</div>
+    </div>
+  </div>
+</section>
+
+<div class="sec-divider"></div>
+
+
+<!-- ─────────────────────────────────────────────
+     ACTIVATIONS
+───────────────────────────────────────────── -->
+<section id="activations">
+  <div class="container">
+    <div class="eyebrow ey-orange">Activations</div>
+    <h2 class="sec-title">How it works at<br>brand activations &amp; events</h2>
+    <p class="sec-sub">ReviewTap excels at exactly the moments agencies spend the most money creating — when brand energy is highest and customers are most willing to engage.</p>
+
+    <div class="activation-grid">
+
+      <!-- Events -->
+      <div class="act-card orange">
+        <div class="act-card-header">
+          <span class="act-big-icon">🎪</span>
+          <h3 class="card-title">Event Activations</h3>
+          <div style="font-size:12px;color:var(--text-2);margin-top:6px;">Music festivals · Sporting events · Brand launches · Expos</div>
+        </div>
+        <div class="act-card-body">
+          <p class="act-desc">Deploy NFC wristbands at entry or branded NFC stands at activation zones. Attendees tap to enter competitions, claim exclusive content or start a WhatsApp conversation with the brand — at peak excitement.</p>
+          <ul class="act-list">
+            <li>NFC wristbands issued at event entry</li>
+            <li>Tap at activation zone = instant competition entry</li>
+            <li>Winner announced via WhatsApp broadcast in real time</li>
+            <li>Data captured per zone for post-event reporting</li>
+            <li>Social follow at the moment of highest affinity</li>
+            <li>Photo/UGC upload linked to brand hashtag</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Retail -->
+      <div class="act-card blue">
+        <div class="act-card-header">
+          <span class="act-big-icon">🏪</span>
+          <h3 class="card-title">Retail Activations</h3>
+          <div style="font-size:12px;color:var(--text-2);margin-top:6px;">In-store sampling · Pop-ups · Product launches · End caps</div>
+        </div>
+        <div class="act-card-body">
+          <p class="act-desc">Place NFC cards or QR codes at demo stations, sampling points and checkouts. Customers who try the product are prompted to review, share or claim a reward — before they leave the store.</p>
+          <ul class="act-list">
+            <li>Tap at sampling station = review + reward</li>
+            <li>Loyalty points issued via WhatsApp instantly</li>
+            <li>Product info, recipes or pairings delivered on tap</li>
+            <li>Purchase intent captured and fed into retargeting</li>
+            <li>Staff-facing dashboard shows live engagement per location</li>
+            <li>Integrates with existing retail CRM or POS</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Hospitality -->
+      <div class="act-card wa">
+        <div class="act-card-header">
+          <span class="act-big-icon">🥂</span>
+          <h3 class="card-title">Hospitality &amp; On-Trade</h3>
+          <div style="font-size:12px;color:var(--text-2);margin-top:6px;">Restaurants · Hotels · Bars · Brand experience lounges</div>
+        </div>
+        <div class="act-card-body">
+          <p class="act-desc">NFC cards placed on tables, menus or at checkout capture the customer at the most natural moment — after a meal, a drink or an experience. One tap triggers a full WhatsApp engagement flow.</p>
+          <ul class="act-list">
+            <li>Table-side NFC cards prompt review at bill time</li>
+            <li>Tap opens WhatsApp with cocktail recipe / wine pairing</li>
+            <li>Upsell offer delivered to returning visitors automatically</li>
+            <li>Event RSVP collected via WhatsApp bot</li>
+            <li>Hotel check-in experience extended digitally</li>
+            <li>TripAdvisor + Google reviews captured simultaneously</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- OOH -->
+      <div class="act-card purple">
+        <div class="act-card-header">
+          <span class="act-big-icon">🏙</span>
+          <h3 class="card-title">Out-of-Home &amp; Media</h3>
+          <div style="font-size:12px;color:var(--text-2);margin-top:6px;">Billboards · Bus shelters · Mall media · Street furniture</div>
+        </div>
+        <div class="act-card-body">
+          <p class="act-desc">Embed QR codes in OOH media to bridge the gap between passive viewing and active brand engagement. A poster becomes a two-way conversation — and every scan is a trackable lead.</p>
+          <ul class="act-list">
+            <li>QR on billboard → WhatsApp conversation starts</li>
+            <li>Scan-to-enter competition on bus shelter posters</li>
+            <li>OOH scan data overlays with media audience analytics</li>
+            <li>Dynamic QR — destination changes per campaign wave</li>
+            <li>Real-time scan counts per OOH site for ROI reporting</li>
+            <li>Location-based flows for hyper-relevant messaging</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Sports / Sponsorships -->
+      <div class="act-card gold">
+        <div class="act-card-header">
+          <span class="act-big-icon">🏟</span>
+          <h3 class="card-title">Sports &amp; Sponsorships</h3>
+          <div style="font-size:12px;color:var(--text-2);margin-top:6px;">Stadium activations · Athlete partnerships · Fan zones</div>
+        </div>
+        <div class="act-card-body">
+          <p class="act-desc">Sponsorship activations are expensive and fleeting. ReviewTap captures the fan data and sentiment in the moment — giving brands something to show for the investment beyond impressions and logos.</p>
+          <ul class="act-list">
+            <li>Fan zone NFC stands capture reviews + sentiment</li>
+            <li>Tap to enter stadium giveaway (live draw)</li>
+            <li>Athlete meet-and-greet check-in via NFC</li>
+            <li>Branded WhatsApp bot continues the conversation post-event</li>
+            <li>Fan database built with opted-in contacts</li>
+            <li>Integrates with sponsor reporting dashboards</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Corporate -->
+      <div class="act-card green">
+        <div class="act-card-header">
+          <span class="act-big-icon">🏢</span>
+          <h3 class="card-title">Corporate &amp; Trade</h3>
+          <div style="font-size:12px;color:var(--text-2);margin-top:6px;">Conferences · Trade shows · B2B exhibitions · Showrooms</div>
+        </div>
+        <div class="act-card-body">
+          <p class="act-desc">Replace business card swaps and manual badge scanners. NFC-enabled name tags or stand displays let visitors tap to connect — instantly sharing digital contact info and triggering a follow-up sequence.</p>
+          <ul class="act-list">
+            <li>NFC name badge = digital business card exchange</li>
+            <li>Showroom tap = product spec sheet + instant follow-up</li>
+            <li>Trade stand tap = add to CRM + trigger sales sequence</li>
+            <li>Speaker session tap = slide deck delivery via WhatsApp</li>
+            <li>Lead quality score assigned automatically via bot</li>
+            <li>Sales team notified in real time for hot leads</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Activation flow diagram -->
+    <div style="margin-top:56px;">
+      <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-3);margin-bottom:18px;">Example: Brand Activation End-to-End Flow</div>
+      <div class="flow-wrap">
+        <div class="flow-row">
+          <div class="flow-node">
+            <div class="flow-ico gold">📲</div>
+            <div class="flow-name">Customer Tap</div>
+            <div class="flow-hint">NFC card or QR at activation point</div>
+          </div>
+          <div class="flow-arrow"></div>
+          <div class="flow-node">
+            <div class="flow-ico blue">📱</div>
+            <div class="flow-name">Landing</div>
+            <div class="flow-hint">Custom branded page loads instantly</div>
+          </div>
+          <div class="flow-arrow"></div>
+          <div class="flow-node">
+            <div class="flow-ico wa">💬</div>
+            <div class="flow-name">WhatsApp Opens</div>
+            <div class="flow-hint">Pre-filled message sent to brand</div>
+          </div>
+          <div class="flow-arrow"></div>
+          <div class="flow-node">
+            <div class="flow-ico purple">🤖</div>
+            <div class="flow-name">Bot Responds</div>
+            <div class="flow-hint">Within seconds via Make.com / GHL</div>
+          </div>
+          <div class="flow-arrow"></div>
+          <div class="flow-node">
+            <div class="flow-ico orange">🎁</div>
+            <div class="flow-name">Reward Sent</div>
+            <div class="flow-hint">Voucher, content or competition confirmation</div>
+          </div>
+          <div class="flow-arrow"></div>
+          <div class="flow-node">
+            <div class="flow-ico gray">📊</div>
+            <div class="flow-name">Data Logged</div>
+            <div class="flow-hint">CRM updated, analytics captured</div>
+          </div>
+          <div class="flow-arrow"></div>
+          <div class="flow-node">
+            <div class="flow-ico green">🔁</div>
+            <div class="flow-name">Follow-Up</div>
+            <div class="flow-hint">Automated sequence nurtures the contact</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="sec-divider"></div>
+
+
+<!-- ─────────────────────────────────────────────
+     WHATSAPP SECTION
+───────────────────────────────────────────── -->
+<section id="whatsapp" class="wa-section">
+  <div class="container">
+    <div class="eyebrow ey-wa">WhatsApp Automation</div>
+    <h2 class="sec-title">How WhatsApp gets<br>built into the tap</h2>
+    <p class="sec-sub">WhatsApp is the highest-engagement channel in South Africa. ReviewTap makes it the destination — creating a conversation that starts the moment a customer taps.</p>
+
+    <div class="wa-grid">
+
+      <!-- Left: Steps -->
+      <div>
+        <div class="wa-steps">
+          <div class="wa-step">
+            <div class="wa-step-num">1</div>
+            <div>
+              <h4>The NFC card links to a wa.me URL</h4>
+              <p>When programmed, the NFC chip or QR code encodes a special WhatsApp deep link with a pre-written message already loaded. No typing required from the customer.</p>
+              <code>https://wa.me/27XXXXXXXXX?text=Hi+ReviewTap!+I+just+visited+[Venue+Name]+🎉</code>
+            </div>
+          </div>
+          <div class="wa-step">
+            <div class="wa-step-num">2</div>
+            <div>
+              <h4>WhatsApp opens on the customer's phone</h4>
+              <p>The pre-filled message appears in a new WhatsApp chat — pointed at your brand's WhatsApp Business number. The customer taps <strong style="color:var(--wa);">Send</strong>. One tap. That's all they do.</p>
+            </div>
+          </div>
+          <div class="wa-step">
+            <div class="wa-step-num">3</div>
+            <div>
+              <h4>The automation fires instantly</h4>
+              <p>The incoming message triggers a Make.com scenario, GHL conversation automation or direct WhatsApp Business API webhook. The bot responds within seconds — no human required.</p>
+            </div>
+          </div>
+          <div class="wa-step">
+            <div class="wa-step-num">4</div>
+            <div>
+              <h4>The conversation does the work</h4>
+              <p>Based on the message content and customer replies, the bot routes to the appropriate flow — review request, competition entry, loyalty reward, lead qualification, or content delivery.</p>
+            </div>
+          </div>
+          <div class="wa-step">
+            <div class="wa-step-num">5</div>
+            <div>
+              <h4>Data flows into your CRM</h4>
+              <p>Every interaction is logged — phone number, name (if provided), location, timestamp, choice made. This feeds into GoHighLevel, HubSpot, Google Sheets or any connected platform.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="inline-note">
+          <span class="ni">🌍</span>
+          <div><strong style="color:var(--text);">Why WhatsApp in South Africa?</strong> WhatsApp has over 23 million active users in SA — a higher penetration rate than email or any other messaging app. Messages sent via WhatsApp have an average open rate of <strong style="color:var(--wa-lt);">98%</strong> vs. 20–25% for email. It's where your clients' customers actually are.</div>
+        </div>
+      </div>
+
+      <!-- Right: Phone mockup -->
+      <div class="phone-wrap">
+        <div class="phone-frame">
+          <div class="phone-notch"></div>
+          <div class="wa-header">
+            <div class="wa-avatar">🤖</div>
+            <div>
+              <div class="wa-header-name">Diageo Rewards</div>
+              <div class="wa-header-sub">Online</div>
+            </div>
+            <div style="margin-left:auto;font-size:18px;color:rgba(255,255,255,0.5);">⋮</div>
+          </div>
+          <div class="wa-chat">
+
+            <div style="text-align:center;margin:8px 0;">
+              <span style="background:rgba(255,255,255,0.07);padding:4px 10px;border-radius:8px;font-size:10px;color:rgba(255,255,255,0.4);">Today · 20:14</span>
+            </div>
+
+            <div class="wa-bubble sent">
+              Hi Diageo! I just tasted Johnnie Walker Black at the Cape Town Experience 🥃
+              <div class="ts">20:14 <span class="tick">✓✓</span></div>
+            </div>
+
+            <div class="wa-bubble recv">
+              Welcome! 🎉 Thanks for joining the JW Black tasting.<br><br>
+              What would you like to do?<br><br>
+              1️⃣ <strong>Leave a review</strong><br>
+              2️⃣ <strong>Get a cocktail recipe</strong><br>
+              3️⃣ <strong>Find JW near me</strong><br>
+              4️⃣ <strong>Enter the prize draw</strong>
+              <div class="ts">20:14</div>
+            </div>
+
+            <div class="wa-bubble sent">
+              4
+              <div class="ts">20:15 <span class="tick">✓✓</span></div>
+            </div>
+
+            <div class="wa-bubble recv">
+              You're in! 🏆<br><br>
+              Your entry has been logged. We'll announce the winner on Friday via WhatsApp.<br><br>
+              In the meantime — want to leave a quick Google review? It takes 60 seconds and helps us grow 🙏
+              <div class="ts">20:15</div>
+            </div>
+
+            <div class="wa-bubble sent">
+              Sure!
+              <div class="ts">20:15 <span class="tick">✓✓</span></div>
+            </div>
+
+            <div class="wa-bubble recv">
+              Perfect. Here's your review link:<br><br>
+              🔗 g.page/r/Diageo-JWBlack-CT<br><br>
+              Takes 60 seconds. Thank you! 🥃
+              <div class="ts">20:15</div>
+            </div>
+
+          </div>
+          <div class="wa-input-bar">
+            <div style="font-size:18px;color:rgba(255,255,255,0.4);">😊</div>
+            <div class="wa-input-field">Type a message</div>
+            <div class="wa-send-btn">➤</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="sec-divider"></div>
+
+
+<!-- ─────────────────────────────────────────────
+     AUTOMATION FLOWS
+───────────────────────────────────────────── -->
+<section id="flows">
+  <div class="container">
+    <div class="eyebrow ey-purple">Automation Flows</div>
+    <h2 class="sec-title">Five WhatsApp flows<br>you can build today</h2>
+    <p class="sec-sub">Each flow starts with a single NFC tap — and ends with a customer in your CRM, a review on Google, or a lead in your pipeline.</p>
+
+    <div class="scenario-list">
+
+      <!-- FLOW 1: Review via WhatsApp -->
+      <div class="scenario">
+        <div class="scenario-header">
+          <div class="scenario-ico sico-gold">⭐</div>
+          <div>
+            <h3>Flow 1: Review Capture via WhatsApp</h3>
+            <p>The classic ReviewTap use case — but delivered through WhatsApp for higher completion rates and richer engagement than a direct browser redirect.</p>
+          </div>
+        </div>
+        <div class="scenario-body">
+          <div class="scenario-flow">
+            <div class="scenario-flow-title">Step by step</div>
+            <div class="sflow-step">
+              <div class="sflow-num" style="background:rgba(242,169,25,0.15);color:var(--gold);">1</div>
+              <div><strong>Tap at point of experience</strong><span>Customer taps card at checkout, table or event exit</span></div>
+            </div>
+            <div class="sflow-step">
+              <div class="sflow-num" style="background:rgba(242,169,25,0.15);color:var(--gold);">2</div>
+              <div><strong>WhatsApp opens — pre-filled</strong><span>"Hi [Brand]! I just visited [Location] and wanted to share my experience"</span></div>
+            </div>
+            <div class="sflow-step">
+              <div class="sflow-num" style="background:rgba(242,169,25,0.15);color:var(--gold);">3</div>
+              <div><strong>Bot asks a quick rating question</strong><span>"On a scale of 1–5, how was your experience today? ⭐"</span></div>
+            </div>
+            <div class="sflow-step">
+              <div class="sflow-num" style="background:rgba(242,169,25,0.15);color:var(--gold);">4</div>
+              <div><strong>If 4–5 stars: send Google review link</strong><span>Direct link to Google review page — one tap to post</span></div>
+            </div>
+            <div class="sflow-step">
+              <div class="sflow-num" style="background:rgba(242,169,25,0.15);color:var(--gold);">5</div>
+              <div><strong>If 1–3 stars: escalate internally</strong><span>Flag to manager, log in CRM, send recovery message — never push unhappy customers to Google</span></div>
+            </div>
+          </div>
+          <div class="scenario-outcome">
+            <div class="scenario-outcome-title">What you capture</div>
+            <div class="out-item"><span class="oi">📞</span> Customer phone number (WhatsApp opt-in)</div>
+            <div class="out-item"><span class="oi">⭐</span> Sentiment score (1–5 rating)</div>
+            <div class="out-item"><span class="oi">📍</span> Location + timestamp of interaction</div>
+            <div class="out-item"><span class="oi">📝</span> Optional free-text feedback</div>
+            <div class="out-item"><span class="oi">✅</span> Whether Google review was completed</div>
+            <div class="out-item"><span class="oi">🔁</span> Customer flagged for future re-engagement</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FLOW 2: Competition Entry -->
+      <div class="scenario">
+        <div class="scenario-header">
+          <div class="scenario-ico sico-purple">🎁</div>
+          <div>
+            <h3>Flow 2: Competition Entry &amp; Live Draws</h3>
+            <p>Perfect for events, retail activations and in-store campaigns. Every tap is a competition entry — collected instantly, drawn automatically, winner notified via WhatsApp.</p>
+          </div>
+        </div>
+        <div class="scenario-body">
+          <div class="scenario-flow">
+            <div class="scenario-flow-title">Step by step</div>
+            <div class="sflow-step">
+              <div class="sflow-num" style="background:rgba(168,85,247,0.15);color:var(--purple-lt);">1</div>
+              <div><strong>Tap to enter at activation point</strong><span>NFC stand, product display or event wristband</span></div>
+            </div>
+            <div class="sflow-step">
+              <div class="sflow-num" style="background:rgba(168,85,247,0.15);color:var(--purple-lt);">2</div>
+              <div><strong>WhatsApp confirms entry</strong><span>"You're in! 🎉 Reply with your name to finalise your entry."</span></div>
+            </div>
+            <div class="sflow-step">
+              <div class="sflow-num" style="background:rgba(168,85,247,0.15);color:var(--purple-lt);">3</div>
+              <div><strong>Entry logged to Google Sheets / CRM</strong><span>Name, number, timestamp, location — all auto-captured</span></div>
+            </div>
+            <div class="sflow-step">
+              <div class="sflow-num" style="background:rgba(168,85,247,0.15);color:var(--purple-lt);">4</div>
+              <div><strong>Optional bonus entries</strong><span>"Leave a review for 5 extra entries" — drives review volume simultaneously</span></div>
+            </div>
+            <div class="sflow-step">
+              <div class="sflow-num" style="background:rgba(168,85,247,0.15);color:var(--purple-lt);">5</div>
+              <div><strong>Winner drawn and notified via WhatsApp</strong><span>Broadcast message to all entrants, direct message to winner</span></div>
+            </div>
+          </div>
+          <div class="scenario-outcome">
+            <div class="scenario-outcome-title">Why this works</div>
+            <div class="out-item"><span class="oi">⚡</span> Zero form to fill — tap, reply name, done</div>
+            <div class="out-item"><span class="oi">📊</span> Real-time entry count visible on dashboard</div>
+            <div class="out-item"><span class="oi">🎯</span> Opted-in WhatsApp database built in one campaign</div>
+            <div class="out-item"><span class="oi">💬</span> Brand stays in contact post-event legitimately</div>
+            <div class="out-item"><span class="oi">📣</span> Dual purpose: entries + reviews simultaneously</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FLOW 3: Lead Qualification -->
+      <div class="scenario">
+        <div class="scenario-header">
+          <div class="scenario-ico sico-wa">🎯</div>
+          <div>
+            <h3>Flow 3: Lead Capture &amp; Qualification</h3>
+            <p>Ideal for B2B expos, showrooms, corporate events and high-value product launches. Every tap starts a qualifying conversation — hot leads routed directly to sales in real time.</p>
+          </div>
+        </div>
+        <div class="scenario-body">
+          <div class="scenario-flow">
+            <div class="scenario-flow-title">Step by step</div>
+            <div class="sflow-step">
+              <div class="sflow-num" style="background:rgba(37,211,102,0.12);color:var(--wa);">1</div>
+              <div><strong>Tap at stand or showroom display</strong><span>"Connect with us" NFC card or branded display</span></div>
+            </div>
+            <div class="sflow-step">
+              <div class="sflow-num" style="background:rgba(37,211,102,0.12);color:var(--wa);">2</div>
+              <div><strong>Bot collects basic info via WhatsApp</strong><span>Name, company, what they're looking for — conversational, not form-like</span></div>
+            </div>
+            <div class="sflow-step">
+              <div class="sflow-num" style="background:rgba(37,211,102,0.12);color:var(--wa);">3</div>
+              <div><strong>AI qualifies the lead (optional)</strong><span>Budget, timeline and fit questions answered naturally in chat</span></div>
+            </div>
+            <div class="sflow-step">
+              <div class="sflow-num" style="background:rgba(37,211,102,0.12);color:var(--wa);">4</div>
+              <div><strong>Hot leads trigger sales notification</strong><span>Sales rep gets a WhatsApp or Slack ping within seconds</span></div>
+            </div>
+            <div class="sflow-step">
+              <div class="sflow-num" style="background:rgba(37,211,102,0.12);color:var(--wa);">5</div>
+              <div><strong>Contact created in GHL / HubSpot</strong><span>Full conversation history attached — no manual data entry</span></div>
+            </div>
+          </div>
+          <div class="scenario-outcome">
+            <div class="scenario-outcome-title">Integration options</div>
+            <div class="out-item"><span class="oi">🔧</span> GoHighLevel — conversation automation + pipeline</div>
+            <div class="out-item"><span class="oi">🔗</span> Make.com — webhook → CRM → Slack/email alert</div>
+            <div class="out-item"><span class="oi">🤖</span> OpenAI — AI qualification layer in the chat</div>
+            <div class="out-item"><span class="oi">📊</span> Google Sheets — real-time lead log</div>
+            <div class="out-item"><span class="oi">📧</span> Email sequence triggered on capture</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FLOW 4: Loyalty / Voucher -->
+      <div class="scenario">
+        <div class="scenario-header">
+          <div class="scenario-ico sico-orange">🏆</div>
+          <div>
+            <h3>Flow 4: Loyalty Rewards &amp; Voucher Delivery</h3>
+            <p>Turn a one-time customer into a repeat visitor. Tap to join, tap to earn, tap to redeem — all via WhatsApp without an app download or loyalty card.</p>
+          </div>
+        </div>
+        <div class="scenario-body">
+          <div class="scenario-flow">
+            <div class="scenario-flow-title">Step by step</div>
+            <div class="sflow-step">
+              <div class="sflow-num" style="background:rgba(251,146,60,0.15);color:var(--orange);">1</div>
+              <div><strong>Tap at checkout or table</strong><span>"Join our loyalty programme" NFC card</span></div>
+            </div>
+            <div class="sflow-step">
+              <div class="sflow-num" style="background:rgba(251,146,60,0.15);color:var(--orange);">2</div>
+              <div><strong>WhatsApp confirms enrolment</strong><span>"Welcome to [Brand] Rewards! You've earned 50 points for today's visit. 🎉"</span></div>
+            </div>
+            <div class="sflow-step">
+              <div class="sflow-num" style="background:rgba(251,146,60,0.15);color:var(--orange);">3</div>
+              <div><strong>Points tracked in GHL / custom system</strong><span>Every tap at future visits adds points automatically via phone number match</span></div>
+            </div>
+            <div class="sflow-step">
+              <div class="sflow-num" style="background:rgba(251,146,60,0.15);color:var(--orange);">4</div>
+              <div><strong>Reward milestones trigger WhatsApp messages</strong><span>"You've reached 200 points! Here's your R50 voucher 🎁" — sent automatically</span></div>
+            </div>
+            <div class="sflow-step">
+              <div class="sflow-num" style="background:rgba(251,146,60,0.15);color:var(--orange);">5</div>
+              <div><strong>Voucher redeemed by showing WhatsApp message at POS</strong><span>Zero app, zero plastic card, zero friction</span></div>
+            </div>
+          </div>
+          <div class="scenario-outcome">
+            <div class="scenario-outcome-title">Business impact</div>
+            <div class="out-item"><span class="oi">🔄</span> Repeat visit rate increases with milestone rewards</div>
+            <div class="out-item"><span class="oi">📱</span> No app download = higher adoption rate</div>
+            <div class="out-item"><span class="oi">💬</span> WhatsApp becomes a legitimate re-engagement channel</div>
+            <div class="out-item"><span class="oi">📊</span> Visit frequency and spend per customer tracked</div>
+            <div class="out-item"><span class="oi">🎯</span> Lapsed customers triggered for win-back campaign</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="sec-divider"></div>
+
+
+<!-- ─────────────────────────────────────────────
+     MAKE.COM BLUEPRINT
+───────────────────────────────────────────── -->
+<section id="blueprint">
+  <div class="container">
+    <div class="eyebrow ey-purple">Make.com Blueprint</div>
+    <h2 class="sec-title">The automation under<br>the hood</h2>
+    <p class="sec-sub">Every WhatsApp flow is powered by a Make.com scenario running in the background. Here's exactly how the core blueprint is structured — buildable in a few hours.</p>
+
+    <div class="blueprint">
+      <div class="bp-title">WhatsApp Engagement Automation — Core Blueprint</div>
+      <div class="bp-sub">Triggered by an incoming WhatsApp message. Routes to the correct flow based on message content and customer history.</div>
+
+      <div class="bp-modules">
+
+        <!-- Module 1 -->
+        <div class="bp-module">
+          <div class="bp-mod-num">Module 1</div>
+          <div class="bp-mod-ico">💬</div>
+          <div class="bp-mod-name">WhatsApp Trigger</div>
+          <div class="bp-mod-desc">Webhook listens for incoming WhatsApp messages on your Business number</div>
+          <div class="bp-mod-app app-wa">WhatsApp API</div>
+        </div>
+
+        <div class="bp-arrow">→</div>
+
+        <!-- Module 2 -->
+        <div class="bp-module">
+          <div class="bp-mod-num">Module 2</div>
+          <div class="bp-mod-ico">🔍</div>
+          <div class="bp-mod-name">Parse Message</div>
+          <div class="bp-mod-desc">Extract phone number, message text, sender name and campaign keyword from message</div>
+          <div class="bp-mod-app app-make">Make.com</div>
+        </div>
+
+        <div class="bp-arrow">→</div>
+
+        <!-- Module 3 -->
+        <div class="bp-module">
+          <div class="bp-mod-num">Module 3</div>
+          <div class="bp-mod-ico">🗂</div>
+          <div class="bp-mod-name">Check Contact</div>
+          <div class="bp-mod-desc">Look up phone number in GHL / CRM. New vs. returning contact — determines flow</div>
+          <div class="bp-mod-app app-ghl">GHL / CRM</div>
+        </div>
+
+        <div class="bp-arrow">→</div>
+
+        <!-- Router -->
+        <div class="bp-router">
+          <div class="bp-router-ico">🔀</div>
+          <span>ROUTER</span>
+        </div>
+
+        <!-- Branches -->
+        <div class="bp-branches">
+          <div class="bp-branch">
+            <div class="bp-branch-label">Review</div>
+            <div class="bp-mini">
+              <div class="bp-mini-name">⭐ Review Flow</div>
+              <div class="bp-mini-desc">Rate experience → send Google link or escalate internally</div>
+            </div>
+          </div>
+          <div class="bp-branch">
+            <div class="bp-branch-label">Comp</div>
+            <div class="bp-mini">
+              <div class="bp-mini-name">🎁 Competition Flow</div>
+              <div class="bp-mini-desc">Log entry → confirm → bonus review ask</div>
+            </div>
+          </div>
+          <div class="bp-branch">
+            <div class="bp-branch-label">Lead</div>
+            <div class="bp-mini">
+              <div class="bp-mini-name">🎯 Lead Flow</div>
+              <div class="bp-mini-desc">Qualify → score → notify sales if hot</div>
+            </div>
+          </div>
+          <div class="bp-branch">
+            <div class="bp-branch-label">Loyalty</div>
+            <div class="bp-mini">
+              <div class="bp-mini-name">🏆 Loyalty Flow</div>
+              <div class="bp-mini-desc">Add points → check milestone → send reward</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bp-arrow">→</div>
+
+        <!-- Module 4 -->
+        <div class="bp-module">
+          <div class="bp-mod-num">Module 7</div>
+          <div class="bp-mod-ico">🤖</div>
+          <div class="bp-mod-name">AI Response (Optional)</div>
+          <div class="bp-mod-desc">OpenAI reads message, generates personalised response — handles freetext naturally</div>
+          <div class="bp-mod-app app-ai">OpenAI</div>
+        </div>
+
+        <div class="bp-arrow">→</div>
+
+        <!-- Module 5 -->
+        <div class="bp-module">
+          <div class="bp-mod-num">Module 8</div>
+          <div class="bp-mod-ico">💬</div>
+          <div class="bp-mod-name">Send WA Reply</div>
+          <div class="bp-mod-desc">Formatted WhatsApp message sent within seconds of customer's original tap</div>
+          <div class="bp-mod-app app-wa">WhatsApp API</div>
+        </div>
+
+        <div class="bp-arrow">→</div>
+
+        <!-- Module 6 -->
+        <div class="bp-module">
+          <div class="bp-mod-num">Module 9</div>
+          <div class="bp-mod-ico">📊</div>
+          <div class="bp-mod-name">Update CRM + Log</div>
+          <div class="bp-mod-desc">Create/update contact record, tag conversation, log to Sheets, trigger follow-up sequence</div>
+          <div class="bp-mod-app app-ghl">GHL / Sheets</div>
+        </div>
+
+      </div>
+
+      <div class="inline-note" style="margin-top:32px;background:rgba(168,85,247,0.05);border-color:rgba(168,85,247,0.15);">
+        <span class="ni">🔧</span>
+        <div>
+          <strong style="color:var(--text);">What you need to build this:</strong> A WhatsApp Business API account (via Meta or a provider like Twilio / 360Dialog), a Make.com account, and optionally a GoHighLevel account for CRM. Build time for the core blueprint is approximately <strong style="color:var(--purple-lt);">4–6 hours</strong>. Add 2–3 hours per additional conversation flow. Once built, it runs 24/7 at zero marginal cost per response.
+        </div>
+      </div>
+    </div>
+
+    <!-- Integration options -->
+    <div style="margin-top:40px;">
+      <div style="font-size:16px;font-weight:700;margin-bottom:16px;">Integration options for WhatsApp automation</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;">
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);padding:22px 20px;display:flex;flex-direction:column;gap:10px;">
+          <div style="font-size:24px;">🟣</div>
+          <div style="font-weight:700;font-size:14px;">Make.com</div>
+          <div style="font-size:12px;color:var(--text-2);line-height:1.55;">Most flexible — build any logic with visual drag-and-drop. Connects to 1,500+ apps. Recommended for complex flows.</div>
+        </div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);padding:22px 20px;display:flex;flex-direction:column;gap:10px;">
+          <div style="font-size:24px;">🟠</div>
+          <div style="font-weight:700;font-size:14px;">GoHighLevel</div>
+          <div style="font-size:12px;color:var(--text-2);line-height:1.55;">Built-in WhatsApp automation with conversation builder. Best if already using GHL for CRM and pipeline management.</div>
+        </div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);padding:22px 20px;display:flex;flex-direction:column;gap:10px;">
+          <div style="font-size:24px;">🟡</div>
+          <div style="font-weight:700;font-size:14px;">Zapier</div>
+          <div style="font-size:12px;color:var(--text-2);line-height:1.55;">Simpler flows with less complexity. Good for basic trigger-and-respond use cases. Easier to set up, less powerful than Make.</div>
+        </div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);padding:22px 20px;display:flex;flex-direction:column;gap:10px;">
+          <div style="font-size:24px;">🔵</div>
+          <div style="font-weight:700;font-size:14px;">WhatsApp Business API</div>
+          <div style="font-size:12px;color:var(--text-2);line-height:1.55;">Direct API integration for maximum control. Providers: Twilio, 360Dialog, MessageBird. Required for high-volume broadcast messaging.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="sec-divider"></div>
+
+
+<!-- ─────────────────────────────────────────────
+     CLIENT USE CASES
+───────────────────────────────────────────── -->
+<section id="clients">
+  <div class="container">
+    <div class="eyebrow ey-gold">Omnicom Client Applications</div>
+    <h2 class="sec-title">Exactly how this plays out<br>for your portfolio</h2>
+    <p class="sec-sub">Beyond reviews — specific WhatsApp and activation use cases mapped to your biggest client opportunities.</p>
+
+    <div class="client-cases">
+
+      <div class="client-case">
+        <div class="cc-header">
+          <div>
+            <div class="cc-brand">MTN</div>
+            <div class="cc-vertical">Telecoms · Retail · 1,000+ locations</div>
+          </div>
+          <span class="cc-badge" style="background:rgba(242,169,25,0.12);color:var(--gold);">Tier 1</span>
+        </div>
+        <div class="cc-body">
+          <div class="cc-use">📱 Contract Upgrade Lead Generation</div>
+          <div class="cc-desc">Customer visits MTN store, taps ReviewTap card at the counter. WhatsApp bot asks: "Are you happy with your current plan?" — qualifies upgrade intent, books a callback with a sales agent, logs to CRM as a warm lead. Sales team is notified instantly.</div>
+          <div class="cc-tags">
+            <span class="cc-tag">WhatsApp Bot</span>
+            <span class="cc-tag">Lead Qualification</span>
+            <span class="cc-tag">GHL Pipeline</span>
+          </div>
+          <div style="height:1px;background:var(--border);margin:8px 0;"></div>
+          <div class="cc-use">⭐ Review + NPS Across 1,000 Stores</div>
+          <div class="cc-desc">Post-service tap prompts rating. Happy customers pushed to Google. Unhappy customers escalated to regional manager via WhatsApp alert — before they post publicly.</div>
+          <div class="cc-tags">
+            <span class="cc-tag">Review Gating</span>
+            <span class="cc-tag">NPS Capture</span>
+            <span class="cc-tag">Escalation Alerts</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="client-case">
+        <div class="cc-header">
+          <div>
+            <div class="cc-brand">Diageo</div>
+            <div class="cc-vertical">FMCG · On-Trade · Brand Experiences</div>
+          </div>
+          <span class="cc-badge" style="background:rgba(242,169,25,0.12);color:var(--gold);">Tier 1</span>
+        </div>
+        <div class="cc-body">
+          <div class="cc-use">🥃 Johnnie Walker WhatsApp Experience</div>
+          <div class="cc-desc">Customer at tasting event taps NFC card on the bar. WhatsApp bot delivers the cocktail menu, offers competition entry, sends the Google review link for the venue, and subscribes them to the JW newsletter — all in one conversation.</div>
+          <div class="cc-tags">
+            <span class="cc-tag">Multi-step Bot</span>
+            <span class="cc-tag">Competition Entry</span>
+            <span class="cc-tag">Content Delivery</span>
+          </div>
+          <div style="height:1px;background:var(--border);margin:8px 0;"></div>
+          <div class="cc-use">🍺 Guinness On-Trade Loyalty</div>
+          <div class="cc-desc">Tap at venue table → "Check in" to earn Guinness loyalty points. Fifth visit triggers a free pint voucher sent directly via WhatsApp. No app, no plastic card — just tap and WhatsApp.</div>
+          <div class="cc-tags">
+            <span class="cc-tag">Loyalty Programme</span>
+            <span class="cc-tag">Voucher Delivery</span>
+            <span class="cc-tag">Visit Tracking</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="client-case">
+        <div class="cc-header">
+          <div>
+            <div class="cc-brand">SA Tourism</div>
+            <div class="cc-vertical">Tourism · Destination Marketing</div>
+          </div>
+          <span class="cc-badge" style="background:rgba(61,142,255,0.12);color:var(--blue-lt);">Tier 2</span>
+        </div>
+        <div class="cc-body">
+          <div class="cc-use">✈️ International Visitor WhatsApp Concierge</div>
+          <div class="cc-desc">Tourist taps NFC at hotel lobby, airport or info centre. WhatsApp bot detects language preference, delivers a personalised SA itinerary, activity recommendations and booking links — all in a conversation. Tourist data captured for post-visit retargeting.</div>
+          <div class="cc-tags">
+            <span class="cc-tag">AI Concierge</span>
+            <span class="cc-tag">Multilingual</span>
+            <span class="cc-tag">Booking Links</span>
+          </div>
+          <div style="height:1px;background:var(--border);margin:8px 0;"></div>
+          <div class="cc-use">🌍 Google Review Generation at Partner Lodges</div>
+          <div class="cc-desc">NFC cards at 200+ partner lodges and guesthouses drive English-language reviews on Google — improving SA's international destination perception and search visibility for inbound tourists.</div>
+          <div class="cc-tags">
+            <span class="cc-tag">Review Generation</span>
+            <span class="cc-tag">Destination SEO</span>
+            <span class="cc-tag">Partner Network</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="client-case">
+        <div class="cc-header">
+          <div>
+            <div class="cc-brand">Red Bull</div>
+            <div class="cc-vertical">FMCG · Events · Sponsorships</div>
+          </div>
+          <span class="cc-badge" style="background:rgba(61,142,255,0.12);color:var(--blue-lt);">Tier 2</span>
+        </div>
+        <div class="cc-body">
+          <div class="cc-use">🏆 Live Event Competition &amp; Fan Data Capture</div>
+          <div class="cc-desc">NFC wristbands issued at Red Bull event entry. Tap at experience zones to enter real-time competition. Winner announced via WhatsApp broadcast to all entrants. Red Bull builds an opted-in fan database at every event — zero data leakage.</div>
+          <div class="cc-tags">
+            <span class="cc-tag">Live Competition</span>
+            <span class="cc-tag">WA Broadcast</span>
+            <span class="cc-tag">Fan Database</span>
+          </div>
+          <div style="height:1px;background:var(--border);margin:8px 0;"></div>
+          <div class="cc-use">📸 UGC &amp; Social Amplification</div>
+          <div class="cc-desc">Tap at photo moment → WhatsApp prompts fan to upload photo + tag Red Bull on Instagram. Best UGC selected automatically, fan notified via WhatsApp. Event content generated at scale by the audience — not the agency.</div>
+          <div class="cc-tags">
+            <span class="cc-tag">UGC Collection</span>
+            <span class="cc-tag">Social Follow</span>
+            <span class="cc-tag">Content Amplification</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="sec-divider"></div>
+
+
+<!-- ─────────────────────────────────────────────
+     DATA SECTION
+───────────────────────────────────────────── -->
+<section>
+  <div class="container">
+    <div class="eyebrow ey-blue">The Data Layer</div>
+    <h2 class="sec-title">Every tap is a<br>data point</h2>
+    <p class="sec-sub">ReviewTap doesn't just collect reviews — it builds a first-party data asset that feeds directly back into your clients' campaigns.</p>
+
+    <div class="data-grid">
+      <div class="data-card">
+        <div class="data-ico">📞</div>
+        <h3>Phone Numbers (Opted-In)</h3>
+        <p>Every WhatsApp interaction captures a mobile number with explicit opt-in. This is first-party, consented contact data — the most valuable asset in modern marketing.</p>
+      </div>
+      <div class="data-card">
+        <div class="data-ico">📍</div>
+        <h3>Location &amp; Timestamp</h3>
+        <p>Every tap is tagged to a location and timestamp. Know which stores, events or activation zones are performing — and which need attention.</p>
+      </div>
+      <div class="data-card">
+        <div class="data-ico">⭐</div>
+        <h3>Sentiment Scores</h3>
+        <p>Rating data per location, per campaign, over time. Real customer sentiment — not survey panels. Feeds directly into brand health reporting.</p>
+      </div>
+      <div class="data-card">
+        <div class="data-ico">🔁</div>
+        <h3>Repeat Visit Frequency</h3>
+        <p>Phone number matching across taps reveals which customers are returning and at what cadence. Identify your best customers automatically.</p>
+      </div>
+      <div class="data-card">
+        <div class="data-ico">🎯</div>
+        <h3>Campaign Attribution</h3>
+        <p>Each NFC card or QR code can carry a unique campaign ID. Know which activation, media placement or influencer drove the most engagement — down to the tap.</p>
+      </div>
+      <div class="data-card">
+        <div class="data-ico">🤝</div>
+        <h3>CRM &amp; Retargeting Ready</h3>
+        <p>All captured data flows into your CRM of choice. Phone numbers can be used for WhatsApp retargeting, Meta custom audiences, Google Customer Match — closing the attribution loop.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="sec-divider"></div>
+
+
+<!-- ─────────────────────────────────────────────
+     CTA
+───────────────────────────────────────────── -->
+<section class="cta-section">
+  <div class="container">
+    <div class="cta-box-inner">
+      <div class="eyebrow ey-gold" style="margin-bottom:8px;">The Bottom Line</div>
+      <h2 class="sec-title" style="text-align:center;">ReviewTap is an<br><span class="g-gold">engagement platform.</span><br>Reviews are just the start.</h2>
+      <p style="font-size:17px;color:var(--text-2);text-align:center;line-height:1.65;max-width:580px;">
+        Every NFC card is a programmable trigger. Every tap is a data point. Every WhatsApp conversation is an opted-in relationship. The question isn't whether to use it — it's which activation to run first.
+      </p>
+      <div style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-top:8px;">
+        <div style="padding:14px 24px;background:var(--card);border:1px solid rgba(242,169,25,0.2);border-radius:12px;font-size:14px;font-weight:600;color:var(--gold);">⭐ Reviews</div>
+        <div style="padding:14px 24px;background:var(--card);border:1px solid rgba(37,211,102,0.2);border-radius:12px;font-size:14px;font-weight:600;color:var(--wa-lt);">💬 WhatsApp Automation</div>
+        <div style="padding:14px 24px;background:var(--card);border:1px solid rgba(168,85,247,0.2);border-radius:12px;font-size:14px;font-weight:600;color:var(--purple-lt);">🎁 Competition Entry</div>
+        <div style="padding:14px 24px;background:var(--card);border:1px solid rgba(61,142,255,0.2);border-radius:12px;font-size:14px;font-weight:600;color:var(--blue-lt);">👤 Lead Capture</div>
+        <div style="padding:14px 24px;background:var(--card);border:1px solid rgba(251,146,60,0.2);border-radius:12px;font-size:14px;font-weight:600;color:var(--orange);">🏆 Loyalty Rewards</div>
+        <div style="padding:14px 24px;background:var(--card);border:1px solid rgba(15,207,160,0.2);border-radius:12px;font-size:14px;font-weight:600;color:var(--green);">📊 Data &amp; Analytics</div>
+      </div>
+      <div style="margin-top:24px;padding:22px 32px;background:rgba(242,169,25,0.06);border:1px solid rgba(242,169,25,0.15);border-radius:16px;text-align:center;">
+        <div style="font-size:15px;color:var(--text-2);line-height:1.65;">
+          <strong style="color:var(--text);">reviewtap.co.za</strong> &nbsp;·&nbsp; Presented by <strong style="color:var(--text);">Jacques Groenewald</strong> &nbsp;·&nbsp; JCE Agency &nbsp;·&nbsp; 2026
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

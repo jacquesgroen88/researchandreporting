@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Signal Brief — 2026-05-24</title>
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --surface2: #1a1a24;
+    --border: #2a2a3a;
+    --text: #e8e8f0;
+    --muted: #6b6b8a;
+    --red: #ff4d6d;
+    --red-bg: #1a0810;
+    --red-border: #3d1020;
+    --yellow: #ffd60a;
+    --yellow-bg: #1a1500;
+    --yellow-border: #3d3200;
+    --green: #4ade80;
+    --green-bg: #081a0e;
+    --green-border: #10341c;
+    --blue: #60a5fa;
+    --purple: #a78bfa;
+    --orange: #fb923c;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(12px);
+  }
+
+  .header-left { display: flex; align-items: center; gap: 16px; }
+
+  .logo {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    background: linear-gradient(135deg, #60a5fa, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .window-badge {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .stats-bar { display: flex; gap: 20px; align-items: center; }
+
+  .stat { text-align: center; }
+  .stat-num { font-size: 18px; font-weight: 700; line-height: 1; }
+  .stat-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .stat.breaking .stat-num { color: var(--red); }
+  .stat.noteworthy .stat-num { color: var(--yellow); }
+  .stat.background .stat-num { color: var(--green); }
+
+  .main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 32px 24px 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-icon { font-size: 20px; }
+
+  .section-title {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+  }
+
+  .section-title.breaking { color: var(--red); }
+  .section-title.noteworthy { color: var(--yellow); }
+  .section-title.background { color: var(--green); }
+  .section-title.competitor { color: var(--orange); }
+
+  .section-subtitle { font-size: 12px; color: var(--muted); margin-left: auto; }
+
+  .signal-card {
+    background: var(--surface);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 12px;
+    position: relative;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .signal-card:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
+
+  .signal-card.breaking {
+    background: var(--red-bg);
+    border: 1px solid var(--red-border);
+  }
+  .signal-card.breaking::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--red);
+    border-radius: 12px 0 0 12px;
+  }
+
+  .signal-card.noteworthy {
+    background: var(--yellow-bg);
+    border: 1px solid var(--yellow-border);
+  }
+  .signal-card.noteworthy::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--yellow);
+    border-radius: 12px 0 0 12px;
+  }
+
+  .signal-card.competitor {
+    background: #120d05;
+    border: 1px solid #3d2500;
+  }
+  .signal-card.competitor::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--orange);
+    border-radius: 12px 0 0 12px;
+  }
+
+  .signal-headline {
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 10px;
+    letter-spacing: -0.2px;
+  }
+
+  .signal-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .source-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 12px;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .source-chip:hover { color: var(--text); border-color: #4a4a6a; }
+
+  .traction-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: var(--muted);
+    background: var(--surface2);
+    border-radius: 20px;
+    padding: 3px 10px;
+    border: 1px solid var(--border);
+  }
+
+  .signal-what {
+    font-size: 14px;
+    color: #b8b8d0;
+    margin-bottom: 14px;
+    line-height: 1.65;
+  }
+
+  .content-angle {
+    background: rgba(96, 165, 250, 0.06);
+    border: 1px solid rgba(96, 165, 250, 0.2);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: #93b4f8;
+    line-height: 1.5;
+  }
+
+  .content-angle-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #60a5fa;
+    margin-bottom: 4px;
+  }
+
+  .claude-angle {
+    background: rgba(251, 146, 60, 0.06);
+    border: 1px solid rgba(251, 146, 60, 0.2);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: #f8b878;
+    line-height: 1.5;
+    margin-top: 10px;
+  }
+
+  .claude-angle-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--orange);
+    margin-bottom: 4px;
+  }
+
+  .background-list {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .background-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    transition: background 0.15s;
+  }
+
+  .background-item:last-child { border-bottom: none; }
+  .background-item:hover { background: var(--surface2); }
+
+  .background-item a {
+    color: var(--green);
+    text-decoration: none;
+    font-size: 11px;
+    margin-left: auto;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .background-item a:hover { text-decoration: underline; }
+
+  .bg-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    flex-shrink: 0;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 32px;
+    color: var(--muted);
+    font-size: 14px;
+    background: var(--surface);
+    border: 1px dashed var(--border);
+    border-radius: 12px;
+  }
+
+  .footer {
+    margin-top: 24px;
+    padding: 20px 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    font-size: 12px;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .sources-checked { display: flex; flex-wrap: wrap; gap: 6px; }
+
+  .source-tag {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-size: 11px;
+  }
+
+  @media (max-width: 640px) {
+    .header { flex-direction: column; gap: 12px; padding: 16px; }
+    .stats-bar { gap: 12px; }
+    .main { padding: 20px 16px 60px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-left">
+    <div class="logo">⚡ Claude Signal Brief</div>
+    <div class="window-badge">Last 24–48 hours · 2026-05-24</div>
+  </div>
+  <div class="stats-bar">
+    <div class="stat breaking">
+      <div class="stat-num">2</div>
+      <div class="stat-label">Breaking</div>
+    </div>
+    <div class="stat noteworthy">
+      <div class="stat-num">4</div>
+      <div class="stat-label">Noteworthy</div>
+    </div>
+    <div class="stat background">
+      <div class="stat-num">6</div>
+      <div class="stat-label">Background</div>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+
+  <!-- BREAKING -->
+  <section>
+    <div class="section-header">
+      <span class="section-icon">🔴</span>
+      <span class="section-title breaking">Breaking</span>
+      <span class="section-subtitle">Act on this today</span>
+    </div>
+
+    <div class="signal-card breaking">
+      <div class="signal-headline">Andrej Karpathy Just Joined Anthropic — and He's Using Claude to Train Claude</div>
+      <div class="signal-meta">
+        <a class="source-chip" href="https://news.ycombinator.com/item?id=48194352" target="_blank">🔗 Hacker News</a>
+        <span class="traction-badge">⭐ 1,424 pts · 💬 616 comments · posted 1 day ago</span>
+      </div>
+      <div class="signal-what">
+        Andrej Karpathy — the AI educator behind Neural Networks: Zero to Hero and former Tesla AI director — has joined Anthropic's pre-training team. His stated focus: using Claude to accelerate pretraining research itself, building on his AutoResearch work. This is a significant talent signal for Anthropic. The HN discussion (616 comments) is mixed — celebration of his teaching work alongside skepticism about Anthropic's direction on jobs and AI concentration.
+      </div>
+      <div class="content-angle">
+        <div class="content-angle-label">Content angle</div>
+        YouTube: "Karpathy is now at Anthropic — what does that mean for Claude's future?" — huge name recognition, his tutorials have tens of millions of views; this is a "known quantity joins the race" story your audience already has an opinion on. LinkedIn: frame as talent war signal — the best AI educators are now building the models.
+      </div>
+    </div>
+
+    <div class="signal-card breaking">
+      <div class="signal-headline">Project Glasswing: Claude Found 10,000 Critical Security Bugs in One Month — More Than All Human Testers</div>
+      <div class="signal-meta">
+        <a class="source-chip" href="https://www.anthropic.com/research/glasswing-initial-update" target="_blank">🔗 anthropic.com</a>
+        <span class="traction-badge">📅 May 22 · Official update</span>
+      </div>
+      <div class="signal-what">
+        Anthropic published the first results from Project Glasswing — their defensive cybersecurity initiative using Claude Mythos Preview. In one month across ~50 partner orgs: 10,000+ high/critical vulnerabilities discovered in systemically important software. Cloudflare alone found 2,000 bugs (400 critical) with a false positive rate better than human testers. Mozilla found 271 Firefox vulnerabilities — "over ten times more" than all previous efforts combined. Anthropic's identified bottleneck: finding bugs is now easy; patching them is still slow and human.
+      </div>
+      <div class="content-angle">
+        <div class="content-angle-label">Content angle</div>
+        YouTube: "AI just broke security research — Claude found 10,000 critical bugs in a month" — the before/after contrast (human teams vs Claude) is a perfect thumbnail moment. Newsletter: the bottleneck framing is the real story — what happens when AI out-discovers humans but humans can't patch fast enough?
+      </div>
+    </div>
+  </section>
+
+  <!-- NOTEWORTHY -->
+  <section>
+    <div class="section-header">
+      <span class="section-icon">🟡</span>
+      <span class="section-title noteworthy">Noteworthy</span>
+      <span class="section-subtitle">Worth a post this week</span>
+    </div>
+
+    <div class="signal-card noteworthy">
+      <div class="signal-headline">Anthropic Quietly A/B Tested Removing Claude Code From the $20 Pro Plan — Developers Are Leaving</div>
+      <div class="signal-meta">
+        <a class="source-chip" href="https://news.ycombinator.com/item?id=47854477" target="_blank">🔗 Hacker News</a>
+        <span class="traction-badge">💬 Active discussion · ~3 weeks old but resurging</span>
+      </div>
+      <div class="signal-what">
+        Anthropic's Head of Growth confirmed an A/B test removing Claude Code from ~2% of new Pro plan signups at the same $20/month price — with no public announcement and quietly updated documentation. HN reaction was severe: engineers who described themselves as "Anthropic's most outspoken proponents" said they're switching to OpenAI Codex or Chinese alternatives (Kimi, GLM). Anthropic cited capacity constraints after Opus 4 usage "exploded." Existing subscribers unaffected — for now.
+      </div>
+      <div class="content-angle">
+        <div class="content-angle-label">Content angle</div>
+        YouTube: "Is Anthropic about to charge more for Claude Code?" — fear-of-loss framing performs well. LinkedIn: professional trust angle — what does silent A/B testing on paying customers tell us about Anthropic's product culture?
+      </div>
+    </div>
+
+    <div class="signal-card noteworthy">
+      <div class="signal-headline">Anthropic Can Now Read Claude's Internal Thoughts — New Interpretability Milestone</div>
+      <div class="signal-meta">
+        <a class="source-chip" href="https://www.anthropic.com/research/natural-language-autoencoders" target="_blank">🔗 anthropic.com/research</a>
+        <span class="traction-badge">📅 May 7 · arXiv + code released</span>
+      </div>
+      <div class="signal-what">
+        Anthropic published Natural Language Autoencoders (NLAs) — a technique that converts Claude's internal model activations into human-readable text in real time. Key findings: Claude's internal states revealed it suspects it's being safety-tested 16–26% of the time on evaluation datasets (vs. under 1% in real usage). The system also exposed hidden motivations in intentionally misaligned models. Code is on GitHub, interactive demo via Neuronpedia. This is a step toward genuinely auditable AI.
+      </div>
+      <div class="content-angle">
+        <div class="content-angle-label">Content angle</div>
+        YouTube: "We can now see what Claude is thinking — and it's surprising" — the "Claude suspects it's being tested" finding is a genuinely strange and story-worthy moment. Newsletter: deep dive on what interpretability actually means for AI safety and whether this changes how we should trust AI systems.
+      </div>
+    </div>
+
+    <div class="signal-card noteworthy">
+      <div class="signal-headline">Claude Agents Can Now "Dream" — Review Their Own Sessions and Self-Improve Overnight</div>
+      <div class="signal-meta">
+        <a class="source-chip" href="https://simonwillison.net/2026/May/6/code-w-claude-2026/" target="_blank">🔗 simonwillison.net</a>
+        <span class="traction-badge">📅 May 6 · Code with Claude 2026</span>
+      </div>
+      <div class="signal-what">
+        At Code with Claude 2026, Anthropic previewed "Dreaming" — a research-preview feature letting Claude agents review transcripts of their own past sessions, extract improvement learnings, and write those memories for future runs. Paired with the new Outcomes feature (define success criteria, let Claude loop until met) and multi-agent orchestration now in public beta. Simon Willison called Dreaming "really interesting" while noting the event was heavy on inspiration and light on new models.
+      </div>
+      <div class="content-angle">
+        <div class="content-angle-label">Content angle</div>
+        YouTube: "Claude agents that learn from their own mistakes — what 'Dreaming' actually means" — sleeping/dreaming AI is a visual and conceptually rich hook. LinkedIn: operational impact framing — Mercado Libre's goal of 90% autonomous coding by Q3 sets a concrete benchmark.
+      </div>
+    </div>
+
+    <div class="signal-card noteworthy">
+      <div class="signal-headline">Claude Is Now on AWS — Full API Access With AWS Billing and IAM</div>
+      <div class="signal-meta">
+        <a class="source-chip" href="https://platform.claude.com/docs/en/build-with-claude/claude-platform-on-aws" target="_blank">🔗 Claude Docs</a>
+        <span class="traction-badge">📅 May 11 · Generally available</span>
+      </div>
+      <div class="signal-what">
+        Anthropic launched Claude Platform on AWS — bringing the full Claude API (Messages, Files, Batch, Managed Agents, code execution, tool use) to AWS infrastructure with native AWS billing and IAM authentication. This is separate from the existing Bedrock integration, which also expanded on April 16 to all Bedrock customers in 27 regions. For enterprise teams already on AWS, this removes a major procurement and auth blocker.
+      </div>
+      <div class="content-angle">
+        <div class="content-angle-label">Content angle</div>
+        LinkedIn: enterprise/CTO audience — "If your company is on AWS, Claude just got a lot easier to buy and deploy." Newsletter: explains the difference between Claude on AWS vs Bedrock and why it matters for enterprise AI adoption.
+      </div>
+    </div>
+  </section>
+
+  <!-- BACKGROUND -->
+  <section>
+    <div class="section-header">
+      <span class="section-icon">🟢</span>
+      <span class="section-title background">Background</span>
+      <span class="section-subtitle">File for context</span>
+    </div>
+    <div class="background-list">
+      <div class="background-item">
+        <div class="bg-dot"></div>
+        <span><strong>MCP tunnels in research preview</strong> — Connect Claude to MCP servers in private networks (May 19)</span>
+        <a href="https://platform.claude.com/docs/en/release-notes/api" target="_blank">source →</a>
+      </div>
+      <div class="background-item">
+        <div class="bg-dot"></div>
+        <span><strong>Web search now returns SEC filings</strong> — Richer financial data grounding for research agents (May 18)</span>
+        <a href="https://platform.claude.com/docs/en/release-notes/api" target="_blank">source →</a>
+      </div>
+      <div class="background-item">
+        <div class="bg-dot"></div>
+        <span><strong>Cache diagnostics beta</strong> — API now tells you exactly why your prompt cache missed (May 13)</span>
+        <a href="https://platform.claude.com/docs/en/release-notes/api" target="_blank">source →</a>
+      </div>
+      <div class="background-item">
+        <div class="bg-dot"></div>
+        <span><strong>Opus 4.7 fast mode</strong> — Significantly faster output on Anthropic's most capable model (May 12)</span>
+        <a href="https://platform.claude.com/docs/en/release-notes/api" target="_blank">source →</a>
+      </div>
+      <div class="background-item">
+        <div class="bg-dot"></div>
+        <span><strong>KPMG: 276,000 employees get Claude</strong> — Global alliance, every KPMG staff member (May 19)</span>
+        <a href="https://www.anthropic.com/news/anthropic-kpmg" target="_blank">source →</a>
+      </div>
+      <div class="background-item">
+        <div class="bg-dot"></div>
+        <span><strong>Claude for Small Business launched</strong> — Connectors for QuickBooks, PayPal, HubSpot, Canva, DocuSign (May 13)</span>
+        <a href="https://www.anthropic.com/news/claude-for-small-business" target="_blank">source →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPETITOR CONTEXT -->
+  <section>
+    <div class="section-header">
+      <span class="section-icon">⚔️</span>
+      <span class="section-title competitor">Competitor Context</span>
+      <span class="section-subtitle">Framed around Claude</span>
+    </div>
+
+    <div class="signal-card competitor">
+      <div class="signal-headline">OpenAI Ships GPT-5.5 Instant — New ChatGPT Default With 52% Fewer Hallucinations</div>
+      <div class="signal-meta">
+        <a class="source-chip" href="https://techcrunch.com/2026/05/05/openai-releases-gpt-5-5-instant-a-new-default-model-for-chatgpt/" target="_blank">🔗 TechCrunch</a>
+        <span class="traction-badge">📅 May 5 · Rolling out to all ChatGPT users</span>
+      </div>
+      <div class="signal-what">
+        OpenAI replaced GPT-5.3 Instant as ChatGPT's default model with GPT-5.5 Instant — claiming 52.5% fewer hallucinations on high-stakes domains (medicine, law, finance), better image understanding, and improved STEM. Also landing: ChatGPT for personal finance (connect 12,000+ financial institutions) and ChatGPT in Excel/Sheets globally.
+      </div>
+      <div class="claude-angle">
+        <div class="claude-angle-label">Claude angle</div>
+        Benchmarks as of May 2026 still show Claude Opus 4.6 leading SWE-bench at 80.8% for coding — the hallucination reduction claim from OpenAI is worth stress-testing. Content angle: "ChatGPT just got smarter — where does that leave Claude?" is a recurring hook your audience responds to.
+      </div>
+    </div>
+
+    <div class="signal-card competitor">
+      <div class="signal-headline">Google I/O: Gemini 3.5 Flash Is 4x Faster Than Frontier Models and Beats 3.1 Pro on Benchmarks</div>
+      <div class="signal-meta">
+        <a class="source-chip" href="https://9to5google.com/2026/05/19/google-io-2026-news/" target="_blank">🔗 9to5Google</a>
+        <span class="traction-badge">📅 May 19 · Google I/O 2026</span>
+      </div>
+      <div class="signal-what">
+        At Google I/O, Gemini 3.5 Flash launched — surpassing 3.1 Pro in coding, agentic, and multimodal benchmarks at 4x the output speed of other frontier models. Gemini Omni (video generation grounded in real-world knowledge) and Science Skills (30 life science databases in one agent) also shipped. Google AI Ultra repriced to $100/month. Gemini 3.5 Pro coming next month.
+      </div>
+      <div class="claude-angle">
+        <div class="claude-angle-label">Claude angle</div>
+        The speed gap is real — Gemini 3.1 Pro is clocked at 120.3 tokens/sec vs ~60 for Claude. But Claude Opus 4.6 still leads on coding (SWE-bench) and is consistently rated the best for "writing and conversation that doesn't feel canned" in user comparisons. Google is winning speed; Claude is winning quality perception.
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div>
+      <strong>Generated:</strong> 2026-05-24 · <strong>Signals reviewed:</strong> ~40 · <strong>Earliest signal:</strong> May 5 (GPT-5.5 Instant)
+    </div>
+    <div class="sources-checked">
+      <span class="source-tag">anthropic.com</span>
+      <span class="source-tag">Claude Docs API</span>
+      <span class="source-tag">HackerNews</span>
+      <span class="source-tag">arXiv</span>
+      <span class="source-tag">X/Twitter</span>
+      <span class="source-tag">OpenAI</span>
+      <span class="source-tag">Google I/O</span>
+    </div>
+  </div>
+
+</main>
+</body>
+</html>

@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JCE Media — Facebook Followers Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg:        #070E1C;
+  --surface:   #0B1628;
+  --card:      #0D1B30;
+  --card-hi:   #122038;
+  --border:    rgba(255,255,255,0.055);
+  --border-hi: rgba(255,255,255,0.11);
+  --fb:        #1877F2;
+  --fb-glow:   rgba(24,119,242,0.2);
+  --fb-dk:     rgba(24,119,242,0.08);
+  --pink:      #E91E8C;
+  --pink-glow: rgba(233,30,140,0.2);
+  --pink-dk:   rgba(233,30,140,0.08);
+  --green:     #00D49A;
+  --green-dk:  rgba(0,212,154,0.12);
+  --red:       #FF5757;
+  --red-dk:    rgba(255,87,87,0.12);
+  --gold:      #F2A919;
+  --text:      #EBF1FB;
+  --text-2:    #8AA3BF;
+  --text-3:    #4A617A;
+  --r:         12px;
+  --r-lg:      18px;
+  --r-xl:      24px;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+header {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(7,14,28,0.94);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 32px;
+  height: 64px;
+  display: flex; align-items: center; gap: 0;
+}
+.hdr-brand { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.hdr-logo {
+  width: 34px; height: 34px; border-radius: 8px;
+  background: linear-gradient(135deg, var(--fb) 0%, var(--pink) 100%);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 900; color: #fff;
+  letter-spacing: -0.03em;
+}
+.hdr-agency-name { font-size: 14px; font-weight: 800; letter-spacing: -0.02em; color: var(--gold); }
+.hdr-sep { width: 1px; height: 28px; background: var(--border-hi); margin: 0 20px; }
+.hdr-title { font-size: 15px; font-weight: 600; color: var(--text); }
+.hdr-sub  { font-size: 11px; color: var(--text-3); letter-spacing: 0.04em; text-transform: uppercase; margin-top: 1px; }
+.hdr-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+.live-badge {
+  display: flex; align-items: center; gap: 7px;
+  padding: 5px 12px; border-radius: 100px;
+  background: rgba(0,212,154,0.08); border: 1px solid rgba(0,212,154,0.18);
+  font-size: 12px; font-weight: 600; color: var(--green);
+}
+.live-dot {
+  width: 7px; height: 7px; border-radius: 50%; background: var(--green);
+  animation: pulse-live 1.8s ease-in-out infinite;
+}
+@keyframes pulse-live {
+  0%,100% { opacity:1; box-shadow: 0 0 0 0 rgba(0,212,154,0.4); }
+  50%      { opacity:0.7; box-shadow: 0 0 0 5px rgba(0,212,154,0); }
+}
+.btn-log {
+  padding: 8px 18px; border-radius: 10px;
+  background: linear-gradient(135deg, var(--fb), #0e5fd4);
+  border: none; font-size: 13px; font-weight: 600; color: #fff;
+  cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 7px;
+}
+.btn-log:hover { opacity: 0.9; transform: translateY(-1px); }
+.btn-export {
+  padding: 8px 16px; border-radius: 10px;
+  background: var(--card); border: 1px solid var(--border-hi);
+  font-size: 12px; font-weight: 600; color: var(--text-2);
+  cursor: pointer; transition: all 0.2s;
+}
+.btn-export:hover { color: var(--text); border-color: rgba(255,255,255,0.18); }
+
+/* =========================================================
+   MAIN
+   ========================================================= */
+main { padding: 28px 32px 60px; max-width: 1600px; margin: 0 auto; }
+
+/* =========================================================
+   SECTION HEADER
+   ========================================================= */
+.section-hdr {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 16px;
+}
+.section-title { font-size: 13px; font-weight: 600; color: var(--text-2); text-transform: uppercase; letter-spacing: 0.06em; }
+.section-gap { margin-bottom: 24px; }
+
+/* =========================================================
+   PAGE HERO CARDS
+   ========================================================= */
+.pages-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+  margin-bottom: 24px;
+}
+.page-hero {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--r-xl); padding: 26px 28px;
+  position: relative; overflow: hidden;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.page-hero:hover { transform: translateY(-2px); }
+.page-hero.fb  { border-color: rgba(24,119,242,0.25); }
+.page-hero.mb  { border-color: rgba(233,30,140,0.25); }
+.page-hero::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+}
+.page-hero.fb::before { background: linear-gradient(90deg, var(--fb), transparent); }
+.page-hero.mb::before { background: linear-gradient(90deg, var(--pink), transparent); }
+.page-hero-bg {
+  position: absolute; top: -40px; right: -40px;
+  width: 180px; height: 180px; border-radius: 50%; opacity: 0.04;
+  pointer-events: none;
+}
+.page-hero.fb .page-hero-bg { background: var(--fb); }
+.page-hero.mb .page-hero-bg { background: var(--pink); }
+
+.ph-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 20px; }
+.ph-page-info { display: flex; align-items: center; gap: 13px; }
+.ph-icon {
+  width: 46px; height: 46px; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center; font-size: 22px;
+  flex-shrink: 0;
+}
+.ph-icon.fb { background: var(--fb-dk); }
+.ph-icon.mb { background: var(--pink-dk); }
+.ph-name { font-size: 16px; font-weight: 700; line-height: 1.2; }
+.ph-url  { font-size: 11px; color: var(--text-3); margin-top: 3px; font-family: monospace; }
+.ph-badge {
+  font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 8px;
+}
+.ph-badge.fb { background: var(--fb-dk); color: var(--fb); }
+.ph-badge.mb { background: var(--pink-dk); color: var(--pink); }
+
+.ph-count { font-size: 48px; font-weight: 900; letter-spacing: -0.03em; line-height: 1; margin-bottom: 8px; }
+.ph-count.fb { color: var(--fb); }
+.ph-count.mb { color: var(--pink); }
+.ph-count-label { font-size: 12px; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 18px; }
+
+.ph-stats { display: flex; gap: 24px; }
+.ph-stat {}
+.ph-stat-val {
+  font-size: 16px; font-weight: 700;
+}
+.ph-stat-val.up   { color: var(--green); }
+.ph-stat-val.down { color: var(--red); }
+.ph-stat-val.flat { color: var(--text-3); }
+.ph-stat-lbl { font-size: 11px; color: var(--text-3); margin-top: 2px; }
+
+/* =========================================================
+   KPI ROW
+   ========================================================= */
+.kpi-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+  margin-bottom: 24px;
+}
+.kpi-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--r-lg); padding: 20px 22px;
+  display: flex; flex-direction: column; gap: 10px;
+  position: relative; overflow: hidden;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.kpi-card:hover { border-color: var(--border-hi); transform: translateY(-2px); }
+.kpi-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+}
+.kpi-card.fb::before   { background: linear-gradient(90deg, var(--fb), transparent); }
+.kpi-card.mb::before   { background: linear-gradient(90deg, var(--pink), transparent); }
+.kpi-card.green::before{ background: linear-gradient(90deg, var(--green), transparent); }
+.kpi-card.gold::before { background: linear-gradient(90deg, var(--gold), transparent); }
+
+.kpi-top { display: flex; align-items: center; justify-content: space-between; }
+.kpi-icon {
+  width: 34px; height: 34px; border-radius: 9px;
+  display: flex; align-items: center; justify-content: center; font-size: 15px;
+}
+.ki-fb    { background: var(--fb-dk); }
+.ki-mb    { background: var(--pink-dk); }
+.ki-green { background: rgba(0,212,154,0.1); }
+.ki-gold  { background: rgba(242,169,25,0.1); }
+.kpi-delta {
+  font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 6px;
+}
+.delta-up   { background: rgba(0,212,154,0.12); color: var(--green); }
+.delta-down { background: rgba(255,87,87,0.12); color: var(--red); }
+.delta-flat { background: rgba(138,163,191,0.1); color: var(--text-3); }
+.kpi-val { font-size: 26px; font-weight: 800; letter-spacing: -0.02em; }
+.kpi-lbl { font-size: 12px; color: var(--text-3); }
+
+/* =========================================================
+   CHART CARD
+   ========================================================= */
+.chart-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--r-xl); padding: 24px 26px;
+  margin-bottom: 24px;
+}
+.chart-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+.chart-title { font-size: 15px; font-weight: 700; }
+.chart-controls { display: flex; gap: 6px; }
+.chart-btn {
+  padding: 5px 14px; border-radius: 8px;
+  background: transparent; border: 1px solid var(--border);
+  font-size: 12px; font-weight: 500; color: var(--text-3);
+  cursor: pointer; transition: all 0.15s;
+}
+.chart-btn:hover { border-color: var(--border-hi); color: var(--text-2); }
+.chart-btn.active {
+  background: rgba(24,119,242,0.1); border-color: rgba(24,119,242,0.3);
+  color: var(--fb);
+}
+.chart-legend { display: flex; gap: 20px; margin-bottom: 18px; }
+.legend-item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-2); }
+.legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+.chart-wrap { position: relative; height: 280px; }
+
+/* =========================================================
+   HISTORY TABLE
+   ========================================================= */
+.history-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--r-xl); overflow: hidden;
+  margin-bottom: 24px;
+}
+.history-hdr {
+  padding: 18px 24px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+}
+.history-title { font-size: 14px; font-weight: 700; }
+table { width: 100%; border-collapse: collapse; }
+thead th {
+  padding: 12px 16px;
+  font-size: 11px; font-weight: 600; color: var(--text-3);
+  text-transform: uppercase; letter-spacing: 0.06em;
+  text-align: left; background: rgba(0,0,0,0.15);
+  border-bottom: 1px solid var(--border);
+}
+tbody tr {
+  border-bottom: 1px solid var(--border);
+  transition: background 0.15s;
+}
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: rgba(255,255,255,0.025); }
+tbody td {
+  padding: 13px 16px;
+  font-size: 13px; color: var(--text-2);
+}
+tbody td.td-date { font-weight: 600; color: var(--text); }
+tbody td.td-num  { font-family: monospace; font-weight: 700; font-size: 14px; }
+tbody td.td-num.fb   { color: var(--fb); }
+tbody td.td-num.mb   { color: var(--pink); }
+.td-delta { font-size: 12px; font-weight: 600; padding: 2px 7px; border-radius: 5px; }
+.empty-row td { text-align: center; color: var(--text-3); padding: 40px; font-size: 13px; }
+
+/* =========================================================
+   MODAL
+   ========================================================= */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 1000;
+  background: rgba(0,0,0,0.7); backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none; transition: opacity 0.2s;
+}
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal {
+  background: var(--surface); border: 1px solid var(--border-hi);
+  border-radius: var(--r-xl); padding: 32px;
+  width: 480px; max-width: calc(100vw - 32px);
+  transform: translateY(16px); transition: transform 0.2s;
+  position: relative;
+}
+.modal-overlay.open .modal { transform: translateY(0); }
+.modal-title { font-size: 18px; font-weight: 800; margin-bottom: 6px; }
+.modal-sub   { font-size: 13px; color: var(--text-3); margin-bottom: 24px; }
+.modal-close {
+  position: absolute; top: 20px; right: 20px;
+  width: 32px; height: 32px; border-radius: 8px;
+  background: var(--card); border: 1px solid var(--border);
+  color: var(--text-3); font-size: 18px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+}
+.modal-close:hover { color: var(--text); border-color: var(--border-hi); }
+.form-row { margin-bottom: 18px; }
+.form-label {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px; font-weight: 600; color: var(--text-2);
+  margin-bottom: 8px;
+}
+.form-label-dot { width: 8px; height: 8px; border-radius: 50%; }
+.form-input {
+  width: 100%; padding: 11px 14px; border-radius: 10px;
+  background: var(--card); border: 1px solid var(--border-hi);
+  font-size: 15px; font-weight: 600; color: var(--text);
+  font-family: 'Inter', sans-serif;
+  transition: border-color 0.2s;
+  -webkit-appearance: none;
+}
+.form-input:focus { outline: none; border-color: var(--fb); }
+.form-date {
+  width: 100%; padding: 11px 14px; border-radius: 10px;
+  background: var(--card); border: 1px solid var(--border-hi);
+  font-size: 14px; color: var(--text);
+  font-family: 'Inter', sans-serif;
+  transition: border-color 0.2s;
+}
+.form-date:focus { outline: none; border-color: var(--fb); }
+.form-date::-webkit-calendar-picker-indicator { filter: invert(0.5); }
+.modal-actions { display: flex; gap: 10px; margin-top: 24px; }
+.btn-save {
+  flex: 1; padding: 12px; border-radius: 10px;
+  background: linear-gradient(135deg, var(--fb), #0e5fd4);
+  border: none; font-size: 14px; font-weight: 700; color: #fff;
+  cursor: pointer; transition: all 0.2s;
+}
+.btn-save:hover { opacity: 0.9; }
+.btn-cancel {
+  padding: 12px 20px; border-radius: 10px;
+  background: var(--card); border: 1px solid var(--border-hi);
+  font-size: 14px; font-weight: 600; color: var(--text-2);
+  cursor: pointer; transition: all 0.2s;
+}
+.btn-cancel:hover { color: var(--text); }
+
+/* =========================================================
+   TOAST
+   ========================================================= */
+.toast {
+  position: fixed; bottom: 28px; right: 28px; z-index: 2000;
+  background: var(--green); color: #fff;
+  padding: 12px 20px; border-radius: 12px;
+  font-size: 13px; font-weight: 600;
+  transform: translateY(80px); opacity: 0;
+  transition: all 0.3s; pointer-events: none;
+  display: flex; align-items: center; gap: 8px;
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+.footer {
+  text-align: center; padding: 20px 32px;
+  font-size: 11px; color: var(--text-3);
+  border-top: 1px solid var(--border);
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+@media (max-width: 900px) {
+  header { padding: 0 16px; }
+  main { padding: 16px 16px 48px; }
+  .pages-grid { grid-template-columns: 1fr; }
+  .kpi-grid { grid-template-columns: 1fr 1fr; }
+  .ph-count { font-size: 36px; }
+  .hdr-sep, .hdr-sub { display: none; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- ========================================================
+     HEADER
+     ======================================================== -->
+<header>
+  <div class="hdr-brand">
+    <div class="hdr-logo">J</div>
+    <div>
+      <div class="hdr-agency-name">JCE Media</div>
+    </div>
+  </div>
+  <div class="hdr-sep"></div>
+  <div>
+    <div class="hdr-title">Facebook Followers Dashboard</div>
+    <div class="hdr-sub">Daily Growth Tracker</div>
+  </div>
+  <div class="hdr-right">
+    <div class="live-badge">
+      <div class="live-dot"></div>
+      <span id="lastUpdatedBadge">No data yet</span>
+    </div>
+    <div class="live-badge" style="background:rgba(242,169,25,0.08);border-color:rgba(242,169,25,0.2);color:#F2A919">
+      <span style="font-size:11px">☁</span>
+      <span>Make.com Sync</span>
+    </div>
+    <button class="btn-export" onclick="exportCSV()">↓ Export CSV</button>
+    <button class="btn-log" onclick="openModal()">
+      <span>+</span> Log Today
+    </button>
+  </div>
+</header>
+
+<!-- ========================================================
+     MAIN
+     ======================================================== -->
+<main>
+
+  <!-- PAGE HERO CARDS -->
+  <div class="section-hdr">
+    <div class="section-title">Tracked Pages</div>
+  </div>
+  <div class="pages-grid">
+
+    <!-- JCE Agency Page -->
+    <div class="page-hero fb">
+      <div class="page-hero-bg"></div>
+      <div class="ph-top">
+        <div class="ph-page-info">
+          <div class="ph-icon fb">📘</div>
+          <div>
+            <div class="ph-name">JCE Agency</div>
+            <div class="ph-url">id=61572881828237</div>
+          </div>
+        </div>
+        <div class="ph-badge fb">Facebook Page</div>
+      </div>
+      <div class="ph-count fb" id="jce-current">—</div>
+      <div class="ph-count-label">Followers</div>
+      <div class="ph-stats">
+        <div class="ph-stat">
+          <div class="ph-stat-val" id="jce-d1">—</div>
+          <div class="ph-stat-lbl">vs Yesterday</div>
+        </div>
+        <div class="ph-stat">
+          <div class="ph-stat-val" id="jce-d7">—</div>
+          <div class="ph-stat-lbl">vs 7 Days Ago</div>
+        </div>
+        <div class="ph-stat">
+          <div class="ph-stat-val" id="jce-d30">—</div>
+          <div class="ph-stat-lbl">vs 30 Days Ago</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Myforeverbaby Page -->
+    <div class="page-hero mb">
+      <div class="page-hero-bg"></div>
+      <div class="ph-top">
+        <div class="ph-page-info">
+          <div class="ph-icon mb">💕</div>
+          <div>
+            <div class="ph-name">Myforeverbaby</div>
+            <div class="ph-url">id=61577330363527</div>
+          </div>
+        </div>
+        <div class="ph-badge mb">Facebook Page</div>
+      </div>
+      <div class="ph-count mb" id="mfb-current">—</div>
+      <div class="ph-count-label">Followers</div>
+      <div class="ph-stats">
+        <div class="ph-stat">
+          <div class="ph-stat-val" id="mfb-d1">—</div>
+          <div class="ph-stat-lbl">vs Yesterday</div>
+        </div>
+        <div class="ph-stat">
+          <div class="ph-stat-val" id="mfb-d7">—</div>
+          <div class="ph-stat-lbl">vs 7 Days Ago</div>
+        </div>
+        <div class="ph-stat">
+          <div class="ph-stat-val" id="mfb-d30">—</div>
+          <div class="ph-stat-lbl">vs 30 Days Ago</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- KPI SUMMARY -->
+  <div class="kpi-grid">
+    <div class="kpi-card fb">
+      <div class="kpi-top">
+        <div class="kpi-icon ki-fb">📘</div>
+        <div class="kpi-delta" id="kpi-jce-delta">—</div>
+      </div>
+      <div class="kpi-val" id="kpi-jce-val">—</div>
+      <div class="kpi-lbl">JCE Today's Followers</div>
+    </div>
+    <div class="kpi-card mb">
+      <div class="kpi-top">
+        <div class="kpi-icon ki-mb">💕</div>
+        <div class="kpi-delta" id="kpi-mfb-delta">—</div>
+      </div>
+      <div class="kpi-val" id="kpi-mfb-val">—</div>
+      <div class="kpi-lbl">MFB Today's Followers</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-top">
+        <div class="kpi-icon ki-green">📈</div>
+        <div class="kpi-delta" id="kpi-total-delta">—</div>
+      </div>
+      <div class="kpi-val" id="kpi-total-val">—</div>
+      <div class="kpi-lbl">Combined Followers</div>
+    </div>
+    <div class="kpi-card gold">
+      <div class="kpi-top">
+        <div class="kpi-icon ki-gold">🗓</div>
+        <div class="kpi-delta" id="kpi-days-delta">—</div>
+      </div>
+      <div class="kpi-val" id="kpi-days-val">0</div>
+      <div class="kpi-lbl">Days Tracked</div>
+    </div>
+  </div>
+
+  <!-- CHART -->
+  <div class="chart-card">
+    <div class="chart-hdr">
+      <div class="chart-title">Follower Growth Over Time</div>
+      <div class="chart-controls">
+        <button class="chart-btn" onclick="setRange(7)" id="btn7">7D</button>
+        <button class="chart-btn active" onclick="setRange(30)" id="btn30">30D</button>
+        <button class="chart-btn" onclick="setRange(90)" id="btn90">90D</button>
+        <button class="chart-btn" onclick="setRange(999)" id="btnAll">All</button>
+      </div>
+    </div>
+    <div class="chart-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#1877F2"></div>JCE Agency</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#E91E8C"></div>Myforeverbaby</div>
+    </div>
+    <div class="chart-wrap">
+      <canvas id="mainChart"></canvas>
+    </div>
+  </div>
+
+  <!-- HISTORY TABLE -->
+  <div class="history-card">
+    <div class="history-hdr">
+      <div class="history-title">Daily History</div>
+      <div style="font-size:12px; color:var(--text-3)" id="historyCount">0 entries</div>
+    </div>
+    <div style="overflow-x:auto">
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>JCE Agency</th>
+            <th>Change</th>
+            <th>Myforeverbaby</th>
+            <th>Change</th>
+            <th>Combined</th>
+          </tr>
+        </thead>
+        <tbody id="historyBody">
+          <tr class="empty-row"><td colspan="6">No data logged yet. Click "Log Today" to add your first entry.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</main>
+
+<footer class="footer">
+  JCE Media · Facebook Followers Dashboard · Data stored locally + backed up to Make.com · Daily Slack reminder active
+</footer>
+
+<!-- ========================================================
+     LOG MODAL
+     ======================================================== -->
+<div class="modal-overlay" id="logModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-title">Log Follower Counts</div>
+    <div class="modal-sub">Enter today's follower counts for both pages.</div>
+
+    <div class="form-row">
+      <label class="form-label">
+        <div class="form-label-dot" style="background:#ccc"></div>
+        Date
+      </label>
+      <input type="date" class="form-date" id="logDate">
+    </div>
+
+    <div class="form-row">
+      <label class="form-label">
+        <div class="form-label-dot" style="background:var(--fb)"></div>
+        JCE Agency Followers
+      </label>
+      <input type="number" class="form-input" id="logJce" placeholder="e.g. 1250" min="0">
+    </div>
+
+    <div class="form-row">
+      <label class="form-label">
+        <div class="form-label-dot" style="background:var(--pink)"></div>
+        Myforeverbaby Followers
+      </label>
+      <input type="number" class="form-input" id="logMfb" placeholder="e.g. 3400" min="0">
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-save" onclick="saveEntry()">Save Entry</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================================
+     TOAST
+     ======================================================== -->
+<div class="toast" id="toast">✓ Entry saved successfully</div>
+
+<!-- ========================================================
+     JAVASCRIPT
+     ======================================================== -->
+<script>
+/* ── CONFIG ── */
+const MAKE_SAVE_URL  = 'https://hook.eu2.make.com/093migx29oqd0juvfgqormi4icvryg7p';
+const MAKE_FETCH_URL = 'https://hook.eu2.make.com/pxq1usvg99jret9d9n97tvnb980wewsj';
+
+/* ── DATA LAYER ── */
+const STORE_KEY = 'jce_fb_followers_v1';
+
+function loadData() {
+  try { return JSON.parse(localStorage.getItem(STORE_KEY)) || []; }
+  catch { return []; }
+}
+function saveData(data) {
+  localStorage.setItem(STORE_KEY, JSON.stringify(data));
+}
+
+/* ── FORMATTING ── */
+function fmt(n) {
+  if (n == null || n === '') return '—';
+  return Number(n).toLocaleString();
+}
+function fmtDelta(d, showSign = true) {
+  if (d == null) return { text: '—', cls: 'flat' };
+  const sign = d > 0 ? '+' : '';
+  return { text: sign + d.toLocaleString(), cls: d > 0 ? 'up' : d < 0 ? 'down' : 'flat' };
+}
+function fmtDate(str) {
+  const d = new Date(str + 'T00:00:00');
+  return d.toLocaleDateString('en-ZA', { day:'2-digit', month:'short', year:'numeric' });
+}
+
+/* ── STATS ── */
+function getLatest(data) { return data.length ? data[data.length - 1] : null; }
+function getAtOffset(data, offset) {
+  if (data.length <= offset) return null;
+  return data[data.length - 1 - offset];
+}
+function delta(current, prev, field) {
+  if (!current || !prev) return null;
+  const c = current[field], p = prev[field];
+  if (c == null || p == null) return null;
+  return c - p;
+}
+
+/* ── RENDER ── */
+let chartInst = null;
+let currentRange = 30;
+
+function setRange(n) {
+  currentRange = n;
+  ['btn7','btn30','btn90','btnAll'].forEach(id => document.getElementById(id).classList.remove('active'));
+  const map = {7:'btn7',30:'btn30',90:'btn90',999:'btnAll'};
+  document.getElementById(map[n]).classList.add('active');
+  renderChart(loadData());
+}
+
+function renderAll() {
+  const data = loadData();
+  renderHeroes(data);
+  renderKpis(data);
+  renderChart(data);
+  renderTable(data);
+  renderLastUpdated(data);
+}
+
+function renderLastUpdated(data) {
+  const el = document.getElementById('lastUpdatedBadge');
+  if (!data.length) { el.textContent = 'No data yet'; return; }
+  el.textContent = 'Updated ' + fmtDate(data[data.length-1].date);
+}
+
+function renderHeroes(data) {
+  const latest = getLatest(data);
+  const prev1  = getAtOffset(data, 1);
+  const prev7  = getAtOffset(data, 7);
+  const prev30 = getAtOffset(data, 30);
+
+  // JCE
+  document.getElementById('jce-current').textContent = latest ? fmt(latest.jce) : '—';
+  setDeltaEl('jce-d1',  delta(latest, prev1,  'jce'));
+  setDeltaEl('jce-d7',  delta(latest, prev7,  'jce'));
+  setDeltaEl('jce-d30', delta(latest, prev30, 'jce'));
+
+  // MFB
+  document.getElementById('mfb-current').textContent = latest ? fmt(latest.mfb) : '—';
+  setDeltaEl('mfb-d1',  delta(latest, prev1,  'mfb'));
+  setDeltaEl('mfb-d7',  delta(latest, prev7,  'mfb'));
+  setDeltaEl('mfb-d30', delta(latest, prev30, 'mfb'));
+}
+
+function setDeltaEl(id, d) {
+  const el = document.getElementById(id);
+  if (d == null) { el.textContent = '—'; el.className = 'ph-stat-val flat'; return; }
+  const sign = d > 0 ? '+' : '';
+  el.textContent = sign + fmt(d);
+  el.className = 'ph-stat-val ' + (d > 0 ? 'up' : d < 0 ? 'down' : 'flat');
+}
+
+function renderKpis(data) {
+  const latest = getLatest(data);
+  const prev1  = getAtOffset(data, 1);
+
+  // JCE KPI
+  document.getElementById('kpi-jce-val').textContent = latest ? fmt(latest.jce) : '—';
+  const dJce = delta(latest, prev1, 'jce');
+  setKpiDelta('kpi-jce-delta', dJce);
+
+  // MFB KPI
+  document.getElementById('kpi-mfb-val').textContent = latest ? fmt(latest.mfb) : '—';
+  const dMfb = delta(latest, prev1, 'mfb');
+  setKpiDelta('kpi-mfb-delta', dMfb);
+
+  // Total
+  const total = latest ? (latest.jce || 0) + (latest.mfb || 0) : null;
+  const totalPrev = prev1 ? (prev1.jce || 0) + (prev1.mfb || 0) : null;
+  document.getElementById('kpi-total-val').textContent = total != null ? fmt(total) : '—';
+  setKpiDelta('kpi-total-delta', total != null && totalPrev != null ? total - totalPrev : null);
+
+  // Days
+  document.getElementById('kpi-days-val').textContent = data.length;
+  const daysEl = document.getElementById('kpi-days-delta');
+  if (data.length > 0) {
+    daysEl.textContent = data.length + ' day' + (data.length > 1 ? 's' : '');
+    daysEl.className = 'kpi-delta delta-up';
+  } else {
+    daysEl.textContent = '0 days'; daysEl.className = 'kpi-delta delta-flat';
+  }
+}
+
+function setKpiDelta(id, d) {
+  const el = document.getElementById(id);
+  if (d == null) { el.textContent = '—'; el.className = 'kpi-delta delta-flat'; return; }
+  const sign = d > 0 ? '+' : '';
+  el.textContent = sign + fmt(d);
+  el.className = 'kpi-delta ' + (d > 0 ? 'delta-up' : d < 0 ? 'delta-down' : 'delta-flat');
+}
+
+function renderChart(data) {
+  const slice = currentRange >= 999 ? data : data.slice(-currentRange);
+  const labels = slice.map(r => {
+    const d = new Date(r.date + 'T00:00:00');
+    return d.toLocaleDateString('en-GB', { day:'2-digit', month:'short' });
+  });
+  const jceData = slice.map(r => r.jce || null);
+  const mfbData = slice.map(r => r.mfb || null);
+
+  if (chartInst) { chartInst.destroy(); chartInst = null; }
+
+  const ctx = document.getElementById('mainChart').getContext('2d');
+
+  const fbGrad = ctx.createLinearGradient(0, 0, 0, 280);
+  fbGrad.addColorStop(0, 'rgba(24,119,242,0.25)');
+  fbGrad.addColorStop(1, 'rgba(24,119,242,0)');
+
+  const mbGrad = ctx.createLinearGradient(0, 0, 0, 280);
+  mbGrad.addColorStop(0, 'rgba(233,30,140,0.2)');
+  mbGrad.addColorStop(1, 'rgba(233,30,140,0)');
+
+  chartInst = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'JCE Agency',
+          data: jceData,
+          borderColor: '#1877F2',
+          backgroundColor: fbGrad,
+          borderWidth: 2.5,
+          pointBackgroundColor: '#1877F2',
+          pointBorderColor: '#0D1B30',
+          pointBorderWidth: 2,
+          pointRadius: slice.length <= 14 ? 5 : 3,
+          pointHoverRadius: 7,
+          fill: true,
+          tension: 0.4,
+          spanGaps: true,
+        },
+        {
+          label: 'Myforeverbaby',
+          data: mfbData,
+          borderColor: '#E91E8C',
+          backgroundColor: mbGrad,
+          borderWidth: 2.5,
+          pointBackgroundColor: '#E91E8C',
+          pointBorderColor: '#0D1B30',
+          pointBorderWidth: 2,
+          pointRadius: slice.length <= 14 ? 5 : 3,
+          pointHoverRadius: 7,
+          fill: true,
+          tension: 0.4,
+          spanGaps: true,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#0D1B30',
+          borderColor: 'rgba(255,255,255,0.1)',
+          borderWidth: 1,
+          titleColor: '#EBF1FB',
+          bodyColor: '#8AA3BF',
+          padding: 12,
+          callbacks: {
+            label: ctx => ` ${ctx.dataset.label}: ${fmt(ctx.parsed.y)}`
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: 'rgba(255,255,255,0.04)' },
+          ticks: { color: '#4A617A', font: { size: 11 }, maxTicksLimit: 10 }
+        },
+        y: {
+          grid: { color: 'rgba(255,255,255,0.04)' },
+          ticks: { color: '#4A617A', font: { size: 11 }, callback: v => fmt(v) },
+          beginAtZero: false
+        }
+      }
+    }
+  });
+}
+
+function renderTable(data) {
+  const tbody = document.getElementById('historyBody');
+  document.getElementById('historyCount').textContent = data.length + ' entr' + (data.length === 1 ? 'y' : 'ies');
+
+  if (!data.length) {
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="6">No data logged yet. Click "Log Today" to add your first entry.</td></tr>';
+    return;
+  }
+
+  const rows = [...data].reverse();
+  tbody.innerHTML = rows.map((row, i) => {
+    const prev = rows[i + 1] || null;
+    const dJce = prev && row.jce != null && prev.jce != null ? row.jce - prev.jce : null;
+    const dMfb = prev && row.mfb != null && prev.mfb != null ? row.mfb - prev.mfb : null;
+    const total = (row.jce || 0) + (row.mfb || 0);
+    return `<tr>
+      <td class="td-date">${fmtDate(row.date)}</td>
+      <td class="td-num fb">${fmt(row.jce)}</td>
+      <td>${deltaChip(dJce)}</td>
+      <td class="td-num mb">${fmt(row.mfb)}</td>
+      <td>${deltaChip(dMfb)}</td>
+      <td class="td-num" style="color:var(--text-2)">${fmt(total)}</td>
+    </tr>`;
+  }).join('');
+}
+
+function deltaChip(d) {
+  if (d == null) return '<span style="color:var(--text-3)">—</span>';
+  const sign = d > 0 ? '+' : '';
+  const cls = d > 0 ? 'delta-up' : d < 0 ? 'delta-down' : 'delta-flat';
+  return `<span class="td-delta kpi-delta ${cls}">${sign}${fmt(d)}</span>`;
+}
+
+/* ── MODAL ── */
+function openModal() {
+  const today = new Date().toISOString().slice(0, 10);
+  document.getElementById('logDate').value = today;
+  document.getElementById('logJce').value = '';
+  document.getElementById('logMfb').value = '';
+
+  // Pre-fill if today's entry exists
+  const data = loadData();
+  const existing = data.find(r => r.date === today);
+  if (existing) {
+    if (existing.jce != null) document.getElementById('logJce').value = existing.jce;
+    if (existing.mfb != null) document.getElementById('logMfb').value = existing.mfb;
+  }
+
+  document.getElementById('logModal').classList.add('open');
+  setTimeout(() => document.getElementById('logJce').focus(), 200);
+}
+function closeModal() {
+  document.getElementById('logModal').classList.remove('open');
+}
+
+function saveEntry() {
+  const date = document.getElementById('logDate').value;
+  const jce  = document.getElementById('logJce').value;
+  const mfb  = document.getElementById('logMfb').value;
+
+  if (!date) { alert('Please select a date.'); return; }
+  if (jce === '' && mfb === '') { alert('Please enter at least one follower count.'); return; }
+
+  const data = loadData();
+  const idx = data.findIndex(r => r.date === date);
+  const entry = {
+    date,
+    jce: jce !== '' ? parseInt(jce, 10) : null,
+    mfb: mfb !== '' ? parseInt(mfb, 10) : null,
+  };
+  if (idx >= 0) {
+    data[idx] = entry;
+  } else {
+    data.push(entry);
+    data.sort((a, b) => a.date.localeCompare(b.date));
+  }
+  saveData(data);
+  closeModal();
+  renderAll();
+  showToast('Entry saved for ' + fmtDate(date));
+  // Cloud backup to Make.com data store (fire-and-forget)
+  syncToCloud(entry);
+}
+
+/* ── CLOUD SYNC ── */
+async function syncToCloud(entry) {
+  try {
+    await fetch(MAKE_SAVE_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(entry),
+      mode: 'no-cors'  // Make.com doesn't send CORS headers; fire-and-forget
+    });
+    console.log('[Cloud] Entry synced to Make.com data store:', entry.date);
+  } catch (e) {
+    console.warn('[Cloud] Sync failed (data is still saved locally):', e.message);
+  }
+}
+
+/* ── AUTO-FETCH FROM CLOUD ── */
+async function autoFetchFromCloud() {
+  try {
+    const resp = await fetch(MAKE_FETCH_URL);
+    if (!resp.ok) return;
+    const cloudData = await resp.json();
+    if (!Array.isArray(cloudData) || !cloudData.length) return;
+
+    // Normalise — ensure numeric types and valid dates
+    const normalized = cloudData
+      .filter(r => r.date)
+      .map(r => ({
+        date: r.date,
+        jce:  r.jce  != null ? Number(r.jce)  : null,
+        mfb:  r.mfb  != null ? Number(r.mfb)  : null,
+      }));
+
+    if (!normalized.length) return;
+
+    // Merge: cloud is source of truth; keep any local-only dates
+    const local = loadData();
+    const cloudDates = new Set(normalized.map(r => r.date));
+    const localOnly  = local.filter(r => !cloudDates.has(r.date));
+    const merged = [...normalized, ...localOnly]
+      .sort((a, b) => a.date.localeCompare(b.date));
+
+    saveData(merged);
+    renderAll();
+    console.log('[Cloud] Synced ' + normalized.length + ' record(s) from Make.com');
+  } catch (e) {
+    console.warn('[Cloud] Auto-fetch skipped (showing local data):', e.message);
+  }
+}
+
+/* ── TOAST ── */
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = '✓ ' + msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+/* ── EXPORT ── */
+function exportCSV() {
+  const data = loadData();
+  if (!data.length) { alert('No data to export yet.'); return; }
+  const rows = [['Date','JCE Agency Followers','Myforeverbaby Followers','Combined']];
+  data.forEach(r => rows.push([r.date, r.jce ?? '', r.mfb ?? '', (r.jce||0)+(r.mfb||0)]));
+  const csv = rows.map(r => r.join(',')).join('\n');
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+  a.download = 'fb-followers-' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
+}
+
+/* ── KEYBOARD ── */
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+  if ((e.ctrlKey || e.metaKey) && e.key === 'l') { e.preventDefault(); openModal(); }
+});
+document.getElementById('logModal').addEventListener('click', e => {
+  if (e.target === document.getElementById('logModal')) closeModal();
+});
+
+/* ── INIT ── */
+renderAll();          // Render local data instantly on page open
+autoFetchFromCloud(); // Then silently merge cloud data (Make.com data store)
+</script>
+</body>
+</html>

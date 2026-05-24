@@ -1,0 +1,1470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ReviewTap × Omnicom — Partnership Presentation</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+
+/* =========================================================
+   RESET & BASE
+   ========================================================= */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg:          #06101E;
+  --surface:     #0C1B30;
+  --card:        #102040;
+  --card-hi:     #162B50;
+  --border:      rgba(255,255,255,0.06);
+  --border-hi:   rgba(255,255,255,0.12);
+  --gold:        #F2A919;
+  --gold-lt:     #FFCD6A;
+  --gold-glow:   rgba(242,169,25,0.22);
+  --blue:        #3D8EFF;
+  --blue-lt:     #7CB8FF;
+  --blue-glow:   rgba(61,142,255,0.18);
+  --green:       #0FCFA0;
+  --green-glow:  rgba(15,207,160,0.18);
+  --red:         #FF6B6B;
+  --text:        #EFF4FC;
+  --text-2:      #8FA8C4;
+  --text-3:      #4D657E;
+  --r:           16px;
+  --r-lg:        24px;
+}
+
+html, body {
+  width: 100%; height: 100%;
+  overflow: hidden;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* =========================================================
+   LAYOUT SHELL
+   ========================================================= */
+.deck {
+  position: relative;
+  width: 100vw; height: 100vh;
+  overflow: hidden;
+}
+
+.track {
+  display: flex;
+  height: 100%;
+  will-change: transform;
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.slide {
+  min-width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 80px;
+  position: relative;
+  overflow: hidden;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 40px;
+}
+
+/* =========================================================
+   CHROME
+   ========================================================= */
+#progress {
+  position: fixed; top: 0; left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gold), var(--blue));
+  transition: width 0.5s ease;
+  z-index: 200;
+  border-radius: 0 2px 2px 0;
+  box-shadow: 0 0 12px var(--gold-glow);
+}
+
+#counter {
+  position: fixed; top: 20px; right: 24px;
+  font-size: 13px; font-weight: 500;
+  color: var(--text-3); z-index: 200;
+  letter-spacing: 0.06em;
+}
+#counter span { color: var(--text-2); }
+
+#dots {
+  position: fixed; bottom: 26px; left: 50%;
+  transform: translateX(-50%);
+  display: flex; gap: 7px; z-index: 200;
+}
+.dot {
+  width: 6px; height: 6px; border-radius: 3px;
+  background: var(--text-3); cursor: pointer;
+  transition: all 0.3s ease;
+}
+.dot.on { width: 22px; background: var(--gold); }
+
+.arr {
+  position: fixed; top: 50%; transform: translateY(-50%);
+  width: 44px; height: 44px; border-radius: 50%;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border-hi);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; z-index: 200;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(12px);
+}
+.arr:hover { background: rgba(255,255,255,0.09); border-color: rgba(255,255,255,0.22); }
+#arrL { left: 18px; }
+#arrR { right: 18px; }
+.arr svg { width: 18px; height: 18px; fill: none; stroke: var(--text-2); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+#fsBtn {
+  position: fixed; bottom: 24px; right: 24px;
+  font-size: 11px; color: var(--text-3); cursor: pointer;
+  z-index: 200; letter-spacing: 0.06em; transition: color 0.2s;
+}
+#fsBtn:hover { color: var(--text-2); }
+
+/* =========================================================
+   REUSABLE TOKENS
+   ========================================================= */
+.kicker {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 13px; border-radius: 100px;
+  background: rgba(242,169,25,0.10); color: var(--gold);
+  font-size: 11px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase;
+  border: 1px solid rgba(242,169,25,0.18);
+}
+.kicker-blue {
+  background: rgba(61,142,255,0.10); color: var(--blue-lt);
+  border-color: rgba(61,142,255,0.2);
+}
+.kicker-green {
+  background: rgba(15,207,160,0.10); color: var(--green);
+  border-color: rgba(15,207,160,0.2);
+}
+
+.h1 {
+  font-size: clamp(36px, 4vw, 54px);
+  font-weight: 800; line-height: 1.1; letter-spacing: -0.03em;
+}
+.h2 {
+  font-size: clamp(28px, 3vw, 42px);
+  font-weight: 800; line-height: 1.15; letter-spacing: -0.03em;
+}
+.sub {
+  font-size: 17px; color: var(--text-2);
+  line-height: 1.6; max-width: 760px;
+}
+
+.g-gold {
+  background: linear-gradient(130deg, var(--gold), var(--gold-lt));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.g-blue {
+  background: linear-gradient(130deg, var(--blue), var(--blue-lt));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.g-green {
+  background: linear-gradient(130deg, var(--green), #A8FFE5);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+}
+
+.card-gold { border-color: rgba(242,169,25,0.2); box-shadow: 0 0 48px var(--gold-glow); }
+.card-blue { border-color: rgba(61,142,255,0.2); box-shadow: 0 0 48px var(--blue-glow); }
+.card-green { border-color: rgba(15,207,160,0.2); box-shadow: 0 0 48px var(--green-glow); }
+
+.bg-grid {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+.w100 { width: 100%; max-width: 1100px; }
+
+/* =========================================================
+   SLIDE 1 — COVER
+   ========================================================= */
+.s1 {
+  background:
+    radial-gradient(ellipse 110% 70% at 50% 65%, rgba(242,169,25,0.09) 0%, transparent 65%),
+    radial-gradient(ellipse 70% 50% at 15% 25%, rgba(61,142,255,0.06) 0%, transparent 55%),
+    var(--bg);
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+}
+
+.s1-logos {
+  display: flex; align-items: center; gap: 20px;
+  margin-bottom: 48px;
+}
+.s1-logo {
+  padding: 13px 28px;
+  background: var(--card); border: 1px solid var(--border-hi);
+  border-radius: var(--r);
+  font-size: 18px; font-weight: 800; letter-spacing: -0.01em;
+}
+.s1-logo.rt { color: var(--gold); box-shadow: 0 0 32px var(--gold-glow); }
+.s1-logo.omc { color: var(--text-2); }
+.s1-x { font-size: 26px; color: var(--text-3); font-weight: 300; }
+
+.s1-hl {
+  font-size: clamp(44px, 5.5vw, 74px);
+  font-weight: 900; line-height: 1.08; letter-spacing: -0.04em;
+  max-width: 950px;
+}
+.s1-sub {
+  margin-top: 24px;
+  font-size: 20px; color: var(--text-2);
+  max-width: 640px; line-height: 1.6;
+}
+.s1-meta {
+  position: absolute; bottom: 38px;
+  font-size: 12px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--text-3);
+}
+
+/* Floating stars */
+.fstar {
+  position: absolute; font-size: 13px; color: var(--gold);
+  opacity: 0; animation: fstar 5s ease-in-out infinite;
+}
+@keyframes fstar {
+  0%   { opacity: 0; transform: translateY(16px) scale(0.4); }
+  20%  { opacity: 0.55; }
+  80%  { opacity: 0.25; }
+  100% { opacity: 0; transform: translateY(-70px) scale(1.1); }
+}
+
+/* =========================================================
+   STAT CARDS (slide 2)
+   ========================================================= */
+.stat-grid {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 20px; width: 100%; max-width: 1100px;
+}
+.stat-c {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--r-lg); padding: 32px;
+  display: flex; flex-direction: column; gap: 12px;
+  position: relative; overflow: hidden;
+}
+.stat-c::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+}
+.stat-c.gold::before { background: linear-gradient(90deg, var(--gold), transparent); }
+.stat-c.blue::before { background: linear-gradient(90deg, var(--blue), transparent); }
+.stat-c.red::before  { background: linear-gradient(90deg, var(--red), transparent); }
+.stat-c.grn::before  { background: linear-gradient(90deg, var(--green), transparent); }
+
+.stat-num {
+  font-size: clamp(52px,5vw,68px); font-weight: 900;
+  line-height: 1; letter-spacing: -0.04em;
+}
+.stat-c.gold .stat-num { color: var(--gold); }
+.stat-c.blue .stat-num { color: var(--blue-lt); }
+.stat-c.red  .stat-num { color: var(--red); }
+.stat-c.grn  .stat-num { color: var(--green); }
+.stat-lbl { font-size: 15px; color: var(--text-2); line-height: 1.55; }
+.stat-src { font-size: 11px; color: var(--text-3); margin-top: auto; padding-top: 6px; }
+
+/* =========================================================
+   GAP SLIDE (slide 3)
+   ========================================================= */
+.gap-grid {
+  display: grid; grid-template-columns: 1fr 1px 1fr;
+  gap: 32px; align-items: start;
+  max-width: 1100px; width: 100%;
+}
+.gap-divider { background: linear-gradient(180deg, transparent, var(--border-hi), transparent); }
+.gap-hdr { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.09em; margin-bottom: 14px; }
+.gap-row {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 15px 18px; background: var(--card);
+  border: 1px solid var(--border); border-radius: 12px; margin-bottom: 10px;
+}
+.gap-icon {
+  width: 36px; height: 36px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0;
+}
+.gap-icon.b { background: rgba(61,142,255,0.14); }
+.gap-icon.r { background: rgba(255,107,107,0.14); }
+.gap-icon.g { background: rgba(242,169,25,0.12); }
+.gap-row strong { display: block; font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+.gap-row span { font-size: 13px; color: var(--text-2); line-height: 1.5; }
+
+/* =========================================================
+   PILLAR CARDS (slide 4)
+   ========================================================= */
+.pillar-grid {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 22px; max-width: 1100px; width: 100%;
+}
+.pillar {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--r-lg); padding: 36px 28px;
+  display: flex; flex-direction: column; gap: 16px;
+}
+.pillar-icon {
+  width: 50px; height: 50px; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center; font-size: 22px;
+}
+.pi-g { background: rgba(242,169,25,0.12); }
+.pi-b { background: rgba(61,142,255,0.12); }
+.pi-gr { background: rgba(15,207,160,0.12); }
+.pillar-title { font-size: 20px; font-weight: 700; letter-spacing: -0.01em; }
+.pillar-body { font-size: 14px; color: var(--text-2); line-height: 1.65; }
+
+/* =========================================================
+   HOW IT WORKS (slide 5)
+   ========================================================= */
+.steps-row {
+  display: flex; align-items: flex-start;
+  max-width: 1100px; width: 100%; position: relative;
+}
+.step {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; text-align: center; padding: 0 20px;
+  position: relative;
+}
+.step:not(:last-child)::after {
+  content: '';
+  position: absolute; top: 28px;
+  left: calc(50% + 28px); right: calc(-50% + 28px);
+  height: 2px;
+  background: linear-gradient(90deg, rgba(242,169,25,0.35), rgba(61,142,255,0.35));
+}
+.step-num {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: var(--card); border: 2px solid var(--gold);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; font-weight: 800; color: var(--gold);
+  margin-bottom: 22px; position: relative; z-index: 1;
+}
+.step-emoji { font-size: 38px; margin-bottom: 18px; }
+.step-title { font-size: 17px; font-weight: 700; margin-bottom: 10px; }
+.step-body { font-size: 13px; color: var(--text-2); line-height: 1.65; }
+
+.feat-row {
+  display: flex; gap: 16px; max-width: 1100px; width: 100%;
+}
+.feat {
+  flex: 1; background: var(--card); border: 1px solid var(--border);
+  border-radius: 14px; padding: 18px 22px;
+  display: flex; gap: 14px; align-items: center;
+}
+.feat-icon { font-size: 22px; flex-shrink: 0; }
+.feat-title { font-size: 13px; font-weight: 600; margin-bottom: 3px; }
+.feat-sub { font-size: 12px; color: var(--text-2); }
+
+/* =========================================================
+   NUMBERS (slide 6)
+   ========================================================= */
+.num-grid {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 22px; max-width: 1100px; width: 100%;
+}
+.num-c {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--r-lg); padding: 36px 28px;
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center; gap: 12px; position: relative; overflow: hidden;
+}
+.num-big {
+  font-size: 72px; font-weight: 900;
+  line-height: 1; letter-spacing: -0.05em;
+}
+.num-unit { font-size: 30px; font-weight: 700; vertical-align: baseline; }
+.num-lbl { font-size: 13px; color: var(--text-2); line-height: 1.55; max-width: 200px; }
+
+/* =========================================================
+   CLIENT TABLE (slide 7)
+   ========================================================= */
+.ctable {
+  width: 100%; max-width: 1100px; border-collapse: collapse;
+}
+.ctable th {
+  text-align: left; font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--text-3); padding: 0 18px 14px;
+}
+.ctable td {
+  padding: 16px 18px; font-size: 14px;
+  border-top: 1px solid var(--border); vertical-align: top;
+}
+.ctable tr:last-child td { border-bottom: 1px solid var(--border); }
+.cn { font-size: 16px; font-weight: 700; }
+.cv { font-size: 12px; color: var(--text-3); margin-top: 3px; }
+.cuc { color: var(--text-2); line-height: 1.55; font-size: 13px; }
+
+.badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 10px; border-radius: 100px; font-size: 11px; font-weight: 600;
+}
+.badge-hi  { background: rgba(15,207,160,0.12); color: var(--green); }
+.badge-med { background: rgba(61,142,255,0.12); color: var(--blue-lt); }
+.badge-t1  { background: rgba(242,169,25,0.14); color: var(--gold); border-radius: 6px; }
+.badge-t2  { background: rgba(61,142,255,0.12); color: var(--blue-lt); border-radius: 6px; }
+
+/* =========================================================
+   FIT CARDS (slide 8)
+   ========================================================= */
+.fit-grid {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 22px; max-width: 1100px; width: 100%;
+}
+.fit-c {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--r-lg); padding: 32px;
+  display: flex; flex-direction: column; gap: 14px;
+}
+.fit-ico { font-size: 30px; }
+.fit-ttl { font-size: 17px; font-weight: 700; }
+.fit-body { font-size: 14px; color: var(--text-2); line-height: 1.65; }
+
+/* =========================================================
+   MODEL CARDS (slide 9)
+   ========================================================= */
+.model-grid {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 22px; max-width: 1100px; width: 100%;
+}
+.model-c {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--r-lg); padding: 36px 28px;
+  display: flex; flex-direction: column; gap: 20px;
+  position: relative; overflow: hidden;
+}
+.model-c.feat {
+  border-color: rgba(242,169,25,0.28);
+  box-shadow: 0 0 60px rgba(242,169,25,0.1);
+}
+.model-c.feat::after {
+  content: 'Recommended';
+  position: absolute; top: 16px; right: 16px;
+  background: var(--gold); color: #000;
+  font-size: 10px; font-weight: 800; padding: 4px 10px;
+  border-radius: 100px; letter-spacing: 0.06em;
+}
+.model-name { font-size: 20px; font-weight: 800; }
+.model-sub  { font-size: 12px; color: var(--text-3); margin-top: 3px; }
+.model-rate { font-size: 48px; font-weight: 900; line-height: 1; letter-spacing: -0.04em; }
+.model-rate-note { font-size: 13px; color: var(--text-2); margin-top: 5px; line-height: 1.5; }
+.model-perks { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+.model-perks li { font-size: 13px; color: var(--text-2); display: flex; gap: 9px; }
+.model-perks li::before { content: '✓'; color: var(--gold); font-weight: 700; flex-shrink: 0; }
+
+/* =========================================================
+   PILOT (slide 10)
+   ========================================================= */
+.pilot-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 28px; max-width: 1100px; width: 100%;
+}
+.pilot-c {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--r-lg); padding: 32px;
+  display: flex; flex-direction: column; gap: 18px;
+}
+.pilot-hdr { font-size: 13px; font-weight: 700; color: var(--text-2); }
+.pilot-row { display: flex; gap: 14px; align-items: flex-start; }
+.pilot-ico {
+  width: 38px; height: 38px; border-radius: 10px;
+  background: rgba(15,207,160,0.12); display: flex;
+  align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0;
+}
+.pilot-row strong { display: block; font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+.pilot-row span   { font-size: 13px; color: var(--text-2); line-height: 1.5; }
+.outcome-row {
+  display: flex; align-items: center; gap: 14px;
+  padding: 13px 16px; background: rgba(255,255,255,0.03);
+  border-radius: 10px;
+}
+.outcome-ico { font-size: 20px; }
+.outcome-row strong { display: block; font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+.outcome-row span   { font-size: 12px; color: var(--text-2); line-height: 1.5; }
+
+/* =========================================================
+   FIRST MOVER (slide 11)
+   ========================================================= */
+.fm-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 22px; max-width: 1100px; width: 100%;
+}
+.fm-c {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--r-lg); padding: 28px 32px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.fm-c.hi {
+  border-color: rgba(242,169,25,0.22);
+  background: linear-gradient(135deg, rgba(242,169,25,0.06), var(--card));
+}
+.fm-ttl { font-size: 16px; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+.fm-body { font-size: 14px; color: var(--text-2); line-height: 1.65; }
+
+/* =========================================================
+   NEXT STEPS (slide 12)
+   ========================================================= */
+.s12 { align-items: center; justify-content: center; }
+.step-list { display: flex; flex-direction: column; gap: 16px; max-width: 700px; width: 100%; }
+.ns-row {
+  display: flex; gap: 22px; align-items: center;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--r-lg); padding: 22px 28px;
+  transition: border-color 0.25s;
+}
+.ns-row:hover { border-color: rgba(242,169,25,0.22); }
+.ns-num {
+  width: 42px; height: 42px; border-radius: 50%; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--gold), var(--gold-lt));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px; font-weight: 800; color: #000;
+}
+.ns-row strong { display: block; font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+.ns-row span   { font-size: 13px; color: var(--text-2); line-height: 1.55; }
+.cta-box {
+  background: linear-gradient(135deg, rgba(242,169,25,0.08), rgba(61,142,255,0.06));
+  border: 1px solid rgba(242,169,25,0.18); border-radius: var(--r-lg);
+  padding: 26px 36px; max-width: 700px; width: 100%;
+  font-size: 17px; font-style: italic; color: var(--text-2);
+  line-height: 1.65; text-align: center;
+}
+
+/* =========================================================
+   CLOSING (slide 13)
+   ========================================================= */
+.s13 {
+  background:
+    radial-gradient(ellipse 120% 90% at 50% 60%, rgba(242,169,25,0.1) 0%, transparent 65%),
+    radial-gradient(ellipse 60% 50% at 80% 20%, rgba(61,142,255,0.06) 0%, transparent 50%),
+    var(--bg);
+  align-items: center; justify-content: center; text-align: center; gap: 28px;
+}
+.s13-logo { font-size: 52px; font-weight: 900; letter-spacing: -0.04em; }
+.s13-url  { font-size: 18px; color: var(--text-3); letter-spacing: 0.02em; }
+.s13-line { width: 80px; height: 2px; border-radius: 2px; background: linear-gradient(90deg, var(--gold), var(--blue)); margin: 4px auto; }
+.s13-quote { font-size: clamp(22px,2.8vw,34px); font-weight: 700; letter-spacing: -0.02em; line-height: 1.35; max-width: 700px; }
+.contact-row { display: flex; gap: 20px; }
+.contact-c {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 14px 22px; text-align: center;
+}
+.contact-lbl { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-3); margin-bottom: 5px; }
+.contact-val { font-size: 14px; font-weight: 600; color: var(--text-2); }
+
+
+/* =========================================================
+   LOGO SVG HELPERS
+   ========================================================= */
+.rt-logo-wrap { display: flex; align-items: center; gap: 14px; }
+.rt-logo-name { font-size: 22px; font-weight: 900; letter-spacing: -0.03em; color: var(--gold); }
+
+/* =========================================================
+   SOCIAL PROOF SLIDE (slide 4)
+   ========================================================= */
+.proof-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 18px; max-width: 1100px; width: 100%;
+}
+.proof-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--r-lg); overflow: hidden;
+  display: flex; flex-direction: column;
+  transition: transform 0.25s, border-color 0.25s;
+}
+.proof-card:hover { transform: translateY(-4px); border-color: var(--border-hi); }
+.proof-img {
+  width: 100%; aspect-ratio: 1;
+  object-fit: cover; object-position: center top;
+  display: block;
+}
+.proof-fallback {
+  width: 100%; aspect-ratio: 1;
+  background: linear-gradient(135deg, var(--card-hi), var(--card));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 48px;
+}
+.proof-info { padding: 16px 18px; display: flex; flex-direction: column; gap: 4px; }
+.proof-brand { font-size: 15px; font-weight: 800; }
+.proof-sector { font-size: 12px; color: var(--text-3); margin-top: 1px; }
+.proof-live {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11px; font-weight: 600; color: var(--green); margin-top: 8px;
+}
+.live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse-dot 1.8s ease-in-out infinite; }
+@keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.35;transform:scale(0.8)} }
+
+/* =========================================================
+   BEYOND REVIEWS SLIDE (slide 8)
+   ========================================================= */
+.dest-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 13px; max-width: 1100px; width: 100%;
+}
+.dest-tile {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--r-lg); padding: 18px 16px;
+  display: flex; flex-direction: column; gap: 9px;
+  transition: border-color 0.25s, transform 0.25s;
+}
+.dest-tile:hover { transform: translateY(-2px); }
+.dt-ico { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+.dt-gold   { background: rgba(242,169,25,0.12);  border: 1px solid rgba(242,169,25,0.18); }
+.dt-wa     { background: rgba(37,211,102,0.12);  border: 1px solid rgba(37,211,102,0.18); }
+.dt-purple { background: rgba(168,85,247,0.12);  border: 1px solid rgba(168,85,247,0.18); }
+.dt-blue   { background: rgba(61,142,255,0.12);  border: 1px solid rgba(61,142,255,0.18); }
+.dt-orange { background: rgba(251,146,60,0.12);  border: 1px solid rgba(251,146,60,0.18); }
+.dt-green  { background: rgba(15,207,160,0.12);  border: 1px solid rgba(15,207,160,0.18); }
+.dt-red    { background: rgba(255,107,107,0.12); border: 1px solid rgba(255,107,107,0.18); }
+.dt-teal   { background: rgba(6,182,212,0.12);   border: 1px solid rgba(6,182,212,0.18); }
+.dest-tile-title { font-size: 13px; font-weight: 700; }
+.dest-tile-body  { font-size: 11px; color: var(--text-2); line-height: 1.55; }
+
+</style>
+</head>
+<body>
+
+<!-- CHROME -->
+<div id="progress"></div>
+<div id="counter"><span id="cn">1</span> / <span id="ct">15</span></div>
+<div id="dots"></div>
+<div class="arr" id="arrL"><svg viewBox="0 0 24 24"><polyline points="15,18 9,12 15,6"/></svg></div>
+<div class="arr" id="arrR"><svg viewBox="0 0 24 24"><polyline points="9,18 15,12 9,6"/></svg></div>
+<div id="fsBtn" onclick="toggleFS()">⛶ &nbsp;Fullscreen</div>
+
+<div class="deck">
+<div class="track" id="track">
+
+
+<!-- ═══════════════════════════════════════════════════
+     SLIDE 1 — COVER
+═══════════════════════════════════════════════════ -->
+<div class="slide s1">
+  <span class="fstar" style="left:12%;top:18%;animation-delay:0s;animation-duration:5.2s">★</span>
+  <span class="fstar" style="left:22%;top:62%;animation-delay:1.3s;animation-duration:4.7s">★</span>
+  <span class="fstar" style="left:48%;top:28%;animation-delay:0.6s;animation-duration:6.1s">★</span>
+  <span class="fstar" style="left:68%;top:58%;animation-delay:2.1s;animation-duration:4.3s">★</span>
+  <span class="fstar" style="left:80%;top:22%;animation-delay:1.6s;animation-duration:5.6s">★</span>
+  <span class="fstar" style="left:37%;top:74%;animation-delay:0.4s;animation-duration:5s">★</span>
+  <span class="fstar" style="left:58%;top:82%;animation-delay:2.8s;animation-duration:4.9s">★</span>
+  <span class="fstar" style="left:90%;top:48%;animation-delay:1.1s;animation-duration:4.5s">★</span>
+  <span class="fstar" style="left:5%;top:52%;animation-delay:3.2s;animation-duration:5.3s">★</span>
+  <span class="fstar" style="left:73%;top:38%;animation-delay:0.9s;animation-duration:4.8s">★</span>
+
+  <div class="s1-logos">
+    <div class="s1-logo rt" style="display:flex;align-items:center;gap:12px;">
+      <!-- ReviewTap Logo SVG -->
+      <svg width="34" height="34" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <path d="M 12,28 L 50,6 L 88,28 L 73,37 L 50,24 L 27,37 Z" fill="#FA8231"/>
+        <path d="M 88,28 L 88,72 L 50,94 L 50,76 L 73,63 L 73,37 Z" fill="#2563EB"/>
+        <path d="M 50,94 L 12,72 L 12,28 L 27,37 L 27,63 L 50,76 Z" fill="#00C755"/>
+      </svg>
+      ReviewTap
+    </div>
+    <span class="s1-x">×</span>
+    <div class="s1-logo omc">Omnicom Media Group</div>
+  </div>
+
+  <h1 class="s1-hl">
+    Turn every customer moment<br>
+    into <span class="g-gold">measurable brand value</span>
+  </h1>
+
+  <p class="s1-sub">
+    A partnership that completes the campaign — and builds the reputation that keeps working long after it ends.
+  </p>
+
+  <div class="s1-meta">Partnership Proposal &nbsp;·&nbsp; ReviewTap &nbsp;·&nbsp; 2026</div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     SLIDE 2 — THE REVIEW ECONOMY
+═══════════════════════════════════════════════════ -->
+<div class="slide" style="gap:36px;">
+  <div class="bg-grid"></div>
+  <div class="w100">
+    <div class="kicker" style="margin-bottom:14px;">The Review Economy</div>
+    <h2 class="h1">Reviews are the last mile<br>of every campaign you run</h2>
+    <p class="sub" style="margin-top:12px;">Brands invest millions reaching consumers. Most lose the sale right after the experience — in the review gap.</p>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat-c gold">
+      <div class="stat-num">84%</div>
+      <div class="stat-lbl">of consumers trust online reviews as much as a personal recommendation from a friend</div>
+      <div class="stat-src">BrightLocal Consumer Survey</div>
+    </div>
+    <div class="stat-c red">
+      <div class="stat-num">57%</div>
+      <div class="stat-lbl">of consumers won't use a business that has fewer than 4 stars on Google</div>
+      <div class="stat-src">BrightLocal Consumer Survey</div>
+    </div>
+    <div class="stat-c blue">
+      <div class="stat-num">2×</div>
+      <div class="stat-lbl">more revenue earned by businesses with 200+ reviews vs. the category average</div>
+      <div class="stat-src">Harvard Business Review</div>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:16px;max-width:1100px;width:100%;">
+    <div style="flex:1;background:rgba(242,169,25,0.06);border:1px solid rgba(242,169,25,0.15);border-radius:14px;padding:18px 22px;display:flex;gap:12px;align-items:center;">
+      <span style="font-size:22px;">📉</span>
+      <div style="font-size:13px;color:var(--text-2);line-height:1.55;"><strong style="color:var(--text);display:block;margin-bottom:3px;">1 missing star = up to 9% revenue drop</strong>A one-star decrease on Yelp leads to a 5–9% drop in restaurant revenue (Harvard Business Review)</div>
+    </div>
+    <div style="flex:1;background:rgba(255,107,107,0.06);border:1px solid rgba(255,107,107,0.15);border-radius:14px;padding:18px 22px;display:flex;gap:12px;align-items:center;">
+      <span style="font-size:22px;">😤</span>
+      <div style="font-size:13px;color:var(--text-2);line-height:1.55;"><strong style="color:var(--text);display:block;margin-bottom:3px;">94% avoid businesses with bad reviews</strong>One visible negative review is enough to lose nearly all consideration-stage customers</div>
+    </div>
+    <div style="flex:1;background:rgba(61,142,255,0.06);border:1px solid rgba(61,142,255,0.15);border-radius:14px;padding:18px 22px;display:flex;gap:12px;align-items:center;">
+      <span style="font-size:22px;">🔇</span>
+      <div style="font-size:13px;color:var(--text-2);line-height:1.55;"><strong style="color:var(--text);display:block;margin-bottom:3px;">Happy customers stay silent</strong>Negative reviews are written 3× more often than positive ones — without a prompt to act</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     SLIDE 3 — WHERE CLIENTS ARE LOSING
+═══════════════════════════════════════════════════ -->
+<div class="slide" style="gap:36px;">
+  <div class="w100">
+    <div class="kicker" style="margin-bottom:14px;">The Problem</div>
+    <h2 class="h1">Where the campaign ends —<br>and where clients lose</h2>
+    <p class="sub" style="margin-top:12px;">Every rand of media spend creates a customer moment. Most of those moments disappear without a trace.</p>
+  </div>
+
+  <div class="gap-grid">
+    <!-- Left -->
+    <div>
+      <div class="gap-hdr" style="color:var(--blue-lt);">✦ The Campaign Journey</div>
+      <div class="gap-row">
+        <div class="gap-icon b">📣</div>
+        <div><strong>Media Awareness</strong><span>TV, OOH, Digital, Social — driving attention</span></div>
+      </div>
+      <div class="gap-row">
+        <div class="gap-icon b">🔍</div>
+        <div><strong>Consideration</strong><span>Search, retargeting, influencer — driving intent</span></div>
+      </div>
+      <div class="gap-row">
+        <div class="gap-icon b">🏪</div>
+        <div><strong>The Experience</strong><span>Store visit, event, purchase — the moment of truth</span></div>
+      </div>
+      <div class="gap-row" style="border-color:rgba(242,169,25,0.25);background:rgba(242,169,25,0.05);">
+        <div class="gap-icon g">⭐</div>
+        <div><strong style="color:var(--gold);">The Review Moment</strong><span>This is where reputation is built — or quietly lost</span></div>
+      </div>
+    </div>
+
+    <!-- Divider -->
+    <div class="gap-divider"></div>
+
+    <!-- Right -->
+    <div>
+      <div class="gap-hdr" style="color:var(--red);">✗ Without ReviewTap</div>
+      <div class="gap-row" style="border-color:rgba(255,107,107,0.2);">
+        <div class="gap-icon r">🤐</div>
+        <div><strong>Happy customers stay silent</strong><span>Great experience, but no prompt. The moment passes. No review.</span></div>
+      </div>
+      <div class="gap-row" style="border-color:rgba(255,107,107,0.2);">
+        <div class="gap-icon r">😠</div>
+        <div><strong>Unhappy customers find a way</strong><span>Negative reviews don't need encouragement — they happen anyway</span></div>
+      </div>
+      <div class="gap-row" style="border-color:rgba(255,107,107,0.2);">
+        <div class="gap-icon r">📉</div>
+        <div><strong>Review score slides</strong><span>Google ranks competitors higher. Trust erodes. CAC rises quietly.</span></div>
+      </div>
+      <div class="gap-row" style="border-color:rgba(255,107,107,0.2);">
+        <div class="gap-icon r">💸</div>
+        <div><strong>Media spend is partially wasted</strong><span>Traffic arrives but doesn't convert — reviews are the silent dealbreaker</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     SLIDE 4 — SOCIAL PROOF (real client devices)
+═══════════════════════════════════════════════════ -->
+<!-- NOTE: Save your device photos to D:\JCEAgency\images\ as:
+     rt-fishaways.jpg | rt-milkylane.jpg | rt-wimpy.jpg | rt-ford.jpg -->
+<div class="slide" style="background:radial-gradient(ellipse 80% 60% at 50% 50%, rgba(242,169,25,0.06) 0%, transparent 60%), var(--bg); gap:40px;">
+  <div class="bg-grid"></div>
+  <div class="w100">
+    <div class="kicker" style="margin-bottom:14px;">Already Live in SA</div>
+    <h2 class="h1">Trusted by brands<br>your clients already know</h2>
+    <p class="sub" style="margin-top:12px;">ReviewTap is deployed and working today — across QSRs, hospitality, automotive and retail.</p>
+  </div>
+
+  <div class="proof-grid">
+    <!-- Fishaways -->
+    <div class="proof-card" style="border-color:rgba(34,197,94,0.2);">
+      <img class="proof-img" src="./Fishaways Example.jpg" alt="ReviewTap at Fishaways"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div class="proof-fallback" style="display:none;">🐟</div>
+      <div class="proof-info">
+        <div class="proof-brand">Fishaways</div>
+        <div class="proof-sector">QSR · National Chain</div>
+        <div class="proof-live"><div class="live-dot"></div> Live &amp; active</div>
+      </div>
+    </div>
+    <!-- Milky Lane -->
+    <div class="proof-card" style="border-color:rgba(61,142,255,0.2);">
+      <img class="proof-img" src="./Milkylane Example.jpg" alt="ReviewTap at Milky Lane"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div class="proof-fallback" style="display:none;">🍦</div>
+      <div class="proof-info">
+        <div class="proof-brand">Milky Lane</div>
+        <div class="proof-sector">Hospitality · Restaurants</div>
+        <div class="proof-live"><div class="live-dot"></div> Live &amp; active</div>
+      </div>
+    </div>
+    <!-- Wimpy -->
+    <div class="proof-card" style="border-color:rgba(239,68,68,0.2);">
+      <img class="proof-img" src="./Wimpy Example.jpg" alt="ReviewTap at Wimpy"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div class="proof-fallback" style="display:none;">🍔</div>
+      <div class="proof-info">
+        <div class="proof-brand">Wimpy</div>
+        <div class="proof-sector">QSR · National Franchise</div>
+        <div class="proof-live"><div class="live-dot"></div> Live &amp; active</div>
+      </div>
+    </div>
+    <!-- Ford -->
+    <div class="proof-card" style="border-color:rgba(61,142,255,0.25);">
+      <img class="proof-img" src="./Ford Example.jpg" alt="ReviewTap at Ford"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div class="proof-fallback" style="display:none;">🚗</div>
+      <div class="proof-info">
+        <div class="proof-brand">Ford</div>
+        <div class="proof-sector">Automotive · Dealerships</div>
+        <div class="proof-live"><div class="live-dot"></div> Live &amp; active</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:24px;max-width:1100px;width:100%;">
+    <div style="flex:1;background:rgba(242,169,25,0.06);border:1px solid rgba(242,169,25,0.15);border-radius:14px;padding:18px 24px;display:flex;gap:14px;align-items:center;">
+      <span style="font-size:26px;flex-shrink:0;">📲</span>
+      <div style="font-size:13px;color:var(--text-2);line-height:1.6;"><strong style="color:var(--text);display:block;margin-bottom:3px;">Same device. Your client's brand.</strong>Each stand is custom-branded with the client's logo, colours and messaging. Looks like it was made for them — because it was.</div>
+    </div>
+    <div style="flex:1;background:rgba(15,207,160,0.05);border:1px solid rgba(15,207,160,0.15);border-radius:14px;padding:18px 24px;display:flex;gap:14px;align-items:center;">
+      <span style="font-size:26px;flex-shrink:0;">⚡</span>
+      <div style="font-size:13px;color:var(--text-2);line-height:1.6;"><strong style="color:var(--text);display:block;margin-bottom:3px;">Deployed in days, not weeks.</strong>From signed order to device on the counter — ReviewTap's typical deployment timeline is under 7 days per location. No IT team required.</div>
+    </div>
+    <div style="flex:1;background:rgba(61,142,255,0.05);border:1px solid rgba(61,142,255,0.15);border-radius:14px;padding:18px 24px;display:flex;gap:14px;align-items:center;">
+      <span style="font-size:26px;flex-shrink:0;">🔁</span>
+      <div style="font-size:13px;color:var(--text-2);line-height:1.6;"><strong style="color:var(--text);display:block;margin-bottom:3px;">Reprogrammable without touching hardware.</strong>Campaign change? New destination? Update the NFC destination remotely from the dashboard — the physical device stays on the counter.</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     SLIDE 5 — THE SOLUTION (was slide 4)
+═══════════════════════════════════════════════════ -->
+<div class="slide" style="background:radial-gradient(ellipse 100% 80% at 50% 55%, rgba(242,169,25,0.07) 0%, transparent 60%), var(--bg); gap:40px;">
+  <div class="w100">
+    <div class="kicker" style="margin-bottom:14px;">The Solution</div>
+    <h2 class="h1">Introducing ReviewTap</h2>
+    <p class="sub" style="margin-top:12px;">One tap. One scan. The review is live on Google in 60 seconds — no app, no friction, no barrier.</p>
+  </div>
+
+  <div class="pillar-grid">
+    <div class="pillar card-gold">
+      <div class="pillar-icon pi-g">📲</div>
+      <div class="pillar-title g-gold">Capture</div>
+      <div class="pillar-body">
+        A branded NFC card or QR code is placed at the peak moment — checkout, table exit, event close. No app download. No URL to type. One physical tap from any smartphone.
+      </div>
+    </div>
+    <div class="pillar card-blue">
+      <div class="pillar-icon pi-b">⚡</div>
+      <div class="pillar-title g-blue">Convert</div>
+      <div class="pillar-body">
+        The customer lands on a pre-loaded Google review screen with your business profile ready. The full journey from tap to published review takes under 60 seconds — friction removed at every step.
+      </div>
+    </div>
+    <div class="pillar card-green">
+      <div class="pillar-icon pi-gr">📈</div>
+      <div class="pillar-title g-green">Compound</div>
+      <div class="pillar-body">
+        Reviews accumulate. Rankings rise. Organic trust builds month after month — a permanent brand asset that keeps working long after every campaign ends.
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:20px;max-width:1100px;width:100%;flex-wrap:wrap;">
+    <div style="padding:12px 20px;background:var(--card);border:1px solid var(--border);border-radius:10px;font-size:13px;color:var(--text-2);"><span style="color:var(--gold);font-weight:700;">✓</span>&nbsp; Works with Google, TripAdvisor, Facebook, Yelp, Trustpilot</div>
+    <div style="padding:12px 20px;background:var(--card);border:1px solid var(--border);border-radius:10px;font-size:13px;color:var(--text-2);"><span style="color:var(--gold);font-weight:700;">✓</span>&nbsp; No app download required — any smartphone, instantly</div>
+    <div style="padding:12px 20px;background:var(--card);border:1px solid var(--border);border-radius:10px;font-size:13px;color:var(--text-2);"><span style="color:var(--gold);font-weight:700;">✓</span>&nbsp; Fully branded — custom cards, client logos, white-label ready</div>
+    <div style="padding:12px 20px;background:var(--card);border:1px solid var(--border);border-radius:10px;font-size:13px;color:var(--text-2);"><span style="color:var(--gold);font-weight:700;">✓</span>&nbsp; Real-time dashboard — reviews monitored as they come in</div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     SLIDE 5 — HOW IT WORKS
+═══════════════════════════════════════════════════ -->
+<div class="slide" style="gap:44px;">
+  <div class="bg-grid"></div>
+  <div class="w100">
+    <div class="kicker" style="margin-bottom:14px;">How It Works</div>
+    <h2 class="h1">Three steps. Sixty seconds.</h2>
+    <p class="sub" style="margin-top:12px;">The simplest review journey ever built — designed for the real world, not the app store.</p>
+  </div>
+
+  <div class="steps-row">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-emoji">🤝</div>
+      <div class="step-title">The Moment</div>
+      <div class="step-body">Customer finishes a great experience — a purchase, a meal, an event, a service. Staff presents the ReviewTap card at peak satisfaction.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-emoji">📱</div>
+      <div class="step-title">The Tap</div>
+      <div class="step-body">Customer taps the NFC card or scans the QR code with any smartphone. No app. No URL to type. Opens in their browser instantly.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-emoji">⭐</div>
+      <div class="step-title">Live on Google</div>
+      <div class="step-body">Review page loads pre-filled with your business. One tap on five stars. One click on Post. Live in under 60 seconds — every time.</div>
+    </div>
+  </div>
+
+  <div class="feat-row">
+    <div class="feat">
+      <div class="feat-icon">🌐</div>
+      <div><div class="feat-title">Multi-platform</div><div class="feat-sub">Google · TripAdvisor · Facebook · Yelp · Trustpilot</div></div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">📵</div>
+      <div><div class="feat-title">Zero friction</div><div class="feat-sub">No app · No account · No typing — works on every phone</div></div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">📊</div>
+      <div><div class="feat-title">Live dashboard</div><div class="feat-sub">Monitor reviews in real-time, location by location</div></div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">🎨</div>
+      <div><div class="feat-title">Fully branded</div><div class="feat-sub">Client logos · Custom colours · White-label ready</div></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     SLIDE 6 — THE NUMBERS
+═══════════════════════════════════════════════════ -->
+<div class="slide" style="background:radial-gradient(ellipse 80% 60% at 25% 50%, rgba(61,142,255,0.06) 0%, transparent 55%), radial-gradient(ellipse 60% 60% at 75% 50%, rgba(15,207,160,0.05) 0%, transparent 50%), var(--bg); gap:40px;">
+  <div class="w100">
+    <div class="kicker" style="margin-bottom:14px;">What Clients See</div>
+    <h2 class="h1">Results in the first 30 days</h2>
+    <p class="sub" style="margin-top:12px;">What happens when you put ReviewTap in front of real customers, at real locations.</p>
+  </div>
+
+  <div class="num-grid">
+    <div class="num-c card-gold">
+      <div class="num-big g-gold">3×</div>
+      <div class="num-lbl">more reviews generated per month vs. pre-deployment baseline</div>
+    </div>
+    <div class="num-c card-green">
+      <div class="num-big g-green">4.7<span class="num-unit g-green">★</span></div>
+      <div class="num-lbl">average rating maintained across active client deployments</div>
+    </div>
+    <div class="num-c card-blue">
+      <div class="num-big g-blue">60<span class="num-unit g-blue" style="font-size:26px;">sec</span></div>
+      <div class="num-lbl">end-to-end review journey from tap to live on Google</div>
+    </div>
+    <div class="num-c">
+      <div class="num-big" style="color:var(--text);">0</div>
+      <div class="num-lbl">app downloads required — works on every smartphone instantly</div>
+    </div>
+    <div class="num-c" style="border-color:rgba(242,169,25,0.15);">
+      <div class="num-big g-gold">92%</div>
+      <div class="num-lbl">review completion rate from customers who tap the card</div>
+    </div>
+    <div class="num-c" style="border-color:rgba(15,207,160,0.15);">
+      <div class="num-big g-green">↑</div>
+      <div class="num-lbl">Google local search ranking improves as review velocity grows — reducing paid search dependency</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     SLIDE 8 — BEYOND REVIEWS (the full platform)
+═══════════════════════════════════════════════════ -->
+<div class="slide" style="background:radial-gradient(ellipse 90% 70% at 50% 55%, rgba(37,211,102,0.05) 0%, transparent 60%), var(--bg); gap:36px;">
+  <div class="w100">
+    <div class="kicker" style="margin-bottom:14px;">The Full Platform</div>
+    <h2 class="h1">ReviewTap is more than reviews —<br>the tap is just the <span class="g-gold">beginning</span></h2>
+    <p class="sub" style="margin-top:10px;">Every NFC card and QR code is a fully programmable trigger. The destination changes per campaign, per location, per event — with zero hardware changes.</p>
+  </div>
+
+  <div class="dest-grid">
+    <div class="dest-tile" style="border-color:rgba(242,169,25,0.18);">
+      <div class="dt-ico dt-gold">⭐</div>
+      <div class="dest-tile-title">Google Reviews</div>
+      <div class="dest-tile-body">Direct to Google, TripAdvisor or Facebook — published in 60 seconds, no app needed.</div>
+    </div>
+    <div class="dest-tile" style="border-color:rgba(37,211,102,0.18);">
+      <div class="dt-ico dt-wa">💬</div>
+      <div class="dest-tile-title">WhatsApp Automation</div>
+      <div class="dest-tile-body">Tap opens a pre-filled WhatsApp message. Bot responds instantly — qualifying, rewarding, following up 24/7.</div>
+    </div>
+    <div class="dest-tile" style="border-color:rgba(168,85,247,0.18);">
+      <div class="dt-ico dt-purple">🎁</div>
+      <div class="dest-tile-title">Competition Entry</div>
+      <div class="dest-tile-body">One tap to enter. Customer confirms name via WhatsApp. Winner drawn and announced automatically.</div>
+    </div>
+    <div class="dest-tile" style="border-color:rgba(61,142,255,0.18);">
+      <div class="dt-ico dt-blue">👤</div>
+      <div class="dest-tile-title">Lead Capture</div>
+      <div class="dest-tile-body">Tap to share contact details, opt into a database or book a follow-up — no clipboard or scanner.</div>
+    </div>
+    <div class="dest-tile" style="border-color:rgba(251,146,60,0.18);">
+      <div class="dt-ico dt-orange">🏆</div>
+      <div class="dest-tile-title">Loyalty Enrolment</div>
+      <div class="dest-tile-body">Tap to join a rewards programme, earn points or redeem a voucher. No app download needed.</div>
+    </div>
+    <div class="dest-tile" style="border-color:rgba(15,207,160,0.18);">
+      <div class="dt-ico dt-green">📋</div>
+      <div class="dest-tile-title">Surveys &amp; NPS</div>
+      <div class="dest-tile-body">Post-experience NPS or CSAT survey captured in real time, per location, per visit.</div>
+    </div>
+    <div class="dest-tile" style="border-color:rgba(255,107,107,0.18);">
+      <div class="dt-ico dt-red">📲</div>
+      <div class="dest-tile-title">Social Follow</div>
+      <div class="dest-tile-body">Tap to follow on Instagram or TikTok at peak brand affinity — right after a great experience.</div>
+    </div>
+    <div class="dest-tile" style="border-color:rgba(6,182,212,0.18);">
+      <div class="dt-ico dt-teal">📦</div>
+      <div class="dest-tile-title">Content Delivery</div>
+      <div class="dest-tile-body">Tap to receive a menu, recipe, event playlist, brochure or exclusive digital asset instantly.</div>
+    </div>
+  </div>
+
+  <div style="background:rgba(37,211,102,0.06);border:1px solid rgba(37,211,102,0.18);border-radius:14px;padding:18px 26px;max-width:1100px;width:100%;display:flex;gap:14px;align-items:center;">
+    <span style="font-size:24px;flex-shrink:0;">💡</span>
+    <div style="font-size:13px;color:var(--text-2);line-height:1.65;">
+      <strong style="color:var(--text);">Multi-destination in a single tap:</strong> One tap can simultaneously trigger a WhatsApp message, log the customer's location and timestamp to a spreadsheet, and add them to a CRM nurture sequence — all with no extra steps for the customer. The full detail of every flow and the Make.com automation blueprint is available in a separate technical document.
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     SLIDE 9 — YOUR CLIENT PORTFOLIO (was slide 7)
+═══════════════════════════════════════════════════ -->
+<div class="slide" style="gap:36px;">
+  <div class="w100">
+    <div class="kicker" style="margin-bottom:14px;">Your Portfolio</div>
+    <h2 class="h1">Built for the brands<br>you already manage</h2>
+    <p class="sub" style="margin-top:12px;">ReviewTap doesn't replace any existing campaign — it slots in as the final conversion layer.</p>
+  </div>
+
+  <table class="ctable">
+    <thead>
+      <tr>
+        <th style="width:160px;">Client</th>
+        <th>ReviewTap Activation</th>
+        <th style="width:190px;">Deployment Method</th>
+        <th style="width:110px;">Impact</th>
+        <th style="width:80px;">Tier</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><div class="cn">MTN</div><div class="cv">Telecoms · Retail Network</div></td>
+        <td class="cuc">1,000+ branded stores capturing post-purchase Google reviews. Reputation management at national scale with monthly network-wide reporting.</td>
+        <td><span style="font-size:12px;color:var(--text-2);">NFC cards at every POS + QR at exit points</span></td>
+        <td><span class="badge badge-hi">⬆ High</span></td>
+        <td><span class="badge badge-t1">Tier 1</span></td>
+      </tr>
+      <tr>
+        <td><div class="cn">Diageo</div><div class="cv">FMCG · On-Trade Venues</div></td>
+        <td class="cuc">Activate at Johnnie Walker, Guinness and Baileys venue partnerships. Review capture post brand experience, tasting or event activation.</td>
+        <td><span style="font-size:12px;color:var(--text-2);">NFC cards + QR on menus and activation stands</span></td>
+        <td><span class="badge badge-hi">⬆ High</span></td>
+        <td><span class="badge badge-t1">Tier 1</span></td>
+      </tr>
+      <tr>
+        <td><div class="cn">SA Tourism</div><div class="cv">Tourism · Destination</div></td>
+        <td class="cuc">Review capture at partner lodges, airports and info centres. International visitors generate English-language social proof for global audiences.</td>
+        <td><span style="font-size:12px;color:var(--text-2);">QR stands and NFC at partner venues nationwide</span></td>
+        <td><span class="badge badge-med">→ Medium</span></td>
+        <td><span class="badge badge-t2">Tier 2</span></td>
+      </tr>
+      <tr>
+        <td><div class="cn">Red Bull</div><div class="cv">FMCG · Events</div></td>
+        <td class="cuc">Real-time review capture at events and venues. Activations generate authentic experiential reviews at the moment of peak excitement.</td>
+        <td><span style="font-size:12px;color:var(--text-2);">Branded NFC wristbands + event QR codes</span></td>
+        <td><span class="badge badge-med">→ Medium</span></td>
+        <td><span class="badge badge-t2">Tier 2</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     SLIDE 8 — WHY IT FITS YOUR MODEL
+═══════════════════════════════════════════════════ -->
+<div class="slide" style="gap:40px;">
+  <div class="bg-grid"></div>
+  <div class="w100">
+    <div class="kicker" style="margin-bottom:14px;">The Strategic Fit</div>
+    <h2 class="h1">ReviewTap doesn't compete<br>with your campaigns — it completes them</h2>
+    <p class="sub" style="margin-top:12px;">Three reasons this belongs in every major client relationship you manage.</p>
+  </div>
+
+  <div class="fit-grid">
+    <div class="fit-c card-gold">
+      <div class="fit-ico">📊</div>
+      <div class="fit-ttl">Amplifies Your Media ROI</div>
+      <div class="fit-body">
+        Reviews reduce friction at the final conversion point. When a client's Google rating improves, their <strong style="color:var(--gold);">paid search CPL drops</strong> because organic trust pre-qualifies clicks before they're paid for. Your campaigns perform better when the reputation floor is solid.
+      </div>
+    </div>
+    <div class="fit-c card-blue">
+      <div class="fit-ico">💰</div>
+      <div class="fit-ttl">New Revenue, Zero New Headcount</div>
+      <div class="fit-body">
+        Add a recurring revenue stream to every client relationship. <strong style="color:var(--blue-lt);">25–35% margin</strong> on device sales and monthly management fees — no additional operational complexity, no new team members required.
+      </div>
+    </div>
+    <div class="fit-c card-green">
+      <div class="fit-ico">🔗</div>
+      <div class="fit-ttl">Deeper Client Retention</div>
+      <div class="fit-body">
+        Become indispensable to your clients' reputation stack — not just their media budget. <strong style="color:var(--green);">Agencies that own more of the performance stack</strong> are significantly harder to replace at contract renewal.
+      </div>
+    </div>
+  </div>
+
+  <div style="background:linear-gradient(135deg,rgba(242,169,25,0.06),rgba(61,142,255,0.04));border:1px solid rgba(242,169,25,0.15);border-radius:16px;padding:20px 28px;max-width:1100px;width:100%;display:flex;gap:14px;align-items:center;">
+    <span style="font-size:24px;">💡</span>
+    <div style="font-size:14px;color:var(--text-2);line-height:1.6;">
+      <strong style="color:var(--text);">The Compounding Effect:</strong> A client running ReviewTap for 12 months generates 30–50× more reviews than when they started. That organic trust base reduces dependence on paid media over time — freeing budget for higher-value campaigns. <strong style="color:var(--gold);">You win when they grow.</strong>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     SLIDE 9 — PARTNERSHIP MODELS
+═══════════════════════════════════════════════════ -->
+<div class="slide" style="gap:40px;">
+  <div class="w100">
+    <div class="kicker" style="margin-bottom:14px;">Partnership Models</div>
+    <h2 class="h1">Three ways to work together</h2>
+    <p class="sub" style="margin-top:12px;">We flex to your agency model — choose the level of involvement that works for your team and clients.</p>
+  </div>
+
+  <div class="model-grid">
+    <div class="model-c">
+      <div>
+        <div class="model-name">Reseller</div>
+        <div class="model-sub">You sell — we deploy and operate</div>
+      </div>
+      <div>
+        <div class="model-rate g-blue">25%</div>
+        <div class="model-rate-note">margin on all device sales<br>and monthly subscriptions</div>
+      </div>
+      <ul class="model-perks">
+        <li>Zero operations on your end</li>
+        <li>We handle setup, support, fulfilment</li>
+        <li>Co-branded client reporting</li>
+        <li>Dedicated ReviewTap account manager</li>
+        <li>Lowest effort, fastest to launch</li>
+      </ul>
+    </div>
+
+    <div class="model-c feat">
+      <div>
+        <div class="model-name">White-Label</div>
+        <div class="model-sub">Your brand — our tech</div>
+      </div>
+      <div>
+        <div class="model-rate g-gold">35%</div>
+        <div class="model-rate-note">margin on all revenue<br>at full white-label pricing</div>
+      </div>
+      <ul class="model-perks">
+        <li>Omnicom-branded NFC devices</li>
+        <li>Your dashboard, your reporting</li>
+        <li>You own the client relationship entirely</li>
+        <li>Premium positioning for enterprise clients</li>
+        <li>Best margin, strongest differentiation</li>
+      </ul>
+    </div>
+
+    <div class="model-c">
+      <div>
+        <div class="model-name">Bundled Retainer</div>
+        <div class="model-sub">Baked into existing media packages</div>
+      </div>
+      <div>
+        <div class="model-rate g-green" style="font-size:32px;">R150–300</div>
+        <div class="model-rate-note">per location per month<br>added to client retainers</div>
+      </div>
+      <ul class="model-perks">
+        <li>Added to existing SLAs — minimal friction</li>
+        <li>Predictable monthly recurring revenue</li>
+        <li>Scales automatically with client growth</li>
+        <li>Simplest to sell, easiest to retain</li>
+        <li>Immediate value on Day 1</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     SLIDE 10 — THE 30-DAY PILOT
+═══════════════════════════════════════════════════ -->
+<div class="slide" style="background:radial-gradient(ellipse 90% 70% at 50% 55%, rgba(15,207,160,0.05) 0%, transparent 60%), var(--bg); gap:40px;">
+  <div class="w100">
+    <div class="kicker kicker-green" style="margin-bottom:14px;">Let the Results Do the Selling</div>
+    <h2 class="h1">The 30-Day Pilot</h2>
+    <p class="sub" style="margin-top:12px;">No long-term commitment to get started. Just hard numbers you can put in front of any client board.</p>
+  </div>
+
+  <div class="pilot-grid">
+    <div class="pilot-c">
+      <div class="pilot-hdr">What's included in the pilot</div>
+      <div class="pilot-row">
+        <div class="pilot-ico">📍</div>
+        <div><strong>20 locations</strong><span>Single pilot client — MTN or Diageo recommended for maximum impact</span></div>
+      </div>
+      <div class="pilot-row">
+        <div class="pilot-ico">📦</div>
+        <div><strong>Full device deployment</strong><span>Branded NFC cards and QR codes, installed and configured</span></div>
+      </div>
+      <div class="pilot-row">
+        <div class="pilot-ico">🖥</div>
+        <div><strong>Live dashboard access</strong><span>Real-time review monitoring for your team and the client</span></div>
+      </div>
+      <div class="pilot-row">
+        <div class="pilot-ico">📋</div>
+        <div><strong>30-day performance report</strong><span>Review volume, rating change, location-by-location breakdown</span></div>
+      </div>
+      <div class="pilot-row">
+        <div class="pilot-ico">🤝</div>
+        <div><strong>No lock-in</strong><span>Scale up only if the results justify it — zero obligation to proceed</span></div>
+      </div>
+    </div>
+
+    <div class="pilot-c">
+      <div class="pilot-hdr">What you walk away with after 30 days</div>
+      <div class="outcome-row">
+        <div class="outcome-ico">📈</div>
+        <div><strong>Proof of performance</strong><span>Hard data on review volume growth across 10 real client locations</span></div>
+      </div>
+      <div class="outcome-row">
+        <div class="outcome-ico">🏆</div>
+        <div><strong>A client-ready case study</strong><span>A 30-day results deck you can present to any brand in your portfolio</span></div>
+      </div>
+      <div class="outcome-row">
+        <div class="outcome-ico">💼</div>
+        <div><strong>Revenue model validated</strong><span>Proof of margin at scale before full partnership commitment</span></div>
+      </div>
+      <div class="outcome-row">
+        <div class="outcome-ico">🥇</div>
+        <div><strong>First-mover positioning</strong><span>Your competitors haven't offered this to their clients yet</span></div>
+      </div>
+      <div class="outcome-row">
+        <div class="outcome-ico">📣</div>
+        <div><strong>A PR story</strong><span>SA's first agency-led enterprise review management deployment — worth shouting about</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     SLIDE 11 — FIRST MOVER ADVANTAGE
+═══════════════════════════════════════════════════ -->
+<div class="slide" style="gap:40px;">
+  <div class="bg-grid"></div>
+  <div class="w100">
+    <div class="kicker" style="margin-bottom:14px;">The Window</div>
+    <h2 class="h1">The first-mover advantage<br>is still available — for now</h2>
+    <p class="sub" style="margin-top:12px;">South Africa's enterprise review management category is wide open. That changes fast.</p>
+  </div>
+
+  <div class="fm-grid">
+    <div class="fm-c hi">
+      <div class="fm-ttl"><span>🇿🇦</span> The SA Market Gap</div>
+      <div class="fm-body">Enterprise-grade review management tools are well established in the US and UK. South Africa's large-brand market remains significantly underpenetrated. ReviewTap is live, proven, and purpose-built for this market — right now.</div>
+    </div>
+    <div class="fm-c hi">
+      <div class="fm-ttl"><span>⚡</span> Google Rewards Review Velocity</div>
+      <div class="fm-body">Google's local search algorithm weights <strong style="color:var(--text);">review recency and velocity</strong> heavily. Clients who start building review volume now create a compounding advantage that is structurally hard for competitors to catch up on.</div>
+    </div>
+    <div class="fm-c">
+      <div class="fm-ttl"><span>🏢</span> Differentiated Agency Positioning</div>
+      <div class="fm-body">The first SA agency to offer reputation management as a native service line will own that positioning. Differentiated service offerings are the number one driver of agency retention at the enterprise level.</div>
+    </div>
+    <div class="fm-c">
+      <div class="fm-ttl"><span>🚪</span> Partnership Spots Are Limited</div>
+      <div class="fm-body">ReviewTap is selectively choosing enterprise agency partners in South Africa. We're approaching the agency with the client base and infrastructure to scale this properly — not offering it to everyone.</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     SLIDE 12 — NEXT STEPS
+═══════════════════════════════════════════════════ -->
+<div class="slide s12" style="background:radial-gradient(ellipse 100% 80% at 50% 55%, rgba(242,169,25,0.07) 0%, transparent 60%), var(--bg);">
+  <div style="max-width:700px;width:100%;text-align:center;margin-bottom:8px;">
+    <div class="kicker" style="margin:0 auto 14px;">Let's Move Forward</div>
+    <h2 class="h1" style="text-align:center;">Three things to leave<br>today's call with</h2>
+  </div>
+
+  <div class="step-list">
+    <div class="ns-row">
+      <div class="ns-num">1</div>
+      <div>
+        <strong>Identify the pilot client</strong>
+        <span>We recommend MTN or Diageo as the first deployment — both have scale, brand recognition and high review volume potential across their networks.</span>
+      </div>
+    </div>
+    <div class="ns-row">
+      <div class="ns-num">2</div>
+      <div>
+        <strong>Schedule a 1-hour setup call</strong>
+        <span>We walk through your team, pilot timeline, device branding and dashboard setup. ReviewTap can be deployed within the week — we're ready to move.</span>
+      </div>
+    </div>
+    <div class="ns-row">
+      <div class="ns-num">3</div>
+      <div>
+        <strong>We deploy — you own the results</strong>
+        <span>30 days later you have a performance report to put in front of any client. If the numbers work, we scale. If not, no obligation. Zero risk to try.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta-box">
+    "Let's make this the campaign that keeps working<br>long after the campaign ends."
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     SLIDE 15 — CLOSING
+═══════════════════════════════════════════════════ -->
+<div class="slide s13">
+  <!-- ReviewTap Logo -->
+  <svg width="64" height="64" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:4px;">
+    <path d="M 12,28 L 50,6 L 88,28 L 73,37 L 50,24 L 27,37 Z" fill="#FA8231"/>
+    <path d="M 88,28 L 88,72 L 50,94 L 50,76 L 73,63 L 73,37 Z" fill="#2563EB"/>
+    <path d="M 50,94 L 12,72 L 12,28 L 27,37 L 27,63 L 50,76 Z" fill="#00C755"/>
+  </svg>
+  <div class="s13-logo g-gold">ReviewTap</div>
+  <div class="s13-url">reviewtap.co.za</div>
+  <div class="s13-line"></div>
+  <p class="s13-quote">
+    "The review is the new testimonial.<br>
+    The tap is the new <span class="g-gold">call to action.</span>"
+  </p>
+  <div class="contact-row">
+    <div class="contact-c">
+      <div class="contact-lbl">Presented by</div>
+      <div class="contact-val">Jacques Groenewald</div>
+    </div>
+    <div class="contact-c">
+      <div class="contact-lbl">Company</div>
+      <div class="contact-val">ReviewTap / JCE Agency</div>
+    </div>
+    <div class="contact-c">
+      <div class="contact-lbl">Website</div>
+      <div class="contact-val">reviewtap.co.za</div>
+    </div>
+    <div class="contact-c">
+      <div class="contact-lbl">Today's Date</div>
+      <div class="contact-val">May 2026</div>
+    </div>
+  </div>
+</div>
+
+
+</div><!-- /track -->
+</div><!-- /deck -->
+
+<script>
+const TOTAL = 15;
+let cur = 0;
+
+const track   = document.getElementById('track');
+const prog    = document.getElementById('progress');
+const cnEl    = document.getElementById('cn');
+const ctEl    = document.getElementById('ct');
+const dotsEl  = document.getElementById('dots');
+
+ctEl.textContent = TOTAL;
+
+// Build dots
+for (let i = 0; i < TOTAL; i++) {
+  const d = document.createElement('div');
+  d.className = 'dot' + (i === 0 ? ' on' : '');
+  d.addEventListener('click', () => goTo(i));
+  dotsEl.appendChild(d);
+}
+
+function goTo(n) {
+  cur = Math.max(0, Math.min(TOTAL - 1, n));
+  track.style.transform = `translateX(-${cur * 100}vw)`;
+  prog.style.width = ((cur + 1) / TOTAL * 100) + '%';
+  cnEl.textContent = cur + 1;
+  document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('on', i === cur));
+}
+
+document.getElementById('arrL').addEventListener('click', () => goTo(cur - 1));
+document.getElementById('arrR').addEventListener('click', () => goTo(cur + 1));
+
+document.addEventListener('keydown', e => {
+  if (['ArrowRight','ArrowDown',' '].includes(e.key)) { e.preventDefault(); goTo(cur + 1); }
+  if (['ArrowLeft','ArrowUp'].includes(e.key))        { e.preventDefault(); goTo(cur - 1); }
+  if (e.key === 'Home') goTo(0);
+  if (e.key === 'End')  goTo(TOTAL - 1);
+});
+
+let tx = 0;
+document.addEventListener('touchstart', e => { tx = e.changedTouches[0].screenX; }, {passive:true});
+document.addEventListener('touchend',   e => {
+  const d = tx - e.changedTouches[0].screenX;
+  if (Math.abs(d) > 50) d > 0 ? goTo(cur + 1) : goTo(cur - 1);
+}, {passive:true});
+
+function toggleFS() {
+  if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{});
+  else document.exitFullscreen();
+}
+
+goTo(0);
+</script>
+</body>
+</html>
