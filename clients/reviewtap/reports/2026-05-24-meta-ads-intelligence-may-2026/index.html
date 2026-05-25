@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ReviewTap — Meta Ads Intelligence Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --orange: #FF6B00;
+    --orange-light: #FF8C3A;
+    --orange-dim: rgba(255,107,0,0.12);
+    --bg: #0D0D0D;
+    --surface: #161616;
+    --surface2: #1E1E1E;
+    --border: #2A2A2A;
+    --text: #F0F0F0;
+    --muted: #888;
+    --green: #22C55E;
+    --red: #EF4444;
+    --yellow: #F59E0B;
+    --blue: #3B82F6;
+    --green-dim: rgba(34,197,94,0.12);
+    --red-dim: rgba(239,68,68,0.12);
+    --yellow-dim: rgba(245,158,11,0.12);
+    --blue-dim: rgba(59,130,246,0.12);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 14px; line-height: 1.5; }
+  a { color: var(--orange); text-decoration: none; }
+
+  /* HEADER */
+  .header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 18px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-left { display: flex; align-items: center; gap: 14px; }
+  .logo-mark {
+    width: 36px; height: 36px; background: var(--orange);
+    border-radius: 8px; display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 16px; color: #fff; letter-spacing: -1px;
+  }
+  .header-title { font-size: 16px; font-weight: 700; color: var(--text); }
+  .header-sub { font-size: 12px; color: var(--muted); margin-top: 1px; }
+  .header-badge {
+    background: var(--green-dim); color: var(--green);
+    border: 1px solid rgba(34,197,94,0.25);
+    padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .header-badge::before { content: '●'; font-size: 7px; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  .date-badge { font-size: 12px; color: var(--muted); background: var(--surface2); padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border); }
+
+  /* LAYOUT */
+  .container { max-width: 1400px; margin: 0 auto; padding: 28px 32px 60px; }
+  .section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; color: var(--muted); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+  .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 28px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 28px; }
+  .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 28px; }
+  .grid-21 { display: grid; grid-template-columns: 2fr 1fr; gap: 14px; margin-bottom: 28px; }
+  .grid-12 { display: grid; grid-template-columns: 1fr 2fr; gap: 14px; margin-bottom: 28px; }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .card-title { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); margin-bottom: 10px; }
+
+  /* KPI CARDS */
+  .kpi-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 22px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .kpi-card:hover { border-color: var(--orange); }
+  .kpi-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--orange), transparent);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .kpi-card:hover::before { opacity: 1; }
+  .kpi-label { font-size: 11px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 8px; }
+  .kpi-value { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; color: var(--text); line-height: 1; }
+  .kpi-sub { font-size: 12px; color: var(--muted); margin-top: 6px; display: flex; align-items: center; gap: 5px; }
+  .badge-up { color: var(--green); background: var(--green-dim); padding: 2px 7px; border-radius: 10px; font-size: 11px; font-weight: 700; }
+  .badge-down { color: var(--red); background: var(--red-dim); padding: 2px 7px; border-radius: 10px; font-size: 11px; font-weight: 700; }
+  .badge-warn { color: var(--yellow); background: var(--yellow-dim); padding: 2px 7px; border-radius: 10px; font-size: 11px; font-weight: 700; }
+  .badge-neutral { color: var(--muted); background: rgba(255,255,255,0.06); padding: 2px 7px; border-radius: 10px; font-size: 11px; font-weight: 700; }
+  .kpi-accent { color: var(--orange); }
+
+  /* CHART CONTAINERS */
+  .chart-wrap { position: relative; }
+
+  /* ALERT BOXES */
+  .alert { border-radius: 10px; padding: 14px 16px; margin-bottom: 10px; display: flex; gap: 12px; align-items: flex-start; }
+  .alert-red { background: var(--red-dim); border: 1px solid rgba(239,68,68,0.25); }
+  .alert-yellow { background: var(--yellow-dim); border: 1px solid rgba(245,158,11,0.25); }
+  .alert-green { background: var(--green-dim); border: 1px solid rgba(34,197,94,0.25); }
+  .alert-blue { background: var(--blue-dim); border: 1px solid rgba(59,130,246,0.25); }
+  .alert-icon { font-size: 16px; line-height: 1; margin-top: 1px; flex-shrink: 0; }
+  .alert-title { font-weight: 700; font-size: 13px; margin-bottom: 2px; }
+  .alert-red .alert-title { color: var(--red); }
+  .alert-yellow .alert-title { color: var(--yellow); }
+  .alert-green .alert-title { color: var(--green); }
+  .alert-blue .alert-title { color: var(--blue); }
+  .alert-body { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  /* TABLE */
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; }
+  thead th { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+  tbody td { padding: 11px 12px; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 13px; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover td { background: rgba(255,255,255,0.02); }
+  .td-name { font-weight: 600; }
+  .td-good { color: var(--green); font-weight: 700; }
+  .td-bad { color: var(--red); font-weight: 700; }
+  .td-warn { color: var(--yellow); font-weight: 700; }
+  .td-muted { color: var(--muted); }
+
+  /* PILL TAGS */
+  .pill { display: inline-block; padding: 2px 8px; border-radius: 8px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+  .pill-green { background: var(--green-dim); color: var(--green); border: 1px solid rgba(34,197,94,0.2); }
+  .pill-red { background: var(--red-dim); color: var(--red); border: 1px solid rgba(239,68,68,0.2); }
+  .pill-yellow { background: var(--yellow-dim); color: var(--yellow); border: 1px solid rgba(245,158,11,0.2); }
+  .pill-orange { background: var(--orange-dim); color: var(--orange); border: 1px solid rgba(255,107,0,0.2); }
+  .pill-blue { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(59,130,246,0.2); }
+
+  /* FUNNEL */
+  .funnel-step {
+    display: flex; align-items: center; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--border);
+  }
+  .funnel-step:last-child { border-bottom: none; }
+  .funnel-bar-bg { flex: 1; background: rgba(255,255,255,0.05); border-radius: 4px; height: 8px; overflow: hidden; }
+  .funnel-bar { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
+  .funnel-label { width: 180px; font-size: 12px; font-weight: 600; color: var(--text); }
+  .funnel-num { width: 80px; text-align: right; font-size: 13px; font-weight: 700; color: var(--text); }
+  .funnel-rate { width: 70px; text-align: right; font-size: 11px; color: var(--muted); }
+  .funnel-drop { width: 70px; text-align: right; font-size: 11px; }
+
+  /* ADSET COMPARE */
+  .adset-card {
+    border-radius: 10px; padding: 18px; border: 2px solid var(--border);
+    position: relative; transition: border-color 0.2s;
+  }
+  .adset-card.winner { border-color: var(--green); background: rgba(34,197,94,0.04); }
+  .adset-card.loser { border-color: rgba(239,68,68,0.3); }
+  .winner-badge {
+    position: absolute; top: -10px; right: 14px;
+    background: var(--green); color: #fff;
+    font-size: 10px; font-weight: 800; padding: 2px 10px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .adset-name { font-size: 13px; font-weight: 700; margin-bottom: 14px; color: var(--text); }
+  .adset-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .adset-metric-label { font-size: 10px; color: var(--muted); text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; }
+  .adset-metric-value { font-size: 20px; font-weight: 800; margin-top: 2px; }
+
+  /* DEVICE BARS */
+  .device-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .device-label { width: 100px; font-size: 12px; font-weight: 600; }
+  .device-bar-wrap { flex: 1; background: rgba(255,255,255,0.05); border-radius: 4px; height: 10px; overflow: hidden; }
+  .device-bar { height: 100%; border-radius: 4px; }
+  .device-val { width: 60px; text-align: right; font-size: 12px; font-weight: 700; }
+
+  /* LANDING PAGE */
+  .lp-product { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .lp-product:last-child { border-bottom: none; }
+  .lp-product-name { font-size: 13px; font-weight: 600; }
+  .lp-product-price { font-size: 16px; font-weight: 800; color: var(--orange); }
+  .lp-product-was { font-size: 11px; color: var(--muted); text-decoration: line-through; }
+  .lp-product-discount { background: var(--orange-dim); color: var(--orange); font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 10px; margin-left: 8px; }
+
+  /* WEEKLY TREND */
+  .week-row { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .week-row:last-child { border-bottom: none; }
+  .week-label { width: 110px; font-size: 12px; font-weight: 600; }
+  .week-bar-wrap { flex: 1; background: rgba(255,255,255,0.05); border-radius: 4px; height: 8px; overflow: hidden; }
+  .week-bar { height: 100%; border-radius: 4px; background: var(--orange); }
+  .week-val { width: 55px; text-align: right; font-size: 12px; font-weight: 700; }
+  .week-cpp { width: 65px; text-align: right; font-size: 11px; }
+
+  /* ACTIONS */
+  .action-item {
+    display: flex; gap: 14px; padding: 14px 16px; border-radius: 10px;
+    border: 1px solid var(--border); margin-bottom: 8px;
+    background: var(--surface2);
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .action-item:hover { border-color: var(--orange); background: rgba(255,107,0,0.03); }
+  .action-num {
+    width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center;
+    justify-content: center; font-size: 11px; font-weight: 800; flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .action-num.p1 { background: var(--red-dim); color: var(--red); }
+  .action-num.p2 { background: var(--orange-dim); color: var(--orange); }
+  .action-num.p3 { background: var(--yellow-dim); color: var(--yellow); }
+  .action-num.p4 { background: var(--blue-dim); color: var(--blue); }
+  .action-num.p5 { background: rgba(255,255,255,0.06); color: var(--muted); }
+  .action-content { flex: 1; }
+  .action-title { font-size: 13px; font-weight: 700; margin-bottom: 3px; }
+  .action-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+  .action-impact { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 6px; }
+  .impact-high { color: var(--red); }
+  .impact-med { color: var(--yellow); }
+  .impact-low { color: var(--blue); }
+
+  /* DIVIDER */
+  .divider { height: 1px; background: var(--border); margin: 28px 0; }
+
+  /* SCORE RING */
+  .score-ring-wrap { display: flex; align-items: center; justify-content: center; padding: 10px 0; }
+  .score-ring { position: relative; width: 110px; height: 110px; }
+  .score-ring svg { transform: rotate(-90deg); }
+  .score-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .score-number { font-size: 26px; font-weight: 800; }
+  .score-label { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-top: -2px; }
+
+  /* TOOLTIP-LIKE ANNOTATIONS */
+  .annotation { font-size: 11px; color: var(--muted); background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 6px 10px; margin-top: 8px; }
+
+  /* RESPONSIVE */
+  @media (max-width: 1100px) {
+    .grid-4 { grid-template-columns: repeat(2, 1fr); }
+    .grid-3 { grid-template-columns: repeat(2, 1fr); }
+    .grid-21, .grid-12 { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 700px) {
+    .container { padding: 16px; }
+    .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
+    .header { padding: 14px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-left">
+    <div class="logo-mark">RT</div>
+    <div>
+      <div class="header-title">ReviewTap — Ads Intelligence</div>
+      <div class="header-sub">Review Tap · act_641218531785624 · ZAR</div>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <div class="header-badge">Live Account</div>
+    <div class="date-badge">Last 30 days · Apr 24 – May 24, 2026</div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ======================== KPI STRIP ======================== -->
+  <div class="section-title">Campaign Performance — ReviewTap May 2026</div>
+  <div class="grid-4">
+
+    <div class="kpi-card">
+      <div class="kpi-label">ROAS</div>
+      <div class="kpi-value kpi-accent">4.56×</div>
+      <div class="kpi-sub">
+        <span class="badge-up">+74%</span> Experiment ad set 6.29×
+      </div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-label">Revenue (30d)</div>
+      <div class="kpi-value">R48,884</div>
+      <div class="kpi-sub">
+        <span class="badge-neutral">42 purchases</span> avg R1,164/order
+      </div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-label">Total Spend</div>
+      <div class="kpi-value">R10,727</div>
+      <div class="kpi-sub">
+        <span class="badge-neutral">R1,150/day</span> budget · CBO
+      </div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-label">Cost Per Purchase</div>
+      <div class="kpi-value">R255</div>
+      <div class="kpi-sub">
+        <span class="badge-down">↑79%</span> R411 this week (deteriorating)
+      </div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-label">CPM</div>
+      <div class="kpi-value">R50.80</div>
+      <div class="kpi-sub">
+        <span class="badge-warn">2.66</span> avg frequency
+      </div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-label">CTR</div>
+      <div class="kpi-value">1.32%</div>
+      <div class="kpi-sub">
+        <span class="badge-neutral">2,797</span> clicks · R3.84 CPC
+      </div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-label">Landing Page Views</div>
+      <div class="kpi-value">1,064</div>
+      <div class="kpi-sub">
+        <span class="badge-down">38%</span> of clicks → LPV (page load leak)
+      </div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-label">Account Total Spend</div>
+      <div class="kpi-value">R262K</div>
+      <div class="kpi-sub">
+        <span class="badge-neutral">465 days</span> account age
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ======================== ALERTS ======================== -->
+  <div class="section-title">Active Issues</div>
+  <div style="margin-bottom:28px;">
+
+    <div class="alert alert-red">
+      <div class="alert-icon">🔴</div>
+      <div>
+        <div class="alert-title">CPP Spike +79% This Week</div>
+        <div class="alert-body">Cost per purchase jumped from R230 (week 2) to R411 (May 22–24). Frequency is climbing past 2.66×. Audience saturation starting on the original ad set — action needed within 48hrs if trend holds.</div>
+      </div>
+    </div>
+
+    <div class="alert alert-red">
+      <div class="alert-icon">🔴</div>
+      <div>
+        <div class="alert-title">Budget Misallocated — Wrong Ad Set Winning CBO</div>
+        <div class="alert-body">The "Experiment" ad set delivers 6.29× ROAS vs 3.61× on the original — but CBO is giving it only 36% of spend (R3,802 vs R6,925). The algorithm is stuck rewarding history over performance. Manual intervention needed.</div>
+      </div>
+    </div>
+
+    <div class="alert alert-yellow">
+      <div class="alert-icon">⚠️</div>
+      <div>
+        <div class="alert-title">38% Click-to-LPV Rate — Page Load Problem</div>
+        <div class="alert-body">2,797 clicks but only 1,064 landing page views recorded. 62% of paid clicks are disappearing before the pixel fires. This points to slow mobile page load (3G common in ZA), a redirect chain, or pixel misfiring on the collection page.</div>
+      </div>
+    </div>
+
+    <div class="alert alert-yellow">
+      <div class="alert-icon">⚠️</div>
+      <div>
+        <div class="alert-title">No Active Retargeting — R67K in Abandoned Revenue</div>
+        <div class="alert-body">58 people added payment info but didn't purchase. At ~R1,164 AOV that's ~R67,000 in recoverable revenue this month with zero retargeting active. Previous WhatsApp retargeting and catalogue campaigns are both paused.</div>
+      </div>
+    </div>
+
+    <div class="alert alert-green">
+      <div class="alert-icon">✅</div>
+      <div>
+        <div class="alert-title">Strong Base ROAS — Healthy Foundation</div>
+        <div class="alert-body">4.56× account ROAS on a physical product in ZA is solid. Pixel is firing correctly for purchases, conversion tracking is clean, and checkout flow works (82% ATC-to-checkout rate). The fundamentals are good — these are allocation and scaling issues, not structural ones.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ======================== WEEKLY TREND + FUNNEL ======================== -->
+  <div class="grid-21">
+
+    <!-- Weekly Trend -->
+    <div class="card">
+      <div class="card-title">Weekly Performance Trend</div>
+      <div class="chart-wrap" style="height:220px;">
+        <canvas id="weeklyChart"></canvas>
+      </div>
+      <div style="margin-top:16px;">
+        <div class="week-row">
+          <div class="week-label">May 8–14</div>
+          <div class="week-bar-wrap"><div class="week-bar" style="width:67%;background:var(--green);"></div></div>
+          <div class="week-val" style="color:var(--text);">R3,004</div>
+          <div class="week-cpp" style="color:var(--green);">R273/sale</div>
+        </div>
+        <div class="week-row">
+          <div class="week-label">May 15–21</div>
+          <div class="week-bar-wrap"><div class="week-bar" style="width:100%;background:var(--green);"></div></div>
+          <div class="week-val" style="color:var(--text);">R5,510</div>
+          <div class="week-cpp" style="color:var(--green);">R230/sale ✓</div>
+        </div>
+        <div class="week-row">
+          <div class="week-label">May 22–24 ⚡</div>
+          <div class="week-bar-wrap"><div class="week-bar" style="width:52%;background:var(--red);"></div></div>
+          <div class="week-val" style="color:var(--text);">R2,880</div>
+          <div class="week-cpp" style="color:var(--red);">R411/sale ↑</div>
+        </div>
+      </div>
+      <div class="annotation">⚡ Week 3 is partial (3 days). CPP spike may partially reflect weekend patterns — verify by Monday EOD before acting.</div>
+    </div>
+
+    <!-- Conversion Funnel -->
+    <div class="card">
+      <div class="card-title">Conversion Funnel</div>
+      <div class="funnel-step">
+        <div class="funnel-label">Impressions</div>
+        <div class="funnel-bar-bg"><div class="funnel-bar" style="width:100%;background:var(--blue);"></div></div>
+        <div class="funnel-num">211,159</div>
+        <div class="funnel-drop"></div>
+      </div>
+      <div class="funnel-step">
+        <div class="funnel-label">Clicks</div>
+        <div class="funnel-bar-bg"><div class="funnel-bar" style="width:100%;background:var(--blue);"></div></div>
+        <div class="funnel-num">2,797</div>
+        <div class="funnel-drop" style="color:var(--muted);">CTR 1.32%</div>
+      </div>
+      <div class="funnel-step">
+        <div class="funnel-label" style="color:var(--red);">LPVs ⚠</div>
+        <div class="funnel-bar-bg"><div class="funnel-bar" style="width:38%;background:var(--red);"></div></div>
+        <div class="funnel-num">1,064</div>
+        <div class="funnel-drop" style="color:var(--red);">38% of clicks</div>
+      </div>
+      <div class="funnel-step">
+        <div class="funnel-label">Add to Cart</div>
+        <div class="funnel-bar-bg"><div class="funnel-bar" style="width:11%;background:var(--yellow);"></div></div>
+        <div class="funnel-num">122</div>
+        <div class="funnel-drop" style="color:var(--muted);">11.5% of LPV</div>
+      </div>
+      <div class="funnel-step">
+        <div class="funnel-label">Checkout</div>
+        <div class="funnel-bar-bg"><div class="funnel-bar" style="width:9%;background:var(--yellow);"></div></div>
+        <div class="funnel-num">100</div>
+        <div class="funnel-drop" style="color:var(--green);">82% of ATC ✓</div>
+      </div>
+      <div class="funnel-step">
+        <div class="funnel-label">Payment Info</div>
+        <div class="funnel-bar-bg"><div class="funnel-bar" style="width:5%;background:var(--orange);"></div></div>
+        <div class="funnel-num">58</div>
+        <div class="funnel-drop" style="color:var(--muted);">58% of checkout</div>
+      </div>
+      <div class="funnel-step">
+        <div class="funnel-label">Purchases ✓</div>
+        <div class="funnel-bar-bg"><div class="funnel-bar" style="width:4%;background:var(--green);"></div></div>
+        <div class="funnel-num">42</div>
+        <div class="funnel-drop" style="color:var(--red);">72% of pay info</div>
+      </div>
+      <div class="annotation">16 people entered payment info and still didn't buy — abandoned at the very last step. High-urgency retargeting opportunity.</div>
+    </div>
+
+  </div>
+
+  <!-- ======================== AD SET COMPARISON ======================== -->
+  <div class="section-title">Ad Set Comparison — CBO Budget Split</div>
+  <div class="grid-2" style="margin-bottom:28px;">
+
+    <div class="adset-card loser">
+      <div class="adset-name">📌 May 2026 Ad Set New <span class="pill pill-red" style="margin-left:6px;font-size:9px;">Gets 64% of budget</span></div>
+      <div class="adset-metrics">
+        <div>
+          <div class="adset-metric-label">Spend</div>
+          <div class="adset-metric-value">R6,925</div>
+        </div>
+        <div>
+          <div class="adset-metric-label">ROAS</div>
+          <div class="adset-metric-value" style="color:var(--yellow);">3.61×</div>
+        </div>
+        <div>
+          <div class="adset-metric-label">Purchases</div>
+          <div class="adset-metric-value">24</div>
+        </div>
+        <div>
+          <div class="adset-metric-label">Cost Per Purchase</div>
+          <div class="adset-metric-value" style="color:var(--red);">R289</div>
+        </div>
+        <div>
+          <div class="adset-metric-label">Frequency</div>
+          <div class="adset-metric-value" style="color:var(--yellow);">2.29</div>
+        </div>
+        <div>
+          <div class="adset-metric-label">Revenue</div>
+          <div class="adset-metric-value">R24,980</div>
+        </div>
+      </div>
+      <div style="margin-top:12px;">
+        <div class="annotation" style="border-color:rgba(239,68,68,0.2);">Started May 8. Higher frequency signals audience getting tired. CBO prefers this because of longer history — not better performance.</div>
+      </div>
+    </div>
+
+    <div class="adset-card winner">
+      <div class="winner-badge">★ Winner</div>
+      <div class="adset-name">🚀 May 2026 Ad Set New – Experiment <span class="pill pill-green" style="margin-left:6px;font-size:9px;">Gets 36% of budget</span></div>
+      <div class="adset-metrics">
+        <div>
+          <div class="adset-metric-label">Spend</div>
+          <div class="adset-metric-value">R3,802</div>
+        </div>
+        <div>
+          <div class="adset-metric-label">ROAS</div>
+          <div class="adset-metric-value" style="color:var(--green);">6.29×</div>
+        </div>
+        <div>
+          <div class="adset-metric-label">Purchases</div>
+          <div class="adset-metric-value">18</div>
+        </div>
+        <div>
+          <div class="adset-metric-label">Cost Per Purchase</div>
+          <div class="adset-metric-value" style="color:var(--green);">R211</div>
+        </div>
+        <div>
+          <div class="adset-metric-label">Frequency</div>
+          <div class="adset-metric-value" style="color:var(--green);">1.76</div>
+        </div>
+        <div>
+          <div class="adset-metric-label">Revenue</div>
+          <div class="adset-metric-value">R23,903</div>
+        </div>
+      </div>
+      <div style="margin-top:12px;">
+        <div class="annotation" style="border-color:rgba(34,197,94,0.2);">Started May 17. Lower frequency = fresher audience. 74% better ROAS despite only 7 days running. Pause the original and give this full budget.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ======================== CREATIVE PERFORMANCE ======================== -->
+  <div class="section-title">Creative Performance (Mobile App — where all purchases happen)</div>
+  <div class="card" style="margin-bottom:28px;">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Ad Creative</th>
+            <th>Ad Set</th>
+            <th>Spend</th>
+            <th>Purchases</th>
+            <th>Revenue</th>
+            <th>ROAS</th>
+            <th>CPP</th>
+            <th>LPVs</th>
+            <th>ATC</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="td-name">Jonathan Might Grow Demo</td>
+            <td class="td-muted">Original</td>
+            <td>R3,808</td>
+            <td>14</td>
+            <td>R17,053</td>
+            <td class="td-good">4.48×</td>
+            <td>R272</td>
+            <td>406</td>
+            <td>37</td>
+            <td><span class="pill pill-green">Top Vol</span></td>
+          </tr>
+          <tr>
+            <td class="td-name">[Warm] Testimonial – Hoffs</td>
+            <td class="td-muted">Experiment</td>
+            <td>R139</td>
+            <td>2</td>
+            <td>R1,966</td>
+            <td class="td-good">14.11×</td>
+            <td class="td-good">R70</td>
+            <td>7</td>
+            <td>2</td>
+            <td><span class="pill pill-yellow">Low Data ⚡</span></td>
+          </tr>
+          <tr>
+            <td class="td-name">Static Image – Orange Review Ads</td>
+            <td class="td-muted">Original</td>
+            <td>R28</td>
+            <td>1</td>
+            <td>R754</td>
+            <td class="td-good">26.8×</td>
+            <td class="td-good">R28</td>
+            <td>3</td>
+            <td>1</td>
+            <td><span class="pill pill-yellow">Low Data ⚡</span></td>
+          </tr>
+          <tr>
+            <td class="td-name">Hypermotion Standard Unit</td>
+            <td class="td-muted">Original</td>
+            <td>R211</td>
+            <td>1</td>
+            <td>R754</td>
+            <td>3.57×</td>
+            <td>R211</td>
+            <td>20</td>
+            <td>1</td>
+            <td><span class="pill pill-blue">Scaling</span></td>
+          </tr>
+          <tr>
+            <td class="td-name">Time Counter Video Ad</td>
+            <td class="td-muted">Original</td>
+            <td>R2,411</td>
+            <td>7</td>
+            <td>R5,665</td>
+            <td class="td-bad">2.35×</td>
+            <td class="td-bad">R344</td>
+            <td>267</td>
+            <td>32</td>
+            <td><span class="pill pill-red">Pause</span></td>
+          </tr>
+          <tr>
+            <td class="td-name">Jonathan Demo – Copy</td>
+            <td class="td-muted">Experiment</td>
+            <td>R74</td>
+            <td>0</td>
+            <td>—</td>
+            <td class="td-muted">—</td>
+            <td class="td-muted">—</td>
+            <td>6</td>
+            <td>1</td>
+            <td><span class="pill pill-yellow">Low Data</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="annotation" style="margin-top:14px;">⚡ ROAS outliers on very low spend (Testimonial at 14×, Static at 26×) should not be taken at face value — 1-2 purchase samples. Give them R500+ spend before drawing conclusions. Time Counter Video has enough data to confidently call as underperformer.</div>
+  </div>
+
+  <!-- ======================== CHARTS ROW ======================== -->
+  <div class="grid-2">
+
+    <!-- ROAS by Creative -->
+    <div class="card">
+      <div class="card-title">ROAS by Creative (Mobile App)</div>
+      <div class="chart-wrap" style="height:240px;">
+        <canvas id="roasChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Spend vs Revenue -->
+    <div class="card">
+      <div class="card-title">Spend vs Revenue — Ad Set View</div>
+      <div class="chart-wrap" style="height:240px;">
+        <canvas id="spendRevenueChart"></canvas>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ======================== DEVICE SPLIT ======================== -->
+  <div class="section-title">Device Platform Analysis</div>
+  <div class="grid-2" style="margin-bottom:28px;">
+
+    <div class="card">
+      <div class="card-title">Purchases by Device</div>
+      <div class="device-row">
+        <div class="device-label">📱 Mobile App</div>
+        <div class="device-bar-wrap"><div class="device-bar" style="width:100%;background:var(--green);"></div></div>
+        <div class="device-val" style="color:var(--green);">42 (100%)</div>
+      </div>
+      <div class="device-row">
+        <div class="device-label">🖥 Desktop</div>
+        <div class="device-bar-wrap"><div class="device-bar" style="width:0%;background:var(--red);"></div></div>
+        <div class="device-val" style="color:var(--red);">0 (0%)</div>
+      </div>
+      <div class="device-row">
+        <div class="device-label">🌐 Mobile Web</div>
+        <div class="device-bar-wrap"><div class="device-bar" style="width:0%;background:var(--muted);"></div></div>
+        <div class="device-val" style="color:var(--muted);">0 (0%)</div>
+      </div>
+      <div class="annotation" style="margin-top:14px;">Desktop receives ~4% of impressions at CPM R75–R217 and generates zero purchases. Excluding desktop placements would save ~R300–R500/month for zero downside.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Spend Distribution by Device</div>
+      <div class="chart-wrap" style="height:190px;">
+        <canvas id="deviceChart"></canvas>
+      </div>
+      <div class="annotation" style="margin-top:6px;">The slice going to desktop and mobile web (~5–6%) returns nothing. Placement exclusions are a free efficiency gain.</div>
+    </div>
+
+  </div>
+
+  <!-- ======================== LANDING PAGE ======================== -->
+  <div class="section-title">Landing Page Analysis — reviewtap.co.za</div>
+  <div class="grid-21" style="margin-bottom:28px;">
+
+    <div class="card">
+      <div class="card-title">Active Landing — /collections/google-review-devices</div>
+
+      <div style="background:var(--surface2);border-radius:8px;padding:14px;margin-bottom:16px;border:1px solid var(--border);">
+        <div style="font-size:12px;font-weight:700;color:var(--orange);margin-bottom:4px;">⚠ All ads point to the collections page (4 products), not a dedicated landing page</div>
+        <div style="font-size:12px;color:var(--muted);">Visitors arrive and must choose — decision friction reduces conversion. A dedicated landing page for the top product with a single CTA would typically improve ATC rate by 20–40%.</div>
+      </div>
+
+      <div class="lp-product">
+        <div>
+          <div class="lp-product-name">Custom Branded Google Review Stand (NFC + QR)</div>
+          <div style="font-size:11px;color:var(--muted);">Most premium option · Recommended hero</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="lp-product-price">R649 <span class="lp-product-discount">67% off</span></div>
+          <div class="lp-product-was">was R1,950</div>
+        </div>
+      </div>
+      <div class="lp-product">
+        <div>
+          <div class="lp-product-name">NFC Google Review Stand</div>
+          <div style="font-size:11px;color:var(--muted);">Mid-tier · High volume potential</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="lp-product-price">R499 <span class="lp-product-discount">62% off</span></div>
+          <div class="lp-product-was">was R1,299</div>
+        </div>
+      </div>
+      <div class="lp-product">
+        <div>
+          <div class="lp-product-name">Custom Branded Google Review Card (NFC + QR)</div>
+          <div style="font-size:11px;color:var(--muted);">Card format · Lower entry</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="lp-product-price">R449 <span class="lp-product-discount">67% off</span></div>
+          <div class="lp-product-was">was R1,350</div>
+        </div>
+      </div>
+      <div class="lp-product">
+        <div>
+          <div class="lp-product-name">NFC Google Review Card</div>
+          <div style="font-size:11px;color:var(--muted);">Entry-level · Highest volume product</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="lp-product-price">R299 <span class="lp-product-discount">67% off</span></div>
+          <div class="lp-product-was">was R899</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Landing Page Scorecard</div>
+
+      <div style="margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);">
+          <span style="font-size:12px;font-weight:600;">Mobile Speed</span>
+          <span class="pill pill-red">Critical ⚠</span>
+        </div>
+        <div style="font-size:11px;color:var(--muted);padding:8px 0;border-bottom:1px solid var(--border);">Only 38% of clicks reach the landing page. Shopify with heavy apps can be 4–6s on 3G. Fix: compress images, reduce apps, enable Shopify CDN.</div>
+      </div>
+
+      <div style="margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);">
+          <span style="font-size:12px;font-weight:600;">Trust Signals</span>
+          <span class="pill pill-green">Present ✓</span>
+        </div>
+        <div style="font-size:11px;color:var(--muted);padding:8px 0;border-bottom:1px solid var(--border);">14-day money-back guarantee present. "No apps, no setup" messaging clear. WhatsApp contact visible.</div>
+      </div>
+
+      <div style="margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);">
+          <span style="font-size:12px;font-weight:600;">Dedicated Landing Page</span>
+          <span class="pill pill-red">Missing ✗</span>
+        </div>
+        <div style="font-size:11px;color:var(--muted);padding:8px 0;border-bottom:1px solid var(--border);">All ads drop to collection page (4 choices). Build a single-product page per ad creative for message match.</div>
+      </div>
+
+      <div style="margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);">
+          <span style="font-size:12px;font-weight:600;">Sale Urgency</span>
+          <span class="pill pill-yellow">Weak</span>
+        </div>
+        <div style="font-size:11px;color:var(--muted);padding:8px 0;border-bottom:1px solid var(--border);">Products show "67% off" but no countdown timer or stock scarcity signals. AOV is ~R1,164 — customers are buying 2+ items. Bundle offers could increase this further.</div>
+      </div>
+
+      <div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);">
+          <span style="font-size:12px;font-weight:600;">Checkout Recovery</span>
+          <span class="pill pill-red">Missing ✗</span>
+        </div>
+        <div style="font-size:11px;color:var(--muted);padding:8px 0;">58 people entered payment info and left. No WhatsApp or email sequence to recover them.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ======================== REVENUE BRIDGE ======================== -->
+  <div class="section-title">Revenue Bridge — Where Money Is Lost</div>
+  <div class="card" style="margin-bottom:28px;">
+    <div class="chart-wrap" style="height:260px;">
+      <canvas id="bridgeChart"></canvas>
+    </div>
+    <div class="annotation" style="margin-top:12px;">Based on R1,164 avg order value. "Desktop Waste" = estimated spend on desktop placements that generate 0 conversions. "LPV Leak" = revenue lost from clicks that never load the page. "Checkout Abandon" = revenue from the 58 payment-info dropoffs. "Retargeting Gap" = estimated revenue available from warm audiences if retargeting were active (conservative 3× ROAS estimate on R2,000/month budget).</div>
+  </div>
+
+  <!-- ======================== ACTION PLAN ======================== -->
+  <div class="section-title">Prioritised Action Plan</div>
+  <div style="margin-bottom:28px;">
+
+    <div class="action-item">
+      <div class="action-num p1">1</div>
+      <div class="action-content">
+        <div class="action-title">Pause Original Ad Set — Give Experiment Full Budget</div>
+        <div class="action-desc">The Experiment ad set runs at 6.29× ROAS vs 3.61× — 74% more efficient — but gets only 36% of CBO budget. CBO is rewarding history over live performance. Pause the original ad set ("May 2026 Ad Set New") and let the Experiment run at full R1,150/day. Monitor CPP over 5 days. If it holds under R250, scale budget by 20% increments.</div>
+        <div class="action-impact impact-high">🔴 HIGH IMPACT · Estimated CPP improvement: R289 → ~R211 · Do this today</div>
+      </div>
+    </div>
+
+    <div class="action-item">
+      <div class="action-num p1">2</div>
+      <div class="action-content">
+        <div class="action-title">Exclude Desktop Placements Across All Ad Sets</div>
+        <div class="action-desc">Desktop received ~4% of spend and generated exactly 0 purchases across every creative and ad set. CPM on desktop runs R75–R217 vs R47 on mobile app. Go into each active ad set → Placements → Manual Placements → uncheck Facebook Desktop, Instagram Desktop. This is a free efficiency gain with no risk of conversion loss.</div>
+        <div class="action-impact impact-high">🔴 QUICK WIN · ~5% spend saved, 0 conversions lost · Takes 5 minutes</div>
+      </div>
+    </div>
+
+    <div class="action-item">
+      <div class="action-num p2">3</div>
+      <div class="action-content">
+        <div class="action-title">Build Retargeting Campaign — Warm Audiences</div>
+        <div class="action-desc">No retargeting is running. 79,507 people were reached in 30 days. Target: (1) Website visitors last 30 days, (2) Add-to-cart last 30 days, (3) Checkout initiators last 30 days — all excluding purchasers. Run at R200–R300/day with the Testimonial Video creative (highest ROAS signal). WhatsApp CTA for personal follow-up. Expected ROAS: 5–8× on warm audiences.</div>
+        <div class="action-impact impact-high">🔴 HIGH IMPACT · ~R67K in recoverable checkout abandonment alone</div>
+      </div>
+    </div>
+
+    <div class="action-item">
+      <div class="action-num p2">4</div>
+      <div class="action-content">
+        <div class="action-title">Investigate + Fix the 62% Click-to-LPV Leak</div>
+        <div class="action-desc">2,797 clicks but only 1,064 LPVs = 1,733 paid clicks never loaded the page or fired the pixel. Test: (1) Run a PageSpeed Insights test on /collections/google-review-devices on mobile. (2) Check if the Shopify pixel is placed on the collection page correctly. (3) Check if there's a redirect from the ad URL to the landing URL (adds 200–400ms). Fixing a 62% LPV leak could effectively double conversions with no additional spend.</div>
+        <div class="action-impact impact-high">🔴 CRITICAL · Could effectively halve your real CPC from R3.84 → under R2</div>
+      </div>
+    </div>
+
+    <div class="action-item">
+      <div class="action-num p3">5</div>
+      <div class="action-content">
+        <div class="action-title">Pause Time Counter Video — Reallocate to Jonathan Demo</div>
+        <div class="action-desc">Time Counter Video has R2,411 spend and only 2.35× ROAS / R344 CPP — the worst performing creative with meaningful spend. Jonathan Might Grow Demo has 4.48× ROAS at R272 CPP with 14 purchases (statistically reliable). Pause Time Counter and let CBO shift that budget to Jonathan Demo and the Testimonial creative for testing.</div>
+        <div class="action-impact impact-med">⚠️ MEDIUM IMPACT · Estimated CPP improvement of R30–R60 across campaign</div>
+      </div>
+    </div>
+
+    <div class="action-item">
+      <div class="action-num p3">6</div>
+      <div class="action-content">
+        <div class="action-title">Build a Dedicated Landing Page (vs. Collection Page)</div>
+        <div class="action-desc">All ads currently land on /collections/google-review-devices where visitors must choose between 4 products. For the top-converting creative (Jonathan Demo), build a dedicated Shopify landing page for the NFC Google Review Card (R299 — lowest barrier entry) with a single buy button, testimonials, and urgency element. Match the ad's messaging verbatim. Test with 50% of traffic via URL parameter.</div>
+        <div class="action-impact impact-med">⚠️ MEDIUM IMPACT · Expected ATC rate lift from ~11% to 20–30% on dedicated page</div>
+      </div>
+    </div>
+
+    <div class="action-item">
+      <div class="action-num p4">7</div>
+      <div class="action-content">
+        <div class="action-title">Add Bundle Offer to Increase AOV</div>
+        <div class="action-desc">Current AOV is ~R1,164 — customers are already buying multiple items. Create an explicit bundle: e.g., "Starter Kit — 1 Stand + 5 Cards" at R699 (vs R948 individually). This increases perceived value, reduces decision paralysis, and gives Meta a single higher-value product to optimise purchases toward. Feature the bundle in a new static image creative.</div>
+        <div class="action-impact impact-med">⚠️ MEDIUM IMPACT · Even +10% AOV on 42/month = +R4,900 revenue/month</div>
+      </div>
+    </div>
+
+    <div class="action-item">
+      <div class="action-num p5">8</div>
+      <div class="action-content">
+        <div class="action-title">Set Up Abandoned Checkout Recovery (WhatsApp / Email)</div>
+        <div class="action-desc">58 people entered payment info this month and didn't complete. Shopify has built-in abandoned checkout email recovery — verify it's enabled and the email is branded. Add a WhatsApp follow-up via ManyChat or a simple Shopify flow: "Your review device is waiting — complete your order and get it shipped within 24hrs." These are your highest-intent leads and cost nothing to reach.</div>
+        <div class="action-impact impact-low">🔵 LOW EFFORT / HIGH INTENT · Could recover 20–30% of abandonments</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ======================== FOOTER ======================== -->
+  <div class="divider"></div>
+  <div style="display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:11px;">
+    <div>ReviewTap Meta Ads Dashboard · Generated May 24, 2026 · Data: Pipeboard / Meta Marketing API</div>
+    <div>Review Tap · act_641218531785624 · ZAR · Sasolburg, South Africa</div>
+  </div>
+
+</div>
+
+<!-- ======================== CHARTS JS ======================== -->
+<script>
+Chart.defaults.color = '#888';
+Chart.defaults.borderColor = '#2A2A2A';
+Chart.defaults.font.family = "'Inter', -apple-system, sans-serif";
+
+// ---- Weekly Trend ----
+const weeklyCtx = document.getElementById('weeklyChart').getContext('2d');
+new Chart(weeklyCtx, {
+  type: 'bar',
+  data: {
+    labels: ['May 8–14', 'May 15–21', 'May 22–24 (partial)'],
+    datasets: [
+      {
+        label: 'Spend (R)',
+        data: [3004, 5510, 2880],
+        backgroundColor: ['rgba(255,107,0,0.6)','rgba(255,107,0,0.6)','rgba(239,68,68,0.4)'],
+        borderColor: ['#FF6B00','#FF6B00','#EF4444'],
+        borderWidth: 1.5,
+        borderRadius: 6,
+        yAxisID: 'y'
+      },
+      {
+        label: 'Cost per Purchase (R)',
+        data: [273, 230, 411],
+        type: 'line',
+        borderColor: '#F59E0B',
+        backgroundColor: 'rgba(245,158,11,0.1)',
+        borderWidth: 2.5,
+        pointBackgroundColor: '#F59E0B',
+        pointRadius: 5,
+        tension: 0.3,
+        fill: false,
+        yAxisID: 'y1'
+      }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { position: 'top', labels: { boxWidth: 12, padding: 12 } } },
+    scales: {
+      y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { callback: v => 'R'+v.toLocaleString() } },
+      y1: { position: 'right', grid: { display: false }, ticks: { callback: v => 'R'+v } }
+    }
+  }
+});
+
+// ---- ROAS by Creative ----
+const roasCtx = document.getElementById('roasChart').getContext('2d');
+new Chart(roasCtx, {
+  type: 'bar',
+  data: {
+    labels: ['Jonathan Demo', 'Hypermotion', 'Testimonial Hoffs*', 'Static Orange*', 'Time Counter'],
+    datasets: [{
+      label: 'ROAS',
+      data: [4.48, 3.57, 14.11, 26.8, 2.35],
+      backgroundColor: [
+        'rgba(34,197,94,0.7)',
+        'rgba(59,130,246,0.6)',
+        'rgba(245,158,11,0.6)',
+        'rgba(245,158,11,0.6)',
+        'rgba(239,68,68,0.7)'
+      ],
+      borderRadius: 6,
+      borderWidth: 0
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ' ' + ctx.parsed.x.toFixed(2) + '×' } }
+    },
+    scales: {
+      x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { callback: v => v+'×' } },
+      y: { grid: { display: false } }
+    }
+  }
+});
+
+// ---- Spend vs Revenue ----
+const srCtx = document.getElementById('spendRevenueChart').getContext('2d');
+new Chart(srCtx, {
+  type: 'bar',
+  data: {
+    labels: ['Original Ad Set', 'Experiment Ad Set'],
+    datasets: [
+      {
+        label: 'Spend (R)',
+        data: [6925, 3802],
+        backgroundColor: 'rgba(239,68,68,0.6)',
+        borderColor: '#EF4444',
+        borderWidth: 1.5,
+        borderRadius: 6
+      },
+      {
+        label: 'Revenue (R)',
+        data: [24980, 23903],
+        backgroundColor: 'rgba(34,197,94,0.6)',
+        borderColor: '#22C55E',
+        borderWidth: 1.5,
+        borderRadius: 6
+      }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { position: 'top', labels: { boxWidth: 12, padding: 12 } } },
+    scales: {
+      x: { grid: { display: false } },
+      y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { callback: v => 'R'+v.toLocaleString() } }
+    }
+  }
+});
+
+// ---- Device Doughnut ----
+const devCtx = document.getElementById('deviceChart').getContext('2d');
+new Chart(devCtx, {
+  type: 'doughnut',
+  data: {
+    labels: ['Mobile App', 'Desktop', 'Mobile Web'],
+    datasets: [{
+      data: [93, 5, 2],
+      backgroundColor: ['rgba(34,197,94,0.8)','rgba(239,68,68,0.7)','rgba(136,136,136,0.5)'],
+      borderColor: ['#22C55E','#EF4444','#555'],
+      borderWidth: 2,
+      hoverOffset: 6
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    cutout: '65%',
+    plugins: {
+      legend: { position: 'bottom', labels: { boxWidth: 12, padding: 14 } },
+      tooltip: { callbacks: { label: ctx => ' ' + ctx.label + ': ' + ctx.parsed + '%' } }
+    }
+  }
+});
+
+// ---- Revenue Bridge ----
+const bridgeCtx = document.getElementById('bridgeChart').getContext('2d');
+new Chart(bridgeCtx, {
+  type: 'bar',
+  data: {
+    labels: ['Captured Revenue', 'Desktop Waste (spend)', 'LPV Leak (est. rev)', 'Checkout Abandonment', 'Retargeting Gap (est.)'],
+    datasets: [{
+      label: 'ZAR',
+      data: [48884, -600, -25000, -67000, 18000],
+      backgroundColor: [
+        'rgba(34,197,94,0.7)',
+        'rgba(239,68,68,0.6)',
+        'rgba(239,68,68,0.6)',
+        'rgba(239,68,68,0.6)',
+        'rgba(59,130,246,0.6)'
+      ],
+      borderRadius: 6,
+      borderWidth: 0
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ' R' + Math.abs(ctx.parsed.y).toLocaleString() } }
+    },
+    scales: {
+      x: { grid: { display: false } },
+      y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { callback: v => 'R' + Math.abs(v/1000).toFixed(0)+'K' } }
+    }
+  }
+});
+</script>
+
+</body>
+</html>

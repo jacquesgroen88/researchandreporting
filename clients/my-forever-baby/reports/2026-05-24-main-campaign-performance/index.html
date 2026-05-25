@@ -1,0 +1,1381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MFB Main Campaign 2026 — Performance Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0d0f14;
+    --surface: #161a23;
+    --surface2: #1e2330;
+    --border: #2a3045;
+    --accent: #7c6af7;
+    --accent2: #f7846a;
+    --accent3: #4dd9ac;
+    --accent4: #f7c96a;
+    --red: #f75a5a;
+    --green: #4dd9ac;
+    --yellow: #f7c96a;
+    --text: #e8eaf0;
+    --text2: #8b92a9;
+    --text3: #5a6178;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, #1a1040 0%, #0d1a2e 50%, #0d1628 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 32px 40px 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(124,106,247,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header-inner { max-width: 1400px; margin: 0 auto; }
+  .header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand-dot { width: 10px; height: 10px; background: var(--green); border-radius: 50%; box-shadow: 0 0 8px var(--green); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.4} }
+  .brand h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
+  .brand h1 span { color: var(--accent); }
+  .live-badge {
+    background: rgba(77,217,172,0.12);
+    border: 1px solid rgba(77,217,172,0.3);
+    color: var(--green);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .header-sub { color: var(--text2); font-size: 13px; }
+  .header-sub span { color: var(--text); font-weight: 500; }
+
+  /* LAYOUT */
+  .container { max-width: 1400px; margin: 0 auto; padding: 32px 40px 60px; }
+  .section-title {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text3);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  .section { margin-bottom: 40px; }
+
+  /* STAT CARDS */
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+  .stat-card:hover { transform: translateY(-2px); border-color: var(--accent); }
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: 14px 14px 0 0;
+  }
+  .stat-card.purple::before { background: linear-gradient(90deg, #7c6af7, #a78bf5); }
+  .stat-card.orange::before { background: linear-gradient(90deg, #f7846a, #f7c96a); }
+  .stat-card.green::before { background: linear-gradient(90deg, #4dd9ac, #6de8c0); }
+  .stat-card.red::before { background: linear-gradient(90deg, #f75a5a, #f7846a); }
+  .stat-card.blue::before { background: linear-gradient(90deg, #4a9ef7, #7c6af7); }
+  .stat-card.yellow::before { background: linear-gradient(90deg, #f7c96a, #f7846a); }
+  .stat-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; }
+  .stat-value { font-size: 28px; font-weight: 700; letter-spacing: -1px; }
+  .stat-sub { font-size: 12px; color: var(--text2); margin-top: 4px; }
+  .stat-badge {
+    display: inline-block;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-weight: 600;
+    margin-top: 6px;
+  }
+  .badge-green { background: rgba(77,217,172,0.12); color: var(--green); border: 1px solid rgba(77,217,172,0.2); }
+  .badge-red { background: rgba(247,90,90,0.12); color: var(--red); border: 1px solid rgba(247,90,90,0.2); }
+  .badge-yellow { background: rgba(247,201,106,0.12); color: var(--yellow); border: 1px solid rgba(247,201,106,0.2); }
+  .badge-purple { background: rgba(124,106,247,0.12); color: var(--accent); border: 1px solid rgba(124,106,247,0.2); }
+
+  /* CHARTS */
+  .chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .chart-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+  @media (max-width: 900px) { .chart-grid, .chart-grid-3 { grid-template-columns: 1fr; } }
+  .chart-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px;
+  }
+  .chart-card.full { grid-column: 1 / -1; }
+  .chart-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .chart-sub { font-size: 12px; color: var(--text2); margin-bottom: 20px; }
+  .chart-wrap { position: relative; }
+
+  /* ADSET CARDS */
+  .adset-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  @media (max-width: 1000px) { .adset-grid { grid-template-columns: 1fr; } }
+  .adset-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .adset-card.winner { border-color: rgba(77,217,172,0.4); background: linear-gradient(180deg, rgba(77,217,172,0.05) 0%, var(--surface) 100%); }
+  .adset-card.danger { border-color: rgba(247,90,90,0.4); background: linear-gradient(180deg, rgba(247,90,90,0.05) 0%, var(--surface) 100%); }
+  .adset-card.paused { border-color: rgba(90,97,120,0.4); opacity: 0.7; }
+  .adset-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
+  .adset-name { font-size: 15px; font-weight: 600; line-height: 1.3; }
+  .status-pill {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    white-space: nowrap;
+  }
+  .pill-active { background: rgba(77,217,172,0.15); color: var(--green); border: 1px solid rgba(77,217,172,0.3); }
+  .pill-paused { background: rgba(90,97,120,0.15); color: var(--text3); border: 1px solid var(--border); }
+  .pill-danger { background: rgba(247,90,90,0.15); color: var(--red); border: 1px solid rgba(247,90,90,0.3); }
+  .adset-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .adset-metric { }
+  .adset-metric-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.6px; }
+  .adset-metric-value { font-size: 18px; font-weight: 700; }
+  .adset-roas { font-size: 32px; font-weight: 800; letter-spacing: -1px; }
+  .roas-green { color: var(--green); }
+  .roas-red { color: var(--red); }
+  .roas-yellow { color: var(--yellow); }
+  .adset-spend-bar { margin-top: 20px; }
+  .bar-label { display: flex; justify-content: space-between; font-size: 11px; color: var(--text2); margin-bottom: 6px; }
+  .bar-track { background: var(--surface2); border-radius: 4px; height: 6px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 4px; transition: width 1s ease; }
+
+  /* AD TABLE */
+  .ad-table { width: 100%; border-collapse: collapse; }
+  .ad-table th {
+    text-align: left;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text3);
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  .ad-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(42,48,69,0.5);
+    font-size: 13px;
+    vertical-align: middle;
+  }
+  .ad-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .ad-table tr:last-child td { border-bottom: none; }
+  .ad-name { font-weight: 600; color: var(--text); }
+  .ad-set-tag {
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 4px;
+    margin-left: 6px;
+    background: var(--surface2);
+    color: var(--text3);
+    font-weight: 500;
+  }
+  .roas-cell { font-weight: 700; }
+  .star-row td { background: rgba(124,106,247,0.05) !important; }
+  .star-badge { color: #f7c96a; margin-right: 4px; }
+
+  /* FUNNEL */
+  .funnel-wrap { display: flex; align-items: center; gap: 0; }
+  .funnel-step {
+    flex: 1;
+    text-align: center;
+    padding: 20px 10px;
+    position: relative;
+  }
+  .funnel-step::after {
+    content: '→';
+    position: absolute;
+    right: -10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text3);
+    font-size: 18px;
+    z-index: 1;
+  }
+  .funnel-step:last-child::after { display: none; }
+  .funnel-bar-outer {
+    width: 80%;
+    margin: 0 auto 12px;
+    background: var(--surface2);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .funnel-bar-inner {
+    background: linear-gradient(135deg, var(--accent), #a78bf5);
+    border-radius: 8px;
+    transition: height 1s ease;
+  }
+  .funnel-num { font-size: 22px; font-weight: 700; }
+  .funnel-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.6px; margin-top: 4px; }
+  .funnel-pct { font-size: 12px; color: var(--accent); font-weight: 600; margin-top: 2px; }
+
+  /* PRODUCT TABLE */
+  .product-list { display: flex; flex-direction: column; gap: 10px; }
+  .product-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 20px;
+    background: var(--surface2);
+    border-radius: 10px;
+    transition: background 0.2s;
+  }
+  .product-item:hover { background: #242939; }
+  .product-rank { font-size: 13px; font-weight: 700; color: var(--text3); width: 24px; text-align: center; }
+  .product-name { flex: 1; font-weight: 600; }
+  .product-orders { font-size: 12px; color: var(--text2); }
+  .product-rev { font-size: 15px; font-weight: 700; }
+  .product-bar-wrap { width: 100px; }
+  .product-bar { height: 4px; background: var(--surface); border-radius: 4px; overflow: hidden; }
+  .product-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 4px; }
+
+  /* ACTIONS */
+  .actions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 800px) { .actions-grid { grid-template-columns: 1fr; } }
+  .action-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    display: flex;
+    gap: 16px;
+  }
+  .action-card.urgent { border-left: 3px solid var(--red); }
+  .action-card.important { border-left: 3px solid var(--yellow); }
+  .action-card.growth { border-left: 3px solid var(--green); }
+  .action-card.completed { border-left: 3px solid var(--green); opacity: 0.75; }
+  .action-num {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 800;
+    flex-shrink: 0;
+  }
+  .action-num.red { background: rgba(247,90,90,0.15); color: var(--red); }
+  .action-num.yellow { background: rgba(247,201,106,0.15); color: var(--yellow); }
+  .action-num.green { background: rgba(77,217,172,0.15); color: var(--green); }
+  .action-body { }
+  .action-title { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+  .action-desc { font-size: 12px; color: var(--text2); line-height: 1.6; }
+  .action-impact {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 6px;
+  }
+
+  /* HEALTH GRID */
+  .health-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+  .health-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .health-icon { font-size: 20px; }
+  .health-label { font-size: 12px; color: var(--text2); margin-bottom: 3px; }
+  .health-val { font-size: 14px; font-weight: 700; }
+
+  /* ATTRIBUTION */
+  .attribution-row { display: flex; gap: 20px; margin-bottom: 12px; }
+  .attr-bar-wrap { flex: 1; }
+  .attr-label { display: flex; justify-content: space-between; font-size: 12px; color: var(--text2); margin-bottom: 6px; }
+  .attr-label span:last-child { color: var(--text); font-weight: 600; }
+  .attr-track { background: var(--surface2); border-radius: 4px; height: 8px; overflow: hidden; }
+  .attr-fill { height: 100%; border-radius: 4px; }
+
+  /* WEEK CARDS */
+  .week-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  @media (max-width: 900px) { .week-grid { grid-template-columns: 1fr 1fr; } }
+  .week-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+    position: relative;
+    overflow: hidden;
+  }
+  .week-card.crisis { border-color: rgba(247,90,90,0.5); }
+  .week-card.best { border-color: rgba(77,217,172,0.5); }
+  .week-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text3); margin-bottom: 12px; }
+  .week-roas { font-size: 26px; font-weight: 800; letter-spacing: -1px; }
+  .week-stats { margin-top: 10px; display: flex; flex-direction: column; gap: 4px; }
+  .week-stat { display: flex; justify-content: space-between; font-size: 12px; }
+  .week-stat-label { color: var(--text3); }
+  .week-stat-value { color: var(--text); font-weight: 500; }
+  .week-badge {
+    position: absolute;
+    top: 12px; right: 12px;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  /* DIVIDER */
+  .divider { height: 1px; background: var(--border); margin: 8px 0 24px; }
+
+  /* SCROLL */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* ALERT BANNER */
+  .alert-banner {
+    background: linear-gradient(135deg, rgba(247,90,90,0.12) 0%, rgba(247,132,106,0.08) 100%);
+    border: 1px solid rgba(247,90,90,0.3);
+    border-radius: 12px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .alert-icon { font-size: 24px; }
+  .alert-text { font-size: 13px; color: var(--text); }
+  .alert-text strong { color: var(--red); }
+
+  .table-wrap { overflow-x: auto; border-radius: 14px; border: 1px solid var(--border); }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 800px) { .two-col { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <div class="header-top">
+      <div class="brand">
+        <div class="brand-dot"></div>
+        <h1>MyForeverBaby <span>Campaign Dashboard</span></h1>
+      </div>
+      <div class="live-badge">⚡ Live Data</div>
+    </div>
+    <div class="header-sub">
+      MFB Main Campaign 2026 &nbsp;·&nbsp;
+      <span>28 Apr – 24 May 2026</span> &nbsp;·&nbsp;
+      Pulled from Pipeboard + Shopify &nbsp;·&nbsp;
+      <span>24 May 2026</span>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ALERT -->
+  <div class="alert-banner">
+    <div class="alert-icon">🚨</div>
+    <div class="alert-text">
+      <strong>Week 4 Crisis:</strong> CPM has surged to <strong>R94.12</strong> (up from R55 in Week 2) and ROAS has collapsed to <strong>0.73×</strong>. Only 1 purchase in the last 6 days despite R3,025 spend. Immediate action required on audience expansion and creative rotation.
+    </div>
+  </div>
+
+  <!-- TOP KPIs -->
+  <div class="section">
+    <div class="section-title">Campaign Top-Line Metrics</div>
+    <div class="stat-grid">
+      <div class="stat-card purple">
+        <div class="stat-label">Total Spend</div>
+        <div class="stat-value">R16,776</div>
+        <div class="stat-sub">R600/day budget</div>
+      </div>
+      <div class="stat-card green">
+        <div class="stat-label">Revenue (Facebook)</div>
+        <div class="stat-value">R54,240</div>
+        <div class="stat-sub">Shopify actual: R57,748</div>
+        <div class="stat-badge badge-green">+R3,508 unattr.</div>
+      </div>
+      <div class="stat-card green">
+        <div class="stat-label">ROAS (Facebook)</div>
+        <div class="stat-value">3.23×</div>
+        <div class="stat-sub">True ROAS: 3.44×</div>
+        <div class="stat-badge badge-green">Healthy</div>
+      </div>
+      <div class="stat-card blue">
+        <div class="stat-label">Impressions</div>
+        <div class="stat-value">245K</div>
+        <div class="stat-sub">Reach: 86,049</div>
+      </div>
+      <div class="stat-card orange">
+        <div class="stat-label">CTR</div>
+        <div class="stat-value">6.10%</div>
+        <div class="stat-sub">Industry avg: ~1.5%</div>
+        <div class="stat-badge badge-green">Excellent</div>
+      </div>
+      <div class="stat-card green">
+        <div class="stat-label">CPC</div>
+        <div class="stat-value">R1.12</div>
+        <div class="stat-sub">14,957 clicks</div>
+        <div class="stat-badge badge-green">Strong</div>
+      </div>
+      <div class="stat-card yellow">
+        <div class="stat-label">Purchases (FB)</div>
+        <div class="stat-value">18</div>
+        <div class="stat-sub">Shopify actual: 20</div>
+        <div class="stat-badge badge-yellow">CPP: R931</div>
+      </div>
+      <div class="stat-card red">
+        <div class="stat-label">Frequency</div>
+        <div class="stat-value">2.85×</div>
+        <div class="stat-sub">Saturation threshold: 3×</div>
+        <div class="stat-badge badge-red">⚠ Getting high</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEEKLY TREND -->
+  <div class="section">
+    <div class="section-title">Weekly Performance Trend</div>
+
+    <div class="week-grid" style="margin-bottom: 20px;">
+      <div class="week-card">
+        <div class="week-label">Week 1 · Apr 28–May 4</div>
+        <div class="week-roas roas-yellow">2.49×</div>
+        <div class="week-stats">
+          <div class="week-stat"><span class="week-stat-label">Spend</span><span class="week-stat-value">R3,232</span></div>
+          <div class="week-stat"><span class="week-stat-label">CPM</span><span class="week-stat-value">R69.23</span></div>
+          <div class="week-stat"><span class="week-stat-label">CPC</span><span class="week-stat-value">R1.55</span></div>
+          <div class="week-stat"><span class="week-stat-label">Purchases</span><span class="week-stat-value">3</span></div>
+          <div class="week-stat"><span class="week-stat-label">Revenue</span><span class="week-stat-value">R8,055</span></div>
+        </div>
+      </div>
+      <div class="week-card best">
+        <div class="week-badge badge-green">Best Week</div>
+        <div class="week-label">Week 2 · May 5–11</div>
+        <div class="week-roas roas-green">4.64×</div>
+        <div class="week-stats">
+          <div class="week-stat"><span class="week-stat-label">Spend</span><span class="week-stat-value">R5,128</span></div>
+          <div class="week-stat"><span class="week-stat-label">CPM</span><span class="week-stat-value" style="color:var(--green)">R55.18</span></div>
+          <div class="week-stat"><span class="week-stat-label">CPC</span><span class="week-stat-value" style="color:var(--green)">R0.74</span></div>
+          <div class="week-stat"><span class="week-stat-label">Purchases</span><span class="week-stat-value">6</span></div>
+          <div class="week-stat"><span class="week-stat-label">Revenue</span><span class="week-stat-value">R23,798</span></div>
+        </div>
+      </div>
+      <div class="week-card">
+        <div class="week-label">Week 3 · May 12–18</div>
+        <div class="week-roas" style="color:var(--yellow)">3.74×</div>
+        <div class="week-stats">
+          <div class="week-stat"><span class="week-stat-label">Spend</span><span class="week-stat-value">R5,392</span></div>
+          <div class="week-stat"><span class="week-stat-label">CPM</span><span class="week-stat-value">R73.59</span></div>
+          <div class="week-stat"><span class="week-stat-label">CPC</span><span class="week-stat-value">R1.28</span></div>
+          <div class="week-stat"><span class="week-stat-label">Purchases</span><span class="week-stat-value">8</span></div>
+          <div class="week-stat"><span class="week-stat-label">Revenue</span><span class="week-stat-value">R20,188</span></div>
+        </div>
+      </div>
+      <div class="week-card crisis">
+        <div class="week-badge badge-red">🚨 Crisis</div>
+        <div class="week-label">Week 4 · May 19–24</div>
+        <div class="week-roas roas-red">0.73×</div>
+        <div class="week-stats">
+          <div class="week-stat"><span class="week-stat-label">Spend</span><span class="week-stat-value">R3,025</span></div>
+          <div class="week-stat"><span class="week-stat-label">CPM</span><span class="week-stat-value" style="color:var(--red)">R94.12</span></div>
+          <div class="week-stat"><span class="week-stat-label">CPC</span><span class="week-stat-value" style="color:var(--red)">R1.75</span></div>
+          <div class="week-stat"><span class="week-stat-label">Purchases</span><span class="week-stat-value" style="color:var(--red)">1</span></div>
+          <div class="week-stat"><span class="week-stat-label">Revenue</span><span class="week-stat-value">R2,199</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chart-grid">
+      <div class="chart-card">
+        <div class="chart-title">ROAS by Week</div>
+        <div class="chart-sub">Break-even = 1.0× · Target = 3.0×</div>
+        <div class="chart-wrap"><canvas id="roasChart" height="200"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">CPM Escalation</div>
+        <div class="chart-sub">Rising CPM = audience saturation signal</div>
+        <div class="chart-wrap"><canvas id="cpmChart" height="200"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AD SET COMPARISON -->
+  <div class="section">
+    <div class="section-title">Ad Set Performance</div>
+    <div class="adset-grid">
+
+      <div class="adset-card winner">
+        <div class="adset-header">
+          <div class="adset-name">Women with Kids 3–8<br><span style="color:var(--text2);font-size:13px;font-weight:400">Copy Ad Set</span></div>
+          <div class="status-pill pill-active">Active</div>
+        </div>
+        <div class="adset-roas roas-green">4.00×</div>
+        <div style="font-size:12px;color:var(--text2);margin-bottom:16px;">ROAS · R52,041 revenue</div>
+        <div class="adset-metrics">
+          <div class="adset-metric">
+            <div class="adset-metric-label">Spend</div>
+            <div class="adset-metric-value">R13,008</div>
+          </div>
+          <div class="adset-metric">
+            <div class="adset-metric-label">Cost/Purchase</div>
+            <div class="adset-metric-value" style="color:var(--green)">R765</div>
+          </div>
+          <div class="adset-metric">
+            <div class="adset-metric-label">CTR</div>
+            <div class="adset-metric-value">6.45%</div>
+          </div>
+          <div class="adset-metric">
+            <div class="adset-metric-label">CPM</div>
+            <div class="adset-metric-value">R65.17</div>
+          </div>
+          <div class="adset-metric">
+            <div class="adset-metric-label">Purchases</div>
+            <div class="adset-metric-value">17</div>
+          </div>
+          <div class="adset-metric">
+            <div class="adset-metric-label">Frequency</div>
+            <div class="adset-metric-value">2.51×</div>
+          </div>
+        </div>
+        <div class="adset-spend-bar" style="margin-top:16px;">
+          <div class="bar-label"><span>Budget share</span><span>77.5%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:77.5%;background:linear-gradient(90deg,var(--green),#6de8c0)"></div></div>
+        </div>
+      </div>
+
+      <div class="adset-card danger">
+        <div class="adset-header">
+          <div class="adset-name">Women with Kids 3–8<br><span style="color:var(--text2);font-size:13px;font-weight:400">Experiment (Hypermotion)</span></div>
+          <div class="status-pill pill-danger">⚠ Burning</div>
+        </div>
+        <div class="adset-roas roas-red">0.85×</div>
+        <div style="font-size:12px;color:var(--text2);margin-bottom:16px;">ROAS · R2,199 revenue</div>
+        <div class="adset-metrics">
+          <div class="adset-metric">
+            <div class="adset-metric-label">Spend</div>
+            <div class="adset-metric-value">R2,581</div>
+          </div>
+          <div class="adset-metric">
+            <div class="adset-metric-label">Cost/Purchase</div>
+            <div class="adset-metric-value" style="color:var(--red)">R2,581</div>
+          </div>
+          <div class="adset-metric">
+            <div class="adset-metric-label">CTR</div>
+            <div class="adset-metric-value">5.43%</div>
+          </div>
+          <div class="adset-metric">
+            <div class="adset-metric-label">CPM</div>
+            <div class="adset-metric-value" style="color:var(--red)">R91.90</div>
+          </div>
+          <div class="adset-metric">
+            <div class="adset-metric-label">Purchases</div>
+            <div class="adset-metric-value">1</div>
+          </div>
+          <div class="adset-metric">
+            <div class="adset-metric-label">Started</div>
+            <div class="adset-metric-value" style="font-size:12px;color:var(--text2)">18 May</div>
+          </div>
+        </div>
+        <div class="adset-spend-bar" style="margin-top:16px;">
+          <div class="bar-label"><span>Budget share</span><span>15.4%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:15.4%;background:linear-gradient(90deg,var(--red),#f7846a)"></div></div>
+        </div>
+      </div>
+
+      <div class="adset-card paused">
+        <div class="adset-header">
+          <div class="adset-name">Advantage+ Shopping<br><span style="color:var(--text2);font-size:13px;font-weight:400">Manual (Paused)</span></div>
+          <div class="status-pill pill-paused">Paused</div>
+        </div>
+        <div class="adset-roas" style="color:var(--text3)">0×</div>
+        <div style="font-size:12px;color:var(--text3);margin-bottom:16px;">ROAS · R0 revenue</div>
+        <div class="adset-metrics">
+          <div class="adset-metric">
+            <div class="adset-metric-label">Spend</div>
+            <div class="adset-metric-value" style="color:var(--text2)">~R1,187</div>
+          </div>
+          <div class="adset-metric">
+            <div class="adset-metric-label">Purchases</div>
+            <div class="adset-metric-value" style="color:var(--text3)">0</div>
+          </div>
+          <div class="adset-metric">
+            <div class="adset-metric-label">CTR</div>
+            <div class="adset-metric-value" style="color:var(--text2)">3.11%</div>
+          </div>
+          <div class="adset-metric">
+            <div class="adset-metric-label">CPM</div>
+            <div class="adset-metric-value" style="color:var(--text2)">R66.78</div>
+          </div>
+        </div>
+        <div class="adset-spend-bar" style="margin-top:16px;">
+          <div class="bar-label"><span>Budget share</span><span>7.1%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:7.1%;background:var(--text3)"></div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- AD LEVEL -->
+  <div class="section">
+    <div class="section-title">Individual Ad Performance</div>
+    <div class="table-wrap">
+      <table class="ad-table">
+        <thead>
+          <tr>
+            <th>Ad Creative</th>
+            <th>Spend</th>
+            <th>Impressions</th>
+            <th>CTR</th>
+            <th>CPC</th>
+            <th>CPM</th>
+            <th>Purchases</th>
+            <th>Revenue</th>
+            <th>ROAS</th>
+            <th>CPP</th>
+            <th>ATC</th>
+            <th>LPV</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="star-row">
+            <td><span class="star-badge">⭐</span><span class="ad-name">Video Ad October English</span><span class="ad-set-tag">Copy</span></td>
+            <td>R1,218</td>
+            <td>14,241</td>
+            <td>3.72%</td>
+            <td>R2.30</td>
+            <td>R85.52</td>
+            <td><strong>5</strong></td>
+            <td><strong>R17,586</strong></td>
+            <td class="roas-cell" style="color:var(--green)">14.44×</td>
+            <td style="color:var(--green)"><strong>R244</strong></td>
+            <td>13</td>
+            <td>275</td>
+          </tr>
+          <tr>
+            <td><span class="ad-name">MFB Reaction Video</span><span class="ad-set-tag">Copy</span></td>
+            <td>R8,005</td>
+            <td>116,855</td>
+            <td>5.73%</td>
+            <td>R1.20</td>
+            <td>R68.51</td>
+            <td>10</td>
+            <td>R26,285</td>
+            <td class="roas-cell" style="color:var(--accent)">3.28×</td>
+            <td>R801</td>
+            <td>37</td>
+            <td>2,520</td>
+          </tr>
+          <tr>
+            <td><span class="ad-name">MFB Unboxing Single Video</span><span class="ad-set-tag">Copy</span></td>
+            <td>R1,485</td>
+            <td>32,500</td>
+            <td style="color:var(--green)"><strong>10.85%</strong></td>
+            <td style="color:var(--green)"><strong>R0.42</strong></td>
+            <td>R45.70</td>
+            <td>1</td>
+            <td>R5,192</td>
+            <td class="roas-cell" style="color:var(--accent)">3.50×</td>
+            <td>R1,485</td>
+            <td>4</td>
+            <td>1,240</td>
+          </tr>
+          <tr>
+            <td><span class="ad-name">Video Ad Unboxing With Tears</span><span class="ad-set-tag">Copy</span></td>
+            <td>R1,028</td>
+            <td>17,349</td>
+            <td>7.45%</td>
+            <td>R0.80</td>
+            <td>R59.24</td>
+            <td>1</td>
+            <td>R2,978</td>
+            <td class="roas-cell" style="color:var(--yellow)">2.90×</td>
+            <td>R1,028</td>
+            <td>2</td>
+            <td>206</td>
+          </tr>
+          <tr>
+            <td><span class="ad-name">Hypermotion — Chloe</span><span class="ad-set-tag">Experiment</span></td>
+            <td>R2,403</td>
+            <td>26,286</td>
+            <td>5.54%</td>
+            <td>R1.65</td>
+            <td>R91.43</td>
+            <td>1</td>
+            <td>R2,199</td>
+            <td class="roas-cell" style="color:var(--red)">0.91×</td>
+            <td style="color:var(--red)">R2,403</td>
+            <td>6</td>
+            <td>703</td>
+          </tr>
+          <tr>
+            <td><span class="ad-name">Video Ad Oct Afrikaans — Copy</span><span class="ad-set-tag">Copy</span></td>
+            <td>R690</td>
+            <td>9,919</td>
+            <td>4.38%</td>
+            <td>R1.59</td>
+            <td>R69.52</td>
+            <td style="color:var(--red)">0</td>
+            <td>R0</td>
+            <td class="roas-cell" style="color:var(--red)">0×</td>
+            <td style="color:var(--red)">—</td>
+            <td>1</td>
+            <td>141</td>
+          </tr>
+          <tr>
+            <td><span class="ad-name">Static Ads April 2026 — Copy</span><span class="ad-set-tag">Adv+</span></td>
+            <td>R582</td>
+            <td>8,569</td>
+            <td>3.75%</td>
+            <td>R1.81</td>
+            <td>R67.94</td>
+            <td style="color:var(--red)">0</td>
+            <td>R0</td>
+            <td class="roas-cell" style="color:var(--red)">0×</td>
+            <td style="color:var(--red)">—</td>
+            <td>2</td>
+            <td>184</td>
+          </tr>
+          <tr>
+            <td><span class="ad-name">Video J V1</span><span class="ad-set-tag">Copy</span></td>
+            <td>R582</td>
+            <td>8,729</td>
+            <td>4.56%</td>
+            <td>R1.46</td>
+            <td>R66.65</td>
+            <td style="color:var(--red)">0</td>
+            <td>R0</td>
+            <td class="roas-cell" style="color:var(--red)">0×</td>
+            <td style="color:var(--red)">—</td>
+            <td>0</td>
+            <td>154</td>
+          </tr>
+          <tr>
+            <td><span class="ad-name">Catalogue — In Stock</span><span class="ad-set-tag">Adv+</span></td>
+            <td>R475</td>
+            <td>7,269</td>
+            <td>2.35%</td>
+            <td>R2.78</td>
+            <td>R65.41</td>
+            <td style="color:var(--red)">0</td>
+            <td>R0</td>
+            <td class="roas-cell" style="color:var(--red)">0×</td>
+            <td style="color:var(--red)">—</td>
+            <td>0</td>
+            <td>80</td>
+          </tr>
+          <tr>
+            <td><span class="ad-name">Hypermotion — Ashley</span><span class="ad-set-tag">Experiment</span></td>
+            <td>R123</td>
+            <td>1,196</td>
+            <td>3.51%</td>
+            <td>R2.94</td>
+            <td>R103.11</td>
+            <td style="color:var(--text3)">0 <span style="font-size:10px;color:var(--text3)">(6 days)</span></td>
+            <td>R0</td>
+            <td class="roas-cell" style="color:var(--text3)">—</td>
+            <td style="color:var(--text3)">—</td>
+            <td>0</td>
+            <td>13</td>
+          </tr>
+          <tr>
+            <td><span class="ad-name">Hypermotion — Hope</span><span class="ad-set-tag">Experiment</span></td>
+            <td>R55</td>
+            <td>607</td>
+            <td>4.78%</td>
+            <td>R1.89</td>
+            <td>R90.07</td>
+            <td style="color:var(--text3)">0 <span style="font-size:10px;color:var(--text3)">(6 days)</span></td>
+            <td>R0</td>
+            <td class="roas-cell" style="color:var(--text3)">—</td>
+            <td style="color:var(--text3)">—</td>
+            <td>0</td>
+            <td>16</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="margin-top:10px;font-size:11px;color:var(--text3);">⭐ = Hidden gem requiring immediate budget scale-up &nbsp;·&nbsp; October English: 14.44× ROAS on just R1,218 spend</div>
+  </div>
+
+  <!-- CHARTS ROW -->
+  <div class="section">
+    <div class="section-title">Ad Spend vs Revenue Distribution</div>
+    <div class="chart-grid">
+      <div class="chart-card">
+        <div class="chart-title">Spend by Ad Creative</div>
+        <div class="chart-sub">How budget is currently distributed across active ads</div>
+        <div class="chart-wrap"><canvas id="spendChart" height="220"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Revenue by Ad Creative</div>
+        <div class="chart-sub">Where revenue is actually coming from</div>
+        <div class="chart-wrap"><canvas id="revenueChart" height="220"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONVERSION FUNNEL -->
+  <div class="section">
+    <div class="section-title">Conversion Funnel — Facebook Attribution</div>
+    <div class="chart-card">
+      <div class="chart-grid" style="gap:0">
+        <div>
+          <div class="chart-title" style="margin-bottom:24px;">Full Funnel Breakdown</div>
+          <div class="funnel-wrap">
+            <div class="funnel-step">
+              <div class="funnel-bar-outer" style="height:120px;">
+                <div class="funnel-bar-inner" style="height:100%"></div>
+              </div>
+              <div class="funnel-num">245K</div>
+              <div class="funnel-label">Impressions</div>
+              <div class="funnel-pct">100%</div>
+            </div>
+            <div class="funnel-step">
+              <div class="funnel-bar-outer" style="height:120px;">
+                <div class="funnel-bar-inner" style="height:61%"></div>
+              </div>
+              <div class="funnel-num">14,957</div>
+              <div class="funnel-label">Clicks</div>
+              <div class="funnel-pct">6.1%</div>
+            </div>
+            <div class="funnel-step">
+              <div class="funnel-bar-outer" style="height:120px;">
+                <div class="funnel-bar-inner" style="height:23%"></div>
+              </div>
+              <div class="funnel-num">5,548</div>
+              <div class="funnel-label">Landing Views</div>
+              <div class="funnel-pct">37.1% of clicks</div>
+            </div>
+            <div class="funnel-step">
+              <div class="funnel-bar-outer" style="height:120px;">
+                <div class="funnel-bar-inner" style="height:2.7%"></div>
+              </div>
+              <div class="funnel-num">65</div>
+              <div class="funnel-label">Add to Cart</div>
+              <div class="funnel-pct" style="color:var(--red)">1.2% of views</div>
+            </div>
+            <div class="funnel-step">
+              <div class="funnel-bar-outer" style="height:120px;">
+                <div class="funnel-bar-inner" style="height:1.6%"></div>
+              </div>
+              <div class="funnel-num">39</div>
+              <div class="funnel-label">Checkout</div>
+              <div class="funnel-pct">60% of carts</div>
+            </div>
+            <div class="funnel-step">
+              <div class="funnel-bar-outer" style="height:120px;">
+                <div class="funnel-bar-inner" style="height:0.7%;background:linear-gradient(135deg,var(--green),#6de8c0)"></div>
+              </div>
+              <div class="funnel-num" style="color:var(--green)">18</div>
+              <div class="funnel-label">Purchases</div>
+              <div class="funnel-pct">46.2% of checkout</div>
+            </div>
+          </div>
+          <div style="margin-top:16px;padding:14px;background:rgba(247,90,90,0.06);border:1px solid rgba(247,90,90,0.2);border-radius:10px;font-size:12px;color:var(--text2);">
+            ⚠️ <strong style="color:var(--text)">63% of paid clicks don't become landing page views</strong> — biggest funnel leak. Fix mobile page speed first.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SHOPIFY DATA -->
+  <div class="section">
+    <div class="section-title">Shopify Live Data</div>
+    <div class="two-col">
+
+      <div>
+        <div class="chart-card" style="margin-bottom:20px;">
+          <div class="chart-title">Revenue Attribution by Source</div>
+          <div class="chart-sub">Where Shopify revenue actually came from</div>
+          <div style="margin-top:16px;">
+            <div style="margin-bottom:14px;">
+              <div class="attr-label"><span>Social (Facebook/Instagram)</span><span>R29,533 · 10 orders</span></div>
+              <div class="attr-track"><div class="attr-fill" style="width:51%;background:linear-gradient(90deg,#7c6af7,#a78bf5);height:100%"></div></div>
+            </div>
+            <div style="margin-bottom:14px;">
+              <div class="attr-label"><span>Search (Google/Organic)</span><span>R18,780 · 6 orders</span></div>
+              <div class="attr-track"><div class="attr-fill" style="width:33%;background:linear-gradient(90deg,#4a9ef7,#7c6af7);height:100%"></div></div>
+            </div>
+            <div>
+              <div class="attr-label"><span>Direct / Unknown</span><span>R10,125 · 4 orders</span></div>
+              <div class="attr-track"><div class="attr-fill" style="width:18%;background:linear-gradient(90deg,#4dd9ac,#4a9ef7);height:100%"></div></div>
+            </div>
+          </div>
+          <div style="margin-top:16px;font-size:12px;color:var(--text2);padding:12px;background:rgba(77,217,172,0.05);border-radius:8px;border:1px solid rgba(77,217,172,0.15);">
+            💡 Only 51% of revenue is FB-attributed. Ads are driving awareness that converts via other channels — true ROAS impact is higher than reported.
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-title">Facebook vs Shopify Attribution Gap</div>
+          <div class="chart-sub">Shopify consistently shows more than Facebook reports</div>
+          <div style="margin-top:16px; display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+            <div style="text-align:center;padding:16px;background:var(--surface2);border-radius:10px;">
+              <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px;">Facebook Says</div>
+              <div style="font-size:28px;font-weight:800;color:var(--accent)">18</div>
+              <div style="font-size:12px;color:var(--text2)">orders · R54,240</div>
+              <div style="font-size:12px;font-weight:600;color:var(--accent);margin-top:4px;">3.23× ROAS</div>
+            </div>
+            <div style="text-align:center;padding:16px;background:var(--surface2);border-radius:10px;">
+              <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px;">Shopify Actual</div>
+              <div style="font-size:28px;font-weight:800;color:var(--green)">20</div>
+              <div style="font-size:12px;color:var(--text2)">orders · R57,748</div>
+              <div style="font-size:12px;font-weight:600;color:var(--green);margin-top:4px;">3.44× ROAS</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="chart-card" style="margin-bottom:20px;">
+          <div class="chart-title">Top Products by Revenue</div>
+          <div class="chart-sub">28 Apr – 24 May · Shopify live</div>
+          <div class="product-list" style="margin-top:16px;">
+            <div class="product-item">
+              <div class="product-rank">1</div>
+              <div class="product-name">Baby Ashley</div>
+              <div class="product-orders" style="margin-right:8px;">5 orders</div>
+              <div class="product-bar-wrap"><div class="product-bar"><div class="product-bar-fill" style="width:100%"></div></div></div>
+              <div class="product-rev">R10,495</div>
+            </div>
+            <div class="product-item">
+              <div class="product-rank">2</div>
+              <div class="product-name">Baby Hope</div>
+              <div class="product-orders" style="margin-right:8px;">4 orders</div>
+              <div class="product-bar-wrap"><div class="product-bar"><div class="product-bar-fill" style="width:80%"></div></div></div>
+              <div class="product-rev">R8,396</div>
+            </div>
+            <div class="product-item">
+              <div class="product-rank">3</div>
+              <div class="product-name">Baby Nila</div>
+              <div class="product-orders" style="margin-right:8px;">2 orders</div>
+              <div class="product-bar-wrap"><div class="product-bar"><div class="product-bar-fill" style="width:54%"></div></div></div>
+              <div class="product-rev">R5,697</div>
+            </div>
+            <div class="product-item">
+              <div class="product-rank">4</div>
+              <div class="product-name">MFB Deluxe Travel Package</div>
+              <div class="product-orders" style="margin-right:8px;">6 orders</div>
+              <div class="product-bar-wrap"><div class="product-bar"><div class="product-bar-fill" style="width:50%;background:linear-gradient(90deg,var(--accent2),var(--accent))"></div></div></div>
+              <div class="product-rev">R5,274</div>
+            </div>
+            <div class="product-item">
+              <div class="product-rank">5</div>
+              <div class="product-name">Baby Summer / Elizabeth / Amelia / Emma</div>
+              <div class="product-orders" style="margin-right:8px;">2 ea.</div>
+              <div class="product-bar-wrap"><div class="product-bar"><div class="product-bar-fill" style="width:40%"></div></div></div>
+              <div class="product-rev">R4,198 ea.</div>
+            </div>
+          </div>
+          <div style="margin-top:12px;font-size:11px;color:var(--text3);">💡 Travel Package has the most orders (6) — great entry product for ad creative</div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-title">Shopify Session Funnel</div>
+          <div class="chart-sub">28 Apr – 24 May · All traffic sources</div>
+          <div style="margin-top:16px; display:flex; flex-direction:column; gap:10px;">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div style="font-size:12px;color:var(--text2);width:160px;">Sessions</div>
+              <div style="flex:1;background:var(--surface2);border-radius:4px;height:20px;overflow:hidden;">
+                <div style="width:100%;height:100%;background:linear-gradient(90deg,var(--accent),#a78bf5);display:flex;align-items:center;padding-left:8px;font-size:11px;font-weight:700;">7,078</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div style="font-size:12px;color:var(--text2);width:160px;">Cart Additions</div>
+              <div style="flex:1;background:var(--surface2);border-radius:4px;height:20px;overflow:hidden;">
+                <div style="width:1.47%;height:100%;background:linear-gradient(90deg,var(--yellow),#f7846a);min-width:60px;display:flex;align-items:center;padding-left:8px;font-size:11px;font-weight:700;">~104</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div style="font-size:12px;color:var(--text2);width:160px;">Reached Checkout</div>
+              <div style="flex:1;background:var(--surface2);border-radius:4px;height:20px;overflow:hidden;">
+                <div style="width:0.95%;height:100%;background:linear-gradient(90deg,var(--accent2),var(--red));min-width:50px;display:flex;align-items:center;padding-left:8px;font-size:11px;font-weight:700;">~67</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div style="font-size:12px;color:var(--text2);width:160px;">Completed Purchase</div>
+              <div style="flex:1;background:var(--surface2);border-radius:4px;height:20px;overflow:hidden;">
+                <div style="width:0.28%;height:100%;background:linear-gradient(90deg,var(--green),#6de8c0);min-width:40px;display:flex;align-items:center;padding-left:8px;font-size:11px;font-weight:700;">20</div>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:12px;padding:10px;background:rgba(247,201,106,0.06);border:1px solid rgba(247,201,106,0.2);border-radius:8px;font-size:12px;color:var(--text2);">
+            84 abandoned carts remain. At R2,887 AOV, recovering 20 = <strong style="color:var(--yellow)">R57,740 potential revenue</strong>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PRIORITY ACTIONS -->
+  <div class="section">
+    <div class="section-title">Priority Action Plan</div>
+
+    <div style="margin-bottom:12px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+      <span style="font-size:12px;color:var(--text3);">Urgency:</span>
+      <span class="stat-badge badge-red">🔴 Do Today</span>
+      <span class="stat-badge badge-yellow">🟡 This Week</span>
+      <span class="stat-badge badge-green">🟢 Next 1–2 Weeks</span>
+    </div>
+
+    <div class="actions-grid">
+
+      <div class="action-card completed">
+        <div class="action-num green">✓</div>
+        <div class="action-body">
+          <div class="action-title" style="text-decoration: line-through;">🏆 Scale Video Ad October English immediately</div>
+          <div class="action-desc"><strong>Completed:</strong> You duplicated the Copy ad set and added the high-converting English version of the creative for dedicated scaling!</div>
+          <div class="action-impact badge-green">Est. impact: +R30K–50K/month revenue</div>
+        </div>
+      </div>
+
+      <div class="action-card urgent">
+        <div class="action-num red">2</div>
+        <div class="action-body">
+          <div class="action-title">🚨 Week 4 CPM at R94 — expand audience today</div>
+          <div class="action-desc">CPMs have gone R55 → R94 in 2 weeks, purchases crashed from 8 to 1. Either broaden targeting (add kids 9–12) or let Advantage+ audience go fully open. Campaign is spending R600/day at sub-1× ROAS right now.</div>
+          <div class="action-impact badge-red">Risk if not done: continued R600/day loss</div>
+        </div>
+      </div>
+
+      <div class="action-card completed">
+        <div class="action-num green">✓</div>
+        <div class="action-body">
+          <div class="action-title" style="text-decoration: line-through;">⏸ Cap Experiment ad set at R200/day max</div>
+          <div class="action-desc"><strong>Completed:</strong> You successfully capped the Experiment ad set spend by setting budget min/max values to prevent unnecessary burn!</div>
+          <div class="action-impact badge-yellow">Saves ~R400/day from burning</div>
+        </div>
+      </div>
+
+      <div class="action-card important">
+        <div class="action-num yellow">4</div>
+        <div class="action-body">
+          <div class="action-title">🛒 Launch retargeting for 84 abandoned carts</div>
+          <div class="action-desc">Shopify shows 104 add-to-cart sessions vs 20 purchases. Create a 7-day cart-abandonment custom audience with urgency copy (gift-by-date, limited stock). These people already chose a product — lowest CPP you'll ever get.</div>
+          <div class="action-impact badge-green">~R57,740 recoverable at R2,887 AOV</div>
+        </div>
+      </div>
+
+      <div class="action-card important">
+        <div class="action-num yellow">5</div>
+        <div class="action-body">
+          <div class="action-title">🗑 Pause 3 dead-weight ads draining R1,854</div>
+          <div class="action-desc">Video J V1 (0 ATC on 398 clicks), Video Ad Afrikaans Copy (0 purchases), Static Ads April (0 purchases). Combined R1,854 spend, zero revenue. Redirect every rand to October English and Unboxing Single Video which are converting.</div>
+          <div class="action-impact badge-purple">Frees R1,854 for reallocation</div>
+        </div>
+      </div>
+
+      <div class="action-card important">
+        <div class="action-num yellow">6</div>
+        <div class="action-body">
+          <div class="action-title">📦 Fulfil order #1329 (Chantelle, 21 May)</div>
+          <div class="action-desc">One order is still unfulfilled from 3 days ago. All other 19 orders are fulfilled. Chantelle Labuschagne · R2,199 · Order #1329. Check stock and dispatch today.</div>
+          <div class="action-impact badge-red">Customer experience risk</div>
+        </div>
+      </div>
+
+      <div class="action-card important">
+        <div class="action-num yellow">7</div>
+        <div class="action-body">
+          <div class="action-title">🎁 Add Travel Package to ad creative</div>
+          <div class="action-desc">The MFB Deluxe Travel Package has the highest order count (6 orders) and acts as a natural upsell to doll buyers. None of your current ad creatives feature it. A bundle creative (doll + travel pack) could lower CPP by widening the entry point.</div>
+          <div class="action-impact badge-green">Potential to improve AOV</div>
+        </div>
+      </div>
+
+      <div class="action-card growth">
+        <div class="action-num green">8</div>
+        <div class="action-body">
+          <div class="action-title">📧 Build post-purchase email retention sequence</div>
+          <div class="action-desc">Only 1 of 20 customers purchased twice in 27 days. Your products have natural companions (doll + accessories, multiple dolls for siblings). An automated email series to previous buyers costs nothing and could generate R5K–10K/month with zero ad spend.</div>
+          <div class="action-impact badge-green">Zero cost, high compounding value</div>
+        </div>
+      </div>
+
+      <div class="action-card growth">
+        <div class="action-num green">9</div>
+        <div class="action-body">
+          <div class="action-title">⚡ Fix landing page speed (0.28% conversion rate)</div>
+          <div class="action-desc">63% of paid clicks never become landing page views. The store converts at 0.28% overall — every media efficiency gain hits this ceiling. Run Google PageSpeed on mobile. Target 3s load time on 4G. This is the #1 multiplier on all ad spend.</div>
+          <div class="action-impact badge-purple">Could double purchases without more spend</div>
+        </div>
+      </div>
+
+      <div class="action-card growth">
+        <div class="action-num green">10</div>
+        <div class="action-body">
+          <div class="action-title">👨‍👩‍👧 Test new audience: grandparents &amp; gift-buyers</div>
+          <div class="action-desc">100% of targeting is mothers of kids 3–8. But lifelike baby dolls are gift items — grandparents, aunts, and fathers are significant buyer segments. A new campaign targeting gift-buyers for ages 45–65 would reach a completely fresh, unexhausted audience.</div>
+          <div class="action-impact badge-purple">Fresh audience = lower CPMs immediately</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- HEALTH SCORECARD -->
+  <div class="section">
+    <div class="section-title">Account Health Scorecard</div>
+    <div class="health-grid">
+      <div class="health-item">
+        <div class="health-icon">✅</div>
+        <div>
+          <div class="health-label">Copy Ad Set ROAS</div>
+          <div class="health-val" style="color:var(--green)">4.00× (Healthy)</div>
+        </div>
+      </div>
+      <div class="health-item">
+        <div class="health-icon">🔴</div>
+        <div>
+          <div class="health-label">Week 4 ROAS</div>
+          <div class="health-val" style="color:var(--red)">0.73× (Crisis)</div>
+        </div>
+      </div>
+      <div class="health-item">
+        <div class="health-icon">🔴</div>
+        <div>
+          <div class="health-label">CPM Trajectory</div>
+          <div class="health-val" style="color:var(--red)">R55 → R94 (Saturation)</div>
+        </div>
+      </div>
+      <div class="health-item">
+        <div class="health-icon">⭐</div>
+        <div>
+          <div class="health-label">Best Creative (Oct English)</div>
+          <div class="health-val" style="color:var(--yellow)">14.44× ROAS (Underserved)</div>
+        </div>
+      </div>
+      <div class="health-item">
+        <div class="health-icon">🔴</div>
+        <div>
+          <div class="health-label">Experiment Ad Set</div>
+          <div class="health-val" style="color:var(--red)">0.85× ROAS (Burning)</div>
+        </div>
+      </div>
+      <div class="health-item">
+        <div class="health-icon">🟡</div>
+        <div>
+          <div class="health-label">Store Conversion Rate</div>
+          <div class="health-val" style="color:var(--yellow)">0.28% (Needs Work)</div>
+        </div>
+      </div>
+      <div class="health-item">
+        <div class="health-icon">🟡</div>
+        <div>
+          <div class="health-label">Unfulfilled Orders</div>
+          <div class="health-val" style="color:var(--yellow)">1 Pending (#1329)</div>
+        </div>
+      </div>
+      <div class="health-item">
+        <div class="health-icon">✅</div>
+        <div>
+          <div class="health-label">Attribution Gap (FB vs Shopify)</div>
+          <div class="health-val" style="color:var(--green)">+2 orders (Normal)</div>
+        </div>
+      </div>
+      <div class="health-item">
+        <div class="health-icon">✅</div>
+        <div>
+          <div class="health-label">Overall CTR</div>
+          <div class="health-val" style="color:var(--green)">6.10% (Excellent)</div>
+        </div>
+      </div>
+      <div class="health-item">
+        <div class="health-icon">🔴</div>
+        <div>
+          <div class="health-label">Repeat Purchase Rate</div>
+          <div class="health-val" style="color:var(--red)">5% (No loyalty loop)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center;color:var(--text3);font-size:11px;padding:20px 0;">
+    Data pulled live · Pipeboard Meta Ads MCP + Shopify Analytics · 24 May 2026 · MyForeverBaby
+  </div>
+
+</div>
+
+<script>
+const chartDefaults = {
+  plugins: {
+    legend: { labels: { color: '#8b92a9', font: { size: 12 } } },
+    tooltip: {
+      backgroundColor: '#1e2330',
+      titleColor: '#e8eaf0',
+      bodyColor: '#8b92a9',
+      borderColor: '#2a3045',
+      borderWidth: 1,
+      padding: 12,
+      cornerRadius: 8
+    }
+  },
+  scales: {
+    x: { ticks: { color: '#5a6178' }, grid: { color: '#1e2330', drawBorder: false } },
+    y: { ticks: { color: '#5a6178' }, grid: { color: '#1e2330', drawBorder: false } }
+  }
+};
+
+// ROAS by Week
+new Chart(document.getElementById('roasChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Week 1\nApr 28–May 4', 'Week 2\nMay 5–11', 'Week 3\nMay 12–18', 'Week 4\nMay 19–24'],
+    datasets: [{
+      label: 'ROAS',
+      data: [2.49, 4.64, 3.74, 0.73],
+      backgroundColor: ['rgba(247,201,106,0.7)', 'rgba(77,217,172,0.7)', 'rgba(124,106,247,0.7)', 'rgba(247,90,90,0.8)'],
+      borderColor: ['#f7c96a', '#4dd9ac', '#7c6af7', '#f75a5a'],
+      borderWidth: 2,
+      borderRadius: 8
+    }, {
+      label: 'Break-even (1×)',
+      data: [1, 1, 1, 1],
+      type: 'line',
+      borderColor: 'rgba(255,255,255,0.2)',
+      borderDash: [5, 5],
+      borderWidth: 1.5,
+      pointRadius: 0,
+      fill: false
+    }, {
+      label: 'Target (3×)',
+      data: [3, 3, 3, 3],
+      type: 'line',
+      borderColor: 'rgba(77,217,172,0.3)',
+      borderDash: [5, 5],
+      borderWidth: 1.5,
+      pointRadius: 0,
+      fill: false
+    }]
+  },
+  options: {
+    ...chartDefaults,
+    plugins: { ...chartDefaults.plugins },
+    scales: { ...chartDefaults.scales, y: { ...chartDefaults.scales.y, min: 0, max: 6 } }
+  }
+});
+
+// CPM Chart
+new Chart(document.getElementById('cpmChart'), {
+  type: 'line',
+  data: {
+    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+    datasets: [{
+      label: 'CPM (ZAR)',
+      data: [69.23, 55.18, 73.59, 94.12],
+      borderColor: '#f75a5a',
+      backgroundColor: 'rgba(247,90,90,0.1)',
+      fill: true,
+      tension: 0.4,
+      pointBackgroundColor: ['#f7c96a', '#4dd9ac', '#7c6af7', '#f75a5a'],
+      pointRadius: 6,
+      pointHoverRadius: 8,
+      borderWidth: 2.5
+    }]
+  },
+  options: {
+    ...chartDefaults,
+    plugins: { ...chartDefaults.plugins },
+    scales: { ...chartDefaults.scales, y: { ...chartDefaults.scales.y, min: 40, max: 110 } }
+  }
+});
+
+// Spend Distribution
+const adLabels = ['Reaction Video', 'Hypermotion Chloe', 'Unboxing Single', 'Oct English', 'Unboxing Tears', 'Oct Afr–Copy', 'Static Ads', 'Video J V1', 'Catalogue', 'Ashley', 'Hope'];
+const adSpend = [8005, 2403, 1485, 1218, 1028, 690, 582, 582, 475, 123, 55];
+const adRevenue = [26285, 2199, 5192, 17586, 2978, 0, 0, 0, 0, 0, 0];
+const colors = ['#7c6af7','#f75a5a','#4dd9ac','#f7c96a','#f7846a','#4a9ef7','#8b92a9','#5a6178','#3a4055','#a78bf5','#6de8c0'];
+
+new Chart(document.getElementById('spendChart'), {
+  type: 'doughnut',
+  data: {
+    labels: adLabels,
+    datasets: [{ data: adSpend, backgroundColor: colors, borderColor: '#161a23', borderWidth: 2, hoverOffset: 6 }]
+  },
+  options: {
+    ...chartDefaults,
+    plugins: {
+      ...chartDefaults.plugins,
+      legend: { position: 'right', labels: { color: '#8b92a9', font: { size: 10 }, boxWidth: 10, padding: 8 } }
+    },
+    cutout: '65%'
+  }
+});
+
+new Chart(document.getElementById('revenueChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Reaction Video\nR26,285', 'Oct English\nR17,586', 'Unboxing Single\nR5,192', 'Unboxing Tears\nR2,978', 'Hypermotion Chloe\nR2,199'],
+    datasets: [{
+      data: [26285, 17586, 5192, 2978, 2199],
+      backgroundColor: ['#7c6af7','#f7c96a','#4dd9ac','#f7846a','#f75a5a'],
+      borderColor: '#161a23',
+      borderWidth: 2,
+      hoverOffset: 6
+    }]
+  },
+  options: {
+    ...chartDefaults,
+    plugins: {
+      ...chartDefaults.plugins,
+      legend: { position: 'right', labels: { color: '#8b92a9', font: { size: 10 }, boxWidth: 10, padding: 8 } }
+    },
+    cutout: '65%'
+  }
+});
+</script>
+</body>
+</html>
