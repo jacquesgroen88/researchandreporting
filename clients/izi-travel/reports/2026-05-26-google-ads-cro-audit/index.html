@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Izi Travel — Google Ads CRO Audit | JCE Media</title>
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --card: #111827;
+    --border: #1e293b;
+    --text: #e2e8f0;
+    --text-muted: #94a3b8;
+    --accent: linear-gradient(135deg, #C9A84C, #8B6914);
+    --accent-color: #C9A84C;
+    --amber: #f59e0b;
+    --green: #10b981;
+    --red: #ef4444;
+    --blue: #4f6ef7;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+  }
+  .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+
+  /* Header */
+  .report-header {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 40px;
+    margin-bottom: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .report-header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: var(--accent);
+  }
+  .badge {
+    display: inline-block;
+    background: var(--amber);
+    color: #000;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 16px;
+  }
+  .report-header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .report-header .subtitle {
+    color: var(--text-muted);
+    font-size: 15px;
+    margin-bottom: 20px;
+  }
+  .meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 14px; }
+  .meta span { display: flex; align-items: center; gap: 6px; }
+
+  /* Section */
+  .section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    margin-bottom: 24px;
+  }
+  .section h2 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 20px 0 8px;
+    color: var(--accent-color);
+  }
+
+  /* Priority items */
+  .priority-item {
+    border-left: 3px solid var(--border);
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    background: rgba(255,255,255,0.02);
+    border-radius: 0 8px 8px 0;
+  }
+  .priority-item.p0 { border-left-color: var(--red); }
+  .priority-item.p1 { border-left-color: var(--amber); }
+  .priority-item.p2 { border-left-color: var(--green); }
+  .priority-item.p3 { border-left-color: var(--blue); }
+  .priority-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  .p0 .priority-label { color: var(--red); }
+  .p1 .priority-label { color: var(--amber); }
+  .priority-item h4 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+  .priority-item p { color: var(--text-muted); font-size: 14px; }
+  .fix { color: var(--green); font-size: 13px; margin-top: 6px; }
+
+  /* Table */
+  table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+  th, td { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--border); }
+  th { color: var(--text-muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+  td { font-size: 14px; }
+  .prio-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 8px; }
+  .dot-red { background: var(--red); }
+  .dot-amber { background: var(--amber); }
+  .dot-green { background: var(--green); }
+  .dot-blue { background: var(--blue); }
+
+  /* Score card */
+  .score-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 16px; }
+  .score-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+  }
+  .score-card .value { font-size: 32px; font-weight: 700; }
+  .score-card .label { color: var(--text-muted); font-size: 13px; margin-top: 4px; }
+
+  /* Checklist */
+  .checklist { list-style: none; margin-top: 12px; }
+  .checklist li {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .check { color: var(--green); font-weight: 700; }
+  .cross { color: var(--red); font-weight: 700; }
+
+  .footer {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 13px;
+    margin-top: 40px;
+    padding: 20px;
+    border-top: 1px solid var(--border);
+  }
+  .footer a { color: var(--accent-color); text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="report-header">
+    <div class="badge">Audit</div>
+    <h1>Izi Travel — Google Ads CRO Audit</h1>
+    <p class="subtext">10 conversion rate optimization recommendations for izitravel.co.za to improve Google Ads performance and reduce cost per lead.</p>
+    <div class="meta">
+      <span>📅 May 26, 2026</span>
+      <span>🏷️ CRO, Google Ads, Travel</span>
+      <span>🌐 izitravel.co.za</span>
+    </div>
+  </div>
+
+  <!-- Executive Summary -->
+  <div class="section">
+    <h2>📊 Executive Summary</h2>
+    <p style="color: var(--text-muted); margin-bottom: 20px;">The Izi Travel website has a solid foundation — clean design, clear pricing, and a well-structured enquiry form. However, there are critical gaps in conversion tracking and Google Ads infrastructure that mean advertising spend is currently unoptimised. Below are 10 prioritized recommendations.</p>
+    <div class="score-grid">
+      <div class="score-card">
+        <div class="value" style="color: var(--red);">0/3</div>
+        <div class="label">P0 Critical Fixes</div>
+      </div>
+      <div class="score-card">
+        <div class="value" style="color: var(--amber);">3/3</div>
+        <div class="label">P1 High Priority</div>
+      </div>
+      <div class="score-card">
+        <div class="value" style="color: var(--green);">3/3</div>
+        <div class="label">P2 Medium Priority</div>
+      </div>
+      <div class="score-card">
+        <div class="value" style="color: var(--blue);">1/1</div>
+        <div class="label">P3 Nice to Have</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- What's Working -->
+  <div class="section">
+    <h2>✅ What's Working Well</h2>
+    <ul class="checklist">
+      <li><span class="check">✓</span> Clear value proposition — "Plan Your Dream Island Holiday" with rotating subheadings</li>
+      <li><span class="check">✓</span> Quick Enquiry form is prominent and well-structured</li>
+      <li><span class="check">✓</span> Local trust signals — "Vanderbijlpark's #1 Travel Agent"</li>
+      <li><span class="check">✓</span> Featured packages with clear FROM pricing (R14,200–R32,000)</li>
+      <li><span class="check">✓</span> Phone number visible in header (082 967 2060)</li>
+      <li><span class="check">✓</span> No JavaScript errors — clean console</li>
+      <li><span class="check">✓</span> Fast load time — ~4.4s, 1.9KB transfer</li>
+    </ul>
+  </div>
+
+  <!-- Critical Issues -->
+  <div class="section">
+    <h2>🚨 Critical CRO Issues for Google Ads</h2>
+
+    <div class="priority-item p0">
+      <div class="priority-label">P0 — Critical</div>
+      <h4>No Google Ads Conversion Tracking</h4>
+      <p>No Google Ads tag, Google Tag Manager, or conversion pixel detected. You can't measure which ads drive enquiries — you're flying blind.</p>
+      <div class="fix">🔧 Fix: Install Google Tag Manager + Google Ads conversion tracking on form submissions</div>
+    </div>
+
+    <div class="priority-item p0">
+      <div class="priority-label">P0 — Critical</div>
+      <h4>No Thank You / Confirmation Page</h4>
+      <p>The "Request Pricing" button submits but there's no visible thank-you page. Google Ads needs a conversion event on a separate thank-you page URL.</p>
+      <div class="fix">🔧 Fix: Create a /thank-you page and fire the conversion tag there</div>
+    </div>
+
+    <div class="priority-item p0">
+      <div class="priority-label">P0 — Critical</div>
+      <h4>No Click-to-Call Tracking</h4>
+      <p>The phone number is a plain link with no call tracking. For a local travel agency, phone calls are likely the #1 converter.</p>
+      <div class="fix">🔧 Fix: Add Google Ads call tracking number or use CallRail to track which ads drive calls</div>
+    </div>
+
+    <div class="priority-item p1">
+      <div class="priority-label">P1 — High</div>
+      <h4>Form Has Too Many Required Fields</h4>
+      <p>8 required fields creates friction. Every extra field reduces conversion rate by ~5-10% for Google Ads traffic.</p>
+      <div class="fix">🔧 Fix: Make Month, Year, Budget, and Travellers optional. Only require: Name, WhatsApp/Email, Destination</div>
+    </div>
+
+    <div class="priority-item p1">
+      <div class="priority-label">P1 — High</div>
+      <h4>No WhatsApp Floating Button</h4>
+      <p>The form asks for WhatsApp but there's no direct WhatsApp chat button. South African users heavily prefer WhatsApp for business communication.</p>
+      <div class="fix">🔧 Fix: Add floating WhatsApp button → https://wa.me/27829672060</div>
+    </div>
+
+    <div class="priority-item p1">
+      <div class="priority-label">P1 — High</div>
+      <h4>No Customer Reviews / Testimonials</h4>
+      <p>Zero social proof beyond the "#1 Travel Agent" claim. Google Ads Quality Score improves with trust signals on the landing page.</p>
+      <div class="fix">🔧 Fix: Add Google Reviews widget, testimonials with photos, or TripAdvisor badges</div>
+    </div>
+
+    <div class="priority-item p2">
+      <div class="priority-label">P2 — Medium</div>
+      <h4>Rotating Headline Hurts Ad Relevance</h4>
+      <p>The hero heading rotates between "Island Holiday", "Wedding Getaway", "Birthday Escape", "Honeymoon". If someone clicks a "Thailand Holiday" ad but lands on "Honeymoon", that's a Quality Score mismatch.</p>
+      <div class="fix">🔧 Fix: Create dedicated landing pages for each ad group, or use a static broad headline</div>
+    </div>
+
+    <div class="priority-item p2">
+      <div class="priority-label">P2 — Medium</div>
+      <h4>No Urgency or Scarcity Elements</h4>
+      <p>No "Limited time offer", "Only X seats left", or booking deadlines. Travel purchases are emotional — urgency drives action.</p>
+      <div class="fix">🔧 Fix: Add seasonal urgency like "Book before [date] for free airport transfers"</div>
+    </div>
+
+    <div class="priority-item p2">
+      <div class="priority-label">P2 — Medium</div>
+      <h4>Missing Trust Badges</h4>
+      <p>No BBBEE, IATA, or ASATA membership badges visible. Travel is a high-consideration purchase — trust badges reduce anxiety.</p>
+      <div class="fix">🔧 Fix: Add industry accreditation badges near the CTA buttons</div>
+    </div>
+
+    <div class="priority-item p3">
+      <div class="priority-label">P3 — Nice to Have</div>
+      <h4>No Exit-Intent Popup</h4>
+      <p>No mechanism to capture leaving visitors who don't convert on the first visit.</p>
+      <div class="fix">🔧 Fix: Add exit popup offering a free travel guide or discount in exchange for email</div>
+    </div>
+  </div>
+
+  <!-- Priority Action Table -->
+  <div class="section">
+    <h2>📋 Priority Action List</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Priority</th>
+          <th>Action</th>
+          <th>Impact</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="prio-dot dot-red"></span>P0</td><td>Install Google Ads conversion tracking</td><td>Can't optimize what you can't measure</td></tr>
+        <tr><td><span class="prio-dot dot-red"></span>P0</td><td>Create thank-you page for form submissions</td><td>Required for conversion tracking</td></tr>
+        <tr><td><span class="prio-dot dot-red"></span>P0</td><td>Add click-to-call tracking</td><td>Track your most valuable leads</td></tr>
+        <tr><td><span class="prio-dot dot-amber"></span>P1</td><td>Reduce form fields to 3-4 required</td><td>Higher conversion rate</td></tr>
+        <tr><td><span class="prio-dot dot-amber"></span>P1</td><td>Add WhatsApp floating button</td><td>SA users prefer WhatsApp</td></tr>
+        <tr><td><span class="prio-dot dot-amber"></span>P1</td><td>Add testimonials/reviews</td><td>Trust = more bookings</td></tr>
+        <tr><td><span class="prio-dot dot-green"></span>P2</td><td>Create ad-specific landing pages</td><td>Better Quality Score, lower CPC</td></tr>
+        <tr><td><span class="prio-dot dot-green"></span>P2</td><td>Add urgency/scarcity elements</td><td>Faster decision-making</td></tr>
+        <tr><td><span class="prio-dot dot-green"></span>P2</td><td>Add trust badges (IATA/ASATA)</td><td>Reduce purchase anxiety</td></tr>
+        <tr><td><span class="prio-dot dot-blue"></span>P3</td><td>Exit-intent popup</td><td>Capture abandoning visitors</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Bottom Line -->
+  <div class="section">
+    <h2>💡 The Bottom Line</h2>
+    <p style="color: var(--text-muted);">The biggest bang for your buck: <strong style="color: var(--text);">set up conversion tracking first</strong> (all 3 P0 items). Right now you're spending on Google Ads with no idea which clicks turn into customers. Once tracking is in place, the form optimization and landing page tweaks will significantly lower your cost per lead and improve your Google Ads Quality Score.</p>
+  </div>
+
+  <div class="footer">
+    <p>Published by <a href="https://jcereports.netlify.app">JCE Media Research & Reporting</a> — jacques@jcemedia.com</p>
+  </div>
+
+</div>
+</body>
+</html>
