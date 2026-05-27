@@ -1,0 +1,1567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Studio Collaboration Agreement · JCE Media</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:   #0D1F35;
+    --navy2:  #152A47;
+    --blue:   #1A5FA8;
+    --blue2:  #2878CC;
+    --gold:   #C9A84C;
+    --gold2:  #E2C06A;
+    --cream:  #F7F3EC;
+    --smoke:  #EEE9E0;
+    --green:  #1A6B3C;
+    --green2: #236E43;
+    --lgreen: #EAF5EE;
+    --text:   #1A1A2E;
+    --muted:  #6B7080;
+    --border: rgba(255,255,255,0.08);
+    --page-bg:#0A1628;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--page-bg);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--cream);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── BACKGROUND TEXTURE ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 10% 0%, rgba(26,95,168,0.18) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 80% at 90% 100%, rgba(201,168,76,0.10) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 40% at 50% 50%, rgba(26,107,60,0.06) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap {
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 24px 120px;
+  }
+
+  /* ── COVER ── */
+  .cover {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px 0 60px;
+    position: relative;
+  }
+
+  .cover-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+
+  .cover-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(42px, 7vw, 76px);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--cream);
+    margin-bottom: 12px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.35s forwards;
+  }
+
+  .cover-title em {
+    font-style: italic;
+    color: var(--gold2);
+  }
+
+  .cover-sub {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 18px;
+    font-weight: 300;
+    color: rgba(247,243,236,0.55);
+    margin-bottom: 64px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.5s forwards;
+  }
+
+  .cover-rule {
+    height: 1px;
+    background: linear-gradient(90deg, var(--gold), rgba(201,168,76,0.1) 60%, transparent);
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.6s forwards;
+  }
+
+  .cover-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 2px;
+    overflow: hidden;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.75s forwards;
+  }
+
+  .cover-meta-item {
+    padding: 18px 24px;
+    border-bottom: 1px solid rgba(201,168,76,0.1);
+    border-right: 1px solid rgba(201,168,76,0.1);
+  }
+
+  .cover-meta-item:nth-child(even) { border-right: none; }
+  .cover-meta-item:nth-last-child(-n+2) { border-bottom: none; }
+
+  .meta-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+
+  .meta-value {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--cream);
+    line-height: 1.4;
+  }
+
+  .scroll-hint {
+    margin-top: 60px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: rgba(247,243,236,0.3);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0;
+    animation: fadeUp 0.8s 1.1s forwards;
+  }
+
+  .scroll-arrow {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    animation: pulse 2s 1.5s infinite;
+  }
+
+  /* ── NAV DOT ── */
+  .nav-dots {
+    position: fixed;
+    right: 32px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 100;
+  }
+
+  .nav-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(201,168,76,0.25);
+    cursor: pointer;
+    transition: all 0.3s;
+    border: none;
+    padding: 0;
+  }
+
+  .nav-dot.active, .nav-dot:hover {
+    background: var(--gold);
+    transform: scale(1.4);
+  }
+
+  /* ── SECTIONS ── */
+  .section {
+    margin-top: 80px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s, transform 0.7s;
+  }
+
+  .section.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── SECTION BADGE ── */
+  .section-badge {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 36px;
+  }
+
+  .badge-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 48px;
+    font-weight: 700;
+    color: rgba(201,168,76,0.15);
+    line-height: 1;
+    min-width: 56px;
+    letter-spacing: -0.03em;
+  }
+
+  .badge-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--cream);
+    line-height: 1.2;
+    border-bottom: 1px solid rgba(201,168,76,0.3);
+    padding-bottom: 14px;
+    flex: 1;
+  }
+
+  /* ── SUBSECTION ── */
+  .subsection {
+    margin: 28px 0 16px;
+  }
+
+  .subsection-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .subsection-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(201,168,76,0.15);
+  }
+
+  /* ── BODY TEXT ── */
+  p.body-text {
+    font-size: 15px;
+    line-height: 1.75;
+    color: rgba(247,243,236,0.75);
+    margin-bottom: 14px;
+    font-weight: 300;
+  }
+
+  p.note-text {
+    font-size: 13px;
+    line-height: 1.65;
+    color: var(--muted);
+    font-style: italic;
+    margin-top: 10px;
+    padding-left: 16px;
+    border-left: 2px solid rgba(201,168,76,0.2);
+  }
+
+  /* ── BULLETS ── */
+  ul.styled {
+    list-style: none;
+    margin: 10px 0 10px 4px;
+  }
+
+  ul.styled li {
+    font-size: 14.5px;
+    line-height: 1.65;
+    color: rgba(247,243,236,0.72);
+    padding: 5px 0 5px 22px;
+    position: relative;
+    font-weight: 300;
+  }
+
+  ul.styled li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--gold);
+    font-weight: 400;
+  }
+
+  /* ── INFO GRID ── */
+  .info-grid {
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 16px 0;
+  }
+
+  .info-row {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .info-row:last-child { border-bottom: none; }
+
+  .info-label {
+    background: rgba(26,95,168,0.12);
+    padding: 14px 18px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    border-right: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .info-value {
+    padding: 14px 18px;
+    font-size: 13.5px;
+    color: rgba(247,243,236,0.8);
+    line-height: 1.5;
+    display: flex;
+    align-items: center;
+    font-weight: 400;
+  }
+
+  /* ── TABLES ── */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 13px;
+  }
+
+  .data-table thead tr {
+    background: var(--navy2);
+  }
+
+  .data-table thead th {
+    padding: 12px 14px;
+    text-align: left;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border-bottom: 1px solid rgba(201,168,76,0.3);
+    font-weight: 500;
+  }
+
+  .data-table tbody tr {
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    transition: background 0.2s;
+  }
+
+  .data-table tbody tr:hover { background: rgba(26,95,168,0.08); }
+
+  .data-table tbody tr:nth-child(odd) { background: rgba(255,255,255,0.02); }
+
+  .data-table tbody td {
+    padding: 12px 14px;
+    color: rgba(247,243,236,0.75);
+    line-height: 1.45;
+    vertical-align: top;
+  }
+
+  /* Revenue tables — green theme */
+  .revenue-table thead tr { background: rgba(26,107,60,0.5); }
+  .revenue-table thead th { color: #7DDBAA; border-bottom-color: rgba(125,219,170,0.3); }
+  .revenue-table tbody tr:nth-child(odd) { background: rgba(26,107,60,0.06); }
+
+  .revenue-table tbody tr:last-child td {
+    font-weight: 600;
+    color: #7DDBAA;
+    background: rgba(26,107,60,0.15);
+  }
+
+  /* ── PHASE CARDS ── */
+  .phase-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 20px 0;
+  }
+
+  .phase-card {
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 4px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .phase-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+
+  .phase-card.phase1::before { background: linear-gradient(90deg, var(--blue), var(--blue2)); }
+  .phase-card.phase2::before { background: linear-gradient(90deg, var(--gold), var(--gold2)); }
+
+  .phase-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+
+  .phase-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--cream);
+    margin-bottom: 16px;
+  }
+
+  /* ── REVENUE SCENARIOS ── */
+  .scenario-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin: 20px 0;
+  }
+
+  .scenario-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 4px;
+    padding: 18px 16px;
+    text-align: center;
+    transition: all 0.3s;
+  }
+
+  .scenario-card:hover {
+    background: rgba(26,95,168,0.1);
+    border-color: rgba(26,95,168,0.3);
+    transform: translateY(-2px);
+  }
+
+  .scenario-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  .scenario-rev {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--cream);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .scenario-each {
+    font-size: 11px;
+    color: #7DDBAA;
+    font-weight: 500;
+  }
+
+  .scenario-clients {
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+
+  /* ── EQUITY SPLIT VISUAL ── */
+  .equity-visual {
+    margin: 24px 0;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 4px;
+    padding: 28px;
+  }
+
+  .equity-bar {
+    height: 10px;
+    border-radius: 5px;
+    overflow: hidden;
+    display: flex;
+    margin: 20px 0 24px;
+  }
+
+  .equity-seg {
+    height: 100%;
+    transition: flex 0.5s;
+  }
+
+  .equity-seg.jacques { background: linear-gradient(90deg, var(--blue), var(--blue2)); flex: 60; }
+  .equity-seg.sam     { background: linear-gradient(90deg, var(--gold), var(--gold2)); flex: 20; }
+  .equity-seg.giorgio { background: linear-gradient(90deg, #6A5ACD, #8B78E3); flex: 20; }
+
+  .equity-legend {
+    display: flex;
+    gap: 28px;
+    flex-wrap: wrap;
+  }
+
+  .equity-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .legend-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .legend-dot.jacques { background: var(--blue2); }
+  .legend-dot.sam     { background: var(--gold); }
+  .legend-dot.giorgio { background: #8B78E3; }
+
+  .legend-name {
+    font-size: 13px;
+    color: rgba(247,243,236,0.7);
+    font-weight: 400;
+  }
+
+  .legend-pct {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--cream);
+  }
+
+  /* ── PROJECT CARDS ── */
+  .project-card {
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 20px 0;
+  }
+
+  .project-header {
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+
+  .project-header.p1 { background: rgba(26,95,168,0.15); }
+  .project-header.p2 { background: rgba(26,107,60,0.15); }
+  .project-header.p3 { background: rgba(201,168,76,0.12); }
+
+  .project-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1;
+    opacity: 0.3;
+    color: var(--cream);
+  }
+
+  .project-meta { flex: 1; }
+
+  .project-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
+
+  .project-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--cream);
+  }
+
+  .project-body { padding: 24px; }
+
+  /* ── BONUS CHIPS ── */
+  .bonus-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 16px 0;
+  }
+
+  .bonus-chip {
+    background: rgba(201,168,76,0.08);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-size: 12px;
+    color: var(--gold2);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .bonus-chip span { color: rgba(247,243,236,0.6); }
+
+  /* ── SIGNATURES ── */
+  .sig-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin: 28px 0;
+  }
+
+  .sig-block {
+    padding: 24px;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 4px;
+    background: rgba(255,255,255,0.02);
+  }
+
+  .sig-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--cream);
+    margin-bottom: 4px;
+  }
+
+  .sig-role {
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 24px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.05em;
+  }
+
+  .sig-line {
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+    margin-bottom: 8px;
+    height: 36px;
+  }
+
+  .sig-caption {
+    font-size: 10px;
+    color: rgba(255,255,255,0.2);
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* ── COMBINED EARNINGS HIGHLIGHT ── */
+  .earnings-highlight {
+    background: linear-gradient(135deg, rgba(26,107,60,0.15), rgba(26,95,168,0.1));
+    border: 1px solid rgba(125,219,170,0.15);
+    border-radius: 4px;
+    padding: 28px;
+    margin: 24px 0;
+    text-align: center;
+  }
+
+  .earnings-headline {
+    font-family: 'Playfair Display', serif;
+    font-size: 48px;
+    font-weight: 700;
+    color: #7DDBAA;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .earnings-sub {
+    font-size: 13px;
+    color: rgba(247,243,236,0.5);
+    margin-bottom: 20px;
+  }
+
+  .earnings-trigger {
+    display: inline-block;
+    background: rgba(26,107,60,0.2);
+    border: 1px solid rgba(125,219,170,0.2);
+    border-radius: 2px;
+    padding: 8px 18px;
+    font-size: 12px;
+    color: #7DDBAA;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.08em;
+  }
+
+  /* ── PRINT BUTTON ── */
+  .print-btn {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    background: var(--gold);
+    color: var(--navy);
+    border: none;
+    padding: 12px 24px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 2px;
+    font-weight: 600;
+    transition: all 0.2s;
+    z-index: 200;
+  }
+
+  .print-btn:hover {
+    background: var(--gold2);
+    transform: translateY(-1px);
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.3; }
+    50%       { opacity: 1; }
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(201,168,76,0.2), transparent);
+    margin: 60px 0;
+  }
+
+  /* ── SCHEDULE TAG ── */
+  .schedule-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 0;
+    border-top: 1px solid rgba(201,168,76,0.2);
+    border-bottom: 1px solid rgba(201,168,76,0.2);
+    margin-bottom: 32px;
+  }
+
+  .schedule-tag {
+    background: rgba(201,168,76,0.1);
+    border: 1px solid rgba(201,168,76,0.25);
+    padding: 4px 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border-radius: 2px;
+  }
+
+  .schedule-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--cream);
+  }
+
+  @media print {
+    body { background: white; color: #111; }
+    body::before { display: none; }
+    .nav-dots, .print-btn, .scroll-hint { display: none; }
+    .section { opacity: 1; transform: none; }
+    .cover { min-height: auto; }
+  }
+
+  @media (max-width: 700px) {
+    .phase-grid { grid-template-columns: 1fr; }
+    .scenario-strip { grid-template-columns: 1fr 1fr; }
+    .sig-grid { grid-template-columns: 1fr; }
+    .cover-meta { grid-template-columns: 1fr; }
+    .info-row { grid-template-columns: 1fr; }
+    .nav-dots { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV DOTS -->
+<nav class="nav-dots" id="navDots"></nav>
+
+<!-- PRINT BUTTON -->
+<button class="print-btn" onclick="window.print()">⌘ Print / PDF</button>
+
+<div class="wrap">
+
+  <!-- ══ COVER ══ -->
+  <div class="cover" data-section="Cover">
+    <p class="cover-eyebrow">JCE Media Product Studio · Confidential</p>
+    <h1 class="cover-title">Studio<br><em>Collaboration</em><br>Agreement</h1>
+    <p class="cover-sub">Partner Framework · May 2026</p>
+    <div class="cover-rule"></div>
+    <div class="cover-meta">
+      <div class="cover-meta-item">
+        <div class="meta-label">Lead Partner</div>
+        <div class="meta-value">Jacques Groenewald<br>JCE Media / ReviewTap</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="meta-label">Technical Partners</div>
+        <div class="meta-value">Samuel Rencken<br>Giorgio van Rooyen</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="meta-label">Revenue Share</div>
+        <div class="meta-value">60% JCE Media · 40% TP Pool (contribution-weighted)</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="meta-label">Phase 2 Equity Trigger</div>
+        <div class="meta-value">R90,000 net / month × 3 consecutive months</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="meta-label">Effective Date</div>
+        <div class="meta-value">[Date to be completed]</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="meta-label">Governing Law</div>
+        <div class="meta-value">Republic of South Africa</div>
+      </div>
+    </div>
+    <div class="scroll-hint">
+      <div class="scroll-arrow"></div>
+      <span>Scroll to review</span>
+    </div>
+  </div>
+
+  <!-- ══ 1. PARTIES ══ -->
+  <section class="section" data-section="Parties">
+    <div class="section-badge">
+      <div class="badge-number">01</div>
+      <h2 class="badge-title">Parties to This Agreement</h2>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Lead Partner</div>
+      <p class="body-text">Jacques Groenewald, trading as JCE Media ("the Lead Partner"), brings existing client relationships, the ReviewTap device and service infrastructure, an active and funded sales pipeline, brand, and strategic direction to this collaboration. ReviewTap's existing subscriber base is the primary lead source for studio upsell opportunities — these are warm, qualified relationships built and maintained at the Lead Partner's cost before this agreement began. Ongoing operational spend through JCE Media and ReviewTap (tooling, infrastructure, client management) constitutes a recognised capital contribution by the Lead Partner to this studio from inception. Technical Partners benefit materially from this pre-existing foundation.</p>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Technical Partners</div>
+      <p class="body-text">Samuel Rencken and Giorgio van Rooyen ("the Technical Partners") bring digital product development skills including web application development, SaaS tooling, AI-powered builds, content creation, and sales support.</p>
+    </div>
+
+    <p class="note-text">Each party enters this agreement as an independent contractor. Nothing herein creates an employment, agency, or joint-venture relationship unless explicitly upgraded by a separate Shareholders Agreement signed by all parties.</p>
+  </section>
+
+  <!-- ══ 2. PURPOSE ══ -->
+  <section class="section" data-section="Purpose">
+    <div class="section-badge">
+      <div class="badge-number">02</div>
+      <h2 class="badge-title">Purpose of the Collaboration</h2>
+    </div>
+
+    <p class="body-text">The parties agree to collaborate on three complementary revenue streams, all anchored to the existing ReviewTap client base:</p>
+
+    <p class="body-text">Every system, tool, and automation the studio builds is first deployed and proven inside the Lead Partner's own businesses — JCE Media and ReviewTap — before being packaged and sold to clients. This internal-first model means every studio product has been validated in a live commercial environment. Once proven, these systems become resellable, scalable assets that can be offered across the full ReviewTap client base and beyond.</p>
+
+    <div class="project-card">
+      <div class="project-header p1">
+        <div class="project-num">01</div>
+        <div class="project-meta">
+          <div class="project-tag">Primary Revenue Stream</div>
+          <div class="project-name">Growth System Builds</div>
+        </div>
+      </div>
+      <div class="project-body">
+        <p class="body-text">Website refreshes, automation, review systems, and full lead generation funnels for ReviewTap upsell clients — built to the Foundation / Growth / Scale package model.</p>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-header p2">
+        <div class="project-num">02</div>
+        <div class="project-meta">
+          <div class="project-tag">Subscription Community</div>
+          <div class="project-name">AI Community for Small Businesses</div>
+        </div>
+      </div>
+      <div class="project-body">
+        <p class="body-text">A R299/month training community teaching South African small business owners how to apply AI in their operations — content-driven, low marginal cost, high compound value.</p>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-header p3">
+        <div class="project-num">03</div>
+        <div class="project-meta">
+          <div class="project-tag">Active Participation Required</div>
+          <div class="project-name">Sales Process Involvement</div>
+        </div>
+      </div>
+      <div class="project-body">
+        <p class="body-text">Pre-sales demo builds, lead outreach, and call booking — Technical Partners are active contributors to the sales cycle, not just execution.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 3. STRUCTURE ══ -->
+  <section class="section" data-section="Structure">
+    <div class="section-badge">
+      <div class="badge-number">03</div>
+      <h2 class="badge-title">Two-Phase Structure</h2>
+    </div>
+
+    <div class="phase-grid">
+      <div class="phase-card phase1">
+        <div class="phase-label">Phase 1 · Months 1–12</div>
+        <div class="phase-title">Build Phase</div>
+        <ul class="styled">
+          <li>Execute agreed projects under Lead Partner's direction</li>
+          <li>All IP created belongs to the studio entity</li>
+          <li>Earn revenue share — no equity at this stage</li>
+          <li>Lead Partner covers operational costs and tooling</li>
+          <li>Exit on 30 days written notice</li>
+        </ul>
+      </div>
+      <div class="phase-card phase2">
+        <div class="phase-label">Phase 2 · Post-Milestone</div>
+        <div class="phase-title">Equity Phase</div>
+        <ul class="styled">
+          <li>Triggered when Revenue Threshold is reached</li>
+          <li>Shareholders Agreement executed within 60 days</li>
+          <li>Equity crystallises on actual contribution inputs</li>
+          <li>Technical Partners vest over 24 months</li>
+          <li>Lead Partner retains casting vote throughout</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 4. REVENUE SHARE ══ -->
+  <section class="section" data-section="Revenue Share">
+    <div class="section-badge">
+      <div class="badge-number">04</div>
+      <h2 class="badge-title">Phase 1 Revenue Share</h2>
+    </div>
+
+    <p class="body-text">Technical Partners are compensated via revenue share on net revenue (after direct costs and platform fees) generated from studio projects they contribute to.</p>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Revenue Stream</th>
+          <th>Total TP Share</th>
+          <th>Samuel Rencken</th>
+          <th>Giorgio van Rooyen</th>
+          <th>Lead Partner</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Growth builds (both contributing)</td>
+          <td>40%</td><td>20%</td><td>20%</td><td>60%</td>
+        </tr>
+        <tr>
+          <td>Growth builds (one TP contributing)</td>
+          <td>30% to that partner</td><td>30% or 0%</td><td>0% or 30%</td><td>70%</td>
+        </tr>
+        <tr>
+          <td>AI Community (both contributing)</td>
+          <td>40%</td><td>20%</td><td>20%</td><td>60%</td>
+        </tr>
+        <tr>
+          <td>Lead Partner-only sales</td>
+          <td>0%</td><td>0%</td><td>0%</td><td>100%</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="subsection-title" style="margin-top:24px">Sales Bonuses — Results Only</div>
+    <div class="bonus-row">
+      <div class="bonus-chip">7.5% <span>of month 1 net revenue for deals sourced or closed</span></div>
+    </div>
+
+    <p class="note-text">Technical Partners are compensated on closed results, not sales activity. No flat call-booking fee applies. The 7.5% bonus is paid on the first month's net revenue for any client the Technical Partner sourced, nurtured, or directly contributed to closing — as attributed in ReviewTap CRM at the time of close.</p>
+
+    <p class="note-text">Revenue share calculated monthly and paid within 15 days of month end against a valid invoice from each Technical Partner. Lead Partner maintains books and provides a monthly earnings statement by the 1st business day of each month.</p>
+  </section>
+
+  <!-- ══ 5. PROJECT RESPONSIBILITIES ══ -->
+  <section class="section" data-section="Responsibilities">
+    <div class="section-badge">
+      <div class="badge-number">05</div>
+      <h2 class="badge-title">Project Responsibilities</h2>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Minimum Time Commitment</div>
+      <p class="body-text">Each Technical Partner commits a minimum of <strong style="color:var(--cream)">15 hours per week</strong> to studio work, with a target of <strong style="color:var(--cream)">25 hours per week</strong> during active project delivery periods. This time must be logged weekly in the agreed time-tracking tool. Consistent failure to meet the 15-hour minimum over any 4-week rolling period constitutes a material breach of this agreement and may trigger review or termination under Section 13.</p>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Project 1 — Growth System Builds</div>
+      <p class="body-text">When the Lead Partner closes a client on a Foundation (R1,999/mo), Growth (R4,299/mo), or Scale (R6,500/mo) package, Technical Partners own the execution:</p>
+      <ul class="styled">
+        <li>Website refreshes, homepage redesigns, mobile-responsive builds</li>
+        <li>ReviewTap widget integration and live review feed setup</li>
+        <li>GA4, Facebook Pixel, and conversion tracking installation</li>
+        <li>WhatsApp form triggers and automation sequences</li>
+        <li>Blog CTA updates, SEO article publishing workflows</li>
+        <li>Facebook Lead Ad creative and WhatsApp drip sequence builds</li>
+        <li>Pre-sales demo sites built before proposal meetings (see Project 3)</li>
+      </ul>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Project 2 — AI Community</div>
+      <p class="body-text">Monthly subscription training community. Samuel and Giorgio co-own content execution alongside the Lead Partner.</p>
+      <ul class="styled">
+        <li>Minimum 3 tutorial video contributions per TP per month (screen recordings, walkthroughs, tool demos)</li>
+        <li>Minimum 3 YouTube/TikTok videos per TP per month — short-form content promoting the community and building audience</li>
+        <li>Community moderation — respond to member questions within 48 hours</li>
+        <li>Build and maintain the community on the ReviewTap platform</li>
+        <li>Each TP responsible for recruiting minimum 5 new paying members per month</li>
+        <li>Host weekly Q&amp;A calls on a rotating basis — Samuel hosts odd-numbered weeks, Giorgio hosts even-numbered weeks (starting Week 1: Samuel)</li>
+        <li>Maintain a shared content calendar planned 30 days ahead</li>
+      </ul>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Project 3 — Sales Process</div>
+      <p class="body-text">Technical Partners are active in the sales cycle — not just delivery. Specific responsibilities:</p>
+      <ul class="styled">
+        <li><strong style="color:var(--cream)">Pre-sales demo builds</strong> — working prototype of the client's site built before every proposal meeting</li>
+        <li><strong style="color:var(--cream)">Lead identification</strong> — 10 qualified ReviewTap upsell leads flagged per month between them</li>
+        <li><strong style="color:var(--cream)">Outreach support</strong> — 20 personalised touchpoints per week combined (LinkedIn, email, WhatsApp)</li>
+        <li><strong style="color:var(--cream)">Call booking</strong> — follow up on warm leads and book discovery calls into the Lead Partner's calendar</li>
+        <li><strong style="color:var(--cream)">Demo calls</strong> — attend minimum 2 client calls per month to present builds live</li>
+        <li><strong style="color:var(--cream)">CRM discipline</strong> — all leads logged in ReviewTap CRM weekly, no off-platform deals</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ══ 6. REVENUE PROJECTIONS ══ -->
+  <section class="section" data-section="Projections">
+    <div class="section-badge">
+      <div class="badge-number">06</div>
+      <h2 class="badge-title">Revenue Projections &amp; Partner Earnings</h2>
+    </div>
+
+    <p class="body-text">Projections across three growth scenarios. Not guaranteed — illustrative of the realistic upside when all three streams are running.</p>
+
+    <div class="subsection">
+      <div class="subsection-title">Project 1 — Growth System Builds</div>
+      <p class="body-text" style="font-size:13px;margin-bottom:12px">Package pricing: Foundation R1,999/mo · Growth R4,299/mo · Scale R6,500/mo + once-off setup fees (R1,750–R3,500)</p>
+
+      <div class="scenario-strip">
+        <div class="scenario-card">
+          <div class="scenario-label">Early</div>
+          <div class="scenario-rev">R12,500</div>
+          <div class="scenario-each">R2,500 each / mo</div>
+          <div class="scenario-clients">5 clients · R2,500 avg</div>
+        </div>
+        <div class="scenario-card">
+          <div class="scenario-label">Growing</div>
+          <div class="scenario-rev">R35,000</div>
+          <div class="scenario-each">R7,000 each / mo</div>
+          <div class="scenario-clients">10 clients · R3,500 avg</div>
+        </div>
+        <div class="scenario-card">
+          <div class="scenario-label">Scaling</div>
+          <div class="scenario-rev">R80,000</div>
+          <div class="scenario-each">R16,000 each / mo</div>
+          <div class="scenario-clients">20 clients · R4,000 avg</div>
+        </div>
+        <div class="scenario-card">
+          <div class="scenario-label">Target</div>
+          <div class="scenario-rev">R135,000</div>
+          <div class="scenario-each">R27,000 each / mo</div>
+          <div class="scenario-clients">30 clients · R4,500 avg</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Project 2 — AI Community</div>
+      <table class="data-table revenue-table">
+        <thead>
+          <tr>
+            <th>Members</th>
+            <th>Monthly Revenue</th>
+            <th>Annual Revenue</th>
+            <th>TP Share (40%)</th>
+            <th>Each TP (20%)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>20 members</td><td>R5,980</td><td>R71,760</td><td>R2,392/mo</td><td>R1,196/mo</td></tr>
+          <tr><td>50 members</td><td>R14,950</td><td>R179,400</td><td>R5,980/mo</td><td>R2,990/mo</td></tr>
+          <tr><td>100 members</td><td>R29,900</td><td>R358,800</td><td>R11,960/mo</td><td>R5,980/mo</td></tr>
+          <tr><td>200 members</td><td>R59,800</td><td>R717,600</td><td>R23,920/mo</td><td>R11,960/mo</td></tr>
+          <tr><td>500 members</td><td>R149,500</td><td>R1,794,000</td><td>R59,800/mo</td><td>R29,900/mo</td></tr>
+        </tbody>
+      </table>
+      <p class="note-text">Phase 2 trigger (R90k net/month) is achievable from the community alone at ~350 members — a realistic 18-month target with consistent growth from all parties.</p>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Combined Earnings Scenario</div>
+      <table class="data-table revenue-table">
+        <thead>
+          <tr><th>Stream</th><th>Monthly Revenue</th><th>TP Total (40%)</th><th>Each TP (20%)</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Growth System (15 clients @ R3,800 avg)</td>
+            <td>R57,000</td><td>R22,800</td><td>R11,400</td>
+          </tr>
+          <tr>
+            <td>AI Community (150 members)</td>
+            <td>R44,850</td><td>R17,940</td><td>R8,970</td>
+          </tr>
+          <tr>
+            <td>Sales Bonuses (est. 5 deals + calls)</td>
+            <td>R8,000</td><td>R8,000</td><td>R4,000 each</td>
+          </tr>
+          <tr>
+            <td><strong>TOTAL</strong></td>
+            <td><strong>R109,850</strong></td><td><strong>R48,740</strong></td><td><strong>R24,370 each</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="earnings-highlight">
+      <div class="earnings-headline">R24,370</div>
+      <div class="earnings-sub">per Technical Partner per month at combined scale</div>
+      <div class="earnings-trigger">⚡ Phase 2 equity trigger met at this level</div>
+    </div>
+  </section>
+
+  <!-- ══ 7. EQUITY ══ -->
+  <section class="section" data-section="Equity">
+    <div class="section-badge">
+      <div class="badge-number">07</div>
+      <h2 class="badge-title">Equity Pathway — Phase 2</h2>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Crystallisation Trigger</div>
+      <p class="body-text">Phase 2 is triggered when the studio achieves combined net revenue of <strong style="color:var(--gold)">R90,000 or more per month for three consecutive months</strong>. Once triggered, a Shareholders Agreement must be executed within 60 days.</p>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">How the TP Equity Pool is Divided</div>
+      <p class="body-text">The combined Technical Partner equity pool is fixed at <strong style="color:var(--gold)">40%</strong> of the studio. JCE Media (Jacques Groenewald) holds the remaining <strong style="color:var(--gold)">60%</strong> permanently and unconditionally. Within the 40% pool, Samuel's and Giorgio's individual equity percentages are not split equally by default — they are determined by their <em>relative</em> contribution scores calculated at the Phase 2 crystallisation date.</p>
+      <p class="body-text"><strong style="color:var(--cream)">Formula: Partner Equity % = (Partner's Contribution Score ÷ Combined TP Contribution Score) × 40%</strong></p>
+      <p class="note-text">Example: If Samuel's contribution score is 700 and Giorgio's is 300 at crystallisation, Samuel receives 28% and Giorgio receives 12% — still totalling 40% between them. The Lead Partner's 60% is unaffected regardless of how the pool divides. Contribution scores are calculated and locked at the Phase 2 trigger date.</p>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Illustrative Equity Split (Equal Contribution Scenario)</div>
+      <div class="equity-visual">
+        <div class="equity-bar">
+          <div class="equity-seg jacques"></div>
+          <div class="equity-seg sam"></div>
+          <div class="equity-seg giorgio"></div>
+        </div>
+        <div class="equity-legend">
+          <div class="equity-legend-item">
+            <div class="legend-dot jacques"></div>
+            <div>
+              <div class="legend-name">Jacques Groenewald</div>
+              <div class="legend-pct">60%</div>
+            </div>
+          </div>
+          <div class="equity-legend-item">
+            <div class="legend-dot sam"></div>
+            <div>
+              <div class="legend-name">Samuel Rencken</div>
+              <div class="legend-pct">20%</div>
+            </div>
+          </div>
+          <div class="equity-legend-item">
+            <div class="legend-dot giorgio"></div>
+            <div>
+              <div class="legend-name">Giorgio van Rooyen</div>
+              <div class="legend-pct">20%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Three Equity Input Types</div>
+      <table class="data-table">
+        <thead>
+          <tr><th>Input Type</th><th>How It Is Calculated</th><th>Tracked Via</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Time &amp; Responsibility</td>
+            <td>Hours logged at R1,000/hr symbolic rate. 1,000 hours = 10% equity.</td>
+            <td>Shared time log</td>
+          </tr>
+          <tr>
+            <td>IP &amp; Products Built</td>
+            <td>30% of gross profit attributable to tools, apps, or systems built by the partner.</td>
+            <td>Revenue attribution in CRM</td>
+          </tr>
+          <tr>
+            <td>Revenue Brought In</td>
+            <td>30% of gross profit on revenue from clients the partner sourced or closed.</td>
+            <td>CRM deal attribution</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Vesting Schedule</div>
+      <ul class="styled">
+        <li>No equity vests if a Technical Partner exits before Month 12</li>
+        <li>From Month 12: equity vests linearly over 24 months from Phase 2 commencement</li>
+        <li>Full vesting requires 3 years of continuous involvement from effective date</li>
+        <li>Unvested equity is forfeited on exit or termination for cause</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ══ 8. IP ══ -->
+  <section class="section" data-section="IP">
+    <div class="section-badge">
+      <div class="badge-number">08</div>
+      <h2 class="badge-title">Intellectual Property</h2>
+    </div>
+    <p class="body-text">All intellectual property created specifically for the studio — including code, designs, systems, automations, AI prompts, demo sites, video content, and documentation — is owned by the Lead Partner or the designated studio entity from the date of creation.</p>
+    <p class="body-text">Technical Partners retain ownership of any pre-existing tools, frameworks, or libraries they bring in, but grant the studio a perpetual, royalty-free licence to use such assets in studio products. All pre-existing IP must be declared in writing within 14 days of this agreement's effective date.</p>
+  </section>
+
+  <!-- ══ 9. DECISION-MAKING ══ -->
+  <section class="section" data-section="Governance">
+    <div class="section-badge">
+      <div class="badge-number">09</div>
+      <h2 class="badge-title">Decision-Making</h2>
+    </div>
+    <p class="body-text">The Lead Partner holds final decision-making authority on all commercial matters including pricing, client acceptance, package structure, product direction, hiring, and cost commitments. Technical Partners are actively consulted on product and technical decisions — their input is valued, but the Lead Partner's decision is final.</p>
+    <p class="body-text">Once a Shareholders Agreement is executed in Phase 2, formal voting rights and governance processes will be defined therein, consistent with the equity split in force at that time.</p>
+  </section>
+
+  <!-- ══ 10. NON-COMPETE ══ -->
+  <section class="section" data-section="Non-Compete">
+    <div class="section-badge">
+      <div class="badge-number">10</div>
+      <h2 class="badge-title">Non-Compete &amp; Non-Solicitation</h2>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">No Exclusivity Required</div>
+      <p class="body-text">Technical Partners may continue other projects and businesses during Phase 1 and Phase 2 provided these do not directly compete with the studio's three project areas or involve any current or prospective studio clients.</p>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Non-Solicitation of Clients</div>
+      <p class="body-text">Technical Partners may not directly solicit, approach, or engage any ReviewTap client, studio client, or active prospect for competing services — during the term of this agreement and for 12 months following exit.</p>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Lead Partner's Existing Businesses</div>
+      <p class="body-text">JCE Media and ReviewTap remain the sole property of the Lead Partner. This agreement confers no rights, claims, or equity interest over those entities to the Technical Partners under any circumstances.</p>
+    </div>
+  </section>
+
+  <!-- ══ 11. CONFIDENTIALITY ══ -->
+  <section class="section" data-section="Confidentiality">
+    <div class="section-badge">
+      <div class="badge-number">11</div>
+      <h2 class="badge-title">Confidentiality</h2>
+    </div>
+    <p class="body-text">All parties agree to keep confidential any business information, client data, pricing structures, product roadmaps, sales strategies, financial information, and CRM data shared in the course of this collaboration. This obligation survives termination of this agreement for 3 years.</p>
+  </section>
+
+  <!-- ══ 12. CODE OF CONDUCT ══ -->
+  <section class="section" data-section="Conduct">
+    <div class="section-badge">
+      <div class="badge-number">12</div>
+      <h2 class="badge-title">Code of Conduct &amp; Minimum Involvement</h2>
+    </div>
+    <p class="body-text">All parties commit to the following minimum standards throughout Phase 1 and Phase 2:</p>
+    <ul class="styled">
+      <li>Commit a minimum of 15 hours per week to studio work; target 25 hours during active delivery periods — logged weekly in the agreed time-tracking tool</li>
+      <li>Attend a fortnightly alignment call (30–60 minutes) — mandatory unless excused in advance</li>
+      <li>Respond to messages within 24 hours on agreed working days</li>
+      <li>Deliver agreed work on time, or flag delays at least 48 hours before a deadline</li>
+      <li>Log time and CRM activity weekly — books must be current for monthly revenue share calculations</li>
+      <li>Act with honesty and transparency in all client and partner dealings</li>
+      <li>Raise disputes directly and privately with the relevant party before escalating</li>
+      <li>Represent the studio professionally in all client-facing interactions</li>
+    </ul>
+  </section>
+
+  <!-- ══ 13. EXIT ══ -->
+  <section class="section" data-section="Exit">
+    <div class="section-badge">
+      <div class="badge-number">13</div>
+      <h2 class="badge-title">Exit Terms</h2>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Voluntary Exit</div>
+      <p class="body-text">Any party may exit this agreement on 30 days written notice. Upon exit:</p>
+      <ul class="styled">
+        <li>All studio IP remains with the Lead Partner / studio entity</li>
+        <li>Revenue share ceases at end of notice period</li>
+        <li>Sales pipeline built by the exiting partner transfers to the studio at no additional cost</li>
+        <li>Unvested equity (if in Phase 2) is forfeited</li>
+        <li>Vested equity (if in Phase 2) is subject to a buy-back at fair value, negotiated within 60 days</li>
+      </ul>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Early Exit — Before Month 12</div>
+      <p class="body-text">A Technical Partner exiting before Month 12 forfeits all equity entitlement and receives only revenue share earned to the exit date. No goodwill payment or additional compensation is owed.</p>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Wind-Down Clause</div>
+      <p class="body-text">If the Lead Partner terminates the collaboration (not for cause) before the Month 12 review, each Technical Partner receives a one-time payment equivalent to 3 months of their average monthly revenue share as a goodwill settlement.</p>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Termination for Cause</div>
+      <p class="body-text">The Lead Partner may terminate a Technical Partner's involvement immediately — without notice or payment — for material breach of this agreement, client solicitation, IP theft, or conduct that materially damages the studio or its clients. Where the breach is capable of remedy, the Lead Partner will provide written notice specifying the breach and allow 10 business days for remedy before termination takes effect. All equity entitlement is forfeited on termination for cause.</p>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Single Technical Partner Exit</div>
+      <p class="body-text">If one Technical Partner exits while the other remains active, the following applies:</p>
+      <ul class="styled">
+        <li>The remaining Technical Partner's revenue share and equity path continue unchanged — their equity is determined solely by their own contribution score relative to the full TP pool at Phase 2 crystallisation</li>
+        <li>The departing partner's unvested equity entitlement returns to the Lead Partner's pool — it does not automatically transfer to the remaining Technical Partner</li>
+        <li>Any vested equity held by the departing partner is subject to the buy-back clause in this section — fair value negotiated within 60 days, with CA(SA) valuation as fallback</li>
+        <li>The Lead Partner may recruit a replacement Technical Partner via a separate written addendum; that partner's equity entitlement is carved from the available pool by agreement at that time</li>
+        <li>The remaining Technical Partner is not automatically required to absorb the departing partner's quotas in full; revised targets must be agreed in writing within 30 days of the exit date</li>
+        <li>All other exit obligations — IP transfer, non-solicitation, confidentiality — apply to the departing partner in the same manner as a standard voluntary exit</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ══ 14. 12-MONTH REVIEW ══ -->
+  <section class="section" data-section="Review">
+    <div class="section-badge">
+      <div class="badge-number">14</div>
+      <h2 class="badge-title">12-Month Review</h2>
+    </div>
+    <p class="body-text">At the 12-month mark all parties conduct a formal review covering:</p>
+    <ul class="styled">
+      <li>Studio revenue vs the R90,000/month Phase 2 threshold</li>
+      <li>Actual contribution inputs per partner (time, IP, revenue) vs projected</li>
+      <li>Code of conduct compliance and minimum involvement standards</li>
+      <li>Whether to proceed to Phase 2, amend terms, or wind down</li>
+    </ul>
+    <p class="note-text">If the revenue threshold has not been reached and there is no credible path to it within a further 6 months, the collaboration will be wound down by mutual consent. All earned revenue share is paid in full. IP remains with the Lead Partner.</p>
+  </section>
+
+  <!-- ══ 15. AMENDMENTS ══ -->
+  <section class="section" data-section="Amendments">
+    <div class="section-badge">
+      <div class="badge-number">15</div>
+      <h2 class="badge-title">Amendments</h2>
+    </div>
+    <p class="body-text">This agreement may only be amended in writing, signed by all parties. No verbal amendments are binding. Schedule A may be updated by written agreement between all parties without requiring a full amendment to this agreement.</p>
+  </section>
+
+  <!-- ══ 16. INDEPENDENT CONTRACTOR & TAX ══ -->
+  <section class="section" data-section="Tax &amp; Contractor">
+    <div class="section-badge">
+      <div class="badge-number">16</div>
+      <h2 class="badge-title">Independent Contractor Status &amp; Tax</h2>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Contractor Status</div>
+      <p class="body-text">Each Technical Partner is an independent contractor. Nothing in this agreement creates an employment relationship between the Technical Partners and JCE Media, and the studio has no obligation to deduct PAYE, UIF, or SDL on revenue share payments — provided each Technical Partner operates in a manner consistent with independent contractor status under South African law and SARS guidelines.</p>
+      <p class="note-text">If SARS determines that a Technical Partner qualifies as a "personal service provider" under the Fourth Schedule of the Income Tax Act No. 58 of 1962 — for example, where substantially all of their income derives from services rendered to this studio — JCE Media reserves the right to withhold employees' tax at the applicable rate from revenue share payments without prior notice. Technical Partners are strongly advised to seek independent tax counsel to assess their personal service provider exposure and to consider operating through a registered company (Pty Ltd) to reduce this risk.</p>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Invoicing</div>
+      <p class="body-text">Revenue share payments are made only against a valid tax invoice issued by each Technical Partner (or their registered entity) by the 3rd business day of each month for the preceding month's earnings. JCE Media will provide each Technical Partner with a monthly earnings statement by the 1st business day of each month to facilitate invoicing. No payment will be released without a valid invoice on file.</p>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Provisional Tax</div>
+      <p class="body-text">Each Technical Partner is solely responsible for registering with SARS as a provisional taxpayer (IRP6) and submitting provisional tax returns twice annually in accordance with SARS deadlines (typically August and February). JCE Media accepts no responsibility for any penalties, interest, or assessments arising from a Technical Partner's failure to meet their own SARS obligations.</p>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Value-Added Tax (VAT)</div>
+      <p class="body-text">Each Technical Partner must monitor their cumulative annual turnover from all sources. Where turnover exceeds R1,000,000 in any 12-month period, VAT registration with SARS is compulsory under the Value-Added Tax Act No. 89 of 1991. Each Technical Partner is solely responsible for their own VAT registration, returns, and remittances. Where a Technical Partner is a registered VAT vendor and charges VAT on invoices issued to the studio, JCE Media will pay the VAT component in addition to the revenue share amount, provided a valid tax invoice is supplied.</p>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Annual Earnings Certificates</div>
+      <p class="body-text">JCE Media will provide each Technical Partner with a written summary of total payments made during the tax year by 30 April following each financial year end. This summary supports each Technical Partner's personal income tax filing but does not constitute a formal IRP5 or IT3(a) certificate unless the studio is required by law to issue one.</p>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Tax Indemnity</div>
+      <p class="body-text">Each Technical Partner indemnifies JCE Media and the studio against any SARS assessments, penalties, interest, or third-party claims arising directly from that Technical Partner's failure to meet their own tax obligations as an independent contractor. This indemnity survives termination of this agreement.</p>
+    </div>
+  </section>
+
+  <!-- ══ SIGNATURES ══ -->
+  <section class="section" data-section="Signatures">
+    <div class="divider"></div>
+    <div class="section-badge">
+      <div class="badge-number" style="opacity:0.15">✦</div>
+      <h2 class="badge-title">Signatures</h2>
+    </div>
+    <p class="body-text">By signing below, each party confirms they have read, understood, and agree to all terms of this Studio Collaboration Agreement.</p>
+    <div class="sig-grid">
+      <div class="sig-block">
+        <div class="sig-name">Jacques Groenewald</div>
+        <div class="sig-role">Lead Partner · JCE Media / ReviewTap</div>
+        <div class="sig-line"></div>
+        <div class="sig-caption">Signature · Date</div>
+      </div>
+      <div class="sig-block">
+        <div class="sig-name">Samuel Rencken</div>
+        <div class="sig-role">Technical Partner</div>
+        <div class="sig-line"></div>
+        <div class="sig-caption">Signature · Date</div>
+      </div>
+      <div class="sig-block">
+        <div class="sig-name">Giorgio van Rooyen</div>
+        <div class="sig-role">Technical Partner</div>
+        <div class="sig-line"></div>
+        <div class="sig-caption">Signature · Date</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ SCHEDULE A ══ -->
+  <section class="section" data-section="Schedule A">
+    <div class="divider"></div>
+    <div class="schedule-header">
+      <div class="schedule-tag">Schedule A</div>
+      <div class="schedule-title">Project Scope &amp; Operating Details</div>
+    </div>
+    <p class="body-text">This schedule defines the three active projects and key operating parameters. It may be updated by written agreement without amending the main body of this agreement.</p>
+
+    <div class="subsection">
+      <div class="subsection-title">Project 1 — Growth System Builds</div>
+      <div class="info-grid">
+        <div class="info-row"><div class="info-label">Description</div><div class="info-value">Build and maintain digital growth systems for ReviewTap upsell clients: websites, automations, review feeds, WhatsApp triggers, SEO content, Facebook ad funnels, WhatsApp drip sequences</div></div>
+        <div class="info-row"><div class="info-label">Packages</div><div class="info-value">Foundation R1,999/mo · Growth R4,299/mo · Scale R6,500/mo · Setup fees R1,750–R3,500 once-off</div></div>
+        <div class="info-row"><div class="info-label">TP Revenue Share</div><div class="info-value">40% of net monthly retainer and setup fees on projects both TPs contribute to</div></div>
+        <div class="info-row"><div class="info-label">Pre-Sales Demos</div><div class="info-value">One working demo site per active proposal, delivered before the client meeting</div></div>
+        <div class="info-row"><div class="info-label">Delivery SLA</div><div class="info-value">Foundation: 5 working days · Growth: 7 working days · Scale: 10 working days</div></div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Project 2 — AI Community for Small Businesses</div>
+      <div class="info-grid">
+        <div class="info-row"><div class="info-label">Description</div><div class="info-value">Monthly subscription training community teaching SA small business owners to use AI tools practically in their business</div></div>
+        <div class="info-row"><div class="info-label">Price</div><div class="info-value">R299/month per member · Platform: ReviewTap Community System</div></div>
+        <div class="info-row"><div class="info-label">Content Quota</div><div class="info-value">Minimum 3 tutorial videos per TP per month (screen recordings, walkthroughs, tool demos) + minimum 3 YouTube/TikTok videos per TP per month</div></div>
+        <div class="info-row"><div class="info-label">Growth Quota</div><div class="info-value">Minimum 5 new paying members recruited per TP per month via own channels</div></div>
+        <div class="info-row"><div class="info-label">TP Revenue Share</div><div class="info-value">40% of net community subscription revenue (20% Samuel, 20% Giorgio)</div></div>
+        <div class="info-row"><div class="info-label">Q&amp;A Calls</div><div class="info-value">Weekly live Q&amp;A call — rotating host schedule: Samuel hosts odd-numbered weeks (Week 1, 3, 5…), Giorgio hosts even-numbered weeks (Week 2, 4, 6…). Host is responsible for scheduling, running, and summarising the call for the community.</div></div>
+        <div class="info-row"><div class="info-label">Content Pillars</div><div class="info-value">AI for communication · AI for marketing · AI for admin · AI for sales · Tool spotlights</div></div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Project 3 — Sales Process</div>
+      <div class="info-grid">
+        <div class="info-row"><div class="info-label">Lead Quota</div><div class="info-value">10 qualified ReviewTap upsell leads flagged per month (combined)</div></div>
+        <div class="info-row"><div class="info-label">Outreach Quota</div><div class="info-value">20 personalised outreach touchpoints per week combined (LinkedIn, email, WhatsApp)</div></div>
+        <div class="info-row"><div class="info-label">Demo Call Quota</div><div class="info-value">Minimum 2 client discovery or demo calls per month per TP</div></div>
+        <div class="info-row"><div class="info-label">Sales Bonus</div><div class="info-value">7.5% of first month's net revenue for any client the TP sourced, nurtured, or directly contributed to closing — as attributed in ReviewTap CRM at close. No flat call-booking fee. Compensation is results-based only.</div></div>
+        <div class="info-row"><div class="info-label">CRM</div><div class="info-value">All leads and pipeline activity logged in ReviewTap CRM — updated weekly</div></div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Operating Parameters</div>
+      <div class="info-grid">
+        <div class="info-row"><div class="info-label">Alignment Calls</div><div class="info-value">Fortnightly · 30–60 minutes · Lead Partner chairs</div></div>
+        <div class="info-row"><div class="info-label">Time Tracking</div><div class="info-value">[Toggl / Notion / Google Sheet — to be agreed at kickoff] · Minimum 15 hrs/week per TP; target 25 hrs/week during active delivery periods</div></div>
+        <div class="info-row"><div class="info-label">Payment</div><div class="info-value">Revenue share paid monthly within 15 days of month end</div></div>
+        <div class="info-row"><div class="info-label">Symbolic Hourly Rate</div><div class="info-value">R1,000/hour for equity calculation purposes only</div></div>
+        <div class="info-row"><div class="info-label">Phase 2 Trigger</div><div class="info-value">R90,000 net combined revenue/month for 3 consecutive months</div></div>
+        <div class="info-row"><div class="info-label">Shareholders Agmt</div><div class="info-value">To be executed within 60 days of Phase 2 trigger</div></div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  // ── Intersection observer for section reveals ──
+  const sections = document.querySelectorAll('.section');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('visible');
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+  sections.forEach(s => observer.observe(s));
+
+  // ── Nav dots ──
+  const navDots = document.getElementById('navDots');
+  const allSections = [document.querySelector('.cover'), ...sections];
+
+  allSections.forEach((sec, i) => {
+    const dot = document.createElement('button');
+    dot.className = 'nav-dot';
+    dot.title = sec.dataset.section || 'Cover';
+    dot.onclick = () => sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    navDots.appendChild(dot);
+  });
+
+  const dotEls = navDots.querySelectorAll('.nav-dot');
+
+  const navObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      const idx = [...allSections].indexOf(e.target);
+      if (e.isIntersecting && idx >= 0) {
+        dotEls.forEach(d => d.classList.remove('active'));
+        dotEls[idx]?.classList.add('active');
+      }
+    });
+  }, { threshold: 0.4 });
+
+  allSections.forEach(s => navObserver.observe(s));
+
+  // ── Animate equity bar on scroll ──
+  const equityBar = document.querySelector('.equity-bar');
+  if (equityBar) {
+    const eqObserver = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        equityBar.style.opacity = '0';
+        equityBar.style.transition = 'opacity 0.5s';
+        setTimeout(() => { equityBar.style.opacity = '1'; }, 100);
+      }
+    }, { threshold: 0.5 });
+    eqObserver.observe(equityBar);
+  }
+</script>
+</body>
+</html>

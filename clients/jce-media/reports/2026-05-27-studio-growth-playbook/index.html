@@ -1,0 +1,2079 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JCE Studio Growth Playbook · 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:    #0A1628;
+    --navy2:   #0D1F35;
+    --navy3:   #152A47;
+    --blue:    #1A5FA8;
+    --blue2:   #2878CC;
+    --gold:    #C9A84C;
+    --gold2:   #E2C06A;
+    --teal:    #0E9688;
+    --teal2:   #14B8A6;
+    --lteal:   rgba(14,150,136,0.08);
+    --orange:  #D4720A;
+    --orange2: #F08C2A;
+    --lorange: rgba(212,114,10,0.08);
+    --green:   #1A6B3C;
+    --green2:  #22C55E;
+    --lgreen:  rgba(26,107,60,0.08);
+    --purple:  #6A5ACD;
+    --cream:   #F7F3EC;
+    --muted:   #6B7080;
+    --page-bg: #0A1628;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--page-bg);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--cream);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 5% 0%, rgba(14,150,136,0.12) 0%, transparent 55%),
+      radial-gradient(ellipse 60% 80% at 95% 100%, rgba(201,168,76,0.10) 0%, transparent 55%),
+      radial-gradient(ellipse 50% 50% at 50% 30%, rgba(26,95,168,0.07) 0%, transparent 60%);
+    pointer-events: none; z-index: 0;
+  }
+
+  .wrap {
+    position: relative; z-index: 1;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 24px 140px;
+  }
+
+  /* ── COVER ── */
+  .cover {
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 80px 0 60px;
+  }
+
+  .cover-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; letter-spacing: 0.25em;
+    text-transform: uppercase; color: var(--teal2);
+    margin-bottom: 28px;
+    opacity: 0; animation: fadeUp 0.8s 0.2s forwards;
+  }
+
+  .cover-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(44px, 7.5vw, 84px);
+    font-weight: 700; line-height: 1.02;
+    letter-spacing: -0.025em; color: var(--cream);
+    margin-bottom: 10px;
+    opacity: 0; animation: fadeUp 0.8s 0.35s forwards;
+  }
+
+  .cover-title em { font-style: italic; color: var(--gold2); }
+
+  .cover-sub {
+    font-size: 18px; font-weight: 300;
+    color: rgba(247,243,236,0.5);
+    margin-bottom: 56px;
+    opacity: 0; animation: fadeUp 0.8s 0.5s forwards;
+  }
+
+  .cover-rule {
+    height: 1px;
+    background: linear-gradient(90deg, var(--teal2), rgba(14,150,136,0.1) 60%, transparent);
+    margin-bottom: 44px;
+    opacity: 0; animation: fadeUp 0.8s 0.6s forwards;
+  }
+
+  .cover-stats {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+    border: 1px solid rgba(14,150,136,0.2);
+    border-radius: 3px; overflow: hidden;
+    opacity: 0; animation: fadeUp 0.8s 0.75s forwards;
+  }
+
+  .cover-stat {
+    padding: 20px 22px;
+    border-right: 1px solid rgba(14,150,136,0.12);
+  }
+  .cover-stat:last-child { border-right: none; }
+
+  .stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--teal2);
+    margin-bottom: 8px;
+  }
+
+  .stat-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px; font-weight: 700; color: var(--cream);
+    line-height: 1; margin-bottom: 4px;
+  }
+
+  .stat-sub { font-size: 11px; color: var(--muted); }
+
+  /* ── NAV DOTS ── */
+  .nav-dots {
+    position: fixed; right: 28px; top: 50%;
+    transform: translateY(-50%);
+    display: flex; flex-direction: column; gap: 9px;
+    z-index: 100;
+  }
+
+  .nav-dot {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: rgba(14,150,136,0.2);
+    cursor: pointer; border: none; padding: 0;
+    transition: all 0.3s;
+  }
+
+  .nav-dot.active, .nav-dot:hover {
+    background: var(--teal2); transform: scale(1.5);
+  }
+
+  /* ── SECTIONS ── */
+  .section {
+    margin-top: 90px;
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.7s, transform 0.7s;
+  }
+
+  .section.visible { opacity: 1; transform: translateY(0); }
+
+  .section-badge {
+    display: flex; align-items: center; gap: 18px;
+    margin-bottom: 36px;
+  }
+
+  .badge-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 52px; font-weight: 700;
+    color: rgba(14,150,136,0.12);
+    line-height: 1; min-width: 60px;
+    letter-spacing: -0.03em;
+  }
+
+  .badge-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px; font-weight: 600; color: var(--cream);
+    line-height: 1.2;
+    border-bottom: 1px solid rgba(14,150,136,0.25);
+    padding-bottom: 14px; flex: 1;
+  }
+
+  .subsection { margin: 32px 0 16px; }
+
+  .subsection-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 14px;
+    display: flex; align-items: center; gap: 10px;
+  }
+
+  .subsection-title::after {
+    content: ''; flex: 1; height: 1px;
+    background: rgba(201,168,76,0.15);
+  }
+
+  p.body-text {
+    font-size: 15px; line-height: 1.78;
+    color: rgba(247,243,236,0.75);
+    margin-bottom: 14px; font-weight: 300;
+  }
+
+  p.note-text {
+    font-size: 13px; line-height: 1.65;
+    color: var(--muted); font-style: italic;
+    margin-top: 10px; padding-left: 16px;
+    border-left: 2px solid rgba(14,150,136,0.2);
+  }
+
+  ul.styled { list-style: none; margin: 10px 0 10px 4px; }
+
+  ul.styled li {
+    font-size: 14.5px; line-height: 1.65;
+    color: rgba(247,243,236,0.72);
+    padding: 5px 0 5px 22px;
+    position: relative; font-weight: 300;
+  }
+
+  ul.styled li::before {
+    content: '—'; position: absolute; left: 0;
+    color: var(--teal2); font-weight: 400;
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(14,150,136,0.2), transparent);
+    margin: 70px 0;
+  }
+
+  /* ── PRINT BUTTON ── */
+  .print-btn {
+    position: fixed; bottom: 32px; right: 32px;
+    background: var(--teal); color: white;
+    border: none; padding: 12px 24px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; letter-spacing: 0.15em;
+    text-transform: uppercase; cursor: pointer;
+    border-radius: 2px; font-weight: 600;
+    transition: all 0.2s; z-index: 200;
+  }
+  .print-btn:hover { background: var(--teal2); transform: translateY(-1px); }
+
+  /* ══ FLYWHEEL ══ */
+  .flywheel {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 0; margin: 24px 0;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 4px; overflow: hidden;
+  }
+
+  .flywheel-step {
+    padding: 28px 20px;
+    border-right: 1px solid rgba(255,255,255,0.06);
+    position: relative; text-align: center;
+  }
+  .flywheel-step:last-child { border-right: none; }
+
+  .flywheel-step::after {
+    content: '→';
+    position: absolute; right: -10px; top: 50%;
+    transform: translateY(-50%);
+    color: rgba(14,150,136,0.4);
+    font-size: 18px; z-index: 2;
+  }
+  .flywheel-step:last-child::after { display: none; }
+
+  .fw-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  .fw-icon {
+    font-size: 28px; margin-bottom: 12px; display: block;
+  }
+
+  .fw-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px; font-weight: 600; color: var(--cream);
+    margin-bottom: 8px;
+  }
+
+  .fw-desc {
+    font-size: 12px; color: var(--muted);
+    line-height: 1.5; font-weight: 300;
+  }
+
+  .flywheel-step.step1 { background: rgba(14,150,136,0.06); }
+  .flywheel-step.step2 { background: rgba(201,168,76,0.05); }
+  .flywheel-step.step3 { background: rgba(26,95,168,0.06); }
+  .flywheel-step.step4 { background: rgba(26,107,60,0.07); }
+
+  /* ══ MASTERCLASS MODULES ══ */
+  .module-list { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
+
+  .module-card {
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 4px; overflow: hidden;
+  }
+
+  .module-header {
+    display: flex; align-items: center; gap: 16px;
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .module-header.m1 { background: rgba(14,150,136,0.10); }
+  .module-header.m2 { background: rgba(212,114,10,0.10); }
+  .module-header.m3 { background: rgba(26,95,168,0.10); }
+  .module-header.m4 { background: rgba(106,90,205,0.10); }
+  .module-header.m5 { background: rgba(26,107,60,0.10); }
+
+  .module-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px; font-weight: 700;
+    color: rgba(247,243,236,0.2); line-height: 1; min-width: 44px;
+  }
+
+  .module-meta { flex: 1; }
+
+  .module-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 3px;
+  }
+
+  .module-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px; font-weight: 600; color: var(--cream);
+  }
+
+  .module-duration {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; color: var(--muted);
+    letter-spacing: 0.08em;
+  }
+
+  .module-body { padding: 16px 20px; }
+
+  .lesson-list {
+    list-style: none; margin: 0;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 4px 20px;
+  }
+
+  .lesson-list li {
+    font-size: 13px; color: rgba(247,243,236,0.65);
+    padding: 4px 0 4px 18px; position: relative;
+    font-weight: 300; line-height: 1.4;
+  }
+
+  .lesson-list li::before {
+    content: '▸'; position: absolute; left: 0;
+    color: var(--teal2); font-size: 10px; top: 6px;
+  }
+
+  /* ══ PRICING CARD ══ */
+  .pricing-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 24px 0;
+  }
+
+  .pricing-card {
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 4px; padding: 32px 28px;
+    position: relative; overflow: hidden;
+  }
+
+  .pricing-card.masterclass { border-color: rgba(201,168,76,0.3); }
+  .pricing-card.community { border-color: rgba(14,150,136,0.3); }
+
+  .pricing-card::before {
+    content: ''; position: absolute;
+    top: 0; left: 0; right: 0; height: 3px;
+  }
+
+  .pricing-card.masterclass::before { background: linear-gradient(90deg, var(--gold), var(--gold2)); }
+  .pricing-card.community::before { background: linear-gradient(90deg, var(--teal), var(--teal2)); }
+
+  .pricing-type {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px; letter-spacing: 0.2em;
+    text-transform: uppercase; margin-bottom: 12px;
+  }
+
+  .pricing-card.masterclass .pricing-type { color: var(--gold); }
+  .pricing-card.community .pricing-type { color: var(--teal2); }
+
+  .pricing-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px; font-weight: 600; color: var(--cream);
+    margin-bottom: 20px;
+  }
+
+  .pricing-amount {
+    font-family: 'Playfair Display', serif;
+    font-size: 52px; font-weight: 700; color: var(--cream);
+    line-height: 1; margin-bottom: 4px;
+  }
+
+  .pricing-period { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+
+  .pricing-includes { list-style: none; }
+  .pricing-includes li {
+    font-size: 13.5px; color: rgba(247,243,236,0.7);
+    padding: 6px 0 6px 20px; position: relative;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-weight: 300;
+  }
+  .pricing-includes li:last-child { border-bottom: none; }
+  .pricing-includes li::before {
+    content: '✓'; position: absolute; left: 0;
+    font-weight: 600; font-size: 11px;
+  }
+  .pricing-card.masterclass .pricing-includes li::before { color: var(--gold); }
+  .pricing-card.community .pricing-includes li::before { color: var(--teal2); }
+
+  .upsell-arrow {
+    display: flex; align-items: center; justify-content: center;
+    gap: 12px; margin: 8px 0;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--teal2);
+  }
+
+  .upsell-arrow::before, .upsell-arrow::after {
+    content: ''; flex: 1; height: 1px;
+    background: rgba(14,150,136,0.2);
+  }
+
+  /* ══ CONTENT PILLARS ══ */
+  .pillars-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 20px 0;
+  }
+
+  .pillar-card {
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 4px; overflow: hidden;
+  }
+
+  .pillar-header {
+    padding: 16px 18px;
+    display: flex; align-items: center; gap: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .pillar-header.p1 { background: rgba(14,150,136,0.12); }
+  .pillar-header.p2 { background: rgba(212,114,10,0.12); }
+  .pillar-header.p3 { background: rgba(26,95,168,0.12); }
+  .pillar-header.p4 { background: rgba(106,90,205,0.12); }
+  .pillar-header.p5 { background: rgba(26,107,60,0.12); }
+
+  .pillar-icon { font-size: 22px; }
+
+  .pillar-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px; font-weight: 600; color: var(--cream);
+  }
+
+  .pillar-body { padding: 14px 18px; }
+
+  .topic-chip {
+    display: inline-block;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 100px;
+    padding: 3px 10px; font-size: 11.5px;
+    color: rgba(247,243,236,0.65);
+    margin: 3px 2px; font-weight: 300;
+  }
+
+  .pillar-full-card {
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 4px; overflow: hidden; margin: 14px 0;
+  }
+
+  /* ══ PLATFORM CARDS ══ */
+  .platforms-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 20px 0;
+  }
+
+  .platform-card {
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 4px; overflow: hidden;
+  }
+
+  .platform-header {
+    padding: 18px 20px;
+    display: flex; align-items: center; gap: 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .platform-header.youtube { background: rgba(255,0,0,0.08); }
+  .platform-header.shorts  { background: rgba(255,100,0,0.08); }
+  .platform-header.tiktok  { background: rgba(0,200,200,0.07); }
+  .platform-header.email   { background: rgba(26,95,168,0.10); }
+
+  .platform-logo {
+    width: 36px; height: 36px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+  }
+
+  .platform-logo.youtube { background: rgba(255,0,0,0.2); }
+  .platform-logo.shorts  { background: rgba(255,100,0,0.2); }
+  .platform-logo.tiktok  { background: rgba(0,200,200,0.15); }
+  .platform-logo.email   { background: rgba(26,95,168,0.2); }
+
+  .platform-meta { flex: 1; }
+
+  .platform-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px; font-weight: 600; color: var(--cream);
+    margin-bottom: 2px;
+  }
+
+  .platform-sub { font-size: 11px; color: var(--muted); }
+
+  .platform-body { padding: 18px 20px; }
+
+  .platform-row {
+    display: grid; grid-template-columns: 110px 1fr;
+    gap: 6px; margin-bottom: 10px; font-size: 13px;
+  }
+
+  .platform-key {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--gold);
+    padding-top: 2px;
+  }
+
+  .platform-val { color: rgba(247,243,236,0.72); line-height: 1.5; font-weight: 300; }
+
+  /* ══ 90-DAY SPRINT ══ */
+  .sprint-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 16px; margin: 20px 0;
+  }
+
+  .sprint-card {
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 4px; overflow: hidden;
+  }
+
+  .sprint-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .sprint-header.m1 { background: rgba(14,150,136,0.12); }
+  .sprint-header.m2 { background: rgba(201,168,76,0.10); }
+  .sprint-header.m3 { background: rgba(212,114,10,0.10); }
+
+  .sprint-month {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 4px;
+  }
+
+  .sprint-focus {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px; font-weight: 600; color: var(--cream);
+  }
+
+  .sprint-body { padding: 16px 20px; }
+
+  .sprint-item {
+    font-size: 13px; color: rgba(247,243,236,0.68);
+    padding: 5px 0 5px 18px; position: relative;
+    line-height: 1.45; font-weight: 300;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .sprint-item:last-child { border-bottom: none; }
+
+  .sprint-item::before {
+    content: '▸'; position: absolute; left: 0;
+    color: var(--teal2); font-size: 10px; top: 7px;
+  }
+
+  .sprint-week {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--muted);
+    margin-top: 12px; margin-bottom: 6px;
+  }
+
+  /* ══ REVENUE MILESTONE ══ */
+  .milestone-track {
+    position: relative; margin: 32px 0; padding: 0 8px;
+  }
+
+  .milestone-line {
+    position: absolute; top: 22px; left: 28px; right: 28px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--teal), var(--gold), var(--green2));
+    border-radius: 2px;
+  }
+
+  .milestones {
+    display: grid; grid-template-columns: repeat(5, 1fr);
+    gap: 0; position: relative; z-index: 1;
+  }
+
+  .milestone {
+    display: flex; flex-direction: column; align-items: center;
+    text-align: center;
+  }
+
+  .milestone-dot {
+    width: 16px; height: 16px; border-radius: 50%;
+    margin-bottom: 14px; border: 2px solid var(--navy2);
+    flex-shrink: 0;
+  }
+
+  .milestone-dot.m1 { background: var(--teal2); }
+  .milestone-dot.m2 { background: var(--blue2); }
+  .milestone-dot.m3 { background: var(--gold); }
+  .milestone-dot.m4 { background: var(--orange2); }
+  .milestone-dot.m5 { background: var(--green2); }
+
+  .milestone-time {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--muted);
+    margin-bottom: 4px;
+  }
+
+  .milestone-revenue {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px; font-weight: 700; color: var(--cream);
+    margin-bottom: 4px; line-height: 1;
+  }
+
+  .milestone-desc {
+    font-size: 11px; color: var(--muted);
+    line-height: 1.4; font-weight: 300;
+  }
+
+  /* ══ CONTENT CALENDAR ══ */
+  .cal-grid {
+    display: grid;
+    grid-template-columns: 100px repeat(4, 1fr);
+    gap: 0; margin: 20px 0;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 4px; overflow: hidden;
+  }
+
+  .cal-cell {
+    padding: 12px 14px;
+    border-right: 1px solid rgba(255,255,255,0.05);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-size: 12.5px; color: rgba(247,243,236,0.68);
+    line-height: 1.45; font-weight: 300;
+  }
+
+  .cal-cell:nth-child(5n) { border-right: none; }
+
+  .cal-header {
+    background: var(--navy3);
+    font-family: 'DM Mono', monospace;
+    font-size: 9px; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--gold);
+    display: flex; align-items: center;
+  }
+
+  .cal-row-label {
+    background: rgba(14,150,136,0.06);
+    font-family: 'DM Mono', monospace;
+    font-size: 9px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--teal2);
+    display: flex; align-items: center;
+  }
+
+  .cal-cell.tutorial { background: rgba(14,150,136,0.05); }
+  .cal-cell.shortform { background: rgba(212,114,10,0.05); }
+  .cal-cell.community { background: rgba(26,95,168,0.05); }
+  .cal-cell.sales { background: rgba(26,107,60,0.05); }
+
+  /* ══ FUNNEL ══ */
+  .funnel-steps {
+    display: flex; flex-direction: column;
+    align-items: center; gap: 0; margin: 24px 0;
+  }
+
+  .funnel-step {
+    width: 100%; max-width: 680px;
+    padding: 18px 28px;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 4px;
+    display: flex; align-items: center; gap: 20px;
+    margin-bottom: 0;
+    position: relative;
+  }
+
+  .funnel-step.fs1 { background: rgba(14,150,136,0.08); border-color: rgba(14,150,136,0.2); }
+  .funnel-step.fs2 { background: rgba(201,168,76,0.06); border-color: rgba(201,168,76,0.15); max-width: 620px; }
+  .funnel-step.fs3 { background: rgba(212,114,10,0.07); border-color: rgba(212,114,10,0.18); max-width: 560px; }
+  .funnel-step.fs4 { background: rgba(26,95,168,0.08); border-color: rgba(26,95,168,0.2); max-width: 500px; }
+  .funnel-step.fs5 { background: rgba(106,90,205,0.08); border-color: rgba(106,90,205,0.2); max-width: 440px; }
+  .funnel-step.fs6 { background: rgba(26,107,60,0.10); border-color: rgba(26,107,60,0.25); max-width: 380px; }
+
+  .funnel-connector {
+    width: 2px; height: 20px;
+    background: rgba(255,255,255,0.1);
+    margin: 0 auto;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--muted); font-size: 12px;
+  }
+
+  .funnel-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px; font-weight: 700;
+    opacity: 0.2; color: var(--cream);
+    min-width: 36px; line-height: 1;
+  }
+
+  .funnel-meta { flex: 1; }
+
+  .funnel-step-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px; font-weight: 600; color: var(--cream);
+    margin-bottom: 4px;
+  }
+
+  .funnel-step-desc {
+    font-size: 12.5px; color: var(--muted); line-height: 1.5; font-weight: 300;
+  }
+
+  .funnel-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px; letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 3px 10px; border-radius: 100px;
+    border: 1px solid;
+    white-space: nowrap;
+  }
+
+  .tag-teal { color: var(--teal2); border-color: rgba(14,150,136,0.3); }
+  .tag-gold { color: var(--gold); border-color: rgba(201,168,76,0.3); }
+  .tag-orange { color: var(--orange2); border-color: rgba(212,114,10,0.3); }
+  .tag-blue { color: var(--blue2); border-color: rgba(26,95,168,0.3); }
+  .tag-purple { color: #A78BFA; border-color: rgba(106,90,205,0.3); }
+  .tag-green { color: var(--green2); border-color: rgba(26,107,60,0.3); }
+
+  /* ══ ROLES TABLE ══ */
+  .roles-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 16px; margin: 20px 0;
+  }
+
+  .role-card {
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 4px; overflow: hidden;
+  }
+
+  .role-header {
+    padding: 18px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .role-header.jacques { background: rgba(26,95,168,0.15); }
+  .role-header.samuel  { background: rgba(14,150,136,0.12); }
+  .role-header.giorgio { background: rgba(106,90,205,0.12); }
+
+  .role-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px; font-weight: 600; color: var(--cream);
+    margin-bottom: 2px;
+  }
+
+  .role-title { font-size: 11px; color: var(--muted); font-family: 'DM Mono', monospace; letter-spacing: 0.05em; }
+
+  .role-body { padding: 16px 20px; }
+
+  .role-item {
+    font-size: 13px; color: rgba(247,243,236,0.68);
+    padding: 5px 0 5px 18px; position: relative;
+    line-height: 1.45; font-weight: 300;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .role-item:last-child { border-bottom: none; }
+  .role-item::before {
+    content: '—'; position: absolute; left: 0;
+    color: var(--gold); font-weight: 400;
+  }
+
+  /* ══ KPI DASHBOARD ══ */
+  .kpi-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 12px; margin: 20px 0;
+  }
+
+  .kpi-card {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 4px; padding: 20px 16px;
+    text-align: center;
+  }
+
+  .kpi-category {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .kpi-metric {
+    font-family: 'Playfair Display', serif;
+    font-size: 13px; font-weight: 600; color: var(--cream);
+    line-height: 1.3; margin-bottom: 8px;
+  }
+
+  .kpi-target {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; color: var(--teal2); font-weight: 500;
+  }
+
+  /* ══ DATA TABLE ══ */
+  .data-table {
+    width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13px;
+  }
+
+  .data-table thead tr { background: var(--navy3); }
+
+  .data-table thead th {
+    padding: 12px 14px; text-align: left;
+    font-family: 'DM Mono', monospace; font-size: 9px;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--gold); border-bottom: 1px solid rgba(201,168,76,0.3);
+    font-weight: 500;
+  }
+
+  .data-table tbody tr { border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .data-table tbody tr:nth-child(odd) { background: rgba(255,255,255,0.02); }
+  .data-table tbody td {
+    padding: 11px 14px; color: rgba(247,243,236,0.75);
+    line-height: 1.45; vertical-align: top;
+  }
+
+  /* ══ INFO GRID ══ */
+  .info-grid { border: 1px solid rgba(255,255,255,0.07); border-radius: 4px; overflow: hidden; margin: 16px 0; }
+  .info-row { display: grid; grid-template-columns: 180px 1fr; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .info-row:last-child { border-bottom: none; }
+  .info-label {
+    background: rgba(14,150,136,0.08); padding: 13px 16px;
+    font-family: 'DM Mono', monospace; font-size: 9.5px;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--teal2); display: flex; align-items: center;
+    border-right: 1px solid rgba(255,255,255,0.05);
+  }
+  .info-value {
+    padding: 13px 16px; font-size: 13px;
+    color: rgba(247,243,236,0.78); line-height: 1.5;
+    font-weight: 400;
+  }
+
+  /* ══ HIGHLIGHT BOX ══ */
+  .highlight-box {
+    background: linear-gradient(135deg, rgba(14,150,136,0.12), rgba(26,95,168,0.08));
+    border: 1px solid rgba(14,150,136,0.2);
+    border-radius: 4px; padding: 28px 32px; margin: 24px 0;
+    text-align: center;
+  }
+
+  .highlight-headline {
+    font-family: 'Playfair Display', serif;
+    font-size: 48px; font-weight: 700; color: var(--teal2);
+    line-height: 1; margin-bottom: 6px;
+  }
+
+  .highlight-sub { font-size: 13px; color: rgba(247,243,236,0.5); margin-bottom: 16px; }
+
+  .highlight-note {
+    display: inline-block;
+    background: rgba(14,150,136,0.12); border: 1px solid rgba(14,150,136,0.2);
+    border-radius: 2px; padding: 7px 18px;
+    font-size: 12px; color: var(--teal2);
+    font-family: 'DM Mono', monospace; letter-spacing: 0.08em;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @media print {
+    body { background: white; color: #111; }
+    body::before { display: none; }
+    .print-btn, .nav-dots { display: none; }
+    .section { opacity: 1; transform: none; }
+    .cover { min-height: auto; }
+  }
+
+  @media (max-width: 720px) {
+    .cover-stats, .flywheel, .milestones { grid-template-columns: 1fr 1fr; }
+    .sprint-grid, .platforms-grid, .roles-grid { grid-template-columns: 1fr; }
+    .pillars-grid, .pricing-grid { grid-template-columns: 1fr; }
+    .kpi-grid { grid-template-columns: 1fr 1fr; }
+    .lesson-list { grid-template-columns: 1fr; }
+    .nav-dots { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav-dots" id="navDots"></nav>
+<button class="print-btn" onclick="window.print()">⌘ Print / PDF</button>
+
+<div class="wrap">
+
+  <!-- ══ COVER ══ -->
+  <div class="cover" data-section="Cover">
+    <p class="cover-eyebrow">JCE Media Product Studio · Internal Strategy</p>
+    <h1 class="cover-title">The Studio<br><em>Growth</em><br>Playbook</h1>
+    <p class="cover-sub">From First Video to Phase 2 Equity — The 12-Month Plan · 2026</p>
+    <div class="cover-rule"></div>
+    <div class="cover-stats">
+      <div class="cover-stat">
+        <div class="stat-label">Revenue Target</div>
+        <div class="stat-value">R90k</div>
+        <div class="stat-sub">net / month to trigger Phase 2</div>
+      </div>
+      <div class="cover-stat">
+        <div class="stat-label">Community Goal</div>
+        <div class="stat-value">350+</div>
+        <div class="stat-sub">paying members by Month 12</div>
+      </div>
+      <div class="cover-stat">
+        <div class="stat-label">Masterclass</div>
+        <div class="stat-value">R497</div>
+        <div class="stat-sub">once-off · upsell to community</div>
+      </div>
+      <div class="cover-stat">
+        <div class="stat-label">Content Output</div>
+        <div class="stat-value">48+</div>
+        <div class="stat-sub">pieces per month across all platforms</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ 1. THE MISSION ══ -->
+  <section class="section" data-section="Mission">
+    <div class="section-badge">
+      <div class="badge-number">01</div>
+      <h2 class="badge-title">The Mission</h2>
+    </div>
+
+    <p class="body-text">JCE Media is building South Africa's most practical AI education brand for small business owners — while simultaneously generating recurring revenue through done-for-you digital growth systems. These are not two separate businesses. They are two sides of the same flywheel: the content builds the audience, the audience buys the masterclass, the masterclass converts to community members, and the community members become growth system clients.</p>
+
+    <p class="body-text">Every piece of content we create, every video we publish, every email we send has one job: <strong style="color:var(--cream)">move a South African small business owner one step closer to becoming a paying client, community member, or both.</strong> Content that doesn't serve that goal doesn't get made.</p>
+
+    <div class="highlight-box">
+      <div class="highlight-headline">R90,000</div>
+      <div class="highlight-sub">combined net monthly revenue to unlock Phase 2 equity — achievable inside 12 months</div>
+      <div class="highlight-note">⚡ 350 community members + 15 growth clients = Phase 2 trigger met</div>
+    </div>
+  </section>
+
+  <!-- ══ 2. THE GROWTH FLYWHEEL ══ -->
+  <section class="section" data-section="Flywheel">
+    <div class="section-badge">
+      <div class="badge-number">02</div>
+      <h2 class="badge-title">The Growth Flywheel</h2>
+    </div>
+
+    <p class="body-text">Every content decision flows through a single framework. Nothing gets created without a clear place in the flywheel. This is what separates a content strategy from random posting.</p>
+
+    <div class="flywheel">
+      <div class="flywheel-step step1">
+        <div class="fw-num">Step 1</div>
+        <div class="fw-icon">🎬</div>
+        <div class="fw-title">Content</div>
+        <div class="fw-desc">YouTube tutorials, Shorts, TikTok — builds trust and search visibility with SA small business owners</div>
+      </div>
+      <div class="flywheel-step step2">
+        <div class="fw-num">Step 2</div>
+        <div class="fw-icon">🎓</div>
+        <div class="fw-title">Masterclass</div>
+        <div class="fw-desc">Warm audience converts via a R497 once-off masterclass — the entry point into our paid ecosystem</div>
+      </div>
+      <div class="flywheel-step step3">
+        <div class="fw-num">Step 3</div>
+        <div class="fw-icon">🏡</div>
+        <div class="fw-title">Community</div>
+        <div class="fw-desc">Masterclass buyers upsell to R299/month community — recurring revenue and a high-intent audience</div>
+      </div>
+      <div class="flywheel-step step4">
+        <div class="fw-num">Step 4</div>
+        <div class="fw-icon">🚀</div>
+        <div class="fw-title">Done-for-You</div>
+        <div class="fw-desc">Community members become the most likely buyers of our Growth System Builds — the highest-value product</div>
+      </div>
+    </div>
+
+    <p class="note-text">The flywheel compounds over time. A community member who started as a YouTube viewer costs near zero to acquire — and has already demonstrated trust through two paid steps before ever buying a growth build.</p>
+
+    <div class="subsection">
+      <div class="subsection-title">Revenue Streams in Context</div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Stream</th>
+            <th>Entry Price</th>
+            <th>Recurring</th>
+            <th>Phase 2 Scenario</th>
+            <th>What Feeds It</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong style="color:var(--cream)">AI Masterclass</strong></td>
+            <td>R497 once-off</td>
+            <td>No</td>
+            <td>50 sales/month = R24,850</td>
+            <td>Content, ReviewTap warm list, email</td>
+          </tr>
+          <tr>
+            <td><strong style="color:var(--cream)">AI Community</strong></td>
+            <td>R299/month</td>
+            <td>Yes</td>
+            <td>350 members = R104,650</td>
+            <td>Masterclass upsell, YouTube, TikTok</td>
+          </tr>
+          <tr>
+            <td><strong style="color:var(--cream)">Growth System Builds</strong></td>
+            <td>R1,999–R6,500/mo</td>
+            <td>Yes</td>
+            <td>20 clients = R80,000</td>
+            <td>ReviewTap upsells, community members</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ══ 3. THE MASTERCLASS ══ -->
+  <section class="section" data-section="Masterclass">
+    <div class="section-badge">
+      <div class="badge-number">03</div>
+      <h2 class="badge-title">The AI Business Playbook — Masterclass</h2>
+    </div>
+
+    <p class="body-text">The masterclass is the commercial bridge between free content and the community. It's designed to be the best R497 a South African small business owner has ever spent — so good that not joining the community feels like leaving money on the table.</p>
+
+    <div class="pricing-grid">
+      <div class="pricing-card masterclass">
+        <div class="pricing-type">Entry Product</div>
+        <div class="pricing-name">The AI Business Playbook</div>
+        <div class="pricing-amount">R497</div>
+        <div class="pricing-period">once-off · lifetime access</div>
+        <ul class="pricing-includes">
+          <li>5 core modules · 20+ lessons</li>
+          <li>150+ SA-specific AI prompt library</li>
+          <li>Free vs Paid AI Tool Guide (SA context)</li>
+          <li>WhatsApp automation templates</li>
+          <li>Content creation swipe file</li>
+          <li>Private 30-day Q&amp;A access</li>
+          <li>Future module updates included</li>
+        </ul>
+      </div>
+      <div class="pricing-card community">
+        <div class="pricing-type">Upsell — Community</div>
+        <div class="pricing-name">AI Community for SA Business</div>
+        <div class="pricing-amount">R299</div>
+        <div class="pricing-period">per month · cancel anytime</div>
+        <ul class="pricing-includes">
+          <li>Weekly live Q&amp;A calls (alternating hosts)</li>
+          <li>3+ new tutorial videos per month per TP</li>
+          <li>Community forum — ask anything, get answers</li>
+          <li>Monthly AI tool spotlight</li>
+          <li>Exclusive member-only AI workflows</li>
+          <li>Early access to new masterclass modules</li>
+          <li>Discounts on Growth System Builds</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="upsell-arrow">Masterclass buyer → community upsell offer within 48 hours of purchase</div>
+
+    <div class="subsection">
+      <div class="subsection-title">Masterclass Curriculum — 5 Modules</div>
+      <p class="body-text">Every module is built around real South African business problems — not generic AI tutorials. Each lesson is under 12 minutes, immediately actionable, and results in something the business owner can use the same day.</p>
+    </div>
+
+    <div class="module-list">
+
+      <div class="module-card">
+        <div class="module-header m1">
+          <div class="module-num">01</div>
+          <div class="module-meta">
+            <div class="module-tag">Foundation</div>
+            <div class="module-name">Getting Started with AI in Your SA Business</div>
+          </div>
+          <div class="module-duration">~90 min</div>
+        </div>
+        <div class="module-body">
+          <ul class="lesson-list">
+            <li>What AI can and can't do for your business</li>
+            <li>Free tools that work without a VPN in SA</li>
+            <li>Setting up ChatGPT for your business context</li>
+            <li>Your first 5 prompts to use today</li>
+            <li>The SA business owner's AI toolkit (free tier)</li>
+            <li>AI for Afrikaans and multilingual businesses</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-header m2">
+          <div class="module-num">02</div>
+          <div class="module-meta">
+            <div class="module-tag">Communication</div>
+            <div class="module-name">AI for Professional Communication &amp; Admin</div>
+          </div>
+          <div class="module-duration">~100 min</div>
+        </div>
+        <div class="module-body">
+          <ul class="lesson-list">
+            <li>Write professional quotes and proposals in 10 minutes</li>
+            <li>AI-powered WhatsApp response templates</li>
+            <li>Generate invoices and follow-up emails with AI</li>
+            <li>Responding to complaints and difficult clients</li>
+            <li>Meeting notes and summaries with AI</li>
+            <li>Job ads and staff communication templates</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-header m3">
+          <div class="module-num">03</div>
+          <div class="module-meta">
+            <div class="module-tag">Marketing</div>
+            <div class="module-name">AI for Marketing &amp; Social Media</div>
+          </div>
+          <div class="module-duration">~110 min</div>
+        </div>
+        <div class="module-body">
+          <ul class="lesson-list">
+            <li>Create a month of Facebook/Instagram content in 1 hour</li>
+            <li>Write Facebook ads that work for SA audiences</li>
+            <li>AI-assisted Canva design workflow</li>
+            <li>TikTok and Reels scripts with AI</li>
+            <li>Google Business Profile responses with AI</li>
+            <li>Build a basic email newsletter with AI</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-header m4">
+          <div class="module-num">04</div>
+          <div class="module-meta">
+            <div class="module-tag">Sales &amp; Growth</div>
+            <div class="module-name">AI for Sales, Leads &amp; Customer Retention</div>
+          </div>
+          <div class="module-duration">~95 min</div>
+        </div>
+        <div class="module-body">
+          <ul class="lesson-list">
+            <li>AI-powered lead follow-up sequences</li>
+            <li>Building a simple WhatsApp chatbot</li>
+            <li>Recover abandoned carts and pending payments</li>
+            <li>Writing sales scripts for phone and WhatsApp</li>
+            <li>AI tools for Google reviews and reputation</li>
+            <li>Upsell and cross-sell message templates</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-header m5">
+          <div class="module-num">05</div>
+          <div class="module-meta">
+            <div class="module-tag">Automation</div>
+            <div class="module-name">AI-Powered Business Automation</div>
+          </div>
+          <div class="module-duration">~120 min</div>
+        </div>
+        <div class="module-body">
+          <ul class="lesson-list">
+            <li>No-code automation tools for SA businesses (Make, Zapier)</li>
+            <li>Auto-send quotes when a form is submitted</li>
+            <li>Review collection automation after each job</li>
+            <li>WhatsApp → CRM → follow-up pipeline</li>
+            <li>Build a basic AI assistant for your business</li>
+            <li>What to automate first — the SA priority list</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Launch Strategy</div>
+      <div class="info-grid">
+        <div class="info-row">
+          <div class="info-label">Warm Launch</div>
+          <div class="info-value">Week 1–2: Email the full ReviewTap subscriber base first — these are warm, trusted relationships. Offer a founder's price of R297 for the first 50 buyers. Creates social proof and revenue before the cold audience sees it.</div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">Public Launch</div>
+          <div class="info-value">Week 3: Full launch to cold audience via YouTube, TikTok, and organic social. Masterclass CTA added to every video description and pinned comment from launch week onward.</div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">Upsell Sequence</div>
+          <div class="info-value">Every masterclass buyer receives an automated 3-email sequence over 48 hours offering their first month of community at R99. Email 1: welcome + module access. Email 2: what the community adds. Email 3: the offer + deadline.</div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">ReviewTap Integration</div>
+          <div class="info-value">Every ReviewTap client receives a personalised message from Giorgio introducing the masterclass — positioned as "something we built for businesses like yours." Not a cold pitch — a warm product recommendation from a known contact.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 4. CONTENT PILLARS ══ -->
+  <section class="section" data-section="Content Pillars">
+    <div class="section-badge">
+      <div class="badge-number">04</div>
+      <h2 class="badge-title">Content Pillars &amp; Topic Strategy</h2>
+    </div>
+
+    <p class="body-text">All content — tutorials, short-form, community posts, email — maps to one of five pillars. Every pillar has a SA-specific angle. Generic AI content is everywhere. SA business-specific AI content is almost non-existent. That's our moat.</p>
+
+    <div class="pillars-grid">
+      <div class="pillar-card">
+        <div class="pillar-header p1">
+          <div class="pillar-icon">💬</div>
+          <div class="pillar-name">Pillar 1 · AI for Communication</div>
+        </div>
+        <div class="pillar-body">
+          <p style="font-size:12.5px;color:var(--muted);margin-bottom:10px;font-weight:300">Emails, quotes, proposals, WhatsApp, complaints, job ads</p>
+          <div>
+            <span class="topic-chip">Quote in 10 min with ChatGPT</span>
+            <span class="topic-chip">Professional WhatsApp replies</span>
+            <span class="topic-chip">Responding to bad Google reviews</span>
+            <span class="topic-chip">Complaint handling with AI</span>
+            <span class="topic-chip">Afrikaans business writing</span>
+            <span class="topic-chip">Overdue invoice follow-up</span>
+            <span class="topic-chip">Job ad that gets applications</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="pillar-card">
+        <div class="pillar-header p2">
+          <div class="pillar-icon">📣</div>
+          <div class="pillar-name">Pillar 2 · AI for Marketing</div>
+        </div>
+        <div class="pillar-body">
+          <p style="font-size:12.5px;color:var(--muted);margin-bottom:10px;font-weight:300">Social content, ad copy, video scripts, email marketing</p>
+          <div>
+            <span class="topic-chip">Month of content in 1 hour</span>
+            <span class="topic-chip">Facebook ads for SA market</span>
+            <span class="topic-chip">TikTok scripts with AI</span>
+            <span class="topic-chip">AI + Canva workflow</span>
+            <span class="topic-chip">Email newsletter in 15 min</span>
+            <span class="topic-chip">Google My Business posts</span>
+            <span class="topic-chip">Seasonal campaign planning</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="pillar-card">
+        <div class="pillar-header p3">
+          <div class="pillar-icon">🧾</div>
+          <div class="pillar-name">Pillar 3 · AI for Admin &amp; Finance</div>
+        </div>
+        <div class="pillar-body">
+          <p style="font-size:12.5px;color:var(--muted);margin-bottom:10px;font-weight:300">Invoicing, bookkeeping basics, SARS prep, scheduling</p>
+          <div>
+            <span class="topic-chip">Invoice with AI tools</span>
+            <span class="topic-chip">Track expenses with AI</span>
+            <span class="topic-chip">SARS provisional tax basics</span>
+            <span class="topic-chip">Meeting summaries</span>
+            <span class="topic-chip">Automate your schedule</span>
+            <span class="topic-chip">Business plan first draft</span>
+            <span class="topic-chip">CIPC documents with AI</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="pillar-card">
+        <div class="pillar-header p4">
+          <div class="pillar-icon">🔥</div>
+          <div class="pillar-name">Pillar 4 · AI for Sales &amp; Leads</div>
+        </div>
+        <div class="pillar-body">
+          <p style="font-size:12.5px;color:var(--muted);margin-bottom:10px;font-weight:300">Lead gen, follow-up, WhatsApp bots, CRM</p>
+          <div>
+            <span class="topic-chip">AI follow-up sequences</span>
+            <span class="topic-chip">WhatsApp chatbot setup</span>
+            <span class="topic-chip">Recover unpaid invoices</span>
+            <span class="topic-chip">Sales script with AI</span>
+            <span class="topic-chip">Upsell message templates</span>
+            <span class="topic-chip">Find leads on social media</span>
+            <span class="topic-chip">Convert quotes faster</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="pillar-card" style="grid-column: 1 / -1">
+        <div class="pillar-header p5">
+          <div class="pillar-icon">⚙️</div>
+          <div class="pillar-name">Pillar 5 · AI for Automation &amp; Operations</div>
+        </div>
+        <div class="pillar-body">
+          <p style="font-size:12.5px;color:var(--muted);margin-bottom:10px;font-weight:300">No-code tools, workflows, automations, systems — for businesses with no IT department</p>
+          <div>
+            <span class="topic-chip">Make.com for beginners</span>
+            <span class="topic-chip">Auto-send quotes on form submit</span>
+            <span class="topic-chip">Review automation after job done</span>
+            <span class="topic-chip">WhatsApp → CRM pipeline</span>
+            <span class="topic-chip">Auto-replies for common questions</span>
+            <span class="topic-chip">Inventory alerts with AI</span>
+            <span class="topic-chip">Load shedding-proof workflows</span>
+            <span class="topic-chip">Booking system without a website</span>
+            <span class="topic-chip">Build your own AI assistant</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">The SA Angle — Why This Works</div>
+      <p class="body-text">Most AI content is created for a US or UK audience — using tools that require credit cards, dollar pricing, fast internet, and no data constraints. South African small business owners face a completely different reality: load shedding, data costs, WhatsApp-first communication, rand pricing, SARS compliance, and BEE considerations. Every topic we cover is filtered through this lens. This is not a translation of US content — it's built from the ground up for the SA market.</p>
+    </div>
+  </section>
+
+  <!-- ══ 5. PLATFORM PLAYBOOK ══ -->
+  <section class="section" data-section="Platform Playbook">
+    <div class="section-badge">
+      <div class="badge-number">05</div>
+      <h2 class="badge-title">Platform Playbook</h2>
+    </div>
+
+    <p class="body-text">Four platforms, one purpose. Every platform has a specific role in the funnel. No platform is treated as an afterthought — each has a defined format, frequency, CTA, and growth tactic. Content is created once and distributed intelligently, not recreated from scratch per platform.</p>
+
+    <div class="platforms-grid">
+
+      <div class="platform-card">
+        <div class="platform-header youtube">
+          <div class="platform-logo youtube">▶</div>
+          <div class="platform-meta">
+            <div class="platform-name">YouTube — Long Form</div>
+            <div class="platform-sub">Trust builder · SEO engine · Masterclass driver</div>
+          </div>
+        </div>
+        <div class="platform-body">
+          <div class="platform-row">
+            <div class="platform-key">Format</div>
+            <div class="platform-val">Tutorial walkthroughs, tool demos, case studies. Screen recordings with commentary. 8–15 minutes.</div>
+          </div>
+          <div class="platform-row">
+            <div class="platform-key">Frequency</div>
+            <div class="platform-val">1–2 videos per week per TP (3 minimum per TP per month)</div>
+          </div>
+          <div class="platform-row">
+            <div class="platform-key">Primary CTA</div>
+            <div class="platform-val">"Get the full AI Business Playbook — link in description" → masterclass sales page</div>
+          </div>
+          <div class="platform-row">
+            <div class="platform-key">SA Topics That Work</div>
+            <div class="platform-val">"How I built a WhatsApp bot for my SA business in 30 minutes" · "AI for Afrikaans business owners"</div>
+          </div>
+          <div class="platform-row">
+            <div class="platform-key">Growth Tactic</div>
+            <div class="platform-val">SEO-optimised titles with SA keywords. Reply to every comment in the first 24 hours. Upload schedule locked — same day each week.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="platform-card">
+        <div class="platform-header shorts">
+          <div class="platform-logo shorts">⚡</div>
+          <div class="platform-meta">
+            <div class="platform-name">YouTube Shorts</div>
+            <div class="platform-sub">Discovery channel · Channel growth · Clip repurposing</div>
+          </div>
+        </div>
+        <div class="platform-body">
+          <div class="platform-row">
+            <div class="platform-key">Format</div>
+            <div class="platform-val">60-second clips cut directly from long-form tutorials. The best 60 seconds of each video becomes a Short.</div>
+          </div>
+          <div class="platform-row">
+            <div class="platform-key">Frequency</div>
+            <div class="platform-val">3+ per week (clips from tutorials — low extra effort)</div>
+          </div>
+          <div class="platform-row">
+            <div class="platform-key">Primary CTA</div>
+            <div class="platform-val">"Watch the full tutorial on our channel" + community link in pinned comment</div>
+          </div>
+          <div class="platform-row">
+            <div class="platform-key">Best Performers</div>
+            <div class="platform-val">"One AI trick that saves me 2 hours a week" · "Stop writing quotes manually — watch this"</div>
+          </div>
+          <div class="platform-row">
+            <div class="platform-key">Growth Tactic</div>
+            <div class="platform-val">Hook in the first 2 seconds is everything. Start with the result, not the setup. Post at 7am and 6pm SA time.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="platform-card">
+        <div class="platform-header tiktok">
+          <div class="platform-logo tiktok">♪</div>
+          <div class="platform-meta">
+            <div class="platform-name">TikTok</div>
+            <div class="platform-sub">Cold reach · Young business owners · Viral potential</div>
+          </div>
+        </div>
+        <div class="platform-body">
+          <div class="platform-row">
+            <div class="platform-key">Format</div>
+            <div class="platform-val">30–60 second videos. Trending audio + business tip overlay. Real screen recordings. Personality-led.</div>
+          </div>
+          <div class="platform-row">
+            <div class="platform-key">Frequency</div>
+            <div class="platform-val">3+ per TP per month (can reuse Shorts content with different audio)</div>
+          </div>
+          <div class="platform-row">
+            <div class="platform-key">Primary CTA</div>
+            <div class="platform-val">"Link in bio" → community landing page. Use trending SA sounds where appropriate.</div>
+          </div>
+          <div class="platform-row">
+            <div class="platform-key">Content Style</div>
+            <div class="platform-val">"POV: you're a SA business owner who just automated your invoicing" · relatable small business struggles + AI solution</div>
+          </div>
+          <div class="platform-row">
+            <div class="platform-key">Growth Tactic</div>
+            <div class="platform-val">Stitch and respond to comments. Post 3–5 times per week for algorithm momentum. One original concept per week, rest are repurposed clips.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="platform-card">
+        <div class="platform-header email">
+          <div class="platform-logo email">✉</div>
+          <div class="platform-meta">
+            <div class="platform-name">Email / ReviewTap List</div>
+            <div class="platform-sub">Warmest channel · Highest conversion · Zero cost</div>
+          </div>
+        </div>
+        <div class="platform-body">
+          <div class="platform-row">
+            <div class="platform-key">Format</div>
+            <div class="platform-val">Weekly value email: one AI tip, one tutorial link, one CTA. 300–400 words max. Plain text converts best.</div>
+          </div>
+          <div class="platform-row">
+            <div class="platform-key">Frequency</div>
+            <div class="platform-val">1× per week. Consistent day and time (Tuesday 9am recommended).</div>
+          </div>
+          <div class="platform-row">
+            <div class="platform-key">Primary CTA</div>
+            <div class="platform-val">Masterclass purchase, then community upsell once purchased.</div>
+          </div>
+          <div class="platform-row">
+            <div class="platform-key">List Strategy</div>
+            <div class="platform-val">Start with ReviewTap subscriber base. Add free "AI Starter Pack" lead magnet on YouTube to grow the cold list. Target 1,000+ email subscribers by Month 6.</div>
+          </div>
+          <div class="platform-row">
+            <div class="platform-key">Growth Tactic</div>
+            <div class="platform-val">Every YouTube video description includes a link to the free AI Starter Pack (in exchange for email). Automated 5-email welcome sequence warms them before the masterclass offer.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Content Repurposing Map — One Video, Six Outputs</div>
+      <table class="data-table">
+        <thead>
+          <tr><th>Source</th><th>Repurposed As</th><th>Platform</th><th>Effort</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td rowspan="6" style="font-weight:500;color:var(--cream)">1× YouTube Tutorial<br><span style="font-size:11px;color:var(--muted)">(10–12 min)</span></td>
+            <td>YouTube Long-Form Video</td><td>YouTube</td><td>Primary creation</td>
+          </tr>
+          <tr>
+            <td>Best 60-second clip → YouTube Short</td><td>YouTube Shorts</td><td>10 min to clip and caption</td>
+          </tr>
+          <tr>
+            <td>Same Short with trending audio → TikTok</td><td>TikTok</td><td>5 min (swap audio)</td>
+          </tr>
+          <tr>
+            <td>Video transcript → Tuesday email value tip</td><td>Email</td><td>15 min to adapt</td>
+          </tr>
+          <tr>
+            <td>Key takeaway → Community post / pinned thread</td><td>ReviewTap Community</td><td>5 min</td>
+          </tr>
+          <tr>
+            <td>Topic → Community tutorial (deeper version)</td><td>ReviewTap Community</td><td>15 min to expand</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ══ 6. 90-DAY SPRINT ══ -->
+  <section class="section" data-section="90-Day Sprint">
+    <div class="section-badge">
+      <div class="badge-number">06</div>
+      <h2 class="badge-title">The 90-Day Launch Sprint</h2>
+    </div>
+
+    <p class="body-text">The first 90 days are non-negotiable. This is when the habits form, the flywheel starts spinning, and the first revenue lands. Every week has a focus. Every month has a target. Nothing is vague.</p>
+
+    <div class="sprint-grid">
+
+      <div class="sprint-card">
+        <div class="sprint-header m1">
+          <div class="sprint-month">Month 1 · Weeks 1–4</div>
+          <div class="sprint-focus">Build the Foundation</div>
+        </div>
+        <div class="sprint-body">
+          <div class="sprint-week">Week 1</div>
+          <div class="sprint-item">Set up ReviewTap community platform — categories, welcome post, member journey</div>
+          <div class="sprint-item">Film Module 1 of the masterclass ("Getting Started")</div>
+          <div class="sprint-item">Build the masterclass landing page and payment flow</div>
+          <div class="sprint-item">Set up YouTube channel — branding, banner, about, first community post</div>
+          <div class="sprint-week">Week 2</div>
+          <div class="sprint-item">Film Tutorial #1: "How to use ChatGPT to run your SA business"</div>
+          <div class="sprint-item">Create AI Starter Pack lead magnet (PDF prompt library)</div>
+          <div class="sprint-item">Set up email platform + 5-part welcome sequence</div>
+          <div class="sprint-week">Week 3</div>
+          <div class="sprint-item">Email ReviewTap list: founder's price masterclass offer (R297)</div>
+          <div class="sprint-item">Film Tutorial #2 + 3 Shorts/TikToks from Tutorial #1</div>
+          <div class="sprint-item">Giorgio begins abandoned cart and EFT recovery calls</div>
+          <div class="sprint-week">Week 4</div>
+          <div class="sprint-item">First Q&amp;A call (Sam hosts Week 1 — odd week)</div>
+          <div class="sprint-item">Film Module 2 of masterclass ("Communication &amp; Admin")</div>
+          <div class="sprint-item">Month-end review: subscribers, masterclass sales, community members</div>
+          <div class="sprint-week">Month 1 Targets</div>
+          <div class="sprint-item">Masterclass: 20+ sales (warm list launch)</div>
+          <div class="sprint-item">Community: 15+ founding members</div>
+          <div class="sprint-item">YouTube: channel set up + 2 videos live</div>
+          <div class="sprint-item">Email list: 100+ subscribers</div>
+        </div>
+      </div>
+
+      <div class="sprint-card">
+        <div class="sprint-header m2">
+          <div class="sprint-month">Month 2 · Weeks 5–8</div>
+          <div class="sprint-focus">Publish &amp; Grow</div>
+        </div>
+        <div class="sprint-body">
+          <div class="sprint-week">Week 5</div>
+          <div class="sprint-item">Public masterclass launch — add CTAs to all video descriptions</div>
+          <div class="sprint-item">Tutorial #3: "Create a month of social media content in 1 hour"</div>
+          <div class="sprint-item">Sam hosts Q&amp;A call — community engagement focus</div>
+          <div class="sprint-week">Week 6</div>
+          <div class="sprint-item">Tutorial #4: "AI-powered WhatsApp follow-up sequences"</div>
+          <div class="sprint-item">Giorgio contacts all active ReviewTap clients — masterclass intro</div>
+          <div class="sprint-item">3 TikToks from Tutorial #3 clips — SA business angle</div>
+          <div class="sprint-week">Week 7</div>
+          <div class="sprint-item">Film Modules 3 &amp; 4 of masterclass</div>
+          <div class="sprint-item">Giorgio hosts Q&amp;A call — odd week now flips (Giorgio = even)</div>
+          <div class="sprint-item">Tutorial #5: "Write your business proposal with AI"</div>
+          <div class="sprint-week">Week 8</div>
+          <div class="sprint-item">First Growth System Build demo video published</div>
+          <div class="sprint-item">Email list nurture: "5 things I wish I knew about AI for my business"</div>
+          <div class="sprint-item">Month-end review — adjust content based on top-performing videos</div>
+          <div class="sprint-week">Month 2 Targets</div>
+          <div class="sprint-item">Masterclass: 15+ additional sales</div>
+          <div class="sprint-item">Community: 35+ total members</div>
+          <div class="sprint-item">YouTube: 5 videos published, 100+ subscribers</div>
+          <div class="sprint-item">Email list: 250+ subscribers</div>
+        </div>
+      </div>
+
+      <div class="sprint-card">
+        <div class="sprint-header m3">
+          <div class="sprint-month">Month 3 · Weeks 9–12</div>
+          <div class="sprint-focus">Compound &amp; Convert</div>
+        </div>
+        <div class="sprint-body">
+          <div class="sprint-week">Week 9</div>
+          <div class="sprint-item">Film final masterclass module (Module 5 — Automation)</div>
+          <div class="sprint-item">Masterclass officially "complete" — update landing page</div>
+          <div class="sprint-item">Tutorial #6: "Build a no-code automation for your SA business"</div>
+          <div class="sprint-week">Week 10</div>
+          <div class="sprint-item">Tutorial #7: "AI tools to survive load shedding and stay productive"</div>
+          <div class="sprint-item">Email campaign: "Your masterclass is now complete — here's Module 5"</div>
+          <div class="sprint-item">3 TikTok originals — trending audio + AI business tips</div>
+          <div class="sprint-week">Week 11</div>
+          <div class="sprint-item">Case study video: "How a SA [industry] business used AI to save 10 hours/week"</div>
+          <div class="sprint-item">ReviewTap upsell push: Growth System Build intro to engaged community members</div>
+          <div class="sprint-item">Q&amp;A call — themed around automation (Module 5)</div>
+          <div class="sprint-week">Week 12</div>
+          <div class="sprint-item">90-day review: content performance, community growth, revenue</div>
+          <div class="sprint-item">Double down on the 2 best-performing content topics</div>
+          <div class="sprint-item">Plan Month 4–6 content calendar based on data</div>
+          <div class="sprint-week">Month 3 Targets</div>
+          <div class="sprint-item">Masterclass: 10+ additional sales (now organic search)</div>
+          <div class="sprint-item">Community: 60+ total members</div>
+          <div class="sprint-item">YouTube: 8+ videos, 300+ subscribers</div>
+          <div class="sprint-item">First Growth Build enquiry from community member</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══ 7. MONTHS 4–12 ══ -->
+  <section class="section" data-section="Scale Phase">
+    <div class="section-badge">
+      <div class="badge-number">07</div>
+      <h2 class="badge-title">Months 4–12: The Scale Phase</h2>
+    </div>
+
+    <p class="body-text">After the 90-day sprint, the system is running. The focus shifts from building to compounding. Content output stays consistent, revenue per piece of content increases as the audience grows, and Growth System Build clients begin converting from the warm community audience.</p>
+
+    <div class="subsection">
+      <div class="subsection-title">Monthly Rhythm (Month 4 Onward)</div>
+      <div class="info-grid">
+        <div class="info-row">
+          <div class="info-label">Week 1</div>
+          <div class="info-value">New pillar focus for the month decided. Tutorial #1 filmed and uploaded. Community post previewing the month's theme. Giorgio sends masterclass intro to any new ReviewTap clients onboarded that month.</div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">Week 2</div>
+          <div class="info-value">Tutorial #2 uploaded. 3 Shorts/TikToks from Tutorial #1. Email value tip sent (Tuesday). Sam hosts Q&amp;A call.</div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">Week 3</div>
+          <div class="info-value">Tutorial #3 uploaded. 3 Shorts/TikToks from Tutorial #2. Community exclusive content (deeper version of one tutorial). Giorgio hosts Q&amp;A call.</div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">Week 4</div>
+          <div class="info-value">Month-end review. Best performing content identified and doubled-down on. Growth Build outreach to community members showing buying signals. Revenue share calculated.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Quarterly Content Themes</div>
+      <table class="data-table">
+        <thead>
+          <tr><th>Quarter</th><th>Theme</th><th>Masterclass Module Focus</th><th>Community Campaign</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Q1 (Months 1–3)</td>
+            <td>AI Foundations for SA Business</td>
+            <td>Modules 1 &amp; 2 — Getting Started + Communication</td>
+            <td>Founding Member Drive — R99 first month</td>
+          </tr>
+          <tr>
+            <td>Q2 (Months 4–6)</td>
+            <td>AI Marketing &amp; Social Media</td>
+            <td>Module 3 — Marketing deep-dive</td>
+            <td>"100 Members" milestone campaign</td>
+          </tr>
+          <tr>
+            <td>Q3 (Months 7–9)</td>
+            <td>AI Sales &amp; Growth</td>
+            <td>Module 4 — Sales &amp; leads</td>
+            <td>Member case studies + "Results Wall"</td>
+          </tr>
+          <tr>
+            <td>Q4 (Months 10–12)</td>
+            <td>AI Automation Sprint</td>
+            <td>Module 5 — Automation — advanced content</td>
+            <td>"350 Members" Phase 2 push · annual offer</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ══ 8. REVENUE MILESTONES ══ -->
+  <section class="section" data-section="Milestones">
+    <div class="section-badge">
+      <div class="badge-number">08</div>
+      <h2 class="badge-title">Revenue Milestones</h2>
+    </div>
+
+    <p class="body-text">Five meaningful checkpoints from launch to Phase 2. Each milestone is achievable, measurable, and unlocks the next phase of investment and effort.</p>
+
+    <div class="milestone-track">
+      <div class="milestone-line"></div>
+      <div class="milestones">
+        <div class="milestone">
+          <div class="milestone-dot m1"></div>
+          <div class="milestone-time">Month 1</div>
+          <div class="milestone-revenue">R5,000</div>
+          <div class="milestone-desc">Warm list masterclass sales + first community members</div>
+        </div>
+        <div class="milestone">
+          <div class="milestone-dot m2"></div>
+          <div class="milestone-time">Month 3</div>
+          <div class="milestone-revenue">R18,000</div>
+          <div class="milestone-desc">60+ community members + organic masterclass sales beginning</div>
+        </div>
+        <div class="milestone">
+          <div class="milestone-dot m3"></div>
+          <div class="milestone-time">Month 6</div>
+          <div class="milestone-revenue">R42,000</div>
+          <div class="milestone-desc">150+ members + 5 growth build clients + consistent masterclass sales</div>
+        </div>
+        <div class="milestone">
+          <div class="milestone-dot m4"></div>
+          <div class="milestone-time">Month 9</div>
+          <div class="milestone-revenue">R68,000</div>
+          <div class="milestone-desc">250+ members + 12 growth clients + YouTube momentum driving sales</div>
+        </div>
+        <div class="milestone">
+          <div class="milestone-dot m5"></div>
+          <div class="milestone-time">Month 12</div>
+          <div class="milestone-revenue">R90,000+</div>
+          <div class="milestone-desc">350+ members + 20 growth clients — Phase 2 equity trigger reached</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Combined Revenue at Phase 2 Trigger</div>
+      <table class="data-table">
+        <thead>
+          <tr><th>Stream</th><th>Volume</th><th>Monthly Revenue</th><th>TP Share (40%)</th><th>Each TP</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>AI Community</td><td>350 members × R299</td><td>R104,650</td><td>R41,860</td><td>R20,930</td>
+          </tr>
+          <tr>
+            <td>Masterclass sales</td><td>20/month × R497</td><td>R9,940</td><td>R3,976</td><td>R1,988</td>
+          </tr>
+          <tr>
+            <td>Growth System Builds</td><td>15 clients × R4,000 avg</td><td>R60,000</td><td>R24,000</td><td>R12,000</td>
+          </tr>
+          <tr style="font-weight:600">
+            <td><strong>Total</strong></td><td>—</td><td><strong style="color:#7DDBAA">R174,590</strong></td><td><strong style="color:#7DDBAA">R69,836</strong></td><td><strong style="color:#7DDBAA">R34,918</strong></td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="note-text">Phase 2 triggers well before this ceiling — at R90,000/month net combined. The above scenario illustrates the 12-month upside if all three streams are firing.</p>
+    </div>
+  </section>
+
+  <!-- ══ 9. CONTENT CALENDAR ══ -->
+  <section class="section" data-section="Content Calendar">
+    <div class="section-badge">
+      <div class="badge-number">09</div>
+      <h2 class="badge-title">Monthly Content Calendar Template</h2>
+    </div>
+
+    <p class="body-text">This template repeats every month from Month 2 onward. Pillar and topic change monthly. Format and cadence stay fixed. The discipline of a repeatable schedule is what separates channels that grow from channels that stall.</p>
+
+    <div class="cal-grid">
+      <div class="cal-cell cal-header">Activity</div>
+      <div class="cal-cell cal-header">Week 1</div>
+      <div class="cal-cell cal-header">Week 2</div>
+      <div class="cal-cell cal-header">Week 3</div>
+      <div class="cal-cell cal-header">Week 4</div>
+
+      <div class="cal-cell cal-row-label">YouTube Tutorial (Sam)</div>
+      <div class="cal-cell tutorial">Tutorial A — Pillar topic intro (10–12 min)</div>
+      <div class="cal-cell tutorial">Tutorial B — Deeper dive on same pillar</div>
+      <div class="cal-cell tutorial">Tutorial C — Case study or tool spotlight</div>
+      <div class="cal-cell tutorial">Bonus or community-requested topic</div>
+
+      <div class="cal-cell cal-row-label">YouTube Tutorial (Giorgio)</div>
+      <div class="cal-cell tutorial">Tutorial D — Complementary pillar topic</div>
+      <div class="cal-cell tutorial">Tutorial E — How-to walkthrough</div>
+      <div class="cal-cell tutorial">Tutorial F — Beginner-friendly version</div>
+      <div class="cal-cell tutorial">Collab or Q&amp;A recap video</div>
+
+      <div class="cal-cell cal-row-label">Shorts / TikTok (Sam)</div>
+      <div class="cal-cell shortform">3× clips from Tutorial A</div>
+      <div class="cal-cell shortform">3× clips from Tutorial B</div>
+      <div class="cal-cell shortform">3× clips from Tutorial C</div>
+      <div class="cal-cell shortform">1× original concept Short</div>
+
+      <div class="cal-cell cal-row-label">Shorts / TikTok (Giorgio)</div>
+      <div class="cal-cell shortform">3× clips from Tutorial D</div>
+      <div class="cal-cell shortform">3× clips from Tutorial E</div>
+      <div class="cal-cell shortform">3× clips from Tutorial F</div>
+      <div class="cal-cell shortform">1× trending audio + business tip</div>
+
+      <div class="cal-cell cal-row-label">Community Posts</div>
+      <div class="cal-cell community">Month theme intro + what to expect this month</div>
+      <div class="cal-cell community">Mid-month check-in + exclusive tip not in video</div>
+      <div class="cal-cell community">Member highlight or result showcase</div>
+      <div class="cal-cell community">Month recap + next month teaser</div>
+
+      <div class="cal-cell cal-row-label">Q&amp;A Calls</div>
+      <div class="cal-cell community">Sam hosts (odd week)</div>
+      <div class="cal-cell community">Giorgio hosts (even week)</div>
+      <div class="cal-cell community">Sam hosts (odd week)</div>
+      <div class="cal-cell community">Giorgio hosts (even week)</div>
+
+      <div class="cal-cell cal-row-label">Email</div>
+      <div class="cal-cell sales">Value tip from Tutorial A + masterclass CTA</div>
+      <div class="cal-cell sales">Value tip from Tutorial B + community CTA</div>
+      <div class="cal-cell sales">Value tip from Tutorial C + growth build mention</div>
+      <div class="cal-cell sales">Month wrap-up + best of the month</div>
+
+      <div class="cal-cell cal-row-label">Sales (Giorgio)</div>
+      <div class="cal-cell sales">Cart recovery + EFT follow-up calls</div>
+      <div class="cal-cell sales">New enquiry handling + masterclass intros to ReviewTap clients</div>
+      <div class="cal-cell sales">Mockup approvals + invoice follow-ups</div>
+      <div class="cal-cell sales">Progress update to Jacques + pipeline review</div>
+    </div>
+
+    <p class="note-text">Minimum monthly output: 6 long-form tutorials + 24 Shorts/TikToks + 4 community posts + 4 emails + 4 Q&amp;A calls + ongoing sales ops. Total platform touches: 40+ pieces of content per month.</p>
+  </section>
+
+  <!-- ══ 10. THE FUNNEL ══ -->
+  <section class="section" data-section="Funnel">
+    <div class="section-badge">
+      <div class="badge-number">10</div>
+      <h2 class="badge-title">The Full Funnel — Stranger to Client</h2>
+    </div>
+
+    <p class="body-text">Every step in this funnel is intentional. No one gets pushed — they're pulled forward by value at each stage. The key insight: someone who has watched 3 videos, bought the masterclass, and been in the community for 2 months is not a cold lead for a Growth Build. They're a warm referral who already trusts us.</p>
+
+    <div class="funnel-steps">
+      <div class="funnel-step fs1">
+        <div class="funnel-num">1</div>
+        <div class="funnel-meta">
+          <div class="funnel-step-title">Discovery — Free Content</div>
+          <div class="funnel-step-desc">SA small business owner finds us on YouTube, TikTok, or Shorts searching for AI help. First impression is a high-value, SA-specific tutorial. No selling. Pure value.</div>
+        </div>
+        <span class="funnel-tag tag-teal">YouTube · TikTok · Shorts</span>
+      </div>
+      <div class="funnel-connector">↓</div>
+      <div class="funnel-step fs2">
+        <div class="funnel-num">2</div>
+        <div class="funnel-meta">
+          <div class="funnel-step-title">Lead Capture — AI Starter Pack</div>
+          <div class="funnel-step-desc">CTA in video description offers a free "SA Business AI Starter Pack" (150 prompts PDF). Viewer enters email to download. Enters 5-part welcome sequence.</div>
+        </div>
+        <span class="funnel-tag tag-gold">Free lead magnet</span>
+      </div>
+      <div class="funnel-connector">↓</div>
+      <div class="funnel-step fs3">
+        <div class="funnel-num">3</div>
+        <div class="funnel-meta">
+          <div class="funnel-step-title">Email Nurture — 5-Part Sequence</div>
+          <div class="funnel-step-desc">Over 7 days: Email 1 (Starter Pack delivery + best tutorial), Email 2 (SA business AI case study), Email 3 (most common AI mistakes), Email 4 (what the masterclass covers), Email 5 (masterclass offer).</div>
+        </div>
+        <span class="funnel-tag tag-orange">Email sequence</span>
+      </div>
+      <div class="funnel-connector">↓</div>
+      <div class="funnel-step fs4">
+        <div class="funnel-num">4</div>
+        <div class="funnel-meta">
+          <div class="funnel-step-title">Masterclass Purchase — R497</div>
+          <div class="funnel-step-desc">Converts to The AI Business Playbook. Immediate access to all 5 modules. Buyer is now a paid customer with high intent and a demonstrated willingness to invest in their business.</div>
+        </div>
+        <span class="funnel-tag tag-blue">R497 · once-off</span>
+      </div>
+      <div class="funnel-connector">↓</div>
+      <div class="funnel-step fs5">
+        <div class="funnel-num">5</div>
+        <div class="funnel-meta">
+          <div class="funnel-step-title">Community Upsell — R99 First Month</div>
+          <div class="funnel-step-desc">48-hour post-purchase email sequence: Email 1 (welcome + modules), Email 2 (what the community adds that the masterclass doesn't), Email 3 (R99 first month offer — expires in 48 hrs). Converts to R299/month from Month 2.</div>
+        </div>
+        <span class="funnel-tag tag-purple">R99 → R299/month</span>
+      </div>
+      <div class="funnel-connector">↓</div>
+      <div class="funnel-step fs6">
+        <div class="funnel-num">6</div>
+        <div class="funnel-meta">
+          <div class="funnel-step-title">Growth System Build Client</div>
+          <div class="funnel-step-desc">Community member who has seen 3 months of our work, asked questions on Q&amp;A calls, and watched us build systems for other businesses. When Jacques reaches out about a Growth Build, this is not a cold call. Conversion rate on community members is 3–5× higher than cold prospects.</div>
+        </div>
+        <span class="funnel-tag tag-green">R1,999–R6,500/month</span>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">ReviewTap Warm Path (Parallel Funnel)</div>
+      <p class="body-text">ReviewTap subscribers skip Steps 1–3 entirely. Giorgio sends a personal masterclass introduction directly — warm trust already established through the ReviewTap relationship. Conversion rate on this path is expected to be significantly higher than cold YouTube traffic. This is the fastest path to Month 1 revenue.</p>
+    </div>
+  </section>
+
+  <!-- ══ 11. ROLES ══ -->
+  <section class="section" data-section="Roles">
+    <div class="section-badge">
+      <div class="badge-number">11</div>
+      <h2 class="badge-title">Roles &amp; Responsibilities</h2>
+    </div>
+
+    <p class="body-text">Three people, three lanes. Clear ownership means nothing falls through the cracks and no one is doing the same job twice.</p>
+
+    <div class="roles-grid">
+
+      <div class="role-card">
+        <div class="role-header jacques">
+          <div class="role-name">Jacques Groenewald</div>
+          <div class="role-title">Lead Partner · Strategy &amp; Sales</div>
+        </div>
+        <div class="role-body">
+          <div class="role-item">Set quarterly content themes and pillar priorities</div>
+          <div class="role-item">Close all Growth System Build clients</div>
+          <div class="role-item">ReviewTap upsell conversations (relationship owner)</div>
+          <div class="role-item">Weekly email to list — written or approved</div>
+          <div class="role-item">Approve all masterclass and community pricing decisions</div>
+          <div class="role-item">Month-end revenue review and earnings distribution</div>
+          <div class="role-item">CRM oversight — all pipeline in ReviewTap CRM</div>
+          <div class="role-item">Strategic direction — product roadmap decisions</div>
+        </div>
+      </div>
+
+      <div class="role-card">
+        <div class="role-header samuel">
+          <div class="role-name">Samuel Rencken</div>
+          <div class="role-title">Technical Partner · Content &amp; Builds</div>
+        </div>
+        <div class="role-body">
+          <div class="role-item">3 tutorial videos per month (YouTube primary)</div>
+          <div class="role-item">3 YouTube Shorts / TikToks per month</div>
+          <div class="role-item">Host Q&amp;A call — odd-numbered weeks</div>
+          <div class="role-item">ReviewTap community platform maintenance</div>
+          <div class="role-item">Growth System Build execution — website, automation, integrations</div>
+          <div class="role-item">Masterclass module filming and editing</div>
+          <div class="role-item">Community moderation — 48hr response SLA</div>
+          <div class="role-item">Pre-sales demo builds before client meetings</div>
+        </div>
+      </div>
+
+      <div class="role-card">
+        <div class="role-header giorgio">
+          <div class="role-name">Giorgio van Rooyen</div>
+          <div class="role-title">Technical Partner · Ops &amp; Sales Support</div>
+        </div>
+        <div class="role-body">
+          <div class="role-item">3 tutorial videos per month (YouTube primary)</div>
+          <div class="role-item">3 YouTube Shorts / TikToks per month</div>
+          <div class="role-item">Host Q&amp;A call — even-numbered weeks</div>
+          <div class="role-item">First response to new enquiries (4 hr SLA)</div>
+          <div class="role-item">Abandoned cart + EFT recovery calls daily</div>
+          <div class="role-item">Mockup approval management + invoicing</div>
+          <div class="role-item">Printer pickups + fulfilment (21 Wintershoek St, Vaalpark)</div>
+          <div class="role-item">Masterclass intro to all new ReviewTap clients</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══ 12. KPIs ══ -->
+  <section class="section" data-section="KPIs">
+    <div class="section-badge">
+      <div class="badge-number">12</div>
+      <h2 class="badge-title">KPIs — What We Measure</h2>
+    </div>
+
+    <p class="body-text">Reviewed monthly on the 1st business day. Anything below target for two consecutive months gets a specific fix applied — not a conversation about trying harder.</p>
+
+    <div class="subsection">
+      <div class="subsection-title">Content KPIs</div>
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-category">YouTube</div>
+          <div class="kpi-metric">Videos Published</div>
+          <div class="kpi-target">≥ 6/month</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-category">YouTube</div>
+          <div class="kpi-metric">Subscriber Growth</div>
+          <div class="kpi-target">+100/month by M3</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-category">Shorts / TikTok</div>
+          <div class="kpi-metric">Short-form clips</div>
+          <div class="kpi-target">≥ 24/month</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-category">Email</div>
+          <div class="kpi-metric">List Size</div>
+          <div class="kpi-target">+100 subs/month</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Revenue KPIs</div>
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-category">Masterclass</div>
+          <div class="kpi-metric">Monthly Sales</div>
+          <div class="kpi-target">10+ by M2 · 20+ by M4</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-category">Community</div>
+          <div class="kpi-metric">Paying Members</div>
+          <div class="kpi-target">35 M1 → 350 M12</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-category">Growth Builds</div>
+          <div class="kpi-metric">Active Clients</div>
+          <div class="kpi-target">5 by M3 · 20 by M12</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-category">Combined</div>
+          <div class="kpi-metric">Net Monthly Revenue</div>
+          <div class="kpi-target">R90k by Month 12</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Conversion KPIs</div>
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-category">Funnel</div>
+          <div class="kpi-metric">Email → Masterclass</div>
+          <div class="kpi-target">≥ 3% conversion</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-category">Funnel</div>
+          <div class="kpi-metric">Masterclass → Community</div>
+          <div class="kpi-target">≥ 40% upsell rate</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-category">Sales Ops</div>
+          <div class="kpi-metric">Cart / EFT Recovery</div>
+          <div class="kpi-target">≥ 25% recovery rate</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-category">Sales Ops</div>
+          <div class="kpi-metric">Enquiry → Booked Call</div>
+          <div class="kpi-target">≥ 60% of qualified leads</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">The One Number That Matters Most</div>
+      <div class="highlight-box">
+        <div class="highlight-headline">R90,000</div>
+        <div class="highlight-sub">net combined monthly revenue for 3 consecutive months. Everything else — views, subscribers, members, build clients — is a leading indicator for this number.</div>
+        <div class="highlight-note">Phase 2 equity unlocks. Shareholders Agreement executed. The team owns what they built.</div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  const sections = document.querySelectorAll('.section');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08, rootMargin: '0px 0px -50px 0px' });
+  sections.forEach(s => observer.observe(s));
+
+  const navDots = document.getElementById('navDots');
+  const allSections = [document.querySelector('.cover'), ...sections];
+
+  allSections.forEach((sec) => {
+    const dot = document.createElement('button');
+    dot.className = 'nav-dot';
+    dot.title = sec.dataset.section || 'Cover';
+    dot.onclick = () => sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    navDots.appendChild(dot);
+  });
+
+  const dotEls = navDots.querySelectorAll('.nav-dot');
+  const navObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      const idx = [...allSections].indexOf(e.target);
+      if (e.isIntersecting && idx >= 0) {
+        dotEls.forEach(d => d.classList.remove('active'));
+        dotEls[idx]?.classList.add('active');
+      }
+    });
+  }, { threshold: 0.4 });
+  allSections.forEach(s => navObserver.observe(s));
+</script>
+</body>
+</html>

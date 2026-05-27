@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Operations & Sales Addendum · Giorgio van Rooyen · JCE Media</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:   #0D1F35;
+    --navy2:  #152A47;
+    --blue:   #1A5FA8;
+    --blue2:  #2878CC;
+    --gold:   #C9A84C;
+    --gold2:  #E2C06A;
+    --cream:  #F7F3EC;
+    --smoke:  #EEE9E0;
+    --purple: #6A5ACD;
+    --purple2:#8B78E3;
+    --lpurple:rgba(106,90,205,0.08);
+    --green:  #1A6B3C;
+    --lgreen: #EAF5EE;
+    --text:   #1A1A2E;
+    --muted:  #6B7080;
+    --border: rgba(255,255,255,0.08);
+    --page-bg:#0A1628;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--page-bg);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--cream);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 10% 0%, rgba(106,90,205,0.15) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 80% at 90% 100%, rgba(201,168,76,0.10) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 40% at 50% 50%, rgba(26,95,168,0.08) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap {
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 24px 120px;
+  }
+
+  /* ── COVER ── */
+  .cover {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px 0 60px;
+  }
+
+  .cover-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--purple2);
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+
+  .cover-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 6vw, 64px);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--cream);
+    margin-bottom: 12px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.35s forwards;
+  }
+
+  .cover-title em {
+    font-style: italic;
+    color: var(--gold2);
+  }
+
+  .cover-sub {
+    font-size: 18px;
+    font-weight: 300;
+    color: rgba(247,243,236,0.55);
+    margin-bottom: 64px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.5s forwards;
+  }
+
+  .cover-rule {
+    height: 1px;
+    background: linear-gradient(90deg, var(--purple2), rgba(139,120,227,0.1) 60%, transparent);
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.6s forwards;
+  }
+
+  .cover-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: 1px solid rgba(139,120,227,0.25);
+    border-radius: 2px;
+    overflow: hidden;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.75s forwards;
+  }
+
+  .cover-meta-item {
+    padding: 18px 24px;
+    border-bottom: 1px solid rgba(139,120,227,0.12);
+    border-right: 1px solid rgba(139,120,227,0.12);
+  }
+
+  .cover-meta-item:nth-child(even) { border-right: none; }
+  .cover-meta-item:nth-last-child(-n+2) { border-bottom: none; }
+
+  .meta-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--purple2);
+    margin-bottom: 6px;
+  }
+
+  .meta-value {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--cream);
+    line-height: 1.4;
+  }
+
+  .addendum-badge {
+    display: inline-block;
+    background: rgba(106,90,205,0.15);
+    border: 1px solid rgba(139,120,227,0.3);
+    padding: 5px 14px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--purple2);
+    border-radius: 2px;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.1s forwards;
+  }
+
+  /* ── SECTIONS ── */
+  .section {
+    margin-top: 80px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s, transform 0.7s;
+  }
+
+  .section.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .section-badge {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 36px;
+  }
+
+  .badge-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 48px;
+    font-weight: 700;
+    color: rgba(139,120,227,0.15);
+    line-height: 1;
+    min-width: 56px;
+    letter-spacing: -0.03em;
+  }
+
+  .badge-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--cream);
+    line-height: 1.2;
+    border-bottom: 1px solid rgba(139,120,227,0.3);
+    padding-bottom: 14px;
+    flex: 1;
+  }
+
+  .subsection { margin: 28px 0 16px; }
+
+  .subsection-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--purple2);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .subsection-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(139,120,227,0.15);
+  }
+
+  p.body-text {
+    font-size: 15px;
+    line-height: 1.75;
+    color: rgba(247,243,236,0.75);
+    margin-bottom: 14px;
+    font-weight: 300;
+  }
+
+  p.note-text {
+    font-size: 13px;
+    line-height: 1.65;
+    color: var(--muted);
+    font-style: italic;
+    margin-top: 10px;
+    padding-left: 16px;
+    border-left: 2px solid rgba(139,120,227,0.2);
+  }
+
+  ul.styled {
+    list-style: none;
+    margin: 10px 0 10px 4px;
+  }
+
+  ul.styled li {
+    font-size: 14.5px;
+    line-height: 1.65;
+    color: rgba(247,243,236,0.72);
+    padding: 5px 0 5px 22px;
+    position: relative;
+    font-weight: 300;
+  }
+
+  ul.styled li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--purple2);
+    font-weight: 400;
+  }
+
+  /* ── INFO GRID ── */
+  .info-grid {
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 16px 0;
+  }
+
+  .info-row {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .info-row:last-child { border-bottom: none; }
+
+  .info-label {
+    background: rgba(106,90,205,0.12);
+    padding: 14px 18px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--purple2);
+    display: flex;
+    align-items: center;
+    border-right: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .info-value {
+    padding: 14px 18px;
+    font-size: 13.5px;
+    color: rgba(247,243,236,0.8);
+    line-height: 1.5;
+    display: flex;
+    align-items: center;
+    font-weight: 400;
+  }
+
+  /* ── RATE CARDS ── */
+  .rate-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 20px 0;
+  }
+
+  .rate-card {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(139,120,227,0.2);
+    border-radius: 4px;
+    padding: 28px 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .rate-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--purple), var(--purple2));
+  }
+
+  .rate-type {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  .rate-amount {
+    font-family: 'Playfair Display', serif;
+    font-size: 38px;
+    font-weight: 700;
+    color: var(--cream);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .rate-unit {
+    font-size: 12px;
+    color: var(--purple2);
+    font-weight: 500;
+  }
+
+  .rate-note {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 10px;
+    line-height: 1.5;
+  }
+
+  /* ── RESPONSIBILITY BLOCKS ── */
+  .resp-card {
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 16px 0;
+  }
+
+  .resp-header {
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+
+  .resp-header.sales { background: rgba(26,95,168,0.15); }
+  .resp-header.ops   { background: rgba(106,90,205,0.15); }
+  .resp-header.fulfil{ background: rgba(26,107,60,0.15); }
+
+  .resp-icon {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .resp-icon.sales  { background: rgba(26,95,168,0.3); }
+  .resp-icon.ops    { background: rgba(106,90,205,0.3); }
+  .resp-icon.fulfil { background: rgba(26,107,60,0.3); }
+
+  .resp-meta { flex: 1; }
+
+  .resp-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 2px;
+  }
+
+  .resp-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--cream);
+  }
+
+  .resp-body { padding: 20px 24px; }
+
+  /* ── COMPENSATION HIGHLIGHT ── */
+  .comp-highlight {
+    background: linear-gradient(135deg, rgba(106,90,205,0.15), rgba(26,95,168,0.1));
+    border: 1px solid rgba(139,120,227,0.2);
+    border-radius: 4px;
+    padding: 28px;
+    margin: 24px 0;
+  }
+
+  .comp-headline {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--purple2);
+    margin-bottom: 16px;
+  }
+
+  .comp-items {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .comp-item {
+    text-align: center;
+    padding: 16px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 4px;
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .comp-item-amount {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--cream);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .comp-item-label {
+    font-size: 11px;
+    color: var(--purple2);
+    font-weight: 500;
+  }
+
+  .comp-item-note {
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  /* ── SIGNATURES ── */
+  .sig-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin: 28px 0;
+  }
+
+  .sig-block {
+    padding: 24px;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 4px;
+    background: rgba(255,255,255,0.02);
+  }
+
+  .sig-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--cream);
+    margin-bottom: 4px;
+  }
+
+  .sig-role {
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 24px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.05em;
+  }
+
+  .sig-line {
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+    margin-bottom: 8px;
+    height: 36px;
+  }
+
+  .sig-caption {
+    font-size: 10px;
+    color: rgba(255,255,255,0.2);
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* ── PRINT BUTTON ── */
+  .print-btn {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    background: var(--purple2);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 2px;
+    font-weight: 600;
+    transition: all 0.2s;
+    z-index: 200;
+  }
+
+  .print-btn:hover {
+    background: var(--purple);
+    transform: translateY(-1px);
+  }
+
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(139,120,227,0.25), transparent);
+    margin: 60px 0;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @media print {
+    body { background: white; color: #111; }
+    body::before { display: none; }
+    .print-btn { display: none; }
+    .section { opacity: 1; transform: none; }
+    .cover { min-height: auto; }
+  }
+
+  @media (max-width: 700px) {
+    .rate-grid { grid-template-columns: 1fr; }
+    .comp-items { grid-template-columns: 1fr; }
+    .sig-grid { grid-template-columns: 1fr; }
+    .cover-meta { grid-template-columns: 1fr; }
+    .info-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">⌘ Print / PDF</button>
+
+<div class="wrap">
+
+  <!-- ══ COVER ══ -->
+  <div class="cover" data-section="Cover">
+    <div class="addendum-badge">Addendum to Studio Collaboration Agreement</div>
+    <p class="cover-eyebrow">JCE Media Product Studio · Confidential</p>
+    <h1 class="cover-title">Giorgio van Rooyen<br><em>Operations &amp;</em><br>Sales Addendum</h1>
+    <p class="cover-sub">Individual Role &amp; Compensation Framework · May 2026</p>
+    <div class="cover-rule"></div>
+    <div class="cover-meta">
+      <div class="cover-meta-item">
+        <div class="meta-label">Partner</div>
+        <div class="meta-value">Giorgio van Rooyen</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="meta-label">Principal</div>
+        <div class="meta-value">Jacques Groenewald · JCE Media</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="meta-label">Role</div>
+        <div class="meta-value">Sales Support · Operations · Fulfilment</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="meta-label">Effective Date</div>
+        <div class="meta-value">[Date to be completed]</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="meta-label">Parent Agreement</div>
+        <div class="meta-value">Studio Collaboration Agreement (JCE Media)</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="meta-label">Governing Law</div>
+        <div class="meta-value">Republic of South Africa</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ 1. PURPOSE ══ -->
+  <section class="section" data-section="Purpose">
+    <div class="section-badge">
+      <div class="badge-number">01</div>
+      <h2 class="badge-title">Purpose of This Addendum</h2>
+    </div>
+    <p class="body-text">This addendum forms part of, and supplements, the Studio Collaboration Agreement between Jacques Groenewald (JCE Media) and Giorgio van Rooyen. It defines Giorgio's specific responsibilities within the sales and operations function of JCE Media — activities that fall outside the standard Technical Partner scope and which carry their own compensation structure.</p>
+    <p class="body-text">All terms of the Studio Collaboration Agreement continue to apply in full. Where this addendum conflicts with the parent agreement, this addendum governs for the specific responsibilities described herein.</p>
+    <p class="note-text">This addendum does not alter Samuel Rencken's rights or obligations under the Studio Collaboration Agreement. Giorgio's compensation under this addendum is separate from and in addition to his revenue share as a Technical Partner.</p>
+  </section>
+
+  <!-- ══ 2. SALES RESPONSIBILITIES ══ -->
+  <section class="section" data-section="Sales">
+    <div class="section-badge">
+      <div class="badge-number">02</div>
+      <h2 class="badge-title">Sales Support Responsibilities</h2>
+    </div>
+
+    <p class="body-text">Giorgio will actively support the sales pipeline and customer acquisition function for JCE Media. Compensation for this role is contribution and results-based — tied to the value delivered, not hours spent. Sales activities include:</p>
+
+    <div class="resp-card">
+      <div class="resp-header sales">
+        <div class="resp-icon sales">📞</div>
+        <div class="resp-meta">
+          <div class="resp-tag">Inbound &amp; Recovery</div>
+          <div class="resp-name">Abandoned Carts &amp; EFT Pending Payments</div>
+        </div>
+      </div>
+      <div class="resp-body">
+        <p class="body-text">Giorgio phones and follows up on customers who have initiated a purchase or order but not completed payment — including abandoned checkout processes and outstanding EFT (Electronic Funds Transfer) payments. Objective is to recover these transactions and convert them to completed sales.</p>
+        <ul class="styled">
+          <li>Phone outreach within 24 hours of a flagged abandoned cart or pending EFT</li>
+          <li>Follow a scripted conversation flow agreed with the Lead Partner</li>
+          <li>Log outcome in ReviewTap CRM immediately after each call</li>
+          <li>Escalate disputes or payment queries to the Lead Partner within the same business day</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="resp-card">
+      <div class="resp-header sales">
+        <div class="resp-icon sales">🔍</div>
+        <div class="resp-meta">
+          <div class="resp-tag">Lead Handling</div>
+          <div class="resp-name">New Enquiries</div>
+        </div>
+      </div>
+      <div class="resp-body">
+        <p class="body-text">Giorgio is the first point of contact for new inbound enquiries received through JCE Media's and ReviewTap's channels. This includes web enquiries, WhatsApp messages, and referral introductions.</p>
+        <ul class="styled">
+          <li>Respond to all new enquiries within 4 business hours</li>
+          <li>Qualify the lead against the agreed ICP (Ideal Customer Profile) criteria</li>
+          <li>Book qualified leads into the Lead Partner's calendar for a discovery call</li>
+          <li>Log all enquiries in ReviewTap CRM with qualification status and next action</li>
+          <li>Handle basic pricing and package queries; escalate complex commercial questions to the Lead Partner</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="resp-card">
+      <div class="resp-header sales">
+        <div class="resp-icon sales">🎨</div>
+        <div class="resp-meta">
+          <div class="resp-tag">Client Approvals</div>
+          <div class="resp-name">Mockup Approvals</div>
+        </div>
+      </div>
+      <div class="resp-body">
+        <p class="body-text">Giorgio manages the mockup and design approval cycle with clients — sending mockups, following up for feedback, capturing revisions, and obtaining written sign-off before production begins.</p>
+        <ul class="styled">
+          <li>Send mockups to clients within the agreed delivery SLA</li>
+          <li>Follow up on outstanding approvals after 48 hours of no response</li>
+          <li>Capture and communicate client revisions clearly to the production team</li>
+          <li>Obtain written (email or message) approval before any job goes to print or live</li>
+          <li>Log approval status in ReviewTap CRM against each job</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 3. OPERATIONS RESPONSIBILITIES ══ -->
+  <section class="section" data-section="Operations">
+    <div class="section-badge">
+      <div class="badge-number">03</div>
+      <h2 class="badge-title">Operations Responsibilities</h2>
+    </div>
+
+    <div class="resp-card">
+      <div class="resp-header ops">
+        <div class="resp-icon ops">🧾</div>
+        <div class="resp-meta">
+          <div class="resp-tag">Admin &amp; Finance</div>
+          <div class="resp-name">Invoice Creation</div>
+        </div>
+      </div>
+      <div class="resp-body">
+        <p class="body-text">Giorgio assists with the creation and sending of client invoices using JCE Media's agreed invoicing system. This includes generating invoices from approved quotes or completed jobs, verifying amounts and line items, and ensuring invoices reach clients promptly.</p>
+        <ul class="styled">
+          <li>Create invoices from approved quotes or job cards — no invoice to be raised without client approval on file</li>
+          <li>Verify line items, amounts, and VAT treatment before sending</li>
+          <li>Send invoices to clients within 24 hours of job completion or monthly billing date</li>
+          <li>Follow up on overdue invoices at the 7-day and 14-day marks</li>
+          <li>Report outstanding debtors to the Lead Partner weekly</li>
+        </ul>
+        <p class="note-text">Giorgio does not have authority to amend pricing, grant discounts, or issue credit notes without explicit approval from the Lead Partner.</p>
+      </div>
+    </div>
+  </section>
+
+    <div class="resp-card">
+      <div class="resp-header ops">
+        <div class="resp-icon ops">⭐</div>
+        <div class="resp-meta">
+          <div class="resp-tag">Social Proof</div>
+          <div class="resp-name">Testimonial Collection</div>
+        </div>
+      </div>
+      <div class="resp-body">
+        <p class="body-text">Giorgio is responsible for collecting at least one verified client testimonial per month. A testimonial may take the form of a written review, a WhatsApp voice note, a short video clip, or a recorded screen-share — whatever the client is comfortable providing. The content must reference JCE Media, ReviewTap, or a specific product or service by name and be usable in marketing materials.</p>
+        <ul class="styled">
+          <li>Identify satisfied clients from fulfilled orders, approved mockups, or resolved enquiries as the primary source pool</li>
+          <li>Request the testimonial personally — via phone, WhatsApp, or in person during a delivery or pickup</li>
+          <li>Collect the testimonial in a usable format (written, audio, or video) and submit it to the Lead Partner</li>
+          <li>Log the testimonial in ReviewTap CRM against the relevant client record</li>
+          <li>Minimum 1 verified testimonial per calendar month — this is a standing requirement, not optional</li>
+        </ul>
+        <p class="note-text"><strong style="color:var(--cream)">First testimonial: required, unpaid.</strong> The first testimonial Giorgio collects under this addendum is a mandatory baseline — no bonus applies. From the second testimonial onward, the R500 bonus structure applies, subject to the monthly minimum being met first.</p>
+      </div>
+    </div>
+
+  <!-- ══ 4. FULFILMENT RESPONSIBILITIES ══ -->
+  <section class="section" data-section="Fulfilment">
+    <div class="section-badge">
+      <div class="badge-number">04</div>
+      <h2 class="badge-title">Fulfilment Responsibilities</h2>
+    </div>
+
+    <p class="body-text">Giorgio assists with the physical fulfilment side of JCE Media's product operations. This includes collecting printed materials from production partners and assisting with the preparation and delivery of client orders.</p>
+
+    <div class="resp-card">
+      <div class="resp-header fulfil">
+        <div class="resp-icon fulfil">🖨️</div>
+        <div class="resp-meta">
+          <div class="resp-tag">Collection</div>
+          <div class="resp-name">Printer Pickups</div>
+        </div>
+      </div>
+      <div class="resp-body">
+        <p class="body-text">Giorgio collects printed units from JCE Media's print suppliers when instructed to do so. Collection trips are scheduled by the Lead Partner and Giorgio is notified in advance.</p>
+        <ul class="styled">
+          <li>Collect printed units from the designated printer(s) as scheduled</li>
+          <li>Verify quantity and quality of the print run before leaving the printer — flag any defects immediately</li>
+          <li>Deliver collected units to the agreed staging or despatch location</li>
+          <li>Confirm collection in writing (WhatsApp or email) to the Lead Partner upon pickup</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="resp-card">
+      <div class="resp-header fulfil">
+        <div class="resp-icon fulfil">📦</div>
+        <div class="resp-meta">
+          <div class="resp-tag">Delivery</div>
+          <div class="resp-name">Fulfilment Assistance</div>
+        </div>
+      </div>
+      <div class="resp-body">
+        <p class="body-text">Giorgio assists in the packing, preparation, and physical delivery of client orders where required. Fulfilment activities are scheduled and coordinated by the Lead Partner.</p>
+        <ul class="styled">
+          <li>Pack and prepare orders according to the job specification provided</li>
+          <li>Deliver orders to clients or collection points as scheduled</li>
+          <li>Obtain proof of delivery (signature, photo, or message confirmation) for every delivery</li>
+          <li>Report any delivery issues, damages, or client complaints immediately to the Lead Partner</li>
+          <li>Submit a weekly fulfilment log (hours worked + km driven) by close of business each Friday</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 5. COMPENSATION ══ -->
+  <section class="section" data-section="Compensation">
+    <div class="section-badge">
+      <div class="badge-number">05</div>
+      <h2 class="badge-title">Compensation Structure</h2>
+    </div>
+
+    <p class="body-text">Giorgio's compensation under this addendum is structured across four layers: a guaranteed monthly base retainer, results-based recovery commissions, an operational hourly rate for fulfilment work, and a mileage reimbursement for kilometres driven on authorised fulfilment trips.</p>
+
+    <div class="subsection">
+      <div class="subsection-title">Base Retainer</div>
+      <p class="body-text">Giorgio receives a guaranteed base retainer of <strong style="color:var(--cream)">R1,500 per month</strong> for being available and responsive as the operations first-responder — covering enquiry handling, mockup approval management, and invoicing support. This retainer is paid regardless of activity volume and is not conditional on results. It is paid within 15 days of month end against a valid tax invoice.</p>
+      <p class="note-text">The base retainer does not reduce or offset results-based commissions, fulfilment rates, or mileage reimbursements earned in the same month — all compensation components are additive.</p>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Recovery Commission</div>
+      <p class="body-text">Recovery compensation is <strong style="color:var(--cream)">results-based</strong> — Giorgio earns on the value he actually recovers, not on call time.</p>
+      <div class="info-grid">
+        <div class="info-row">
+          <div class="info-label">Abandoned Cart &amp; EFT Recovery</div>
+          <div class="info-value"><strong style="color:var(--cream)">10% of the recovered transaction value</strong> for each abandoned cart or pending EFT payment that Giorgio personally followed up on and converted to a completed payment. Applies to both checkout abandonment and outstanding EFT transactions. Recovery is attributed to Giorgio in ReviewTap CRM at the time payment is confirmed.</div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">New Enquiry Conversion</div>
+          <div class="info-value">Covered under the 7.5% closed-deal bonus in the parent Studio Collaboration Agreement — applies where Giorgio sources, qualifies, or nurtures a lead to close, as attributed in ReviewTap CRM. (How attribution is handled when Giorgio qualifies and the Lead Partner closes is to be agreed separately.)</div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">Mockup Approvals &amp; Invoicing</div>
+          <div class="info-value">Covered by the monthly base retainer and Giorgio's broader Technical Partner contribution score. No additional per-task fee applies.</div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">Testimonial Bonus</div>
+          <div class="info-value"><strong style="color:var(--cream)">R500 per verified testimonial collected</strong>, subject to the following conditions: (1) the first testimonial ever collected is unpaid — it is a mandatory baseline requirement; (2) from the second testimonial onward, the R500 bonus applies per testimonial; (3) the monthly minimum of 1 testimonial must be met before any bonus is paid — the bonus is not paid if the minimum was missed in that calendar month; (4) testimonial must be verified and approved by the Lead Partner before bonus is processed.</div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">Payment Timing</div>
+          <div class="info-value">Recovery commissions calculated monthly and paid within 15 days of month end against a valid tax invoice from Giorgio.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Fulfilment Rates</div>
+      <p class="body-text">Fulfilment work — printer pickups, packing, and physical deliveries — is compensated at the following fixed rates:</p>
+
+      <div class="rate-grid">
+        <div class="rate-card">
+          <div class="rate-type">Hourly Rate</div>
+          <div class="rate-amount">R60</div>
+          <div class="rate-unit">per hour worked</div>
+          <div class="rate-note">Applies to all physical fulfilment time: packing, pickups, deliveries, waiting time at printers. Time is logged to the nearest 30-minute increment.</div>
+        </div>
+        <div class="rate-card">
+          <div class="rate-type">Mileage Reimbursement</div>
+          <div class="rate-amount">R4.20</div>
+          <div class="rate-unit">per kilometre driven</div>
+          <div class="rate-note">Applies to kilometres driven for authorised fulfilment duties — specifically from the printer supplier(s) to the fulfilment address at 21 Wintershoek Street, Vaalpark. Return trip included. No GPS verification required — route is known and agreed.</div>
+        </div>
+      </div>
+
+      <div class="info-grid" style="margin-top:16px">
+        <div class="info-row">
+          <div class="info-label">Standard Route</div>
+          <div class="info-value">Printer supplier(s) → 21 Wintershoek Street, Vaalpark (return). The km rate for this route is fixed and agreed at the start of each month. Any deviation from the standard route requires prior approval and the actual km travelled applies.</div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">Time Logging</div>
+          <div class="info-value">Hours and trips included in Giorgio's bi-weekly progress update (see Section 6). No separate weekly fulfilment log required.</div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">Payment Timing</div>
+          <div class="info-value">Fulfilment hours and mileage calculated monthly and paid within 15 days of month end against a valid tax invoice from Giorgio.</div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">Authorisation</div>
+          <div class="info-value">Only fulfilment trips specifically authorised by the Lead Partner (in writing, in advance) are eligible for hourly and mileage compensation. Ad hoc trips arranged without prior approval are not reimbursed.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Compensation Summary</div>
+      <div class="comp-highlight">
+        <div class="comp-headline">Giorgio's Compensation Under This Addendum</div>
+        <div class="comp-items" style="grid-template-columns: repeat(5,1fr)">
+          <div class="comp-item">
+            <div class="comp-item-amount">R1,500</div>
+            <div class="comp-item-label">Base Retainer</div>
+            <div class="comp-item-note">per month, guaranteed</div>
+          </div>
+          <div class="comp-item">
+            <div class="comp-item-amount">10%</div>
+            <div class="comp-item-label">Cart &amp; EFT Recovery</div>
+            <div class="comp-item-note">of each personally recovered transaction</div>
+          </div>
+          <div class="comp-item">
+            <div class="comp-item-amount">R500</div>
+            <div class="comp-item-label">Testimonial Bonus</div>
+            <div class="comp-item-note">per verified testimonial · first one unpaid · min 1/month required</div>
+          </div>
+          <div class="comp-item">
+            <div class="comp-item-amount">R60</div>
+            <div class="comp-item-label">Fulfilment Rate</div>
+            <div class="comp-item-note">per hour worked on pickups &amp; deliveries</div>
+          </div>
+          <div class="comp-item">
+            <div class="comp-item-amount">R4.20</div>
+            <div class="comp-item-label">Mileage</div>
+            <div class="comp-item-note">per km on authorised fulfilment route</div>
+          </div>
+        </div>
+      </div>
+      <p class="note-text">This is in addition to Giorgio's Technical Partner revenue share and sales bonuses under the parent Studio Collaboration Agreement.</p>
+    </div>
+  </section>
+
+  <!-- ══ 6. REPORTING ══ -->
+  <section class="section" data-section="Reporting">
+    <div class="section-badge">
+      <div class="badge-number">06</div>
+      <h2 class="badge-title">Reporting &amp; Accountability</h2>
+    </div>
+
+    <p class="body-text">Reporting is kept lean — two progress updates per week and one monthly invoice.</p>
+
+    <div class="info-grid">
+      <div class="info-row">
+        <div class="info-label">Progress Updates</div>
+        <div class="info-value"><strong style="color:var(--cream)">2 updates per week</strong> (e.g. Monday and Thursday) covering: enquiries handled, carts and EFTs followed up, approvals status, invoices sent, and any fulfilment trips or hours logged that week. Shared via the agreed channel (WhatsApp, Notion, or equivalent). No formal template required — a clear, brief summary is sufficient.</div>
+      </div>
+      <div class="info-row">
+        <div class="info-label">Monthly Invoice</div>
+        <div class="info-value">One consolidated tax invoice submitted by the 3rd business day of each month covering: base retainer + recovery commissions + fulfilment hours + mileage. Lead Partner provides a monthly earnings summary by the 1st business day to facilitate this.</div>
+      </div>
+      <div class="info-row">
+        <div class="info-label">Escalation</div>
+        <div class="info-value">Any client complaints, payment disputes, print defects, or delivery failures reported to the Lead Partner within the same business day — not held for the next progress update.</div>
+      </div>
+    </div>
+
+    <p class="note-text">Failure to submit the monthly invoice on time may result in payment being deferred to the following month's cycle. The Lead Partner is not obligated to chase overdue invoices.</p>
+  </section>
+
+  <!-- ══ 7. GENERAL TERMS ══ -->
+  <section class="section" data-section="Terms">
+    <div class="section-badge">
+      <div class="badge-number">07</div>
+      <h2 class="badge-title">General Terms</h2>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Independent Contractor</div>
+      <p class="body-text">Giorgio performs all activities under this addendum as an independent contractor. JCE Media is not responsible for PAYE, UIF, SDL, or any other employment-related deductions on payments made under this addendum. All tax obligations remain Giorgio's sole responsibility, consistent with Section 16 of the parent Studio Collaboration Agreement.</p>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Authority Limits</div>
+      <p class="body-text">Giorgio does not have authority to commit JCE Media to any contractual, financial, or operational obligations on behalf of the business. Specifically:</p>
+      <ul class="styled">
+        <li>Giorgio may not offer discounts, credit notes, or pricing variations without written approval from the Lead Partner</li>
+        <li>Giorgio may not make representations about delivery timelines, product capabilities, or service terms beyond what has been pre-approved</li>
+        <li>Giorgio may not authorise print runs, production orders, or supplier commitments</li>
+        <li>All commitments to clients must be confirmed by the Lead Partner before being communicated</li>
+      </ul>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Amendments</div>
+      <p class="body-text">This addendum may be amended by written agreement between Jacques Groenewald and Giorgio van Rooyen without requiring Samuel Rencken's consent, provided the amendment does not alter the terms of the parent Studio Collaboration Agreement.</p>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Termination</div>
+      <p class="body-text">Either party may terminate this addendum on 14 days written notice without affecting Giorgio's standing as a Technical Partner under the parent Studio Collaboration Agreement. Termination of the parent agreement automatically terminates this addendum. All accrued, unpaid compensation under this addendum is paid in full within 30 days of termination.</p>
+    </div>
+  </section>
+
+  <!-- ══ SIGNATURES ══ -->
+  <section class="section" data-section="Signatures">
+    <div class="divider"></div>
+    <div class="section-badge">
+      <div class="badge-number" style="opacity:0.15">✦</div>
+      <h2 class="badge-title">Signatures</h2>
+    </div>
+    <p class="body-text">By signing below, both parties confirm they have read, understood, and agree to all terms of this Operations &amp; Sales Addendum and its relationship to the parent Studio Collaboration Agreement.</p>
+    <div class="sig-grid">
+      <div class="sig-block">
+        <div class="sig-name">Jacques Groenewald</div>
+        <div class="sig-role">Lead Partner · JCE Media / ReviewTap</div>
+        <div class="sig-line"></div>
+        <div class="sig-caption">Signature · Date</div>
+      </div>
+      <div class="sig-block">
+        <div class="sig-name">Giorgio van Rooyen</div>
+        <div class="sig-role">Technical Partner · Operations &amp; Sales</div>
+        <div class="sig-line"></div>
+        <div class="sig-caption">Signature · Date</div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  const sections = document.querySelectorAll('.section');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
