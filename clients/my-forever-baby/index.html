@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -231,5 +231,46 @@
   <a href="/">← Back to all clients</a>
 </footer>
 
+
+<!-- ── JCE AUTH GATE ── -->
+<div id="__jce_gate" style="position:fixed;inset:0;z-index:9999;background:#0a0d14;display:flex;align-items:center;justify-content:center;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Inter',sans-serif;">
+  <div style="background:#111520;border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:48px 40px;max-width:380px;width:calc(100% - 48px);text-align:center;box-shadow:0 24px 64px rgba(0,0,0,0.6);">
+    <div style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#4f6ef7,#7c3aed);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px;color:#fff;margin:0 auto 20px;letter-spacing:-0.5px;">JC</div>
+    <h2 style="color:#e8eaf0;font-size:20px;font-weight:700;margin:0 0 8px;">JCE Media Reports</h2>
+    <p style="color:#6b7280;font-size:14px;line-height:1.5;margin:0 0 28px;">Enter your access password to continue.</p>
+    <input id="__jce_pw" type="password" placeholder="Password" autocomplete="current-password"
+      style="width:100%;padding:12px 16px;background:#161c2d;border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#e8eaf0;font-size:15px;outline:none;margin-bottom:8px;box-sizing:border-box;display:block;"
+      onkeydown="if(event.key==='Enter')__jceAuth()"
+    />
+    <div id="__jce_err" style="color:#f87171;font-size:13px;min-height:20px;margin-bottom:8px;"></div>
+    <button onclick="__jceAuth()"
+      style="width:100%;padding:12px 16px;background:linear-gradient(135deg,#4f6ef7,#7c3aed);border:none;border-radius:8px;color:#fff;font-size:15px;font-weight:600;cursor:pointer;letter-spacing:0.2px;">
+      Access Reports &#x2192;
+    </button>
+  </div>
+</div>
+<script>
+(function(){
+  var H='60987c0b5b03d9b9899922e78de1641279ddf7331f4e8a5613a42f6be1512542';
+  var g=document.getElementById('__jce_gate');
+  if(sessionStorage.getItem('jce_auth')===H){if(g)g.remove();}
+  else{document.body.style.overflow='hidden';}
+  window.__jceAuth=async function(){
+    var v=document.getElementById('__jce_pw').value;
+    var b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(v));
+    var h=Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,'0')}).join('');
+    if(h===H){
+      sessionStorage.setItem('jce_auth',H);
+      var el=document.getElementById('__jce_gate');
+      if(el)el.remove();
+      document.body.style.overflow='';
+    } else {
+      document.getElementById('__jce_err').textContent='Incorrect password — try again.';
+      document.getElementById('__jce_pw').value='';
+      document.getElementById('__jce_pw').focus();
+    }
+  };
+})();
+</script>
 </body>
 </html>
