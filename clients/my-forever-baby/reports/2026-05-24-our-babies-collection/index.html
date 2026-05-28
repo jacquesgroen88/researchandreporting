@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1035,5 +1035,108 @@
   </div>
 </footer>
 
+
+<!-- ── JCE ADMIN NAV ── -->
+<script>
+(function(){
+  var H='60987c0b5b03d9b9899922e78de1641279ddf7331f4e8a5613a42f6be1512542';
+  if(sessionStorage.getItem('jce_auth')!==H)return;
+
+  var CLIENTS=[
+    {name:'AcquireIQ',       slug:'acquireiq'},
+    {name:'AI TikTok',       slug:'ai-tiktok-channel'},
+    {name:'Factor Pro',      slug:'factor-pro'},
+    {name:'Izi Travel',      slug:'izi-travel'},
+    {name:'JCE Media',       slug:'jce-media'},
+    {name:'Liquid Lounge',   slug:'liquid-lounge'},
+    {name:'My Forever Baby', slug:'my-forever-baby'},
+    {name:'ReviewTap',       slug:'reviewtap'},
+    {name:'ThreeZero',       slug:'threezero'},
+    {name:'Wiesenhof',       slug:'wiesenhof'}
+  ];
+
+  var path=window.location.pathname;
+  var cMatch=path.match(/\/clients\/([^\/]+)/);
+  var isReport=/\/reports\//.test(path);
+  var curSlug=cMatch?cMatch[1]:null;
+  var curClient=curSlug?CLIENTS.find(function(c){return c.slug===curSlug;}):null;
+
+  /* Build nav element */
+  var wrap=document.createElement('div');
+  wrap.id='__jce_anav';
+  wrap.style.cssText='position:fixed;bottom:24px;right:24px;z-index:8990;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Inter",sans-serif;';
+
+  /* Panel */
+  var panel=document.createElement('div');
+  panel.id='__jce_apnl';
+  panel.style.cssText='display:none;background:#111520;border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:12px;margin-bottom:8px;width:220px;max-height:75vh;overflow-y:auto;box-shadow:0 16px 48px rgba(0,0,0,0.8);';
+
+  /* Header row */
+  var hdr=document.createElement('div');
+  hdr.style.cssText='display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.07);';
+  hdr.innerHTML='<span style="color:#e8eaf0;font-size:12px;font-weight:700;">&#9889; JCE Admin</span>';
+  var logoutBtn=document.createElement('button');
+  logoutBtn.textContent='Logout';
+  logoutBtn.style.cssText='background:rgba(255,255,255,0.05);border:none;color:#9ca3af;cursor:pointer;font-size:11px;padding:3px 8px;border-radius:4px;';
+  logoutBtn.onclick=function(){sessionStorage.removeItem('jce_auth');window.location.href='/';};
+  hdr.appendChild(logoutBtn);
+  panel.appendChild(hdr);
+
+  /* Dashboard link */
+  var dash=document.createElement('a');
+  dash.href='/';
+  dash.style.cssText='display:flex;align-items:center;gap:7px;color:#e8eaf0;text-decoration:none;font-size:12px;padding:7px 10px;border-radius:6px;background:#161c2d;margin-bottom:8px;font-weight:500;';
+  dash.innerHTML='&#127968; Dashboard';
+  panel.appendChild(dash);
+
+  /* Back-to-client-hub link (only when inside a report) */
+  if(isReport&&curClient){
+    var back=document.createElement('a');
+    back.href='/clients/'+curClient.slug+'/';
+    back.style.cssText='display:flex;align-items:center;gap:6px;color:#7c9bff;text-decoration:none;font-size:12px;font-weight:600;padding:7px 10px;border-radius:6px;background:rgba(79,110,247,0.12);margin-bottom:8px;';
+    back.innerHTML='&#8592; '+curClient.name+' Hub';
+    panel.appendChild(back);
+  }
+
+  /* Clients section label */
+  var lbl=document.createElement('div');
+  lbl.textContent='Clients';
+  lbl.style.cssText='font-size:10px;color:#6b7280;text-transform:uppercase;letter-spacing:0.8px;padding:4px 6px 5px;font-weight:600;';
+  panel.appendChild(lbl);
+
+  /* Client links */
+  CLIENTS.forEach(function(c){
+    var active=(c.slug===curSlug&&!isReport);
+    var a=document.createElement('a');
+    a.href='/clients/'+c.slug+'/';
+    a.textContent=c.name;
+    a.style.cssText='display:block;color:'+(active?'#7c9bff':'#b0b8cc')+';text-decoration:none;font-size:12px;padding:5px 10px;border-radius:6px;'+(active?'background:rgba(79,110,247,0.14);font-weight:600;':'');
+    a.addEventListener('mouseover',function(){if(!active)this.style.background='rgba(255,255,255,0.04)';});
+    a.addEventListener('mouseout',function(){if(!active)this.style.background='';});
+    panel.appendChild(a);
+  });
+
+  /* Toggle button */
+  var btn=document.createElement('button');
+  btn.style.cssText='width:100%;padding:8px 16px;background:linear-gradient(135deg,#4f6ef7,#7c3aed);border:none;border-radius:10px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(79,110,247,0.35);letter-spacing:0.3px;';
+  btn.innerHTML='&#9889; Admin';
+
+  var open=false;
+  function toggle(){
+    open=!open;
+    panel.style.display=open?'block':'none';
+    btn.style.boxShadow=open?'0 4px 16px rgba(79,110,247,0.6)':'0 4px 16px rgba(79,110,247,0.35)';
+  }
+  btn.onclick=toggle;
+  window.__jceNavToggle=toggle;
+
+  /* Alt+A keyboard shortcut */
+  document.addEventListener('keydown',function(e){if(e.altKey&&e.key==='a')toggle();});
+
+  wrap.appendChild(panel);
+  wrap.appendChild(btn);
+  document.body.appendChild(wrap);
+})();
+</script>
 </body>
 </html>
