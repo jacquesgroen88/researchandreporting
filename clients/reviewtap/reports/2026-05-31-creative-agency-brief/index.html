@@ -621,6 +621,133 @@
 
     p { font-size: 14px; color: var(--muted); }
 
+    /* ─── ASSETS GALLERY ─── */
+    .assets-section {
+      background: var(--surface-2);
+      border: 1px solid var(--border-lit);
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+    .assets-header {
+      padding: 22px 28px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .assets-header-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: #fff;
+    }
+    .assets-header-sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-left: auto;
+    }
+    .assets-body { padding: 24px 28px; display: flex; flex-direction: column; gap: 28px; }
+
+    .asset-group-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--rt);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .asset-group-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, rgba(79,142,247,0.3), transparent);
+    }
+
+    /* videos */
+    .video-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 650px) { .video-grid { grid-template-columns: 1fr; } }
+    .video-card {
+      border-radius: var(--r-sm);
+      overflow: hidden;
+      background: #000;
+      border: 1px solid var(--border-lit);
+    }
+    .video-card video { width: 100%; display: block; max-height: 320px; object-fit: contain; background: #000; }
+    .video-label {
+      padding: 10px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      background: var(--surface-3);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .video-label::before {
+      content: '▶';
+      font-size: 10px;
+      color: var(--rt);
+    }
+
+    /* image grid */
+    .img-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    @media (max-width: 800px) { .img-grid-4 { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 480px) { .img-grid-4 { grid-template-columns: 1fr; } }
+    .img-card {
+      border-radius: var(--r-sm);
+      overflow: hidden;
+      border: 1px solid var(--border-lit);
+      background: var(--surface-3);
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .img-card:hover { border-color: rgba(79,142,247,0.4); transform: translateY(-2px); }
+    .img-card img { width: 100%; display: block; aspect-ratio: 1/1; object-fit: cover; }
+    .img-label {
+      padding: 8px 12px;
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 500;
+      border-top: 1px solid var(--border);
+      line-height: 1.4;
+    }
+
+    /* 2-col image grid */
+    .img-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media (max-width: 600px) { .img-grid-2 { grid-template-columns: 1fr; } }
+    .img-card-wide img { aspect-ratio: 4/3; object-fit: cover; }
+
+    /* fullwidth image */
+    .img-card-full img { width: 100%; display: block; border-radius: var(--r-sm); border: 1px solid var(--border-lit); }
+
+    /* lightbox */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.9);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .lightbox.open { display: flex; }
+    .lightbox img { max-width: 90vw; max-height: 90vh; border-radius: var(--r-sm); box-shadow: 0 0 80px rgba(0,0,0,0.8); }
+    .lightbox-close {
+      position: absolute;
+      top: 20px; right: 24px;
+      font-size: 28px;
+      color: white;
+      cursor: pointer;
+      line-height: 1;
+      opacity: 0.7;
+    }
+    .lightbox-close:hover { opacity: 1; }
+
     /* ─── UGC EXPLAINER ─── */
     .ugc-explainer {
       background: rgba(251,191,36,0.06);
@@ -976,6 +1103,75 @@
     </a>
   </div>
 
+  <!-- ── EXISTING CREATIVE ASSETS ── -->
+  <div class="assets-section">
+    <div class="assets-header">
+      <span style="font-size:20px;">🎨</span>
+      <span class="assets-header-title">Existing Creative Assets</span>
+      <span class="assets-header-sub">8 assets — 2 videos · 4 static ads · 1 live preview · 1 logo</span>
+    </div>
+    <div class="assets-body">
+
+      <!-- VIDEO ADS -->
+      <div>
+        <div class="asset-group-label">Video Ads — Hypermotion Series</div>
+        <div class="video-grid">
+          <div class="video-card">
+            <video controls preload="metadata">
+              <source src="./ad-video-1.mp4" type="video/mp4">
+            </video>
+            <div class="video-label">Hypermotion Ad 1</div>
+          </div>
+          <div class="video-card">
+            <video controls preload="metadata">
+              <source src="./ad-video-2.mp4" type="video/mp4">
+            </video>
+            <div class="video-label">Hypermotion Ad 2</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STATIC ADS -->
+      <div>
+        <div class="asset-group-label">Static Ad Creative</div>
+        <div class="img-grid-4">
+          <div class="img-card" onclick="openLightbox('./ad-pain-angle.png')">
+            <img src="./ad-pain-angle.png" alt="Pain angle ad — Still stuck on 4 reviews?" loading="lazy">
+            <div class="img-label">Pain angle — "Still stuck on 4 Google reviews? R649"</div>
+          </div>
+          <div class="img-card" onclick="openLightbox('./ad-static-stand-nfc.jpg')">
+            <img src="./ad-static-stand-nfc.jpg" alt="NFC Stand product ad" loading="lazy">
+            <div class="img-label">Product ad — NFC Google Review Stand</div>
+          </div>
+          <div class="img-card" onclick="openLightbox('./ad-static-stand-custom.jpg')">
+            <img src="./ad-static-stand-custom.jpg" alt="Custom branded stand ad" loading="lazy">
+            <div class="img-label">Product ad — Custom Branded Stand (NFC+QR)</div>
+          </div>
+          <div class="img-card" onclick="openLightbox('./ad-static-card-custom.jpg')">
+            <img src="./ad-static-card-custom.jpg" alt="Custom NFC+QR card ad" loading="lazy">
+            <div class="img-label">Product ad — Custom NFC + QR Cards</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LIVE AD PREVIEW -->
+      <div>
+        <div class="asset-group-label">Live Facebook Ad Preview — A/B Test (Ads Manager)</div>
+        <div class="img-card-full" onclick="openLightbox('./ad-live-preview.jpg')" style="cursor:pointer;">
+          <img src="./ad-live-preview.jpg" alt="Facebook Ads Manager live preview" loading="lazy" style="border-radius:var(--r-sm);border:1px solid var(--border-lit);">
+        </div>
+        <p style="margin-top:8px;font-size:12px;">Static vs. video A/B test currently running. Copy: "Make it effortless for customers to leave 5-star reviews with the Review Tap NFC Stand!" CTA: Order Now → R499.00</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <span class="lightbox-close" onclick="closeLightbox()">✕</span>
+    <img id="lightbox-img" src="" alt="">
+  </div>
+
   <!-- Product Table -->
   <div class="table-wrap">
     <div class="table-header">
@@ -1201,6 +1397,20 @@
   </div>
 
 </div>
+
+<script>
+  function openLightbox(src) {
+    document.getElementById('lightbox-img').src = src;
+    document.getElementById('lightbox').classList.add('open');
+  }
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+    document.getElementById('lightbox-img').src = '';
+  }
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeLightbox();
+  });
+</script>
 
 <!-- ════════════ FOOTER ════════════ -->
 <div class="footer">
