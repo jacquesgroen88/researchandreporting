@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Growth Proposal · Tooth Fairy Dental Clinic · JCE Media</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #07090f;
+      --bg2:       #0d1120;
+      --bg3:       #111827;
+      --card:      #0f1623;
+      --border:    rgba(255,255,255,0.07);
+      --accent:    #2dd4bf;
+      --accent2:   #0ea5e9;
+      --gold:      #f59e0b;
+      --red:       #ef4444;
+      --green:     #22c55e;
+      --text:      #f1f5f9;
+      --muted:     #94a3b8;
+      --dim:       #475569;
+      --radius:    12px;
+      --radius-lg: 20px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── STICKY TOP BAR ─── */
+    .topbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 999;
+      background: rgba(7,9,15,0.92);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 24px;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px;
+    }
+    .topbar-text { font-size: 13px; color: var(--muted); }
+    .topbar-text strong { color: var(--text); }
+    .topbar-actions { display: flex; align-items: center; gap: 10px; }
+    .btn-wa {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: #25d366; color: #fff; font-weight: 600; font-size: 13px;
+      padding: 8px 16px; border-radius: 8px; text-decoration: none;
+      transition: background .2s, transform .15s;
+      white-space: nowrap;
+    }
+    .btn-wa:hover { background: #1db954; transform: translateY(-1px); }
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 6px;
+      color: var(--muted); font-size: 13px; text-decoration: none;
+      padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border);
+      transition: border-color .2s, color .2s;
+    }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ─── NAV ─── */
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 40px;
+      margin-top: 57px;
+    }
+    .logo {
+      display: flex; align-items: center; gap: 10px;
+      font-weight: 700; font-size: 15px; letter-spacing: -.3px; color: var(--text);
+    }
+    .logo-mark {
+      width: 32px; height: 32px; border-radius: 8px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+    }
+    .nav-meta {
+      text-align: right; font-size: 12px; color: var(--dim);
+      line-height: 1.5;
+    }
+    .nav-meta strong { color: var(--muted); display: block; }
+
+    /* ─── HERO ─── */
+    .hero {
+      padding: 80px 40px 100px;
+      max-width: 860px;
+      position: relative;
+    }
+    .hero-label {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(45,212,191,0.1); border: 1px solid rgba(45,212,191,0.25);
+      color: var(--accent); font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; padding: 6px 14px; border-radius: 100px;
+      margin-bottom: 32px;
+    }
+    .hero h1 {
+      font-size: clamp(40px, 6vw, 72px);
+      font-weight: 800; line-height: 1.08; letter-spacing: -2px;
+      margin-bottom: 28px;
+    }
+    .hero h1 em {
+      font-style: normal;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-sub {
+      font-size: 18px; color: var(--muted); max-width: 560px;
+      line-height: 1.7; margin-bottom: 48px;
+    }
+    .hero-meta {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1px; background: var(--border);
+      border: 1px solid var(--border); border-radius: var(--radius);
+      overflow: hidden; max-width: 540px;
+    }
+    .hero-meta-item {
+      background: var(--card); padding: 20px;
+    }
+    .hero-meta-item .label { font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; color: var(--dim); margin-bottom: 4px; }
+    .hero-meta-item .value { font-size: 14px; font-weight: 600; color: var(--text); }
+
+    /* ─── SECTION HEADERS ─── */
+    section { padding: 80px 40px; max-width: 900px; margin: 0 auto; }
+    .section-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 14px;
+    }
+    .section-title {
+      font-size: clamp(28px, 4vw, 42px); font-weight: 800;
+      letter-spacing: -1px; line-height: 1.15; margin-bottom: 12px;
+    }
+    .section-sub {
+      font-size: 16px; color: var(--muted); max-width: 580px; line-height: 1.7;
+      margin-bottom: 48px;
+    }
+
+    /* ─── SHORT VERSION ─── */
+    .summary-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1px; background: var(--border);
+      border: 1px solid var(--border); border-radius: var(--radius);
+      overflow: hidden; margin-bottom: 40px;
+    }
+    .summary-stat {
+      background: var(--card); padding: 28px 24px;
+    }
+    .summary-stat .num {
+      font-size: 36px; font-weight: 800; color: var(--accent); letter-spacing: -1px;
+      margin-bottom: 6px; line-height: 1;
+    }
+    .summary-stat .desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+    /* ─── AUDIT ─── */
+    .audit-item {
+      display: grid; grid-template-columns: 80px 1fr;
+      gap: 0; border: 1px solid var(--border); border-radius: var(--radius-lg);
+      overflow: hidden; margin-bottom: 16px;
+      transition: border-color .3s;
+    }
+    .audit-item:hover { border-color: rgba(45,212,191,0.3); }
+    .audit-num {
+      display: flex; align-items: flex-start; justify-content: center;
+      padding: 28px 0 0;
+      font-size: 11px; font-weight: 800; letter-spacing: 1px; color: var(--dim);
+      background: var(--bg2);
+    }
+    .audit-body { background: var(--card); padding: 28px 32px; }
+    .audit-tag {
+      display: inline-block; font-size: 10px; font-weight: 700;
+      letter-spacing: 1.2px; text-transform: uppercase;
+      padding: 3px 10px; border-radius: 100px; margin-bottom: 10px;
+    }
+    .tag-critical { background: rgba(239,68,68,.15); color: #ef4444; border: 1px solid rgba(239,68,68,.3); }
+    .tag-high    { background: rgba(245,158,11,.12); color: #f59e0b; border: 1px solid rgba(245,158,11,.3); }
+    .tag-medium  { background: rgba(45,212,191,.1);  color: var(--accent); border: 1px solid rgba(45,212,191,.25); }
+    .tag-brand   { background: rgba(14,165,233,.1);  color: var(--accent2); border: 1px solid rgba(14,165,233,.3); }
+    .audit-body h3 { font-size: 18px; font-weight: 700; margin-bottom: 10px; letter-spacing: -.3px; }
+    .audit-body p { font-size: 14px; color: var(--muted); line-height: 1.7; margin-bottom: 14px; }
+    .audit-fix {
+      background: rgba(45,212,191,.06); border: 1px solid rgba(45,212,191,.15);
+      border-radius: 8px; padding: 12px 16px;
+      font-size: 13px; color: var(--accent); line-height: 1.6;
+    }
+    .audit-fix strong { color: var(--accent); }
+
+    /* ─── PILLARS ─── */
+    .pillars-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .pillar-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 28px;
+      transition: border-color .3s, transform .2s;
+    }
+    .pillar-card:hover { border-color: rgba(45,212,191,0.3); transform: translateY(-2px); }
+    .pillar-card.full-width { grid-column: 1 / -1; }
+    .pillar-icon { font-size: 28px; margin-bottom: 12px; display: block; }
+    .pillar-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+    .pillar-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 10px; letter-spacing: -.3px; }
+    .pillar-card p { font-size: 14px; color: var(--muted); line-height: 1.7; margin-bottom: 16px; }
+    .feature-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .feature-list li {
+      font-size: 13px; color: var(--muted); padding-left: 20px; position: relative; line-height: 1.5;
+    }
+    .feature-list li::before { content: '✓'; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+    .feature-list li.inactive { color: var(--dim); }
+    .feature-list li.inactive::before { content: '—'; color: var(--dim); }
+
+    /* ─── FLOW BANNER ─── */
+    .flow-banner {
+      background: linear-gradient(135deg, rgba(45,212,191,.08) 0%, rgba(14,165,233,.08) 100%);
+      border: 1px solid rgba(45,212,191,.2); border-radius: var(--radius-lg);
+      padding: 28px 32px; margin-top: 32px;
+      display: flex; align-items: center; gap: 16px;
+    }
+    .flow-banner .icon { font-size: 24px; flex-shrink: 0; }
+    .flow-banner p { font-size: 14px; color: var(--muted); line-height: 1.7; }
+    .flow-banner strong { color: var(--text); }
+
+    /* ─── PRICING ─── */
+    .pricing-grid {
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px; align-items: start;
+    }
+    .pricing-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 32px 28px;
+      position: relative; transition: transform .2s;
+    }
+    .pricing-card:hover { transform: translateY(-3px); }
+    .pricing-card.featured {
+      border-color: var(--accent);
+      background: linear-gradient(160deg, #0f1e26 0%, var(--card) 100%);
+    }
+    .pricing-card.featured::before {
+      content: '★ Recommended';
+      position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+      background: var(--accent); color: #000; font-size: 11px; font-weight: 800;
+      letter-spacing: .8px; padding: 4px 14px; border-radius: 100px;
+      white-space: nowrap;
+    }
+    .plan-name { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
+    .plan-price { font-size: 36px; font-weight: 800; letter-spacing: -1.5px; color: var(--text); line-height: 1; margin-bottom: 4px; }
+    .plan-price span { font-size: 16px; font-weight: 500; color: var(--muted); letter-spacing: 0; }
+    .plan-setup { font-size: 13px; color: var(--dim); margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+    .plan-features { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+    .plan-features li { font-size: 13px; color: var(--muted); padding-left: 20px; position: relative; line-height: 1.5; }
+    .plan-features li::before { content: '✓'; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+    .plan-features li.off { color: var(--dim); }
+    .plan-features li.off::before { content: '—'; color: var(--dim); }
+    .btn-primary {
+      display: block; width: 100%; text-align: center; text-decoration: none;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #000; font-weight: 700; font-size: 14px;
+      padding: 14px 20px; border-radius: 10px;
+      transition: opacity .2s, transform .15s;
+    }
+    .btn-primary:hover { opacity: .9; transform: translateY(-1px); }
+    .btn-secondary {
+      display: block; width: 100%; text-align: center; text-decoration: none;
+      background: transparent; color: var(--text); font-weight: 600; font-size: 14px;
+      padding: 14px 20px; border-radius: 10px; border: 1px solid var(--border);
+      transition: border-color .2s, color .2s;
+    }
+    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+    .value-note {
+      background: rgba(245,158,11,.08); border: 1px solid rgba(245,158,11,.2);
+      border-radius: var(--radius); padding: 20px 24px; margin-top: 32px;
+      font-size: 14px; color: var(--muted); line-height: 1.7;
+    }
+    .value-note .bulb { font-size: 20px; margin-bottom: 8px; display: block; }
+    .value-note strong { color: var(--gold); }
+
+    /* ─── TIMELINE ─── */
+    .timeline { display: flex; flex-direction: column; gap: 0; }
+    .tl-item { display: grid; grid-template-columns: 140px 1fr; gap: 0; }
+    .tl-left {
+      display: flex; flex-direction: column; align-items: center;
+      padding-right: 24px; gap: 0;
+    }
+    .tl-dot {
+      width: 12px; height: 12px; border-radius: 50%;
+      background: var(--accent); flex-shrink: 0; margin-top: 4px;
+      box-shadow: 0 0 12px rgba(45,212,191,.4);
+    }
+    .tl-line { width: 2px; flex: 1; background: var(--border); min-height: 40px; }
+    .tl-item:last-child .tl-line { display: none; }
+    .tl-when { font-size: 11px; font-weight: 700; color: var(--accent); letter-spacing: 1px; text-transform: uppercase; padding-top: 2px; text-align: right; }
+    .tl-body { padding-bottom: 36px; }
+    .tl-body h4 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+    .tl-body p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+    /* ─── RISK / GUARANTEES ─── */
+    .risk-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .risk-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 24px;
+    }
+    .risk-icon { font-size: 24px; margin-bottom: 12px; display: block; }
+    .risk-card h4 { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+    .risk-card p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+    /* ─── FINAL CTA ─── */
+    .final-cta {
+      background: linear-gradient(160deg, var(--bg2) 0%, var(--bg) 100%);
+      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+      padding: 80px 40px; text-align: center;
+    }
+    .final-cta h2 { font-size: clamp(28px, 4vw, 46px); font-weight: 800; letter-spacing: -1.5px; line-height: 1.1; margin-bottom: 16px; }
+    .final-cta h2 em { font-style: normal; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .final-cta p { font-size: 16px; color: var(--muted); max-width: 480px; margin: 0 auto 40px; line-height: 1.7; }
+    .final-pkg-grid {
+      display: inline-grid; grid-template-columns: repeat(3, auto);
+      gap: 12px; margin: 0 auto 48px;
+    }
+    .final-pkg {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 20px 24px; text-align: center;
+      text-decoration: none; transition: border-color .2s, transform .2s;
+    }
+    .final-pkg:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .final-pkg.star { border-color: var(--accent); }
+    .final-pkg .p-name { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+    .final-pkg .p-price { font-size: 20px; font-weight: 800; color: var(--text); letter-spacing: -.5px; }
+    .final-pkg .p-note { font-size: 11px; color: var(--dim); margin-top: 4px; }
+    .final-pkg .p-cta { font-size: 13px; color: var(--accent); font-weight: 600; margin-top: 10px; }
+    .final-meta { font-size: 12px; color: var(--dim); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      padding: 32px 40px; display: flex; align-items: center; justify-content: space-between;
+      border-top: 1px solid var(--border); flex-wrap: wrap; gap: 16px;
+    }
+    .footer-agent { display: flex; align-items: center; gap: 14px; }
+    .agent-avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 16px; color: #000; flex-shrink: 0;
+    }
+    .agent-name { font-size: 14px; font-weight: 700; }
+    .agent-title { font-size: 12px; color: var(--dim); }
+    .agent-wa {
+      display: inline-flex; align-items: center; gap: 6px;
+      color: #25d366; font-size: 13px; font-weight: 600; text-decoration: none;
+      padding: 8px 14px; border: 1px solid rgba(37,211,102,.3); border-radius: 8px;
+      transition: border-color .2s;
+    }
+    .agent-wa:hover { border-color: #25d366; }
+    .footer-copy { font-size: 12px; color: var(--dim); }
+
+    /* ─── FLOATING WA ─── */
+    .float-wa {
+      position: fixed; bottom: 24px; right: 24px; z-index: 998;
+      width: 56px; height: 56px; border-radius: 50%;
+      background: #25d366; display: flex; align-items: center; justify-content: center;
+      text-decoration: none; box-shadow: 0 8px 32px rgba(37,211,102,.4);
+      font-size: 28px; transition: transform .2s, box-shadow .2s;
+    }
+    .float-wa:hover { transform: scale(1.1); box-shadow: 0 12px 40px rgba(37,211,102,.5); }
+    .float-wa-pulse {
+      position: absolute; inset: -4px; border-radius: 50%;
+      border: 2px solid rgba(37,211,102,.4);
+      animation: pulse 2s ease-out infinite;
+    }
+    @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }
+
+    /* ─── DIVIDER ─── */
+    .divider { border: none; border-top: 1px solid var(--border); margin: 0; }
+
+    /* ─── SCROLL FADE ─── */
+    .fade-up { opacity: 0; transform: translateY(24px); transition: opacity .6s ease, transform .6s ease; }
+    .fade-up.visible { opacity: 1; transform: none; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 720px) {
+      nav { padding: 16px 20px; }
+      section { padding: 60px 20px; }
+      .hero { padding: 60px 20px 80px; }
+      .hero h1 { letter-spacing: -1px; }
+      .hero-meta { grid-template-columns: 1fr; }
+      .summary-grid { grid-template-columns: 1fr; }
+      .pillars-grid { grid-template-columns: 1fr; }
+      .pricing-grid { grid-template-columns: 1fr; }
+      .audit-item { grid-template-columns: 60px 1fr; }
+      .risk-grid { grid-template-columns: 1fr; }
+      .tl-item { grid-template-columns: 100px 1fr; }
+      .final-pkg-grid { grid-template-columns: 1fr; width: 100%; }
+      footer { flex-direction: column; align-items: flex-start; }
+      .topbar-text { display: none; }
+      .final-cta { padding: 60px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ TOPBAR ═══ -->
+<div class="topbar">
+  <div class="topbar-text">Ready to grow, <strong>Tooth Fairy Dental?</strong> Let's talk.</div>
+  <div class="topbar-actions">
+    <a href="https://wa.me/27795124292?text=Hi%20Jacques%2C%20I%27d%20like%20to%20accept%20the%20proposal%20for%20Tooth%20Fairy%20Dental" class="btn-wa" target="_blank">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.136.562 4.14 1.537 5.875L0 24l6.312-1.516C8.04 23.456 9.982 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.885 0-3.664-.513-5.197-1.407l-.371-.22-3.747.9.935-3.646-.241-.376C2.511 15.677 2 13.896 2 12 2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+      WhatsApp Jacques
+    </a>
+    <a href="#packages" class="btn-ghost">View Packages ↓</a>
+  </div>
+</div>
+
+<!-- ═══ NAV ═══ -->
+<nav>
+  <div class="logo">
+    <div class="logo-mark">J</div>
+    JCE Media
+  </div>
+  <div class="nav-meta">
+    <strong>Confidential · Prepared for Tooth Fairy Dental</strong>
+    Growth Proposal · June 2026
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<div class="hero fade-up">
+  <div class="hero-label">
+    <span>🦷</span> Full Digital Growth Partnership
+  </div>
+  <h1>Your patients are<br>searching.<br><em>Are they finding you?</em></h1>
+  <p class="hero-sub">
+    Tooth Fairy Dental delivers exceptional care. This proposal builds the digital system that makes sure every patient searching for a dentist in your area finds you first — and books the appointment.
+  </p>
+  <div class="hero-meta">
+    <div class="hero-meta-item">
+      <div class="label">Prepared by</div>
+      <div class="value">Jacques Groenewald · JCE Media</div>
+    </div>
+    <div class="hero-meta-item">
+      <div class="label">Prepared for</div>
+      <div class="value">Tooth Fairy Dental Clinic</div>
+    </div>
+    <div class="hero-meta-item">
+      <div class="label">Valid until</div>
+      <div class="value">30 June 2026</div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ═══ SHORT VERSION ═══ -->
+<section class="fade-up">
+  <div class="section-label">The Short Version</div>
+  <h2 class="section-title">Great practice.<br>Invisible online.</h2>
+  <p class="section-sub">Patients are searching "dentist near me" every day in your area. Without the right digital foundation, those patients are booking with your competitors — not you. Here's what the numbers look like right now:</p>
+
+  <div class="summary-grid">
+    <div class="summary-stat">
+      <div class="num">73%</div>
+      <div class="desc">of patients research a dental practice online before booking their first appointment</div>
+    </div>
+    <div class="summary-stat">
+      <div class="num">0</div>
+      <div class="desc">paid search presence — you don't appear when patients search for a dentist in your area</div>
+    </div>
+    <div class="summary-stat">
+      <div class="num">48hrs</div>
+      <div class="desc">average follow-up time on new enquiries — leads go cold in under 5 minutes without automation</div>
+    </div>
+    <div class="summary-stat">
+      <div class="num">R0</div>
+      <div class="desc">currently invested in re-engaging patients overdue for their 6-month recall or missed appointments</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ═══ AUDIT ═══ -->
+<section class="fade-up">
+  <div class="section-label">Site & Growth Audit</div>
+  <h2 class="section-title">What's holding<br>Tooth Fairy back</h2>
+  <p class="section-sub">Four gaps standing between where you are and a fully-booked appointment book.</p>
+
+  <div class="audit-item">
+    <div class="audit-num">01</div>
+    <div class="audit-body">
+      <span class="audit-tag tag-critical">Critical</span>
+      <h3>Your website doesn't convert visitors into patients</h3>
+      <p>A new patient landing on your site has one question: "Can I trust these people with my teeth?" The answer needs to come through instantly — with professional photography, visible qualifications, real patient reviews, and a frictionless booking flow. Right now, visitors arrive, browse briefly, and leave without booking. Every departure is a lost patient.</p>
+      <div class="audit-fix"><strong>Fix:</strong> A modern, conversion-focused website designed to answer trust questions on the first scroll — with visible credentials, prominent reviews, clear treatment pricing, and a booking form that works on any device.</div>
+    </div>
+  </div>
+
+  <div class="audit-item">
+    <div class="audit-num">02</div>
+    <div class="audit-body">
+      <span class="audit-tag tag-critical">Critical</span>
+      <h3>No Google presence — you're invisible to new patients</h3>
+      <p>When someone in your area searches "dentist near me", "emergency dentist", or "teeth whitening [your suburb]" — you don't appear. These are high-intent patients ready to book right now. Without Google Ads and a properly optimised local presence, every one of those searches results in a booking for a competitor.</p>
+      <div class="audit-fix"><strong>Fix:</strong> Google Search campaigns targeting high-intent dental keywords in your catchment area. You appear at the top of search results the moment a patient is actively looking — not before, not after.</div>
+    </div>
+  </div>
+
+  <div class="audit-item">
+    <div class="audit-num">03</div>
+    <div class="audit-body">
+      <span class="audit-tag tag-high">High Impact</span>
+      <h3>Enquiries go unanswered — warm leads go cold</h3>
+      <p>When a patient fills in your contact form or sends a WhatsApp message, what happens next? If the answer is "we get to it when we can", you're losing patients. Research shows that leads responded to within 5 minutes are 9x more likely to convert. A manual process at a busy front desk simply can't compete with that expectation.</p>
+      <div class="audit-fix"><strong>Fix:</strong> A WhatsApp AI system that responds instantly to every new enquiry, qualifies the patient, collects their details, and either books the appointment automatically or flags urgent cases to your team — 24/7, including weekends.</div>
+    </div>
+  </div>
+
+  <div class="audit-item">
+    <div class="audit-num">04</div>
+    <div class="audit-body">
+      <span class="audit-tag tag-medium">Growth Opportunity</span>
+      <h3>Existing patients aren't being recalled or re-engaged</h3>
+      <p>Your best source of new revenue is sitting in your patient database. Patients overdue for a 6-month checkup, those who haven't been back in over a year, people who enquired but never booked — these are warm relationships that should be generating appointments every month. Without an automated system, they quietly drift to whoever reminds them first.</p>
+      <div class="audit-fix"><strong>Fix:</strong> Automated WhatsApp recall campaigns and re-engagement sequences that bring lapsed patients back — personalised by name, treatment history, and time since last visit. Set up once, runs every month.</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ═══ PILLARS ═══ -->
+<section class="fade-up">
+  <div class="section-label">What's on the Table</div>
+  <h2 class="section-title">Three pillars.<br>One complete system.</h2>
+  <p class="section-sub">Each pillar solves a specific gap. Stack them together and you have a patient acquisition engine that runs around the clock.</p>
+
+  <div class="pillars-grid">
+    <div class="pillar-card">
+      <span class="pillar-icon">🌐</span>
+      <div class="pillar-label">Pillar 01 · Foundation</div>
+      <h3>New Website</h3>
+      <p>A modern, professional dental website designed to convert first-time visitors into booked appointments. Looks premium. Loads fast. Works perfectly on mobile.</p>
+      <ul class="feature-list">
+        <li>Custom-designed dental website (up to 8 pages)</li>
+        <li>Mobile-first, Google-optimised design</li>
+        <li>Online booking form with WhatsApp confirmation</li>
+        <li>Treatment pages with clear pricing sections</li>
+        <li>Google Analytics + conversion tracking installed</li>
+        <li>Google Business Profile optimised</li>
+        <li>Patient review showcase section</li>
+        <li>Team & credentials page (trust builder)</li>
+        <li>Before/after gallery (if photos available)</li>
+        <li>SSL, fast hosting, and 30-day support included</li>
+      </ul>
+    </div>
+
+    <div class="pillar-card">
+      <span class="pillar-icon">📣</span>
+      <div class="pillar-label">Pillar 02 · Growth</div>
+      <h3>Google Ads Campaigns</h3>
+      <p>Targeted Google Search campaigns that put Tooth Fairy Dental at the top of results every time a patient in your area searches for dental services — right when they're ready to book.</p>
+      <ul class="feature-list">
+        <li>Campaign strategy & keyword research</li>
+        <li>Search ads for high-intent dental terms</li>
+        <li>Emergency dental, checkups, whitening, implants</li>
+        <li>Geo-targeted to your catchment area</li>
+        <li>Ad copy written and tested monthly</li>
+        <li>Negative keyword management (no wasted spend)</li>
+        <li>Conversion tracking (calls + form fills)</li>
+        <li>Monthly performance report</li>
+        <li>Ad spend managed separately (your budget, your control)</li>
+      </ul>
+    </div>
+
+    <div class="pillar-card full-width">
+      <span class="pillar-icon">🤖</span>
+      <div class="pillar-label">Pillar 03 · Scale · AI-Powered</div>
+      <h3>WhatsApp AI — Your 24/7 Virtual Receptionist</h3>
+      <p>An intelligent WhatsApp AI assistant that handles patient enquiries, books appointments, sends reminders, and re-engages lapsed patients — automatically, around the clock. Patients get an instant, human-feeling response the moment they reach out. Your front desk team only handles the cases that genuinely need them.</p>
+      <ul class="feature-list" style="columns: 2; gap: 32px;">
+        <li>Instant AI response to every WhatsApp enquiry</li>
+        <li>Appointment booking qualification flow</li>
+        <li>Collects patient name, treatment needed & availability</li>
+        <li>Escalates urgent cases (pain, emergencies) immediately</li>
+        <li>24-hour & 2-hour appointment reminder messages</li>
+        <li>Post-treatment follow-up sequence</li>
+        <li>6-month recall campaign to existing patients</li>
+        <li>Re-engagement sequences for lapsed patients</li>
+        <li>Handles FAQs (pricing, location, hours, procedures)</li>
+        <li>POPIA-compliant throughout</li>
+        <li>Dashboard to monitor all conversations</li>
+        <li>Monthly AI performance report</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="flow-banner">
+    <div class="icon">⚡</div>
+    <p><strong>How the pillars compound:</strong> The website converts visitors → Google Ads drives qualified traffic to the site → The WhatsApp AI captures every enquiry instantly, books appointments automatically, and re-engages patients month after month. Each pillar feeds the next.</p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ═══ PRICING ═══ -->
+<section id="packages" class="fade-up">
+  <div class="section-label">Investment</div>
+  <h2 class="section-title">Choose your package</h2>
+  <p class="section-sub">Start with the foundation. Add pillars as you grow. No lock-in, no long-term contracts.</p>
+
+  <div class="pricing-grid">
+
+    <!-- FOUNDATION -->
+    <div class="pricing-card">
+      <div class="plan-name">Foundation</div>
+      <div class="plan-price">R2,999 <span>/mo</span></div>
+      <div class="plan-setup">+ R6,500 once-off website build</div>
+      <ul class="plan-features">
+        <li>New custom website (up to 8 pages)</li>
+        <li>Mobile-first design</li>
+        <li>Online booking form</li>
+        <li>Google Analytics setup</li>
+        <li>Google Business optimisation</li>
+        <li>Review showcase section</li>
+        <li>WhatsApp form notification</li>
+        <li>30-day post-launch support</li>
+        <li class="off">Google Ads management</li>
+        <li class="off">WhatsApp AI assistant</li>
+        <li class="off">Patient recall automation</li>
+      </ul>
+      <a href="https://wa.me/27795124292?text=Hi%20Jacques%2C%20I%27d%20like%20the%20Foundation%20package%20for%20Tooth%20Fairy%20Dental" class="btn-secondary" target="_blank">Get Started →</a>
+    </div>
+
+    <!-- GROWTH (FEATURED) -->
+    <div class="pricing-card featured">
+      <div class="plan-name">Growth</div>
+      <div class="plan-price">R5,999 <span>/mo</span></div>
+      <div class="plan-setup">+ R3,500 once-off setup · No lock-in</div>
+      <ul class="plan-features">
+        <li>Everything in Foundation</li>
+        <li>New custom website included</li>
+        <li>Google Ads campaign management</li>
+        <li>Search ads — dental keywords</li>
+        <li>Monthly ad copy & optimisation</li>
+        <li>Conversion tracking (calls + forms)</li>
+        <li>Monthly performance report</li>
+        <li>Dedicated WhatsApp support</li>
+        <li class="off">WhatsApp AI assistant</li>
+        <li class="off">Patient recall automation</li>
+        <li class="off">24/7 automated responses</li>
+      </ul>
+      <a href="https://wa.me/27795124292?text=Hi%20Jacques%2C%20I%27d%20like%20to%20accept%20the%20Growth%20package%20for%20Tooth%20Fairy%20Dental" class="btn-primary" target="_blank">Accept This Package →</a>
+    </div>
+
+    <!-- SCALE -->
+    <div class="pricing-card">
+      <div class="plan-name">Scale</div>
+      <div class="plan-price">R9,500 <span>/mo</span></div>
+      <div class="plan-setup">Website + setup included · + your ad spend</div>
+      <ul class="plan-features">
+        <li>Everything in Growth</li>
+        <li>WhatsApp AI assistant (24/7)</li>
+        <li>Instant response to every enquiry</li>
+        <li>Appointment booking automation</li>
+        <li>Appointment reminders (24hr + 2hr)</li>
+        <li>Post-treatment follow-up sequences</li>
+        <li>6-month patient recall campaigns</li>
+        <li>Lapsed patient re-engagement</li>
+        <li>Full conversation dashboard</li>
+        <li>Priority support (same-day)</li>
+        <li>Full funnel reporting</li>
+      </ul>
+      <a href="https://wa.me/27795124292?text=Hi%20Jacques%2C%20I%27d%20like%20the%20Scale%20package%20for%20Tooth%20Fairy%20Dental" class="btn-secondary" target="_blank">Get Started →</a>
+    </div>
+
+  </div>
+
+  <div class="value-note">
+    <span class="bulb">💡</span>
+    A single new patient on a treatment plan covers the Growth package for 1–2 months. At standard dental consultation and treatment rates, acquiring <strong>3–5 new patients per month from Google Ads alone</strong> puts the entire package comfortably in profit. These are patient acquisition costs — not marketing expenses.
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ═══ TIMELINE ═══ -->
+<section class="fade-up">
+  <div class="section-label">From Yes to Live</div>
+  <h2 class="section-title">What happens after<br>you accept</h2>
+  <p class="section-sub">We move fast. Here's the exact sequence from the moment you say go.</p>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-left">
+        <div class="tl-when">Day 1</div>
+        <div class="tl-dot"></div>
+        <div class="tl-line"></div>
+      </div>
+      <div class="tl-body">
+        <h4>WhatsApp kickoff call</h4>
+        <p>We confirm your package, gather your brand assets and photos, align on design direction, and get access to your existing site and Google Business Profile.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-left">
+        <div class="tl-when">Days 2–3</div>
+        <div class="tl-dot"></div>
+        <div class="tl-line"></div>
+      </div>
+      <div class="tl-body">
+        <h4>Analytics + Google Business live</h4>
+        <p>GA4 tracking installed on your current site. Google Business Profile optimised with fresh photos, correct hours, services listed. You're no longer flying blind.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-left">
+        <div class="tl-when">Days 4–10</div>
+        <div class="tl-dot"></div>
+        <div class="tl-line"></div>
+      </div>
+      <div class="tl-body">
+        <h4>New website designed & reviewed</h4>
+        <p>First design draft delivered for your review. Two rounds of revisions included. You approve before anything goes live.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-left">
+        <div class="tl-when">Week 2</div>
+        <div class="tl-dot"></div>
+        <div class="tl-line"></div>
+      </div>
+      <div class="tl-body">
+        <h4>Website goes live · Google Ads launched</h4>
+        <p>New site deployed. Google Ads campaigns go live targeting patients in your area. WhatsApp form notification active — you're notified instantly on every new enquiry.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-left">
+        <div class="tl-when">Week 3</div>
+        <div class="tl-dot"></div>
+        <div class="tl-line"></div>
+      </div>
+      <div class="tl-body">
+        <h4>WhatsApp AI goes live (Scale only)</h4>
+        <p>AI assistant connected to your WhatsApp number. Responds to every incoming message instantly. Booking flows, FAQs, recall sequences — all tested and live.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-left">
+        <div class="tl-when">Month 2+</div>
+        <div class="tl-dot"></div>
+        <div class="tl-line"></div>
+      </div>
+      <div class="tl-body">
+        <h4>Full system running — compound growth begins</h4>
+        <p>Google Ads optimised from real conversion data. AI handling enquiries 24/7. Patient recall campaigns running monthly. You focus on dentistry — the system handles growth.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ═══ RISK ═══ -->
+<section class="fade-up">
+  <div class="section-label">Zero Risk</div>
+  <h2 class="section-title">No lock-in.<br>No surprises.</h2>
+  <p class="section-sub">We keep your business by delivering results — not by trapping you in a contract.</p>
+
+  <div class="risk-grid">
+    <div class="risk-card">
+      <span class="risk-icon">🔓</span>
+      <h4>Cancel any time</h4>
+      <p>Month-to-month rolling agreement. No minimum term, no cancellation fees. Give 30 days' notice and we'll hand everything over cleanly.</p>
+    </div>
+    <div class="risk-card">
+      <span class="risk-icon">⚡</span>
+      <h4>Your assets stay yours</h4>
+      <p>Your website, your Google Ads account, your patient data. Everything lives under your name and ownership. We build it, you own it.</p>
+    </div>
+    <div class="risk-card">
+      <span class="risk-icon">📊</span>
+      <h4>Full transparency, always</h4>
+      <p>Monthly reporting on every metric that matters — website traffic, ad spend, leads generated, appointments booked, WhatsApp conversations. You always see exactly what's working.</p>
+    </div>
+    <div class="risk-card">
+      <span class="risk-icon">🤝</span>
+      <h4>WhatsApp-first support</h4>
+      <p>No ticketing systems. No waiting on hold. Message Jacques directly on WhatsApp. Same-day response guaranteed on every question or concern.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ═══ FINAL CTA ═══ -->
+<div class="final-cta fade-up">
+  <h2>The practice is already<br>brilliant. Let's make sure<br><em>patients can find it.</em></h2>
+  <p>Pick the package that fits where Tooth Fairy Dental is right now. WhatsApp to accept and we'll have everything moving within 48 hours of the word go.</p>
+
+  <div class="final-pkg-grid">
+    <a href="https://wa.me/27795124292?text=Hi%20Jacques%2C%20Foundation%20package%20for%20Tooth%20Fairy%20Dental" class="final-pkg" target="_blank">
+      <div class="p-name">Foundation</div>
+      <div class="p-price">R2,999<span style="font-size:13px;font-weight:500;color:var(--muted)">/mo</span></div>
+      <div class="p-note">+ R6,500 setup</div>
+      <div class="p-cta">Choose →</div>
+    </a>
+    <a href="https://wa.me/27795124292?text=Hi%20Jacques%2C%20I%27d%20like%20to%20accept%20the%20Growth%20package%20for%20Tooth%20Fairy%20Dental" class="final-pkg star" target="_blank">
+      <div class="p-name">Growth ★</div>
+      <div class="p-price">R5,999<span style="font-size:13px;font-weight:500;color:var(--muted)">/mo</span></div>
+      <div class="p-note">+ R3,500 setup</div>
+      <div class="p-cta">Accept →</div>
+    </a>
+    <a href="https://wa.me/27795124292?text=Hi%20Jacques%2C%20Scale%20package%20for%20Tooth%20Fairy%20Dental" class="final-pkg" target="_blank">
+      <div class="p-name">Scale</div>
+      <div class="p-price">R9,500<span style="font-size:13px;font-weight:500;color:var(--muted)">/mo</span></div>
+      <div class="p-note">+ your ad spend</div>
+      <div class="p-cta">Choose →</div>
+    </a>
+  </div>
+
+  <div class="final-meta">All packages · month-to-month · cancel anytime · valid until 30 June 2026</div>
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="footer-agent">
+    <div class="agent-avatar">J</div>
+    <div>
+      <div class="agent-name">Jacques Groenewald</div>
+      <div class="agent-title">Founder · JCE Media</div>
+    </div>
+    <a href="https://wa.me/27795124292" class="agent-wa" target="_blank">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.136.562 4.14 1.537 5.875L0 24l6.312-1.516C8.04 23.456 9.982 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.885 0-3.664-.513-5.197-1.407l-.371-.22-3.747.9.935-3.646-.241-.376C2.511 15.677 2 13.896 2 12 2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+      +27 79 512 4292 →
+    </a>
+  </div>
+  <div class="footer-copy">Prepared by JCE Media for Tooth Fairy Dental Clinic · Confidential · June 2026</div>
+</footer>
+
+<!-- ═══ FLOATING WHATSAPP ═══ -->
+<a href="https://wa.me/27795124292?text=Hi%20Jacques%2C%20I%27d%20like%20to%20discuss%20the%20Tooth%20Fairy%20Dental%20proposal" class="float-wa" target="_blank">
+  <div class="float-wa-pulse"></div>
+  💬
+</a>
+
+<script>
+  // Fade-up on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // Smooth scroll for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+</script>
+</body>
+</html>
