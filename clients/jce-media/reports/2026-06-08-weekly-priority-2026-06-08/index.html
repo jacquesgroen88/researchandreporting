@@ -23,6 +23,7 @@
     --pink: #f778ba;
   }
 
+  html { scroll-behavior: smooth; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
@@ -34,17 +35,16 @@
     min-height: 100vh;
   }
 
+  /* ── HEADER ── */
   .header {
     background: linear-gradient(135deg, #1e1040 0%, #0d1117 60%);
     border-bottom: 1px solid var(--border);
     padding: 40px 48px 32px;
-    position: relative;
-    overflow: hidden;
+    position: relative; overflow: hidden;
   }
   .header::before {
     content: '';
-    position: absolute;
-    top: -80px; right: -80px;
+    position: absolute; top: -80px; right: -80px;
     width: 300px; height: 300px;
     background: radial-gradient(circle, rgba(124,58,237,0.15) 0%, transparent 70%);
   }
@@ -53,56 +53,98 @@
   .header h1 span { background: linear-gradient(135deg, #a78bfa, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
   .header-sub { color: var(--text-muted); margin-top: 6px; font-size: 13px; }
 
-  /* TOC NAV */
+  /* ── STICKY TOC ── */
   .toc {
-    background: var(--surface);
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(22,27,34,0.95);
+    backdrop-filter: blur(8px);
     border-bottom: 1px solid var(--border);
-    padding: 12px 48px;
+    padding: 10px 48px;
     display: flex; gap: 6px; flex-wrap: wrap;
   }
   .toc a {
-    font-size: 12px;
-    color: var(--text-muted);
+    font-size: 12px; color: var(--text-muted);
     text-decoration: none;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 4px 12px;
-    transition: all .15s;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 20px; padding: 4px 12px;
+    transition: all .15s; white-space: nowrap;
   }
-  .toc a:hover { color: var(--text); border-color: #484f58; }
+  .toc a:hover { color: var(--text); border-color: #6366f1; background: rgba(99,102,241,0.1); }
 
-  /* SUMMARY BAR */
+  /* ── SUMMARY BAR ── */
   .summary-bar {
     display: flex; gap: 10px; flex-wrap: wrap;
-    padding: 16px 48px;
-    background: var(--surface2);
-    border-bottom: 1px solid var(--border);
+    padding: 14px 48px;
+    background: var(--surface2); border-bottom: 1px solid var(--border);
   }
   .stat-pill {
-    display: flex; align-items: center; gap: 8px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 5px 12px;
-    font-size: 12px;
+    display: flex; align-items: center; gap: 7px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 20px; padding: 5px 12px; font-size: 12px;
   }
   .stat-pill .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-  .dot-red { background: var(--red); }
-  .dot-orange { background: var(--orange); }
-  .dot-green { background: var(--green); }
-  .dot-blue { background: var(--blue); }
-  .dot-purple { background: var(--purple); }
-  .dot-pink { background: var(--pink); }
+  .dot-red{background:var(--red)} .dot-orange{background:var(--orange)}
+  .dot-green{background:var(--green)} .dot-blue{background:var(--blue)}
+  .dot-purple{background:var(--purple)} .dot-pink{background:var(--pink)}
 
+  /* ── GSD DASHBOARD ── */
+  .gsd-dashboard {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 24px 48px;
+  }
+  .gsd-title {
+    font-size: 11px; font-weight: 700; letter-spacing: .08em;
+    text-transform: uppercase; color: var(--text-muted); margin-bottom: 14px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .gsd-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .gsd-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; }
+  .gsd-col {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 10px; overflow: hidden;
+  }
+  .gsd-col-header {
+    padding: 10px 14px; font-size: 11px; font-weight: 700;
+    letter-spacing: .05em; text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .gsd-g1 { border-top: 2px solid var(--red); }
+  .gsd-g2 { border-top: 2px solid var(--orange); }
+  .gsd-g3 { border-top: 2px solid var(--blue); }
+  .gsd-g4 { border-top: 2px solid var(--text-muted); }
+  .gsd-g1 .gsd-col-header { color: #ff7b72; }
+  .gsd-g2 .gsd-col-header { color: var(--orange); }
+  .gsd-g3 .gsd-col-header { color: var(--blue); }
+  .gsd-g4 .gsd-col-header { color: var(--text-muted); }
+  .gsd-col-body { padding: 10px 14px; }
+  .gsd-item {
+    font-size: 12px; color: var(--text-muted);
+    padding: 5px 0; border-bottom: 1px solid rgba(48,54,61,0.5);
+    line-height: 1.3;
+  }
+  .gsd-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .gsd-item strong { color: var(--text); display: block; font-weight: 500; }
+  .gsd-item span { font-size: 11px; }
+  .gsd-badge {
+    display: inline-block; font-size: 9px; font-weight: 700;
+    letter-spacing: .04em; text-transform: uppercase;
+    border-radius: 3px; padding: 1px 5px; margin-right: 4px; vertical-align: middle;
+  }
+  .gb-g1 { background: rgba(248,81,73,0.2); color: #ff7b72; }
+  .gb-g2 { background: rgba(227,179,65,0.2); color: #e3b341; }
+  .gb-g3 { background: rgba(88,166,255,0.2); color: #79c0ff; }
+  .gb-g4 { background: rgba(139,148,158,0.15); color: #8b949e; }
+
+  /* ── LAYOUT ── */
   .container { max-width: 1200px; margin: 0 auto; padding: 32px 48px 64px; }
 
-  /* SECTION */
-  .section { margin-bottom: 44px; }
+  /* ── SECTION ── */
+  .section { margin-bottom: 44px; scroll-margin-top: 52px; }
   .section-header {
     display: flex; align-items: center; gap: 12px;
-    margin-bottom: 16px;
-    padding-bottom: 10px;
+    margin-bottom: 16px; padding-bottom: 10px;
     border-bottom: 1px solid var(--border);
   }
   .section-icon {
@@ -110,84 +152,83 @@
     display: flex; align-items: center; justify-content: center;
     font-size: 16px; flex-shrink: 0;
   }
-  .icon-red { background: rgba(248,81,73,0.15); }
-  .icon-orange { background: rgba(227,179,65,0.15); }
-  .icon-green { background: rgba(63,185,80,0.15); }
-  .icon-blue { background: rgba(88,166,255,0.15); }
-  .icon-purple { background: rgba(188,140,255,0.15); }
-  .icon-teal { background: rgba(57,211,83,0.15); }
-  .icon-pink { background: rgba(247,120,186,0.15); }
+  .icon-red{background:rgba(248,81,73,.15)} .icon-orange{background:rgba(227,179,65,.15)}
+  .icon-green{background:rgba(63,185,80,.15)} .icon-blue{background:rgba(88,166,255,.15)}
+  .icon-purple{background:rgba(188,140,255,.15)} .icon-teal{background:rgba(57,211,83,.15)}
+  .icon-pink{background:rgba(247,120,186,.15)}
 
   .section-header h2 { font-size: 16px; font-weight: 600; }
   .section-count {
-    margin-left: auto;
-    font-size: 11px; color: var(--text-muted);
+    margin-left: auto; font-size: 11px; color: var(--text-muted);
     background: var(--surface2); border: 1px solid var(--border);
     border-radius: 10px; padding: 2px 8px;
   }
 
-  /* CARD GRID */
+  /* ── CARD GRID ── */
   .card-grid { display: grid; gap: 12px; }
   .card-grid.two-col { grid-template-columns: 1fr 1fr; }
   .card-grid.three-col { grid-template-columns: 1fr 1fr 1fr; }
 
-  /* CARD */
+  /* ── CARD ── */
   .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 16px 18px;
-    transition: border-color .15s;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 16px 18px; transition: border-color .15s;
   }
   .card:hover { border-color: #484f58; }
-  .card.urgent { border-left: 3px solid var(--red); }
-  .card.high { border-left: 3px solid var(--orange); }
-  .card.normal { border-left: 3px solid var(--blue); }
+  .card.urgent  { border-left: 3px solid var(--red); }
+  .card.high    { border-left: 3px solid var(--orange); }
+  .card.normal  { border-left: 3px solid var(--blue); }
   .card.revenue { border-left: 3px solid var(--green); }
   .card.purple-border { border-left: 3px solid var(--purple); }
-  .card.pink-border { border-left: 3px solid var(--pink); }
+  .card.pink-border   { border-left: 3px solid var(--pink); }
 
-  .card-top { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; }
+  .card-top { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
   .checkbox {
     width: 16px; height: 16px; border-radius: 4px;
-    border: 1.5px solid var(--border);
-    flex-shrink: 0; margin-top: 2px;
+    border: 1.5px solid var(--border); flex-shrink: 0; margin-top: 2px;
   }
-  .card-title { font-weight: 600; font-size: 14px; flex: 1; }
+  .card-title { font-weight: 600; font-size: 14px; flex: 1; min-width: 0; }
   .badge {
     font-size: 10px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase;
     border-radius: 4px; padding: 2px 7px; flex-shrink: 0;
   }
-  .badge-urgent { background: rgba(248,81,73,0.18); color: #ff7b72; }
-  .badge-today { background: rgba(227,179,65,0.18); color: #e3b341; }
-  .badge-tue { background: rgba(88,166,255,0.18); color: #79c0ff; }
-  .badge-week { background: rgba(63,185,80,0.18); color: #56d364; }
-  .badge-asap { background: rgba(188,140,255,0.18); color: #d2a8ff; }
-  .badge-revenue { background: rgba(63,185,80,0.18); color: #56d364; }
-  .badge-build { background: rgba(247,120,186,0.18); color: #f778ba; }
+  .badge-urgent { background:rgba(248,81,73,.18); color:#ff7b72; }
+  .badge-today  { background:rgba(227,179,65,.18); color:#e3b341; }
+  .badge-tue    { background:rgba(88,166,255,.18); color:#79c0ff; }
+  .badge-week   { background:rgba(63,185,80,.18);  color:#56d364; }
+  .badge-asap   { background:rgba(188,140,255,.18);color:#d2a8ff; }
+  .badge-revenue{ background:rgba(63,185,80,.18);  color:#56d364; }
+  .badge-build  { background:rgba(247,120,186,.18);color:#f778ba; }
 
-  .card-body { color: var(--text-muted); font-size: 12.5px; padding-left: 26px; }
+  /* GSD label on card */
+  .gsd-label {
+    font-size: 9px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+    border-radius: 3px; padding: 2px 6px; flex-shrink: 0; margin-top: 3px;
+    align-self: flex-start;
+  }
+  .gl-g1 { background:rgba(248,81,73,.18); color:#ff7b72; border:1px solid rgba(248,81,73,.3); }
+  .gl-g2 { background:rgba(227,179,65,.18); color:#e3b341; border:1px solid rgba(227,179,65,.3); }
+  .gl-g3 { background:rgba(88,166,255,.18); color:#79c0ff; border:1px solid rgba(88,166,255,.3); }
+  .gl-g4 { background:rgba(139,148,158,.12); color:#8b949e; border:1px solid rgba(139,148,158,.2); }
+
+  .card-body { color: var(--text-muted); font-size: 12.5px; padding-left: 24px; }
   .card-body ul { list-style: none; }
   .card-body ul li { margin-bottom: 2px; }
   .card-body ul li::before { content: '→ '; color: var(--accent2); }
   .card-body p { margin-top: 4px; }
-  .card-meta {
-    display: flex; gap: 8px; flex-wrap: wrap;
-    padding-left: 26px; margin-top: 10px;
-  }
+  .card-meta { display: flex; gap: 8px; flex-wrap: wrap; padding-left: 24px; margin-top: 10px; }
   .chip {
-    font-size: 11px; padding: 2px 8px;
-    border-radius: 20px; border: 1px solid var(--border);
-    color: var(--text-muted); background: var(--surface2);
+    font-size: 11px; padding: 2px 8px; border-radius: 20px;
+    border: 1px solid var(--border); color: var(--text-muted); background: var(--surface2);
   }
-  .chip.revenue-chip { border-color: rgba(63,185,80,0.4); color: #56d364; }
-  .chip.warning-chip { border-color: rgba(248,81,73,0.4); color: #ff7b72; }
-  .chip.info-chip { border-color: rgba(88,166,255,0.3); color: #79c0ff; }
-  .chip.purple-chip { border-color: rgba(188,140,255,0.3); color: #d2a8ff; }
-  .chip.pink-chip { border-color: rgba(247,120,186,0.3); color: #f778ba; }
+  .chip.revenue-chip { border-color:rgba(63,185,80,.4);  color:#56d364; }
+  .chip.warning-chip { border-color:rgba(248,81,73,.4);  color:#ff7b72; }
+  .chip.info-chip    { border-color:rgba(88,166,255,.3); color:#79c0ff; }
+  .chip.purple-chip  { border-color:rgba(188,140,255,.3);color:#d2a8ff; }
+  .chip.pink-chip    { border-color:rgba(247,120,186,.3);color:#f778ba; }
 
-  /* STEP LIST */
-  .step-list { padding-left: 26px; margin-top: 8px; }
+  /* ── STEP LIST ── */
+  .step-list { padding-left: 24px; margin-top: 8px; }
   .step { display: flex; gap: 10px; margin-bottom: 8px; align-items: flex-start; }
   .step-num {
     width: 20px; height: 20px; border-radius: 50%;
@@ -198,55 +239,38 @@
   }
   .step-text { font-size: 12.5px; color: var(--text-muted); }
   .step-text code {
-    background: rgba(99,102,241,0.12);
-    border: 1px solid rgba(99,102,241,0.2);
-    border-radius: 4px; padding: 1px 5px;
-    font-size: 11px; color: #a5b4fc; font-family: monospace;
+    background: rgba(99,102,241,.12); border: 1px solid rgba(99,102,241,.2);
+    border-radius: 4px; padding: 1px 5px; font-size: 11px; color: #a5b4fc; font-family: monospace;
   }
-  .step-text a { color: var(--blue); }
 
-  /* ORDERS TABLE */
+  /* ── ORDERS TABLE ── */
   .orders-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    overflow: hidden;
-    font-size: 12.5px;
+    width: 100%; border-collapse: collapse;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; overflow: hidden; font-size: 12.5px;
   }
   .orders-table th {
-    background: var(--surface2);
-    color: var(--text-muted);
-    font-size: 11px;
-    letter-spacing: .05em;
-    text-transform: uppercase;
-    padding: 10px 14px;
-    text-align: left;
-    border-bottom: 1px solid var(--border);
+    background: var(--surface2); color: var(--text-muted);
+    font-size: 11px; letter-spacing: .05em; text-transform: uppercase;
+    padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border);
   }
   .orders-table td {
-    padding: 10px 14px;
-    border-bottom: 1px solid rgba(48,54,61,0.6);
-    vertical-align: top;
+    padding: 10px 14px; border-bottom: 1px solid rgba(48,54,61,.6); vertical-align: top;
   }
   .orders-table tr:last-child td { border-bottom: none; }
-  .orders-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .orders-table tr:hover td { background: rgba(255,255,255,.02); }
   .order-num { color: var(--accent2); font-weight: 600; font-family: monospace; }
   .printer-tag {
     font-size: 10px; font-weight: 600; text-transform: uppercase;
-    background: rgba(227,179,65,0.15); color: #e3b341;
-    border-radius: 4px; padding: 1px 6px;
+    background: rgba(227,179,65,.15); color: #e3b341; border-radius: 4px; padding: 1px 6px;
   }
   .amount { color: var(--green); font-weight: 600; font-family: monospace; }
 
-  /* ALERT BOX */
+  /* ── ALERT BOX ── */
   .alert-box {
-    background: linear-gradient(135deg, rgba(248,81,73,0.08), rgba(248,81,73,0.03));
-    border: 1px solid rgba(248,81,73,0.3);
-    border-radius: 10px;
-    padding: 18px 20px;
-    display: flex; gap: 16px; align-items: flex-start;
+    background: linear-gradient(135deg, rgba(248,81,73,.08), rgba(248,81,73,.03));
+    border: 1px solid rgba(248,81,73,.3); border-radius: 10px;
+    padding: 18px 20px; display: flex; gap: 16px; align-items: flex-start;
   }
   .alert-icon { font-size: 24px; flex-shrink: 0; }
   .alert-title { font-weight: 700; font-size: 15px; color: #ff7b72; margin-bottom: 6px; }
@@ -254,94 +278,97 @@
   .stat-row { display: flex; gap: 24px; margin-top: 10px; }
   .stat-item .val { font-size: 22px; font-weight: 700; }
   .stat-item .lbl { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: .05em; }
-  .stat-item.red .val { color: #ff7b72; }
+  .stat-item.red .val   { color: #ff7b72; }
   .stat-item.green .val { color: #56d364; }
-  .stat-item.orange .val { color: #e3b341; }
+  .stat-item.orange .val{ color: #e3b341; }
 
-  /* STOCK */
+  /* ── STOCK ── */
   .stock-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .stock-card {
-    background: var(--surface);
-    border: 1px solid rgba(63,185,80,0.25);
-    border-radius: 10px;
-    padding: 20px;
-    text-align: center;
+    background: var(--surface); border: 1px solid rgba(63,185,80,.25);
+    border-radius: 10px; padding: 20px; text-align: center;
   }
   .stock-num { font-size: 40px; font-weight: 800; }
   .stock-black .stock-num { color: #e6edf3; }
   .stock-white .stock-num { color: #a5b4fc; }
   .stock-label { font-size: 12px; color: var(--text-muted); margin-top: 4px; text-transform: uppercase; letter-spacing: .05em; }
-  .stock-sub { font-size: 11px; color: rgba(63,185,80,0.8); margin-top: 6px; }
+  .stock-sub { font-size: 11px; color: rgba(63,185,80,.8); margin-top: 6px; }
 
-  /* SCHEDULE */
-  .schedule-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+  /* ── SCHEDULE ── */
+  .schedule-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 10px; }
   .day-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
   .day-header { padding: 10px 14px; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; border-bottom: 1px solid var(--border); }
-  .day-mon { background: linear-gradient(135deg, rgba(248,81,73,0.15), rgba(248,81,73,0.05)); color: #ff7b72; }
-  .day-tue { background: linear-gradient(135deg, rgba(227,179,65,0.15), rgba(227,179,65,0.05)); color: #e3b341; }
-  .day-wed { background: linear-gradient(135deg, rgba(88,166,255,0.15), rgba(88,166,255,0.05)); color: #79c0ff; }
-  .day-thu { background: linear-gradient(135deg, rgba(63,185,80,0.15), rgba(63,185,80,0.05)); color: #56d364; }
-  .day-fri { background: linear-gradient(135deg, rgba(188,140,255,0.15), rgba(188,140,255,0.05)); color: #d2a8ff; }
+  .day-mon { background:linear-gradient(135deg,rgba(248,81,73,.15),rgba(248,81,73,.05)); color:#ff7b72; }
+  .day-tue { background:linear-gradient(135deg,rgba(227,179,65,.15),rgba(227,179,65,.05)); color:#e3b341; }
+  .day-wed { background:linear-gradient(135deg,rgba(88,166,255,.15),rgba(88,166,255,.05)); color:#79c0ff; }
+  .day-thu { background:linear-gradient(135deg,rgba(63,185,80,.15),rgba(63,185,80,.05)); color:#56d364; }
+  .day-fri { background:linear-gradient(135deg,rgba(188,140,255,.15),rgba(188,140,255,.05)); color:#d2a8ff; }
   .day-items { padding: 12px 14px; }
-  .day-item { display: flex; align-items: flex-start; gap: 7px; margin-bottom: 8px; font-size: 12px; color: var(--text-muted); line-height: 1.4; }
-  .day-item:last-child { margin-bottom: 0; }
-  .day-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--border); flex-shrink: 0; margin-top: 5px; }
+  .day-item { display:flex; align-items:flex-start; gap:7px; margin-bottom:8px; font-size:12px; color:var(--text-muted); line-height:1.4; }
+  .day-item:last-child { margin-bottom:0; }
+  .day-dot { width:5px; height:5px; border-radius:50%; background:var(--border); flex-shrink:0; margin-top:5px; }
+  .day-gbadge {
+    font-size: 9px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
+    border-radius: 3px; padding: 1px 4px; flex-shrink: 0; margin-top: 3px;
+  }
+  .dg1 { background:rgba(248,81,73,.2); color:#ff7b72; }
+  .dg2 { background:rgba(227,179,65,.2); color:#e3b341; }
+  .dg3 { background:rgba(88,166,255,.2); color:#79c0ff; }
 
-  /* DIVIDER */
-  .divider { border: none; border-top: 1px solid var(--border); margin: 8px 0 16px; }
-
-  /* INFO BOX */
+  /* ── INFO BOX ── */
   .info-box {
-    background: rgba(88,166,255,0.06);
-    border: 1px solid rgba(88,166,255,0.2);
-    border-radius: 8px;
-    padding: 12px 14px;
-    font-size: 12.5px;
-    color: var(--text-muted);
-    margin-top: 10px;
+    background: rgba(88,166,255,.06); border: 1px solid rgba(88,166,255,.2);
+    border-radius: 8px; padding: 12px 14px; font-size: 12.5px; color: var(--text-muted); margin-top: 10px;
   }
   .info-box strong { color: var(--blue); }
 
   .footer {
-    border-top: 1px solid var(--border);
-    padding: 20px 48px;
-    text-align: center;
-    color: var(--text-muted);
-    font-size: 11px;
+    border-top: 1px solid var(--border); padding: 20px 48px;
+    text-align: center; color: var(--text-muted); font-size: 11px;
   }
 
+  @media (max-width: 1024px) {
+    .gsd-grid { grid-template-columns: 1fr 1fr; }
+  }
   @media (max-width: 900px) {
-    .header, .summary-bar, .toc, .container, .footer { padding-left: 20px; padding-right: 20px; }
-    .card-grid.two-col, .card-grid.three-col { grid-template-columns: 1fr; }
-    .schedule-grid { grid-template-columns: 1fr 1fr; }
-    .stock-grid { grid-template-columns: 1fr 1fr; }
+    .header,.summary-bar,.toc,.gsd-dashboard,.container,.footer { padding-left:20px; padding-right:20px; }
+    .card-grid.two-col,.card-grid.three-col { grid-template-columns:1fr; }
+    .schedule-grid { grid-template-columns:1fr 1fr; }
+    .stock-grid { grid-template-columns:1fr 1fr; }
+    .gsd-grid { grid-template-columns:1fr 1fr; }
+  }
+  @media (max-width:600px) {
+    .gsd-grid { grid-template-columns:1fr; }
+    .schedule-grid { grid-template-columns:1fr; }
   }
 </style>
 </head>
 <body>
 
+<!-- HEADER -->
 <div class="header">
   <div class="header-meta">JCE Media · Internal Operations</div>
   <h1>Weekly Priority List — <span>8 June 2026</span></h1>
-  <div class="header-sub">All outstanding tasks, meetings, orders, automations, and creative deliverables for this week</div>
+  <div class="header-sub">GSD Method applied — every task has a priority level so you know exactly what to focus on first</div>
 </div>
 
-<!-- TOC -->
-<div class="toc">
+<!-- STICKY TOC -->
+<nav class="toc">
+  <a href="#gsd">🎯 GSD Overview</a>
   <a href="#urgent">🚨 Urgent</a>
   <a href="#ads">📊 Ad Spend</a>
   <a href="#meetings">📅 Meetings</a>
   <a href="#insurance">🛡 Insurance</a>
   <a href="#reviewtap-orders">📦 RT Orders</a>
   <a href="#stock">🚚 Stock</a>
-  <a href="#automations">⚙️ Automations & Flows</a>
+  <a href="#automations">⚙️ Automations</a>
   <a href="#dev">💻 Client Dev</a>
   <a href="#campaigns">📣 Campaigns</a>
-  <a href="#creatives">🎨 Ad Creatives</a>
   <a href="#website">🌐 RT Website</a>
+  <a href="#creatives">🎨 Creatives</a>
   <a href="#admin">🔧 Admin</a>
   <a href="#schedule">🗓 Schedule</a>
-</div>
+</nav>
 
 <!-- SUMMARY BAR -->
 <div class="summary-bar">
@@ -350,8 +377,66 @@
   <div class="stat-pill"><span class="dot dot-blue"></span><strong>18</strong> Open RT Orders</div>
   <div class="stat-pill"><span class="dot dot-green"></span><strong>96</strong> Units Incoming</div>
   <div class="stat-pill"><span class="dot dot-purple"></span><strong>6</strong> Client Dev Tasks</div>
-  <div class="stat-pill"><span class="dot dot-pink"></span><strong>4</strong> Automations to Build</div>
+  <div class="stat-pill"><span class="dot dot-pink"></span><strong>4</strong> Automations</div>
   <div class="stat-pill"><span class="dot dot-orange"></span><strong>16</strong> New Ad Creatives</div>
+</div>
+
+<!-- GSD DASHBOARD -->
+<div class="gsd-dashboard" id="gsd">
+  <div class="gsd-title">🎯 GSD Priority Matrix — Get Shit Done</div>
+  <div class="gsd-grid">
+
+    <div class="gsd-col gsd-g1">
+      <div class="gsd-col-header">🔴 G1 — Do Now <span style="font-size:10px;opacity:.6;margin-left:4px">Blocks everything</span></div>
+      <div class="gsd-col-body">
+        <div class="gsd-item"><strong>Essence of ME — Payment chase</strong><span>Fulfillment at risk</span></div>
+        <div class="gsd-item"><strong>Email signature setup</strong><span>Every email you send</span></div>
+        <div class="gsd-item"><strong>Samsung TV — get repair quote</strong><span>Start the claim</span></div>
+        <div class="gsd-item"><strong>Factor Pro proposal</strong><span>Meeting is Tuesday</span></div>
+        <div class="gsd-item"><strong>Reptilia — chase Diane</strong><span>Blocking go-live</span></div>
+        <div class="gsd-item"><strong>Rachel — implement updates</strong><span>Meeting is Tue/Wed</span></div>
+        <div class="gsd-item"><strong>Stock arrival confirmation</strong><span>18 orders waiting</span></div>
+      </div>
+    </div>
+
+    <div class="gsd-col gsd-g2">
+      <div class="gsd-col-header">🟡 G2 — Schedule It <span style="font-size:10px;opacity:.6;margin-left:4px">Important, plan when</span></div>
+      <div class="gsd-col-body">
+        <div class="gsd-item"><strong>Carmen du Toit — book meeting</strong><span>Multi-unit deal potential</span></div>
+        <div class="gsd-item"><strong>Sam (USA) — prep for Tue evening</strong><span>Agency partnership</span></div>
+        <div class="gsd-item"><strong>Ad strategy review</strong><span>R12k spent, 3 deals only</span></div>
+        <div class="gsd-item"><strong>RT homepage CRO fix</strong><span>Core revenue lever</span></div>
+        <div class="gsd-item"><strong>Email + WhatsApp campaigns</strong><span>Re-engage warm leads</span></div>
+        <div class="gsd-item"><strong>Liezel follow-up — 40 units</strong><span>Large order at risk</span></div>
+        <div class="gsd-item"><strong>Terri's dad website call</strong><span>R8k potential</span></div>
+        <div class="gsd-item"><strong>Insurance audit</strong><span>Personal + business</span></div>
+      </div>
+    </div>
+
+    <div class="gsd-col gsd-g3">
+      <div class="gsd-col-header">🔵 G3 — Delegate <span style="font-size:10px;opacity:.6;margin-left:4px">Others can own this</span></div>
+      <div class="gsd-col-body">
+        <div class="gsd-item"><strong>Reptilia updates</strong><span>Diane executes — you review</span></div>
+        <div class="gsd-item"><strong>Logo follow-up (Giorgio)</strong><span>Build the tool, Giorgio runs it</span></div>
+        <div class="gsd-item"><strong>Ad creatives — RT + MFB</strong><span>Brief the creative team</span></div>
+        <div class="gsd-item"><strong>Izi Travel lead template</strong><span>Set up once, Terri runs it</span></div>
+        <div class="gsd-item"><strong>Threezero / Charissa / Liquid Lounge</strong><span>Development team deliverables</span></div>
+        <div class="gsd-item"><strong>DotCom GHL calendar</strong><span>Technical investigation</span></div>
+      </div>
+    </div>
+
+    <div class="gsd-col gsd-g4">
+      <div class="gsd-col-header">⚪ G4 — Batch / Later <span style="font-size:10px;opacity:.6;margin-left:4px">Group or defer</span></div>
+      <div class="gsd-col-body">
+        <div class="gsd-item"><strong>Number porting status</strong><span>Quick check, low urgency</span></div>
+        <div class="gsd-item"><strong>Giorgio proposal template</strong><span>Useful but not urgent</span></div>
+        <div class="gsd-item"><strong>RT AI bot order update</strong><span>Batch with other bot work</span></div>
+        <div class="gsd-item"><strong>Personal insurance review</strong><span>Important, not this week's fire</span></div>
+        <div class="gsd-item"><strong>Terri RT platform training</strong><span>Batch with Izi Travel meeting</span></div>
+      </div>
+    </div>
+
+  </div>
 </div>
 
 <div class="container">
@@ -368,47 +453,38 @@
         <div class="card-top">
           <div class="checkbox"></div>
           <div class="card-title">Essence of Middle East — Payment Bounced</div>
-          <span class="badge badge-urgent">Urgent</span>
+          <span class="gsd-label gl-g1">G1 · Do Now</span>
         </div>
         <div class="card-body">
           <p>Contact immediately to arrange alternative payment before fulfillment is at risk.</p>
         </div>
-        <div class="card-meta">
-          <span class="chip warning-chip">Payment Failed</span>
-          <span class="chip warning-chip">Call Today</span>
-        </div>
+        <div class="card-meta"><span class="chip warning-chip">Payment Failed</span><span class="chip warning-chip">Call Today</span></div>
       </div>
       <div class="card urgent">
         <div class="card-top">
           <div class="checkbox"></div>
           <div class="card-title">Email Signature Setup</div>
-          <span class="badge badge-asap">ASAP</span>
+          <span class="gsd-label gl-g1">G1 · Do Now</span>
         </div>
         <div class="card-body">
-          <p>New email signature needs to be created and deployed across all accounts immediately.</p>
+          <p>New email signature across all accounts. Every email you send until this is done looks unprofessional.</p>
         </div>
-        <div class="card-meta">
-          <span class="chip">Admin</span><span class="chip">Today</span>
-        </div>
+        <div class="card-meta"><span class="chip">Admin</span><span class="chip">Today</span></div>
       </div>
       <div class="card urgent">
         <div class="card-top">
           <div class="checkbox"></div>
           <div class="card-title">Samsung TV — Insurance Claim Quote</div>
-          <span class="badge badge-urgent">This Week</span>
+          <span class="gsd-label gl-g1">G1 · Do Now</span>
         </div>
         <div class="card-body">
-          <p>Business-insured Samsung TV is broken. Get a repair quote and submit the insurance claim.</p>
           <ul>
             <li>Get repair quote from Samsung / accredited repairer</li>
-            <li>Log claim with insurer (provide quote + proof of ownership)</li>
-            <li>Review what else is on the business policy</li>
+            <li>Log claim with insurer (quote + proof of ownership)</li>
+            <li>Verify TV is on business schedule at correct value</li>
           </ul>
         </div>
-        <div class="card-meta">
-          <span class="chip warning-chip">Insured Asset</span>
-          <span class="chip">Business Policy</span>
-        </div>
+        <div class="card-meta"><span class="chip warning-chip">Insured Asset</span><span class="chip">Business Policy</span></div>
       </div>
     </div>
   </div>
@@ -421,9 +497,9 @@
     </div>
     <div class="alert-box">
       <div class="alert-icon">📊</div>
-      <div>
-        <div class="alert-title">R12,000 spent — only 3 deals closed. Evaluate before spending more.</div>
-        <div class="alert-body">Current ad ROI is unsustainable. Review must happen before new creatives go live. Consider budget caps, audience targeting changes, or a temporary pause while new assets are built.</div>
+      <div style="flex:1">
+        <div class="alert-title">R12,000 spent — only 3 deals closed. <span class="gsd-label gl-g2" style="vertical-align:middle;margin-left:6px">G2 · Schedule</span></div>
+        <div class="alert-body">Review must happen before new creatives go live. Consider budget caps, audience targeting changes, or a pause while new assets are built. Tie this to the homepage CRO fix — ad traffic converting better means this spend makes sense again.</div>
         <div class="stat-row">
           <div class="stat-item red"><div class="val">R12,000</div><div class="lbl">Ad Spend</div></div>
           <div class="stat-item green"><div class="val">3</div><div class="lbl">Deals Closed</div></div>
@@ -446,88 +522,78 @@
           <div class="checkbox"></div>
           <div class="card-title">Carmen du Toit — Eva-Last</div>
           <span class="badge badge-today">Book Today</span>
+          <span class="gsd-label gl-g2">G2</span>
         </div>
         <div class="card-body">
-          <p>Follow up and book meeting this week. Address:</p>
           <ul>
             <li>URL programming for NFC device</li>
             <li>Android vs iOS / iPhone NFC compatibility</li>
             <li>Pricing for 5, 10, 15 branded units (NFC + QR)</li>
             <li>Receptions, Sales offices, Warehouses use case</li>
-            <li>Confirm NFC + QR combo option (can sharpen price for 5+)</li>
+            <li>Can sharpen price for 5+ units</li>
           </ul>
         </div>
-        <div class="card-meta">
-          <span class="chip info-chip">Eva-Last | Muldersdrift</span>
-          <span class="chip revenue-chip">Multi-Unit Potential</span>
-        </div>
+        <div class="card-meta"><span class="chip info-chip">Eva-Last | Muldersdrift</span><span class="chip revenue-chip">Multi-Unit Potential</span></div>
       </div>
       <div class="card high">
         <div class="card-top">
           <div class="checkbox"></div>
           <div class="card-title">Factor Pro — Proposal + Meeting</div>
           <span class="badge badge-tue">Tuesday</span>
+          <span class="gsd-label gl-g1">G1</span>
         </div>
         <div class="card-body">
-          <p>Full proposal ready before EOD Monday. Present Tuesday.</p>
+          <p>Proposal must be ready before EOD Monday. Present Tuesday.</p>
         </div>
-        <div class="card-meta">
-          <span class="chip">Proposal Due Mon</span><span class="chip">Meeting Tue</span>
-        </div>
+        <div class="card-meta"><span class="chip">Proposal Due Mon</span><span class="chip">Meeting Tue</span></div>
       </div>
       <div class="card high">
         <div class="card-top">
           <div class="checkbox"></div>
           <div class="card-title">Sam — USA Agency</div>
           <span class="badge badge-tue">Tue Evening</span>
+          <span class="gsd-label gl-g2">G2</span>
         </div>
         <div class="card-body">
           <p>Prep agenda, numbers, and positioning before Tuesday evening call.</p>
         </div>
-        <div class="card-meta">
-          <span class="chip">Agency Partnership</span><span class="chip">Prep Required</span>
-        </div>
+        <div class="card-meta"><span class="chip">Agency Partnership</span><span class="chip">Prep Required</span></div>
       </div>
       <div class="card high">
         <div class="card-top">
           <div class="checkbox"></div>
           <div class="card-title">Rachel — Meeting + Updates</div>
           <span class="badge badge-tue">Tue / Wed</span>
+          <span class="gsd-label gl-g1">G1</span>
         </div>
         <div class="card-body">
-          <p>All discussed updates must be <strong style="color:var(--text)">implemented before the meeting</strong>. Book Tue or Wed.</p>
+          <p>All discussed updates must be <strong style="color:var(--text)">live before the meeting</strong>.</p>
         </div>
-        <div class="card-meta">
-          <span class="chip warning-chip">Implement Updates First</span>
-          <span class="chip">Number Porting Status</span>
-        </div>
+        <div class="card-meta"><span class="chip warning-chip">Implement Updates First</span><span class="chip">Number Porting Status</span></div>
       </div>
       <div class="card normal">
         <div class="card-top">
           <div class="checkbox"></div>
           <div class="card-title">Izi Travel — Meeting Booked</div>
           <span class="badge badge-week">Confirmed</span>
+          <span class="gsd-label gl-g2">G2</span>
         </div>
         <div class="card-body">
-          <p>Meeting booked — confirm agenda. Also prep Terri's RT platform training (see Automations section).</p>
+          <p>Meeting booked — confirm agenda. Prep Terri's RT training (batch with this meeting).</p>
         </div>
-        <div class="card-meta">
-          <span class="chip">Booked</span><span class="chip">Prep Training</span>
-        </div>
+        <div class="card-meta"><span class="chip">Booked</span><span class="chip">Prep Training</span></div>
       </div>
       <div class="card revenue">
         <div class="card-top">
           <div class="checkbox"></div>
           <div class="card-title">Terri's Dad — Website Discovery Call</div>
           <span class="badge badge-week">Book This Week</span>
+          <span class="gsd-label gl-g2">G2</span>
         </div>
         <div class="card-body">
-          <p>Book discovery / scoping call for new website. R8,000 potential — don't let this slip.</p>
+          <p>R8,000 potential. Book discovery / scoping call — don't let this sit another week.</p>
         </div>
-        <div class="card-meta">
-          <span class="chip revenue-chip">R8,000 Potential</span>
-          <span class="chip">New Client</span>
-        </div>
+        <div class="card-meta"><span class="chip revenue-chip">R8,000 Potential</span><span class="chip">New Client</span></div>
       </div>
     </div>
   </div>
@@ -537,48 +603,40 @@
     <div class="section-header">
       <div class="section-icon icon-orange">🛡</div>
       <h2>Insurance — Personal & Business Review</h2>
-      <span class="section-count">2 areas</span>
     </div>
     <div class="card-grid two-col">
       <div class="card high">
         <div class="card-top">
           <div class="checkbox"></div>
           <div class="card-title">Business Insurance — Full Coverage Audit</div>
-          <span class="badge badge-week">This Week</span>
+          <span class="gsd-label gl-g2">G2 · Schedule</span>
         </div>
         <div class="card-body">
           <ul>
             <li>Pull current business policy schedule</li>
-            <li>List all insured assets — verify Samsung TV is listed and at correct value</li>
-            <li>Identify any gaps (equipment, stock, liability, business interruption)</li>
-            <li>Get Samsung TV repair quote → submit claim</li>
-            <li>Check if any other assets are underinsured or missing</li>
+            <li>Verify Samsung TV is listed at correct replacement value</li>
+            <li>Identify gaps: equipment, stock, liability, business interruption</li>
+            <li>Get Samsung TV repair quote → submit claim this week</li>
+            <li>Check for underinsured or missing assets</li>
           </ul>
         </div>
-        <div class="card-meta">
-          <span class="chip warning-chip">Samsung TV Claim Active</span>
-          <span class="chip">Business Policy</span>
-        </div>
+        <div class="card-meta"><span class="chip warning-chip">Samsung TV Claim Active</span><span class="chip">Business Policy</span></div>
       </div>
       <div class="card normal">
         <div class="card-top">
           <div class="checkbox"></div>
           <div class="card-title">Personal Insurance — Coverage Review</div>
-          <span class="badge badge-week">This Week</span>
+          <span class="gsd-label gl-g4">G4 · Batch Later</span>
         </div>
         <div class="card-body">
           <ul>
             <li>Pull personal policy schedule</li>
-            <li>Review life, disability, income protection coverage</li>
-            <li>Check home contents / vehicle cover is up to date</li>
+            <li>Review life, disability, income protection</li>
+            <li>Check home contents / vehicle cover is current</li>
             <li>Identify gaps vs. current life / business stage</li>
-            <li>Consider: is a broker review overdue?</li>
           </ul>
         </div>
-        <div class="card-meta">
-          <span class="chip">Personal Policy</span>
-          <span class="chip">Review & Update</span>
-        </div>
+        <div class="card-meta"><span class="chip">Personal Policy</span><span class="chip">Review</span></div>
       </div>
     </div>
   </div>
@@ -588,7 +646,7 @@
     <div class="section-header">
       <div class="section-icon icon-teal">📦</div>
       <h2>Reviewtap — Outstanding Orders (At Printer)</h2>
-      <span class="section-count">8 priority orders</span>
+      <span class="section-count">8 priority · G1 once stock arrives</span>
     </div>
     <table class="orders-table">
       <thead>
@@ -607,8 +665,7 @@
           <td><span class="order-num">#1662</span></td>
           <td>Burgert Erasmus<br><span style="color:var(--text-muted)">Torga Optical Fleurdal</span></td>
           <td>Custom Branded Google Review Stand (NFC + QR) - White</td>
-          <td>1</td>
-          <td class="amount">R754</td>
+          <td>1</td><td class="amount">R754</td>
           <td><span class="printer-tag">At Printer</span></td>
           <td style="color:var(--text-muted)">—</td>
         </tr>
@@ -616,8 +673,7 @@
           <td><span class="order-num">#1683</span></td>
           <td>Yolandie Badenhorst<br><span style="color:var(--text-muted)">Secret Sands</span></td>
           <td>Tripadvisor NFC Stand - Black + Google Review Stand - Black</td>
-          <td>2</td>
-          <td class="amount">R998</td>
+          <td>2</td><td class="amount">R998</td>
           <td><span class="printer-tag">At Printer</span></td>
           <td style="color:var(--text-muted)">—</td>
         </tr>
@@ -625,8 +681,7 @@
           <td><span class="order-num">#1687</span></td>
           <td>Hesti Steyn<br><span style="color:var(--text-muted)">KF Potgieter Inc</span></td>
           <td>Custom Branded Google Review Stand (NFC + QR) - Black</td>
-          <td>3</td>
-          <td class="amount">R1,947</td>
+          <td>3</td><td class="amount">R1,947</td>
           <td><span class="printer-tag">At Printer</span></td>
           <td style="color:var(--text-muted)">3 separate business locations</td>
         </tr>
@@ -634,8 +689,7 @@
           <td><span class="order-num">#1689</span></td>
           <td>Wedrich Wessels<br><span style="color:var(--text-muted)">Vokkies</span></td>
           <td>Custom Branded Google Review Stand (NFC + QR) - White</td>
-          <td>10</td>
-          <td class="amount">R6,490</td>
+          <td>10</td><td class="amount">R6,490</td>
           <td><span class="printer-tag">At Printer</span></td>
           <td style="color:var(--text-muted)">—</td>
         </tr>
@@ -643,8 +697,7 @@
           <td><span class="order-num">#1690</span></td>
           <td>Muhammad Patel<br><span style="color:var(--text-muted)">Wild MAP Xplorer</span></td>
           <td>Tripadvisor NFC Cards + Custom Branded Card + Stand</td>
-          <td>3</td>
-          <td class="amount">R1,397</td>
+          <td>3</td><td class="amount">R1,397</td>
           <td><span class="printer-tag">At Printer</span></td>
           <td style="color:var(--text-muted)">—</td>
         </tr>
@@ -652,8 +705,7 @@
           <td><span class="order-num">#1693</span></td>
           <td>Mohamed Wania<br><span style="color:var(--text-muted)">Bean Two Cup</span></td>
           <td>Custom Branded Google Review Stand (NFC + QR) - Black</td>
-          <td>2</td>
-          <td class="amount">R1,298</td>
+          <td>2</td><td class="amount">R1,298</td>
           <td><span class="printer-tag">At Printer</span></td>
           <td style="color:var(--text-muted)">—</td>
         </tr>
@@ -661,8 +713,7 @@
           <td><span class="order-num">#1703</span></td>
           <td>Delene Ferreira<br><span style="color:var(--text-muted)">LITE-GLO</span></td>
           <td>Custom Branded Google Review Stand (NFC + QR) - White</td>
-          <td>2</td>
-          <td class="amount">R1,298</td>
+          <td>2</td><td class="amount">R1,298</td>
           <td><span class="printer-tag">At Printer</span></td>
           <td style="color:var(--text-muted)">Bank Deposit — Lite-Glo previous artwork</td>
         </tr>
@@ -670,8 +721,7 @@
           <td><span class="order-num">#1704</span></td>
           <td>Dee Bester<br><span style="color:var(--text-muted)">House Unboxed</span></td>
           <td>Custom Branded Google Review Stand (NFC + QR) - Black</td>
-          <td>4</td>
-          <td class="amount">R2,596</td>
+          <td>4</td><td class="amount">R2,596</td>
           <td><span class="printer-tag">At Printer</span></td>
           <td style="color:var(--text-muted)">—</td>
         </tr>
@@ -702,18 +752,16 @@
         <div class="checkbox"></div>
         <div class="card-title">Liezel — Follow Up (40 Units for Conti)</div>
         <span class="badge badge-revenue">Large Order</span>
+        <span class="gsd-label gl-g2">G2 · Schedule</span>
       </div>
       <div class="card-body">
-        <p>Enquired about 40 units for client Conti. Follow up this week — close before stock allocation tightens.</p>
+        <p>Enquired about 40 units for client Conti. Follow up this week — close before stock allocation tightens with incoming orders.</p>
       </div>
-      <div class="card-meta">
-        <span class="chip revenue-chip">40 Units</span>
-        <span class="chip">Follow Up This Week</span>
-      </div>
+      <div class="card-meta"><span class="chip revenue-chip">40 Units</span><span class="chip">Follow Up This Week</span></div>
     </div>
   </div>
 
-  <!-- AUTOMATIONS & FLOWS -->
+  <!-- AUTOMATIONS -->
   <div class="section" id="automations">
     <div class="section-header">
       <div class="section-icon icon-pink">⚙️</div>
@@ -722,99 +770,71 @@
     </div>
     <div class="card-grid two-col">
 
-      <!-- AI Bot Update -->
       <div class="card pink-border">
         <div class="card-top">
           <div class="checkbox"></div>
           <div class="card-title">Reviewtap AI Bot — Order Enquiry Handling</div>
-          <span class="badge badge-build">Update Bot</span>
+          <span class="gsd-label gl-g4">G4 · Batch</span>
         </div>
         <div class="card-body">
-          <p>Update the bot to handle order status questions intelligently:</p>
           <div class="step-list">
-            <div class="step"><div class="step-num">1</div><div class="step-text">If customer asks about their order → direct to the Reviewtap order tracking page</div></div>
-            <div class="step"><div class="step-num">2</div><div class="step-text">If no tracking details are available → bot replies: <em style="color:var(--text)">"Your order is currently in the queue for printing. We'll be in touch as soon as it's dispatched."</em></div></div>
-            <div class="step"><div class="step-num">3</div><div class="step-text">Test full conversation flow end-to-end before publishing</div></div>
+            <div class="step"><div class="step-num">1</div><div class="step-text">Order status ask → direct to Reviewtap tracking page</div></div>
+            <div class="step"><div class="step-num">2</div><div class="step-text">No tracking details → bot says: <em style="color:var(--text)">"Your order is currently in the queue for printing — we'll be in touch as soon as it's dispatched."</em></div></div>
+            <div class="step"><div class="step-num">3</div><div class="step-text">Test end-to-end before publishing</div></div>
           </div>
         </div>
-        <div class="card-meta">
-          <span class="chip pink-chip">AI Bot</span>
-          <span class="chip">Order Enquiries</span>
-          <span class="chip">Customer Experience</span>
-        </div>
+        <div class="card-meta"><span class="chip pink-chip">AI Bot</span><span class="chip">Order Enquiries</span></div>
       </div>
 
-      <!-- Logo Follow-Up Flow -->
       <div class="card pink-border">
         <div class="card-top">
           <div class="checkbox"></div>
           <div class="card-title">Reviewtap — Logo Follow-Up Flow (Giorgio)</div>
-          <span class="badge badge-build">Build Flow</span>
+          <span class="gsd-label gl-g3">G3 · Delegate</span>
         </div>
         <div class="card-body">
-          <p>Help Giorgio chase buyers who haven't submitted their logo yet:</p>
           <div class="step-list">
-            <div class="step"><div class="step-num">1</div><div class="step-text">Export outstanding logos from Shopify (orders where logo not yet received)</div></div>
-            <div class="step"><div class="step-num">2</div><div class="step-text">Run export CSV through Claude to generate a personalised WhatsApp message for each customer</div></div>
+            <div class="step"><div class="step-num">1</div><div class="step-text">Export outstanding logo orders from Shopify</div></div>
+            <div class="step"><div class="step-num">2</div><div class="step-text">Run CSV through Claude → generate personalised WhatsApp message per customer</div></div>
             <div class="step"><div class="step-num">3</div><div class="step-text">Message includes pre-filled upload link: <code>reviewtap.formaloo.me/6n4h9c</code></div></div>
-            <div class="step"><div class="step-num">4</div><div class="step-text">Output: clickable wa.me links with URL-encoded message so Giorgio can send with one tap</div></div>
-            <div class="step"><div class="step-num">5</div><div class="step-text">Deliver as a simple Google Sheet or formatted list Giorgio can work from daily</div></div>
+            <div class="step"><div class="step-num">4</div><div class="step-text">Output clickable wa.me links — Giorgio sends with one tap daily</div></div>
           </div>
         </div>
-        <div class="card-meta">
-          <span class="chip pink-chip">Giorgio</span>
-          <span class="chip">WhatsApp</span>
-          <span class="chip">Shopify Export</span>
-          <span class="chip">Logo Collection</span>
-        </div>
+        <div class="card-meta"><span class="chip pink-chip">Giorgio</span><span class="chip">WhatsApp</span><span class="chip">Logo Collection</span></div>
       </div>
 
-      <!-- Izi Travel Training -->
       <div class="card purple-border">
         <div class="card-top">
           <div class="checkbox"></div>
           <div class="card-title">Izi Travel — Terri RT Platform Training</div>
-          <span class="badge badge-week">This Week</span>
+          <span class="gsd-label gl-g4">G4 · Batch w/ Meeting</span>
         </div>
         <div class="card-body">
-          <p>Train Terri on the RT platform for effective lead management:</p>
           <div class="step-list">
-            <div class="step"><div class="step-num">1</div><div class="step-text">How to make internal notes on a contact/lead</div></div>
-            <div class="step"><div class="step-num">2</div><div class="step-text">How to create opportunities and set follow-up stages</div></div>
-            <div class="step"><div class="step-num">3</div><div class="step-text">Walkthrough of the pipeline view and lead lifecycle</div></div>
-            <div class="step"><div class="step-num">4</div><div class="step-text">Best practices for consistent follow-up cadence</div></div>
+            <div class="step"><div class="step-num">1</div><div class="step-text">How to make internal notes on a contact / lead</div></div>
+            <div class="step"><div class="step-num">2</div><div class="step-text">Creating opportunities and setting follow-up stages</div></div>
+            <div class="step"><div class="step-num">3</div><div class="step-text">Pipeline view walkthrough and lead lifecycle</div></div>
+            <div class="step"><div class="step-num">4</div><div class="step-text">Consistent follow-up cadence best practices</div></div>
           </div>
         </div>
-        <div class="card-meta">
-          <span class="chip purple-chip">Izi Travel</span>
-          <span class="chip">Terri</span>
-          <span class="chip">RT Platform</span>
-          <span class="chip">Training</span>
-        </div>
+        <div class="card-meta"><span class="chip purple-chip">Izi Travel</span><span class="chip">Terri</span><span class="chip">RT Platform</span></div>
       </div>
 
-      <!-- Izi Travel Lead Template -->
       <div class="card purple-border">
         <div class="card-top">
           <div class="checkbox"></div>
           <div class="card-title">Izi Travel — Unconverted Lead Follow-Up Template</div>
-          <span class="badge badge-build">Build Template</span>
+          <span class="gsd-label gl-g3">G3 · Delegate</span>
         </div>
         <div class="card-body">
-          <p>Create an automated follow-up template for leads that have enquired but haven't converted:</p>
           <div class="step-list">
-            <div class="step"><div class="step-num">1</div><div class="step-text">Identify leads in pipeline who have not responded or converted after X days</div></div>
-            <div class="step"><div class="step-num">2</div><div class="step-text">Build a multi-touch sequence: Day 2 → Day 5 → Day 10 (email + WhatsApp)</div></div>
-            <div class="step"><div class="step-num">3</div><div class="step-text">Messaging angle: personalised, value-led, not salesy</div></div>
-            <div class="step"><div class="step-num">4</div><div class="step-text">Set up in RT / GHL and test before activating on live leads</div></div>
+            <div class="step"><div class="step-num">1</div><div class="step-text">Identify leads that haven't responded or converted after X days</div></div>
+            <div class="step"><div class="step-num">2</div><div class="step-text">Multi-touch sequence: Day 2 → Day 5 → Day 10 (email + WhatsApp)</div></div>
+            <div class="step"><div class="step-num">3</div><div class="step-text">Personalised, value-led messaging — not salesy</div></div>
+            <div class="step"><div class="step-num">4</div><div class="step-text">Set up in RT / GHL — Terri manages from there</div></div>
           </div>
         </div>
-        <div class="card-meta">
-          <span class="chip purple-chip">Izi Travel</span>
-          <span class="chip">GHL / RT</span>
-          <span class="chip">Lead Nurture</span>
-          <span class="chip">Email + WhatsApp</span>
-        </div>
+        <div class="card-meta"><span class="chip purple-chip">Izi Travel</span><span class="chip">GHL / RT</span><span class="chip">Lead Nurture</span></div>
       </div>
 
     </div>
@@ -825,64 +845,57 @@
     <div class="section-header">
       <div class="section-icon icon-purple">💻</div>
       <h2>Client Dev — Deliverables This Week</h2>
-      <span class="section-count">6 items</span>
+      <span class="section-count">7 items</span>
     </div>
     <div class="card-grid two-col">
       <div class="card purple-border">
-        <div class="card-top"><div class="checkbox"></div><div class="card-title">Andrew — Threezero Website</div><span class="badge badge-week">Finish</span></div>
-        <div class="card-body"><p>Complete all outstanding work.</p></div>
+        <div class="card-top"><div class="checkbox"></div><div class="card-title">Andrew — Threezero Website</div><span class="gsd-label gl-g3">G3 · Delegate</span></div>
+        <div class="card-body"><p>Complete all outstanding work — dev team delivers.</p></div>
         <div class="card-meta"><span class="chip">Website</span><span class="chip">In Progress</span></div>
       </div>
       <div class="card purple-border">
-        <div class="card-top"><div class="checkbox"></div><div class="card-title">Charissa — Website</div><span class="badge badge-week">Finish</span></div>
-        <div class="card-body"><p>Complete all outstanding work.</p></div>
+        <div class="card-top"><div class="checkbox"></div><div class="card-title">Charissa — Website</div><span class="gsd-label gl-g3">G3 · Delegate</span></div>
+        <div class="card-body"><p>Complete all outstanding work — dev team delivers.</p></div>
         <div class="card-meta"><span class="chip">Website</span><span class="chip">In Progress</span></div>
       </div>
       <div class="card purple-border">
-        <div class="card-top"><div class="checkbox"></div><div class="card-title">Liquid Lounge — Website</div><span class="badge badge-week">Finish</span></div>
-        <div class="card-body"><p>Complete all outstanding work.</p></div>
+        <div class="card-top"><div class="checkbox"></div><div class="card-title">Liquid Lounge — Website</div><span class="gsd-label gl-g3">G3 · Delegate</span></div>
+        <div class="card-body"><p>Complete all outstanding work — dev team delivers.</p></div>
         <div class="card-meta"><span class="chip">Website</span><span class="chip">In Progress</span></div>
       </div>
       <div class="card urgent">
-        <div class="card-top"><div class="checkbox"></div><div class="card-title">Reptilia — Updates by Diane → Go Live</div><span class="badge badge-urgent">Go Live</span></div>
-        <div class="card-body"><p>Diane must complete updates this week so site can go live. Set hard deadline and check progress today.</p></div>
+        <div class="card-top"><div class="checkbox"></div><div class="card-title">Reptilia — Updates by Diane → Go Live</div><span class="gsd-label gl-g1">G1 · Chase Today</span></div>
+        <div class="card-body"><p>Check Diane's progress today. Set hard deadline. Blocking go-live.</p></div>
         <div class="card-meta"><span class="chip warning-chip">Assigned: Diane</span><span class="chip warning-chip">Blocking Go Live</span></div>
       </div>
       <div class="card purple-border">
-        <div class="card-top"><div class="checkbox"></div><div class="card-title">AI Bot Programming</div><span class="badge badge-week">Continue</span></div>
-        <div class="card-body"><p>Resume and keep momentum — push toward completion.</p></div>
+        <div class="card-top"><div class="checkbox"></div><div class="card-title">AI Bot Programming</div><span class="gsd-label gl-g3">G3 · Delegate</span></div>
+        <div class="card-body"><p>Resume and push toward completion — keep momentum this week.</p></div>
         <div class="card-meta"><span class="chip">Development</span><span class="chip">In Progress</span></div>
       </div>
       <div class="card high">
-        <div class="card-top"><div class="checkbox"></div><div class="card-title">DotCom Restaurant — GHL Calendar Sync</div><span class="badge badge-week">Fix</span></div>
-        <div class="card-body"><p>Google Calendar not syncing back to GHL calendars. Investigate, test, and resolve.</p></div>
+        <div class="card-top"><div class="checkbox"></div><div class="card-title">DotCom Restaurant — GHL Calendar Sync</div><span class="gsd-label gl-g3">G3 · Delegate</span></div>
+        <div class="card-body"><p>Google Calendar not syncing back to GHL. Investigate, test, resolve.</p></div>
         <div class="card-meta"><span class="chip">GHL</span><span class="chip">Google Calendar</span></div>
       </div>
     </div>
 
-    <!-- Giorgio Proposal Template -->
     <div style="margin-top:12px;">
       <div class="card pink-border">
         <div class="card-top">
           <div class="checkbox"></div>
           <div class="card-title">Giorgio — Proposal .md Template</div>
-          <span class="badge badge-build">Create File</span>
+          <span class="gsd-label gl-g4">G4 · Batch</span>
         </div>
         <div class="card-body">
-          <p>Create a structured Markdown proposal template so Giorgio can generate high-quality proposals independently for your review before client presentation.</p>
           <div class="step-list">
-            <div class="step"><div class="step-num">1</div><div class="step-text">Define standard sections: Cover, Executive Summary, Problem Statement, Proposed Solution, Deliverables, Timeline, Investment, Terms</div></div>
-            <div class="step"><div class="step-num">2</div><div class="step-text">Add inline instructions / placeholders so Giorgio knows exactly what to fill in</div></div>
-            <div class="step"><div class="step-num">3</div><div class="step-text">Include branded language examples and tone guidelines</div></div>
-            <div class="step"><div class="step-num">4</div><div class="step-text">Deliver as <code>proposal-template.md</code> with a short README on how to use it</div></div>
+            <div class="step"><div class="step-num">1</div><div class="step-text">Sections: Cover, Executive Summary, Problem, Proposed Solution, Deliverables, Timeline, Investment, Terms</div></div>
+            <div class="step"><div class="step-num">2</div><div class="step-text">Inline instructions and placeholders so Giorgio knows exactly what to fill in</div></div>
+            <div class="step"><div class="step-num">3</div><div class="step-text">Branded language examples and tone guidelines</div></div>
+            <div class="step"><div class="step-num">4</div><div class="step-text">Deliver as <code>proposal-template.md</code> with short usage README</div></div>
           </div>
         </div>
-        <div class="card-meta">
-          <span class="chip pink-chip">Giorgio</span>
-          <span class="chip">Proposals</span>
-          <span class="chip">Markdown</span>
-          <span class="chip">Quality Control</span>
-        </div>
+        <div class="card-meta"><span class="chip pink-chip">Giorgio</span><span class="chip">Proposals</span><span class="chip">Markdown</span></div>
       </div>
     </div>
   </div>
@@ -899,43 +912,33 @@
         <div class="card-top">
           <div class="checkbox"></div>
           <div class="card-title">Email Campaign — Enquired but Not Bought</div>
-          <span class="badge badge-build">Set Up</span>
+          <span class="gsd-label gl-g2">G2 · Schedule</span>
         </div>
         <div class="card-body">
-          <p>Target people who enquired about Reviewtap but never converted:</p>
           <div class="step-list">
             <div class="step"><div class="step-num">1</div><div class="step-text">Export enquiry list (CRM / GHL) — segment by date and product interest</div></div>
-            <div class="step"><div class="step-num">2</div><div class="step-text">Build 3-email sequence: Re-intro → Social proof → Final CTA (with urgency)</div></div>
-            <div class="step"><div class="step-num">3</div><div class="step-text">Personalise subject lines and body by product category (Google Review vs Tripadvisor)</div></div>
-            <div class="step"><div class="step-num">4</div><div class="step-text">Set up and schedule in GHL / email platform</div></div>
+            <div class="step"><div class="step-num">2</div><div class="step-text">3-email sequence: Re-intro → Social proof → Final CTA with urgency</div></div>
+            <div class="step"><div class="step-num">3</div><div class="step-text">Personalise by product category (Google Review vs Tripadvisor)</div></div>
+            <div class="step"><div class="step-num">4</div><div class="step-text">Set up and schedule in GHL</div></div>
           </div>
         </div>
-        <div class="card-meta">
-          <span class="chip">Email Sequence</span>
-          <span class="chip">Re-engagement</span>
-          <span class="chip">GHL</span>
-        </div>
+        <div class="card-meta"><span class="chip">Email Sequence</span><span class="chip">Re-engagement</span><span class="chip">GHL</span></div>
       </div>
       <div class="card high">
         <div class="card-top">
           <div class="checkbox"></div>
           <div class="card-title">WhatsApp Campaign — Enquired but Not Bought</div>
-          <span class="badge badge-build">Set Up</span>
+          <span class="gsd-label gl-g2">G2 · Schedule</span>
         </div>
         <div class="card-body">
-          <p>Parallel WhatsApp re-engagement for the same unconverted enquiry list:</p>
           <div class="step-list">
-            <div class="step"><div class="step-num">1</div><div class="step-text">Use the same segmented list from the email campaign</div></div>
-            <div class="step"><div class="step-num">2</div><div class="step-text">Build 2-message sequence: friendly check-in → direct offer with link</div></div>
-            <div class="step"><div class="step-num">3</div><div class="step-text">Keep tone conversational — not broadcast-y</div></div>
-            <div class="step"><div class="step-num">4</div><div class="step-text">Ensure compliance with WhatsApp Business messaging rules (opt-in records)</div></div>
+            <div class="step"><div class="step-num">1</div><div class="step-text">Same segmented list as email campaign</div></div>
+            <div class="step"><div class="step-num">2</div><div class="step-text">2-message sequence: friendly check-in → direct offer with link</div></div>
+            <div class="step"><div class="step-num">3</div><div class="step-text">Conversational tone — not broadcast-y</div></div>
+            <div class="step"><div class="step-num">4</div><div class="step-text">Ensure WhatsApp Business opt-in compliance</div></div>
           </div>
         </div>
-        <div class="card-meta">
-          <span class="chip">WhatsApp</span>
-          <span class="chip">Re-engagement</span>
-          <span class="chip">Reviewtap</span>
-        </div>
+        <div class="card-meta"><span class="chip">WhatsApp</span><span class="chip">Re-engagement</span><span class="chip">Reviewtap</span></div>
       </div>
     </div>
   </div>
@@ -950,26 +953,20 @@
       <div class="card-top">
         <div class="checkbox"></div>
         <div class="card-title">Fix Homepage for Conversion — Reviewtap.co.za</div>
-        <span class="badge badge-week">This Week</span>
+        <span class="gsd-label gl-g2">G2 · Schedule</span>
       </div>
       <div class="card-body">
-        <p>The homepage needs to be audited and rebuilt for conversion. Key areas to address:</p>
         <div class="step-list">
-          <div class="step"><div class="step-num">1</div><div class="step-text">Review current above-the-fold — does the hero immediately communicate the value prop + CTA?</div></div>
+          <div class="step"><div class="step-num">1</div><div class="step-text">Audit above-the-fold — hero must communicate value prop + CTA immediately</div></div>
           <div class="step"><div class="step-num">2</div><div class="step-text">Add / improve social proof (testimonials, review counts, brand logos)</div></div>
           <div class="step"><div class="step-num">3</div><div class="step-text">Simplify navigation — reduce friction to purchase</div></div>
-          <div class="step"><div class="step-num">4</div><div class="step-text">Check mobile experience — most traffic is mobile</div></div>
-          <div class="step"><div class="step-num">5</div><div class="step-text">Ensure primary CTA is visible without scrolling on all device sizes</div></div>
-          <div class="step"><div class="step-num">6</div><div class="step-text">Add urgency element (limited stock / current order processing time)</div></div>
+          <div class="step"><div class="step-num">4</div><div class="step-text">Mobile experience check — most traffic is mobile</div></div>
+          <div class="step"><div class="step-num">5</div><div class="step-text">Primary CTA visible without scrolling on all device sizes</div></div>
+          <div class="step"><div class="step-num">6</div><div class="step-text">Add urgency element (limited stock / current processing time)</div></div>
         </div>
-        <div class="info-box"><strong>Tie-in:</strong> Coordinate with the re-engagement campaigns above — landing page must convert the warm traffic you're about to send back to it.</div>
+        <div class="info-box"><strong>Tie-in:</strong> Fix this BEFORE re-engagement campaigns go live — you're about to send warm traffic back here. It must convert.</div>
       </div>
-      <div class="card-meta">
-        <span class="chip">CRO</span>
-        <span class="chip">Homepage</span>
-        <span class="chip">Reviewtap.co.za</span>
-        <span class="chip warning-chip">Revenue Critical</span>
-      </div>
+      <div class="card-meta"><span class="chip">CRO</span><span class="chip">Homepage</span><span class="chip warning-chip">Fix Before Campaigns</span></div>
     </div>
   </div>
 
@@ -977,28 +974,22 @@
   <div class="section" id="creatives">
     <div class="section-header">
       <div class="section-icon icon-orange">🎨</div>
-      <h2>Ad Creatives — New Assets to Build</h2>
+      <h2>Ad Creatives — New Assets</h2>
       <span class="section-count">16 total</span>
     </div>
     <div class="card-grid two-col">
       <div class="card high">
-        <div class="card-top"><div class="checkbox"></div><div class="card-title">Reviewtap — New Creatives</div><span class="badge badge-week">After Strategy Review</span></div>
+        <div class="card-top"><div class="checkbox"></div><div class="card-title">Reviewtap — New Creatives</div><span class="gsd-label gl-g3">G3 · After Review</span></div>
         <div class="card-body">
-          <ul>
-            <li>4 × New video creatives</li>
-            <li>6 × New static ads</li>
-          </ul>
-          <p style="margin-top:6px; color:var(--orange)">⚠ Complete ad strategy review FIRST — don't activate until the spend problem is solved</p>
+          <ul><li>4 × Video creatives</li><li>6 × Static ads</li></ul>
+          <p style="margin-top:6px;color:var(--orange)">⚠ Ad strategy review must happen first — don't activate until spend problem is solved</p>
         </div>
         <div class="card-meta"><span class="chip">10 Assets</span><span class="chip warning-chip">Strategy Review First</span></div>
       </div>
       <div class="card high">
-        <div class="card-top"><div class="checkbox"></div><div class="card-title">MyForeverBaby — New Creatives</div><span class="badge badge-week">This Week</span></div>
+        <div class="card-top"><div class="checkbox"></div><div class="card-title">MyForeverBaby — New Creatives</div><span class="gsd-label gl-g3">G3 · Delegate</span></div>
         <div class="card-body">
-          <ul>
-            <li>4 × New static ads</li>
-            <li>2 × New video ads</li>
-          </ul>
+          <ul><li>4 × Static ads</li><li>2 × Video ads</li></ul>
         </div>
         <div class="card-meta"><span class="chip">6 Assets</span><span class="chip">MyForeverBaby</span></div>
       </div>
@@ -1013,12 +1004,12 @@
     </div>
     <div class="card-grid two-col">
       <div class="card normal">
-        <div class="card-top"><div class="checkbox"></div><div class="card-title">Number Porting — Status Check</div><span class="badge badge-week">Check</span></div>
-        <div class="card-body"><p>Follow up with provider on current porting status.</p></div>
+        <div class="card-top"><div class="checkbox"></div><div class="card-title">Number Porting — Status Check</div><span class="gsd-label gl-g4">G4 · Batch</span></div>
+        <div class="card-body"><p>Quick follow-up with provider. 5 minutes, batch with other admin.</p></div>
       </div>
       <div class="card normal">
-        <div class="card-top"><div class="checkbox"></div><div class="card-title">Rachel — Implement All Updates</div><span class="badge badge-tue">Before Meeting</span></div>
-        <div class="card-body"><p>All discussed updates live before Tuesday/Wednesday meeting.</p></div>
+        <div class="card-top"><div class="checkbox"></div><div class="card-title">Rachel — Implement All Updates</div><span class="gsd-label gl-g1">G1 · Before Meeting</span></div>
+        <div class="card-body"><p>All updates live before Tuesday/Wednesday meeting — non-negotiable.</p></div>
       </div>
     </div>
   </div>
@@ -1033,56 +1024,56 @@
       <div class="day-card">
         <div class="day-header day-mon">Monday</div>
         <div class="day-items">
-          <div class="day-item"><span class="day-dot"></span>Email signature — done first</div>
-          <div class="day-item"><span class="day-dot"></span>Essence of ME — chase payment</div>
-          <div class="day-item"><span class="day-dot"></span>Carmen du Toit — follow-up + book meeting</div>
-          <div class="day-item"><span class="day-dot"></span>Factor Pro — finish proposal</div>
-          <div class="day-item"><span class="day-dot"></span>Reptilia — check Diane's progress</div>
-          <div class="day-item"><span class="day-dot"></span>Samsung TV — get repair quote</div>
-          <div class="day-item"><span class="day-dot"></span>Stock arrival confirmation</div>
+          <div class="day-item"><span class="day-gbadge dg1">G1</span>Email signature — first task</div>
+          <div class="day-item"><span class="day-gbadge dg1">G1</span>Essence of ME — chase payment</div>
+          <div class="day-item"><span class="day-gbadge dg1">G1</span>Factor Pro — finish proposal</div>
+          <div class="day-item"><span class="day-gbadge dg1">G1</span>Reptilia — check Diane's progress</div>
+          <div class="day-item"><span class="day-gbadge dg1">G1</span>Rachel — implement updates</div>
+          <div class="day-item"><span class="day-gbadge dg2">G2</span>Carmen du Toit — follow-up + book</div>
+          <div class="day-item"><span class="day-gbadge dg2">G2</span>Samsung TV — get repair quote</div>
+          <div class="day-item"><span class="day-gbadge dg2">G2</span>Stock arrival confirmation</div>
         </div>
       </div>
       <div class="day-card">
         <div class="day-header day-tue">Tuesday</div>
         <div class="day-items">
-          <div class="day-item"><span class="day-dot"></span>Factor Pro meeting</div>
-          <div class="day-item"><span class="day-dot"></span>Rachel updates live</div>
-          <div class="day-item"><span class="day-dot"></span>Sam (USA) evening call</div>
-          <div class="day-item"><span class="day-dot"></span>Ad strategy review</div>
-          <div class="day-item"><span class="day-dot"></span>Terri's dad — book website call</div>
-          <div class="day-item"><span class="day-dot"></span>RT AI bot order flow update</div>
+          <div class="day-item"><span class="day-gbadge dg1">G1</span>Factor Pro meeting</div>
+          <div class="day-item"><span class="day-gbadge dg2">G2</span>Ad strategy review</div>
+          <div class="day-item"><span class="day-gbadge dg2">G2</span>Terri's dad — book website call</div>
+          <div class="day-item"><span class="day-gbadge dg3">G3</span>RT AI bot order flow update</div>
+          <div class="day-item"><span class="day-gbadge dg2">G2</span>Sam (USA) — evening call</div>
         </div>
       </div>
       <div class="day-card">
         <div class="day-header day-wed">Wednesday</div>
         <div class="day-items">
-          <div class="day-item"><span class="day-dot"></span>Rachel meeting</div>
-          <div class="day-item"><span class="day-dot"></span>DotCom GHL calendar fix</div>
-          <div class="day-item"><span class="day-dot"></span>Liezel follow-up — 40 units</div>
-          <div class="day-item"><span class="day-dot"></span>Logo follow-up flow (Giorgio)</div>
-          <div class="day-item"><span class="day-dot"></span>Giorgio proposal .md template</div>
-          <div class="day-item"><span class="day-dot"></span>Stock dispatch mapping</div>
+          <div class="day-item"><span class="day-gbadge dg1">G1</span>Rachel meeting</div>
+          <div class="day-item"><span class="day-gbadge dg3">G3</span>DotCom GHL calendar fix</div>
+          <div class="day-item"><span class="day-gbadge dg2">G2</span>Liezel follow-up — 40 units</div>
+          <div class="day-item"><span class="day-gbadge dg3">G3</span>Logo follow-up flow (Giorgio)</div>
+          <div class="day-item"><span class="day-gbadge dg2">G2</span>Stock dispatch mapping</div>
+          <div class="day-item"><span class="day-gbadge dg2">G2</span>Business insurance audit</div>
         </div>
       </div>
       <div class="day-card">
         <div class="day-header day-thu">Thursday</div>
         <div class="day-items">
-          <div class="day-item"><span class="day-dot"></span>Reviewtap.co.za homepage CRO</div>
-          <div class="day-item"><span class="day-dot"></span>Email + WhatsApp re-engagement campaigns</div>
-          <div class="day-item"><span class="day-dot"></span>Izi Travel lead follow-up template</div>
-          <div class="day-item"><span class="day-dot"></span>Izi Travel — Terri training</div>
-          <div class="day-item"><span class="day-dot"></span>Website: Threezero / Charissa / Liquid Lounge</div>
+          <div class="day-item"><span class="day-gbadge dg2">G2</span>RT homepage CRO fix</div>
+          <div class="day-item"><span class="day-gbadge dg2">G2</span>Email + WhatsApp campaigns setup</div>
+          <div class="day-item"><span class="day-gbadge dg3">G3</span>Izi Travel lead template</div>
+          <div class="day-item"><span class="day-gbadge dg3">G3</span>Terri RT training (batch w/ meeting)</div>
+          <div class="day-item"><span class="day-gbadge dg3">G3</span>Websites: Threezero / Charissa / Liquid Lounge</div>
         </div>
       </div>
       <div class="day-card">
         <div class="day-header day-fri">Friday</div>
         <div class="day-items">
-          <div class="day-item"><span class="day-dot"></span>Reviewtap + MFB ad creatives</div>
-          <div class="day-item"><span class="day-dot"></span>Insurance audit — personal + business</div>
-          <div class="day-item"><span class="day-dot"></span>Reptilia go live (if Diane done)</div>
-          <div class="day-item"><span class="day-dot"></span>Orders follow-up sweep</div>
-          <div class="day-item"><span class="day-dot"></span>Number porting check</div>
-          <div class="day-item"><span class="day-dot"></span>Week review — open items</div>
+          <div class="day-item"><span class="day-gbadge dg3">G3</span>RT + MFB ad creatives (brief team)</div>
+          <div class="day-item"><span class="day-gbadge dg3">G3</span>Giorgio proposal template</div>
+          <div class="day-item"><span class="day-gbadge dg2">G2</span>Reptilia go live (if Diane done)</div>
+          <div class="day-item"><span class="day-gbadge dg2">G2</span>Orders follow-up sweep</div>
+          <div class="day-item"><span class="day-gbadge dg3">G3</span>Number porting check</div>
+          <div class="day-item"><span class="day-gbadge dg3">G3</span>Personal insurance review</div>
         </div>
       </div>
     </div>
@@ -1091,7 +1082,7 @@
 </div>
 
 <div class="footer">
-  JCE Media — Weekly Priority List · Generated 8 June 2026 · Confidential Internal Document
+  JCE Media — Weekly Priority List · GSD Method Applied · Generated 8 June 2026 · Confidential
 </div>
 
 </body>
