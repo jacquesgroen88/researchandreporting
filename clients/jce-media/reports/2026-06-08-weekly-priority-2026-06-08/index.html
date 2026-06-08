@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weekly Priority List — 8 June 2026</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1c2333;
+    --border: #30363d;
+    --text: #e6edf3;
+    --text-muted: #8b949e;
+    --accent: #7c3aed;
+    --accent2: #6366f1;
+    --red: #f85149;
+    --orange: #e3b341;
+    --green: #3fb950;
+    --blue: #58a6ff;
+    --teal: #39d353;
+    --purple: #bc8cff;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, #1e1040 0%, #0d1117 60%);
+    border-bottom: 1px solid var(--border);
+    padding: 40px 48px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(124,58,237,0.15) 0%, transparent 70%);
+  }
+  .header-meta { color: var(--text-muted); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 8px; }
+  .header h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
+  .header h1 span { background: linear-gradient(135deg, #a78bfa, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .header-sub { color: var(--text-muted); margin-top: 6px; font-size: 13px; }
+
+  /* SUMMARY BAR */
+  .summary-bar {
+    display: flex; gap: 12px; flex-wrap: wrap;
+    padding: 20px 48px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+  .stat-pill {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 12px;
+  }
+  .stat-pill .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .dot-red { background: var(--red); }
+  .dot-orange { background: var(--orange); }
+  .dot-green { background: var(--green); }
+  .dot-blue { background: var(--blue); }
+  .stat-pill strong { color: var(--text); }
+
+  /* MAIN LAYOUT */
+  .container { max-width: 1200px; margin: 0 auto; padding: 32px 48px 64px; }
+
+  /* SECTION */
+  .section { margin-bottom: 40px; }
+  .section-header {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-icon {
+    width: 32px; height: 32px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; flex-shrink: 0;
+  }
+  .icon-red { background: rgba(248,81,73,0.15); }
+  .icon-orange { background: rgba(227,179,65,0.15); }
+  .icon-green { background: rgba(63,185,80,0.15); }
+  .icon-blue { background: rgba(88,166,255,0.15); }
+  .icon-purple { background: rgba(188,140,255,0.15); }
+  .icon-teal { background: rgba(57,211,83,0.15); }
+
+  .section-header h2 { font-size: 16px; font-weight: 600; }
+  .section-count {
+    margin-left: auto;
+    font-size: 11px; color: var(--text-muted);
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 2px 8px;
+  }
+
+  /* CARD GRID */
+  .card-grid { display: grid; gap: 12px; }
+  .card-grid.two-col { grid-template-columns: 1fr 1fr; }
+  .card-grid.three-col { grid-template-columns: 1fr 1fr 1fr; }
+
+  /* PRIORITY CARD */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    position: relative;
+    transition: border-color .15s;
+  }
+  .card:hover { border-color: #484f58; }
+  .card.urgent { border-left: 3px solid var(--red); }
+  .card.high { border-left: 3px solid var(--orange); }
+  .card.normal { border-left: 3px solid var(--blue); }
+  .card.revenue { border-left: 3px solid var(--green); }
+  .card.purple-border { border-left: 3px solid var(--purple); }
+
+  .card-top { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; }
+  .checkbox {
+    width: 16px; height: 16px; border-radius: 4px;
+    border: 1.5px solid var(--border);
+    flex-shrink: 0; margin-top: 2px;
+  }
+  .card-title { font-weight: 600; font-size: 14px; flex: 1; }
+  .badge {
+    font-size: 10px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase;
+    border-radius: 4px; padding: 2px 7px; flex-shrink: 0;
+  }
+  .badge-urgent { background: rgba(248,81,73,0.18); color: #ff7b72; }
+  .badge-today { background: rgba(227,179,65,0.18); color: #e3b341; }
+  .badge-tue { background: rgba(88,166,255,0.18); color: #79c0ff; }
+  .badge-week { background: rgba(63,185,80,0.18); color: #56d364; }
+  .badge-asap { background: rgba(188,140,255,0.18); color: #d2a8ff; }
+  .badge-revenue { background: rgba(63,185,80,0.18); color: #56d364; }
+  .badge-incoming { background: rgba(57,211,83,0.12); color: #3fb950; }
+
+  .card-body { color: var(--text-muted); font-size: 12.5px; padding-left: 26px; }
+  .card-body ul { list-style: none; }
+  .card-body ul li::before { content: '→ '; color: var(--accent2); }
+  .card-body p { margin-top: 4px; }
+  .card-meta {
+    display: flex; gap: 8px; flex-wrap: wrap;
+    padding-left: 26px; margin-top: 10px;
+  }
+  .chip {
+    font-size: 11px; padding: 2px 8px;
+    border-radius: 20px; border: 1px solid var(--border);
+    color: var(--text-muted); background: var(--surface2);
+  }
+  .chip.revenue-chip { border-color: rgba(63,185,80,0.4); color: #56d364; }
+  .chip.warning-chip { border-color: rgba(248,81,73,0.4); color: #ff7b72; }
+  .chip.info-chip { border-color: rgba(88,166,255,0.3); color: #79c0ff; }
+
+  /* ORDERS TABLE */
+  .orders-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    font-size: 12.5px;
+  }
+  .orders-table th {
+    background: var(--surface2);
+    color: var(--text-muted);
+    font-size: 11px;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  .orders-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid rgba(48,54,61,0.6);
+    vertical-align: top;
+  }
+  .orders-table tr:last-child td { border-bottom: none; }
+  .orders-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .order-num { color: var(--accent2); font-weight: 600; font-family: monospace; }
+  .printer-tag {
+    font-size: 10px; font-weight: 600; text-transform: uppercase;
+    background: rgba(227,179,65,0.15); color: #e3b341;
+    border-radius: 4px; padding: 1px 6px;
+  }
+  .amount { color: var(--green); font-weight: 600; font-family: monospace; }
+
+  /* SCHEDULE BAR */
+  .schedule-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+  .day-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .day-header {
+    padding: 10px 14px;
+    font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+  }
+  .day-mon { background: linear-gradient(135deg, rgba(248,81,73,0.15), rgba(248,81,73,0.05)); color: #ff7b72; }
+  .day-tue { background: linear-gradient(135deg, rgba(227,179,65,0.15), rgba(227,179,65,0.05)); color: #e3b341; }
+  .day-wed { background: linear-gradient(135deg, rgba(88,166,255,0.15), rgba(88,166,255,0.05)); color: #79c0ff; }
+  .day-thu { background: linear-gradient(135deg, rgba(63,185,80,0.15), rgba(63,185,80,0.05)); color: #56d364; }
+  .day-fri { background: linear-gradient(135deg, rgba(188,140,255,0.15), rgba(188,140,255,0.05)); color: #d2a8ff; }
+  .day-items { padding: 12px 14px; }
+  .day-item {
+    display: flex; align-items: flex-start; gap: 7px;
+    margin-bottom: 8px;
+    font-size: 12px; color: var(--text-muted);
+    line-height: 1.4;
+  }
+  .day-item:last-child { margin-bottom: 0; }
+  .day-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--border); flex-shrink: 0; margin-top: 5px; }
+
+  /* ADS ALERT BOX */
+  .alert-box {
+    background: linear-gradient(135deg, rgba(248,81,73,0.08), rgba(248,81,73,0.03));
+    border: 1px solid rgba(248,81,73,0.3);
+    border-radius: 10px;
+    padding: 18px 20px;
+    display: flex; gap: 16px; align-items: flex-start;
+  }
+  .alert-icon { font-size: 24px; flex-shrink: 0; }
+  .alert-title { font-weight: 700; font-size: 15px; color: #ff7b72; margin-bottom: 6px; }
+  .alert-body { color: var(--text-muted); font-size: 13px; }
+  .stat-row { display: flex; gap: 24px; margin-top: 10px; }
+  .stat-item .val { font-size: 22px; font-weight: 700; }
+  .stat-item .lbl { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: .05em; }
+  .stat-item.red .val { color: #ff7b72; }
+  .stat-item.green .val { color: #56d364; }
+  .stat-item.orange .val { color: #e3b341; }
+
+  /* STOCK BOX */
+  .stock-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .stock-card {
+    background: var(--surface);
+    border: 1px solid rgba(63,185,80,0.25);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+  }
+  .stock-num { font-size: 40px; font-weight: 800; }
+  .stock-black .stock-num { color: #e6edf3; }
+  .stock-white .stock-num { color: #a5b4fc; }
+  .stock-label { font-size: 12px; color: var(--text-muted); margin-top: 4px; text-transform: uppercase; letter-spacing: .05em; }
+  .stock-sub { font-size: 11px; color: rgba(63,185,80,0.8); margin-top: 6px; }
+
+  /* FOOTER */
+  .footer {
+    border-top: 1px solid var(--border);
+    padding: 20px 48px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 11px;
+  }
+
+  @media (max-width: 900px) {
+    .header, .summary-bar, .container, .footer { padding-left: 20px; padding-right: 20px; }
+    .card-grid.two-col, .card-grid.three-col { grid-template-columns: 1fr; }
+    .schedule-grid { grid-template-columns: 1fr 1fr; }
+    .stock-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-meta">JCE Media · Internal Operations</div>
+  <h1>Weekly Priority List — <span>8 June 2026</span></h1>
+  <div class="header-sub">All outstanding tasks, meetings, orders, and creative deliverables for this week</div>
+</div>
+
+<!-- SUMMARY BAR -->
+<div class="summary-bar">
+  <div class="stat-pill"><span class="dot dot-red"></span><strong>2</strong> Urgent / Payment</div>
+  <div class="stat-pill"><span class="dot dot-orange"></span><strong>5</strong> Meetings to book / prep</div>
+  <div class="stat-pill"><span class="dot dot-blue"></span><strong>18</strong> Open Reviewtap orders</div>
+  <div class="stat-pill"><span class="dot dot-green"></span><strong>96</strong> Units incoming (Black + White)</div>
+  <div class="stat-pill"><span class="dot" style="background:var(--purple)"></span><strong>5</strong> Client dev deliverables</div>
+  <div class="stat-pill"><span class="dot dot-orange"></span><strong>16</strong> New ad creatives needed</div>
+</div>
+
+<div class="container">
+
+  <!-- URGENT -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">🚨</div>
+      <h2>Urgent — Act Today</h2>
+      <span class="section-count">2 items</span>
+    </div>
+    <div class="card-grid two-col">
+      <div class="card urgent">
+        <div class="card-top">
+          <div class="checkbox"></div>
+          <div class="card-title">Essence of Middle East — Payment Bounced</div>
+          <span class="badge badge-urgent">Urgent</span>
+        </div>
+        <div class="card-body">
+          <p>Payment has bounced — contact immediately to arrange an alternative payment method before fulfillment is at risk.</p>
+        </div>
+        <div class="card-meta">
+          <span class="chip warning-chip">Payment Failed</span>
+          <span class="chip warning-chip">Call Today</span>
+        </div>
+      </div>
+
+      <div class="card urgent">
+        <div class="card-top">
+          <div class="checkbox"></div>
+          <div class="card-title">Email Signature Setup</div>
+          <span class="badge badge-asap">ASAP</span>
+        </div>
+        <div class="card-body">
+          <p>New email signature needs to be created and deployed across all email accounts immediately.</p>
+        </div>
+        <div class="card-meta">
+          <span class="chip">Admin</span>
+          <span class="chip">Today</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADS SPEND ALERT -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-orange">⚠️</div>
+      <h2>Ad Spend Review — Strategy Decision Required</h2>
+    </div>
+    <div class="alert-box">
+      <div class="alert-icon">📊</div>
+      <div>
+        <div class="alert-title">R12,000 spent — only 3 deals closed. Evaluate before spending more.</div>
+        <div class="alert-body">Current ad ROI is unsustainable. A strategy review must happen before new creatives go live. Consider budget caps, audience targeting changes, or a temporary pause while new creatives are built.</div>
+        <div class="stat-row">
+          <div class="stat-item red"><div class="val">R12,000</div><div class="lbl">Ad Spend</div></div>
+          <div class="stat-item green"><div class="val">3</div><div class="lbl">Deals Closed</div></div>
+          <div class="stat-item orange"><div class="val">R4,000</div><div class="lbl">Cost per Deal</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MEETINGS -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-blue">📅</div>
+      <h2>Meetings — Book & Prep</h2>
+      <span class="section-count">6 items</span>
+    </div>
+    <div class="card-grid two-col">
+
+      <div class="card high">
+        <div class="card-top">
+          <div class="checkbox"></div>
+          <div class="card-title">Carmen du Toit — Eva-Last</div>
+          <span class="badge badge-today">Book Today</span>
+        </div>
+        <div class="card-body">
+          <p>Follow up and book meeting this week. She needs answers on:</p>
+          <ul>
+            <li>How to program the URL the device points to</li>
+            <li>Android vs iOS compatibility (iPhone NFC)</li>
+            <li>Pricing for 5, 10, 15 branded units (NFC + QR) — Receptions, Sales offices, Warehouses</li>
+            <li>Confirm NFC + QR combo option (Custom Branded Stand)</li>
+          </ul>
+        </div>
+        <div class="card-meta">
+          <span class="chip info-chip">Eva-Last | Muldersdrift</span>
+          <span class="chip revenue-chip">Potential Multi-Unit Deal</span>
+        </div>
+      </div>
+
+      <div class="card high">
+        <div class="card-top">
+          <div class="checkbox"></div>
+          <div class="card-title">Factor Pro — Proposal + Meeting</div>
+          <span class="badge badge-tue">Tuesday</span>
+        </div>
+        <div class="card-body">
+          <p>Prepare full proposal and present at Tuesday meeting. Ensure proposal is ready before EOD Monday.</p>
+        </div>
+        <div class="card-meta">
+          <span class="chip">Proposal Due Mon</span>
+          <span class="chip">Meeting Tue</span>
+        </div>
+      </div>
+
+      <div class="card high">
+        <div class="card-top">
+          <div class="checkbox"></div>
+          <div class="card-title">Sam — USA Agency</div>
+          <span class="badge badge-tue">Tue Evening</span>
+        </div>
+        <div class="card-body">
+          <p>Prep agenda and talking points before Tuesday evening call. Know your numbers and positioning.</p>
+        </div>
+        <div class="card-meta">
+          <span class="chip">USA Agency Partnership</span>
+          <span class="chip">Prep Required</span>
+        </div>
+      </div>
+
+      <div class="card high">
+        <div class="card-top">
+          <div class="checkbox"></div>
+          <div class="card-title">Rachel — Meeting + Updates</div>
+          <span class="badge badge-tue">Tue / Wed</span>
+        </div>
+        <div class="card-body">
+          <p>All discussed updates must be <strong style="color:var(--text)">implemented before the meeting</strong>. Book for Tuesday or Wednesday.</p>
+        </div>
+        <div class="card-meta">
+          <span class="chip warning-chip">Implement Updates First</span>
+          <span class="chip">Check Number Porting Status</span>
+        </div>
+      </div>
+
+      <div class="card normal">
+        <div class="card-top">
+          <div class="checkbox"></div>
+          <div class="card-title">Izi Travel — Meeting Booked</div>
+          <span class="badge badge-week">Booked</span>
+        </div>
+        <div class="card-body">
+          <p>Meeting already booked — confirm agenda and any prep materials needed.</p>
+        </div>
+        <div class="card-meta">
+          <span class="chip">Confirmed</span>
+          <span class="chip">Prep Agenda</span>
+        </div>
+      </div>
+
+      <div class="card revenue">
+        <div class="card-top">
+          <div class="checkbox"></div>
+          <div class="card-title">Terri's Dad — Website Discovery Call</div>
+          <span class="badge badge-week">Book This Week</span>
+        </div>
+        <div class="card-body">
+          <p>Book a discovery / scoping call for new website project. R8,000 potential. Don't let this slip through.</p>
+        </div>
+        <div class="card-meta">
+          <span class="chip revenue-chip">R8,000 Potential</span>
+          <span class="chip">New Client</span>
+          <span class="chip">Book This Week</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- REVIEWTAP ORDERS -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-teal">📦</div>
+      <h2>Reviewtap — Outstanding Orders (At Printer)</h2>
+      <span class="section-count">8 priority orders</span>
+    </div>
+    <table class="orders-table">
+      <thead>
+        <tr>
+          <th>Order</th>
+          <th>Customer / Company</th>
+          <th>Product</th>
+          <th>Qty</th>
+          <th>Total</th>
+          <th>Status</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="order-num">#1662</span></td>
+          <td>Burgert Erasmus<br><span style="color:var(--text-muted)">Torga Optical Fleurdal</span></td>
+          <td>Custom Branded Google Review Stand (NFC + QR) - White</td>
+          <td>1</td>
+          <td class="amount">R754</td>
+          <td><span class="printer-tag">At Printer</span></td>
+          <td style="color:var(--text-muted)">—</td>
+        </tr>
+        <tr>
+          <td><span class="order-num">#1683</span></td>
+          <td>Yolandie Badenhorst<br><span style="color:var(--text-muted)">Secret Sands</span></td>
+          <td>Tripadvisor NFC Stand - Black + NFC Google Review Stand - Black</td>
+          <td>2</td>
+          <td class="amount">R998</td>
+          <td><span class="printer-tag">At Printer</span></td>
+          <td style="color:var(--text-muted)">—</td>
+        </tr>
+        <tr>
+          <td><span class="order-num">#1687</span></td>
+          <td>Hesti Steyn<br><span style="color:var(--text-muted)">KF Potgieter Inc</span></td>
+          <td>Custom Branded Google Review Stand (NFC + QR) - Black</td>
+          <td>3</td>
+          <td class="amount">R1,947</td>
+          <td><span class="printer-tag">At Printer</span></td>
+          <td style="color:var(--text-muted)">3 different business locations</td>
+        </tr>
+        <tr>
+          <td><span class="order-num">#1689</span></td>
+          <td>Wedrich Wessels<br><span style="color:var(--text-muted)">Vokkies</span></td>
+          <td>Custom Branded Google Review Stand (NFC + QR) - White</td>
+          <td>10</td>
+          <td class="amount">R6,490</td>
+          <td><span class="printer-tag">At Printer</span></td>
+          <td style="color:var(--text-muted)">—</td>
+        </tr>
+        <tr>
+          <td><span class="order-num">#1690</span></td>
+          <td>Muhammad Patel<br><span style="color:var(--text-muted)">Wild MAP Xplorer</span></td>
+          <td>Tripadvisor NFC Cards + Custom Branded Card + Stand</td>
+          <td>3</td>
+          <td class="amount">R1,397</td>
+          <td><span class="printer-tag">At Printer</span></td>
+          <td style="color:var(--text-muted)">—</td>
+        </tr>
+        <tr>
+          <td><span class="order-num">#1693</span></td>
+          <td>Mohamed Wania<br><span style="color:var(--text-muted)">Bean Two Cup</span></td>
+          <td>Custom Branded Google Review Stand (NFC + QR) - Black</td>
+          <td>2</td>
+          <td class="amount">R1,298</td>
+          <td><span class="printer-tag">At Printer</span></td>
+          <td style="color:var(--text-muted)">—</td>
+        </tr>
+        <tr>
+          <td><span class="order-num">#1703</span></td>
+          <td>Delene Ferreira<br><span style="color:var(--text-muted)">LITE-GLO</span></td>
+          <td>Custom Branded Google Review Stand (NFC + QR) - White</td>
+          <td>2</td>
+          <td class="amount">R1,298</td>
+          <td><span class="printer-tag">At Printer</span></td>
+          <td style="color:var(--text-muted)">Bank Deposit — Lite-Glo previous artwork</td>
+        </tr>
+        <tr>
+          <td><span class="order-num">#1704</span></td>
+          <td>Dee Bester<br><span style="color:var(--text-muted)">House Unboxed</span></td>
+          <td>Custom Branded Google Review Stand (NFC + QR) - Black</td>
+          <td>4</td>
+          <td class="amount">R2,596</td>
+          <td><span class="printer-tag">At Printer</span></td>
+          <td style="color:var(--text-muted)">—</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- STOCK INCOMING -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-green">🚚</div>
+      <h2>Reviewtap — Stock Incoming This Week</h2>
+    </div>
+    <div class="stock-grid">
+      <div class="stock-card stock-black">
+        <div class="stock-num">41</div>
+        <div class="stock-label">Black Stands</div>
+        <div class="stock-sub">Confirm arrival → map to open orders → dispatch</div>
+      </div>
+      <div class="stock-card stock-white">
+        <div class="stock-num">55</div>
+        <div class="stock-label">White Stands</div>
+        <div class="stock-sub">Confirm arrival → map to open orders → dispatch</div>
+      </div>
+    </div>
+
+    <!-- Liezel Lead -->
+    <div style="margin-top: 12px;">
+      <div class="card revenue">
+        <div class="card-top">
+          <div class="checkbox"></div>
+          <div class="card-title">Liezel — Follow Up (40 Units for Conti)</div>
+          <span class="badge badge-revenue">Large Order</span>
+        </div>
+        <div class="card-body">
+          <p>Liezel was enquiring about 40 units for her client Conti. Follow up this week — close this before stock runs low.</p>
+        </div>
+        <div class="card-meta">
+          <span class="chip revenue-chip">40 Units Potential</span>
+          <span class="chip">Follow Up This Week</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CLIENT DEV WORK -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-purple">💻</div>
+      <h2>Client Dev Work — Deliverables This Week</h2>
+      <span class="section-count">5 items</span>
+    </div>
+    <div class="card-grid two-col">
+
+      <div class="card purple-border">
+        <div class="card-top">
+          <div class="checkbox"></div>
+          <div class="card-title">Andrew — Threezero Website</div>
+          <span class="badge badge-week">Finish This Week</span>
+        </div>
+        <div class="card-body">
+          <p>Complete all outstanding website work for Threezero.</p>
+        </div>
+        <div class="card-meta"><span class="chip">Website</span><span class="chip">In Progress</span></div>
+      </div>
+
+      <div class="card purple-border">
+        <div class="card-top">
+          <div class="checkbox"></div>
+          <div class="card-title">Charissa — Website</div>
+          <span class="badge badge-week">Finish This Week</span>
+        </div>
+        <div class="card-body">
+          <p>Complete all outstanding website work for Charissa.</p>
+        </div>
+        <div class="card-meta"><span class="chip">Website</span><span class="chip">In Progress</span></div>
+      </div>
+
+      <div class="card purple-border">
+        <div class="card-top">
+          <div class="checkbox"></div>
+          <div class="card-title">Liquid Lounge — Website</div>
+          <span class="badge badge-week">Finish This Week</span>
+        </div>
+        <div class="card-body">
+          <p>Complete all outstanding website work for Liquid Lounge.</p>
+        </div>
+        <div class="card-meta"><span class="chip">Website</span><span class="chip">In Progress</span></div>
+      </div>
+
+      <div class="card urgent">
+        <div class="card-top">
+          <div class="checkbox"></div>
+          <div class="card-title">Reptilia — Updates by Diane → Go Live</div>
+          <span class="badge badge-urgent">Go Live This Week</span>
+        </div>
+        <div class="card-body">
+          <p>Diane needs to complete the Reptilia website updates this week so the site can go live. Confirm her progress and set a hard deadline.</p>
+        </div>
+        <div class="card-meta">
+          <span class="chip warning-chip">Assigned: Diane</span>
+          <span class="chip warning-chip">Blocking: Go Live</span>
+        </div>
+      </div>
+
+      <div class="card purple-border">
+        <div class="card-top">
+          <div class="checkbox"></div>
+          <div class="card-title">AI Bot Programming</div>
+          <span class="badge badge-week">Continue This Week</span>
+        </div>
+        <div class="card-body">
+          <p>Resume and push toward completion. Keep momentum going this week.</p>
+        </div>
+        <div class="card-meta"><span class="chip">Development</span><span class="chip">In Progress</span></div>
+      </div>
+
+      <div class="card high">
+        <div class="card-top">
+          <div class="checkbox"></div>
+          <div class="card-title">DotCom Restaurant — GHL Calendar Sync</div>
+          <span class="badge badge-week">Investigate</span>
+        </div>
+        <div class="card-body">
+          <p>Google Calendar is not syncing back to GHL calendars. Investigate root cause, test, and resolve.</p>
+        </div>
+        <div class="card-meta">
+          <span class="chip">GHL Integration</span>
+          <span class="chip">Google Calendar</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- AD CREATIVES -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-orange">🎨</div>
+      <h2>Ad Creatives — New Assets to Build</h2>
+      <span class="section-count">16 total</span>
+    </div>
+    <div class="card-grid two-col">
+      <div class="card high">
+        <div class="card-top">
+          <div class="checkbox"></div>
+          <div class="card-title">Reviewtap — New Creatives</div>
+          <span class="badge badge-week">This Week</span>
+        </div>
+        <div class="card-body">
+          <ul>
+            <li>4 × New video creatives</li>
+            <li>6 × New static ads</li>
+          </ul>
+          <p style="margin-top:6px; color:var(--orange)">⚠ Run ad strategy review FIRST before activating</p>
+        </div>
+        <div class="card-meta">
+          <span class="chip">10 Assets</span>
+          <span class="chip warning-chip">Strategy Review First</span>
+        </div>
+      </div>
+
+      <div class="card high">
+        <div class="card-top">
+          <div class="checkbox"></div>
+          <div class="card-title">MyForeverBaby — New Creatives</div>
+          <span class="badge badge-week">This Week</span>
+        </div>
+        <div class="card-body">
+          <ul>
+            <li>4 × New static ads</li>
+            <li>2 × New video ads</li>
+          </ul>
+        </div>
+        <div class="card-meta">
+          <span class="chip">6 Assets</span>
+          <span class="chip">MyForeverBaby</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADMIN -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-blue">🔧</div>
+      <h2>Admin & Housekeeping</h2>
+    </div>
+    <div class="card-grid two-col">
+      <div class="card normal">
+        <div class="card-top">
+          <div class="checkbox"></div>
+          <div class="card-title">Number Porting — Status Check</div>
+          <span class="badge badge-week">Check Status</span>
+        </div>
+        <div class="card-body">
+          <p>Follow up with provider on the current status of number porting.</p>
+        </div>
+      </div>
+      <div class="card normal">
+        <div class="card-top">
+          <div class="checkbox"></div>
+          <div class="card-title">Rachel — Implement All Updates</div>
+          <span class="badge badge-tue">Before Meeting</span>
+        </div>
+        <div class="card-body">
+          <p>All discussed updates must be live before the Tuesday/Wednesday meeting with Rachel.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEEKLY SCHEDULE -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-blue">🗓</div>
+      <h2>Suggested Daily Focus</h2>
+    </div>
+    <div class="schedule-grid">
+      <div class="day-card">
+        <div class="day-header day-mon">Monday</div>
+        <div class="day-items">
+          <div class="day-item"><span class="day-dot"></span>Email signature setup</div>
+          <div class="day-item"><span class="day-dot"></span>Essence of ME — payment chase</div>
+          <div class="day-item"><span class="day-dot"></span>Carmen du Toit follow-up + book meeting</div>
+          <div class="day-item"><span class="day-dot"></span>Factor Pro proposal draft</div>
+          <div class="day-item"><span class="day-dot"></span>Stock arrival confirmation</div>
+          <div class="day-item"><span class="day-dot"></span>Reptilia — check Diane's progress</div>
+        </div>
+      </div>
+      <div class="day-card">
+        <div class="day-header day-tue">Tuesday</div>
+        <div class="day-items">
+          <div class="day-item"><span class="day-dot"></span>Factor Pro meeting</div>
+          <div class="day-item"><span class="day-dot"></span>Rachel updates go live</div>
+          <div class="day-item"><span class="day-dot"></span>Sam (USA) evening call</div>
+          <div class="day-item"><span class="day-dot"></span>Terri's dad — book website call</div>
+          <div class="day-item"><span class="day-dot"></span>Ad strategy review</div>
+        </div>
+      </div>
+      <div class="day-card">
+        <div class="day-header day-wed">Wednesday</div>
+        <div class="day-items">
+          <div class="day-item"><span class="day-dot"></span>Rachel meeting</div>
+          <div class="day-item"><span class="day-dot"></span>DotCom GHL calendar fix</div>
+          <div class="day-item"><span class="day-dot"></span>Liezel follow-up (Conti 40 units)</div>
+          <div class="day-item"><span class="day-dot"></span>Stock dispatch mapping</div>
+          <div class="day-item"><span class="day-dot"></span>Number porting check</div>
+        </div>
+      </div>
+      <div class="day-card">
+        <div class="day-header day-thu">Thursday</div>
+        <div class="day-items">
+          <div class="day-item"><span class="day-dot"></span>Reviewtap creatives (4 video + 6 static)</div>
+          <div class="day-item"><span class="day-dot"></span>MyForeverBaby creatives (4 static + 2 video)</div>
+          <div class="day-item"><span class="day-dot"></span>Website work: Threezero / Charissa / Liquid Lounge</div>
+          <div class="day-item"><span class="day-dot"></span>AI bot programming</div>
+        </div>
+      </div>
+      <div class="day-card">
+        <div class="day-header day-fri">Friday</div>
+        <div class="day-items">
+          <div class="day-item"><span class="day-dot"></span>Reptilia go live (if ready)</div>
+          <div class="day-item"><span class="day-dot"></span>Orders follow-up sweep</div>
+          <div class="day-item"><span class="day-dot"></span>Week review — what's still open</div>
+          <div class="day-item"><span class="day-dot"></span>Carmen du Toit meeting (if not done earlier)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  JCE Media — Weekly Priority List · Generated 8 June 2026 · Confidential Internal Document
+</div>
+
+</body>
+</html>
