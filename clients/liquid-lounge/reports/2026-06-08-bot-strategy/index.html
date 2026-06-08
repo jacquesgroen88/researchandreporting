@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Liquid Lounge — AI Bot Strategy & Ann's Checklist</title>
+  <style>
+    :root {
+      --navy-deep:  #0A1628;
+      --navy-mid:   #0D2045;
+      --navy-light: #1A3560;
+      --gold:       #C9A84C;
+      --gold-light: #E8C97A;
+      --gold-pale:  #F5E6B8;
+      --white:      #FFFFFF;
+      --muted:      #A8BBCC;
+      --card-bg:    #132040;
+      --border:     #1E3A6E;
+      --green:      #2ECC71;
+      --red:        #E74C3C;
+      --blue:       #3A80D2;
+      --orange:     #E67E22;
+      --teal:       #2A9080;
+      --purple:     #8E44AD;
+      --radius:     10px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--navy-deep);
+      color: var(--white);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      font-size: 15px;
+      line-height: 1.65;
+    }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+    section { padding: 64px 0; }
+    section + section { border-top: 1px solid var(--border); }
+
+    /* ── Header ── */
+    .report-header {
+      background: radial-gradient(ellipse at 50% -10%, #0D2045 0%, var(--navy-deep) 70%);
+      border-top: 5px solid var(--gold);
+      text-align: center;
+      padding: 64px 32px 56px;
+    }
+    .header-eyebrow { font-size: 0.78rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
+    .header-logo { font-size: 3.2rem; font-weight: 900; color: var(--gold); letter-spacing: 0.2em; text-transform: uppercase; line-height: 1; margin-bottom: 10px; }
+    .header-title { font-size: 1.4rem; font-weight: 300; color: rgba(255,255,255,0.8); letter-spacing: 0.06em; margin-bottom: 32px; }
+    .header-meta {
+      display: inline-flex; gap: 32px;
+      background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+      border-radius: 50px; padding: 12px 32px; font-size: 0.83rem; color: var(--muted);
+    }
+    .header-meta span { color: var(--gold-light); font-weight: 600; }
+
+    /* ── Nav tabs ── */
+    .doc-nav {
+      background: var(--navy-mid);
+      border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; z-index: 100;
+    }
+    .doc-nav .container { display: flex; gap: 0; }
+    .doc-nav a {
+      display: block; padding: 16px 24px;
+      font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--muted); text-decoration: none; border-bottom: 3px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .doc-nav a:hover { color: var(--gold-light); border-bottom-color: var(--gold); }
+
+    /* ── Section headings ── */
+    .section-heading {
+      font-size: 1.2rem; font-weight: 700; color: var(--gold);
+      letter-spacing: 0.06em; text-transform: uppercase;
+      padding-bottom: 12px; border-bottom: 2px solid var(--gold);
+      margin-bottom: 36px; display: inline-block;
+    }
+    .section-intro { color: var(--muted); font-size: 0.92rem; max-width: 820px; margin-bottom: 40px; line-height: 1.8; }
+    .subsection-title {
+      font-size: 1rem; font-weight: 700; color: var(--gold-light);
+      margin: 40px 0 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border);
+    }
+
+    /* ── Approval banner ── */
+    .approval-banner {
+      background: linear-gradient(135deg, rgba(46,204,113,0.12), rgba(46,204,113,0.04));
+      border: 1px solid rgba(46,204,113,0.35); border-left: 4px solid var(--green);
+      border-radius: var(--radius); padding: 18px 24px; margin-bottom: 40px;
+      display: flex; align-items: center; gap: 16px;
+    }
+    .approval-banner .icon { font-size: 1.6rem; flex-shrink: 0; }
+    .approval-banner p { color: rgba(255,255,255,0.75); font-size: 0.88rem; line-height: 1.7; }
+    .approval-banner strong { color: var(--green); }
+
+    /* ── Checklist ── */
+    .checklist-period {
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: var(--radius); margin-bottom: 20px; overflow: hidden;
+    }
+    .checklist-period-header {
+      display: flex; align-items: center; gap: 14px;
+      padding: 18px 24px; border-bottom: 1px solid var(--border);
+    }
+    .period-icon {
+      width: 36px; height: 36px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; flex-shrink: 0;
+    }
+    .period-title { font-size: 1rem; font-weight: 700; color: var(--white); }
+    .period-sub { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
+    .checklist-items { padding: 8px 0; }
+    .checklist-item {
+      display: flex; align-items: flex-start; gap: 14px;
+      padding: 12px 24px; border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .checklist-item:last-child { border-bottom: none; }
+    .check-box {
+      width: 20px; height: 20px; border-radius: 4px;
+      border: 2px solid var(--border); flex-shrink: 0; margin-top: 1px;
+      cursor: pointer; transition: all 0.2s; background: transparent;
+    }
+    .check-box:hover { border-color: var(--gold); }
+    .check-box.checked { background: var(--green); border-color: var(--green); }
+    .check-box.checked::after { content: '✓'; display: block; color: white; font-size: 0.7rem; text-align: center; line-height: 16px; font-weight: 700; }
+    .checklist-item-content { flex: 1; }
+    .checklist-item-title { font-size: 0.9rem; color: var(--white); font-weight: 600; margin-bottom: 3px; }
+    .checklist-item-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.65; }
+    .checklist-item-desc em { color: var(--gold-light); font-style: normal; }
+    .item-tag {
+      font-size: 0.68rem; padding: 2px 8px; border-radius: 50px; font-weight: 600;
+      flex-shrink: 0; margin-top: 2px;
+    }
+    .item-tag.daily { background: rgba(46,204,113,0.15); color: var(--green); border: 1px solid rgba(46,204,113,0.3); }
+    .item-tag.urgent { background: rgba(231,76,60,0.15); color: #f08080; border: 1px solid rgba(231,76,60,0.3); }
+    .item-tag.weekly { background: rgba(58,128,210,0.15); color: #80b4f0; border: 1px solid rgba(58,128,210,0.3); }
+    .item-tag.monthly { background: rgba(142,68,173,0.15); color: #bf7fe0; border: 1px solid rgba(142,68,173,0.3); }
+
+    /* ── Bot flow diagram ── */
+    .flow-tree { margin-bottom: 40px; }
+    .flow-node {
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 20px 24px; margin-bottom: 12px;
+      position: relative;
+    }
+    .flow-node.root { border-color: var(--gold); border-left: 4px solid var(--gold); }
+    .flow-node.branch { margin-left: 40px; border-left: 4px solid var(--blue); }
+    .flow-node.branch::before {
+      content: ''; position: absolute; left: -28px; top: 50%;
+      width: 24px; height: 1px; background: var(--border);
+    }
+    .flow-node.leaf { margin-left: 80px; border-left: 4px solid var(--teal); }
+    .flow-node.leaf::before {
+      content: ''; position: absolute; left: -28px; top: 50%;
+      width: 24px; height: 1px; background: var(--border);
+    }
+    .flow-node.handover { margin-left: 80px; border-left: 4px solid var(--orange); }
+    .flow-node.handover::before {
+      content: ''; position: absolute; left: -28px; top: 50%;
+      width: 24px; height: 1px; background: var(--border);
+    }
+    .flow-node-label {
+      font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .flow-node.root .flow-node-label { color: var(--gold); }
+    .flow-node.branch .flow-node-label { color: var(--blue); }
+    .flow-node.leaf .flow-node-label { color: var(--teal); }
+    .flow-node.handover .flow-node-label { color: var(--orange); }
+    .flow-node-title { font-size: 0.95rem; font-weight: 700; color: var(--white); margin-bottom: 6px; }
+    .flow-node-desc { font-size: 0.83rem; color: var(--muted); line-height: 1.7; }
+    .flow-arrow { color: var(--muted); font-size: 1.2rem; margin-left: 40px; margin-bottom: 4px; display: block; }
+
+    /* ── Prompt blocks ── */
+    .prompt-card {
+      background: #0c1a35; border: 1px solid var(--border);
+      border-radius: var(--radius); margin-bottom: 24px; overflow: hidden;
+    }
+    .prompt-card-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 20px; background: var(--navy-light); border-bottom: 1px solid var(--border);
+    }
+    .prompt-card-title { font-size: 0.88rem; font-weight: 700; color: var(--gold-light); }
+    .prompt-type {
+      font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 3px 10px; border-radius: 50px; font-weight: 600;
+    }
+    .prompt-type.system { background: rgba(142,68,173,0.2); color: #bf7fe0; border: 1px solid rgba(142,68,173,0.3); }
+    .prompt-type.message { background: rgba(46,204,113,0.15); color: var(--green); border: 1px solid rgba(46,204,113,0.3); }
+    .prompt-type.condition { background: rgba(230,126,34,0.15); color: #f0a870; border: 1px solid rgba(230,126,34,0.3); }
+    .prompt-type.handover { background: rgba(231,76,60,0.15); color: #f08080; border: 1px solid rgba(231,76,60,0.3); }
+    .prompt-body {
+      padding: 20px 24px;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.83rem; line-height: 1.8;
+      color: #c8d8e8; white-space: pre-wrap; word-break: break-word;
+    }
+    .prompt-body .var { color: var(--gold-light); }
+    .prompt-body .comment { color: #556080; font-style: italic; }
+    .prompt-body .trigger { color: var(--green); }
+    .prompt-note {
+      padding: 12px 20px; background: rgba(201,168,76,0.06);
+      border-top: 1px solid var(--border); font-size: 0.8rem; color: var(--muted);
+    }
+
+    /* ── Contact capture table ── */
+    .capture-table { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
+    .capture-table th {
+      text-align: left; padding: 12px 16px; background: var(--navy-light);
+      color: var(--gold-light); font-size: 0.75rem; letter-spacing: 0.1em;
+      text-transform: uppercase; border-bottom: 2px solid var(--border);
+    }
+    .capture-table td { padding: 13px 16px; border-bottom: 1px solid var(--border); vertical-align: top; color: rgba(255,255,255,0.8); }
+    .capture-table tr:last-child td { border-bottom: none; }
+    .capture-table tr:hover td { background: rgba(255,255,255,0.02); }
+    .required-badge {
+      display: inline-block; font-size: 0.68rem; padding: 2px 8px;
+      border-radius: 50px; font-weight: 700;
+    }
+    .required-badge.yes { background: rgba(231,76,60,0.15); color: #f08080; border: 1px solid rgba(231,76,60,0.3); }
+    .required-badge.optional { background: rgba(58,128,210,0.15); color: #80b4f0; border: 1px solid rgba(58,128,210,0.3); }
+    .required-badge.auto { background: rgba(46,204,113,0.15); color: var(--green); border: 1px solid rgba(46,204,113,0.3); }
+
+    /* ── Handover table ── */
+    .handover-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 40px; }
+    .handover-card {
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 22px; border-left: 4px solid var(--orange);
+    }
+    .handover-card-title { font-size: 0.9rem; font-weight: 700; color: var(--white); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+    .handover-card p { font-size: 0.84rem; color: var(--muted); line-height: 1.7; margin-bottom: 10px; }
+    .handover-card ul { list-style: none; padding: 0; }
+    .handover-card ul li { font-size: 0.82rem; color: rgba(255,255,255,0.65); padding: 4px 0 4px 16px; position: relative; }
+    .handover-card ul li::before { content: '→'; position: absolute; left: 0; color: var(--orange); }
+
+    /* ── Approval checkboxes ── */
+    .approval-section {
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 32px; margin-top: 40px;
+    }
+    .approval-title { font-size: 1rem; font-weight: 700; color: var(--gold); margin-bottom: 20px; }
+    .approval-items { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .approval-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 16px; background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border); border-radius: 8px; cursor: pointer;
+    }
+    .approval-item:hover { border-color: var(--gold); }
+    .approval-checkbox {
+      width: 22px; height: 22px; border-radius: 50%;
+      border: 2px solid var(--border); flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .approval-item-label { font-size: 0.86rem; color: rgba(255,255,255,0.8); }
+    .approval-notes {
+      width: 100%; margin-top: 24px;
+      background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+      border-radius: 8px; padding: 14px 16px;
+      color: var(--muted); font-size: 0.86rem; font-family: inherit;
+      resize: vertical; min-height: 80px;
+    }
+
+    /* ── TOC ── */
+    .toc { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px 32px; }
+    .toc-title { font-size: 0.8rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; }
+    .toc-list { list-style: none; display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px 32px; }
+    .toc-list li a { color: var(--muted); text-decoration: none; font-size: 0.86rem; display: flex; align-items: center; gap: 8px; }
+    .toc-list li a:hover { color: var(--gold-light); }
+    .toc-list li a::before { content: ''; width: 20px; height: 1px; background: var(--border); flex-shrink: 0; }
+
+    /* ── Footer ── */
+    .report-footer { background: var(--navy-mid); border-top: 1px solid var(--border); padding: 40px 32px; text-align: center; }
+    .report-footer p { color: var(--muted); font-size: 0.82rem; }
+    .report-footer strong { color: var(--gold-light); }
+
+    @media (max-width: 768px) {
+      .toc-list, .approval-items, .handover-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="report-header">
+  <div class="header-eyebrow">JCE Media · Internal Operations Document</div>
+  <div class="header-logo">Liquid Lounge</div>
+  <div class="header-title">AI Bot Strategy + Ann's System Checklist</div>
+  <div class="header-meta">
+    <div>Prepared by <span>Jacques Groenewald</span></div>
+    <div>Date <span>8 June 2026</span></div>
+    <div>Status <span>Pending Approval</span></div>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav class="doc-nav">
+  <div class="container">
+    <a href="#checklist">Ann's Checklist</a>
+    <a href="#flow">Bot Flow</a>
+    <a href="#prompts">Bot Prompts</a>
+    <a href="#capture">Contact Capture</a>
+    <a href="#handover">Handover Events</a>
+    <a href="#approval">Approval</a>
+  </div>
+</nav>
+
+<!-- TOC -->
+<section>
+  <div class="container">
+    <div class="toc">
+      <div class="toc-title">Contents</div>
+      <ul class="toc-list">
+        <li><a href="#checklist">Ann's Daily & Weekly Checklist</a></li>
+        <li><a href="#flow">AI Bot Conversation Flow</a></li>
+        <li><a href="#prompts">Full Bot Prompts (System + Messages)</a></li>
+        <li><a href="#capture">Contact Information Capture</a></li>
+        <li><a href="#handover">Handover Events & Escalation Rules</a></li>
+        <li><a href="#approval">Review & Approval</a></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     SECTION 1: ANN'S CHECKLIST
+══════════════════════════════════════════ -->
+<section id="checklist">
+  <div class="container">
+    <div class="section-heading">Ann's ReviewTap System Checklist</div>
+    <p class="section-intro">This is Ann's complete daily and weekly operating guide for the ReviewTap System. Every item is specific and actionable — no guessing, no interpretation needed. Once the AI bot is live, many of these tasks will be handled automatically; Ann's role shifts to monitoring, exceptions, and human conversations that require personal judgment.</p>
+
+    <div class="approval-banner">
+      <div class="icon">ℹ️</div>
+      <p><strong>Note for Charissa:</strong> Please review this checklist with Ann together. Any tasks that don't apply, need to be reworded, or need additional steps — add your notes in the Approval section at the bottom of this document.</p>
+    </div>
+
+    <!-- MORNING ROUTINE -->
+    <div class="checklist-period">
+      <div class="checklist-period-header">
+        <div class="period-icon" style="background: rgba(230,126,34,0.15); color: var(--orange);">🌅</div>
+        <div>
+          <div class="period-title">Morning Routine — Every Working Day (8:00–8:30am)</div>
+          <div class="period-sub">Do this before anything else. Should take no more than 30 minutes.</div>
+        </div>
+      </div>
+      <div class="checklist-items">
+        <div class="checklist-item">
+          <div class="check-box" onclick="this.classList.toggle('checked')"></div>
+          <div class="checklist-item-content">
+            <div class="checklist-item-title">Check all new WhatsApp conversations in the ReviewTap System</div>
+            <div class="checklist-item-desc">Open the inbox. Look for any conversations that came in overnight or since yesterday. Any contact that has sent a message and has not received a reply within <em>2 hours</em> needs to be responded to first.</div>
+          </div>
+          <div class="item-tag daily">Daily</div>
+        </div>
+        <div class="checklist-item">
+          <div class="check-box" onclick="this.classList.toggle('checked')"></div>
+          <div class="checklist-item-content">
+            <div class="checklist-item-title">Check the "Needs Attention" contacts — look for the human handover tag</div>
+            <div class="checklist-item-desc">Filter contacts by the tag <em>human handover</em>. These are people the AI bot could not assist and flagged for a human. They need a personal response from Ann today, not tomorrow.</div>
+          </div>
+          <div class="item-tag urgent">Urgent</div>
+        </div>
+        <div class="checklist-item">
+          <div class="check-box" onclick="this.classList.toggle('checked')"></div>
+          <div class="checklist-item-content">
+            <div class="checklist-item-title">Check the Public Cruise pipeline — update any stages that changed</div>
+            <div class="checklist-item-desc">Open the Public Cruise pipeline. Move any contacts forward if they have paid, confirmed a booking, or cancelled. Stages: <em>New Inquiry → Quoted → Deposit Paid → Confirmed → Completed → No Show/Cancelled</em>.</div>
+          </div>
+          <div class="item-tag daily">Daily</div>
+        </div>
+        <div class="checklist-item">
+          <div class="check-box" onclick="this.classList.toggle('checked')"></div>
+          <div class="checklist-item-content">
+            <div class="checklist-item-title">Check the Private Functions pipeline — same process</div>
+            <div class="checklist-item-desc">Move private function inquiries forward if they have progressed. If someone has confirmed but not yet paid a deposit, flag them and let Charissa know. Do not move to "Confirmed" until deposit is received.</div>
+          </div>
+          <div class="item-tag daily">Daily</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESPONSE RULES -->
+    <div class="checklist-period">
+      <div class="checklist-period-header">
+        <div class="period-icon" style="background: rgba(58,128,210,0.15); color: var(--blue);">💬</div>
+        <div>
+          <div class="period-title">Responding to Conversations — Rules Ann Must Follow</div>
+          <div class="period-sub">These rules apply every time Ann handles a conversation manually.</div>
+        </div>
+      </div>
+      <div class="checklist-items">
+        <div class="checklist-item">
+          <div class="check-box" onclick="this.classList.toggle('checked')"></div>
+          <div class="checklist-item-content">
+            <div class="checklist-item-title">Always reply within 2 hours during business hours (8am–5pm)</div>
+            <div class="checklist-item-desc">If a message comes in after 5pm, reply first thing the next morning. Do not leave any unanswered message for more than 24 hours.</div>
+          </div>
+          <div class="item-tag daily">Daily</div>
+        </div>
+        <div class="checklist-item">
+          <div class="check-box" onclick="this.classList.toggle('checked')"></div>
+          <div class="checklist-item-content">
+            <div class="checklist-item-title">For public cruise bookings — always send the direct booking link</div>
+            <div class="checklist-item-desc">Do not send people to the general website homepage. Send the <em>direct link to the specific cruise</em> they are interested in on the Shopify store. If they don't specify a cruise, ask which one they want first.</div>
+          </div>
+          <div class="item-tag daily">Daily</div>
+        </div>
+        <div class="checklist-item">
+          <div class="check-box" onclick="this.classList.toggle('checked')"></div>
+          <div class="checklist-item-content">
+            <div class="checklist-item-title">For private functions — collect all required information before quoting</div>
+            <div class="checklist-item-desc">Required: <em>Guest count, type of function, preferred date (if known), catering requirements, time of day</em>. Only send a quote once all of this is collected. If they don't have a date yet, that's fine — proceed with a quote based on what they do know.</div>
+          </div>
+          <div class="item-tag daily">Daily</div>
+        </div>
+        <div class="checklist-item">
+          <div class="check-box" onclick="this.classList.toggle('checked')"></div>
+          <div class="checklist-item-content">
+            <div class="checklist-item-title">If someone goes quiet after receiving info — follow up once after 24 hours</div>
+            <div class="checklist-item-desc">Send a short, friendly follow-up: <em>"Hi [name], just checking in — did you get a chance to look at the options? Happy to answer any questions or check availability for you."</em> Only follow up once manually. The automated sequence will handle further follow-ups.</div>
+          </div>
+          <div class="item-tag daily">Daily</div>
+        </div>
+        <div class="checklist-item">
+          <div class="check-box" onclick="this.classList.toggle('checked')"></div>
+          <div class="checklist-item-content">
+            <div class="checklist-item-title">Never move a pipeline stage if it will trigger an automated message you don't want sent</div>
+            <div class="checklist-item-desc">Stage automations are currently switched off. Jacques will confirm when any stage-based automation is reactivated. Until then, move contacts freely without risk of sending messages.</div>
+          </div>
+          <div class="item-tag urgent">Important</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEEKLY TASKS -->
+    <div class="checklist-period">
+      <div class="checklist-period-header">
+        <div class="period-icon" style="background: rgba(46,204,113,0.15); color: var(--green);">📋</div>
+        <div>
+          <div class="period-title">Weekly Tasks — Every Monday Morning</div>
+          <div class="period-sub">These take approximately 1 hour. Do them before anything else on Mondays.</div>
+        </div>
+      </div>
+      <div class="checklist-items">
+        <div class="checklist-item">
+          <div class="check-box" onclick="this.classList.toggle('checked')"></div>
+          <div class="checklist-item-content">
+            <div class="checklist-item-title">Export past guest list — send to Jacques every second Monday</div>
+            <div class="checklist-item-desc">Compile a list of guests from the past 2 weeks — name and WhatsApp number minimum. Split into two tabs: <em>Public Cruise guests</em> and <em>Private Function guests</em>. Save as Excel or CSV and send to Jacques via WhatsApp or email. Jacques will load this into the system to send Google review requests.</div>
+          </div>
+          <div class="item-tag weekly">Every 2nd Monday</div>
+        </div>
+        <div class="checklist-item">
+          <div class="check-box" onclick="this.classList.toggle('checked')"></div>
+          <div class="checklist-item-content">
+            <div class="checklist-item-title">Flag any contacts sitting in "New Inquiry" for more than 3 days with no response from them</div>
+            <div class="checklist-item-desc">If a contact is in the New Inquiry stage and hasn't responded to follow-ups for 3+ days, add the tag <em>not_ready</em> and move them to a holding stage. They will be re-engaged via a broadcast later.</div>
+          </div>
+          <div class="item-tag weekly">Weekly</div>
+        </div>
+        <div class="checklist-item">
+          <div class="check-box" onclick="this.classList.toggle('checked')"></div>
+          <div class="checklist-item-content">
+            <div class="checklist-item-title">Check Trello — approve any pending social media posts for the coming week</div>
+            <div class="checklist-item-desc">Go to the Liquid Lounge Trello board. Check the <em>Ready for Approval</em> column. Move approved posts to <em>Approved</em>. Add comments for anything that needs changes. Diane and Jacques need approvals by Monday to schedule posts for the week.</div>
+          </div>
+          <div class="item-tag weekly">Weekly (do on behalf of Charissa if needed)</div>
+        </div>
+        <div class="checklist-item">
+          <div class="check-box" onclick="this.classList.toggle('checked')"></div>
+          <div class="checklist-item-content">
+            <div class="checklist-item-title">Add any new private function inquiries received via phone or email into the system</div>
+            <div class="checklist-item-desc">Any inquiry Charissa receives via phone call or direct email that is <em>not yet in the ReviewTap System</em> should be added as a new contact in the Private Functions pipeline under "New Inquiry". This will not trigger any automated messages — it's just for tracking.</div>
+          </div>
+          <div class="item-tag weekly">Weekly</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FORTNIGHTLY -->
+    <div class="checklist-period">
+      <div class="checklist-period-header">
+        <div class="period-icon" style="background: rgba(142,68,173,0.15); color: var(--purple);">📊</div>
+        <div>
+          <div class="period-title">Fortnightly — Before Every Call with Jacques</div>
+          <div class="period-sub">Prep these items before each fortnightly review call so the call is productive.</div>
+        </div>
+      </div>
+      <div class="checklist-items">
+        <div class="checklist-item">
+          <div class="check-box" onclick="this.classList.toggle('checked')"></div>
+          <div class="checklist-item-content">
+            <div class="checklist-item-title">Note any system issues, anomalies, or conversation loops that didn't work correctly</div>
+            <div class="checklist-item-desc">Screenshot any conversation where the bot sent the wrong response, went back to the start, or didn't answer correctly. Send these to Jacques before the call so he can fix them.</div>
+          </div>
+          <div class="item-tag monthly">Every 2 weeks</div>
+        </div>
+        <div class="checklist-item">
+          <div class="check-box" onclick="this.classList.toggle('checked')"></div>
+          <div class="checklist-item-content">
+            <div class="checklist-item-title">Check how many contacts moved to "Confirmed" and "Completed" this period</div>
+            <div class="checklist-item-desc">Count how many public cruise and private function bookings were confirmed and completed in the last 2 weeks. Have this number ready for the call — it's the main metric we track.</div>
+          </div>
+          <div class="item-tag monthly">Every 2 weeks</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     SECTION 2: BOT FLOW
+══════════════════════════════════════════ -->
+<section id="flow">
+  <div class="container">
+    <div class="section-heading">AI Bot Conversation Flow</div>
+    <p class="section-intro">The bot handles all incoming WhatsApp messages. It routes each person to the correct agent based on what they're asking. It never sends someone in circles — if it cannot confidently help, it hands over to Ann or Charissa immediately.</p>
+
+    <div class="subsection-title">Flow Architecture</div>
+
+    <div class="flow-tree">
+      <div class="flow-node root">
+        <div class="flow-node-label">Entry Point</div>
+        <div class="flow-node-title">Routing Bot — Every New Incoming Message</div>
+        <div class="flow-node-desc">Reads the message. Greets the person. Asks one simple question: "Are you interested in booking a cruise, enquiring about a private function, or do you have a question about Liquid Lounge?" Maps their reply to the correct agent below.</div>
+      </div>
+
+      <span class="flow-arrow">↓ routes to one of three agents</span>
+
+      <div class="flow-node branch">
+        <div class="flow-node-label">Agent 1</div>
+        <div class="flow-node-title">Public Cruise Agent</div>
+        <div class="flow-node-desc">Triggered when someone wants to book a cruise. Collects: cruise type preference, preferred date, group size. Sends the direct booking link. Follows up if no booking after 24 hours.</div>
+      </div>
+
+      <div class="flow-node leaf">
+        <div class="flow-node-label">Outcome A</div>
+        <div class="flow-node-title">Booking Link Sent</div>
+        <div class="flow-node-desc">Direct Shopify link sent for the specific cruise chosen. Bot monitors for confirmation. If no booking after 24h, sends one follow-up nudge.</div>
+      </div>
+      <div class="flow-node handover">
+        <div class="flow-node-label">Handover Trigger</div>
+        <div class="flow-node-title">Date Not Available / Special Request</div>
+        <div class="flow-node-desc">If the requested date is not available or the contact has a non-standard request (e.g. wheelchair access, large group 20+, media inquiry), bot flags as "human handover" and notifies Ann.</div>
+      </div>
+
+      <div class="flow-node branch">
+        <div class="flow-node-label">Agent 2</div>
+        <div class="flow-node-title">Private Function Agent</div>
+        <div class="flow-node-desc">Triggered when someone wants to enquire about a private event. Collects: type of function, approximate guest count, preferred date (if known), catering requirements. Sends standard private function info pack. Flags for Charissa to follow up with a custom quote.</div>
+      </div>
+
+      <div class="flow-node leaf">
+        <div class="flow-node-label">Outcome B</div>
+        <div class="flow-node-title">Info Pack Sent + Charissa Notified</div>
+        <div class="flow-node-desc">Bot sends the private functions info document. Internally notifies Charissa: "New private function inquiry — [name], [guest count], [date if given], [function type]. Awaiting your quote."</div>
+      </div>
+      <div class="flow-node handover">
+        <div class="flow-node-label">Handover Trigger</div>
+        <div class="flow-node-title">All Private Function Inquiries</div>
+        <div class="flow-node-desc">All private function leads always end in a human handover to Charissa for quoting. Bot collects the info — Charissa closes the deal.</div>
+      </div>
+
+      <div class="flow-node branch">
+        <div class="flow-node-label">Agent 3</div>
+        <div class="flow-node-title">FAQ / General Query Agent</div>
+        <div class="flow-node-desc">Handles general questions: pricing, location, parking, age restrictions, accessibility, what's included, dress code, cancellation policy, etc. Pulls answers from the knowledge base. If the question is outside the knowledge base, escalates immediately.</div>
+      </div>
+
+      <div class="flow-node leaf">
+        <div class="flow-node-label">Outcome C</div>
+        <div class="flow-node-title">Answer Provided — Convert to Booking</div>
+        <div class="flow-node-desc">After answering the question, bot always asks: "Would you like to book a cruise or find out about a private function?" Re-routes them into Agent 1 or 2.</div>
+      </div>
+      <div class="flow-node handover">
+        <div class="flow-node-label">Handover Trigger</div>
+        <div class="flow-node-title">Unknown / Sensitive Questions</div>
+        <div class="flow-node-desc">Complaints, refund requests, supplier inquiries, media requests, legal matters — immediate handover to Ann or Charissa. Bot does not attempt to answer these.</div>
+      </div>
+
+      <div class="flow-node branch">
+        <div class="flow-node-label">Agent 4</div>
+        <div class="flow-node-title">Post-Experience Review Request Flow</div>
+        <div class="flow-node-desc">Triggered separately — not from inbound messages. Fired by Jacques loading the guest list every two weeks. Sends a warm post-experience message, asks for a Google review via the ReviewTap card/link. Filters: only sends to guests who had a positive interaction (screened via a quick 1-question rating first).</div>
+      </div>
+
+      <div class="flow-node leaf">
+        <div class="flow-node-label">Outcome D</div>
+        <div class="flow-node-title">Google Review Link Sent</div>
+        <div class="flow-node-desc">If guest gives a 4 or 5 rating: sends direct Google review link. If 1-3: sends internal flag only — no public review requested. Charissa or Ann follows up privately to understand what went wrong.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     SECTION 3: BOT PROMPTS
+══════════════════════════════════════════ -->
+<section id="prompts">
+  <div class="container">
+    <div class="section-heading">Full Bot Prompts</div>
+    <p class="section-intro">These are the exact prompts to load into the ReviewTap System's Conversations AI. Each block is labelled by its purpose. Yellow text in prompts = variables to be filled in by the system. Green text = trigger conditions.</p>
+
+    <div class="subsection-title">System Prompt — Master Identity & Rules</div>
+
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <div class="prompt-card-title">SYSTEM PROMPT — Load once as the AI's core identity</div>
+        <div class="prompt-type system">System</div>
+      </div>
+      <div class="prompt-body"><span class="comment"># IDENTITY</span>
+You are the friendly and professional virtual assistant for Liquid Lounge, a premier river cruise and events venue on the Vaal River, South Africa.
+
+Your name is <span class="var">{{bot_name}}</span> (default: "the Liquid Lounge team").
+You communicate on WhatsApp. Always be warm, helpful, and concise.
+Use simple, conversational English. Never be stiff or overly formal.
+Never use emojis excessively — one or two per message is fine.
+
+<span class="comment"># YOUR ROLE</span>
+You help people:
+1. Find and book public cruises (sunset cruises, lunch cruises, wine cruises, themed events)
+2. Enquire about and plan private functions (birthday parties, corporate events, year-end functions, weddings)
+3. Get answers to general questions about Liquid Lounge
+4. Leave a Google review after their experience
+
+<span class="comment"># WHAT YOU MUST NEVER DO</span>
+- Never make up information you are not sure about
+- Never quote a price unless it is in your knowledge base
+- Never promise availability without confirmation
+- Never discuss competitor venues
+- Never engage with abusive or inappropriate messages — end politely and flag for human review
+- Never process refunds or handle complaints — always hand these over to a human immediately
+
+<span class="comment"># KEY INFORMATION (Knowledge Base)</span>
+Venue: Liquid Lounge, Vaal River, South Africa
+Contact: info@liquidlounge.co.za | 016 982 3411 | 083 664 3394
+Website: www.liquidlounge.co.za
+Booking platform: www.vaalrivercruises.co.za
+
+Cruises available:
+- 1-Hour Lunch Cruise
+- 2-Hour Lunch Cruise
+- Sunset Cruise
+- Lady Elizabeth (private charter)
+- Themed event cruises (check Trello/calendar for current events)
+
+Private Functions:
+- Birthdays, corporate functions, year-end parties, weddings, matric farewells
+- Minimum / maximum guest count: <span class="var">{{min_guests}}</span> / <span class="var">{{max_guests}}</span>
+- Catering available: Yes
+- Deposit required: Yes (50% to confirm)
+- Cancellation policy: <span class="var">{{cancellation_policy}}</span>
+
+Location: <span class="var">{{venue_address}}</span>
+Parking: Available on site
+Age restriction: All ages welcome. Alcohol served to 18+ only.
+Dress code: Smart casual
+
+Upcoming Events: <span class="var">{{upcoming_events_list}}</span>
+
+<span class="comment"># TONE GUIDELINES</span>
+- Respond in the same language the customer uses (English or Afrikaans)
+- Keep replies under 5 sentences unless the question requires more
+- If unsure, say "Let me check that for you" and flag for human follow-up
+- Always end a resolved conversation with an invitation to book or ask more questions</div>
+      <div class="prompt-note">⚠️ Fill in all <strong>{{variables}}</strong> before going live. These include venue address, min/max guests, cancellation policy, and upcoming events. Update the events list monthly.</div>
+    </div>
+
+    <div class="subsection-title">Agent 1 — Public Cruise Booking Flow</div>
+
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <div class="prompt-card-title">Message 1 — Welcome & Intent Detection</div>
+        <div class="prompt-type message">Opening Message</div>
+      </div>
+      <div class="prompt-body"><span class="comment"># Fires on first message from any new contact</span>
+
+Hi <span class="var">{{contact.first_name | "there"}}</span>! 👋 Welcome to Liquid Lounge — where the Vaal becomes your playground.
+
+How can we help you today?
+
+<span class="trigger">[ 🚢 Book a cruise ]</span>
+<span class="trigger">[ 🎉 Private function ]</span>
+<span class="trigger">[ ❓ General question ]</span></div>
+      <div class="prompt-note">This message fires automatically when a new contact starts a conversation. The buttons route to the correct agent.</div>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <div class="prompt-card-title">Message 2 — Cruise Type Selection</div>
+        <div class="prompt-type message">Cruise Agent — Step 1</div>
+      </div>
+      <div class="prompt-body"><span class="comment"># Fires when contact selects "Book a cruise" or sends a message indicating cruise interest</span>
+
+Great choice! 🚢 We have a few different cruise options.
+
+Which one catches your eye?
+
+<span class="trigger">[ 1-Hour Lunch Cruise ]</span>
+<span class="trigger">[ 2-Hour Lunch Cruise ]</span>
+<span class="trigger">[ Sunset Cruise ]</span>
+<span class="trigger">[ Something else / Not sure ]</span>
+
+<span class="comment"># If they type freely (no button), use AI to detect cruise preference from text and proceed to Step 2</span></div>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <div class="prompt-card-title">Message 3 — Date & Group Size Collection</div>
+        <div class="prompt-type message">Cruise Agent — Step 2</div>
+      </div>
+      <div class="prompt-body"><span class="comment"># Fires after cruise type is selected</span>
+
+Perfect — the <span class="var">{{cruise_type}}</span> is a great option! 🌊
+
+Two quick questions:
+1. What date were you thinking? (Day and month is fine)
+2. How many people in your group?
+
+<span class="comment"># Store answers as:
+#   contact.custom.cruise_preferred_date
+#   contact.custom.cruise_group_size
+# Make date MANDATORY for public cruises — if they don't provide it, ask again before proceeding</span></div>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <div class="prompt-card-title">Message 4 — Send Booking Link</div>
+        <div class="prompt-type message">Cruise Agent — Step 3</div>
+      </div>
+      <div class="prompt-body"><span class="comment"># Fires after date and group size are collected</span>
+
+Awesome — <span class="var">{{cruise_group_size}}</span> guests on <span class="var">{{cruise_preferred_date}}</span>, let's make it happen! 🎉
+
+You can secure your spot right here:
+👉 <span class="var">{{booking_link_for_cruise_type}}</span>
+
+Payment is done online — super quick. Once you've completed the booking, you'll receive a confirmation from us.
+
+Any questions before you book? I'm right here! 😊
+
+<span class="comment"># Tag contact: whatsapp_hotlead_bookings_campaign
+# Start 24-hour no-booking follow-up timer</span></div>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <div class="prompt-card-title">Message 5 — 24-Hour Follow-Up (No Booking)</div>
+        <div class="prompt-type message">Cruise Agent — Follow-up</div>
+      </div>
+      <div class="prompt-body"><span class="comment"># Fires 24 hours after booking link was sent IF no booking has been confirmed</span>
+
+Hi <span class="var">{{contact.first_name | "there"}}</span>! 👋 Just checking in — did you get a chance to have a look at the booking?
+
+If you have any questions or need help with the date, I'm happy to assist. Spots can fill up quickly, especially on weekends! 🌅
+
+<span class="var">{{booking_link_for_cruise_type}}</span>
+
+<span class="comment"># Only fires once. After this, no further automated messages unless a new campaign is triggered.</span></div>
+    </div>
+
+    <div class="subsection-title">Agent 2 — Private Function Enquiry Flow</div>
+
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <div class="prompt-card-title">Message 1 — Private Function Intro</div>
+        <div class="prompt-type message">Private Function Agent — Step 1</div>
+      </div>
+      <div class="prompt-body"><span class="comment"># Fires when contact selects "Private function" or sends message indicating private event interest</span>
+
+How exciting — let's make your event one to remember! 🥂
+
+To help us put together the right proposal for you, I just need a few details.
+
+What type of event are you planning?
+
+<span class="trigger">[ Birthday / Celebration ]</span>
+<span class="trigger">[ Corporate Function ]</span>
+<span class="trigger">[ Year-End Party ]</span>
+<span class="trigger">[ Wedding / Engagement ]</span>
+<span class="trigger">[ Other ]</span>
+
+<span class="comment"># Store as contact.custom.function_type</span></div>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <div class="prompt-card-title">Message 2 — Guest Count & Date</div>
+        <div class="prompt-type message">Private Function Agent — Step 2</div>
+      </div>
+      <div class="prompt-body"><span class="comment"># Fires after function type is selected</span>
+
+A <span class="var">{{function_type}}</span> on the Vaal — stunning choice! 🌊
+
+A couple more things to help us tailor a quote:
+
+1. Roughly how many guests are you expecting?
+2. Do you have a date in mind? (Even a rough month is helpful — totally fine if it's not set yet)
+
+<span class="comment"># Store as:
+#   contact.custom.function_guest_count
+#   contact.custom.function_preferred_date (optional — do not make mandatory)
+# If no date given, proceed anyway</span></div>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <div class="prompt-card-title">Message 3 — Catering & Confirmation</div>
+        <div class="prompt-type message">Private Function Agent — Step 3</div>
+      </div>
+      <div class="prompt-body"><span class="comment"># Fires after guest count and date (or no-date) are received</span>
+
+Almost there! Last question:
+
+Will you be needing catering for your guests?
+
+<span class="trigger">[ Yes — full catering ]</span>
+<span class="trigger">[ Yes — drinks only ]</span>
+<span class="trigger">[ No — we'll arrange our own ]</span>
+<span class="trigger">[ Not sure yet ]</span>
+
+<span class="comment"># Store as contact.custom.function_catering
+# After this, send summary message and trigger internal notification</span></div>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <div class="prompt-card-title">Message 4 — Summary & Handover Notification</div>
+        <div class="prompt-type handover">Private Function Agent — Handover</div>
+      </div>
+      <div class="prompt-body"><span class="comment"># Fires after catering preference is received</span>
+
+Thank you <span class="var">{{contact.first_name | "so much"}}</span>! 🎉
+
+Here's what we've got from you:
+- Event type: <span class="var">{{function_type}}</span>
+- Guests: <span class="var">{{function_guest_count}}</span>
+- Date: <span class="var">{{function_preferred_date | "TBC"}}</span>
+- Catering: <span class="var">{{function_catering}}</span>
+
+Our team will be in touch shortly with a personalised proposal. We're excited to help make your event unforgettable! 🥂
+
+<span class="comment"># INTERNAL ACTION — fires simultaneously:
+# 1. Tag contact: human handover
+# 2. Assign to Charissa (user ID: DQ8w58OU4vPKMpd2FbOJ or relevant user)
+# 3. Send internal notification: "New private function inquiry:
+#    Name: {{contact.full_name}}
+#    Phone: {{contact.phone}}
+#    Type: {{function_type}}
+#    Guests: {{function_guest_count}}
+#    Date: {{function_preferred_date}}
+#    Catering: {{function_catering}}
+#    — Action needed: Send personalised quote"</span></div>
+    </div>
+
+    <div class="subsection-title">Agent 3 — FAQ & General Queries</div>
+
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <div class="prompt-card-title">AI Prompt — General Query Handler</div>
+        <div class="prompt-type system">AI Instruction</div>
+      </div>
+      <div class="prompt-body"><span class="comment"># This prompt governs how the AI answers free-text questions</span>
+
+When a contact asks a general question, follow this process:
+
+1. Check if the answer is in your knowledge base (System Prompt above)
+2. If YES: answer clearly and concisely in 2-3 sentences
+3. After answering: always add — "Is there anything else I can help with, or would you like to book a cruise or find out about a private function?"
+4. If NO — the answer is not in your knowledge base: respond with:
+   "That's a great question — let me get one of our team to answer that properly for you. Give us a moment! 😊"
+   Then: tag contact as "human handover" and assign to Ann
+
+<span class="comment"># Common questions the AI MUST be able to answer from knowledge base:
+# - What cruises do you offer?
+# - How much does it cost?
+# - Where are you located?
+# - Is there parking?
+# - Can I bring children?
+# - What is the cancellation policy?
+# - Is alcohol included?
+# - What is the dress code?
+# - How long is the cruise?
+# - Is food included?
+# - Can I bring my own alcohol?
+# - What happens if it rains?
+# - Do you cater for dietary requirements?
+# - Is it on the Vaal Dam?
+# - How do I get there?</span></div>
+      <div class="prompt-note">⚠️ All answers to the above questions must be added to the knowledge base before going live. Jacques and Charissa to confirm exact answers together during scope session.</div>
+    </div>
+
+    <div class="subsection-title">Agent 4 — Post-Experience Review Request</div>
+
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <div class="prompt-card-title">Message 1 — Sentiment Check (fires 24 hours after experience)</div>
+        <div class="prompt-type message">Review Agent — Step 1</div>
+      </div>
+      <div class="prompt-body"><span class="comment"># Fires from a broadcast — not from inbound message
+# Loaded by Jacques from Ann's fortnightly guest list export</span>
+
+Hi <span class="var">{{contact.first_name | "there"}}</span>! 🌅 We hope you had an amazing time with us on the Vaal recently!
+
+We'd love to know — how was your experience with Liquid Lounge?
+
+<span class="trigger">[ 😍 Loved it! ]</span>
+<span class="trigger">[ 😊 It was good ]</span>
+<span class="trigger">[ 😐 It was okay ]</span>
+<span class="trigger">[ 😞 Not what I expected ]</span>
+
+<span class="comment"># Route based on response:
+# 😍 or 😊 → proceed to Message 2 (review request)
+# 😐 or 😞 → proceed to Message 3 (private feedback — NO public review link)</span></div>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <div class="prompt-card-title">Message 2 — Positive: Send Google Review Link</div>
+        <div class="prompt-type message">Review Agent — Positive Path</div>
+      </div>
+      <div class="prompt-body"><span class="comment"># Fires for 😍 or 😊 responses only</span>
+
+That's so wonderful to hear! 🥂 We really appreciate you taking the time.
+
+If you have 2 minutes, a Google review from you would mean the world to us — it helps other people discover Liquid Lounge too!
+
+👉 <span class="var">{{google_review_link}}</span>
+
+Thank you so much, <span class="var">{{contact.first_name | ""}}</span> — we hope to see you on the water again soon! 🚢</div>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <div class="prompt-card-title">Message 3 — Negative: Private Feedback Collection</div>
+        <div class="prompt-type handover">Review Agent — Negative Path</div>
+      </div>
+      <div class="prompt-body"><span class="comment"># Fires for 😐 or 😞 responses ONLY — never sends review link</span>
+
+We're really sorry to hear that <span class="var">{{contact.first_name | ""}}</span> — your experience matters to us more than anything.
+
+Would you mind sharing what we could have done better? Your feedback goes directly to our management team and genuinely helps us improve.
+
+<span class="comment"># Store response as contact.custom.negative_feedback_notes
+# Tag contact: not_ready
+# Send internal notification to Charissa:
+# "Negative review feedback received from {{contact.full_name}} ({{contact.phone}}):
+#  Rating: {{sentiment_response}}
+#  Feedback: {{negative_feedback_notes}}
+#  — Action: Follow up personally"
+# DO NOT send Google review link under any circumstances</span></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     SECTION 4: CONTACT CAPTURE
+══════════════════════════════════════════ -->
+<section id="capture">
+  <div class="container">
+    <div class="section-heading">Contact Information to Capture</div>
+    <p class="section-intro">These are the data fields the bot must collect and store against each contact in the ReviewTap System. Fields marked as Required must be collected before proceeding. Optional fields are captured where possible but should not block the conversation flow.</p>
+
+    <div class="subsection-title">All Contacts (captured automatically)</div>
+    <table class="capture-table">
+      <thead>
+        <tr><th>Field</th><th>How Captured</th><th>Required</th><th>Notes</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>First Name</strong></td>
+          <td>WhatsApp profile or asked by bot</td>
+          <td><span class="required-badge auto">Auto</span></td>
+          <td>Pulled from WhatsApp profile automatically</td>
+        </tr>
+        <tr>
+          <td><strong>Phone Number</strong></td>
+          <td>WhatsApp number (auto)</td>
+          <td><span class="required-badge auto">Auto</span></td>
+          <td>Always captured — this is the primary identifier</td>
+        </tr>
+        <tr>
+          <td><strong>Enquiry Type</strong></td>
+          <td>Bot routing selection</td>
+          <td><span class="required-badge yes">Required</span></td>
+          <td>Public Cruise / Private Function / General Query</td>
+        </tr>
+        <tr>
+          <td><strong>Lead Source</strong></td>
+          <td>System (auto-tagged)</td>
+          <td><span class="required-badge auto">Auto</span></td>
+          <td>Facebook Ad / WhatsApp Organic / Referral — captured by attribution</td>
+        </tr>
+        <tr>
+          <td><strong>Date First Contact</strong></td>
+          <td>System (auto)</td>
+          <td><span class="required-badge auto">Auto</span></td>
+          <td>Logged automatically when contact is created</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="subsection-title">Public Cruise Contacts</div>
+    <table class="capture-table">
+      <thead>
+        <tr><th>Field</th><th>How Captured</th><th>Required</th><th>Notes</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Cruise Type</strong></td>
+          <td>Bot button selection</td>
+          <td><span class="required-badge yes">Required</span></td>
+          <td>1-Hour Lunch / 2-Hour Lunch / Sunset / Themed</td>
+        </tr>
+        <tr>
+          <td><strong>Preferred Date</strong></td>
+          <td>Bot asks — free text</td>
+          <td><span class="required-badge yes">Required</span></td>
+          <td>Must not proceed to booking link without this. Bot re-asks if not provided.</td>
+        </tr>
+        <tr>
+          <td><strong>Group Size</strong></td>
+          <td>Bot asks — free text</td>
+          <td><span class="required-badge yes">Required</span></td>
+          <td>Needed to flag if group is 20+ (triggers handover)</td>
+        </tr>
+        <tr>
+          <td><strong>Booking Confirmed</strong></td>
+          <td>Shopify webhook / manual update</td>
+          <td><span class="required-badge optional">Optional</span></td>
+          <td>Updated by Ann when booking is confirmed in Shopify</td>
+        </tr>
+        <tr>
+          <td><strong>Email Address</strong></td>
+          <td>Not actively collected by bot</td>
+          <td><span class="required-badge optional">Optional</span></td>
+          <td>Captured if they fill in the Shopify form — pulled through if available</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="subsection-title">Private Function Contacts</div>
+    <table class="capture-table">
+      <thead>
+        <tr><th>Field</th><th>How Captured</th><th>Required</th><th>Notes</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Function Type</strong></td>
+          <td>Bot button selection</td>
+          <td><span class="required-badge yes">Required</span></td>
+          <td>Birthday / Corporate / Year-End / Wedding / Other</td>
+        </tr>
+        <tr>
+          <td><strong>Guest Count</strong></td>
+          <td>Bot asks — free text</td>
+          <td><span class="required-badge yes">Required</span></td>
+          <td>Approximate is fine — needed for quote</td>
+        </tr>
+        <tr>
+          <td><strong>Preferred Date</strong></td>
+          <td>Bot asks — free text</td>
+          <td><span class="required-badge optional">Optional</span></td>
+          <td>Not mandatory — many private function enquiries are exploratory</td>
+        </tr>
+        <tr>
+          <td><strong>Catering Requirement</strong></td>
+          <td>Bot button selection</td>
+          <td><span class="required-badge yes">Required</span></td>
+          <td>Full catering / Drinks only / Own catering / Not sure</td>
+        </tr>
+        <tr>
+          <td><strong>Company Name</strong></td>
+          <td>Bot asks for corporate functions</td>
+          <td><span class="required-badge optional">Optional</span></td>
+          <td>Only prompted if Function Type = Corporate</td>
+        </tr>
+        <tr>
+          <td><strong>Email Address</strong></td>
+          <td>Bot asks after summary</td>
+          <td><span class="required-badge optional">Optional</span></td>
+          <td>"Would you like us to send the proposal to an email address too?" — optional step</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     SECTION 5: HANDOVER EVENTS
+══════════════════════════════════════════ -->
+<section id="handover">
+  <div class="container">
+    <div class="section-heading">Handover Events & Escalation Rules</div>
+    <p class="section-intro">These are the exact conditions under which the AI bot stops handling a conversation and passes it to a human. When a handover fires, the contact is tagged "human handover", assigned to the correct person, and Ann receives a notification in the ReviewTap System inbox.</p>
+
+    <div class="handover-grid">
+      <div class="handover-card">
+        <div class="handover-card-title">🚢 All Private Function Enquiries</div>
+        <p>Every private function inquiry ends in a handover to Charissa. The bot collects the info — Charissa does the quoting and closing.</p>
+        <ul>
+          <li>Assign to: Charissa</li>
+          <li>Tag: human handover</li>
+          <li>Notification: full inquiry summary sent internally</li>
+          <li>Expected response time: within same business day</li>
+        </ul>
+      </div>
+
+      <div class="handover-card">
+        <div class="handover-card-title">❓ Question Not in Knowledge Base</div>
+        <p>If the bot cannot answer from its knowledge base, it immediately hands over rather than guessing or making something up.</p>
+        <ul>
+          <li>Assign to: Ann</li>
+          <li>Tag: human handover</li>
+          <li>Bot message: "Let me get one of our team to answer that properly for you!"</li>
+          <li>Ann responds within 2 hours during business hours</li>
+        </ul>
+      </div>
+
+      <div class="handover-card">
+        <div class="handover-card-title">👥 Large Group (20+ people) on a Public Cruise</div>
+        <p>Groups of 20 or more may require special arrangements. The bot cannot confirm this — it must be checked by a human.</p>
+        <ul>
+          <li>Assign to: Ann or Charissa</li>
+          <li>Tag: human handover, hot lead</li>
+          <li>Bot message: "For groups your size, our team will personally check availability and options for you — we'll be in touch shortly!"</li>
+        </ul>
+      </div>
+
+      <div class="handover-card">
+        <div class="handover-card-title">😞 Negative Experience / Complaint</div>
+        <p>Any contact who indicates a poor experience, raises a complaint, or requests a refund must be handled personally. Never by the bot.</p>
+        <ul>
+          <li>Assign to: Charissa</li>
+          <li>Tag: human handover</li>
+          <li>No review link ever sent</li>
+          <li>Feedback notes captured internally for management review</li>
+        </ul>
+      </div>
+
+      <div class="handover-card">
+        <div class="handover-card-title">💬 Abusive / Inappropriate Message</div>
+        <p>The bot ends the conversation politely and flags it. No engagement, no escalation to argue.</p>
+        <ul>
+          <li>Assign to: Ann (to review and decide action)</li>
+          <li>Tag: human handover, blacklist (if warranted)</li>
+          <li>Bot message: "Thanks for getting in touch. If you'd like assistance, feel free to message us again."</li>
+        </ul>
+      </div>
+
+      <div class="handover-card">
+        <div class="handover-card-title">🔄 Contact Breaks Out of Flow</div>
+        <p>If a contact sends a message that doesn't match any expected response in the flow (e.g. types a random sentence mid-booking), the bot attempts to re-route. After 2 failed re-route attempts, it hands over.</p>
+        <ul>
+          <li>Assign to: Ann</li>
+          <li>Tag: human handover</li>
+          <li>Bot message: "I want to make sure I help you properly — let me connect you with our team directly!"</li>
+        </ul>
+      </div>
+
+      <div class="handover-card">
+        <div class="handover-card-title">📦 Media, Supplier, or Partnership Inquiry</div>
+        <p>Press enquiries, supplier pitches, partnership proposals, or sponsorship requests must be routed to Charissa — not handled by the bot or Ann.</p>
+        <ul>
+          <li>Assign to: Charissa</li>
+          <li>Tag: human handover</li>
+          <li>Bot message: "That sounds like something our management team should handle personally. We'll be in touch!"</li>
+        </ul>
+      </div>
+
+      <div class="handover-card">
+        <div class="handover-card-title">⏰ No Response After 24 Hours (Human Conversations)</div>
+        <p>If Ann has taken over a conversation and the contact has not responded for 24 hours, the system sends Ann a reminder to follow up once more before closing the conversation.</p>
+        <ul>
+          <li>Assign to: Ann (reminder notification)</li>
+          <li>Ann decides: send one more follow-up or close conversation</li>
+          <li>If closed: tag not_ready for future broadcast re-engagement</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     SECTION 6: APPROVAL
+══════════════════════════════════════════ -->
+<section id="approval">
+  <div class="container">
+    <div class="section-heading">Review & Approval</div>
+    <p class="section-intro">Charissa — please tick off each section below once you've reviewed it and are happy for Jacques to proceed with building. Add any notes or changes in the box at the bottom. Once all sections are approved, the bot build begins.</p>
+
+    <div class="approval-section">
+      <div class="approval-title">Section Approvals</div>
+      <div class="approval-items">
+        <div class="approval-item" onclick="toggleApproval(this)">
+          <div class="approval-checkbox">✓</div>
+          <div class="approval-item-label">Ann's Checklist — happy with tasks and frequency</div>
+        </div>
+        <div class="approval-item" onclick="toggleApproval(this)">
+          <div class="approval-checkbox">✓</div>
+          <div class="approval-item-label">Bot Flow Architecture — routing logic makes sense</div>
+        </div>
+        <div class="approval-item" onclick="toggleApproval(this)">
+          <div class="approval-checkbox">✓</div>
+          <div class="approval-item-label">Cruise Agent Prompts — messages sound right for Liquid Lounge</div>
+        </div>
+        <div class="approval-item" onclick="toggleApproval(this)">
+          <div class="approval-checkbox">✓</div>
+          <div class="approval-item-label">Private Function Agent Prompts — info collected is correct</div>
+        </div>
+        <div class="approval-item" onclick="toggleApproval(this)">
+          <div class="approval-checkbox">✓</div>
+          <div class="approval-item-label">FAQ / General Query handling — approach is correct</div>
+        </div>
+        <div class="approval-item" onclick="toggleApproval(this)">
+          <div class="approval-checkbox">✓</div>
+          <div class="approval-item-label">Review Request Flow — sentiment screening approach approved</div>
+        </div>
+        <div class="approval-item" onclick="toggleApproval(this)">
+          <div class="approval-checkbox">✓</div>
+          <div class="approval-item-label">Contact Capture Fields — correct fields for each enquiry type</div>
+        </div>
+        <div class="approval-item" onclick="toggleApproval(this)">
+          <div class="approval-checkbox">✓</div>
+          <div class="approval-item-label">Handover Events — correct escalation to right people</div>
+        </div>
+      </div>
+
+      <textarea class="approval-notes" placeholder="Notes / changes / questions for Jacques — type here before sending back..."></textarea>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="report-footer">
+  <p>Prepared by <strong>Jacques Groenewald</strong> · JCE Media · 8 June 2026</p>
+  <p style="margin-top:8px;">Send feedback or approvals directly to <strong>Jacques@jcemedia.com</strong> or via WhatsApp</p>
+</footer>
+
+<script>
+  function toggleApproval(el) {
+    el.classList.toggle('approved');
+    const cb = el.querySelector('.approval-checkbox');
+    if (el.classList.contains('approved')) {
+      el.style.borderColor = 'var(--green)';
+      el.style.background = 'rgba(46,204,113,0.08)';
+      cb.style.background = 'var(--green)';
+      cb.style.borderRadius = '50%';
+      cb.style.color = 'white';
+      cb.style.fontSize = '0.9rem';
+      cb.style.display = 'flex';
+      cb.style.alignItems = 'center';
+      cb.style.justifyContent = 'center';
+    } else {
+      el.style.borderColor = '';
+      el.style.background = '';
+      cb.style.background = '';
+      cb.style.color = '';
+    }
+  }
+</script>
+
+</body>
+</html>
