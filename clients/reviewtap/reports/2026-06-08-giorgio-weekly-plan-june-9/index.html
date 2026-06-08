@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Giorgio — Weekly Priority Plan · W/C 9 June 2026</title>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #222534;
+      --border: #2e3347;
+      --accent: #6c63ff;
+      --accent2: #00d4aa;
+      --warn: #f59e0b;
+      --danger: #ef4444;
+      --success: #22c55e;
+      --info: #3b82f6;
+      --text: #e2e8f0;
+      --text-muted: #8892a4;
+      --text-dim: #5a6478;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 0 0 60px;
+    }
+
+    /* ── HEADER ── */
+    .hero {
+      background: linear-gradient(135deg, #1a1d27 0%, #0f1117 60%);
+      border-bottom: 1px solid var(--border);
+      padding: 36px 40px 30px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .hero-left h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
+    .hero-left h1 span { color: var(--accent); }
+    .hero-left p { color: var(--text-muted); margin-top: 6px; font-size: 14px; }
+    .hero-date {
+      text-align: right;
+      color: var(--text-muted);
+      font-size: 13px;
+      line-height: 1.8;
+    }
+    .hero-date strong { color: var(--text); font-size: 15px; display: block; }
+
+    /* ── QUICK STATS BAR ── */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .stat-cell {
+      background: var(--surface);
+      padding: 18px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .stat-cell .num { font-size: 28px; font-weight: 700; line-height: 1; }
+    .stat-cell .lbl { font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px; color: var(--text-muted); }
+    .num.red { color: var(--danger); }
+    .num.amber { color: var(--warn); }
+    .num.green { color: var(--success); }
+    .num.purple { color: var(--accent); }
+    .num.teal { color: var(--accent2); }
+
+    /* ── MAIN LAYOUT ── */
+    .main { max-width: 1280px; margin: 0 auto; padding: 32px 40px; display: flex; flex-direction: column; gap: 32px; }
+
+    /* ── SECTION CARD ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .card-header {
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .card-header h2 { font-size: 16px; font-weight: 600; }
+    .card-header p { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+    .card-icon {
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      display: grid; place-items: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .card-body { padding: 20px 24px; }
+
+    /* ── BADGE ── */
+    .badge {
+      display: inline-block;
+      padding: 2px 9px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+    }
+    .badge-red { background: rgba(239,68,68,0.15); color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
+    .badge-amber { background: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.3); }
+    .badge-green { background: rgba(34,197,94,0.15); color: #4ade80; border: 1px solid rgba(34,197,94,0.3); }
+    .badge-purple { background: rgba(108,99,255,0.15); color: #a5b4fc; border: 1px solid rgba(108,99,255,0.3); }
+    .badge-teal { background: rgba(0,212,170,0.15); color: #34d399; border: 1px solid rgba(0,212,170,0.3); }
+    .badge-blue { background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3); }
+    .badge-gray { background: rgba(148,163,184,0.1); color: #94a3b8; border: 1px solid rgba(148,163,184,0.2); }
+
+    /* ── TABLES ── */
+    .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .data-table th {
+      text-align: left;
+      padding: 10px 14px;
+      color: var(--text-muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 600;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    .data-table td {
+      padding: 11px 14px;
+      border-bottom: 1px solid rgba(46,51,71,0.6);
+      vertical-align: top;
+      line-height: 1.4;
+    }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tr:hover td { background: rgba(255,255,255,0.02); }
+    .order-num { font-weight: 700; color: var(--accent); font-size: 12px; }
+    .client-name { font-weight: 600; color: var(--text); }
+    .company-name { font-size: 12px; color: var(--text-muted); }
+    .product-name { color: var(--text); }
+    .product-meta { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+    .qty-chip {
+      display: inline-block;
+      min-width: 24px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--text);
+    }
+
+    /* ── TWO COL GRID ── */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; }
+
+    /* ── ALERT BOX ── */
+    .alert {
+      border-radius: 8px;
+      padding: 14px 18px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .alert-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+    .alert-red { background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.25); }
+    .alert-amber { background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.25); }
+    .alert-green { background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.25); }
+    .alert-teal { background: rgba(0,212,170,0.08); border: 1px solid rgba(0,212,170,0.25); }
+    .alert-blue { background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.25); }
+    .alert strong { display: block; margin-bottom: 2px; }
+
+    /* ── MEETING CARDS ── */
+    .meeting-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+    .meeting-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 18px;
+    }
+    .meeting-card .m-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); margin-bottom: 6px; }
+    .meeting-card .m-name { font-size: 15px; font-weight: 700; color: var(--text); }
+    .meeting-card .m-company { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+    .meeting-card .m-time { font-size: 12px; color: var(--accent2); margin-top: 10px; font-weight: 600; }
+    .meeting-card .m-type { margin-top: 8px; }
+    .meeting-placeholder {
+      background: var(--surface2);
+      border: 1px dashed var(--border);
+      border-radius: 10px;
+      padding: 24px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+    .meeting-placeholder .mp-icon { font-size: 28px; margin-bottom: 8px; }
+
+    /* ── SCHEDULE TIMELINE ── */
+    .timeline { display: flex; flex-direction: column; gap: 0; }
+    .tl-day {
+      display: flex;
+      gap: 0;
+    }
+    .tl-day-label {
+      width: 110px;
+      flex-shrink: 0;
+      padding: 14px 0 14px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 2px;
+    }
+    .tl-day-label .day-name { font-size: 12px; font-weight: 700; color: var(--text); text-transform: uppercase; letter-spacing: 0.5px; }
+    .tl-day-label .day-date { font-size: 11px; color: var(--text-muted); }
+    .tl-line { display: flex; flex-direction: column; gap: 6px; padding: 14px 0 14px 20px; border-left: 2px solid var(--border); flex: 1; position: relative; }
+    .tl-line::before {
+      content: '';
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+      position: absolute;
+      left: -5px; top: 22px;
+    }
+    .tl-line.active::before { background: var(--accent); }
+    .tl-line.fulfillment::before { background: var(--accent2); }
+    .tl-item {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .tl-item .tl-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+    .tl-empty { font-size: 12px; color: var(--text-dim); padding: 8px 0; }
+
+    /* ── STOCK INDICATORS ── */
+    .stock-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .stock-card {
+      background: var(--surface2);
+      border-radius: 10px;
+      padding: 18px;
+      border: 1px solid var(--border);
+    }
+    .stock-card .s-product { font-size: 12px; font-weight: 600; color: var(--text); line-height: 1.3; margin-bottom: 10px; }
+    .stock-card .s-status { font-size: 20px; font-weight: 700; }
+    .stock-card .s-sub { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+    .stock-bar { height: 4px; border-radius: 2px; margin-top: 10px; background: var(--border); overflow: hidden; }
+    .stock-fill { height: 100%; border-radius: 2px; }
+
+    /* ── SUPPORT TICKET ── */
+    .ticket {
+      background: var(--surface2);
+      border: 1px solid rgba(245,158,11,0.4);
+      border-radius: 10px;
+      padding: 20px 24px;
+    }
+    .ticket-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+    .ticket-title { font-size: 15px; font-weight: 700; }
+    .ticket-body { font-size: 13px; color: var(--text-muted); line-height: 1.7; }
+    .ticket-steps { margin-top: 14px; display: flex; flex-direction: column; gap: 8px; }
+    .ticket-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 13px;
+    }
+    .step-num {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: rgba(245,158,11,0.15);
+      border: 1px solid rgba(245,158,11,0.4);
+      color: #fbbf24;
+      font-size: 11px;
+      font-weight: 700;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+
+    /* ── TARGET METER ── */
+    .target-section { padding: 24px; }
+    .target-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .target-top h3 { font-size: 15px; font-weight: 700; }
+    .target-numbers { font-size: 13px; color: var(--text-muted); }
+    .target-numbers span { color: var(--accent); font-weight: 700; font-size: 18px; }
+    .target-bar { height: 10px; background: var(--border); border-radius: 5px; overflow: hidden; }
+    .target-fill { height: 100%; border-radius: 5px; background: linear-gradient(90deg, var(--accent), var(--accent2)); width: 0%; transition: width 1s; }
+    .target-labels { display: flex; justify-content: space-between; margin-top: 8px; font-size: 11px; color: var(--text-muted); }
+    .target-tip { margin-top: 16px; padding: 12px 16px; background: rgba(108,99,255,0.08); border: 1px solid rgba(108,99,255,0.25); border-radius: 8px; font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+
+    /* ── SECTION DIVIDER ── */
+    .section-divider { height: 1px; background: var(--border); margin: 4px 0; }
+
+    /* ── PRIORITY LABEL ── */
+    .priority-flag {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+    .pf-critical { color: var(--danger); }
+    .pf-high { color: var(--warn); }
+    .pf-normal { color: var(--info); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .stats-bar { grid-template-columns: repeat(3, 1fr); }
+      .two-col, .three-col { grid-template-columns: 1fr; }
+      .stock-grid { grid-template-columns: repeat(2, 1fr); }
+      .main { padding: 20px; }
+      .hero { padding: 24px 20px 20px; flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════
+     HERO HEADER
+═══════════════════════════════════════════════════════════ -->
+<div class="hero">
+  <div class="hero-left">
+    <h1>Giorgio's Weekly <span>Priority Plan</span></h1>
+    <p>Review Tap · Fulfillment, Pipeline & Support — Week of 9–14 June 2026</p>
+  </div>
+  <div class="hero-date">
+    <strong>Monday, 9 June 2026</strong>
+    Generated by JCE Media<br>
+    Next fulfillment runs: <strong style="color:var(--accent2)">Tue 10 Jun &amp; Thu 12 Jun</strong>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     QUICK STATS
+═══════════════════════════════════════════════════════════ -->
+<div class="stats-bar">
+  <div class="stat-cell">
+    <span class="num red">31</span>
+    <span class="lbl">Unfulfilled Orders</span>
+  </div>
+  <div class="stat-cell">
+    <span class="num amber">8</span>
+    <span class="lbl">At Printer</span>
+  </div>
+  <div class="stat-cell">
+    <span class="num purple">8</span>
+    <span class="lbl">Need to Printer</span>
+  </div>
+  <div class="stat-cell">
+    <span class="num teal">15</span>
+    <span class="lbl">Ready to Ship (Standard)</span>
+  </div>
+  <div class="stat-cell">
+    <span class="num green">7</span>
+    <span class="lbl">Meetings This Week</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     MAIN CONTENT
+═══════════════════════════════════════════════════════════ -->
+<div class="main">
+
+  <!-- ────────────────────────────────────────────────────────
+       1. MEETINGS & PIPELINE
+  ──────────────────────────────────────────────────────── -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon" style="background:rgba(108,99,255,0.15);">📅</div>
+      <div>
+        <h2>Meetings &amp; Opportunity Pipeline</h2>
+        <p>6 scheduled meetings + 1 proposal call · Target: 6–10 new qualified appointments booked</p>
+      </div>
+    </div>
+    <div class="card-body">
+
+      <div class="meeting-grid">
+
+        <!-- PRIORITY: Proposal Call -->
+        <div class="meeting-card" style="border-color:rgba(239,68,68,0.5);background:rgba(239,68,68,0.06);">
+          <div class="m-label">🔥 Proposal Call — Close Today</div>
+          <div class="m-name">Ruan</div>
+          <div class="m-company">Iso'Bella Vita Guesthouse · Phalaborwa, Limpopo</div>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:8px;line-height:1.5;">Boutique guesthouse near Kruger National Park. Hospitality — strong need for guest review management and online reputation. <strong style="color:#f87171;">Priority close this week.</strong></div>
+          <div class="m-time">⏰ Monday 8 Jun · 12:00 – 13:00</div>
+          <div class="m-type" style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap;">
+            <span class="badge badge-red">Proposal</span>
+            <span class="badge badge-amber">Close Ready</span>
+          </div>
+        </div>
+
+        <!-- Meeting 1 -->
+        <div class="meeting-card">
+          <div class="m-label">Meeting 1 · Mon 8 Jun</div>
+          <div class="m-name">Dawn Nell</div>
+          <div class="m-company">Property Agent</div>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:8px;line-height:1.5;">Real estate professional. Explore how Review Tap supports reputation management and client trust-building in property sales. Qualify hard.</div>
+          <div class="m-time">⏰ Monday 8 Jun · 10:00 – 11:00</div>
+          <div class="m-type" style="margin-top:8px;"><span class="badge badge-purple">Discovery</span></div>
+        </div>
+
+        <!-- Meeting 2 -->
+        <div class="meeting-card" style="border-color:rgba(245,158,11,0.35);">
+          <div class="m-label">Meeting 2 · Tue 9 Jun ⚠ Confirm Time</div>
+          <div class="m-name">Dr Buti</div>
+          <div class="m-company">Optometrist</div>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:8px;line-height:1.5;">Eye care practice. Healthcare providers rely heavily on word-of-mouth and patient reviews — strong fit for review generation and trust-building tools.</div>
+          <div class="m-time" style="color:var(--warn);">⏰ Tuesday 9 Jun · Time TBC — confirm first thing</div>
+          <div class="m-type" style="margin-top:8px;display:flex;gap:6px;"><span class="badge badge-purple">Discovery</span><span class="badge badge-amber">TBC</span></div>
+        </div>
+
+        <!-- Meeting 3 -->
+        <div class="meeting-card">
+          <div class="m-label">Meeting 3 · Tue 9 Jun</div>
+          <div class="m-name">Sassi Graham</div>
+          <div class="m-company">Roar Around</div>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:8px;line-height:1.5;">Travel and adventure experiences business. Tour operators live and die by their online reviews — highly relevant for discovery and qualification.</div>
+          <div class="m-time">⏰ Tuesday 9 Jun · 11:00 – 12:00</div>
+          <div class="m-type" style="margin-top:8px;"><span class="badge badge-purple">Discovery</span></div>
+        </div>
+
+        <!-- Meeting 4 -->
+        <div class="meeting-card">
+          <div class="m-label">Meeting 4 · Wed 10 Jun</div>
+          <div class="m-name">Dominique Sprang</div>
+          <div class="m-company">Flora &amp; Fauna Connect · Limpopo</div>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:8px;line-height:1.5;">Conservation and wildlife education centre — crocodilian preservation and endangered species. Eco-tourism and visitor-facing; reviews drive footfall and funding credibility.</div>
+          <div class="m-time">⏰ Wednesday 10 Jun · 12:00 – 13:00</div>
+          <div class="m-type" style="margin-top:8px;"><span class="badge badge-purple">Discovery</span></div>
+        </div>
+
+        <!-- Meeting 5 -->
+        <div class="meeting-card">
+          <div class="m-label">Meeting 5 · Thu 11 Jun</div>
+          <div class="m-name">Tayla Gould</div>
+          <div class="m-company">Oko Restaurant · BlueBerry Hill Hotel · Roodepoort</div>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:8px;line-height:1.5;">Asian-fusion rooftop restaurant, 6th floor of Blueberry Hill Hotel. 180° city views, up to 160-guest events. Restaurants are the highest-volume review category — <strong style="color:var(--accent2);">lead with Google ranking impact.</strong></div>
+          <div class="m-time">⏰ Thursday 11 Jun · 12:00 – 13:00</div>
+          <div class="m-type" style="margin-top:8px;"><span class="badge badge-teal">High Fit</span><span class="badge badge-purple" style="margin-left:6px;">Discovery</span></div>
+        </div>
+
+      </div>
+
+      <!-- Pipeline tracker table -->
+      <div style="margin-top:24px;">
+        <div style="font-size:13px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px;">Pipeline Tracker</div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Contact</th>
+              <th>Company</th>
+              <th>Type</th>
+              <th>Day / Time</th>
+              <th>Stage</th>
+              <th>Follow-up Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="background:rgba(239,68,68,0.05);">
+              <td><span class="order-num">P-01</span></td>
+              <td><span class="client-name">Ruan</span></td>
+              <td><span class="company-name">Iso'Bella Vita Guesthouse</span></td>
+              <td><span class="badge badge-red">Proposal</span></td>
+              <td style="white-space:nowrap;color:var(--accent2);">Mon 8 Jun · 12:00</td>
+              <td><span class="badge badge-red">Close Meeting</span></td>
+              <td>Close on call → send invoice same day</td>
+            </tr>
+            <tr>
+              <td><span class="order-num">M-01</span></td>
+              <td><span class="client-name">Dawn Nell</span></td>
+              <td><span class="company-name">Property Agent</span></td>
+              <td><span class="badge badge-purple">Meeting</span></td>
+              <td style="white-space:nowrap;">Mon 8 Jun · 10:00</td>
+              <td><span class="badge badge-blue">Discovery</span></td>
+              <td>Qualify · send follow-up + proposal if ready</td>
+            </tr>
+            <tr style="background:rgba(245,158,11,0.04);">
+              <td><span class="order-num">M-02</span></td>
+              <td><span class="client-name">Dr Buti</span></td>
+              <td><span class="company-name">Optometrist</span></td>
+              <td><span class="badge badge-purple">Meeting</span></td>
+              <td style="white-space:nowrap;color:var(--warn);">Tue 9 Jun · ⚠ TBC</td>
+              <td><span class="badge badge-amber">Confirm First</span></td>
+              <td>Confirm time Mon AM · qualify patient review flow</td>
+            </tr>
+            <tr>
+              <td><span class="order-num">M-03</span></td>
+              <td><span class="client-name">Sassi Graham</span></td>
+              <td><span class="company-name">Roar Around</span></td>
+              <td><span class="badge badge-purple">Meeting</span></td>
+              <td style="white-space:nowrap;">Tue 9 Jun · 11:00</td>
+              <td><span class="badge badge-blue">Discovery</span></td>
+              <td>Review volume? What's broken? Pitch outcome</td>
+            </tr>
+            <tr>
+              <td><span class="order-num">M-04</span></td>
+              <td><span class="client-name">Dominique Sprang</span></td>
+              <td><span class="company-name">Flora &amp; Fauna Connect</span></td>
+              <td><span class="badge badge-purple">Meeting</span></td>
+              <td style="white-space:nowrap;">Wed 10 Jun · 12:00</td>
+              <td><span class="badge badge-blue">Discovery</span></td>
+              <td>Eco-tourism angle — reviews drive visitor numbers</td>
+            </tr>
+            <tr>
+              <td><span class="order-num">M-05</span></td>
+              <td><span class="client-name">Tayla Gould</span></td>
+              <td><span class="company-name">Oko Restaurant · BlueBerry Hill Hotel</span></td>
+              <td><span class="badge badge-teal">High Fit</span></td>
+              <td style="white-space:nowrap;">Thu 11 Jun · 12:00</td>
+              <td><span class="badge badge-blue">Discovery</span></td>
+              <td>Lead with Google ranking impact — restaurant = easiest pitch</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ────────────────────────────────────────────────────────
+       2. APPOINTMENT BOOKING TARGET
+  ──────────────────────────────────────────────────────── -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon" style="background:rgba(0,212,170,0.15);">🎯</div>
+      <div>
+        <h2>Appointment Booking Target</h2>
+        <p>Weekly qualified new appointment goal to maintain pipeline momentum</p>
+      </div>
+    </div>
+    <div class="target-section">
+      <div class="target-top">
+        <h3>New Qualified Appointments This Week</h3>
+        <div class="target-numbers"><span>0</span> / 6–10 booked</div>
+      </div>
+      <div class="target-bar">
+        <div class="target-fill" style="width:0%"></div>
+      </div>
+      <div class="target-labels">
+        <span>0</span>
+        <span>Min target: 6</span>
+        <span>Goal: 10</span>
+      </div>
+      <div class="target-tip">
+        💡 <strong>Tip:</strong> With 6 meetings already booked, each call is an opportunity to generate a referral or follow-up booking.
+        Aim to confirm at least 1 new appointment per day (Mon–Fri) to hit the top of the range.
+        Use no-shows or cancellations to call warm leads from last week's pipeline.
+      </div>
+    </div>
+  </div>
+
+  <!-- ────────────────────────────────────────────────────────
+       3. SUPPORT TICKET — CHRISTINE KOTZE
+  ──────────────────────────────────────────────────────── -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon" style="background:rgba(245,158,11,0.15);">🎫</div>
+      <div>
+        <h2>Support Ticket — Reprogramming Required</h2>
+        <p>Order #1645 · Christine Kotze · Sculpt Clinic, Stellenbosch</p>
+      </div>
+      <span class="badge badge-amber" style="margin-left:auto;">Action Required</span>
+    </div>
+    <div class="card-body">
+      <div class="ticket">
+        <div class="ticket-header">
+          <span class="ticket-title">🔄 NFC Card Needs Reprogramming — Wrong URL</span>
+          <span class="badge badge-amber">Standard Unit</span>
+        </div>
+        <div class="ticket-body">
+          Christine received her order of <strong>2 × NFC Google Review Cards</strong>. She is happy with the products, however
+          <strong>both cards are currently pointing to the same Google review link</strong> (Stellenbosch branch).
+          The second card should be linked to the <strong>Paarl branch</strong> Google review page, which it currently does not.
+          <br/><br/>
+          <strong>Client email:</strong> <span style="color:var(--accent2)">info@sculptclinic.co.za</span> &nbsp;|&nbsp;
+          <strong>Phone:</strong> +27 71 6080 630
+        </div>
+        <div class="ticket-steps">
+          <div class="ticket-step">
+            <div class="step-num">1</div>
+            <div>Reply to Christine and ask her to provide the <strong>Google Maps / Google Review URL</strong> for her Paarl branch.</div>
+          </div>
+          <div class="ticket-step">
+            <div class="step-num">2</div>
+            <div>Once the URL is received, <strong>reprogram the second NFC card</strong> (or issue a replacement pre-programmed to the Paarl URL).</div>
+          </div>
+          <div class="ticket-step">
+            <div class="step-num">3</div>
+            <div>Arrange to have the reprogrammed / replacement card sent to Christine at <strong>6 Saffraaan Street, Die Boord, Stellenbosch</strong>.</div>
+          </div>
+          <div class="ticket-step">
+            <div class="step-num">4</div>
+            <div>Follow up after delivery to confirm both cards now scan to their respective branches. <strong>Close the ticket.</strong></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ────────────────────────────────────────────────────────
+       4. STOCK ALERT
+  ──────────────────────────────────────────────────────── -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon" style="background:rgba(239,68,68,0.15);">📦</div>
+      <div>
+        <h2>Stock Status</h2>
+        <p>Black stands are low — prioritise cautiously in Tuesday &amp; Thursday fulfillment runs</p>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="stock-grid">
+        <div class="stock-card" style="border-color:rgba(239,68,68,0.35);">
+          <div class="s-product">NFC Google Review Stand<br><strong>Black</strong></div>
+          <div class="s-status" style="color:var(--danger)">⚠ LOW</div>
+          <div class="s-sub">10+ units needed across open orders</div>
+          <div class="stock-bar"><div class="stock-fill" style="width:20%;background:var(--danger)"></div></div>
+          <div style="margin-top:10px;font-size:11px;color:var(--text-muted);">Orders affected: #1685 (6×), #1695, #1698, #1700</div>
+        </div>
+        <div class="stock-card">
+          <div class="s-product">NFC Google Review Stand<br><strong>White</strong></div>
+          <div class="s-status" style="color:var(--success)">✓ SUFFICIENT</div>
+          <div class="s-sub">Multiple orders, adequate stock</div>
+          <div class="stock-bar"><div class="stock-fill" style="width:75%;background:var(--success)"></div></div>
+        </div>
+        <div class="stock-card">
+          <div class="s-product">NFC Google Review Card<br><strong>White</strong></div>
+          <div class="s-status" style="color:var(--success)">✓ SUFFICIENT</div>
+          <div class="s-sub">Small quantities needed</div>
+          <div class="stock-bar"><div class="stock-fill" style="width:80%;background:var(--success)"></div></div>
+        </div>
+        <div class="stock-card">
+          <div class="s-product">NFC Google Review Card<br><strong>Black</strong></div>
+          <div class="s-status" style="color:var(--success)">✓ SUFFICIENT</div>
+          <div class="s-sub">Small quantities needed</div>
+          <div class="stock-bar"><div class="stock-fill" style="width:80%;background:var(--success)"></div></div>
+        </div>
+      </div>
+
+      <div class="alert alert-red" style="margin-top:16px;">
+        <span class="alert-icon">🚨</span>
+        <div>
+          <strong>Black Stand Shortage Alert</strong>
+          Order #1685 (REMAX Coastal, Knysna) requires <strong>6 × Black Stands</strong> alone.
+          Confirm current stock count before Tuesday's run. If stock is insufficient, split the fulfilment or place a
+          stock order immediately. Do not ship partial orders without notifying the client.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ────────────────────────────────────────────────────────
+       5. FULFILLMENT SCHEDULE
+  ──────────────────────────────────────────────────────── -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon" style="background:rgba(0,212,170,0.15);">🚚</div>
+      <div>
+        <h2>Fulfillment Schedule</h2>
+        <p>Tuesday 10 Jun &amp; Thursday 12 Jun · Standard units must ship with every run</p>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="two-col">
+        <!-- Tuesday -->
+        <div>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+            <div style="background:rgba(0,212,170,0.15);border:1px solid rgba(0,212,170,0.3);border-radius:8px;padding:6px 14px;font-size:13px;font-weight:700;color:var(--accent2);">Tuesday 10 Jun</div>
+            <span class="badge badge-teal">RUN 1</span>
+          </div>
+          <div class="alert alert-teal" style="margin-bottom:14px;font-size:12px;">
+            <span class="alert-icon" style="font-size:14px;">📋</span>
+            <div>Ship all <strong>standard units with stock</strong> (white stands, white cards, black cards).
+            Dispatch any custom orders returned from printer. Confirm black stand qty before shipping #1685.</div>
+          </div>
+          <div style="font-size:12px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.4px;margin-bottom:8px;">Recommended for Tuesday</div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <div class="tl-item"><div class="tl-dot" style="background:var(--accent2)"></div>#1675 — White Stand ×2 (Denic Cabinets, JHB)</div>
+            <div class="tl-item"><div class="tl-dot" style="background:var(--accent2)"></div>#1684 — White Stand ×1 (AfriFusion, Randjespark)</div>
+            <div class="tl-item"><div class="tl-dot" style="background:var(--accent2)"></div>#1692 — White Stand ×1 (SMAAK, Paarl)</div>
+            <div class="tl-item"><div class="tl-dot" style="background:var(--accent2)"></div>#1694 — White Stand ×1 (Amir's Salon, Randburg)</div>
+            <div class="tl-item"><div class="tl-dot" style="background:var(--accent2)"></div>#1697 — White Card ×1 (Lifestyle Print, Rosetta)</div>
+            <div class="tl-item"><div class="tl-dot" style="background:var(--accent2)"></div>#1699 — White Stand ×2 (MALI Accommodation, Storms River)</div>
+            <div class="tl-item"><div class="tl-dot" style="background:var(--accent2)"></div>#1701 — White Stand ×1 (Maånskyñ, Greyton)</div>
+            <div class="tl-item" style="border-color:rgba(239,68,68,0.3)"><div class="tl-dot" style="background:var(--danger)"></div>#1685 — Black Stand ×6 + Black Card ×2 (REMAX Coastal) ⚠ CHECK STOCK</div>
+            <div class="tl-item" style="border-color:rgba(239,68,68,0.3)"><div class="tl-dot" style="background:var(--danger)"></div>#1695 — Black Stand ×1 (Return Revival, Pretoria) ⚠ stock check</div>
+          </div>
+        </div>
+
+        <!-- Thursday -->
+        <div>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+            <div style="background:rgba(108,99,255,0.15);border:1px solid rgba(108,99,255,0.3);border-radius:8px;padding:6px 14px;font-size:13px;font-weight:700;color:var(--accent);">Thursday 12 Jun</div>
+            <span class="badge badge-purple">RUN 2</span>
+          </div>
+          <div class="alert alert-blue" style="margin-bottom:14px;font-size:12px;">
+            <span class="alert-icon" style="font-size:14px;">📋</span>
+            <div>Ship remaining standard units + any printer orders collected by Wednesday.
+            Include standard units from mixed custom/standard orders where the standard component is ready.</div>
+          </div>
+          <div style="font-size:12px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.4px;margin-bottom:8px;">Recommended for Thursday</div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <div class="tl-item"><div class="tl-dot" style="background:var(--accent)"></div>#1698 — Black Stand ×1 (Hamba Jeans) ⚠ stock check</div>
+            <div class="tl-item"><div class="tl-dot" style="background:var(--accent)"></div>#1700 — Black Stand ×1 (Sun Brothers, Polokwane) ⚠ stock check</div>
+            <div class="tl-item"><div class="tl-dot" style="background:var(--accent)"></div>#1707 — Autotrader Black Stand ×1 (House of Laser, CPT)</div>
+            <div class="tl-item"><div class="tl-dot" style="background:var(--accent)"></div>#1710 — White Stand ×2 (Perfect Water, Amanzimtoti)</div>
+            <div class="tl-item"><div class="tl-dot" style="background:var(--accent)"></div>#1713 — White Stand ×1 (Bikemania, Cape Town)</div>
+            <div class="tl-item"><div class="tl-dot" style="background:var(--accent)"></div>#1708 — White Card ×2 (The Missing Sock, Stellenbosch) — std part</div>
+            <div class="tl-item" style="opacity:0.6"><div class="tl-dot" style="background:var(--text-dim)"></div>Any printer returns: #1662 #1683 #1687 #1689 #1690 #1693 #1703 #1704</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ────────────────────────────────────────────────────────
+       6. ORDERS AT PRINTER
+  ──────────────────────────────────────────────────────── -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon" style="background:rgba(245,158,11,0.15);">🖨️</div>
+      <div>
+        <h2>Orders Currently At Printer</h2>
+        <p>8 orders tagged "At Printer" — chase status, confirm collection dates</p>
+      </div>
+      <span class="badge badge-amber" style="margin-left:auto;">8 Orders</span>
+    </div>
+    <div class="card-body" style="padding:0;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Order</th>
+            <th>Client</th>
+            <th>Product(s)</th>
+            <th>Qty</th>
+            <th>Value</th>
+            <th>Location</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="order-num">#1662</span></td>
+            <td><span class="client-name">Burgert Erasmus</span><div class="company-name">Torga Optical Fleurdal</div></td>
+            <td><span class="product-name">Custom Branded Google Review Stand (NFC+QR)</span><div class="product-meta">White</div></td>
+            <td><span class="qty-chip">×1</span></td>
+            <td>R649</td>
+            <td>Bloemfontein, FS</td>
+            <td><span class="badge badge-amber">At Printer</span></td>
+          </tr>
+          <tr>
+            <td><span class="order-num">#1683</span></td>
+            <td><span class="client-name">Yolandie Badenhorst</span><div class="company-name">Secret Sands</div></td>
+            <td><span class="product-name">Tripadvisor NFC Stand</span><div class="product-meta">Black + NFC Google Review Stand Black</div></td>
+            <td><span class="qty-chip">×2</span></td>
+            <td>R998</td>
+            <td>Wilderness, WC</td>
+            <td><span class="badge badge-amber">At Printer</span></td>
+          </tr>
+          <tr>
+            <td><span class="order-num">#1687</span></td>
+            <td><span class="client-name">Hesti Steyn</span><div class="company-name">KF Potgieter Inc</div></td>
+            <td><span class="product-name">Custom Branded Google Review Stand (NFC+QR)</span><div class="product-meta">Black — 3 different business locations</div></td>
+            <td><span class="qty-chip">×3</span></td>
+            <td>R1,947</td>
+            <td>Paarl, WC</td>
+            <td><span class="badge badge-amber">At Printer</span></td>
+          </tr>
+          <tr>
+            <td><span class="order-num">#1689</span></td>
+            <td><span class="client-name">Wedrich Wessels</span><div class="company-name">Vokkies</div></td>
+            <td><span class="product-name">Custom Branded Google Review Stand (NFC+QR)</span><div class="product-meta">White</div></td>
+            <td><span class="qty-chip">×10</span></td>
+            <td>R6,490</td>
+            <td>Cape Town, WC</td>
+            <td><span class="badge badge-amber">At Printer</span></td>
+          </tr>
+          <tr>
+            <td><span class="order-num">#1690</span></td>
+            <td><span class="client-name">Muhammad Patel</span><div class="company-name">Wild MAP Xplorer</div></td>
+            <td><span class="product-name">Tripadvisor NFC Cards + Custom Branded Card + Custom Branded Stand</span><div class="product-meta">All Black</div></td>
+            <td><span class="qty-chip">×3</span></td>
+            <td>R1,397</td>
+            <td>Johannesburg, GP</td>
+            <td><span class="badge badge-amber">At Printer</span></td>
+          </tr>
+          <tr>
+            <td><span class="order-num">#1693</span></td>
+            <td><span class="client-name">Mohamed Wania</span><div class="company-name">Bean Two Cup (PTY) Ltd</div></td>
+            <td><span class="product-name">Custom Branded Google Review Stand (NFC+QR)</span><div class="product-meta">Black</div></td>
+            <td><span class="qty-chip">×2</span></td>
+            <td>R1,298</td>
+            <td>Midrand, GP</td>
+            <td><span class="badge badge-amber">At Printer</span></td>
+          </tr>
+          <tr>
+            <td><span class="order-num">#1703</span></td>
+            <td><span class="client-name">Delene Ferreira</span><div class="company-name">LITE-GLO</div></td>
+            <td><span class="product-name">Custom Branded Google Review Stand (NFC+QR)</span><div class="product-meta">White — previous artwork on file</div></td>
+            <td><span class="qty-chip">×2</span></td>
+            <td>R1,298</td>
+            <td>Randburg, GP</td>
+            <td><span class="badge badge-amber">At Printer</span></td>
+          </tr>
+          <tr>
+            <td><span class="order-num">#1704</span></td>
+            <td><span class="client-name">Dee Bester</span><div class="company-name">House Unboxed</div></td>
+            <td><span class="product-name">Custom Branded Google Review Stand (NFC+QR)</span><div class="product-meta">Black</div></td>
+            <td><span class="qty-chip">×4</span></td>
+            <td>R2,596</td>
+            <td>Centurion, GP</td>
+            <td><span class="badge badge-amber">At Printer</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ────────────────────────────────────────────────────────
+       7. ORDERS NEEDING TO GO TO PRINTER
+  ──────────────────────────────────────────────────────── -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon" style="background:rgba(239,68,68,0.15);">🔴</div>
+      <div>
+        <h2>Custom Orders — Need to Go to Printer</h2>
+        <p>8 orders with custom branding not yet tagged "At Printer" — send immediately</p>
+      </div>
+      <span class="badge badge-red" style="margin-left:auto;">8 Orders · Urgent</span>
+    </div>
+    <div class="card-body" style="padding:0;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Order</th>
+            <th>Client</th>
+            <th>Product(s)</th>
+            <th>Qty</th>
+            <th>Value</th>
+            <th>Location</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="order-num">#1686</span></td>
+            <td><span class="client-name">Marc Bonehill</span><div class="company-name">AfriFusion (Pty) Ltd</div></td>
+            <td><span class="product-name">Custom Branded Google Review Stand (NFC+QR)</span><div class="product-meta">White</div></td>
+            <td><span class="qty-chip">×1</span></td>
+            <td>R499</td>
+            <td>Randjespark, GP</td>
+            <td><span class="badge badge-red">Send to Printer</span></td>
+          </tr>
+          <tr>
+            <td><span class="order-num">#1691</span></td>
+            <td><span class="client-name">Akram Patel</span><div class="company-name">Kings Build</div></td>
+            <td><span class="product-name">Custom Branded Google Review Stand (NFC+QR)</span><div class="product-meta">Black</div></td>
+            <td><span class="qty-chip">×1</span></td>
+            <td>R649</td>
+            <td>Louis Trichardt, LP</td>
+            <td><span class="badge badge-red">Send to Printer</span></td>
+          </tr>
+          <tr>
+            <td><span class="order-num">#1702</span></td>
+            <td><span class="client-name">Mishu M</span><div class="company-name">Shefur Group Pty Ltd</div></td>
+            <td><span class="product-name">Custom Branded Google Review Stand (NFC+QR)</span><div class="product-meta">White</div></td>
+            <td><span class="qty-chip">×2</span></td>
+            <td>R1,298</td>
+            <td>Johannesburg, GP</td>
+            <td><span class="badge badge-red">Send to Printer</span></td>
+          </tr>
+          <tr>
+            <td><span class="order-num">#1705</span></td>
+            <td><span class="client-name">Stephen Brown</span><div class="company-name">Boxman</div></td>
+            <td><span class="product-name">Custom Branded Google Review Stand (NFC+QR)</span><div class="product-meta">Black</div></td>
+            <td><span class="qty-chip">×2</span></td>
+            <td>R1,298</td>
+            <td>Alberton, GP</td>
+            <td><span class="badge badge-red">Send to Printer</span></td>
+          </tr>
+          <tr>
+            <td><span class="order-num">#1706</span></td>
+            <td><span class="client-name">Shannon Callaway</span><div class="company-name">Bloemfontein Eye &amp; Laser Clinic</div></td>
+            <td><span class="product-name">Custom Branded Google Review Stand (NFC+QR)</span><div class="product-meta">Black</div></td>
+            <td><span class="qty-chip">×2</span></td>
+            <td>R1,298</td>
+            <td>Bloemfontein, FS</td>
+            <td><span class="badge badge-red">Send to Printer</span></td>
+          </tr>
+          <tr>
+            <td><span class="order-num">#1708</span></td>
+            <td><span class="client-name">Durgun Kara</span><div class="company-name">The Missing Sock Pty</div></td>
+            <td><span class="product-name">Custom Branded Stand White ×1</span><div class="product-meta">Also: White Card ×2 (ship standard cards now)</div></td>
+            <td><span class="qty-chip">×1</span></td>
+            <td>R1,247</td>
+            <td>Stellenbosch, WC</td>
+            <td><span class="badge badge-red">Send Stand to Printer</span></td>
+          </tr>
+          <tr>
+            <td><span class="order-num">#1709</span></td>
+            <td><span class="client-name">Jacob Maluleka</span><div class="company-name">Maluleka J Attorneys</div></td>
+            <td><span class="product-name">Custom Branded Google Review Card (NFC+QR)</span><div class="product-meta">White</div></td>
+            <td><span class="qty-chip">×1</span></td>
+            <td>R449</td>
+            <td>Ga Rankuwa, GP</td>
+            <td><span class="badge badge-red">Send to Printer</span></td>
+          </tr>
+          <tr>
+            <td><span class="order-num">#1711</span></td>
+            <td><span class="client-name">Gary Chalmers</span><div class="company-name">After the Rain Consulting</div></td>
+            <td><span class="product-name">Custom Branded Google Review Stand (NFC+QR)</span><div class="product-meta">White — client asked how to supply logo</div></td>
+            <td><span class="qty-chip">×1</span></td>
+            <td>R649</td>
+            <td>Cape Town, WC</td>
+            <td><span class="badge badge-amber">Awaiting Artwork</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="padding:16px 24px;">
+      <div class="alert alert-amber">
+        <span class="alert-icon">⚠️</span>
+        <div>
+          <strong>Order #1711 — Gary Chalmers needs artwork onboarding</strong>
+          Gary asked: <em>"How do I upload/supply my logo?"</em> — reach out to <strong>gary@ipulse.systems</strong>
+          with the artwork upload instructions before sending to print.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ────────────────────────────────────────────────────────
+       8. STANDARD ORDERS — READY TO SHIP
+  ──────────────────────────────────────────────────────── -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon" style="background:rgba(34,197,94,0.15);">✅</div>
+      <div>
+        <h2>Standard Orders — Ready to Fulfil from Stock</h2>
+        <p>15 orders requiring no custom printing — ship Tuesday &amp; Thursday</p>
+      </div>
+      <span class="badge badge-green" style="margin-left:auto;">15 Orders</span>
+    </div>
+    <div class="card-body" style="padding:0;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Order</th>
+            <th>Client</th>
+            <th>Product</th>
+            <th>Qty</th>
+            <th>Value</th>
+            <th>Location</th>
+            <th>Run</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="order-num">#1675</span></td>
+            <td><span class="client-name">Sims Phakathi</span><div class="company-name">Denic Cabinets</div></td>
+            <td>NFC Google Review Stand — White</td>
+            <td><span class="qty-chip">×2</span></td>
+            <td>R998</td>
+            <td>Johannesburg, GP</td>
+            <td><span class="badge badge-teal">Tue</span></td>
+          </tr>
+          <tr>
+            <td><span class="order-num">#1684</span></td>
+            <td><span class="client-name">Marc Bonehill</span><div class="company-name">AfriFusion</div></td>
+            <td>NFC Google Review Stand — White</td>
+            <td><span class="qty-chip">×1</span></td>
+            <td>R604</td>
+            <td>Randjespark, GP</td>
+            <td><span class="badge badge-teal">Tue</span></td>
+          </tr>
+          <tr style="background:rgba(239,68,68,0.04);">
+            <td><span class="order-num">#1685</span></td>
+            <td><span class="client-name">Fredri Feiertag</span><div class="company-name">REMAX Coastal</div></td>
+            <td>NFC Google Review Stand — Black + NFC Card — Black</td>
+            <td><span class="qty-chip" style="color:var(--danger)">×8</span></td>
+            <td>R2,994</td>
+            <td>Knysna, WC</td>
+            <td><span class="badge badge-red">⚠ Stock Check First</span></td>
+          </tr>
+          <tr>
+            <td><span class="order-num">#1692</span></td>
+            <td><span class="client-name">Morne Labuschagne</span><div class="company-name">SMAAK</div></td>
+            <td>NFC Google Review Stand — White</td>
+            <td><span class="qty-chip">×1</span></td>
+            <td>R604</td>
+            <td>Paarl, WC</td>
+            <td><span class="badge badge-teal">Tue</span></td>
+          </tr>
+          <tr>
+            <td><span class="order-num">#1694</span></td>
+            <td><span class="client-name">Amir Herselman</span><div class="company-name">Amir's Hair &amp; Beauty Salon</div></td>
+            <td>NFC Google Review Stand — White</td>
+            <td><span class="qty-chip">×1</span></td>
+            <td>R604</td>
+            <td>Randburg, GP</td>
+            <td><span class="badge badge-teal">Tue</span></td>
+          </tr>
+          <tr style="background:rgba(239,68,68,0.04);">
+            <td><span class="order-num">#1695</span></td>
+            <td><span class="client-name">Miemie Uys</span><div class="company-name">Return Revival</div></td>
+            <td>NFC Google Review Stand — Black</td>
+            <td><span class="qty-chip">×1</span></td>
+            <td>R604</td>
+            <td>Pretoria, GP</td>
+            <td><span class="badge badge-red">⚠ Stock Check</span></td>
+          </tr>
+          <tr>
+            <td><span class="order-num">#1697</span></td>
+            <td><span class="client-name">Gemma Heyns</span><div class="company-name">Lifestyle Print</div></td>
+            <td>NFC Google Review Card — White</td>
+            <td><span class="qty-chip">×1</span></td>
+            <td>R404</td>
+            <td>Rosetta, NL</td>
+            <td><span class="badge badge-teal">Tue</span></td>
+          </tr>
+          <tr style="background:rgba(239,68,68,0.04);">
+            <td><span class="order-num">#1698</span></td>
+            <td><span class="client-name">Jeanine Theunissen</span><div class="company-name">Hamba Jeans</div></td>
+            <td>NFC Google Review Stand — Black</td>
+            <td><span class="qty-chip">×1</span></td>
+            <td>R604</td>
+            <td>Gauteng, GP</td>
+            <td><span class="badge badge-red">⚠ Stock Check</span></td>
+          </tr>
+          <tr>
+            <td><span class="order-num">#1699</span></td>
+            <td><span class="client-name">Marius Marnewecke</span><div class="company-name">MALI Accommodation &amp; Adventures</div></td>
+            <td>NFC Google Review Stand — White</td>
+            <td><span class="qty-chip">×2</span></td>
+            <td>R998</td>
+            <td>Storms River, EC</td>
+            <td><span class="badge badge-teal">Tue</span></td>
+          </tr>
+          <tr style="background:rgba(239,68,68,0.04);">
+            <td><span class="order-num">#1700</span></td>
+            <td><span class="client-name">Pi-Po Sun</span><div class="company-name">Sun Brothers Auto Parts CC</div></td>
+            <td>NFC Google Review Stand — Black</td>
+            <td><span class="qty-chip">×1</span></td>
+            <td>R604</td>
+            <td>Polokwane, LP</td>
+            <td><span class="badge badge-red">⚠ Stock Check</span></td>
+          </tr>
+          <tr>
+            <td><span class="order-num">#1701</span></td>
+            <td><span class="client-name">Lori Solomon</span><div class="company-name">Maånskyñ</div></td>
+            <td>NFC Google Review Stand — White</td>
+            <td><span class="qty-chip">×1</span></td>
+            <td>R604</td>
+            <td>Greyton, WC</td>
+            <td><span class="badge badge-teal">Tue</span></td>
+          </tr>
+          <tr style="background:rgba(239,68,68,0.04);">
+            <td><span class="order-num">#1707</span></td>
+            <td><span class="client-name">Sufiya Najjaar</span><div class="company-name">House of Laser</div></td>
+            <td>Autotrader NFC Stand — Black</td>
+            <td><span class="qty-chip">×1</span></td>
+            <td>R604</td>
+            <td>Cape Town, WC</td>
+            <td><span class="badge badge-purple">Thu</span></td>
+          </tr>
+          <tr>
+            <td><span class="order-num">#1708</span></td>
+            <td><span class="client-name">Durgun Kara</span><div class="company-name">The Missing Sock Pty</div></td>
+            <td>NFC Google Review Card — White (standard part only)</td>
+            <td><span class="qty-chip">×2</span></td>
+            <td>R1,247</td>
+            <td>Stellenbosch, WC</td>
+            <td><span class="badge badge-purple">Thu</span></td>
+          </tr>
+          <tr>
+            <td><span class="order-num">#1710</span></td>
+            <td><span class="client-name">Joanne Feasey</span><div class="company-name">Perfect Water Amanzimtoti</div></td>
+            <td>NFC Google Review Stand — White</td>
+            <td><span class="qty-chip">×2</span></td>
+            <td>R998</td>
+            <td>Amanzimtoti, NL</td>
+            <td><span class="badge badge-purple">Thu</span></td>
+          </tr>
+          <tr>
+            <td><span class="order-num">#1713</span></td>
+            <td><span class="client-name">Marco Colaianni</span><div class="company-name">Bikemania Big Boy</div></td>
+            <td>NFC Google Review Stand — White</td>
+            <td><span class="qty-chip">×1</span></td>
+            <td>R604</td>
+            <td>Cape Town, WC</td>
+            <td><span class="badge badge-purple">Thu</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ────────────────────────────────────────────────────────
+       9. FOOTER CHECKLIST
+  ──────────────────────────────────────────────────────── -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon" style="background:rgba(59,130,246,0.15);">☑️</div>
+      <div>
+        <h2>Giorgio's Daily Action Checklist</h2>
+        <p>Quick reference — work through these in priority order</p>
+      </div>
+    </div>
+    <div class="card-body">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:24px;">
+        <div>
+          <div style="font-size:12px;font-weight:700;color:var(--danger);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">🔴 Mon 8 Jun</div>
+          <div style="display:flex;flex-direction:column;gap:8px;font-size:13px;">
+            <label style="display:flex;gap:8px;cursor:pointer;"><input type="checkbox"> 10:00 — Meeting: Dawn Nell (Property Agent)</label>
+            <label style="display:flex;gap:8px;cursor:pointer;"><input type="checkbox"> 12:00 — CLOSE: Ruan / Iso'Bella Vita Guesthouse</label>
+            <label style="display:flex;gap:8px;cursor:pointer;"><input type="checkbox"> Confirm Dr Buti's time for Tuesday</label>
+            <label style="display:flex;gap:8px;cursor:pointer;"><input type="checkbox"> Check stock count — Black Stands</label>
+            <label style="display:flex;gap:8px;cursor:pointer;"><input type="checkbox"> Send 8 custom orders to printer (incl. email Gary #1711 artwork guide)</label>
+            <label style="display:flex;gap:8px;cursor:pointer;"><input type="checkbox"> Reply to Christine Kotze re: Paarl URL (#1645)</label>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">🟢 Tue 9 Jun — Run 1</div>
+          <div style="display:flex;flex-direction:column;gap:8px;font-size:13px;">
+            <label style="display:flex;gap:8px;cursor:pointer;"><input type="checkbox"> TBC AM — Meeting: Dr Buti (Optometrist)</label>
+            <label style="display:flex;gap:8px;cursor:pointer;"><input type="checkbox"> 11:00 — Meeting: Sassi Graham / Roar Around</label>
+            <label style="display:flex;gap:8px;cursor:pointer;"><input type="checkbox"> Pack &amp; ship standard white orders (9 orders)</label>
+            <label style="display:flex;gap:8px;cursor:pointer;"><input type="checkbox"> Handle black stand orders based on stock count</label>
+            <label style="display:flex;gap:8px;cursor:pointer;"><input type="checkbox"> Mark fulfilled orders in Shopify</label>
+            <label style="display:flex;gap:8px;cursor:pointer;"><input type="checkbox"> Reprogram Christine's NFC card once Paarl URL received</label>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:700;color:var(--warn);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">🟡 Wed 10 Jun</div>
+          <div style="display:flex;flex-direction:column;gap:8px;font-size:13px;">
+            <label style="display:flex;gap:8px;cursor:pointer;"><input type="checkbox"> 12:00 — Meeting: Dominique Sprang / Flora &amp; Fauna Connect</label>
+            <label style="display:flex;gap:8px;cursor:pointer;"><input type="checkbox"> AM Outreach block — target 4–5 new bookings</label>
+            <label style="display:flex;gap:8px;cursor:pointer;"><input type="checkbox"> Chase printer orders — confirm collection for Thu</label>
+            <label style="display:flex;gap:8px;cursor:pointer;"><input type="checkbox"> Follow up on Ruan if not closed Monday</label>
+            <label style="display:flex;gap:8px;cursor:pointer;"><input type="checkbox"> Confirm all Thu/Fri meeting slots</label>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">🟣 Thu 11 Jun — Run 2</div>
+          <div style="display:flex;flex-direction:column;gap:8px;font-size:13px;">
+            <label style="display:flex;gap:8px;cursor:pointer;"><input type="checkbox"> 12:00 — Meeting: Tayla Gould / Oko Restaurant</label>
+            <label style="display:flex;gap:8px;cursor:pointer;"><input type="checkbox"> Ship remaining standard orders (6 orders)</label>
+            <label style="display:flex;gap:8px;cursor:pointer;"><input type="checkbox"> Ship any printer returns collected by Wed</label>
+            <label style="display:flex;gap:8px;cursor:pointer;"><input type="checkbox"> Update Shopify fulfillment statuses</label>
+            <label style="display:flex;gap:8px;cursor:pointer;"><input type="checkbox"> Review appointment bookings — target: 6–10 for week</label>
+            <label style="display:flex;gap:8px;cursor:pointer;"><input type="checkbox"> Send weekly summary to Jacques</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<script>
+  // Animate target bar on load
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      document.querySelector('.target-fill').style.width = '0%';
+    }, 500);
+  });
+</script>
+
+</body>
+</html>
