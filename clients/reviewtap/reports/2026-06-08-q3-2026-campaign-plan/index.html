@@ -1,0 +1,1562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ReviewTap — Q3 2026 Campaign Master Plan</title>
+<style>
+:root{--gold:#f5a623;--gold-l:#ffc95c;--dark:#080d1a;--d2:#0e1528;--d3:#151e35;--d4:#1c2540;--white:#fff;--muted:#8892a4;--success:#22c55e;--wa:#25d366;--wa-bg:#0a1014;--wa-out:#005c4b;--wa-in:#1f2c34;--border:rgba(245,166,35,.15);--r:12px}
+*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
+body{background:var(--dark);color:var(--white);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:15px;line-height:1.6}
+
+.hdr{background:var(--d2);border-bottom:1px solid var(--border);padding:16px 40px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.logo{display:flex;align-items:center;gap:12px}
+.lm{width:34px;height:34px;background:var(--gold);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;color:var(--dark)}
+.lt{font-weight:700;font-size:17px}.lt span{color:var(--gold)}
+.badge{background:rgba(245,166,35,.12);border:1px solid var(--gold);color:var(--gold);padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.5px}
+
+.nav{background:var(--d2);border-bottom:1px solid var(--border);display:flex;padding:0 40px;overflow-x:auto;gap:2px}
+.nt{padding:13px 18px;font-size:12px;font-weight:700;color:var(--muted);cursor:pointer;border:none;border-bottom:2px solid transparent;background:none;white-space:nowrap;transition:all .2s;text-transform:uppercase;letter-spacing:.4px}
+.nt:hover{color:var(--white)}.nt.active{color:var(--gold);border-bottom-color:var(--gold)}
+
+.main{max-width:1100px;margin:0 auto;padding:36px 40px}
+.sec{display:none}.sec.active{display:block}
+
+.card{background:var(--d2);border:1px solid var(--border);border-radius:var(--r);padding:26px;margin-bottom:22px}
+.ct{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--gold);margin-bottom:14px}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,var(--d3),var(--d4));border:1px solid var(--border);border-radius:var(--r);padding:38px;margin-bottom:28px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-80px;right:-80px;width:240px;height:240px;background:radial-gradient(circle,rgba(245,166,35,.08),transparent 70%);border-radius:50%}
+.hero h1{font-size:30px;font-weight:800;margin-bottom:8px}.hero h1 span{color:var(--gold)}
+.hero p{color:var(--muted);max-width:620px;line-height:1.75}
+.tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.tag{background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.25);color:var(--gold-l);padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700}
+
+/* PHASE TIMELINE */
+.phase-timeline{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:26px}
+.pt{background:var(--d3);border:1px solid var(--border);border-radius:var(--r);padding:18px}
+.pt .pnum{font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:4px}
+.pt h3{font-size:14px;font-weight:700;margin-bottom:4px}
+.pt .pdates{font-size:12px;color:var(--gold);margin-bottom:8px}
+.pt p{font-size:12px;color:var(--muted)}
+.pt .pgoal{display:inline-block;background:rgba(245,166,35,.1);color:var(--gold);font-size:11px;font-weight:600;padding:2px 8px;border-radius:4px;margin-top:8px}
+
+/* STATS */
+.sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:26px}
+.sc{background:var(--d3);border:1px solid var(--border);border-radius:var(--r);padding:18px;text-align:center}
+.sn{font-size:28px;font-weight:800;color:var(--gold)}.sl{font-size:11px;color:var(--muted);margin-top:3px}
+
+/* EMAIL UI */
+.enav{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:22px}
+.eb{background:var(--d3);border:1px solid var(--border);color:var(--muted);padding:7px 14px;border-radius:7px;cursor:pointer;font-size:12px;font-weight:700;transition:all .2s}
+.eb:hover{color:var(--white);border-color:rgba(245,166,35,.4)}
+.eb.active{background:var(--gold);color:var(--dark);border-color:var(--gold)}
+.ep{display:none}.ep.active{display:block}
+
+.emeta{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:18px}
+.emi{background:var(--d3);border:1px solid var(--border);border-radius:8px;padding:11px 14px}
+.emi .lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+.emi .val{font-size:13px;font-weight:700;margin-top:3px}
+
+.sab{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
+.so{background:var(--d3);border:1px solid var(--border);border-radius:8px;padding:12px 14px}
+.so .al{font-size:10px;color:var(--gold);font-weight:800;text-transform:uppercase;margin-bottom:5px}
+.so .st{font-size:13px;font-weight:600}
+.so .pt2{font-size:11px;color:var(--muted);margin-top:4px}
+
+/* EMAIL PREVIEW */
+.epw{background:#2a2a2a;border-radius:var(--r);overflow:hidden;margin-bottom:18px}
+.epb{background:#363636;padding:9px 14px;display:flex;align-items:center;gap:6px}
+.epb .d{width:11px;height:11px;border-radius:50%}
+.dr{background:#ff5f57}.dy{background:#febc2e}.dg{background:#28c840}
+.epb span{font-size:11px;color:#888;margin-left:6px}
+.er{max-width:560px;margin:0 auto;background:var(--d2)}
+.erh{background:var(--dark);padding:24px 32px 20px;border-bottom:3px solid var(--gold);display:flex;align-items:center;justify-content:space-between}
+.erl{font-weight:800;font-size:18px}.erl span{color:var(--gold)}
+.erc{padding:28px 32px}
+.erc h2{font-size:20px;font-weight:800;margin-bottom:14px;line-height:1.35}
+.erc p{font-size:14px;color:#c0cad6;margin-bottom:13px;line-height:1.72}
+.erc strong{color:var(--white)}
+.cta{display:inline-block;background:var(--gold);color:var(--dark);font-weight:800;font-size:14px;padding:13px 26px;border-radius:8px;text-decoration:none;margin:16px 0}
+.div{height:1px;background:rgba(255,255,255,.07);margin:20px 0}
+.fl{list-style:none;margin:14px 0}
+.fl li{padding:5px 0;font-size:14px;color:#c0cad6;display:flex;gap:9px;align-items:flex-start}
+.fl .ck{color:var(--success);flex-shrink:0}
+.pb{background:var(--d3);border:1px solid var(--border);border-radius:9px;padding:14px 18px;margin:10px 0}
+.pb .pn{font-weight:700;font-size:14px;margin-bottom:3px}
+.pb .pp{font-size:17px;font-weight:800;color:var(--gold)}
+.pb .po{font-size:11px;color:var(--muted);text-decoration:line-through}
+.pb .pd{font-size:12px;color:var(--muted);margin-top:5px}
+.pb a{color:var(--gold);font-size:12px;font-weight:700}
+.qt{background:var(--d3);border-left:3px solid var(--gold);padding:14px 18px;border-radius:0 8px 8px 0;margin:14px 0;font-size:13px;color:#c0cad6;font-style:italic}
+.ps{font-size:13px;color:var(--muted);font-style:italic;margin-top:16px}
+.ps strong{color:var(--gold-l);font-style:normal}
+.sig{margin-top:20px;padding-top:16px;border-top:1px solid rgba(255,255,255,.07)}
+.sig .sn2{font-weight:700;color:var(--white)}
+.sig .st2{font-size:12px;color:var(--muted)}
+.sig a{color:var(--gold)}
+.erf{background:var(--dark);padding:16px 32px;font-size:11px;color:#444;text-align:center;border-top:1px solid rgba(255,255,255,.05)}
+.erf a{color:#555}
+
+/* STRATEGY */
+.strat{background:rgba(245,166,35,.05);border:1px solid rgba(245,166,35,.18);border-radius:var(--r);padding:18px 22px;margin-top:16px}
+.strat h4{color:var(--gold);font-size:11px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.strat p{font-size:13px;color:#a8b4c0;line-height:1.72;margin-bottom:9px}
+.strat ul{padding-left:16px}
+.strat li{font-size:13px;color:#a8b4c0;margin-bottom:6px;line-height:1.65}
+
+/* WHATSAPP */
+.wag{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
+.wac{background:var(--d2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+.wach{background:var(--d3);padding:12px 18px;display:flex;align-items:center;justify-content:space-between}
+.wach .mn{font-weight:700;color:var(--gold);font-size:12px}
+.wach .md{font-size:11px;color:var(--muted)}
+.wap{background:var(--wa-bg);padding:14px}
+.wacb{display:flex;align-items:center;gap:9px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,.06);margin-bottom:10px}
+.wav{width:36px;height:36px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:var(--dark)}
+.wacn{font-weight:600;font-size:13px}.wacs{font-size:10px;color:var(--wa)}
+.wb{background:var(--wa-out);border-radius:0 9px 9px 9px;padding:9px 12px;max-width:88%;margin-bottom:5px;font-size:13px;color:#e8f5e9;line-height:1.52}
+.wt{font-size:10px;color:rgba(255,255,255,.35);text-align:right;margin-top:3px}
+.wcs{padding:14px 18px;border-top:1px solid var(--border)}
+.wcs .wsl{font-size:10px;color:var(--gold);text-transform:uppercase;font-weight:800;margin-bottom:5px}
+.wcs p{font-size:12px;color:var(--muted);line-height:1.6}
+
+/* WORKFLOW */
+.wft{position:relative;padding-left:36px}
+.wft::before{content:'';position:absolute;left:12px;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--gold),rgba(245,166,35,.1))}
+.ws{position:relative;margin-bottom:16px}
+.ws::before{content:'';position:absolute;left:-28px;top:14px;width:10px;height:10px;border-radius:50%;background:var(--gold);border:2px solid var(--dark);box-shadow:0 0 0 3px rgba(245,166,35,.18)}
+.ws.wt2::before{background:var(--d4);border-color:var(--muted)}
+.ws.wc::before{background:var(--d4);border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,.18)}
+.ws.we::before{background:var(--success);box-shadow:0 0 0 3px rgba(34,197,94,.18)}
+.wb2{background:var(--d3);border:1px solid var(--border);border-radius:8px;padding:12px 16px;display:flex;align-items:flex-start;gap:10px}
+.wlbl{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;padding:2px 7px;border-radius:4px;white-space:nowrap;flex-shrink:0;margin-top:3px}
+.wlbl.tr{background:rgba(245,166,35,.2);color:var(--gold)}
+.wlbl.em{background:rgba(59,130,246,.2);color:#93c5fd}
+.wlbl.wa2{background:rgba(37,211,102,.2);color:#86efac}
+.wlbl.wt3{background:rgba(255,255,255,.06);color:var(--muted)}
+.wlbl.if2{background:rgba(139,92,246,.2);color:#c4b5fd}
+.wlbl.en{background:rgba(34,197,94,.2);color:#86efac}
+.wb2 p{font-size:13px}.wb2 .ws2{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* CALENDAR */
+.cal{display:flex;flex-direction:column;gap:3px}
+.cr{display:grid;grid-template-columns:90px 110px 1fr;gap:10px;align-items:center;padding:9px 14px;border-radius:7px;transition:background .2s}
+.cr:hover{background:var(--d3)}
+.cr.hl{background:rgba(245,166,35,.06);border:1px solid rgba(245,166,35,.18)}
+.cd{font-size:12px;color:var(--muted);font-weight:600}
+.cd.d0{color:var(--gold);font-weight:800}
+.cbdg{font-size:10px;font-weight:800;padding:3px 8px;border-radius:20px;text-align:center}
+.cbdg.prep{background:rgba(139,92,246,.18);color:#c4b5fd}
+.cbdg.em2{background:rgba(59,130,246,.18);color:#93c5fd}
+.cbdg.wa3{background:rgba(37,211,102,.18);color:#86efac}
+.cbdg.both{background:rgba(245,166,35,.18);color:var(--gold)}
+.cbdg.rev{background:rgba(239,68,68,.18);color:#fca5a5}
+.ca{font-size:13px}.ca span{color:var(--muted);font-size:12px}
+
+/* KPI */
+.kg{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.kc{background:var(--d3);border:1px solid var(--border);border-radius:var(--r);padding:18px}
+.km{font-size:12px;color:var(--muted);margin-bottom:6px}
+.kt{font-size:24px;font-weight:800;color:var(--gold)}
+.kn{font-size:11px;color:var(--muted);margin-top:5px}
+
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{background:var(--d4);padding:9px 13px;text-align:left;font-size:11px;color:var(--gold);text-transform:uppercase;letter-spacing:.4px}
+.tbl td{padding:9px 13px;border-bottom:1px solid rgba(255,255,255,.04);font-size:13px;vertical-align:top}
+.tbl tr:last-child td{border:none}
+.tc{font-family:'Courier New',monospace;background:var(--d4);padding:2px 6px;border-radius:4px;font-size:11px;color:var(--gold-l)}
+
+/* CHECKLIST */
+.cl{list-style:none}
+.cl li{display:flex;align-items:flex-start;gap:10px;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:13px}
+.cl li:last-child{border:none}
+.cb{width:18px;height:18px;border:2px solid var(--border);border-radius:4px;flex-shrink:0;margin-top:2px;cursor:pointer;transition:all .2s}
+.cb.ck2{background:var(--gold);border-color:var(--gold)}
+.cb.ck2::after{content:'✓';font-size:11px;color:var(--dark);font-weight:900;display:flex;align-items:center;justify-content:center;height:100%}
+.cl li.done .ct2{text-decoration:line-through;color:var(--muted)}
+.cp{font-size:10px;padding:2px 7px;border-radius:4px;font-weight:700;flex-shrink:0}
+.cp.c1{background:rgba(239,68,68,.18);color:#fca5a5}
+.cp.c2{background:rgba(245,166,35,.18);color:var(--gold)}
+.cp.c3{background:rgba(59,130,246,.18);color:#93c5fd}
+
+/* PHASE HEADER */
+.ph{background:linear-gradient(to right,var(--d3),var(--d4));border:1px solid var(--border);border-radius:var(--r);padding:26px;margin-bottom:24px;display:grid;grid-template-columns:1fr auto;gap:20px;align-items:start}
+.ph h2{font-size:22px;font-weight:800;margin-bottom:6px}.ph h2 span{color:var(--gold)}
+.ph p{font-size:13px;color:var(--muted);max-width:560px;line-height:1.7}
+.ph .pmeta{display:flex;flex-direction:column;gap:8px;align-items:flex-end}
+.ph .pmeta .pdate{font-size:12px;color:var(--gold);font-weight:700}
+.ph .pmeta .pseg{font-size:11px;color:var(--muted)}
+
+@media(max-width:768px){.main{padding:20px}.hdr{padding:14px 20px}.nav{padding:0 20px}.sab{grid-template-columns:1fr}.phase-timeline{grid-template-columns:1fr}.ph{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="logo"><div class="lm">R</div><div class="lt">Review<span>Tap</span></div></div>
+  <div class="badge">Q3 2026 — MASTER CAMPAIGN PLAN</div>
+</header>
+
+<nav class="nav">
+  <button class="nt active" onclick="S('overview')">Q3 Overview</button>
+  <button class="nt" onclick="S('p1')">Phase 1: Launch</button>
+  <button class="nt" onclick="S('p2')">Phase 2: Sweep</button>
+  <button class="nt" onclick="S('p3')">Phase 3: Smart Card</button>
+  <button class="nt" onclick="S('p4')">Phase 4: Automation</button>
+  <button class="nt" onclick="S('p5')">Phase 5: Referral</button>
+  <button class="nt" onclick="S('p6')">Phase 6: Quarter Close</button>
+  <button class="nt" onclick="S('calendar')">13-Week Calendar</button>
+  <button class="nt" onclick="S('kpis')">KPIs</button>
+</nav>
+
+<main class="main">
+
+<!-- ===== OVERVIEW ===== -->
+<section id="overview" class="sec active">
+  <div class="hero">
+    <h1>ReviewTap <span>Q3 2026</span> — Full Quarter Campaign Plan</h1>
+    <p>Six coordinated campaign phases across June, July, August, and September. Covers device upgrades, Smart Business Card cross-sells, automation upsell, referral programme launch, and quarter-close push. Every email and WhatsApp message is written, structured, and ready to deploy in GHL.</p>
+    <div class="tags">
+      <span class="tag">6 Campaign Phases</span>
+      <span class="tag">17 Emails</span>
+      <span class="tag">13 WhatsApp Messages</span>
+      <span class="tag">4 Audience Segments</span>
+      <span class="tag">13 Weeks</span>
+      <span class="tag">GHL Workflows Included</span>
+      <span class="tag">POPIA Compliant</span>
+    </div>
+  </div>
+
+  <div class="sg">
+    <div class="sc"><div class="sn">6</div><div class="sl">Campaign Phases</div></div>
+    <div class="sc"><div class="sn">17</div><div class="sl">Emails Written</div></div>
+    <div class="sc"><div class="sn">13</div><div class="sl">WhatsApp Messages</div></div>
+    <div class="sc"><div class="sn">90</div><div class="sl">Days Covered</div></div>
+    <div class="sc"><div class="sn">95%</div><div class="sl">WA Open Rate</div></div>
+    <div class="sc"><div class="sn">5–10%</div><div class="sl">Upgrade Conv. Target</div></div>
+  </div>
+
+  <div class="phase-timeline">
+    <div class="pt"><div class="pnum">Phase 1</div><h3>ReviewTap 2.0 Launch</h3><div class="pdates">Jun 8 – Jun 18</div><p>5 emails · 4 WA · All segments. Upgrade existing devices to the WhatsApp AI flow. Introduce the Negative Review Shield.</p><span class="pgoal">Goal: Device upgrades + hardware sales</span></div>
+    <div class="pt"><div class="pnum">Phase 2</div><h3>Conversion Sweep</h3><div class="pdates">Jun 19 – Jul 6</div><p>3 emails · 2 WA · Non-converters + upgraders. Re-engage with compounding angle. Harvest testimonials from early upgraders.</p><span class="pgoal">Goal: Close non-converters, capture proof</span></div>
+    <div class="pt"><div class="pnum">Phase 3</div><h3>Smart Business Card Blitz</h3><div class="pdates">Jul 7 – Jul 27</div><p>3 emails · 2 WA · All segments excl. smart-card-purchased. Standalone campaign for Smart Business Cards with both/and angle.</p><span class="pgoal">Goal: Smart Card revenue</span></div>
+    <div class="pt"><div class="pnum">Phase 4</div><h3>Automation Upsell</h3><div class="pdates">Jul 28 – Aug 17</div><p>3 emails · 2 WA · Device owners without monthly plan. Convert hardware-only customers to automation subscribers.</p><span class="pgoal">Goal: Monthly recurring revenue</span></div>
+    <div class="pt"><div class="pnum">Phase 5</div><h3>Referral Programme</h3><div class="pdates">Aug 18 – Sep 7</div><p>3 emails · 2 WA · All customers. Launch referral programme with R200 credit per referred business. Double-credit week built in.</p><span class="pgoal">Goal: New customer acquisition</span></div>
+    <div class="pt"><div class="pnum">Phase 6</div><h3>Quarter Close</h3><div class="pdates">Sep 8 – Sep 28</div><p>3 emails · 2 WA · All non-converted. End-of-quarter urgency push. Q4 readiness angle. Final pricing reminder before October.</p><span class="pgoal">Goal: Final conversions before Q4</span></div>
+  </div>
+
+  <div class="card">
+    <div class="ct">Audience Segments (GHL Tags)</div>
+    <table class="tbl">
+      <thead><tr><th>Tag</th><th>Segment</th><th>Primary Offer This Quarter</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tc">standard-device-owner</span></td><td>Segment A — NFC Stand/Card, non-custom</td><td>Custom device upgrade + Smart Card + Automation</td></tr>
+        <tr><td><span class="tc">custom-device-owner</span></td><td>Segment B — Custom branded hardware</td><td>2.0 WhatsApp reprogram + Smart Card + Automation</td></tr>
+        <tr><td><span class="tc">automation-subscriber</span></td><td>Segment C — Active monthly plan</td><td>Device upgrade complement + Smart Card + Referral</td></tr>
+        <tr><td><span class="tc">lapsed-customer</span></td><td>Segment D — One-time buyer, no follow-on</td><td>2.0 re-engagement + Smart Card as low-friction re-entry</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ===== PHASE 1 ===== -->
+<section id="p1" class="sec">
+  <div class="ph">
+    <div>
+      <h2>Phase 1: <span>ReviewTap 2.0 Launch</span></h2>
+      <p>The campaign opens with the biggest product story in ReviewTap's history. The Negative Review Shield changes what the device does fundamentally. Every message in this phase builds the case: what changed, why it matters, what it costs, and why the existing hardware gets it remotely.</p>
+    </div>
+    <div class="pmeta">
+      <div class="pdate">Jun 8 – Jun 18 (10 days)</div>
+      <div class="pseg">All 4 Segments</div>
+      <div class="pseg">5 Emails · 4 WhatsApp Messages</div>
+    </div>
+  </div>
+
+  <!-- EMAIL NAV P1 -->
+  <div class="enav">
+    <button class="eb active" onclick="SE('p1e',1)">Email 1</button>
+    <button class="eb" onclick="SE('p1e',2)">Email 2</button>
+    <button class="eb" onclick="SE('p1e',3)">Email 3</button>
+    <button class="eb" onclick="SE('p1e',4)">Email 4</button>
+    <button class="eb" onclick="SE('p1e',5)">Email 5</button>
+    <button class="eb" onclick="SE('p1e',6)" style="background:rgba(37,211,102,.1);border-color:rgba(37,211,102,.3);color:#86efac">WhatsApp (4)</button>
+  </div>
+
+  <!-- P1 E1 -->
+  <div id="p1e-1" class="ep active">
+    <div class="emeta">
+      <div class="emi"><div class="lbl">Send Day</div><div class="val" style="color:var(--gold)">Day 0 — Launch</div></div>
+      <div class="emi"><div class="lbl">Segments</div><div class="val">All (A, B, C, D)</div></div>
+      <div class="emi"><div class="lbl">Goal</div><div class="val">Curiosity — No Hard Sell</div></div>
+      <div class="emi"><div class="lbl">Angle</div><div class="val">The Upgrade</div></div>
+    </div>
+    <div class="sab">
+      <div class="so"><div class="al">Subject A — Recommended</div><div class="st">Your ReviewTap just got a Negative Review Shield 🛡️</div><div class="pt2">Preview: The upgrade 1,000+ SA businesses have been waiting for. Your existing device gets it remotely.</div></div>
+      <div class="so"><div class="al">Subject B — Test</div><div class="st">We just changed what happens when a customer taps your device</div><div class="pt2">Preview: The upgrade that changes how reviews get collected — and which ones go public.</div></div>
+    </div>
+    <div class="epw">
+      <div class="epb"><div class="d dr"></div><div class="d dy"></div><div class="d dg"></div><span>Email Preview — Giorgio van Rooyen &lt;support@reviewtap.co.za&gt;</span></div>
+      <div class="er">
+        <div class="erh"><div class="erl">Review<span>Tap</span></div><div style="font-size:11px;color:var(--muted)">reviewtap.co.za</div></div>
+        <div class="erc">
+          <p style="font-size:12px;color:var(--muted)">Hi [First Name],</p>
+          <h2>Something changed with your device today.</h2>
+          <p>Not the hardware. The hardware stays exactly as it is. What changed is what happens after a customer taps it.</p>
+          <p><strong>Before:</strong> tap → Google review page → whatever rating they feel like giving.</p>
+          <p><strong>Now:</strong> tap → WhatsApp AI → "How was your experience?" → happy customers get sent to Google → unhappy customers get sent to you. Privately. Before anything goes public.</p>
+          <p>That second path is new. It is called the <strong>Negative Review Shield</strong>. One intercepted 1-star review can protect thousands in bookings or revenue. The Shield does this automatically. Every single tap. Without you being in the room.</p>
+          <p>Your existing ReviewTap device gets this upgrade remotely. No new hardware. No courier. Just a remote reprogram that goes live in 24 to 48 hours.</p>
+          <a href="https://reviewtap.co.za" class="cta">See the upgrade in action →</a>
+          <p>More detail is coming over the next few days. This is the first note — wanted you to hear it before anyone else.</p>
+          <div class="sig"><div class="sn2">Giorgio van Rooyen</div><div class="st2">ReviewTap · <a href="https://reviewtap.co.za">reviewtap.co.za</a></div></div>
+        </div>
+        <div class="erf">You are receiving this because you are a ReviewTap customer. <a href="#">Unsubscribe</a> · Compliant with SA POPIA. Reply STOP to opt out.</div>
+      </div>
+    </div>
+    <div class="strat">
+      <h4>Strategy: Why This Email Works</h4>
+      <p><strong>No product links. No pricing. No sell.</strong> Day 0 is an awareness and curiosity email only. The Negative Review Shield is named but not fully explained — that gap is what pulls readers into Email 2.</p>
+      <ul>
+        <li>"Not the hardware. The hardware stays exactly as it is." — this is the objection kill. Said before the reader even forms the thought. Removes the #1 friction point in the first paragraph.</li>
+        <li>Subject A is the recommended variant because the Shield is a novel, concrete concept. Curiosity around a named feature outperforms vague benefit-led subjects for warm lists.</li>
+        <li>Send WhatsApp Message 1 (Teaser) 2 hours before this email. The teaser creates inbox intent. When the email arrives, the reader already expects it.</li>
+        <li>CTA goes to a landing page or Loom walkthrough — not a product page. Sending warm curiosity traffic to a product page kills conversion. Respect the emotional state.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- P1 E2 -->
+  <div id="p1e-2" class="ep">
+    <div class="emeta">
+      <div class="emi"><div class="lbl">Send Day</div><div class="val" style="color:var(--gold)">Day 2</div></div>
+      <div class="emi"><div class="lbl">Segments</div><div class="val">All (A, B, C, D)</div></div>
+      <div class="emi"><div class="lbl">Goal</div><div class="val">Create Risk Awareness</div></div>
+      <div class="emi"><div class="lbl">Angle</div><div class="val">The Shield — Fear-based</div></div>
+    </div>
+    <div class="sab">
+      <div class="so"><div class="al">Subject A — Recommended</div><div class="st">An unhappy customer just tapped your stand. Here's what happened next.</div><div class="pt2">Preview: Every unfiltered tap is a gamble. ReviewTap 2.0 ends that.</div></div>
+      <div class="so"><div class="al">Subject B — Test</div><div class="st">One bad review can cost you more than a month's revenue</div><div class="pt2">Preview: Without a filter, every customer has a direct path to your public profile.</div></div>
+    </div>
+    <div class="epw">
+      <div class="epb"><div class="d dr"></div><div class="d dy"></div><div class="d dg"></div><span>Email Preview — support@reviewtap.co.za</span></div>
+      <div class="er">
+        <div class="erh"><div class="erl">Review<span>Tap</span></div><div style="font-size:11px;color:var(--muted)">reviewtap.co.za</div></div>
+        <div class="erc">
+          <p style="font-size:12px;color:var(--muted)">Hi [First Name],</p>
+          <h2>Here's a scenario that plays out for thousands of SA businesses every week.</h2>
+          <p>A customer has a frustrating experience. Waited too long. Order was wrong. Something was not as expected.</p>
+          <p>They walk out. They see your ReviewTap stand. They tap it.</p>
+          <p>Under ReviewTap 1.0, that tap sends them directly to your Google review page. They write what they are feeling in that moment. And that review — with your 1-star rating — is now the first thing the next potential customer sees when they search for you.</p>
+          <p>You never had a chance to fix it. You never even knew it was coming.</p>
+          <div class="div"></div>
+          <p><strong>ReviewTap 2.0 intercepts that moment at the tap.</strong></p>
+          <p>The moment a customer taps your device, WhatsApp opens automatically. An AI bot asks: "How was your experience today?" The bot routes based on their answer.</p>
+          <p>Happy? Straight to your Google review page. That 5-star goes public.<br>
+          Unhappy? The feedback is captured privately. It comes to you. The customer feels heard. The problem gets resolved. That 1-star review never happens.</p>
+          <p>The Negative Review Shield intercepts the one moment you could not control — and it does it on every single tap, automatically.</p>
+          <div class="div"></div>
+          <p><strong>And your existing device already has the hardware for this.</strong> We reprogram it remotely. Your stand does not move. Your customers do not notice. The only thing that changes is which reviews go public.</p>
+          <a href="https://reviewtap.co.za" class="cta">Protect my reviews with the 2.0 upgrade →</a>
+          <div class="sig"><div class="sn2">Giorgio van Rooyen</div><div class="st2">ReviewTap · <a href="https://reviewtap.co.za">reviewtap.co.za</a></div></div>
+        </div>
+        <div class="erf">You are receiving this because you are a ReviewTap customer. <a href="#">Unsubscribe</a> · SA POPIA compliant.</div>
+      </div>
+    </div>
+    <div class="strat">
+      <h4>Strategy: The Risk Email</h4>
+      <p><strong>Awareness → Problem → Solution.</strong> Email 1 was awareness. This is the problem email. The reader must feel the exposure before they want the solution. The scenario format puts them inside the situation rather than describing it from outside.</p>
+      <ul>
+        <li>"You never had a chance to fix it. You never even knew it was coming." — two short sentences that land the full weight of the risk. Do not trim or soften this line.</li>
+        <li>Subject A is story-framed ("just tapped your stand") and present-tense. Present tense creates urgency that past-tense copy cannot. Test both across 50/50 but Subject A will likely win with service businesses.</li>
+        <li>For hospitality and restaurants (Segment B and C high-value accounts), the 1-star review risk is existential. Subject A resonates most with this group. Subject B works better with retail and trades where revenue framing is more relevant.</li>
+        <li>The CTA is a direct upgrade CTA for the first time. By Day 2, the reader has seen the teaser and Email 1. The curiosity has been building for 2 days. This is the right moment for a direct ask.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- P1 E3 -->
+  <div id="p1e-3" class="ep">
+    <div class="emeta">
+      <div class="emi"><div class="lbl">Send Day</div><div class="val" style="color:var(--gold)">Day 4</div></div>
+      <div class="emi"><div class="lbl">Segments</div><div class="val">A, B, D (Exclude C)</div></div>
+      <div class="emi"><div class="lbl">Goal</div><div class="val">Convert — Hard Sell with Pricing</div></div>
+      <div class="emi"><div class="lbl">Angle</div><div class="val">Full Feature List + Products</div></div>
+    </div>
+    <div class="sab">
+      <div class="so"><div class="al">Subject A — Recommended</div><div class="st">Everything included in the ReviewTap 2.0 upgrade (with pricing)</div><div class="pt2">Preview: Remote reprogram. WhatsApp AI. Negative Review Shield. No new hardware. Here's exactly what you get.</div></div>
+      <div class="so"><div class="al">Subject B — Test</div><div class="st">Your upgrade is ready — here's what happens next</div><div class="pt2">Preview: Remote reprogram, WhatsApp AI, Negative Review Shield. The full breakdown with pricing.</div></div>
+    </div>
+    <div class="epw">
+      <div class="epb"><div class="d dr"></div><div class="d dy"></div><div class="d dg"></div><span>Email Preview — support@reviewtap.co.za</span></div>
+      <div class="er">
+        <div class="erh"><div class="erl">Review<span>Tap</span></div><div style="font-size:11px;color:var(--muted)">reviewtap.co.za</div></div>
+        <div class="erc">
+          <p style="font-size:12px;color:var(--muted)">Hi [First Name],</p>
+          <h2>Here is exactly what the ReviewTap 2.0 upgrade includes.</h2>
+          <ul class="fl">
+            <li><span class="ck">✅</span> Your existing device reprogrammed remotely to the WhatsApp AI flow</li>
+            <li><span class="ck">✅</span> AI bot trained on your business name, tone, and service type — it sounds like you, not a script</li>
+            <li><span class="ck">✅</span> Negative Review Shield: happy customers routed to Google, unhappy customers routed to you privately</li>
+            <li><span class="ck">✅</span> 95% WhatsApp open rate versus 18% email — your review request gets read</li>
+            <li><span class="ck">✅</span> Human handover built in: the AI knows when a situation needs a real person and flags it</li>
+            <li><span class="ck">✅</span> Works with all existing ReviewTap NFC stands and cards — no hardware change</li>
+          </ul>
+          <p><strong>To get started, reply to this email with the word "upgrade".</strong> We handle the reprogram remotely. Your device does not leave your premises. Live in 24 to 48 hours.</p>
+          <a href="https://reviewtap.co.za" class="cta">Start my 2.0 upgrade →</a>
+          <div class="div"></div>
+          <p style="font-size:12px;color:var(--muted);margin-bottom:14px">While you are here, two products converting fast this month:</p>
+          <div class="pb">
+            <div class="pn">Custom Branded Google Review Stand (NFC + QR)</div>
+            <div><span class="pp">R649</span> <span class="po">R1,950</span></div>
+            <div class="pd">Your logo. Your brand. ReviewTap 2.0 built in from the first tap. No reprogram needed — arrives ready.</div>
+            <a href="https://reviewtap.co.za/products/custom-nfc-qr-google-review-stand">Shop now →</a>
+          </div>
+          <div class="pb">
+            <div class="pn">Custom Smart Business Card (NFC + QR)</div>
+            <div><span class="pp">R649</span> <span class="po">R1,500</span></div>
+            <div class="pd">One tap shares your contacts, Google profile, WhatsApp, socials, and booking link. The networking side of ReviewTap.</div>
+            <a href="https://reviewtap.co.za/products/custom-nfc-qr-business-card">Shop now →</a>
+          </div>
+          <p style="font-size:12px;color:var(--muted)">14-day money-back guarantee on all hardware. No risk.</p>
+          <p class="ps"><strong>P.S.</strong> The reprogram takes 24 to 48 hours once confirmed. Your device stays where it is throughout. You will not notice any downtime.</p>
+          <div class="sig"><div class="sn2">Giorgio van Rooyen</div><div class="st2">ReviewTap · <a href="https://reviewtap.co.za">reviewtap.co.za</a></div></div>
+        </div>
+        <div class="erf">You are receiving this because you are a ReviewTap customer. <a href="#">Unsubscribe</a> · SA POPIA compliant.</div>
+      </div>
+    </div>
+    <div class="strat">
+      <h4>Strategy: The Conversion Email</h4>
+      <p><strong>Clarity converts.</strong> After two emotional emails (awareness + fear), this one is purely informational. The checklist format lets readers scan and confirm value without reading every word. The reply-based CTA ("reply with the word upgrade") has lower friction than a checkout flow for a warm list.</p>
+      <ul>
+        <li>Exclude Segment C (automation subscribers). They are already paying monthly. A pricing email risks making them feel like a sales target. Create a separate variant for them that emphasises "complement what you already have" rather than a hard sell.</li>
+        <li>The P.S. pre-empts the "but my device will be down" concern. Address it at the bottom so it does not derail the reader mid-email.</li>
+        <li>Product blocks use struck-through original prices to anchor perceived value. R649 reads as a significant deal next to R1,950.</li>
+        <li>The "both" product approach in one email works here because the Smart Business Card is a natural complement, not a competing product.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- P1 E4 -->
+  <div id="p1e-4" class="ep">
+    <div class="emeta">
+      <div class="emi"><div class="lbl">Send Day</div><div class="val" style="color:var(--gold)">Day 7</div></div>
+      <div class="emi"><div class="lbl">Segments</div><div class="val">All (excl. smart-card-purchased)</div></div>
+      <div class="emi"><div class="lbl">Goal</div><div class="val">Smart Business Card Sale</div></div>
+      <div class="emi"><div class="lbl">Angle</div><div class="val">The Business Card Standalone</div></div>
+    </div>
+    <div class="sab">
+      <div class="so"><div class="al">Subject A — Recommended</div><div class="st">How many business cards have you handed out this year where you never heard back?</div><div class="pt2">Preview: The problem is not the card. It is what happens 48 hours after the handshake.</div></div>
+      <div class="so"><div class="al">Subject B — Test</div><div class="st">Your NFC stand gets you reviews. This gets you clients.</div><div class="pt2">Preview: One tap shares your full profile, reviews, contact, and booking link. No app. No typing.</div></div>
+    </div>
+    <div class="epw">
+      <div class="epb"><div class="d dr"></div><div class="d dy"></div><div class="d dg"></div><span>Email Preview — support@reviewtap.co.za</span></div>
+      <div class="er">
+        <div class="erh"><div class="erl">Review<span>Tap</span></div><div style="font-size:11px;color:var(--muted)">reviewtap.co.za</div></div>
+        <div class="erc">
+          <p style="font-size:12px;color:var(--muted)">Hi [First Name],</p>
+          <h2>There is a moment that happens after every handshake.</h2>
+          <p>You hand over your card. They take it. They say "I'll be in touch." You both mean it. Then life happens. The card goes in a pocket. The pocket empties into a drawer. Three months later they cannot remember your name.</p>
+          <p>This is not a memory problem. It is a friction problem. Paper cards create a gap between "I should reach out" and "I actually reach out." That gap is where business disappears.</p>
+          <p><strong>The ReviewTap Smart Business Card eliminates that gap at the tap.</strong></p>
+          <p>Tap it against their phone. In two seconds, they have:</p>
+          <ul class="fl">
+            <li><span class="ck">→</span> Your name, number, email — with one-tap call, WhatsApp, and email buttons</li>
+            <li><span class="ck">→</span> Your Google review link (they can leave you a review right then)</li>
+            <li><span class="ck">→</span> Your website or booking link</li>
+            <li><span class="ck">→</span> Your social profiles</li>
+          </ul>
+          <p>Your full digital presence is already on their screen. Not in a pocket. Not in a drawer. On their phone, saved, immediately actionable.</p>
+          <p>No app required. Works with all Android and iPhone XS and newer. Custom-branded with your logo and colours.</p>
+          <div class="pb">
+            <div class="pn">Custom Smart Business Card (NFC + QR)</div>
+            <div><span class="pp">R649</span> <span class="po">R1,500</span></div>
+            <div class="pd">Ships in 5 to 7 business days after design approval. 4 template options. Personalised mini landing page included.</div>
+            <a href="https://reviewtap.co.za/products/custom-nfc-qr-business-card">Order my Smart Business Card →</a>
+          </div>
+          <p style="font-size:12px;color:var(--muted)">14-day money-back guarantee. Zero risk to try.</p>
+          <a href="https://reviewtap.co.za/products/custom-nfc-qr-business-card" class="cta">Order my Smart Business Card →</a>
+          <p class="ps"><strong>P.S.</strong> Your NFC review stand works while you are behind the counter. Your Smart Business Card works every time you leave the building. Two devices. Two completely different growth levers.</p>
+          <div class="sig"><div class="sn2">Giorgio van Rooyen</div><div class="st2">ReviewTap · <a href="https://reviewtap.co.za">reviewtap.co.za</a></div></div>
+        </div>
+        <div class="erf">You are receiving this because you are a ReviewTap customer. <a href="#">Unsubscribe</a> · SA POPIA compliant.</div>
+      </div>
+    </div>
+    <div class="strat">
+      <h4>Strategy: The Cross-Sell Email</h4>
+      <p><strong>This email deliberately avoids mentioning the 2.0 upgrade.</strong> It is a standalone sell for a different use case. Mixing messages here would dilute both. The reader who converts on the Smart Card is responding to a networking pain point — separate from the review pain point.</p>
+      <ul>
+        <li>Subject A opens with a question that the reader answers internally before they read the first line. Most business owners immediately think "lots." That self-answer is the hook.</li>
+        <li>Exclude <span class="tc">smart-card-purchased</span> contacts from this send. Sending it to existing Smart Card owners is a trust issue, not just a waste.</li>
+        <li>The personas (business owner, sales rep, consultant) help readers self-select. If they recognise themselves in the list, they buy. If they do not, they ignore — but they do not unsubscribe, because it was clearly not for them.</li>
+        <li>The P.S. is the "aha" line for readers who are on the fence — the contrast between "counter" and "out of the building" gives them the mental model for owning both products.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- P1 E5 -->
+  <div id="p1e-5" class="ep">
+    <div class="emeta">
+      <div class="emi"><div class="lbl">Send Day</div><div class="val" style="color:var(--gold)">Day 10</div></div>
+      <div class="emi"><div class="lbl">Segments</div><div class="val">All non-converted</div></div>
+      <div class="emi"><div class="lbl">Goal</div><div class="val">Final Push — Social Proof + Urgency</div></div>
+      <div class="emi"><div class="lbl">Angle</div><div class="val">Compounding Asset + Case Study</div></div>
+    </div>
+    <div class="sab">
+      <div class="so"><div class="al">Subject A — Recommended</div><div class="st">1,247 Google reviews. One property. Here is the system behind it.</div><div class="pt2">Preview: TO Strand. Western Cape. ReviewTap + WhatsApp automation. Here is exactly how it compounds.</div></div>
+      <div class="so"><div class="al">Subject B — Segment D Only</div><div class="st">[First Name], this is the last email in this series.</div><div class="pt2">Preview: The upgrade stays open. But I wanted to close the loop before moving on.</div></div>
+    </div>
+    <div class="epw">
+      <div class="epb"><div class="d dr"></div><div class="d dy"></div><div class="d dg"></div><span>Email Preview — support@reviewtap.co.za</span></div>
+      <div class="er">
+        <div class="erh"><div class="erl">Review<span>Tap</span></div><div style="font-size:11px;color:var(--muted)">reviewtap.co.za</div></div>
+        <div class="erc">
+          <p style="font-size:12px;color:var(--muted)">Hi [First Name],</p>
+          <h2>1,247 Google reviews. One property.</h2>
+          <div class="qt">"TO Strand is one of the most-reviewed accommodation businesses in the Western Cape. Over 1,247 Google reviews. A consistently strong rating. Guests who mention the experience before they even unpack."</div>
+          <p>They did not get there by asking every guest manually. They did not run complicated email campaigns or hire a marketing team. Every guest taps a ReviewTap device on check-out. WhatsApp opens. The AI checks their experience. Happy guests review. Unhappy guests get resolved privately. The rating compounds.</p>
+          <p><strong>TO Strand is not an outlier. They are what ReviewTap looks like when it runs for 12 months without stopping.</strong></p>
+          <p>Most new ReviewTap customers see 3 to 5 times more reviews in their first month. The ones who sustain that growth are almost always the ones who added the WhatsApp upgrade — the step that converts more taps into actual reviews.</p>
+          <p>A review posted today still influences search rankings 3 years from now. Every 5-star review is future revenue sitting on your Google profile, working while you sleep. ReviewTap 2.0 makes sure more of those reviews get written, and makes sure the wrong ones never reach Google.</p>
+          <p>The compounding starts the day you switch it on.</p>
+          <div class="div"></div>
+          <p><strong>This is the last email in this series.</strong> If you are ready, here is where to go:</p>
+          <div style="margin:18px 0;display:flex;flex-direction:column;gap:10px">
+            <a href="https://reviewtap.co.za" class="cta" style="display:block;text-align:center">Upgrade to ReviewTap 2.0 →</a>
+            <a href="https://reviewtap.co.za/products/custom-nfc-qr-google-review-stand" style="color:var(--gold);font-size:13px;font-weight:700;display:block">Shop Custom Branded Stands (R649) →</a>
+            <a href="https://reviewtap.co.za/products/custom-nfc-qr-business-card" style="color:var(--gold);font-size:13px;font-weight:700;display:block">Shop Smart Business Cards (R649) →</a>
+          </div>
+          <p class="ps"><strong>P.S.</strong> Not ready yet? That is completely fine. One intercepted 1-star review typically pays for the upgrade many times over. When the timing is right, you know where to find us.</p>
+          <div class="sig"><div style="font-size:11px;color:var(--muted);margin-bottom:6px">ReviewTap · 4.8/5 stars · 1,000+ SA businesses</div><div class="sn2">Giorgio van Rooyen</div><div class="st2">ReviewTap · <a href="https://reviewtap.co.za">reviewtap.co.za</a></div></div>
+        </div>
+        <div class="erf">You are receiving this because you are a ReviewTap customer. <a href="#">Unsubscribe</a> · SA POPIA compliant.</div>
+      </div>
+    </div>
+    <div class="strat">
+      <h4>Strategy: The Closer</h4>
+      <p><strong>Social proof + finality</strong> is the highest-converting final email structure for warm lists. "This is the last email in this series" creates genuine scarcity without fake countdown timers or manufactured urgency. It respects the reader's inbox.</p>
+      <ul>
+        <li>The TO Strand case study anchors the close with a real, specific outcome. 1,247 reviews is a concrete number. Never round or generalise it — specificity is what makes social proof believable.</li>
+        <li>Subject B ("[First Name], this is the last email") is reserved for Segment D (lapsed buyers). The personalisation plus finality triggers re-engagement for contacts who have been ignoring the sequence. Use it as the Segment D variant for this email only.</li>
+        <li>Three separate CTAs in the footer acknowledge that by Day 10, the reader is in one of three buying states: upgrade, new hardware, or Smart Card. Give each state its own path. Forcing a single CTA on a Day 10 email loses the segment who was close to buying something different.</li>
+        <li>After this email, tag all completers <span class="tc">rt2-campaign-complete</span> and move to Phase 2.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- P1 WHATSAPP -->
+  <div id="p1e-6" class="ep">
+    <div class="wag">
+      <div class="wac">
+        <div class="wach"><span class="mn">WA 1 — The Teaser</span><span class="md">Day 0, 2 hrs before Email 1</span></div>
+        <div class="wap">
+          <div class="wacb"><div class="wav">R</div><div><div class="wacn">ReviewTap</div><div class="wacs">online</div></div></div>
+          <div class="wb">Hi [First Name] 👋<br><br>Quick heads-up from ReviewTap.<br><br>We have just shipped something that changes how your NFC device works. Your existing stand or card gets the upgrade remotely. No new hardware.<br><br>Full details in your email in about 2 hours — worth a read.<br><br>— Giorgio<br><br><em style="font-size:11px;opacity:.5">Reply STOP to unsubscribe</em><div class="wt">09:00 ✓✓</div></div>
+        </div>
+        <div class="wcs"><div class="wsl">Strategy</div><p>One job: prime the inbox. No product links. No pricing. "Worth a read" is a micro-commitment that increases email open rate by signalling the sender believes it is valuable. Keep it under 5 lines. Anything longer defeats the teaser purpose.</p></div>
+      </div>
+      <div class="wac">
+        <div class="wach"><span class="mn">WA 2 — Core Offer</span><span class="md">Day 3, after Email 2</span></div>
+        <div class="wap">
+          <div class="wacb"><div class="wav">R</div><div><div class="wacn">ReviewTap</div><div class="wacs">online</div></div></div>
+          <div class="wb">Hi [First Name] 👋<br><br>ReviewTap 2.0 is live.<br><br>Before: tap → Google → any rating.<br>Now: tap → WhatsApp AI → happy = Google review, unhappy = private feedback to you only.<br><br>It is called the Negative Review Shield. Already live for our hospitality clients.<br><br>Your existing device gets this remotely. No courier. No new hardware.<br><br>Or grab a new device with it built in from day one:<br><br>👉 Custom Stand (R649): https://reviewtap.co.za/products/custom-nfc-qr-google-review-stand<br>👉 Smart Business Card (R649): https://reviewtap.co.za/products/custom-nfc-qr-business-card<br><br>Questions? Reply here — I am watching this inbox.<br><br>— Giorgio, ReviewTap<br><br><em style="font-size:11px;opacity:.5">Reply STOP to unsubscribe</em><div class="wt">10:30 ✓✓</div></div>
+        </div>
+        <div class="wcs"><div class="wsl">Strategy</div><p>The before/after structure in two lines is the most efficient way to communicate the product shift. "Already live for our hospitality clients" is social proof without a customer name — effective as a trust signal for readers who haven't yet seen case study details. "I am watching this inbox" is the most important line — it signals a human, not a bot, and lifts reply rates significantly. Include a product image of the Custom Stand.</p></div>
+      </div>
+      <div class="wac">
+        <div class="wach"><span class="mn">WA 3 — Smart Business Card</span><span class="md">Day 6</span></div>
+        <div class="wap">
+          <div class="wacb"><div class="wav">R</div><div><div class="wacn">ReviewTap</div><div class="wacs">online</div></div></div>
+          <div class="wb">[First Name] — quick one 👇<br><br>How many business cards have you handed out this year where you never heard from the person again?<br><br>The Smart Business Card from ReviewTap fixes the moment after the handshake.<br><br>One tap on their phone:<br>✅ Your WhatsApp<br>✅ Your Google Reviews<br>✅ Your booking link or website<br>✅ Your full contact details<br><br>Custom-branded. R649. Ships in 5 to 7 days.<br>👉 https://reviewtap.co.za/products/custom-nfc-qr-business-card<br><br>14-day guarantee. Zero risk.<br><br>— Giorgio<br><br><em style="font-size:11px;opacity:.5">Reply STOP to unsubscribe</em><div class="wt">11:00 ✓✓</div></div>
+        </div>
+        <div class="wcs"><div class="wsl">Strategy</div><p>Opens with a rhetorical question that almost every business owner answers internally ("lots"). The self-answer creates the emotional buy-in before you offer the solution. Include a product image of the Smart Business Card. The 14-day guarantee handles the final objection. This message converts independently — even readers who have not engaged with the emails respond to this one.</p></div>
+      </div>
+      <div class="wac">
+        <div class="wach"><span class="mn">WA 4 — Re-engage (Conditional)</span><span class="md">Day 9 — non-openers/non-clickers only</span></div>
+        <div class="wap">
+          <div class="wacb"><div class="wav">R</div><div><div class="wacn">ReviewTap</div><div class="wacs">online</div></div></div>
+          <div class="wb">Hey [First Name] 👋<br><br>Wanted to check in personally.<br><br>Did the note about the ReviewTap 2.0 upgrade come through? Your existing device can be upgraded remotely to the WhatsApp AI flow — the one that intercepts unhappy customers before they reach Google.<br><br>No new hardware. Usually 24 to 48 hours once confirmed.<br><br>Just reply "yes" if you would like the details and I will walk you through it.<br><br>— Giorgio, ReviewTap<br><br><em style="font-size:11px;opacity:.5">Reply STOP to unsubscribe</em><div class="wt">09:15 ✓✓</div></div>
+        </div>
+        <div class="wcs"><div class="wsl">Strategy — Conditional Send</div><p>Only fires to contacts who have NOT clicked any email link AND have NOT replied to any WA. "Just reply yes" is a micro-commitment — the smallest possible next step. It restarts a conversation without a hard sell and without requiring the reader to make a decision about pricing. Giorgio or a team member must be monitoring replies the same day this sends. These are your most recoverable leads.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- P1 GHL WORKFLOW -->
+  <div class="card" style="margin-top:24px">
+    <div class="ct">Phase 1 — GHL Workflow Structure</div>
+    <div class="wft">
+      <div class="ws"><div class="wb2"><span class="wlbl tr">TRIGGER</span><div><p><strong>Tag added: existing-customer</strong></p><p class="ws2">Manual tag on campaign launch day. Applied to all existing customers regardless of segment.</p></div></div></div>
+      <div class="ws"><div class="wb2"><span class="wlbl wa2">SEND WA</span><div><p>WhatsApp Message 1 — The Teaser (Day 0, immediately)</p></div></div></div>
+      <div class="ws wt2"><div class="wb2"><span class="wlbl wt3">WAIT</span><div><p>2 hours</p></div></div></div>
+      <div class="ws"><div class="wb2"><span class="wlbl em">SEND EMAIL</span><div><p>Email 1 — The Announcement</p><p class="ws2">A/B subject test. CTA to landing page.</p></div></div></div>
+      <div class="ws wt2"><div class="wb2"><span class="wlbl wt3">WAIT</span><div><p>2 days</p></div></div></div>
+      <div class="ws"><div class="wb2"><span class="wlbl em">SEND EMAIL</span><div><p>Email 2 — The Problem</p><p class="ws2">All segments. Shield angle.</p></div></div></div>
+      <div class="ws wt2"><div class="wb2"><span class="wlbl wt3">WAIT</span><div><p>1 day</p></div></div></div>
+      <div class="ws"><div class="wb2"><span class="wlbl wa2">SEND WA</span><div><p>WhatsApp Message 2 — Core Offer + product image</p></div></div></div>
+      <div class="ws wt2"><div class="wb2"><span class="wlbl wt3">WAIT</span><div><p>1 day</p></div></div></div>
+      <div class="ws"><div class="wb2"><span class="wlbl em">SEND EMAIL</span><div><p>Email 3 — Full Offer + Pricing</p><p class="ws2">Exclude Segment C. Hard sell with checklist.</p></div></div></div>
+      <div class="ws wt2"><div class="wb2"><span class="wlbl wt3">WAIT</span><div><p>2 days</p></div></div></div>
+      <div class="ws"><div class="wb2"><span class="wlbl wa2">SEND WA</span><div><p>WhatsApp Message 3 — Smart Business Card</p><p class="ws2">Exclude smart-card-purchased tag.</p></div></div></div>
+      <div class="ws wt2"><div class="wb2"><span class="wlbl wt3">WAIT</span><div><p>1 day</p></div></div></div>
+      <div class="ws"><div class="wb2"><span class="wlbl em">SEND EMAIL</span><div><p>Email 4 — Smart Business Card Standalone</p><p class="ws2">Exclude smart-card-purchased tag.</p></div></div></div>
+      <div class="ws wt2"><div class="wb2"><span class="wlbl wt3">WAIT</span><div><p>2 days</p></div></div></div>
+      <div class="ws wc"><div class="wb2"><span class="wlbl if2">IF/ELSE</span><div><p>Contact has NOT clicked any link AND has NOT replied to WA</p><p class="ws2">YES: Send WA Message 4 (Re-engage) · NO: Skip to Email 5</p></div></div></div>
+      <div class="ws wt2"><div class="wb2"><span class="wlbl wt3">WAIT</span><div><p>1 day</p></div></div></div>
+      <div class="ws"><div class="wb2"><span class="wlbl em">SEND EMAIL</span><div><p>Email 5 — Social Proof + Last Call</p><p class="ws2">All non-converted. Three CTAs.</p></div></div></div>
+      <div class="ws we"><div class="wb2"><span class="wlbl en">END</span><div><p>Add tag: <span class="tc">rt2-campaign-complete</span></p><p class="ws2">Move to Phase 2 workflow.</p></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PHASE 2 ===== -->
+<section id="p2" class="sec">
+  <div class="ph">
+    <div>
+      <h2>Phase 2: <span>Conversion Sweep + Testimonial Harvest</span></h2>
+      <p>Two parallel tracks: re-engage non-converters from Phase 1 with a new angle (the compounding asset), and harvest testimonials from Phase 1 upgraders to fuel Phases 3–6. By this point, early upgraders have had 1–2 weeks with the WhatsApp flow — enough to notice results.</p>
+    </div>
+    <div class="pmeta">
+      <div class="pdate">Jun 19 – Jul 6 (18 days)</div>
+      <div class="pseg">Non-converters + Phase 1 upgraders</div>
+      <div class="pseg">3 Emails · 2 WhatsApp Messages</div>
+    </div>
+  </div>
+
+  <div class="enav">
+    <button class="eb active" onclick="SE('p2e',1)">Email 1</button>
+    <button class="eb" onclick="SE('p2e',2)">Email 2</button>
+    <button class="eb" onclick="SE('p2e',3)">Email 3</button>
+    <button class="eb" onclick="SE('p2e',4)" style="background:rgba(37,211,102,.1);border-color:rgba(37,211,102,.3);color:#86efac">WhatsApp (2)</button>
+  </div>
+
+  <!-- P2 E1 -->
+  <div id="p2e-1" class="ep active">
+    <div class="emeta">
+      <div class="emi"><div class="lbl">Send</div><div class="val" style="color:var(--gold)">Day 11 (Jun 19)</div></div>
+      <div class="emi"><div class="lbl">Segments</div><div class="val">Non-converters (rt2-campaign-complete)</div></div>
+      <div class="emi"><div class="lbl">Goal</div><div class="val">Re-engage with new angle</div></div>
+      <div class="emi"><div class="lbl">Angle</div><div class="val">The Compounding Asset</div></div>
+    </div>
+    <div class="sab">
+      <div class="so"><div class="al">Subject A — Recommended</div><div class="st">The maths behind 1,247 Google reviews</div><div class="pt2">Preview: A review posted today is still working for you in 3 years. Here is what that compounds to.</div></div>
+      <div class="so"><div class="al">Subject B</div><div class="st">What a review posted today is worth in 36 months</div><div class="pt2">Preview: ReviewTap 2.0 is not just a feature upgrade. It is a compounding asset.</div></div>
+    </div>
+    <div class="epw">
+      <div class="epb"><div class="d dr"></div><div class="d dy"></div><div class="d dg"></div><span>Email Preview — support@reviewtap.co.za</span></div>
+      <div class="er">
+        <div class="erh"><div class="erl">Review<span>Tap</span></div><div style="font-size:11px;color:var(--muted)">reviewtap.co.za</div></div>
+        <div class="erc">
+          <p style="font-size:12px;color:var(--muted)">Hi [First Name],</p>
+          <h2>A Google review posted today does not just help you this week.</h2>
+          <p>It sits on your profile. It builds domain trust with Google. It influences searches 6, 12, 36 months from now. Every 5-star review is a future customer who found you instead of your competitor. And that customer tells someone. And Google notices the pattern.</p>
+          <p>This is why the businesses with 800-plus reviews are nearly impossible to displace in local search. They did not just collect reviews. They compounded them.</p>
+          <p><strong>ReviewTap 2.0 accelerates that compounding from both directions.</strong></p>
+          <p>The WhatsApp AI converts more taps into completed reviews — because the follow-through happens inside a conversation the customer is already in, not via a link they forget to click later. The Negative Review Shield stops 1-star reviews from compounding the wrong direction. Together, they build a profile that gets harder to displace with every passing month.</p>
+          <p>Your existing device can be upgraded to this. Remotely. If the timing was not right when I wrote to you last week, I understand. But the compounding does not pause. The earlier it starts, the bigger the advantage 12 months from now.</p>
+          <a href="https://reviewtap.co.za" class="cta">Start the upgrade today →</a>
+          <p class="ps"><strong>P.S.</strong> The reprogram takes 24 to 48 hours once confirmed. Your device stays where it is. You will not notice any downtime.</p>
+          <div class="sig"><div class="sn2">Giorgio van Rooyen</div><div class="st2">ReviewTap · <a href="https://reviewtap.co.za">reviewtap.co.za</a></div></div>
+        </div>
+        <div class="erf"><a href="#">Unsubscribe</a> · SA POPIA compliant.</div>
+      </div>
+    </div>
+    <div class="strat">
+      <h4>Strategy: Different Angle for Non-Converters</h4>
+      <p>The Phase 1 sequence used fear (1-star reviews) and features (checklist) as the primary conversion levers. Non-converters were not moved by those angles. This email uses a completely different frame — the long-term investment case. Some buyers are not motivated by fear of loss; they are motivated by compounding gain. This email finds them.</p>
+      <ul>
+        <li>Never repeat the same argument to a non-converter. If it did not work the first time, a louder version of the same argument will not work either. Change the angle entirely.</li>
+        <li>"Compounding" is a business concept that resonates strongly with owners who think long-term. The comparison to competitor displacement ("800-plus reviews are nearly impossible to displace") makes the urgency tangible without manufactured pressure.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- P2 E2 -->
+  <div id="p2e-2" class="ep">
+    <div class="emeta">
+      <div class="emi"><div class="lbl">Send</div><div class="val" style="color:var(--gold)">Day 14 (Jun 22)</div></div>
+      <div class="emi"><div class="lbl">Segments</div><div class="val">Phase 1 Upgraders (rt2-converted)</div></div>
+      <div class="emi"><div class="lbl">Goal</div><div class="val">Capture testimonials + build rapport</div></div>
+      <div class="emi"><div class="lbl">Angle</div><div class="val">Personal check-in</div></div>
+    </div>
+    <div class="sab">
+      <div class="so"><div class="al">Subject A — Recommended</div><div class="st">One quick question, [First Name] — and a genuine thank you</div><div class="pt2">Preview: If you have had one tap through the new flow, I would love to hear what you noticed.</div></div>
+      <div class="so"><div class="al">Subject B</div><div class="st">Can I ask you something, [First Name]?</div><div class="pt2">Preview: You upgraded. I want to know what you have seen since.</div></div>
+    </div>
+    <div class="epw">
+      <div class="epb"><div class="d dr"></div><div class="d dy"></div><div class="d dg"></div><span>Email Preview — support@reviewtap.co.za</span></div>
+      <div class="er">
+        <div class="erh"><div class="erl">Review<span>Tap</span></div><div style="font-size:11px;color:var(--muted)">reviewtap.co.za</div></div>
+        <div class="erc">
+          <p style="font-size:12px;color:var(--muted)">Hi [First Name],</p>
+          <h2>Thank you for upgrading to ReviewTap 2.0.</h2>
+          <p>If you have had a chance to see the WhatsApp flow in action — even one tap through it — I would love to hear what you noticed. One or two sentences is enough.</p>
+          <p>Something like: "Already had three reviews come through since switching" or "Had a customer send unhappy feedback and we sorted it before it reached Google."</p>
+          <p>Whatever you have seen. It helps me show other businesses what is actually possible — in the real world, not just in a brochure.</p>
+          <p>Hit reply whenever it is convenient. I read every one personally.</p>
+          <div class="sig"><div class="sn2">Giorgio van Rooyen</div><div class="st2">ReviewTap · <a href="https://reviewtap.co.za">reviewtap.co.za</a></div></div>
+        </div>
+        <div class="erf"><a href="#">Unsubscribe</a> · SA POPIA compliant.</div>
+      </div>
+    </div>
+    <div class="strat">
+      <h4>Strategy: Testimonial Harvest</h4>
+      <p>This email serves a dual purpose — it builds customer rapport with upgraders and collects the social proof that will power Phases 3 through 6. The examples given ("Already had three reviews come through" / "sorted it before it reached Google") are deliberately specific because they seed the type of response you want without scripting it.</p>
+      <ul>
+        <li>Send only to <span class="tc">rt2-converted</span> contacts — customers who completed the upgrade. Do not send to prospects.</li>
+        <li>All responses should be logged in GHL or a shared doc for use in Phase 6 social proof emails. Ask for permission to quote if the response is usable.</li>
+        <li>"I read every one personally" is not a throwaway line — it should be true. Giorgio reading replies signals that the business cares about its customers, which compounds brand equity.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- P2 E3 -->
+  <div id="p2e-3" class="ep">
+    <div class="emeta">
+      <div class="emi"><div class="lbl">Send</div><div class="val" style="color:var(--gold)">Day 18 (Jun 26)</div></div>
+      <div class="emi"><div class="lbl">Segments</div><div class="val">Non-converters — final attempt</div></div>
+      <div class="emi"><div class="lbl">Goal</div><div class="val">Close or gracefully exit</div></div>
+      <div class="emi"><div class="lbl">Angle</div><div class="val">Real story from early upgrader</div></div>
+    </div>
+    <div class="sab">
+      <div class="so"><div class="al">Subject A — Recommended</div><div class="st">A business owner messaged me at 11pm last week. Here's what happened.</div><div class="pt2">Preview: One unhappy customer. One intercepted tap. One 5-star review instead of a 1-star.</div></div>
+      <div class="so"><div class="al">Subject B</div><div class="st">The Negative Review Shield caught its first one. Here's the story.</div><div class="pt2">Preview: An unhappy guest tapped the device. Here's how it ended.</div></div>
+    </div>
+    <div class="epw">
+      <div class="epb"><div class="d dr"></div><div class="d dy"></div><div class="d dg"></div><span>Email Preview — support@reviewtap.co.za</span></div>
+      <div class="er">
+        <div class="erh"><div class="erl">Review<span>Tap</span></div><div style="font-size:11px;color:var(--muted)">reviewtap.co.za</div></div>
+        <div class="erc">
+          <p style="font-size:12px;color:var(--muted)">Hi [First Name],</p>
+          <h2>A business owner messaged me at 11pm last week.</h2>
+          <p>An unhappy guest had tapped their ReviewTap stand that evening. Under the old flow, that tap would have gone straight to Google — a 1-star review, written in peak frustration, at 11pm, about a problem that could have been fixed.</p>
+          <p>Under ReviewTap 2.0, the feedback came through privately instead. The owner got a WhatsApp notification. They replied. They apologised. They offered a discount for next time.</p>
+          <p>The guest's reply the next morning: <strong>"This is the most responsive business I have dealt with in years. Changing my review to 5 stars."</strong></p>
+          <p>That is the Negative Review Shield working exactly as designed. One intercepted tap. One private resolution. One 5-star review instead of a 1-star. The owner did not need new hardware. The upgrade took 24 hours. And a returning customer came out the other side.</p>
+          <p>Your existing device can do this. The upgrade is still available.</p>
+          <a href="https://reviewtap.co.za" class="cta">Start the 2.0 upgrade →</a>
+          <p class="ps"><strong>P.S.</strong> If you have already decided this is not the right time, no pressure at all. Just reply and I will stop following up on this topic. If you have questions first, I am here.</p>
+          <div class="sig"><div class="sn2">Giorgio van Rooyen</div><div class="st2">ReviewTap · <a href="https://reviewtap.co.za">reviewtap.co.za</a></div></div>
+        </div>
+        <div class="erf"><a href="#">Unsubscribe</a> · SA POPIA compliant.</div>
+      </div>
+    </div>
+    <div class="strat">
+      <h4>Strategy: The Story Close</h4>
+      <p>A specific real-world story — even a brief one — outperforms feature lists and statistics for late-stage non-converters. The 11pm detail makes it feel like an authentic experience, not a manufactured case study. The P.S. giving them a clean exit ("just reply and I will stop following up") reduces the psychological pressure that stops people from clicking unsubscribe. Counter-intuitively, offering the exit increases reply rate, because readers feel safe enough to engage.</p>
+    </div>
+  </div>
+
+  <!-- P2 WHATSAPP -->
+  <div id="p2e-4" class="ep">
+    <div class="wag">
+      <div class="wac">
+        <div class="wach"><span class="mn">WA 1 — Re-engage Non-responders</span><span class="md">Day 12 (Jun 20)</span></div>
+        <div class="wap">
+          <div class="wacb"><div class="wav">R</div><div><div class="wacn">ReviewTap</div><div class="wacs">online</div></div></div>
+          <div class="wb">Hey [First Name] —<br><br>Wanted to share something brief before moving on.<br><br>Since launching the 2.0 upgrade, we have had a business owner tell us that an unhappy customer's private feedback turned into a 5-star review after they reached out personally.<br><br>That is exactly what the Negative Review Shield is built for.<br><br>Your existing device can do this. Remotely upgraded. No new hardware.<br><br>Still interested? Just reply "upgrade" and I will pick up from there.<br><br>— Giorgio, ReviewTap<br><br><em style="font-size:11px;opacity:.5">Reply STOP to unsubscribe</em><div class="wt">10:00 ✓✓</div></div>
+        </div>
+        <div class="wcs"><div class="wsl">Strategy</div><p>Uses the outcome from Email 2.3 as a brief social proof signal. Short, specific, low-pressure. The "just reply upgrade" CTA is intentionally minimal — no links, no product images. The goal is to re-open a conversation, not to push to a checkout page.</p></div>
+      </div>
+      <div class="wac">
+        <div class="wach"><span class="mn">WA 2 — Testimonial Request</span><span class="md">Day 15 (Jun 23) — upgraders only</span></div>
+        <div class="wap">
+          <div class="wacb"><div class="wav">R</div><div><div class="wacn">ReviewTap</div><div class="wacs">online</div></div></div>
+          <div class="wb">Hi [First Name] 👋<br><br>Quick one — thank you for upgrading to ReviewTap 2.0.<br><br>If you have had a tap through the new WhatsApp flow, I would love to hear what you noticed. Even one sentence.<br><br>It helps me show other business owners what is actually happening out in the real world.<br><br>Reply here whenever convenient.<br><br>— Giorgio<br><br><em style="font-size:11px;opacity:.5">Reply STOP to unsubscribe</em><div class="wt">09:30 ✓✓</div></div>
+        </div>
+        <div class="wcs"><div class="wsl">Strategy</div><p>Mirrored from Email 2.2 but for upgraders who may not have read the email. Testimonials gathered here feed Phase 6 social proof emails. Log every useful response with the sender's permission. A WhatsApp reply feels more casual and less formal than an email reply — lower friction, higher response rate for this type of request.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PHASE 3 ===== -->
+<section id="p3" class="sec">
+  <div class="ph">
+    <div>
+      <h2>Phase 3: <span>Smart Business Card Blitz</span></h2>
+      <p>A standalone 3-week campaign dedicated entirely to Smart Business Cards. By July, Phase 1 upgraders are seeing results — the review side of ReviewTap is working. This phase targets the networking side: every business owner who meets clients face to face is leaving connections on the table. This is the campaign that fixes that.</p>
+    </div>
+    <div class="pmeta">
+      <div class="pdate">Jul 7 – Jul 27 (21 days)</div>
+      <div class="pseg">All segments excl. smart-card-purchased</div>
+      <div class="pseg">3 Emails · 2 WhatsApp Messages</div>
+    </div>
+  </div>
+
+  <div class="enav">
+    <button class="eb active" onclick="SE('p3e',1)">Email 1</button>
+    <button class="eb" onclick="SE('p3e',2)">Email 2</button>
+    <button class="eb" onclick="SE('p3e',3)">Email 3</button>
+    <button class="eb" onclick="SE('p3e',4)" style="background:rgba(37,211,102,.1);border-color:rgba(37,211,102,.3);color:#86efac">WhatsApp (2)</button>
+  </div>
+
+  <div id="p3e-1" class="ep active">
+    <div class="emeta">
+      <div class="emi"><div class="lbl">Send</div><div class="val" style="color:var(--gold)">Jul 7</div></div>
+      <div class="emi"><div class="lbl">Segments</div><div class="val">All (excl. smart-card-purchased)</div></div>
+      <div class="emi"><div class="lbl">Goal</div><div class="val">Open the Smart Card conversation</div></div>
+      <div class="emi"><div class="lbl">Angle</div><div class="val">The Paper Card Problem</div></div>
+    </div>
+    <div class="sab">
+      <div class="so"><div class="al">Subject A — Recommended</div><div class="st">How many business cards have you handed out this year where you never heard back?</div><div class="pt2">Preview: The problem is not the card. It is the 48 hours after the handshake.</div></div>
+      <div class="so"><div class="al">Subject B</div><div class="st">The paper business card has a fatal flaw. Here's what replaces it.</div><div class="pt2">Preview: One tap. Your full digital presence. On their phone before you finish the handshake.</div></div>
+    </div>
+    <div class="epw">
+      <div class="epb"><div class="d dr"></div><div class="d dy"></div><div class="d dg"></div><span>Email Preview — support@reviewtap.co.za</span></div>
+      <div class="er">
+        <div class="erh"><div class="erl">Review<span>Tap</span></div><div style="font-size:11px;color:var(--muted)">reviewtap.co.za</div></div>
+        <div class="erc">
+          <p style="font-size:12px;color:var(--muted)">Hi [First Name],</p>
+          <h2>There is a moment that happens after every handshake.</h2>
+          <p>You hand over your card. They take it. They say "I'll be in touch." Both of you mean it. Then life happens. The card goes in a pocket. The pocket empties into a drawer. Three months later, they cannot remember your name — and they never looked you up.</p>
+          <p>This is not a memory problem. It is a friction problem. Paper cards create a gap between "I should reach out" and "I actually do." That gap is where business quietly disappears.</p>
+          <p><strong>The ReviewTap Smart Business Card closes that gap at the tap.</strong></p>
+          <p>Tap it against their phone during or just after the handshake. In two seconds, they have your full digital presence saved on their screen — not in a pocket, not in a drawer. On their phone, immediately actionable.</p>
+          <ul class="fl">
+            <li><span class="ck">→</span> One-tap call, WhatsApp, or email buttons</li>
+            <li><span class="ck">→</span> Your Google Reviews profile (they can leave you a review right there)</li>
+            <li><span class="ck">→</span> Your website or booking link</li>
+            <li><span class="ck">→</span> Your social profiles</li>
+          </ul>
+          <p>No app required. Works with all Android and iPhone XS and newer. Custom-branded with your logo and colours. Your personalised mini landing page is hosted by ReviewTap and editable at any time — update your links without reprinting.</p>
+          <div class="pb">
+            <div class="pn">Custom Smart Business Card (NFC + QR)</div>
+            <div><span class="pp">R649</span> <span class="po">R1,500</span></div>
+            <div class="pd">Ships in 5 to 7 business days after design approval. 14-day money-back guarantee.</div>
+            <a href="https://reviewtap.co.za/products/custom-nfc-qr-business-card">Order now →</a>
+          </div>
+          <a href="https://reviewtap.co.za/products/custom-nfc-qr-business-card" class="cta">Order my Smart Business Card →</a>
+          <p class="ps"><strong>P.S.</strong> Your NFC review stand works while you are behind the counter. Your Smart Business Card works every time you leave the building. Two devices. Two completely different growth levers.</p>
+          <div class="sig"><div class="sn2">Giorgio van Rooyen</div><div class="st2">ReviewTap · <a href="https://reviewtap.co.za">reviewtap.co.za</a></div></div>
+        </div>
+        <div class="erf"><a href="#">Unsubscribe</a> · SA POPIA compliant.</div>
+      </div>
+    </div>
+    <div class="strat">
+      <h4>Strategy: Open With the Pain</h4>
+      <p>Subject A is a question the reader answers before they open the email — and almost every business owner answers "plenty." That internal answer creates the emotional buy-in before they read a single word of body copy. The friction frame ("not a memory problem — a friction problem") is more sophisticated than the usual "NFC is better" pitch and resonates with analytically-minded business owners.</p>
+    </div>
+  </div>
+
+  <div id="p3e-2" class="ep">
+    <div class="emeta">
+      <div class="emi"><div class="lbl">Send</div><div class="val" style="color:var(--gold)">Jul 14</div></div>
+      <div class="emi"><div class="lbl">Segments</div><div class="val">All (excl. smart-card-purchased)</div></div>
+      <div class="emi"><div class="lbl">Goal</div><div class="val">Product deep-dive + convert</div></div>
+      <div class="emi"><div class="lbl">Angle</div><div class="val">Full Spec + Social Proof</div></div>
+    </div>
+    <div class="sab">
+      <div class="so"><div class="al">Subject A — Recommended</div><div class="st">Inside the Smart Business Card — everything it does, how it works</div><div class="pt2">Preview: NTAG215 chip. 10-year data retention. Custom landing page. Here is the full spec.</div></div>
+      <div class="so"><div class="al">Subject B</div><div class="st">What exactly is on a ReviewTap Smart Business Card?</div><div class="pt2">Preview: Everything you would put in a paper card — plus everything you couldn't.</div></div>
+    </div>
+    <div class="epw">
+      <div class="epb"><div class="d dr"></div><div class="d dy"></div><div class="d dg"></div><span>Email Preview — support@reviewtap.co.za</span></div>
+      <div class="er">
+        <div class="erh"><div class="erl">Review<span>Tap</span></div><div style="font-size:11px;color:var(--muted)">reviewtap.co.za</div></div>
+        <div class="erc">
+          <p style="font-size:12px;color:var(--muted)">Hi [First Name],</p>
+          <h2>Here is exactly what the Smart Business Card contains and how it works.</h2>
+          <p><strong>The card itself:</strong></p>
+          <ul class="fl">
+            <li><span class="ck">✅</span> Premium PVC card — same size as a bank card (85.5mm × 54mm)</li>
+            <li><span class="ck">✅</span> NTAG215 NFC chip — works with all Android and iPhone XS and newer</li>
+            <li><span class="ck">✅</span> Integrated QR code on the back for phones that prefer scanning over tapping</li>
+            <li><span class="ck">✅</span> 10-year data retention, 100,000 erase cycles — it outlasts your paper cards by a decade</li>
+            <li><span class="ck">✅</span> No app required — tap triggers a web page, no download needed</li>
+          </ul>
+          <p><strong>What the recipient sees when they tap:</strong></p>
+          <ul class="fl">
+            <li><span class="ck">→</span> Your name and photo (optional)</li>
+            <li><span class="ck">→</span> One-tap call, WhatsApp, and email buttons</li>
+            <li><span class="ck">→</span> Your Google Reviews profile</li>
+            <li><span class="ck">→</span> Your website or booking link</li>
+            <li><span class="ck">→</span> Your social profiles (Facebook, Instagram, LinkedIn, or any URL)</li>
+          </ul>
+          <p><strong>What you get with your order:</strong></p>
+          <ul class="fl">
+            <li><span class="ck">✅</span> 4 template designs with brand colour customisation</li>
+            <li><span class="ck">✅</span> Your logo on the front of the card</li>
+            <li><span class="ck">✅</span> Mini landing page hosted by ReviewTap at a personalised URL</li>
+            <li><span class="ck">✅</span> Editable links — update your website or socials without reprinting</li>
+            <li><span class="ck">✅</span> Design approval before print — you sign off before anything goes to production</li>
+          </ul>
+          <div class="pb">
+            <div class="pn">Custom Smart Business Card (NFC + QR) — R649</div>
+            <div><span class="pp">R649</span> <span class="po">R1,500</span></div>
+            <div class="pd">5 to 7 business days after design approval. 14-day money-back guarantee.</div>
+            <a href="https://reviewtap.co.za/products/custom-nfc-qr-business-card">Order now →</a>
+          </div>
+          <a href="https://reviewtap.co.za/products/custom-nfc-qr-business-card" class="cta">Order my Smart Business Card →</a>
+          <p class="ps"><strong>P.S.</strong> The personalised URL on your mini landing page is editable after you receive the card. If your number, website, or socials change, you update the link — the physical card stays the same. You never need to reprint.</p>
+          <div class="sig"><div class="sn2">Giorgio van Rooyen</div><div class="st2">ReviewTap · <a href="https://reviewtap.co.za">reviewtap.co.za</a></div></div>
+        </div>
+        <div class="erf"><a href="#">Unsubscribe</a> · SA POPIA compliant.</div>
+      </div>
+    </div>
+    <div class="strat">
+      <h4>Strategy: The Spec Email Converts Consideration Buyers</h4>
+      <p>After the problem email (Phase 3 Email 1), some readers are interested but not yet confident about what they are buying. This email converts the "I want to understand it better before I order" group. The P.S. about editable links addresses a hidden objection — "what if my details change?" — that many readers have but never ask.</p>
+    </div>
+  </div>
+
+  <div id="p3e-3" class="ep">
+    <div class="emeta">
+      <div class="emi"><div class="lbl">Send</div><div class="val" style="color:var(--gold)">Jul 21</div></div>
+      <div class="emi"><div class="lbl">Segments</div><div class="val">All (excl. smart-card-purchased)</div></div>
+      <div class="emi"><div class="lbl">Goal</div><div class="val">Both/and close — stand + card together</div></div>
+      <div class="emi"><div class="lbl">Angle</div><div class="val">Complete Setup</div></div>
+    </div>
+    <div class="sab">
+      <div class="so"><div class="al">Subject A — Recommended</div><div class="st">Your review stand works the counter. Your business card works the room. Here's why most owners get both.</div><div class="pt2">Preview: Two devices. Two touchpoints where business is won or lost. Here is the full picture.</div></div>
+      <div class="so"><div class="al">Subject B</div><div class="st">The complete ReviewTap setup — and why the two devices do completely different jobs</div><div class="pt2">Preview: One collects reviews from customers. One builds relationships with everyone else.</div></div>
+    </div>
+    <div class="epw">
+      <div class="epb"><div class="d dr"></div><div class="d dy"></div><div class="d dg"></div><span>Email Preview — support@reviewtap.co.za</span></div>
+      <div class="er">
+        <div class="erh"><div class="erl">Review<span>Tap</span></div><div style="font-size:11px;color:var(--muted)">reviewtap.co.za</div></div>
+        <div class="erc">
+          <p style="font-size:12px;color:var(--muted)">Hi [First Name],</p>
+          <h2>Two devices. Two completely different jobs.</h2>
+          <div class="pb">
+            <div class="pn">Custom Branded Google Review Stand</div>
+            <p style="font-size:13px;color:#c0cad6;margin-top:8px">Sits at your counter, desk, or checkout point. Every customer tap goes through the WhatsApp AI — happy customers review on Google, unhappy customers come to you privately. It runs the review side of your business without you asking.</p>
+          </div>
+          <div class="pb">
+            <div class="pn">Smart Business Card</div>
+            <p style="font-size:13px;color:#c0cad6;margin-top:8px">Goes in your pocket. Every time you meet someone new — at a networking event, on a site visit, at a trade show — you tap it against their phone. In two seconds they have your full contact, your WhatsApp, your Google profile, and your booking link. It runs the client acquisition side of your business without you following up.</p>
+          </div>
+          <p>Most ReviewTap customers start with the review stand. The Smart Business Card comes later, when they realise that the NFC technology they already trust for reviews can do the same job for their relationships.</p>
+          <p>The most common thing I hear after customers get both: <em>"I should have ordered the card from the start."</em></p>
+          <div class="div"></div>
+          <p>Both are R649. Both include a 14-day money-back guarantee.</p>
+          <a href="https://reviewtap.co.za/products/custom-nfc-qr-business-card" class="cta">Order my Smart Business Card →</a>
+          <a href="https://reviewtap.co.za/products/custom-nfc-qr-google-review-stand" style="display:block;color:var(--gold);font-size:13px;font-weight:700;margin-top:8px">Or upgrade my review stand to Custom Branded →</a>
+          <p class="ps"><strong>P.S.</strong> The Custom Review Stand ships with ReviewTap 2.0 — the WhatsApp AI and Negative Review Shield — built in from day one. No separate reprogram needed.</p>
+          <div class="sig"><div class="sn2">Giorgio van Rooyen</div><div class="st2">ReviewTap · <a href="https://reviewtap.co.za">reviewtap.co.za</a></div></div>
+        </div>
+        <div class="erf"><a href="#">Unsubscribe</a> · SA POPIA compliant.</div>
+      </div>
+    </div>
+    <div class="strat">
+      <h4>Strategy: The Both/And Close</h4>
+      <p>By Email 3 of this phase, readers who have not bought are in one of two states: interested in the card but not quite there, or already considering the review stand upgrade. This email serves both states simultaneously, framing the two products as complementary rather than competing. The "most common thing I hear" social proof line converts the fence-sitters — it uses peer behaviour to normalise the purchase of both.</p>
+    </div>
+  </div>
+
+  <div id="p3e-4" class="ep">
+    <div class="wag">
+      <div class="wac">
+        <div class="wach"><span class="mn">WA 1 — Smart Card Pitch</span><span class="md">Jul 9</span></div>
+        <div class="wap">
+          <div class="wacb"><div class="wav">R</div><div><div class="wacn">ReviewTap</div><div class="wacs">online</div></div></div>
+          <div class="wb">[First Name] —<br><br>Quick question: how many people have you met this month who said they would follow up but never did?<br><br>The Smart Business Card fixes what happens after the handshake.<br><br>Tap it against their phone: your WhatsApp, Google profile, booking link, and full contact details — all in one tap. No app. No typing.<br><br>Custom-branded. R649. Ships in 5 to 7 days.<br>👉 https://reviewtap.co.za/products/custom-nfc-qr-business-card<br><br>14-day guarantee. Zero risk.<br><br>— Giorgio, ReviewTap<br><br><em style="font-size:11px;opacity:.5">Reply STOP to unsubscribe</em><div class="wt">10:00 ✓✓</div></div>
+        </div>
+        <div class="wcs"><div class="wsl">Strategy</div><p>Opens with a rhetorical question that creates immediate self-reflection. Include a Smart Business Card product image (white background, clean crop). The guarantee closes the objection. Short, direct, personal — this message converts independently from the email sequence.</p></div>
+      </div>
+      <div class="wac">
+        <div class="wach"><span class="mn">WA 2 — Both Devices</span><span class="md">Jul 18</span></div>
+        <div class="wap">
+          <div class="wacb"><div class="wav">R</div><div><div class="wacn">ReviewTap</div><div class="wacs">online</div></div></div>
+          <div class="wb">[First Name] —<br><br>If you have the ReviewTap stand at your premises, here is what most owners add next:<br><br>The Smart Business Card.<br><br>Stand = reviews from customers at your location.<br>Card = connections from everyone you meet outside it.<br><br>Same NFC technology. Two completely different jobs.<br><br>R649 each. Both with 14-day guarantee.<br><br>👉 Smart Business Card: https://reviewtap.co.za/products/custom-nfc-qr-business-card<br><br>— Giorgio<br><br><em style="font-size:11px;opacity:.5">Reply STOP to unsubscribe</em><div class="wt">10:30 ✓✓</div></div>
+        </div>
+        <div class="wcs"><div class="wsl">Strategy</div><p>The "what most owners add next" framing uses social proof without needing a specific testimonial. It normalises the Smart Card as the natural next step for someone who already owns the stand. Short, logical, no pressure.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PHASE 4 ===== -->
+<section id="p4" class="sec">
+  <div class="ph">
+    <div>
+      <h2>Phase 4: <span>Automation Upsell</span></h2>
+      <p>By late July, device owners have been running ReviewTap for 6+ weeks. The ones not on an automation plan are leaving reviews on the table — customers who tapped, said they were happy, but never completed the Google review because there was no follow-up. This campaign converts hardware-only customers to monthly automation subscribers.</p>
+    </div>
+    <div class="pmeta">
+      <div class="pdate">Jul 28 – Aug 17 (21 days)</div>
+      <div class="pseg">Device owners without automation plan</div>
+      <div class="pseg">3 Emails · 2 WhatsApp Messages</div>
+    </div>
+  </div>
+
+  <div class="enav">
+    <button class="eb active" onclick="SE('p4e',1)">Email 1</button>
+    <button class="eb" onclick="SE('p4e',2)">Email 2</button>
+    <button class="eb" onclick="SE('p4e',3)">Email 3</button>
+    <button class="eb" onclick="SE('p4e',4)" style="background:rgba(37,211,102,.1);border-color:rgba(37,211,102,.3);color:#86efac">WhatsApp (2)</button>
+  </div>
+
+  <div id="p4e-1" class="ep active">
+    <div class="emeta">
+      <div class="emi"><div class="lbl">Send</div><div class="val" style="color:var(--gold)">Jul 28</div></div>
+      <div class="emi"><div class="lbl">Segments</div><div class="val">Device owners without automation plan</div></div>
+      <div class="emi"><div class="lbl">Goal</div><div class="val">Reveal the gap — taps not converting</div></div>
+      <div class="emi"><div class="lbl">Angle</div><div class="val">The Missing Step</div></div>
+    </div>
+    <div class="sab">
+      <div class="so"><div class="al">Subject A — Recommended</div><div class="st">Your device collects taps. The automation converts them into reviews.</div><div class="pt2">Preview: There is a gap between a tap and a completed Google review. Here is what closes it.</div></div>
+      <div class="so"><div class="al">Subject B</div><div class="st">How many of your taps actually turned into Google reviews last month?</div><div class="pt2">Preview: The ones that did not? A follow-up message would have caught most of them.</div></div>
+    </div>
+    <div class="epw">
+      <div class="epb"><div class="d dr"></div><div class="d dy"></div><div class="d dg"></div><span>Email Preview — support@reviewtap.co.za</span></div>
+      <div class="er">
+        <div class="erh"><div class="erl">Review<span>Tap</span></div><div style="font-size:11px;color:var(--muted)">reviewtap.co.za</div></div>
+        <div class="erc">
+          <p style="font-size:12px;color:var(--muted)">Hi [First Name],</p>
+          <h2>Your ReviewTap device collects taps. The automation converts them into reviews.</h2>
+          <p>Here is a gap that most device owners do not know about until they see the data.</p>
+          <p>A customer taps your stand. WhatsApp opens. The AI asks how their experience was. They type "great, loved it!" They tap send. Then life takes over. They forget to actually go and leave the Google review. The tap registered. The review never arrived.</p>
+          <p>This is not unusual. It is the natural drop-off between intention and action. Most people genuinely mean to leave the review. They just never get back to it.</p>
+          <p><strong>ReviewTap's automation plan closes that gap with one follow-up message.</strong></p>
+          <p>When a customer engages positively through the tap flow, their number is captured automatically. They receive a WhatsApp message the next morning:</p>
+          <div class="qt">"Hi [Name], thanks for the kind words about [Business]! Your Google review means the world to us — it takes less than 60 seconds: [link]"</div>
+          <p>The message arrives warm, in a conversation they already started, at a moment they are not distracted by being in your premises. The completion rate on this follow-up is significantly higher than the in-session tap alone.</p>
+          <p>Customers on the automation plan see <strong>40 to 60% more reviews per month</strong> than device-only customers. Not because more people tap. Because more taps complete.</p>
+          <a href="https://reviewtap.co.za" class="cta">See the automation plan →</a>
+          <p class="ps"><strong>P.S.</strong> The automation plan also includes a notification every time a new Google review is posted on your profile — so you can respond within the hour, not three weeks later.</p>
+          <div class="sig"><div class="sn2">Giorgio van Rooyen</div><div class="st2">ReviewTap · <a href="https://reviewtap.co.za">reviewtap.co.za</a></div></div>
+        </div>
+        <div class="erf"><a href="#">Unsubscribe</a> · SA POPIA compliant.</div>
+      </div>
+    </div>
+    <div class="strat">
+      <h4>Strategy: Name the Gap They Don't Know About</h4>
+      <p>This is a problem the reader did not know they had. The most effective way to sell a solution to an unknown problem is to make the gap visible and specific ("They forget to actually go and leave the Google review"). The 40-60% stat is the proof that the gap is real and the solution works. The P.S. introduces review monitoring — a secondary feature that lands as a bonus, not a distraction.</p>
+    </div>
+  </div>
+
+  <div id="p4e-2" class="ep">
+    <div class="emeta">
+      <div class="emi"><div class="lbl">Send</div><div class="val" style="color:var(--gold)">Aug 4</div></div>
+      <div class="emi"><div class="lbl">Segments</div><div class="val">Device owners without automation plan</div></div>
+      <div class="emi"><div class="lbl">Goal</div><div class="val">ROI justification</div></div>
+      <div class="emi"><div class="lbl">Angle</div><div class="val">The Maths</div></div>
+    </div>
+    <div class="sab">
+      <div class="so"><div class="al">Subject A — Recommended</div><div class="st">What is a Google review actually worth in rands?</div><div class="pt2">Preview: If one review influences one new customer, and that customer spends R800 — here is what the maths say.</div></div>
+      <div class="so"><div class="al">Subject B</div><div class="st">The ROI of automated review follow-ups (with real numbers)</div><div class="pt2">Preview: One automated WhatsApp message. 40-60% more reviews per month. Here is what that is worth.</div></div>
+    </div>
+    <div class="epw">
+      <div class="epb"><div class="d dr"></div><div class="d dy"></div><div class="d dg"></div><span>Email Preview — support@reviewtap.co.za</span></div>
+      <div class="er">
+        <div class="erh"><div class="erl">Review<span>Tap</span></div><div style="font-size:11px;color:var(--muted)">reviewtap.co.za</div></div>
+        <div class="erc">
+          <p style="font-size:12px;color:var(--muted)">Hi [First Name],</p>
+          <h2>Let me do some maths with you.</h2>
+          <p>Say your average customer spends R800 with you. Say your Google profile conversion rate improves by 5% because of more reviews and a higher rating. If 100 people discover your Google listing in a month, a 5% improvement means 5 extra customers.</p>
+          <p><strong>5 customers × R800 = R4,000 in additional monthly revenue. From reviews.</strong></p>
+          <p>The businesses collecting the most reviews are not doing it manually. They have a system that asks every satisfied customer, at the right moment, through the right channel. ReviewTap's automation does this through WhatsApp — the channel with a 95% open rate. The follow-up arrives in the same conversation thread the customer already started. It is warm. It is expected. And it arrives the next morning, when the customer is not distracted.</p>
+          <p>Customers on the automation plan average 40 to 60% more completed reviews per month versus device-only customers. You already have the device. Adding automation activates on your existing setup within 24 hours. No hardware change.</p>
+          <a href="https://reviewtap.co.za" class="cta">Activate my automation plan →</a>
+          <p class="ps"><strong>P.S.</strong> You already own the device. Automation is the layer that makes it compound faster. The monthly cost covers itself with one or two additional customers per month in most categories.</p>
+          <div class="sig"><div class="sn2">Giorgio van Rooyen</div><div class="st2">ReviewTap · <a href="https://reviewtap.co.za">reviewtap.co.za</a></div></div>
+        </div>
+        <div class="erf"><a href="#">Unsubscribe</a> · SA POPIA compliant.</div>
+      </div>
+    </div>
+    <div class="strat">
+      <h4>Strategy: Let the Maths Sell It</h4>
+      <p>Analytical buyers need a number to justify the decision. The maths in this email use conservative assumptions (5% improvement, R800 average spend) that readers can swap in their own numbers. When readers do the calculation with their actual figures, the result almost always makes the automation plan look like an obvious decision. Do the maths for them, but leave the variable open.</p>
+    </div>
+  </div>
+
+  <div id="p4e-3" class="ep">
+    <div class="emeta">
+      <div class="emi"><div class="lbl">Send</div><div class="val" style="color:var(--gold)">Aug 11</div></div>
+      <div class="emi"><div class="lbl">Segments</div><div class="val">Device owners without automation plan</div></div>
+      <div class="emi"><div class="lbl">Goal</div><div class="val">Convert — full plan details</div></div>
+      <div class="emi"><div class="lbl">Angle</div><div class="val">Everything Included</div></div>
+    </div>
+    <div class="sab">
+      <div class="so"><div class="al">Subject A — Recommended</div><div class="st">The ReviewTap automation plan — what's included and how to activate</div><div class="pt2">Preview: Automated follow-ups, review monitoring, monthly reports. Everything on your existing device.</div></div>
+      <div class="so"><div class="al">Subject B</div><div class="st">Everything the automation plan includes (no setup required)</div><div class="pt2">Preview: Activates on your existing ReviewTap device within 24 hours. Here is the full list.</div></div>
+    </div>
+    <div class="epw">
+      <div class="epb"><div class="d dr"></div><div class="d dy"></div><div class="d dg"></div><span>Email Preview — support@reviewtap.co.za</span></div>
+      <div class="er">
+        <div class="erh"><div class="erl">Review<span>Tap</span></div><div style="font-size:11px;color:var(--muted)">reviewtap.co.za</div></div>
+        <div class="erc">
+          <p style="font-size:12px;color:var(--muted)">Hi [First Name],</p>
+          <h2>The ReviewTap automation plan, in full.</h2>
+          <ul class="fl">
+            <li><span class="ck">✅</span> Automated WhatsApp follow-up to every customer who engages positively through the tap flow</li>
+            <li><span class="ck">✅</span> Personalised follow-up message trained on your business name and tone</li>
+            <li><span class="ck">✅</span> Google review link delivered automatically in the follow-up — one tap from them to review</li>
+            <li><span class="ck">✅</span> New review alert — notification every time a review is posted on your Google profile</li>
+            <li><span class="ck">✅</span> Negative review alert — immediate notification if a sub-3 star review appears anywhere</li>
+            <li><span class="ck">✅</span> Monthly review performance report — total reviews, average rating, trend vs prior month</li>
+            <li><span class="ck">✅</span> Human escalation — the AI knows when a situation needs a real person and flags it to you</li>
+          </ul>
+          <p>Works on your existing ReviewTap device. No hardware change. Activates within 24 hours.</p>
+          <a href="https://reviewtap.co.za" class="cta">Activate my automation plan →</a>
+          <p class="ps"><strong>P.S.</strong> Monthly subscribers get priority access to all new ReviewTap features as they launch. ReviewTap 2.0 was rolled out to active subscribers first, before any public announcement.</p>
+          <div class="sig"><div class="sn2">Giorgio van Rooyen</div><div class="st2">ReviewTap · <a href="https://reviewtap.co.za">reviewtap.co.za</a></div></div>
+        </div>
+        <div class="erf"><a href="#">Unsubscribe</a> · SA POPIA compliant.</div>
+      </div>
+    </div>
+    <div class="strat">
+      <h4>Strategy: The Full Feature Close</h4>
+      <p>After two emails establishing the problem and the ROI, this email is the definitive "here is what you get" closer. The checklist format is scannable — readers who have been considering the plan can confirm every feature they care about without reading the whole email. The P.S. adds a surprise value: insider early access to new features, which positions the monthly plan as more than just automation.</p>
+    </div>
+  </div>
+
+  <div id="p4e-4" class="ep">
+    <div class="wag">
+      <div class="wac">
+        <div class="wach"><span class="mn">WA 1 — Automation Intro</span><span class="md">Jul 30</span></div>
+        <div class="wap">
+          <div class="wacb"><div class="wav">R</div><div><div class="wacn">ReviewTap</div><div class="wacs">online</div></div></div>
+          <div class="wb">[First Name] 👋<br><br>Quick question about your ReviewTap.<br><br>When a customer taps your stand and tells the AI they had a great experience — what happens if they never actually go and leave the review?<br><br>That is the most common gap. The automation plan closes it with one same-day WhatsApp follow-up.<br><br>"Thanks for the kind words! Here is the review link — 60 seconds:"<br><br>Most customers at that stage do it. That is where the 40-60% more reviews per month comes from.<br><br>Worth a look? Reply here and I will send the details.<br><br>— Giorgio, ReviewTap<br><br><em style="font-size:11px;opacity:.5">Reply STOP to unsubscribe</em><div class="wt">10:00 ✓✓</div></div>
+        </div>
+        <div class="wcs"><div class="wsl">Strategy</div><p>Opens with a specific scenario the reader can immediately map onto their own experience. The example message shown ("Thanks for the kind words! Here is the review link") makes the automation tangible — they can picture it arriving. Ends with a soft conversation opener rather than a hard link.</p></div>
+      </div>
+      <div class="wac">
+        <div class="wach"><span class="mn">WA 2 — Follow-up</span><span class="md">Aug 7</span></div>
+        <div class="wap">
+          <div class="wacb"><div class="wav">R</div><div><div class="wacn">ReviewTap</div><div class="wacs">online</div></div></div>
+          <div class="wb">[First Name] —<br><br>Sent you a note last week about the automation follow-up for ReviewTap.<br><br>Short version: your device collects the tap. The automation collects the review. One follows the other automatically. No extra work from you.<br><br>Customers on the plan average 40-60% more reviews per month than device-only. Activates on your existing setup in 24 hours.<br><br>Reply here if you want the plan details before deciding.<br><br>— Giorgio<br><br><em style="font-size:11px;opacity:.5">Reply STOP to unsubscribe</em><div class="wt">10:00 ✓✓</div></div>
+        </div>
+        <div class="wcs"><div class="wsl">Strategy</div><p>Brief re-engagement message for non-responders. The one-sentence summary ("your device collects the tap, the automation collects the review") is the entire value prop in plain language. Ends with a reply-based CTA to keep the conversation human.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PHASE 5 ===== -->
+<section id="p5" class="sec">
+  <div class="ph">
+    <div>
+      <h2>Phase 5: <span>Referral Programme Launch</span></h2>
+      <p>By mid-August, existing customers have had 10+ weeks with ReviewTap. The ones seeing results are the best advocates. This phase launches a structured referral programme with a financial incentive (R200 credit per referral), a double-credit week, and a simple sharing mechanism. Goal: turn satisfied customers into a new customer acquisition channel.</p>
+    </div>
+    <div class="pmeta">
+      <div class="pdate">Aug 18 – Sep 7 (21 days)</div>
+      <div class="pseg">All existing customers</div>
+      <div class="pseg">3 Emails · 2 WhatsApp Messages</div>
+    </div>
+  </div>
+
+  <div class="enav">
+    <button class="eb active" onclick="SE('p5e',1)">Email 1</button>
+    <button class="eb" onclick="SE('p5e',2)">Email 2</button>
+    <button class="eb" onclick="SE('p5e',3)">Email 3</button>
+    <button class="eb" onclick="SE('p5e',4)" style="background:rgba(37,211,102,.1);border-color:rgba(37,211,102,.3);color:#86efac">WhatsApp (2)</button>
+  </div>
+
+  <div id="p5e-1" class="ep active">
+    <div class="emeta">
+      <div class="emi"><div class="lbl">Send</div><div class="val" style="color:var(--gold)">Aug 18</div></div>
+      <div class="emi"><div class="lbl">Segments</div><div class="val">All existing customers</div></div>
+      <div class="emi"><div class="lbl">Goal</div><div class="val">Launch referral programme</div></div>
+      <div class="emi"><div class="lbl">Angle</div><div class="val">Earn R200 per referral</div></div>
+    </div>
+    <div class="sab">
+      <div class="so"><div class="al">Subject A — Recommended</div><div class="st">Know another business owner who needs more Google reviews?</div><div class="pt2">Preview: You refer them. They order. You earn R200 in account credit. No cap, no expiry.</div></div>
+      <div class="so"><div class="al">Subject B</div><div class="st">ReviewTap referral programme: R200 credit for every business you introduce</div><div class="pt2">Preview: One WhatsApp message from you could fix a contact's review problem — and earn you credit.</div></div>
+    </div>
+    <div class="epw">
+      <div class="epb"><div class="d dr"></div><div class="d dy"></div><div class="d dg"></div><span>Email Preview — support@reviewtap.co.za</span></div>
+      <div class="er">
+        <div class="erh"><div class="erl">Review<span>Tap</span></div><div style="font-size:11px;color:var(--muted)">reviewtap.co.za</div></div>
+        <div class="erc">
+          <p style="font-size:12px;color:var(--muted)">Hi [First Name],</p>
+          <h2>You have seen what ReviewTap does for your reviews. You probably know someone else who needs it.</h2>
+          <p>A restaurant owner. A trades business. A salon. A car dealership. A healthcare practice. Almost every local service business in South Africa is leaving Google reviews on the table — most of them do not know a better way exists.</p>
+          <p>Starting today, every business you refer that places an order earns you <strong>R200 in ReviewTap account credit</strong>. The credit never expires and there is no cap on referrals.</p>
+          <p><strong>How it works:</strong></p>
+          <ul class="fl">
+            <li><span class="ck">1.</span> Reply to this email with the word "referral" and I will send your personal referral link</li>
+            <li><span class="ck">2.</span> Share the link with a business contact who needs more reviews</li>
+            <li><span class="ck">3.</span> When they place an order through your link, R200 is credited to your account automatically</li>
+            <li><span class="ck">4.</span> Use the credit against your next order, renewal, or upgrade — no minimum</li>
+          </ul>
+          <p>The best referral message I have seen from a customer is one sentence: <em>"I use this NFC device for my Google reviews and it has made a real difference — here's their link if you want to check it out."</em> That is it. Personal. No sales pitch. It works because the trust is already there.</p>
+          <a href="https://reviewtap.co.za" class="cta">Get my referral link →</a>
+          <p class="ps"><strong>P.S.</strong> Five referrals = R1,000 in credit. Ten referrals = R2,000. There is no limit.</p>
+          <div class="sig"><div class="sn2">Giorgio van Rooyen</div><div class="st2">ReviewTap · <a href="https://reviewtap.co.za">reviewtap.co.za</a></div></div>
+        </div>
+        <div class="erf"><a href="#">Unsubscribe</a> · SA POPIA compliant.</div>
+      </div>
+    </div>
+    <div class="strat">
+      <h4>Strategy: Make the Referral Feel Easy</h4>
+      <p>The biggest barrier to referrals is not motivation — it is not knowing what to say. This email solves that by giving them the exact message to send ("I use this NFC device for my Google reviews and it has made a real difference"). When you write the script for them, referral rates increase significantly. The P.S. stacks the value — R1,000 at 5 referrals makes the programme feel like real money, not just a token gesture.</p>
+    </div>
+  </div>
+
+  <div id="p5e-2" class="ep">
+    <div class="emeta">
+      <div class="emi"><div class="lbl">Send</div><div class="val" style="color:var(--gold)">Aug 25</div></div>
+      <div class="emi"><div class="lbl">Segments</div><div class="val">All existing customers</div></div>
+      <div class="emi"><div class="lbl">Goal</div><div class="val">Social proof from early referrers</div></div>
+      <div class="emi"><div class="lbl">Angle</div><div class="val">Peer behaviour normalises it</div></div>
+    </div>
+    <div class="sab">
+      <div class="so"><div class="al">Subject A — Recommended</div><div class="st">The fastest way to offset your ReviewTap costs (according to our customers)</div><div class="pt2">Preview: One WhatsApp message. Ten minutes. R200 in credit. Here is how the early referrers are doing it.</div></div>
+      <div class="so"><div class="al">Subject B</div><div class="st">3 referrals in the first week. Here's what they sent.</div><div class="pt2">Preview: The referral messages that are actually working — and why they work.</div></div>
+    </div>
+    <div class="epw">
+      <div class="epb"><div class="d dr"></div><div class="d dy"></div><div class="d dg"></div><span>Email Preview — support@reviewtap.co.za</span></div>
+      <div class="er">
+        <div class="erh"><div class="erl">Review<span>Tap</span></div><div style="font-size:11px;color:var(--muted)">reviewtap.co.za</div></div>
+        <div class="erc">
+          <p style="font-size:12px;color:var(--muted)">Hi [First Name],</p>
+          <h2>Since launching the referral programme last week, the customers earning the most credit are not doing anything complicated.</h2>
+          <p>They are sending one WhatsApp message to a contact:</p>
+          <div class="qt">"Hey, I've been using this NFC device from ReviewTap for my Google reviews. My reviews have gone up since I started — here's their link if you want to check it out: [link]"</div>
+          <p>That is the entire referral. Personal recommendation. No pitch. No pressure. The trust is already there because it is coming from someone the contact knows and respects.</p>
+          <p>If the contact places an order, R200 goes to your account. Credits stack. There is no cap and no expiry.</p>
+          <p>If you have not got your referral link yet, reply with the word "referral" and I will send it over.</p>
+          <a href="https://reviewtap.co.za" class="cta">Get my referral link →</a>
+          <p class="ps"><strong>P.S.</strong> Credits are redeemable against any ReviewTap order, renewal, or upgrade. No minimum redemption amount.</p>
+          <div class="sig"><div class="sn2">Giorgio van Rooyen</div><div class="st2">ReviewTap · <a href="https://reviewtap.co.za">reviewtap.co.za</a></div></div>
+        </div>
+        <div class="erf"><a href="#">Unsubscribe</a> · SA POPIA compliant.</div>
+      </div>
+    </div>
+    <div class="strat">
+      <h4>Strategy: Show Them the Behaviour</h4>
+      <p>Showing that other customers are already doing something (and making it look effortless) is more motivating than explaining the programme again. The quoted example message does two things: it makes the referral feel doable, and it implicitly sets a quality standard — a genuine recommendation, not a spam blast.</p>
+    </div>
+  </div>
+
+  <div id="p5e-3" class="ep">
+    <div class="emeta">
+      <div class="emi"><div class="lbl">Send</div><div class="val" style="color:var(--gold)">Sep 1</div></div>
+      <div class="emi"><div class="lbl">Segments</div><div class="val">All existing customers</div></div>
+      <div class="emi"><div class="lbl">Goal</div><div class="val">Double-credit week urgency close</div></div>
+      <div class="emi"><div class="lbl">Angle</div><div class="val">Limited Time Incentive</div></div>
+    </div>
+    <div class="sab">
+      <div class="so"><div class="al">Subject A — Recommended</div><div class="st">Double referral credit this week — R400 per referral, through Sunday</div><div class="pt2">Preview: If you have been meaning to share your link, this is the week. R400 instead of R200.</div></div>
+      <div class="so"><div class="al">Subject B</div><div class="st">Last week to earn double credit on referrals</div><div class="pt2">Preview: R400 per referred business. Any order through your link before midnight Sunday qualifies.</div></div>
+    </div>
+    <div class="epw">
+      <div class="epb"><div class="d dr"></div><div class="d dy"></div><div class="d dg"></div><span>Email Preview — support@reviewtap.co.za</span></div>
+      <div class="er">
+        <div class="erh"><div class="erl">Review<span>Tap</span></div><div style="font-size:11px;color:var(--muted)">reviewtap.co.za</div></div>
+        <div class="erc">
+          <p style="font-size:12px;color:var(--muted)">Hi [First Name],</p>
+          <h2>This week only: R400 per referral instead of R200.</h2>
+          <p>We are running double credit on all referrals placed through Sunday, 7 September. Any business that orders through your personal referral link before midnight Sunday earns you R400 in account credit instead of the standard R200.</p>
+          <p>If you have been meaning to share your link with a contact, this is the week to do it.</p>
+          <p>The contact list that tends to convert best:</p>
+          <ul class="fl">
+            <li><span class="ck">→</span> Restaurant or café owners who mention their rating often</li>
+            <li><span class="ck">→</span> Trades businesses (plumbers, electricians, builders) who rely on word of mouth</li>
+            <li><span class="ck">→</span> Salon or clinic owners who ask patients or clients for reviews manually</li>
+            <li><span class="ck">→</span> Any business owner you know who has complained about a competitor having more reviews</li>
+          </ul>
+          <p>One WhatsApp message is all it takes. The referral link tracks the order automatically.</p>
+          <a href="https://reviewtap.co.za" class="cta">Get my referral link →</a>
+          <p class="ps"><strong>P.S.</strong> Credits never expire and stack with multiple referrals. Five referrals this week = R2,000 in credit.</p>
+          <div class="sig"><div class="sn2">Giorgio van Rooyen</div><div class="st2">ReviewTap · <a href="https://reviewtap.co.za">reviewtap.co.za</a></div></div>
+        </div>
+        <div class="erf"><a href="#">Unsubscribe</a> · SA POPIA compliant.</div>
+      </div>
+    </div>
+    <div class="strat">
+      <h4>Strategy: Genuine Urgency Converts</h4>
+      <p>The double-credit week is a real limited-time offer. Real deadlines outperform manufactured ones with warm audiences who can tell the difference. The contact type list ("restaurant owners who mention their rating often") is a creative nudge — it activates the reader's mental rolodex by painting a specific picture of who they should be thinking of. They stop reading generically and start thinking of real people they know.</p>
+    </div>
+  </div>
+
+  <div id="p5e-4" class="ep">
+    <div class="wag">
+      <div class="wac">
+        <div class="wach"><span class="mn">WA 1 — Referral Launch</span><span class="md">Aug 19</span></div>
+        <div class="wap">
+          <div class="wacb"><div class="wav">R</div><div><div class="wacn">ReviewTap</div><div class="wacs">online</div></div></div>
+          <div class="wb">[First Name] 👋<br><br>Just launched something for existing ReviewTap customers.<br><br>A referral programme: for every business you introduce to ReviewTap that places an order, you earn R200 in account credit.<br><br>If you know another business owner who has been complaining about their Google reviews — one WhatsApp message from you could fix their problem and earn you credit.<br><br>Reply "referral" and I will send your personal link.<br><br>— Giorgio<br><br><em style="font-size:11px;opacity:.5">Reply STOP to unsubscribe</em><div class="wt">10:00 ✓✓</div></div>
+        </div>
+        <div class="wcs"><div class="wsl">Strategy</div><p>Short and conversational. "One WhatsApp message from you" makes the action feel small. The reply-based activation ("reply referral") keeps the programme personal and avoids sending a cold link to a landing page.</p></div>
+      </div>
+      <div class="wac">
+        <div class="wach"><span class="mn">WA 2 — Double Credit Week</span><span class="md">Sep 2</span></div>
+        <div class="wap">
+          <div class="wacb"><div class="wav">R</div><div><div class="wacn">ReviewTap</div><div class="wacs">online</div></div></div>
+          <div class="wb">[First Name] —<br><br>Quick update on the referral programme.<br><br>This week only: double credit. R400 per referral instead of R200. Runs through Sunday 7 September.<br><br>If you have been meaning to share your link with a contact, this is the week to do it.<br><br>Reply "referral" if you need your link.<br><br>— Giorgio, ReviewTap<br><br><em style="font-size:11px;opacity:.5">Reply STOP to unsubscribe</em><div class="wt">10:00 ✓✓</div></div>
+        </div>
+        <div class="wcs"><div class="wsl">Strategy</div><p>Minimal, direct. The double-credit message does not need elaboration — the value is immediately obvious. "If you have been meaning to" addresses the procrastinator who has been intending to share but kept putting it off.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PHASE 6 ===== -->
+<section id="p6" class="sec">
+  <div class="ph">
+    <div>
+      <h2>Phase 6: <span>Quarter Close</span></h2>
+      <p>The final push before Q4. Existing pricing is framed as ending, Q4 is positioned as peak season, and all non-converted contacts from the entire quarter receive one last coordinated sequence. The goal is maximum conversions before the quarter ends and Q4 planning begins.</p>
+    </div>
+    <div class="pmeta">
+      <div class="pdate">Sep 8 – Sep 28 (21 days)</div>
+      <div class="pseg">All non-converted contacts from Q3</div>
+      <div class="pseg">3 Emails · 2 WhatsApp Messages</div>
+    </div>
+  </div>
+
+  <div class="enav">
+    <button class="eb active" onclick="SE('p6e',1)">Email 1</button>
+    <button class="eb" onclick="SE('p6e',2)">Email 2</button>
+    <button class="eb" onclick="SE('p6e',3)">Email 3</button>
+    <button class="eb" onclick="SE('p6e',4)" style="background:rgba(37,211,102,.1);border-color:rgba(37,211,102,.3);color:#86efac">WhatsApp (2)</button>
+  </div>
+
+  <div id="p6e-1" class="ep active">
+    <div class="emeta">
+      <div class="emi"><div class="lbl">Send</div><div class="val" style="color:var(--gold)">Sep 8</div></div>
+      <div class="emi"><div class="lbl">Segments</div><div class="val">All non-converted Q3 contacts</div></div>
+      <div class="emi"><div class="lbl">Goal</div><div class="val">Pricing urgency before Q4</div></div>
+      <div class="emi"><div class="lbl">Angle</div><div class="val">End-of-quarter pricing window</div></div>
+    </div>
+    <div class="sab">
+      <div class="so"><div class="al">Subject A — Recommended</div><div class="st">Current ReviewTap pricing runs through end of September. Here is what is on the table.</div><div class="pt2">Preview: Everything at its current price before Q4 planning begins. No pressure — but here is the full list.</div></div>
+      <div class="so"><div class="al">Subject B</div><div class="st">If you have been sitting on a ReviewTap decision, September is the better month</div><div class="pt2">Preview: Current pricing. Q4 undecided. Here is what is available now.</div></div>
+    </div>
+    <div class="epw">
+      <div class="epb"><div class="d dr"></div><div class="d dy"></div><div class="d dg"></div><span>Email Preview — support@reviewtap.co.za</span></div>
+      <div class="er">
+        <div class="erh"><div class="erl">Review<span>Tap</span></div><div style="font-size:11px;color:var(--muted)">reviewtap.co.za</div></div>
+        <div class="erc">
+          <p style="font-size:12px;color:var(--muted)">Hi [First Name],</p>
+          <h2>Current pricing on all ReviewTap devices runs through the end of September.</h2>
+          <p>We have not announced Q4 pricing yet. Historically, the current sale prices do not carry into the new quarter. If you have been considering adding a device or upgrading, September gives you certainty on the price.</p>
+          <div class="div"></div>
+          <p><strong>What is available at current pricing:</strong></p>
+          <div class="pb"><div class="pn">Custom Branded Google Review Stand (NFC + QR)</div><div><span class="pp">R649</span> <span class="po">R1,950</span></div><a href="https://reviewtap.co.za/products/custom-nfc-qr-google-review-stand">Shop now →</a></div>
+          <div class="pb"><div class="pn">Custom Branded Google Review Card (NFC + QR)</div><div><span class="pp">R449</span> <span class="po">R1,350</span></div><a href="https://reviewtap.co.za/products/custom-nfc-qr-google-review-card">Shop now →</a></div>
+          <div class="pb"><div class="pn">Custom Smart Business Card (NFC + QR)</div><div><span class="pp">R649</span> <span class="po">R1,500</span></div><a href="https://reviewtap.co.za/products/custom-nfc-qr-business-card">Shop now →</a></div>
+          <div class="pb"><div class="pn">Standard NFC Google Review Stand</div><div><span class="pp">R499</span> <span class="po">R1,299</span></div><a href="https://reviewtap.co.za/products/nfc-google-review-stand">Shop now →</a></div>
+          <p style="font-size:12px;color:var(--muted)">All hardware ships with ReviewTap 2.0 pre-programmed. All orders include a 14-day money-back guarantee.</p>
+          <a href="https://reviewtap.co.za" class="cta">Shop before Q4 →</a>
+          <p class="ps"><strong>P.S.</strong> If you have been on the fence about adding a second device or upgrading to custom branding, this is the month to do it.</p>
+          <div class="sig"><div class="sn2">Giorgio van Rooyen</div><div class="st2">ReviewTap · <a href="https://reviewtap.co.za">reviewtap.co.za</a></div></div>
+        </div>
+        <div class="erf"><a href="#">Unsubscribe</a> · SA POPIA compliant.</div>
+      </div>
+    </div>
+    <div class="strat"><h4>Strategy: Real Urgency, No Manipulation</h4><p>The pricing urgency here is genuine — Q4 pricing has not been set. This email frames that uncertainty honestly ("we have not announced Q4 pricing yet") rather than claiming a false deadline. Honest urgency with a warm audience converts better than manufactured scarcity, and it does not erode trust.</p></div>
+  </div>
+
+  <div id="p6e-2" class="ep">
+    <div class="emeta">
+      <div class="emi"><div class="lbl">Send</div><div class="val" style="color:var(--gold)">Sep 15</div></div>
+      <div class="emi"><div class="lbl">Segments</div><div class="val">All non-converted Q3 contacts</div></div>
+      <div class="emi"><div class="lbl">Goal</div><div class="val">Q4 readiness angle — peak season</div></div>
+      <div class="emi"><div class="lbl">Angle</div><div class="val">Google profile before holiday season</div></div>
+    </div>
+    <div class="sab">
+      <div class="so"><div class="al">Subject A — Recommended</div><div class="st">What the best-reviewed SA businesses have in place before Q4</div><div class="pt2">Preview: Q4 is peak discovery season. Your Google profile is either working for you or it is not.</div></div>
+      <div class="so"><div class="al">Subject B</div><div class="st">The one thing your Google profile needs before the holiday season</div><div class="pt2">Preview: Reviews compound. The ones you collect in September are still working in December.</div></div>
+    </div>
+    <div class="epw">
+      <div class="epb"><div class="d dr"></div><div class="d dy"></div><div class="d dg"></div><span>Email Preview — support@reviewtap.co.za</span></div>
+      <div class="er">
+        <div class="erh"><div class="erl">Review<span>Tap</span></div><div style="font-size:11px;color:var(--muted)">reviewtap.co.za</div></div>
+        <div class="erc">
+          <p style="font-size:12px;color:var(--muted)">Hi [First Name],</p>
+          <h2>Q4 is when most SA businesses see their highest foot traffic and discovery.</h2>
+          <p>It is also when your Google profile does the most work. Visitors trying new places, people looking for gifts, families making plans — most of them check Google reviews before making a decision. The businesses that do well in Q4 have one thing in common: they have been building their review profile all year.</p>
+          <p>By October, the businesses with 200, 400, 800 reviews are almost impossible to displace in local search. They have the volume and consistency that pushes them to the top. The ones who start in September are ahead of the ones who start in October.</p>
+          <p><strong>ReviewTap 2.0 running through Q4 means:</strong></p>
+          <ul class="fl">
+            <li><span class="ck">✅</span> Every customer tap becomes a review opportunity — automatically, without you asking</li>
+            <li><span class="ck">✅</span> Negative experiences are caught privately before they reach your public profile</li>
+            <li><span class="ck">✅</span> Your rating compounds heading into the peak season — not after it</li>
+          </ul>
+          <p>We typically see a 60 to 90 day timeline to meaningful review growth on a new ReviewTap setup. Starting in September means the compounding is clearly visible by December.</p>
+          <a href="https://reviewtap.co.za" class="cta">Get ready for Q4 →</a>
+          <p class="ps"><strong>P.S.</strong> The upgrade is still available for existing devices. Or order a new device now to arrive well before October.</p>
+          <div class="sig"><div class="sn2">Giorgio van Rooyen</div><div class="st2">ReviewTap · <a href="https://reviewtap.co.za">reviewtap.co.za</a></div></div>
+        </div>
+        <div class="erf"><a href="#">Unsubscribe</a> · SA POPIA compliant.</div>
+      </div>
+    </div>
+    <div class="strat"><h4>Strategy: Q4 Readiness Reframes the Decision</h4><p>Non-converters who have been delaying because the timing "isn't right" need a new context that makes now feel like the right moment. Q4 peak season provides that context. The 60 to 90 day compounding timeline is a specific, believable reason why September is better than October — it is not a sales tactic, it is a genuine operational insight.</p></div>
+  </div>
+
+  <div id="p6e-3" class="ep">
+    <div class="emeta">
+      <div class="emi"><div class="lbl">Send</div><div class="val" style="color:var(--gold)">Sep 22</div></div>
+      <div class="emi"><div class="lbl">Segments</div><div class="val">All non-converted Q3 contacts</div></div>
+      <div class="emi"><div class="lbl">Goal</div><div class="val">Final send — close the quarter</div></div>
+      <div class="emi"><div class="lbl">Angle</div><div class="val">Summation + Graceful Exit</div></div>
+    </div>
+    <div class="sab">
+      <div class="so"><div class="al">Subject A — Recommended</div><div class="st">This is the last email of the quarter, [First Name]</div><div class="pt2">Preview: What we built this quarter — and a clean door if the timing still isn't right.</div></div>
+      <div class="so"><div class="al">Subject B</div><div class="st">Q3 summary and what ReviewTap has for Q4</div><div class="pt2">Preview: One final note before October. Everything on the table, one last time.</div></div>
+    </div>
+    <div class="epw">
+      <div class="epb"><div class="d dr"></div><div class="d dy"></div><div class="d dg"></div><span>Email Preview — support@reviewtap.co.za</span></div>
+      <div class="er">
+        <div class="erh"><div class="erl">Review<span>Tap</span></div><div style="font-size:11px;color:var(--muted)">reviewtap.co.za</div></div>
+        <div class="erc">
+          <p style="font-size:12px;color:var(--muted)">Hi [First Name],</p>
+          <h2>This is the last scheduled email of the quarter.</h2>
+          <p>If you have upgraded to ReviewTap 2.0, ordered a custom device, or added the Smart Business Card this quarter: thank you. You are part of a group of South African businesses using NFC and WhatsApp automation to build a review advantage that compounds month over month. The results show up slowly, then all at once.</p>
+          <p>If you have been on the fence all quarter, here is an honest way to look at it:</p>
+          <p>Every month without the WhatsApp AI running, some percentage of your satisfied customers tapped, felt good, and never completed the review. The automation catches those. Every month without the Negative Review Shield, one frustrated customer has had a direct path to your Google profile. Neither is catastrophic on its own. But they compound in the wrong direction over 12 months.</p>
+          <p>Q4 is a good time to fix this. Current pricing is available through the end of September. The process is fast.</p>
+          <div style="display:flex;flex-direction:column;gap:9px;margin:20px 0">
+            <a href="https://reviewtap.co.za" class="cta" style="display:block;text-align:center">Start my ReviewTap 2.0 upgrade →</a>
+            <a href="https://reviewtap.co.za/products/custom-nfc-qr-google-review-stand" style="color:var(--gold);font-size:13px;font-weight:700;display:block">Order a Custom Branded Stand (R649) →</a>
+            <a href="https://reviewtap.co.za/products/custom-nfc-qr-business-card" style="color:var(--gold);font-size:13px;font-weight:700;display:block">Order a Smart Business Card (R649) →</a>
+            <a href="https://reviewtap.co.za" style="color:var(--gold);font-size:13px;font-weight:700;display:block">Activate the automation plan →</a>
+          </div>
+          <p style="font-size:13px;color:var(--muted)">If none of the above is right for you at the moment, no problem at all. Just reply and I will remove you from future campaign emails — you will still receive order updates and support. No hard feelings, and thank you for being a ReviewTap customer.</p>
+          <div class="sig"><div style="font-size:11px;color:var(--muted);margin-bottom:6px">ReviewTap · 4.8/5 stars · 1,000+ SA businesses</div><div class="sn2">Giorgio van Rooyen</div><div class="st2">ReviewTap · <a href="https://reviewtap.co.za">reviewtap.co.za</a></div></div>
+        </div>
+        <div class="erf"><a href="#">Unsubscribe</a> · SA POPIA compliant.</div>
+      </div>
+    </div>
+    <div class="strat"><h4>Strategy: Respect + Four CTAs + Clean Exit</h4><p>The final email of the quarter does three things: it acknowledges the reader honestly ("on the fence all quarter"), provides a clear path for every buyer state (upgrade / hardware / card / automation), and offers a graceful exit that protects the sender relationship. The opt-down option ("remove you from future campaign emails") reduces unsubscribes, because readers feel in control rather than trapped.</p></div>
+  </div>
+
+  <div id="p6e-4" class="ep">
+    <div class="wag">
+      <div class="wac">
+        <div class="wach"><span class="mn">WA 1 — Quarter Close Push</span><span class="md">Sep 10</span></div>
+        <div class="wap">
+          <div class="wacb"><div class="wav">R</div><div><div class="wacn">ReviewTap</div><div class="wacs">online</div></div></div>
+          <div class="wb">[First Name] —<br><br>End of Q3 check-in from ReviewTap.<br><br>Current device pricing runs through September. If you have been thinking about adding a Smart Business Card, a second stand, or activating the automation plan — now is a good time to sort it before Q4.<br><br>👉 Custom Stand (R649): https://reviewtap.co.za/products/custom-nfc-qr-google-review-stand<br>👉 Smart Card (R649): https://reviewtap.co.za/products/custom-nfc-qr-business-card<br><br>Happy to answer questions here.<br><br>— Giorgio, ReviewTap<br><br><em style="font-size:11px;opacity:.5">Reply STOP to unsubscribe</em><div class="wt">10:00 ✓✓</div></div>
+        </div>
+        <div class="wcs"><div class="wsl">Strategy</div><p>"End of Q3 check-in" is a natural, low-pressure framing. It positions the message as a calendar-driven touchpoint rather than a sales push, which reduces resistance on a warm but non-converting audience.</p></div>
+      </div>
+      <div class="wac">
+        <div class="wach"><span class="mn">WA 2 — Final Nudge</span><span class="md">Sep 24</span></div>
+        <div class="wap">
+          <div class="wacb"><div class="wav">R</div><div><div class="wacn">ReviewTap</div><div class="wacs">online</div></div></div>
+          <div class="wb">[First Name] —<br><br>Last message this quarter.<br><br>Q4 is peak discovery season for most SA businesses. If your Google profile still needs work before then, the best time to start was three months ago. The second best time is now.<br><br>ReviewTap 2.0 upgrade, Smart Business Cards, and the monthly automation plan are all available.<br><br>Reply here if you want to move forward before October.<br><br>— Giorgio<br><br><em style="font-size:11px;opacity:.5">Reply STOP to unsubscribe</em><div class="wt">10:00 ✓✓</div></div>
+        </div>
+        <div class="wcs"><div class="wsl">Strategy</div><p>"The best time was three months ago. The second best time is now." is a well-known principle applied honestly — not as a cliché but as a genuine observation about compounding timelines. It is true, and it lands as true. Reply-based CTA keeps the conversation human for the final interaction of the quarter.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 13-WEEK CALENDAR ===== -->
+<section id="calendar" class="sec">
+  <div class="card">
+    <div class="ct">Q3 2026 — 13-Week Master Campaign Calendar</div>
+    <div class="cal">
+      <div class="cr"><div class="cd">Jun 1–7</div><div><span class="cbdg prep">Prep</span></div><div class="ca">D-7 to D-1: Segment GHL audience · Build email templates · Submit WA templates to Meta · Prepare product images · Set up UTM links · Internal test send</div></div>
+      <div class="cr hl"><div class="cd d0">Jun 8</div><div><span class="cbdg both">Launch Day</span></div><div class="ca"><strong>Phase 1 begins.</strong> WA Teaser (09:00) → wait 2 hours → Email 1: The Announcement. <span>Start monitoring WA inbox immediately.</span></div></div>
+      <div class="cr"><div class="cd">Jun 10</div><div><span class="cbdg em2">Email</span></div><div class="ca">Email 2: The Problem — Shield fear angle. All segments.</div></div>
+      <div class="cr"><div class="cd">Jun 11</div><div><span class="cbdg wa3">WhatsApp</span></div><div class="ca">WA Message 2: Core Offer + product image. Monitor replies same day.</div></div>
+      <div class="cr"><div class="cd">Jun 12</div><div><span class="cbdg em2">Email</span></div><div class="ca">Email 3: Upgrade Offer — hard sell with pricing. Exclude Segment C.</div></div>
+      <div class="cr"><div class="cd">Jun 14</div><div><span class="cbdg wa3">WhatsApp</span></div><div class="ca">WA Message 3: Smart Business Card. Exclude smart-card-purchased.</div></div>
+      <div class="cr"><div class="cd">Jun 15</div><div><span class="cbdg em2">Email</span></div><div class="ca">Email 4: Smart Business Card standalone sell. Exclude smart-card-purchased.</div></div>
+      <div class="cr"><div class="cd">Jun 17</div><div><span class="cbdg wa3">WhatsApp</span></div><div class="ca">WA Message 4: Re-engage (conditional — non-openers and non-clickers only).</div></div>
+      <div class="cr"><div class="cd">Jun 18</div><div><span class="cbdg em2">Email</span></div><div class="ca">Email 5: Social Proof + Last Call. Tag completers rt2-campaign-complete.</div></div>
+      <div class="cr"><div class="cd">Jun 19</div><div><span class="cbdg rev">Review</span></div><div class="ca">Phase 1 results review: open rates, click rates, WA reads, conversions by segment. Document for optimisation.</div></div>
+      <div class="cr"><div class="cd">Jun 19</div><div><span class="cbdg em2">Email</span></div><div class="ca"><strong>Phase 2 begins.</strong> Email 2.1: Compounding Asset angle — non-converters.</div></div>
+      <div class="cr"><div class="cd">Jun 20</div><div><span class="cbdg wa3">WhatsApp</span></div><div class="ca">WA 2.1: Re-engage non-responders with brief social proof story.</div></div>
+      <div class="cr"><div class="cd">Jun 22</div><div><span class="cbdg em2">Email</span></div><div class="ca">Email 2.2: Testimonial request — Phase 1 upgraders only (rt2-converted tag).</div></div>
+      <div class="cr"><div class="cd">Jun 23</div><div><span class="cbdg wa3">WhatsApp</span></div><div class="ca">WA 2.2: Testimonial request via WA to upgraders.</div></div>
+      <div class="cr"><div class="cd">Jun 26</div><div><span class="cbdg em2">Email</span></div><div class="ca">Email 2.3: Story close — "business owner messaged at 11pm." Final attempt for non-converters.</div></div>
+      <div class="cr"><div class="cd">Jul 6</div><div><span class="cbdg rev">Review</span></div><div class="ca">Phase 2 review: testimonials collected, conversion sweep results. Begin Phase 3 prep.</div></div>
+      <div class="cr"><div class="cd">Jul 7</div><div><span class="cbdg em2">Email</span></div><div class="ca"><strong>Phase 3 begins.</strong> Email 3.1: The Paper Card Problem. Smart Business Card campaign opens.</div></div>
+      <div class="cr"><div class="cd">Jul 9</div><div><span class="cbdg wa3">WhatsApp</span></div><div class="ca">WA 3.1: Smart Card pitch with product image.</div></div>
+      <div class="cr"><div class="cd">Jul 14</div><div><span class="cbdg em2">Email</span></div><div class="ca">Email 3.2: Product deep-dive — full spec, what recipient sees, everything included.</div></div>
+      <div class="cr"><div class="cd">Jul 18</div><div><span class="cbdg wa3">WhatsApp</span></div><div class="ca">WA 3.2: Both devices — stand works the counter, card works the room.</div></div>
+      <div class="cr"><div class="cd">Jul 21</div><div><span class="cbdg em2">Email</span></div><div class="ca">Email 3.3: Both/and close — two devices, two jobs, most owners get both.</div></div>
+      <div class="cr"><div class="cd">Jul 27</div><div><span class="cbdg rev">Review</span></div><div class="ca">Phase 3 review: Smart Card conversions, which segment converted best. Begin Phase 4 prep.</div></div>
+      <div class="cr"><div class="cd">Jul 28</div><div><span class="cbdg em2">Email</span></div><div class="ca"><strong>Phase 4 begins.</strong> Email 4.1: The Missing Step — taps not converting to reviews. Automation angle.</div></div>
+      <div class="cr"><div class="cd">Jul 30</div><div><span class="cbdg wa3">WhatsApp</span></div><div class="ca">WA 4.1: Automation intro — "what happens if they never leave the review?"</div></div>
+      <div class="cr"><div class="cd">Aug 4</div><div><span class="cbdg em2">Email</span></div><div class="ca">Email 4.2: ROI maths — what is a Google review worth in rands?</div></div>
+      <div class="cr"><div class="cd">Aug 7</div><div><span class="cbdg wa3">WhatsApp</span></div><div class="ca">WA 4.2: Automation follow-up — "your device collects the tap, automation collects the review."</div></div>
+      <div class="cr"><div class="cd">Aug 11</div><div><span class="cbdg em2">Email</span></div><div class="ca">Email 4.3: Full automation plan features — everything included checklist.</div></div>
+      <div class="cr"><div class="cd">Aug 17</div><div><span class="cbdg rev">Review</span></div><div class="ca">Phase 4 review: automation plan activations, MRR added. Begin Phase 5 prep.</div></div>
+      <div class="cr"><div class="cd">Aug 18</div><div><span class="cbdg em2">Email</span></div><div class="ca"><strong>Phase 5 begins.</strong> Email 5.1: Referral programme launch — R200 per referred business.</div></div>
+      <div class="cr"><div class="cd">Aug 19</div><div><span class="cbdg wa3">WhatsApp</span></div><div class="ca">WA 5.1: Referral launch — "reply referral for your personal link."</div></div>
+      <div class="cr"><div class="cd">Aug 25</div><div><span class="cbdg em2">Email</span></div><div class="ca">Email 5.2: Social proof from early referrers — the message that is working.</div></div>
+      <div class="cr"><div class="cd">Sep 1</div><div><span class="cbdg both">Both</span></div><div class="ca">Email 5.3: Double referral credit this week (R400). WA 5.2: Double credit announcement. Runs through Sep 7.</div></div>
+      <div class="cr"><div class="cd">Sep 7</div><div><span class="cbdg rev">Review</span></div><div class="ca">Double credit week closes. Count referral conversions. Phase 5 review.</div></div>
+      <div class="cr"><div class="cd">Sep 8</div><div><span class="cbdg em2">Email</span></div><div class="ca"><strong>Phase 6 begins.</strong> Email 6.1: Q3 end pricing — all products, current pricing through September.</div></div>
+      <div class="cr"><div class="cd">Sep 10</div><div><span class="cbdg wa3">WhatsApp</span></div><div class="ca">WA 6.1: Quarter close push — current pricing, all products listed.</div></div>
+      <div class="cr"><div class="cd">Sep 15</div><div><span class="cbdg em2">Email</span></div><div class="ca">Email 6.2: Q4 readiness angle — Google profile before peak season. 60-90 day compounding lead time.</div></div>
+      <div class="cr"><div class="cd">Sep 22</div><div><span class="cbdg em2">Email</span></div><div class="ca">Email 6.3: Final quarter close — four CTAs, graceful exit option for non-converters.</div></div>
+      <div class="cr"><div class="cd">Sep 24</div><div><span class="cbdg wa3">WhatsApp</span></div><div class="ca">WA 6.2: Last message — "second best time is now." Reply-based CTA.</div></div>
+      <div class="cr"><div class="cd">Sep 28</div><div><span class="cbdg rev">Review</span></div><div class="ca"><strong>Q3 close.</strong> Full quarter review: total revenue, phase-by-phase conversion rates, top-performing emails, segments that converted, testimonials collected. Brief for Q4 planning.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== KPIs ===== -->
+<section id="kpis" class="sec">
+  <div class="card" style="margin-bottom:22px">
+    <div class="ct">Quarter-Level KPI Targets</div>
+    <div class="kg">
+      <div class="kc"><div class="km">Email Open Rate (warm list)</div><div class="kt">35%+</div><div class="kn">Existing customer list. Below 25% = subject line issue. Below 18% = deliverability issue. Check GHL sender score.</div></div>
+      <div class="kc"><div class="km">Email Click-through Rate</div><div class="kt">8%+</div><div class="kn">Track per email to identify which message converts best. Phase 1 Email 3 (hard sell) should lead CTR.</div></div>
+      <div class="kc"><div class="km">WhatsApp Read Rate</div><div class="kt">80%+</div><div class="kn">Below 60% suggests template approval or delivery issue. Check Meta Business Manager status.</div></div>
+      <div class="kc"><div class="km">WhatsApp Reply Rate</div><div class="kt">10%+</div><div class="kn">Every reply requires a human follow-up within 24 hours. Assign a dedicated inbox watcher throughout the campaign.</div></div>
+      <div class="kc"><div class="km">Device Upgrade Conversion</div><div class="kt">5–10%</div><div class="kn">Of total contacted base. Segment B (custom device owners) should convert highest on 2.0 upgrade.</div></div>
+      <div class="kc"><div class="km">Smart Business Card Sales</div><div class="kt">3–6%</div><div class="kn">Phase 3 is the primary conversion window. Day 7 email and Day 9 WA are the strongest moments.</div></div>
+      <div class="kc"><div class="km">Automation Plan Activations</div><div class="kt">8–15%</div><div class="kn">Of device-only customers. Phase 4 is the first time this is offered. Segment A and B are primary targets.</div></div>
+      <div class="kc"><div class="km">Referral Conversions</div><div class="kt">1–2 per 10 customers</div><div class="kn">10% referral rate is strong for a first-launch programme. Double-credit week (Sep 1–7) should spike this.</div></div>
+      <div class="kc"><div class="km">Unsubscribe Rate</div><div class="kt">&lt; 1%</div><div class="kn">Critical for GHL sender reputation and SA POPIA compliance. Above 2% = pause and review tone/frequency.</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ct">Phase-by-Phase Success Metrics</div>
+    <table class="tbl">
+      <thead><tr><th>Phase</th><th>Primary KPI</th><th>Target</th><th>How to Measure</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Phase 1</strong><br><span style="font-size:11px;color:var(--muted)">RT 2.0 Launch</span></td><td>Device upgrade conversions</td><td>5–10% of list</td><td>GHL tag rt2-converted applied after upgrade confirmed</td></tr>
+        <tr><td><strong>Phase 2</strong><br><span style="font-size:11px;color:var(--muted)">Conversion Sweep</span></td><td>Late conversions + testimonials collected</td><td>2–3% additional conversions, 5+ testimonials</td><td>rt2-converted tags after Phase 2 + testimonial log in GHL notes</td></tr>
+        <tr><td><strong>Phase 3</strong><br><span style="font-size:11px;color:var(--muted)">Smart Card Blitz</span></td><td>Smart Business Card orders</td><td>3–6% of contacted base</td><td>UTM-tagged Shopify orders: utm_campaign=smart-card-blitz</td></tr>
+        <tr><td><strong>Phase 4</strong><br><span style="font-size:11px;color:var(--muted)">Automation Upsell</span></td><td>New automation plan activations</td><td>8–15% of device-only customers</td><td>New MRR added in July–August. GHL automation-subscriber tag applied</td></tr>
+        <tr><td><strong>Phase 5</strong><br><span style="font-size:11px;color:var(--muted)">Referral Launch</span></td><td>Referred businesses placing orders</td><td>1–2 per 10 active referrers</td><td>Referral link tracking in GHL or Shopify discount code attribution</td></tr>
+        <tr><td><strong>Phase 6</strong><br><span style="font-size:11px;color:var(--muted)">Quarter Close</span></td><td>Final conversions before Q4</td><td>Any conversion from previously non-converted contacts</td><td>Orders placed Sep 8–28 from rt2-campaign-complete tagged contacts</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="ct">Q3 Post-Mortem Checklist (Sep 28)</div>
+    <ul class="cl">
+      <li><div class="cb" onclick="toggleCheck(this)"></div><span class="ct2">Pull open rate and CTR for all 17 emails. Identify top 3 performing subject lines for reuse in Q4.</span></li>
+      <li><div class="cb" onclick="toggleCheck(this)"></div><span class="ct2">Count total rt2-converted, smart-card-purchased, and automation-subscriber tags added across the quarter.</span></li>
+      <li><div class="cb" onclick="toggleCheck(this)"></div><span class="ct2">Calculate total Q3 revenue attributed to campaign UTMs in GA4 or Shopify.</span></li>
+      <li><div class="cb" onclick="toggleCheck(this)"></div><span class="ct2">Review all WhatsApp reply threads. Log any outstanding conversations and follow up before October 1.</span></li>
+      <li><div class="cb" onclick="toggleCheck(this)"></div><span class="ct2">Count testimonials collected in Phase 2 and log them for use in Q4 social proof emails.</span></li>
+      <li><div class="cb" onclick="toggleCheck(this)"></div><span class="ct2">Identify which audience segment had the highest conversion rate across all phases. Brief Q4 campaign around their profile.</span></li>
+      <li><div class="cb" onclick="toggleCheck(this)"></div><span class="ct2">Count total referral programme participants and referral credits issued. Decide whether to continue, expand, or restructure in Q4.</span></li>
+      <li><div class="cb" onclick="toggleCheck(this)"></div><span class="ct2">Tag all September non-converters for Q4 re-engagement workflow. Do not let the list go cold over October.</span></li>
+      <li><div class="cb" onclick="toggleCheck(this)"></div><span class="ct2">Document the 3 things that worked best and the 3 things that underperformed. Use this as the Q4 campaign brief foundation.</span></li>
+    </ul>
+  </div>
+</section>
+
+</main>
+
+<script>
+const secMap={overview:0,p1:1,p2:2,p3:3,p4:4,p5:5,p6:6,calendar:7,kpis:8};
+function S(id){
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nt').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.nt')[secMap[id]].classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function SE(prefix,n){
+  const secId=prefix.substring(0,2);
+  const sec=document.getElementById(secId);
+  sec.querySelectorAll('.ep').forEach(ep=>ep.classList.remove('active'));
+  sec.querySelectorAll('.eb').forEach(eb=>eb.classList.remove('active'));
+  document.getElementById(prefix+'-'+n).classList.add('active');
+  sec.querySelectorAll('.eb')[n-1].classList.add('active');
+}
+function toggleCheck(el){el.classList.toggle('ck2');el.closest('li')?.classList.toggle('done')}
+</script>
+</body>
+</html>
