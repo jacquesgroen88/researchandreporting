@@ -173,6 +173,44 @@
   footer{max-width:1100px;margin:0 auto;padding:0 clamp(12px,4vw,40px);color:var(--muted);font-size:12.5px}
   .empty{text-align:center;color:var(--muted);font-size:13.5px;padding:30px 10px}
 
+  /* start screen */
+  .start-title{font-size:15px;font-weight:650;margin:6px 0 12px;color:var(--ink)}
+  .start-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+  @media(max-width:560px){.start-grid{grid-template-columns:1fr}}
+  .start-card{border:1px solid var(--line);border-radius:14px;background:var(--card);box-shadow:var(--shadow);
+    padding:24px 18px;text-align:center;cursor:pointer;transition:background .15s,border-color .15s,transform .1s;-webkit-tap-highlight-color:transparent}
+  .start-card:hover{background:#fff6e6;border-color:var(--gold)}
+  .start-card:active{transform:scale(.99)}
+  .start-card.drop{border-style:dashed}
+  .start-card.drop.drag{background:#fff0cf;border-color:var(--gold)}
+  .start-card.alt:hover{background:#eef4ff;border-color:var(--blue)}
+  .sc-icon{font-size:30px;line-height:1;margin-bottom:8px}
+  .sc-title{font-size:16px;font-weight:700;margin-bottom:4px}
+  .sc-sub{font-size:12.5px;color:var(--muted)}
+
+  /* compact bar (after a run is loaded) */
+  .compactbar{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+  .cb-file{font-size:12.5px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0}
+  .cb-new{padding:8px 12px}
+
+  /* standard vs custom breakdown */
+  .breakdown{display:flex;gap:12px;margin-bottom:16px}
+  .bd-card{flex:1;border:1px solid var(--line);border-radius:14px;padding:14px 16px;background:var(--card);box-shadow:var(--shadow);position:relative;overflow:hidden}
+  .bd-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px}
+  .bd-standard::before{background:#3a4a63}
+  .bd-custom::before{background:#7c3aed}
+  .bd-label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;font-weight:700;color:var(--muted)}
+  .bd-standard .bd-label{color:#3a4a63}
+  .bd-custom .bd-label{color:#7c3aed}
+  .bd-num{font-size:30px;font-weight:800;line-height:1.1;font-variant-numeric:tabular-nums;margin-top:2px}
+  .bd-sub{font-size:12px;color:var(--muted);margin-top:2px}
+  @media(max-width:560px){.bd-num{font-size:25px}}
+
+  /* order-level standard/custom badge */
+  .ordtype{font-size:10px;font-weight:800;letter-spacing:.06em;padding:3px 8px;border-radius:6px;white-space:nowrap;align-self:center}
+  .ot-standard{background:#eef1f6;color:#3a4a63}
+  .ot-custom{background:#f1ecfb;color:#5b3aa6;border:1px solid #d9caf3}
+
   .runs-badge{color:var(--muted);font-weight:500;font-size:12.5px;margin-left:2px}
   .runs-list{display:flex;flex-direction:column;gap:8px;margin-top:12px}
   .runs-empty{font-size:13px;color:var(--muted);padding:6px 0}
@@ -251,7 +289,7 @@
       </div>
 
       <label for="senderName">Your name / signature (used in WhatsApp messages)</label>
-      <input type="text" id="senderName" placeholder="the ReviewTap team" onchange="saveSender(this.value)">
+      <input type="text" id="senderName" placeholder="Giorgio" onchange="saveSender(this.value)">
 
       <div class="keymeta">The built-in key is restricted to ReviewTap's Google project. Stored settings live only in this browser.</div>
       <details class="subhelp">
@@ -275,14 +313,32 @@
     </div>
   </details>
 
-  <div class="drop" id="drop" onclick="document.getElementById('fileInput').click()">
-    <div class="icon">&#128228;</div>
-    <div class="big">Drop a packing-slip PDF here</div>
-    <div class="small">or tap to choose a file &middot; PDF (best) or CSV &middot; runs entirely on your phone</div>
-    <input type="file" id="fileInput" accept=".pdf,.csv" style="display:none" onchange="onFilePick(event)">
+  <input type="file" id="fileInput" accept=".pdf,.csv" style="display:none" onchange="onFilePick(event)">
+
+  <div id="startScreen">
+    <div class="start-title">What would you like to do?</div>
+    <div class="start-grid">
+      <div class="start-card drop" id="drop" onclick="document.getElementById('fileInput').click()">
+        <div class="sc-icon">&#128228;</div>
+        <div class="sc-title">Start a new run</div>
+        <div class="sc-sub">Drop a packing-slip PDF or CSV here, or tap to choose a file</div>
+      </div>
+      <div class="start-card alt" onclick="showPreviousRuns()">
+        <div class="sc-icon">&#128452;&#65039;</div>
+        <div class="sc-title">Continue a previous run</div>
+        <div class="sc-sub" id="continueHint">Re-open a saved run from the cloud</div>
+      </div>
+    </div>
   </div>
 
   <div class="banner" id="banner"></div>
+
+  <div id="breakdown" class="breakdown" style="display:none"></div>
+
+  <div class="compactbar" id="compactbar" style="display:none">
+    <span class="cb-file" id="cbFile"></span>
+    <button class="btn cb-new" onclick="document.getElementById('fileInput').click()">&#128228; New run</button>
+  </div>
 
   <div class="actionsbar" id="actionsbar" style="display:none">
     <button class="btn primary" id="findBtn" onclick="findAll()">&#128269; Find review links</button>
@@ -304,7 +360,6 @@
   </div>
 
   <div id="orders"></div>
-  <div class="empty" id="emptyState">No orders loaded yet. Drop a ReviewTap packing-slip PDF above to get started.</div>
 
   <footer style="margin-top:24px">
     Every Google link is the direct <b>write-a-review</b> URL &mdash; it opens straight to the star picker. Test-tap every device before it goes in the bag.
@@ -331,7 +386,7 @@ function load(k,d){ try{ return JSON.parse(localStorage.getItem(k))||d; }catch(e
 function save(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
 const saveState=()=>save(LS_STATE,state), savePlaces=()=>save(LS_PLACES,places), saveOrders=()=>save(LS_ORDERS,orders);
 function effectiveKey(){ return (apiKey&&apiKey.trim()) || DEFAULT_KEY; }
-function senderName(){ return (localStorage.getItem(LS_SENDER)||"").trim() || "the ReviewTap team"; }
+function senderName(){ return (localStorage.getItem(LS_SENDER)||"").trim() || "Giorgio"; }
 
 /* ===== helpers ===== */
 const STEPS=["Link","Encoded","Tested","Packed"];
@@ -600,17 +655,17 @@ function waNumber(phone){ let d=(phone||"").replace(/[^\d+]/g,"");
   return d; }
 function waMessage(o){
   const first=(o.customer||"there").trim().split(/\s+/)[0];
-  const itemDesc=o.items.map(i=>`${i.q}× ${i.what}`).join(", ");
+  const itemDesc=o.items.map(i=>`${i.q}x ${i.what}`).join(", ");
   const who=senderName(); const intro=/reviewtap/i.test(who)?who:`${who} from ReviewTap`;
-  return `Hi ${first}, it's ${intro} 👋\n\n`+
-    `Thank you for your order ${o.no}${itemDesc?` (${itemDesc})`:""}. We're getting your tap-to-review device for ${o.business} ready.\n\n`+
+  return `Hi ${first}, it's ${intro}\n\n`+
+    `Thank you for your order ${o.no}${itemDesc?` (${itemDesc})`:""}. We're getting your Reviewtap device for ${o.business} ready.\n\n`+
     `Quick thing before we can link it up: we couldn't find a Google Business Profile for ${o.business} on Google Maps yet. Your device needs one so your customers' reviews land on your listing.\n\n`+
     `It's free and takes a few minutes:\n`+
     `1) On your phone, open google.com/business\n`+
     `2) Sign in and tap "Manage now"\n`+
-    `3) Search for "${o.business}" — if it doesn't come up, tap "Add your business to Google"\n`+
+    `3) Search for "${o.business}" - if it doesn't come up, tap "Add your business to Google"\n`+
     `4) Add your area/address, category and contact details, then follow the steps to verify\n\n`+
-    `As soon as it's live, send us the link or the business name here and we'll encode your device and ship it. Happy to help if you get stuck! 🙌`;
+    `As soon as it's live, send us the link or the business name here and we'll encode your device and ship it. Happy to help if you get stuck!`;
 }
 function waLink(o){ return `https://wa.me/${waNumber(o.phone)}?text=${encodeURIComponent(waMessage(o))}`; }
 
@@ -624,16 +679,18 @@ function matchesQuery(o){ if(!query) return true; const q=query;
 function render(){
   const wrap=document.getElementById("orders");
   const has=orders.length>0;
-  document.getElementById("emptyState").style.display=has?"none":"block";
+  document.getElementById("startScreen").style.display=has?"none":"block";
+  document.getElementById("breakdown").style.display=has?"flex":"none";
+  document.getElementById("compactbar").style.display=has?"flex":"none";
   document.getElementById("actionsbar").style.display=has?"flex":"none";
   document.getElementById("legend").style.display=has?"flex":"none";
   document.getElementById("copyallwrap").style.display=has?"flex":"none";
   document.getElementById("searchRow").classList.toggle("show",has);
   wrap.innerHTML="";
-  if(has) renderTotals();
+  if(has){ renderTotals(); renderBreakdown(); document.getElementById("cbFile").textContent=currentFileName||"Current run"; }
   document.getElementById("batchSub").textContent=has
     ? `${orders.length} orders · ${orders.reduce((n,o)=>n+o.items.reduce((m,i)=>m+i.q,0),0)} units`
-    : "Drop a packing-slip PDF to begin";
+    : "Choose new run or continue";
 
   const visible=orders.filter(matchesQuery);
   document.getElementById("searchCount").textContent = query ? `${visible.length} of ${orders.length}` : "";
@@ -700,6 +757,7 @@ function render(){
     el.innerHTML=`
       <div class="top">
         <span class="ordno">${esc(o.no)}</span>
+        <span class="ordtype ${hasCustom?'ot-custom':'ot-standard'}">${hasCustom?'CUSTOM':'STANDARD'}</span>
         <div class="biz">
           <div class="name">${esc(o.business||o.customer||"(no business name)")}</div>
           ${o.matched?`<div class="matched">↳ ${esc(o.matched)}</div>`:""}
@@ -761,6 +819,26 @@ function renderTotals(){
   const pills=Object.keys(t).sort().map(k=>{ const [c,p,kd]=k.split("|"); const n=t[k];
     return `<span class="pill">${sw(c)} <b>${n}</b> ${pw(p)}${kw(kd)}${n>1?"s":""}</span>`; });
   document.getElementById("totals").innerHTML=pills.join("");
+}
+
+function renderBreakdown(){
+  let stdU=0,cusU=0; const stdOrd=new Set(),cusOrd=new Set();
+  for(const o of orders) for(const it of o.items){
+    if(it.custom){ cusU+=it.q; cusOrd.add(o.no); } else { stdU+=it.q; stdOrd.add(o.no); }
+  }
+  const card=(cls,label,units,orders)=>`
+    <div class="bd-card ${cls}">
+      <div class="bd-label">${label}</div>
+      <div class="bd-num">${units}</div>
+      <div class="bd-sub">device${units===1?"":"s"} · ${orders} order${orders===1?"":"s"}</div>
+    </div>`;
+  document.getElementById("breakdown").innerHTML =
+    card("bd-standard","Standard",stdU,stdOrd.size) + card("bd-custom","Custom",cusU,cusOrd.size);
+}
+
+function showPreviousRuns(){
+  const rp=document.getElementById("runsPanel"); rp.open=true;
+  loadRuns(); rp.scrollIntoView({behavior:"smooth",block:"start"});
 }
 
 function toggle(no,step,el){ state[no]=state[no]||{}; state[no][step]=!state[no][step];
@@ -859,6 +937,8 @@ async function loadRuns(){
     .order("created_at",{ascending:false}).limit(60);
   if(error){ list.innerHTML='<div class="runs-empty">Couldn\'t load runs: '+esc(error.message)+'</div>'; return; }
   document.getElementById("runsBadge").textContent=data.length?`(${data.length})`:"";
+  const hint=document.getElementById("continueHint");
+  if(hint) hint.textContent=data.length?`${data.length} saved run${data.length===1?"":"s"} — tap to choose`:"No saved runs yet";
   if(!data.length){ list.innerHTML='<div class="runs-empty">No saved runs yet. Load a batch, then tap “Save run”.</div>'; return; }
   list.innerHTML=data.map(r=>`
     <div class="run-row">
