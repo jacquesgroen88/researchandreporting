@@ -1,0 +1,902 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ReviewTap Fulfillment</title>
+<style>
+  :root{
+    --paper:#fbfaf7; --card:#ffffff; --ink:#1a1a1a; --muted:#6b6b6b; --line:#e7e4dc;
+    --gold:#f5a623; --gold-soft:#fff6e6; --green:#1a8f4c; --green-soft:#e8f6ee;
+    --amber:#b8860b; --amber-soft:#fcf3da; --red:#c0392b; --red-soft:#fbeae8;
+    --blue:#1a73e8; --wa:#25d366; --wa-dark:#128c4b;
+    --shadow:0 1px 2px rgba(0,0,0,.05),0 4px 14px rgba(0,0,0,.05);
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--paper);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;line-height:1.45;overflow-x:hidden;}
+  .mono{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace}
+  a{color:var(--blue)}
+
+  header{position:sticky;top:0;z-index:50;background:rgba(251,250,247,.94);backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);padding:12px clamp(12px,4vw,40px);padding-top:max(12px,env(safe-area-inset-top));}
+  .h-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;max-width:1100px;margin:0 auto}
+  .brand{display:flex;align-items:baseline;gap:9px;margin-right:auto}
+  .brand .star{color:var(--gold);font-size:22px;line-height:1}
+  .brand h1{font-size:18px;margin:0;letter-spacing:-.01em}
+  .brand .sub{font-size:12.5px;color:var(--muted)}
+  .totals{display:flex;gap:6px;flex-wrap:wrap}
+  .pill{font-size:12px;padding:5px 10px;border-radius:999px;border:1px solid var(--line);background:#fff;white-space:nowrap}
+  .pill b{font-variant-numeric:tabular-nums}
+  .progwrap{max-width:1100px;margin:10px auto 0;display:flex;align-items:center;gap:12px}
+  .bar{flex:1;height:8px;border-radius:999px;background:var(--line);overflow:hidden}
+  .bar > i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),#e8920a);transition:width .3s ease}
+  .progtext{font-size:12.5px;color:var(--muted);white-space:nowrap;min-width:96px;text-align:right}
+
+  /* search row in header */
+  .searchrow{max-width:1100px;margin:10px auto 0;display:none;gap:8px;align-items:center}
+  .searchrow.show{display:flex}
+  .search{flex:1;display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:10px;background:#fff;padding:9px 12px}
+  .search input{border:0;outline:0;flex:1;font-size:15px;background:transparent;color:var(--ink);min-width:0}
+  .search .mag{color:var(--muted);font-size:15px}
+  .search .clr{border:0;background:none;color:var(--muted);font-size:18px;cursor:pointer;padding:0 2px;display:none}
+  .search .clr.show{display:block}
+  .searchcount{font-size:12px;color:var(--muted);white-space:nowrap}
+
+  main{max-width:1100px;margin:0 auto;padding:16px clamp(12px,4vw,40px) 90px}
+
+  details.settings{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);margin-bottom:14px;overflow:hidden}
+  details.settings>summary{cursor:pointer;list-style:none;padding:13px 16px;font-size:13.5px;font-weight:600;display:flex;align-items:center;gap:9px}
+  details.settings>summary::-webkit-details-marker{display:none}
+  .conn-dot{width:9px;height:9px;border-radius:50%;background:var(--green);flex:none}
+  .conn-dot.bad{background:var(--red)}
+  .settings .inner{padding:0 16px 16px;border-top:1px solid var(--line)}
+  .settings label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600;display:block;margin:14px 0 6px}
+  .settings input[type=password],.settings input[type=text]{width:100%;border:1px solid var(--line);border-radius:9px;
+    padding:10px 12px;font-size:14px;background:#fff;color:var(--ink)}
+  .settings .keymeta{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.5}
+  .settings .srow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:8px}
+  details.subhelp{margin-top:10px}
+  details.subhelp summary{cursor:pointer;font-size:12.5px;color:var(--blue);font-weight:600}
+  details.subhelp ol{margin:6px 0 0;padding-left:20px;font-size:12.5px;color:#555;line-height:1.55}
+
+  .drop{border:2px dashed #cfcabd;border-radius:16px;background:#fffdf8;padding:30px 18px;text-align:center;
+    cursor:pointer;transition:background .15s,border-color .15s;margin-bottom:16px}
+  .drop:hover{background:#fff6e6;border-color:var(--gold)}
+  .drop.drag{background:#fff0cf;border-color:var(--gold)}
+  .drop .big{font-size:17px;font-weight:650;margin-bottom:4px}
+  .drop .small{font-size:13px;color:var(--muted)}
+  .drop .icon{font-size:32px;line-height:1;margin-bottom:6px}
+
+  .actionsbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+  .btn{border:1px solid var(--line);background:#fff;border-radius:10px;padding:11px 14px;font-size:14px;font-weight:600;
+    cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;gap:7px;color:var(--ink);
+    transition:background .15s,border-color .15s,color .15s;-webkit-tap-highlight-color:transparent}
+  .btn:hover{background:#f3f1ea}
+  .btn:disabled{opacity:.5;cursor:not-allowed}
+  .btn.primary{background:var(--gold);border-color:var(--gold);color:#3a2a00}
+  .btn.primary:hover{background:#e8920a}
+  .btn.open{background:var(--blue);color:#fff;border-color:var(--blue)}
+  .btn.open:hover{background:#1565c8}
+  .btn.copy{background:var(--gold);border-color:var(--gold);color:#3a2a00;flex:1}
+  .btn.copy:hover{background:#e8920a}
+  .btn.wa{background:var(--wa);border-color:var(--wa);color:#06371f}
+  .btn.wa:hover{background:var(--wa-dark);color:#fff}
+  .btn.copied{background:var(--green)!important;color:#fff!important;border-color:var(--green)!important}
+  .mutedbtn{background:none;border:none;color:var(--blue);font-size:12.5px;cursor:pointer;text-decoration:underline;padding:6px 2px}
+
+  .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin:2px 0 14px}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .dot{width:9px;height:9px;border-radius:50%}
+
+  .banner{border-radius:10px;padding:11px 13px;font-size:13px;margin-bottom:14px;display:none}
+  .banner.show{display:block}
+  .banner.err{background:var(--red-soft);color:#7a1f17;border:1px solid #eccac6}
+  .banner.info{background:var(--gold-soft);color:#7a5300;border:1px solid #f0d49a}
+
+  .order{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);
+    margin-bottom:14px;overflow:hidden;transition:opacity .2s ease}
+  .order.done{opacity:.55}
+  .order.done .top{background:var(--green-soft)}
+  .top{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+  .ordno{font-family:ui-monospace,Menlo,monospace;font-weight:600;font-size:15px;background:var(--ink);color:#fff;
+    padding:4px 9px;border-radius:8px;white-space:nowrap}
+  .biz{flex:1;min-width:140px}
+  .biz .name{font-weight:650;font-size:16px;letter-spacing:-.01em;overflow-wrap:anywhere}
+  .biz .matched{font-size:12.5px;color:var(--muted);margin-top:1px;overflow-wrap:anywhere}
+  .biz .meta{font-size:12.5px;color:var(--muted);margin-top:3px;overflow-wrap:anywhere}
+  .status{font-size:11.5px;font-weight:600;padding:4px 9px;border-radius:999px;white-space:nowrap;align-self:center}
+  .s-ready{background:var(--green-soft);color:var(--green)}
+  .s-verify{background:var(--amber-soft);color:var(--amber)}
+  .s-lookup{background:var(--red-soft);color:var(--red)}
+  .s-pending{background:#eef1f6;color:#3a4a63}
+  .s-searching{background:#e7f0fe;color:var(--blue)}
+
+  .body{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:0}
+  .col{padding:14px 16px;min-width:0}
+  .col + .col{border-top:1px solid var(--line)}
+  @media(min-width:741px){.col + .col{border-top:none;border-left:1px solid var(--line)}}
+  .lbl{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600;margin-bottom:8px}
+
+  .item{display:flex;align-items:center;gap:9px;padding:6px 0}
+  .qty{font-weight:700;font-size:15px;min-width:30px;font-variant-numeric:tabular-nums}
+  .swatch{width:13px;height:13px;border-radius:3px;border:1px solid #cfcabd;flex:none}
+  .sw-white{background:#fff}
+  .sw-black{background:#1a1a1a;border-color:#1a1a1a}
+  .item .what{font-size:14px}
+  .item .form{font-size:12px;color:var(--muted)}
+  .kind{font-size:10px;font-weight:700;letter-spacing:.06em;padding:2px 7px;border-radius:6px;margin-left:6px;vertical-align:middle;white-space:nowrap}
+  .kind-stand{background:#eef1f6;color:#3a4a63}
+  .kind-card{background:var(--gold-soft);color:#9a6a00;border:1px solid #f0d49a}
+  .kind-ta{background:#e6f3f0;color:#0d6e5e;border:1px solid #bfe3da}
+  .kind-auto{background:#e9eefb;color:#2a4ba0;border:1px solid #c6d4f5}
+  .kind-custom{background:#f1ecfb;color:#5b3aa6;border:1px solid #d9caf3}
+  .aside-note{margin-top:8px;font-size:12.5px;background:var(--amber-soft);color:#7a5b00;border-radius:8px;padding:8px 10px}
+
+  .conf{font-size:11.5px;color:var(--muted);margin-bottom:6px}
+  .link-box{border:1px dashed #cfcabd;border-radius:9px;padding:9px 11px;background:#fafafa;margin-bottom:8px;
+    font-family:ui-monospace,Menlo,monospace;font-size:11.5px;color:#333;overflow-x:auto;white-space:nowrap;cursor:pointer}
+  .link-box:active{background:#e8f6ee;border-color:var(--green)}
+  .link-actions{display:flex;gap:8px;margin-bottom:8px}
+  @media(max-width:520px){.link-actions{flex-wrap:wrap}}
+  .link-hint{font-size:12px;color:var(--muted)}
+  .lookup-note{font-size:12.5px;background:var(--red-soft);color:#7a1f17;border-radius:8px;padding:9px 11px;margin-bottom:8px}
+  .lookup-note a{color:var(--red);font-weight:600}
+  .match-tools,.platform-tools{margin-top:10px;font-size:12.5px}
+  .match-tools summary,.platform-tools summary{cursor:pointer;color:var(--blue);font-weight:600}
+  .match-tools .mt-body,.platform-tools .mt-body{margin-top:8px;display:flex;flex-direction:column;gap:10px}
+  .match-tools select,.match-tools input,.platform-tools input{border:1px solid var(--line);border-radius:8px;padding:9px 10px;font-size:13px;width:100%;background:#fff;color:var(--ink)}
+  .plat{border:1px solid var(--line);border-radius:10px;padding:10px;margin-top:8px;background:#fcfbf8}
+  .plat .ph{font-size:12.5px;font-weight:700;margin-bottom:7px;display:flex;align-items:center;gap:7px}
+  .plat .pa{display:flex;gap:7px;flex-wrap:wrap}
+  .plat .pa .btn{flex:1;min-width:120px;padding:9px 10px;font-size:13px}
+  .ta-dot{width:9px;height:9px;border-radius:50%;background:#0d6e5e;flex:none}
+  .auto-dot{width:9px;height:9px;border-radius:50%;background:#2a4ba0;flex:none}
+
+  .copyall-wrap{display:flex;justify-content:flex-end;margin:0 0 14px}
+  .btn-copyall{border:1px solid var(--gold);background:var(--gold-soft);color:#7a5300;border-radius:10px;
+    padding:11px 18px;font-size:14px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+  .btn-copyall:hover{background:#fdebc4}
+  .btn-copyall.copied{background:var(--green);color:#fff;border-color:var(--green)}
+
+  .checks{display:flex;gap:6px;flex-wrap:wrap;padding:12px 16px;border-top:1px solid var(--line);background:#fcfbf8}
+  .chk{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;border:1px solid var(--line);
+    border-radius:9px;padding:8px 11px;cursor:pointer;user-select:none;background:#fff;
+    transition:background .12s,border-color .12s,color .12s}
+  .chk .tick{width:16px;height:16px;border:1.5px solid #c4c0b5;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;color:#fff;flex:none}
+  .chk.on{background:var(--green-soft);border-color:var(--green);color:var(--green)}
+  .chk.on .tick{background:var(--green);border-color:var(--green)}
+  .chk.on .tick::after{content:"\2713"}
+
+  footer{max-width:1100px;margin:0 auto;padding:0 clamp(12px,4vw,40px);color:var(--muted);font-size:12.5px}
+  .empty{text-align:center;color:var(--muted);font-size:13.5px;padding:30px 10px}
+
+  .runs-badge{color:var(--muted);font-weight:500;font-size:12.5px;margin-left:2px}
+  .runs-list{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+  .runs-empty{font-size:13px;color:var(--muted);padding:6px 0}
+  .run-row{display:flex;gap:10px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#fff}
+  .run-main{flex:1;min-width:0}
+  .run-label{font-weight:650;font-size:14px;overflow-wrap:anywhere}
+  .run-when{font-size:12px;color:var(--muted);margin-top:2px}
+  .run-stats{font-size:12px;color:var(--muted);margin-top:2px}
+  .run-actions{display:flex;gap:6px;align-items:center;flex:none}
+  .run-actions .btn{padding:8px 12px}
+  .runs-foot{margin-top:10px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  @media(max-width:560px){ .run-row{flex-wrap:wrap} .run-actions{width:100%;justify-content:flex-end} }
+
+  @media(max-width:560px){
+    .brand h1{font-size:16px}
+    .brand .sub{font-size:11px}
+    .pill{font-size:11px;padding:4px 8px}
+    .progtext{min-width:0;font-size:12px}
+    main{padding:14px 12px 80px}
+    .legend{gap:8px 14px;margin-bottom:12px}
+    .copyall-wrap{justify-content:stretch}
+    .btn-copyall{width:100%;justify-content:center}
+    .actionsbar .btn{flex:1 1 calc(50% - 4px)}
+    .top{gap:8px 10px;padding:13px 14px}
+    .biz{flex-basis:100%;order:3;min-width:0}
+    .ordno{order:1}.status{order:2;margin-left:auto}
+    .col{padding:13px 14px}
+    .checks{padding:11px 14px;gap:7px}
+    .chk{flex:1 1 calc(50% - 4px);justify-content:center;padding:11px 8px}
+  }
+  @media print{
+    header{position:static}
+    .btn,.mutedbtn,.progwrap,.btn-copyall,.copyall-wrap,.settings,.drop,.actionsbar,.match-tools,.platform-tools,.searchrow{display:none}
+    .order{break-inside:avoid;box-shadow:none}
+    body{background:#fff}
+    .link-box{white-space:normal;word-break:break-all}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="h-row">
+    <div class="brand">
+      <span class="star">&#9733;</span>
+      <div>
+        <h1>ReviewTap Fulfillment</h1>
+        <div class="sub" id="batchSub">Drop a packing-slip PDF to begin</div>
+      </div>
+    </div>
+    <div class="totals" id="totals"></div>
+  </div>
+  <div class="progwrap">
+    <div class="bar"><i id="barFill"></i></div>
+    <div class="progtext" id="progText">0 / 0 packed</div>
+  </div>
+  <div class="searchrow" id="searchRow">
+    <div class="search">
+      <span class="mag">&#128269;</span>
+      <input id="searchInput" type="search" inputmode="search" placeholder="Search order # or business…" oninput="onSearch(this.value)" autocomplete="off">
+      <button class="clr" id="searchClr" onclick="clearSearch()" aria-label="Clear">&times;</button>
+    </div>
+    <span class="searchcount" id="searchCount"></span>
+  </div>
+</header>
+
+<main>
+  <details class="settings" id="settings">
+    <summary><span class="conn-dot" id="connDot"></span><span id="connText">Google lookup connected (built-in key)</span></summary>
+    <div class="inner">
+      <label for="apiKey">Override Google Maps / Places API key (optional)</label>
+      <input type="password" id="apiKey" placeholder="Leave blank to use the built-in key" autocomplete="off" spellcheck="false">
+      <div class="srow">
+        <button class="btn" onclick="saveKey()">Save key</button>
+        <button class="btn" onclick="toggleKeyVis()">&#128065; Show</button>
+        <button class="mutedbtn" onclick="clearKey()">Use built-in key</button>
+      </div>
+
+      <label for="senderName">Your name / signature (used in WhatsApp messages)</label>
+      <input type="text" id="senderName" placeholder="the ReviewTap team" onchange="saveSender(this.value)">
+
+      <div class="keymeta">The built-in key is restricted to ReviewTap's Google project. Stored settings live only in this browser.</div>
+      <details class="subhelp">
+        <summary>Lookup not working?</summary>
+        <ol>
+          <li>The built-in key needs <b>Maps JavaScript API</b> + <b>Places API (New)</b> enabled with billing on (they are, for this project).</li>
+          <li>If you later restrict the key to a website, add this page's domain under <b>Application restrictions &rarr; Websites</b>.</li>
+        </ol>
+      </details>
+    </div>
+  </details>
+
+  <details class="settings" id="runsPanel">
+    <summary><span>&#128452;&#65039;</span><span>Previous runs</span><span class="runs-badge" id="runsBadge"></span></summary>
+    <div class="inner">
+      <div class="runs-list" id="runsList"><div class="runs-empty">Loading…</div></div>
+      <div class="runs-foot">
+        <button class="mutedbtn" onclick="loadRuns()">Refresh</button>
+        <span class="link-hint">Saved runs live in Supabase &mdash; shared across all your devices.</span>
+      </div>
+    </div>
+  </details>
+
+  <div class="drop" id="drop" onclick="document.getElementById('fileInput').click()">
+    <div class="icon">&#128228;</div>
+    <div class="big">Drop a packing-slip PDF here</div>
+    <div class="small">or tap to choose a file &middot; PDF (best) or CSV &middot; runs entirely on your phone</div>
+    <input type="file" id="fileInput" accept=".pdf,.csv" style="display:none" onchange="onFilePick(event)">
+  </div>
+
+  <div class="banner" id="banner"></div>
+
+  <div class="actionsbar" id="actionsbar" style="display:none">
+    <button class="btn primary" id="findBtn" onclick="findAll()">&#128269; Find review links</button>
+    <button class="btn" id="saveRunBtn" onclick="saveRun(this)">&#9729;&#65039; Save run</button>
+    <button class="btn" onclick="exportBatch(this)">&#128190; Export for Claude</button>
+    <button class="btn" onclick="window.print()">&#128424;&#65039; Print</button>
+    <button class="mutedbtn" onclick="clearBatch()">Clear</button>
+    <button class="mutedbtn" onclick="resetProgress()">Reset ticks</button>
+  </div>
+
+  <div class="legend" id="legend" style="display:none">
+    <span><span class="dot" style="background:var(--green)"></span> Strong match</span>
+    <span><span class="dot" style="background:var(--amber)"></span> Verify match</span>
+    <span><span class="dot" style="background:var(--red)"></span> Not found &rarr; WhatsApp client</span>
+  </div>
+
+  <div class="copyall-wrap" id="copyallwrap" style="display:none">
+    <button class="btn-copyall" id="copyAllBtn" onclick="copyAllLinks(this)">&#128203; Copy all review links</button>
+  </div>
+
+  <div id="orders"></div>
+  <div class="empty" id="emptyState">No orders loaded yet. Drop a ReviewTap packing-slip PDF above to get started.</div>
+
+  <footer style="margin-top:24px">
+    Every Google link is the direct <b>write-a-review</b> URL &mdash; it opens straight to the star picker. Test-tap every device before it goes in the bag.
+  </footer>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+if(window.pdfjsLib){ pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js"; }
+
+/* ===== built-in key (ReviewTap Google project) ===== */
+const DEFAULT_KEY = "AIzaSyANTsMrAJ_x9N7qRslPSlszMEXUjeIAqc0";
+const REVIEW = id => `https://search.google.com/local/writereview?placeid=${id}`;
+
+/* ===== persistence ===== */
+const LS_STATE="rt_fulfil_state", LS_PLACES="rt_fulfil_places", LS_KEY="rt_fulfil_gkey",
+      LS_ORDERS="rt_fulfil_orders", LS_SENDER="rt_fulfil_sender";
+let state  = load(LS_STATE,{});
+let places = load(LS_PLACES,{});
+let orders = load(LS_ORDERS,[]);
+let apiKey = localStorage.getItem(LS_KEY) || "";
+function load(k,d){ try{ return JSON.parse(localStorage.getItem(k))||d; }catch(e){ return d; } }
+function save(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
+const saveState=()=>save(LS_STATE,state), savePlaces=()=>save(LS_PLACES,places), saveOrders=()=>save(LS_ORDERS,orders);
+function effectiveKey(){ return (apiKey&&apiKey.trim()) || DEFAULT_KEY; }
+function senderName(){ return (localStorage.getItem(LS_SENDER)||"").trim() || "the ReviewTap team"; }
+
+/* ===== helpers ===== */
+const STEPS=["Link","Encoded","Tested","Packed"];
+let query="";
+function norm(s){ return (s||"").toLowerCase().normalize("NFKD").replace(/[^a-z0-9 ]/g," ").replace(/\b(pty|ltd|inc|cc|the|and)\b/g," ").replace(/\s+/g," ").trim(); }
+function tokens(s){ return new Set(norm(s).split(" ").filter(Boolean)); }
+function sim(a,b){ const A=tokens(a),B=tokens(b); if(!A.size||!B.size) return 0; let i=0; A.forEach(t=>{if(B.has(t))i++;}); return i/Math.max(A.size,B.size); }
+function placeKey(o){ return norm(o.business)+"|"+norm(o.city); }
+function cssId(no){ return "ord-"+(no||"").replace(/[^a-z0-9]/gi,""); }
+function esc(s){ return (s==null?"":String(s)).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function jsStr(s){ return (s==null?"":String(s)).replace(/\\/g,"\\\\").replace(/'/g,"\\'").replace(/"/g,'&quot;'); }
+
+/* ===== file handling ===== */
+const drop=document.getElementById("drop");
+["dragenter","dragover"].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add("drag");}));
+["dragleave","drop"].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove("drag");}));
+drop.addEventListener("drop",e=>{ const f=e.dataTransfer.files[0]; if(f) handleFile(f); });
+function onFilePick(e){ const f=e.target.files[0]; if(f) handleFile(f); e.target.value=""; }
+
+async function handleFile(file){
+  banner("","");
+  try{
+    let parsed;
+    if(/\.pdf$/i.test(file.name)||file.type==="application/pdf") parsed=await parsePDF(file);
+    else if(/\.csv$/i.test(file.name)||file.type==="text/csv") parsed=parseCSV(await file.text());
+    else { banner("err","Unsupported file. Drop a PDF or CSV packing slip."); return; }
+    if(!parsed.length){ banner("err","Couldn't read any orders from that file."); return; }
+    orders=parsed; saveOrders(); currentFileName=file.name; currentRunSaved=false; clearSearch(); render();
+    banner("info",`Loaded ${orders.length} order${orders.length>1?"s":""} from <b>${esc(file.name)}</b>. Finding review links…`);
+    findAll();
+  }catch(err){ console.error(err); banner("err","Failed to read that file: "+(err.message||err)); }
+}
+
+/* ===== PDF parsing (validated against ReviewTap slips: one order per page) ===== */
+async function parsePDF(file){
+  const buf=await file.arrayBuffer();
+  const pdf=await pdfjsLib.getDocument({data:buf}).promise;
+  const out=[];
+  for(let p=1;p<=pdf.numPages;p++){
+    const page=await pdf.getPage(p);
+    const vp=page.getViewport({scale:1});
+    const content=await page.getTextContent();
+    const o=parsePage(content.items, vp.width);
+    if(o) out.push(o);
+  }
+  return out;
+}
+function buildLines(items){
+  const its=items.filter(i=>i.str!=null).map(i=>({str:i.str,x:i.transform[4],y:i.transform[5]}));
+  its.sort((a,b)=>(b.y-a.y)||(a.x-b.x));
+  const lines=[]; let cur=null;
+  for(const it of its){ if(cur&&Math.abs(cur.y-it.y)<3.2) cur.items.push(it); else { cur={y:it.y,items:[it]}; lines.push(cur);} }
+  return lines;
+}
+const lineFull=l=>l.items.map(i=>i.str).join(" ").replace(/\s+/g," ").trim();
+const lineLeft=(l,d)=>l.items.filter(i=>i.x<d).sort((a,b)=>a.x-b.x).map(i=>i.str).join(" ").replace(/\s+/g," ").trim();
+
+function classifyItem(raw,q,color){
+  const isTA=/tripadvisor/i.test(raw), isAuto=/auto\s*trader/i.test(raw);
+  const isCard=/card/i.test(raw), isStand=/stand/i.test(raw);
+  const custom=/custom\s*branded/i.test(raw);
+  const platform=isTA?"tripadvisor":isAuto?"autotrader":"google";
+  const kind=isCard?"card":isStand?"stand":"other";
+  const platLabel=platform==="tripadvisor"?"Tripadvisor":platform==="autotrader"?"AutoTrader":"Google Review";
+  const kindLabel=kind==="card"?"Card":kind==="stand"?"Stand":"Item";
+  const what=`${platLabel} ${kindLabel}`.trim();
+  return { q, color, what, kind, platform, custom, raw };
+}
+function parsePage(rawItems,width){
+  const lines=buildLines(rawItems);
+  const fulls=lines.map(lineFull);
+  let no=null,dateStr="";
+  for(const f of fulls){ const m=f.match(/Order\s*#\s*([A-Za-z0-9]+)/i); if(m){ no="#"+m[1]; break; } }
+  if(!no) return null;
+  for(const f of fulls){ const m=f.match(/\b(\d{1,2}\s+[A-Za-z]+\s+\d{4})\b/); if(m){ dateStr=m[1]; break; } }
+  let divider=width*0.5;
+  for(const ln of lines){ const b=ln.items.find(i=>/BILL/i.test(i.str)); if(b){ divider=b.x-4; break; } }
+  const idxShip=fulls.findIndex(f=>/SHIP\s*TO/i.test(f));
+  const idxItems=fulls.findIndex(f=>/ITEMS\b/i.test(f)&&/QUANTITY/i.test(f));
+  const idxThanks=fulls.findIndex(f=>/Thank you for shopping/i.test(f));
+  let customer="",business="",street=[],city="",province="",postcode="",phone="";
+  if(idxShip>=0&&idxItems>idxShip){
+    const block=[];
+    for(let i=idxShip+1;i<idxItems;i++){ const t=lineLeft(lines[i],divider); if(t) block.push(t); }
+    const cleaned=[];
+    for(const t of block){
+      if(/^south africa$/i.test(t)) continue;
+      if(/^\+?[\d][\d\s()\-]{6,}$/.test(t)){ phone=t.trim(); continue; }
+      cleaned.push(t);
+    }
+    let cppIdx=-1;
+    for(let i=cleaned.length-1;i>=0;i--){
+      const m=cleaned[i].match(/^(.+?),\s*([A-Za-z][A-Za-z .'-]+),\s*(\d{4})$/);
+      if(m){ city=m[1].trim(); province=m[2].trim(); postcode=m[3]; cppIdx=i; break; }
+    }
+    const addr=cppIdx>=0?cleaned.slice(0,cppIdx):cleaned;
+    customer=addr[0]||""; business=addr[1]||customer; street=addr.slice(2);
+  }
+  const items_=[];
+  if(idxItems>=0){
+    const end=idxThanks>idxItems?idxThanks:fulls.length;
+    let cur=null; const push=()=>{ if(cur) items_.push(cur); };
+    for(let i=idxItems+1;i<end;i++){
+      let t=fulls[i]; if(!t) continue;
+      if(/^(items|quantity)$/i.test(t)) continue;
+      const qm=t.match(/(\d+)\s+of\s+(\d+)/i);
+      const isColor=/^(white|black)$/i.test(t);
+      const isName=/(review\s+(stand|card)|tripadvisor|auto\s*trader|nfc\s+cards?|nfc\s+stand|review\s+tap)/i.test(t)&&!isColor;
+      if(isName){ push(); let q=1; if(qm){ q=parseInt(qm[1],10); t=t.replace(qm[0],"").trim(); } cur={raw:t,qty:q,color:"white"}; }
+      else if(qm&&cur){ cur.qty=parseInt(qm[1],10); }
+      else if(isColor&&cur){ cur.color=t.toLowerCase(); }
+    }
+    push();
+  }
+  const items=items_.map(it=>classifyItem(it.raw,it.qty,it.color));
+  return { no,date:dateStr,customer,business,street,city,province,postcode,phone,items,
+    placeId:null,matched:"",rating:null,count:null,confidence:null,status:"pending",candidates:[] };
+}
+
+/* ===== CSV parsing (best-effort, Shopify-style) ===== */
+function parseCSVRows(text){
+  const rows=[]; let row=[],field="",q=false;
+  for(let i=0;i<text.length;i++){ const c=text[i];
+    if(q){ if(c==='"'){ if(text[i+1]==='"'){field+='"';i++;} else q=false; } else field+=c; }
+    else { if(c==='"') q=true; else if(c===","){row.push(field);field="";} else if(c==="\n"){row.push(field);rows.push(row);row=[];field="";} else if(c==="\r"){} else field+=c; }
+  }
+  if(field.length||row.length){ row.push(field); rows.push(row); }
+  return rows.filter(r=>r.some(c=>c.trim()!==""));
+}
+function parseCSV(text){
+  const rows=parseCSVRows(text); if(rows.length<2) return [];
+  const head=rows[0].map(h=>h.trim().toLowerCase());
+  const find=(...n)=>{ for(const x of n){ const i=head.indexOf(x); if(i>=0) return i; } return -1; };
+  const ci={ order:find("name","order","order number","order #","order name"), biz:find("shipping company","billing company","company"),
+    cust:find("shipping name","billing name","customer name","name"), city:find("shipping city","billing city","city"),
+    prov:find("shipping province name","shipping province","billing province","province"), zip:find("shipping zip","billing zip","zip","postal code"),
+    phone:find("shipping phone","phone","billing phone"), item:find("lineitem name","line item","item","product","product title"), qty:find("lineitem quantity","quantity","qty") };
+  if(ci.order<0||ci.item<0) return [];
+  const map={};
+  for(let r=1;r<rows.length;r++){
+    const row=rows[r], get=i=>i>=0?(row[i]||"").trim():"";
+    const ono=get(ci.order); if(!ono) continue;
+    const key=ono.startsWith("#")?ono:("#"+ono.replace(/^#?/,""));
+    if(!map[key]) map[key]={ no:key,date:"",customer:get(ci.cust),business:get(ci.biz)||get(ci.cust),street:[],
+      city:get(ci.city),province:get(ci.prov),postcode:get(ci.zip),phone:get(ci.phone),items:[],
+      placeId:null,matched:"",rating:null,count:null,confidence:null,status:"pending",candidates:[] };
+    const raw=get(ci.item); if(!raw) continue;
+    const qty=parseInt(get(ci.qty)||"1",10)||1;
+    const cm=raw.match(/\b(white|black)\b/i);
+    map[key].items.push(classifyItem(raw,qty,cm?cm[1].toLowerCase():"white"));
+  }
+  return Object.values(map);
+}
+
+/* ===== Google Places (New) ===== */
+let gmapsReady=false,gmapsLoading=null;
+window.gm_authFailure=function(){ gmapsReady=false; gmapsLoading=null; setConn(false,"Key rejected by Google");
+  banner("err","Google rejected the API key. Check Maps JavaScript API + Places API (New) are enabled and billing is on."); };
+function loadGoogle(key){
+  if(gmapsReady) return Promise.resolve();
+  if(gmapsLoading) return gmapsLoading;
+  gmapsLoading=new Promise((resolve,reject)=>{
+    try{
+      ((g)=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await(a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({key,v:"weekly"});
+      google.maps.importLibrary("places").then(()=>{gmapsReady=true;setConn(true);resolve();}).catch(err=>{gmapsLoading=null;reject(err);});
+    }catch(e){ gmapsLoading=null; reject(e); }
+  });
+  return gmapsLoading;
+}
+/* searchPlaces: prefer Places API (New); auto-fall back to the legacy Places API
+   (which is what this project currently has enabled). Decides the mode once. */
+let placesSvc=null, placesMode=null;
+async function searchPlaces(q){
+  await google.maps.importLibrary("places");
+  if(placesMode!=="legacy"){
+    try{
+      const { Place }=await google.maps.importLibrary("places");
+      const { places:results }=await Place.searchByText({ textQuery:q,
+        fields:["id","displayName","formattedAddress","rating","userRatingCount"], maxResultCount:4, region:"ZA", language:"en" });
+      placesMode="new";
+      return (results||[]).map(p=>({ placeId:p.id,
+        displayName:(typeof p.displayName==="string"?p.displayName:(p.displayName&&p.displayName.text))||"",
+        formattedAddress:p.formattedAddress||"", rating:p.rating??null, count:p.userRatingCount??null }));
+    }catch(e){
+      placesMode="legacy";
+      console.warn("Places API (New) unavailable — using legacy Places API.", e&&(e.message||e));
+    }
+  }
+  if(!placesSvc) placesSvc=new google.maps.places.PlacesService(document.createElement("div"));
+  return new Promise(resolve=>{
+    placesSvc.textSearch({ query:q, region:"za" }, (res,status)=>{
+      if(status===google.maps.places.PlacesServiceStatus.OK && res){
+        resolve(res.slice(0,4).map(p=>({ placeId:p.place_id, displayName:p.name||"",
+          formattedAddress:p.formatted_address||"", rating:p.rating??null, count:p.user_ratings_total??null })));
+      } else resolve([]);
+    });
+  });
+}
+async function lookupOrder(o){
+  const loc=[o.city,o.province].filter(Boolean).join(" ");
+  const cands=await searchPlaces(`${o.business} ${loc} South Africa`.replace(/\s+/g," ").trim());
+  o.candidates=cands;
+  if(!cands.length){ o.status="lookup"; o.placeId=null; o.matched="No Google match for name + location"; o.confidence=0; return; }
+  let best=cands[0],bs=-1;
+  for(const c of cands){
+    let s=sim(o.business,c.displayName);
+    const nb=norm(c.displayName),nn=norm(o.business);
+    if(nb&&nn&&(nb.includes(nn)||nn.includes(nb))) s=Math.max(s,0.78);
+    const fa=(c.formattedAddress||"").toLowerCase();
+    if(o.city&&fa.includes(o.city.toLowerCase())) s+=0.18;
+    if(o.province&&fa.includes(o.province.toLowerCase())) s+=0.06;
+    if(s>bs){ bs=s; best=c; }
+  }
+  applyMatch(o,best,bs);
+}
+function applyMatch(o,c,score){
+  o.placeId=c.placeId; o.rating=c.rating; o.count=c.count; o.confidence=Math.round(Math.min(1,score)*100);
+  const r=c.rating!=null?`${c.rating}★`:"no rating"; const n=c.count!=null?`, ${c.count}`:"";
+  o.matched=`${c.displayName} · ${c.formattedAddress} (${r}${n})`;
+  o.status=score>=0.6?"ready":"verify";
+  places[placeKey(o)]={ placeId:c.placeId,displayName:c.displayName,formattedAddress:c.formattedAddress,
+    rating:c.rating,count:c.count,confirmed:false,matched:o.matched,status:o.status,confidence:o.confidence };
+  savePlaces(); saveOrders();
+}
+async function findAll(){
+  const btn=document.getElementById("findBtn"); btn.disabled=true; const orig=btn.textContent;
+  try{ btn.textContent="Loading Google…"; await loadGoogle(effectiveKey()); }
+  catch(e){ btn.disabled=false; btn.textContent=orig; setConn(false,"Failed to load");
+    banner("err","Couldn't load Google Maps: "+(e.message||e)); return; }
+  let found=0,miss=0;
+  for(const o of orders){
+    const cached=places[placeKey(o)];
+    if(o.status==="pending"&&cached&&cached.placeId){
+      o.placeId=cached.placeId; o.matched=cached.matched||`${cached.displayName} · ${cached.formattedAddress}`;
+      o.rating=cached.rating; o.count=cached.count; o.confidence=cached.confidence;
+      o.status=cached.confirmed?"ready":(cached.status||"verify"); found++; render(); continue;
+    }
+    if(o.placeId){ found++; continue; }
+    o.status="searching"; render(); btn.textContent="Searching…";
+    try{ await lookupOrder(o); if(o.placeId) found++; else miss++; }
+    catch(e){ console.error("lookup failed",o.no,e); o.status="lookup"; o.matched="Lookup error — search manually"; miss++; }
+    saveOrders(); render(); await new Promise(r=>setTimeout(r,160));
+  }
+  btn.disabled=false; btn.textContent=orig;
+  banner("info",`Done. <b>${found}</b> matched, <b>${miss}</b> not found.`+(miss?` Use the green <b>WhatsApp</b> button on the not-found orders to ask the client to set up their Google profile.`:""));
+  if(sb && orders.length && !currentRunSaved){ saveRun(); }  // auto-save this batch to the cloud once
+}
+
+/* ===== match / platform link correction ===== */
+function chooseCandidate(no,idx){ const o=orders.find(x=>x.no===no); if(!o) return; const c=o.candidates[idx]; if(!c) return;
+  applyMatch(o,c,sim(o.business,c.displayName)+0.6); o.status="ready"; places[placeKey(o)].confirmed=true; savePlaces(); saveOrders(); render(); }
+function applyManualId(no,el){ const o=orders.find(x=>x.no===no); if(!o) return; let v=(el.value||"").trim();
+  const m=v.match(/placeid=([A-Za-z0-9_\-]+)/); if(m) v=m[1]; if(!v) return;
+  o.placeId=v; o.status="ready"; o.matched="Manually set Place ID"; o.confidence=100;
+  places[placeKey(o)]={placeId:v,displayName:o.business,formattedAddress:"",rating:null,count:null,confirmed:true,matched:o.matched,status:"ready",confidence:100};
+  savePlaces(); saveOrders(); render(); }
+function setExtraLink(no,platform,el){ const o=orders.find(x=>x.no===no); if(!o) return;
+  state[no]=state[no]||{}; state[no].extra=state[no].extra||{}; state[no].extra[platform]=(el.value||"").trim(); saveState(); render(); }
+
+/* ===== WhatsApp ===== */
+function waNumber(phone){ let d=(phone||"").replace(/[^\d+]/g,"");
+  if(d.startsWith("+")) d=d.slice(1);
+  if(d.startsWith("27")) return d;
+  if(d.startsWith("0")) return "27"+d.slice(1);
+  if(d.length===9) return "27"+d;
+  return d; }
+function waMessage(o){
+  const first=(o.customer||"there").trim().split(/\s+/)[0];
+  const itemDesc=o.items.map(i=>`${i.q}× ${i.what}`).join(", ");
+  const who=senderName(); const intro=/reviewtap/i.test(who)?who:`${who} from ReviewTap`;
+  return `Hi ${first}, it's ${intro} 👋\n\n`+
+    `Thank you for your order ${o.no}${itemDesc?` (${itemDesc})`:""}. We're getting your tap-to-review device for ${o.business} ready.\n\n`+
+    `Quick thing before we can link it up: we couldn't find a Google Business Profile for ${o.business} on Google Maps yet. Your device needs one so your customers' reviews land on your listing.\n\n`+
+    `It's free and takes a few minutes:\n`+
+    `1) On your phone, open google.com/business\n`+
+    `2) Sign in and tap "Manage now"\n`+
+    `3) Search for "${o.business}" — if it doesn't come up, tap "Add your business to Google"\n`+
+    `4) Add your area/address, category and contact details, then follow the steps to verify\n\n`+
+    `As soon as it's live, send us the link or the business name here and we'll encode your device and ship it. Happy to help if you get stuck! 🙌`;
+}
+function waLink(o){ return `https://wa.me/${waNumber(o.phone)}?text=${encodeURIComponent(waMessage(o))}`; }
+
+/* ===== render ===== */
+const statusLabel={ready:"● Strong match",verify:"● Verify match",lookup:"● Not found",pending:"● Pending",searching:"● Searching…"};
+const statusClass={ready:"s-ready",verify:"s-verify",lookup:"s-lookup",pending:"s-pending",searching:"s-searching"};
+
+function matchesQuery(o){ if(!query) return true; const q=query;
+  return (o.no||"").toLowerCase().includes(q) || (o.business||"").toLowerCase().includes(q) || (o.customer||"").toLowerCase().includes(q); }
+
+function render(){
+  const wrap=document.getElementById("orders");
+  const has=orders.length>0;
+  document.getElementById("emptyState").style.display=has?"none":"block";
+  document.getElementById("actionsbar").style.display=has?"flex":"none";
+  document.getElementById("legend").style.display=has?"flex":"none";
+  document.getElementById("copyallwrap").style.display=has?"flex":"none";
+  document.getElementById("searchRow").classList.toggle("show",has);
+  wrap.innerHTML="";
+  if(has) renderTotals();
+  document.getElementById("batchSub").textContent=has
+    ? `${orders.length} orders · ${orders.reduce((n,o)=>n+o.items.reduce((m,i)=>m+i.q,0),0)} units`
+    : "Drop a packing-slip PDF to begin";
+
+  const visible=orders.filter(matchesQuery);
+  document.getElementById("searchCount").textContent = query ? `${visible.length} of ${orders.length}` : "";
+  if(has && !visible.length){ wrap.innerHTML=`<div class="empty">No orders match “${esc(query)}”.</div>`; updateProgress(); return; }
+
+  visible.forEach(o=>{
+    const st=state[o.no]||{}; const packed=!!st.Packed; const link=o.placeId?REVIEW(o.placeId):null;
+
+    const itemsHtml=o.items.map(it=>{
+      const kc=it.platform==="tripadvisor"?"kind-ta":it.platform==="autotrader"?"kind-auto":it.kind==="card"?"kind-card":"kind-stand";
+      const kt=it.platform==="tripadvisor"?"TRIPADVISOR":it.platform==="autotrader"?"AUTOTRADER":it.kind==="card"?"CARD":it.kind==="stand"?"STAND":"ITEM";
+      const cb=it.custom?` <span class="kind kind-custom">CUSTOM</span>`:"";
+      return `<div class="item"><span class="qty">${it.q}×</span><span class="swatch sw-${it.color==="black"?"black":"white"}"></span>
+        <span><span class="what">${esc(it.what)}</span><span class="kind ${kc}">${kt}</span>${cb}
+        <span class="form"> — ${it.color==="black"?"Black":"White"}</span></span></div>`; }).join("");
+
+    const hasCustom=o.items.some(i=>i.custom);
+    const taItems=o.items.filter(i=>i.platform==="tripadvisor");
+    const autoItems=o.items.filter(i=>i.platform==="autotrader");
+    let notes=[];
+    if(hasCustom) notes.push("Includes a <b>Custom Branded</b> item — confirm artwork/branding before encoding.");
+    const noteHtml=notes.length?`<div class="aside-note">⚠️ ${notes.join("<br>")}</div>`:"";
+
+    /* Google review link block */
+    let linkHtml;
+    if(link){
+      const conf=o.confidence!=null?`<div class="conf">Confidence ${o.confidence}%${o.matched?" · "+esc(o.matched):""}</div>`:"";
+      linkHtml=`${conf}
+        <div class="link-box" onclick="copyText('${link}',this)" title="Tap to copy">${link}</div>
+        <div class="link-actions">
+          <button class="btn copy" data-link="${link}" onclick="copyLink(this)">\u{1F4CB} Copy</button>
+          <a class="btn open" href="${link}" target="_blank" rel="noopener">Open &amp; test ↗</a>
+        </div>
+        <div class="link-hint">Opens straight to the star picker. Wrong business? Change it below.</div>
+        ${matchToolsHtml(o)}`;
+    } else if(o.status==="searching"){
+      linkHtml=`<div class="lookup-note" style="background:#e7f0fe;color:#234">⏳ Searching Google…</div>`;
+    } else if(o.status==="pending"){
+      linkHtml=`<div class="lookup-note" style="background:#eef1f6;color:#3a4a63">Not looked up yet. Tap <b>Find review links</b>.</div>`;
+    } else {
+      const q=encodeURIComponent(`${o.business} ${o.city||""} ${o.province||""} South Africa`);
+      linkHtml=`<div class="lookup-note"><b>No Google profile found.</b> The client likely hasn't set one up yet.</div>
+        <div class="link-actions">
+          <a class="btn wa" href="${waLink(o)}" target="_blank" rel="noopener">\u{1F4AC} WhatsApp client (set-up steps)</a>
+          <a class="btn" href="https://www.google.com/maps/search/${q}" target="_blank" rel="noopener">Search Maps ↗</a>
+        </div>
+        <div class="link-hint">WhatsApp opens with a ready-to-send message (you still tap send). Found it? Paste the Place ID below.</div>
+        ${matchToolsHtml(o)}`;
+    }
+
+    /* Tripadvisor / AutoTrader blocks */
+    let platHtml="";
+    if(taItems.length) platHtml+=platformBlock(o,"tripadvisor","Tripadvisor",st);
+    if(autoItems.length) platHtml+=platformBlock(o,"autotrader","AutoTrader",st);
+
+    const checksHtml=STEPS.map(step=>{ const on=!!st[step];
+      return `<label class="chk ${on?'on':''}" onclick="toggle('${o.no}','${step}',this)"><span class="tick"></span>${step}</label>`; }).join("");
+
+    const loc=[o.city,o.province,o.postcode].filter(Boolean).join(", ");
+    const meta=[o.customer,o.phone,loc].filter(Boolean).join(" · ")+(o.date?" · "+o.date:"");
+
+    const el=document.createElement("div");
+    el.className="order"+(packed?" done":""); el.id=cssId(o.no);
+    el.innerHTML=`
+      <div class="top">
+        <span class="ordno">${esc(o.no)}</span>
+        <div class="biz">
+          <div class="name">${esc(o.business||o.customer||"(no business name)")}</div>
+          ${o.matched?`<div class="matched">↳ ${esc(o.matched)}</div>`:""}
+          <div class="meta">${esc(meta)}</div>
+        </div>
+        <span class="status ${statusClass[o.status]||"s-pending"}">${statusLabel[o.status]||""}</span>
+      </div>
+      <div class="body">
+        <div class="col"><div class="lbl">Pack</div>${itemsHtml||'<div class="form">No items detected</div>'}${noteHtml}</div>
+        <div class="col"><div class="lbl">Google review link</div>${linkHtml}${platHtml}</div>
+      </div>
+      <div class="checks">${checksHtml}</div>`;
+    wrap.appendChild(el);
+  });
+  updateProgress();
+}
+
+function platformBlock(o,key,label,st){
+  const saved=(st.extra&&st.extra[key])||"";
+  const dot=key==="tripadvisor"?"ta-dot":"auto-dot";
+  const gq=encodeURIComponent(`${o.business} ${o.city||""} ${label} reviews`);
+  let body;
+  if(saved){
+    body=`<div class="pa">
+      <button class="btn copy" data-link="${esc(saved)}" onclick="copyLink(this)">\u{1F4CB} Copy</button>
+      <a class="btn open" href="${esc(saved)}" target="_blank" rel="noopener">Open ↗</a>
+      <button class="btn" onclick="this.closest('.plat').querySelector('input').focus()">Edit</button>
+    </div>
+    <input value="${esc(saved)}" onchange="setExtraLink('${o.no}','${key}',this)" placeholder="Paste ${label} review link" style="margin-top:7px">`;
+  } else {
+    body=`<div class="pa">
+      <a class="btn" href="https://www.google.com/search?q=${gq}" target="_blank" rel="noopener">Find ${label} link ↗</a>
+    </div>
+    <input onchange="setExtraLink('${o.no}','${key}',this)" placeholder="Paste ${label} review link here" style="margin-top:7px">
+    <div class="link-hint" style="margin-top:6px">Or ask Claude to find it — it'll appear in the batch.</div>`;
+  }
+  return `<div class="plat"><div class="ph"><span class="${dot}"></span>${label} review link</div>${body}</div>`;
+}
+
+function matchToolsHtml(o){
+  const opts=(o.candidates||[]).map((c,i)=>{ const r=c.rating!=null?`${c.rating}★`:"";
+    return `<option value="${i}">${esc(c.displayName)} — ${esc(c.formattedAddress)} ${r}</option>`; }).join("");
+  const sel=(o.candidates&&o.candidates.length)
+    ? `<div><div class="lbl" style="margin-bottom:4px">Pick the correct listing</div>
+        <select onchange="if(this.value!=='')chooseCandidate('${o.no}',+this.value)">
+          <option value="">— ${o.candidates.length} Google results —</option>${opts}</select></div>`:"";
+  return `<details class="match-tools"><summary>Change match / paste Place ID</summary><div class="mt-body">${sel}
+    <div><div class="lbl" style="margin-bottom:4px">…or paste a Place ID / review URL</div>
+    <input class="mono" placeholder="ChIJ… or …writereview?placeid=ChIJ…" onkeydown="if(event.key==='Enter')applyManualId('${o.no}',this)">
+    <div class="link-hint" style="margin-top:6px">Press Enter to apply.</div></div></div></details>`;
+}
+
+function renderTotals(){
+  const t={};
+  for(const o of orders) for(const it of o.items){ const k=`${it.color}|${it.platform}|${it.kind}`; t[k]=(t[k]||0)+it.q; }
+  const sw=c=>c==="black"?"⬛":"⬜";
+  const pw=p=>p==="tripadvisor"?"Tripadvisor ":p==="autotrader"?"AutoTrader ":"";
+  const kw=k=>k==="card"?"card":k==="stand"?"stand":"item";
+  const pills=Object.keys(t).sort().map(k=>{ const [c,p,kd]=k.split("|"); const n=t[k];
+    return `<span class="pill">${sw(c)} <b>${n}</b> ${pw(p)}${kw(kd)}${n>1?"s":""}</span>`; });
+  document.getElementById("totals").innerHTML=pills.join("");
+}
+
+function toggle(no,step,el){ state[no]=state[no]||{}; state[no][step]=!state[no][step];
+  el.classList.toggle("on",state[no][step]);
+  const card=document.getElementById(cssId(no)); if(card) card.classList.toggle("done",!!state[no].Packed);
+  saveState(); updateProgress(); }
+function updateProgress(){ const total=orders.length;
+  const done=orders.filter(o=>state[o.no]&&state[o.no].Packed).length;
+  document.getElementById("barFill").style.width=(total?done/total*100:0)+"%";
+  document.getElementById("progText").textContent=`${done} / ${total} packed`; }
+
+/* ===== search ===== */
+function onSearch(v){ query=(v||"").trim().toLowerCase(); document.getElementById("searchClr").classList.toggle("show",!!query); render(); }
+function clearSearch(){ query=""; const i=document.getElementById("searchInput"); if(i) i.value=""; document.getElementById("searchClr").classList.remove("show"); render(); }
+
+/* ===== clipboard ===== */
+async function doCopy(text){
+  try{ if(navigator.clipboard&&navigator.clipboard.writeText){ await navigator.clipboard.writeText(text); return true; } }catch(e){}
+  try{ const ta=document.createElement("textarea"); ta.value=text; ta.style.position="fixed"; ta.style.opacity="0";
+    document.body.appendChild(ta); ta.focus(); ta.select(); const ok=document.execCommand("copy"); document.body.removeChild(ta); return ok; }catch(e){ return false; }
+}
+function flash(btn,msg){ const o=btn.dataset.orig||btn.textContent; btn.dataset.orig=o; btn.textContent=msg; btn.classList.add("copied");
+  setTimeout(()=>{ btn.textContent=o; btn.classList.remove("copied"); },1400); }
+function copyLink(btn){ doCopy(btn.getAttribute("data-link")).then(ok=>flash(btn,ok?"Copied ✓":"Hold to copy")); }
+function copyText(t,box){ doCopy(t).then(ok=>{ if(!ok)return; const p=box.style.background; box.style.background="#d8f0e0"; setTimeout(()=>box.style.background=p,900); }); }
+function copyAllLinks(btn){ const lines=orders.filter(o=>o.placeId).map(o=>`${o.no} ${o.business}: ${REVIEW(o.placeId)}`);
+  if(!lines.length){ flash(btn,"No links yet"); return; } doCopy(lines.join("\n")).then(ok=>flash(btn,ok?`Copied ${lines.length} links ✓`:"Copy failed")); }
+
+function exportBatch(btn){
+  const lines=orders.map(o=>{
+    const link=o.placeId?REVIEW(o.placeId):"NOT FOUND — needs Google profile";
+    const items=o.items.map(i=>`${i.q}x ${i.color} ${i.what}`).join("; ");
+    const ex=state[o.no]&&state[o.no].extra?Object.entries(state[o.no].extra).filter(([k,v])=>v).map(([k,v])=>`${k}: ${v}`).join("; "):"";
+    return `- ${o.no} | ${o.business} | ${[o.city,o.province].filter(Boolean).join(", ")} | ${o.customer} ${o.phone} | ${items} | status: ${o.status} | google: ${link}${ex?` | extra: ${ex}`:""}`;
+  });
+  const text=`ReviewTap batch — ${orders.length} orders, ${orders.reduce((n,o)=>n+o.items.reduce((m,i)=>m+i.q,0),0)} units\n`+
+    `(paste this to Claude and say "save this batch to memory")\n\n`+lines.join("\n");
+  doCopy(text).then(ok=>flash(btn,ok?"Copied — paste to Claude ✓":"Copy failed"));
+}
+
+/* ===== settings / key ===== */
+function setConn(ok,msg){ document.getElementById("connDot").classList.toggle("bad",!ok);
+  document.getElementById("connText").textContent=ok?(apiKey?"Google lookup connected (your key)":"Google lookup connected (built-in key)"):(msg||"Lookup unavailable"); }
+function saveKey(){ apiKey=document.getElementById("apiKey").value.trim(); localStorage.setItem(LS_KEY,apiKey);
+  gmapsReady=false; gmapsLoading=null; setConn(true); banner("info",apiKey?"Custom key saved on this device.":"Using the built-in key."); }
+function clearKey(){ apiKey=""; localStorage.removeItem(LS_KEY); document.getElementById("apiKey").value=""; gmapsReady=false; gmapsLoading=null; setConn(true); banner("info","Reverted to the built-in key."); }
+function toggleKeyVis(){ const i=document.getElementById("apiKey"); i.type=i.type==="password"?"text":"password"; }
+function saveSender(v){ localStorage.setItem(LS_SENDER,(v||"").trim()); if(orders.length) render(); }
+
+/* ===== batch controls ===== */
+function clearBatch(){ if(!confirm("Clear the loaded orders? (Progress & matched links stay cached.)"))return; orders=[]; saveOrders(); clearSearch(); render(); banner("",""); }
+function resetProgress(){ if(!confirm("Reset all checklist ticks for the loaded orders?"))return; for(const o of orders){ if(state[o.no]){ const ex=state[o.no].extra; state[o.no]={}; if(ex) state[o.no].extra=ex; } } saveState(); render(); }
+
+function banner(kind,html){ const b=document.getElementById("banner");
+  if(!html){ b.className="banner"; b.innerHTML=""; return; } b.className="banner show "+(kind||"info"); b.innerHTML=html; }
+
+/* ===== Supabase (previous runs, shared across devices) ===== */
+const SUPA_URL="https://urwqhjcocnclvhomuksm.supabase.co";
+const SUPA_KEY="sb_publishable_NIw8TlXk2SRTx8o2c705wQ_bOfeKaOH";
+let sb=null;
+try{ if(window.supabase&&window.supabase.createClient) sb=window.supabase.createClient(SUPA_URL,SUPA_KEY); }catch(e){ console.warn("Supabase init failed",e); }
+let currentFileName="", currentRunSaved=false;
+
+function runStats(){ return {
+  order_count: orders.length,
+  unit_count: orders.reduce((n,o)=>n+o.items.reduce((m,i)=>m+i.q,0),0),
+  matched_count: orders.filter(o=>o.placeId).length,
+  notfound_count: orders.filter(o=>o.status==="lookup").length }; }
+
+async function saveRun(btn){
+  if(!sb){ banner("err","Cloud storage isn't available (Supabase didn't load)."); return; }
+  if(!orders.length){ if(btn) flash(btn,"No orders"); return; }
+  if(btn){ btn.disabled=true; btn.dataset.orig=btn.dataset.orig||btn.textContent; btn.textContent="Saving…"; }
+  const rec={ label: currentFileName || `Batch ${new Date().toLocaleDateString("en-ZA")}`,
+    source_filename: currentFileName||null, ...runStats(), orders };
+  const { error }=await sb.from("fulfillment_runs").insert(rec);
+  if(btn){ btn.disabled=false; btn.textContent=btn.dataset.orig||"☁️ Save run"; }
+  if(error){ console.error(error); banner("err","Couldn't save run: "+esc(error.message)); return false; }
+  currentRunSaved=true; if(btn) flash(btn,"Saved ✓"); loadRuns(); return true;
+}
+function fmtWhen(iso){
+  const d=new Date(iso), diff=(Date.now()-d.getTime())/1000;
+  const t=d.toLocaleString("en-ZA",{day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"});
+  if(diff<60) return "just now · "+t;
+  if(diff<3600) return Math.floor(diff/60)+" min ago · "+t;
+  if(diff<86400) return Math.floor(diff/3600)+"h ago · "+t;
+  if(diff<604800) return Math.floor(diff/86400)+"d ago · "+t;
+  return t;
+}
+async function loadRuns(){
+  const list=document.getElementById("runsList"); if(!list) return;
+  if(!sb){ list.innerHTML='<div class="runs-empty">Cloud storage unavailable.</div>'; return; }
+  list.innerHTML='<div class="runs-empty">Loading…</div>';
+  const { data, error }=await sb.from("fulfillment_runs")
+    .select("id,created_at,label,order_count,unit_count,matched_count,notfound_count")
+    .order("created_at",{ascending:false}).limit(60);
+  if(error){ list.innerHTML='<div class="runs-empty">Couldn\'t load runs: '+esc(error.message)+'</div>'; return; }
+  document.getElementById("runsBadge").textContent=data.length?`(${data.length})`:"";
+  if(!data.length){ list.innerHTML='<div class="runs-empty">No saved runs yet. Load a batch, then tap “Save run”.</div>'; return; }
+  list.innerHTML=data.map(r=>`
+    <div class="run-row">
+      <div class="run-main">
+        <div class="run-label">${esc(r.label||"Batch")}</div>
+        <div class="run-when">🕓 ${esc(fmtWhen(r.created_at))}</div>
+        <div class="run-stats">${r.order_count} orders · ${r.unit_count} units · ${r.matched_count} matched${r.notfound_count?` · ${r.notfound_count} not found`:""}</div>
+      </div>
+      <div class="run-actions">
+        <button class="btn" onclick="openRun('${r.id}')">Open</button>
+        <button class="mutedbtn" onclick="deleteRun('${r.id}',this)">Delete</button>
+      </div>
+    </div>`).join("");
+}
+async function openRun(id){
+  if(!sb) return;
+  const { data, error }=await sb.from("fulfillment_runs").select("orders,label,source_filename").eq("id",id).single();
+  if(error||!data){ banner("err","Couldn't open that run."); return; }
+  orders=data.orders||[]; saveOrders(); currentFileName=data.source_filename||data.label||""; currentRunSaved=true;
+  clearSearch(); render(); const rp=document.getElementById("runsPanel"); if(rp) rp.open=false;
+  banner("info",`Opened saved run <b>${esc(data.label||"")}</b> — ${orders.length} orders.`);
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+async function deleteRun(id,btn){
+  if(!sb) return; if(!confirm("Delete this saved run? It's removed for all devices.")) return;
+  const { error }=await sb.from("fulfillment_runs").delete().eq("id",id);
+  if(error){ banner("err","Delete failed: "+esc(error.message)); return; }
+  loadRuns();
+}
+
+/* ===== init ===== */
+(function init(){
+  if(apiKey) document.getElementById("apiKey").value=apiKey;
+  const s=localStorage.getItem(LS_SENDER); if(s) document.getElementById("senderName").value=s;
+  setConn(true);
+  render();
+  loadRuns();
+})();
+</script>
+</body>
+</html>
