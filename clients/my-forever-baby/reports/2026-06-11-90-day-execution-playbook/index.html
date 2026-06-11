@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MyForeverBaby — 90-Day Execution Playbook</title>
+<style>
+  :root{
+    --ink:#1c1a26; --ink-soft:#4b4760; --line:#ece8f2; --bg:#faf8fc; --card:#ffffff;
+    --rose:#e7739b; --rose-deep:#c64d7c; --rose-soft:#fde9f1;
+    --plum:#6d4aa8; --plum-soft:#f0eafb; --mint:#16b187; --mint-soft:#e3f7f0;
+    --amber:#e0922f; --amber-soft:#fcf0dd; --red:#e2544e; --red-soft:#fdebe9;
+    --sky:#3d8bd4; --shadow:0 1px 2px rgba(28,26,38,.04),0 8px 28px rgba(108,74,168,.07);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1020px;margin:0 auto;padding:0 22px}
+  a{color:var(--rose-deep)}
+  code{background:#f3eef9;border:1px solid #e6dcf5;border-radius:5px;padding:1px 6px;font-size:.92em;
+    font-family:'SF Mono',Consolas,Menlo,monospace;color:var(--plum)}
+
+  /* HERO */
+  .hero{background:
+      radial-gradient(1100px 380px at 10% -10%,rgba(231,115,155,.22),transparent 60%),
+      radial-gradient(900px 360px at 100% 0%,rgba(109,74,168,.22),transparent 55%),
+      linear-gradient(160deg,#231f33,#322a4d);
+    color:#fff;padding:56px 0 50px}
+  .eyebrow{letter-spacing:.22em;text-transform:uppercase;font-size:12px;font-weight:700;color:#f4c4d8;margin:0 0 12px}
+  .hero h1{font-size:40px;line-height:1.08;margin:0 0 12px;font-weight:800;letter-spacing:-.5px}
+  .hero h1 span{background:linear-gradient(90deg,#f7a8c6,#c9aef0);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .hero p.lead{font-size:17.5px;max-width:680px;color:#e7e2f2;margin:0 0 22px}
+  .hero .meta{display:flex;flex-wrap:wrap;gap:10px 24px;font-size:13.5px;color:#cfc7e3}
+  .hero .meta b{color:#fff;font-weight:600}
+
+  /* progress */
+  .prog{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line)}
+  .prog .wrap{display:flex;align-items:center;gap:16px;padding:10px 22px}
+  .prog .track{flex:1;height:9px;background:var(--line);border-radius:6px;overflow:hidden}
+  .prog .fill{height:100%;width:0;background:linear-gradient(90deg,var(--rose),var(--plum));border-radius:6px;transition:width .25s}
+  .prog .lbl{font-size:13px;font-weight:700;color:var(--plum);white-space:nowrap}
+
+  section{padding:40px 0 6px}
+  .s-head{display:flex;align-items:baseline;gap:14px;margin-bottom:4px}
+  .s-num{font-size:13px;font-weight:800;color:var(--rose-deep);letter-spacing:.1em}
+  h2{font-size:25px;font-weight:800;margin:0;letter-spacing:-.3px}
+  .s-sub{color:var(--ink-soft);margin:6px 0 22px;font-size:15px;max-width:780px}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:0;box-shadow:var(--shadow);margin-bottom:16px;overflow:hidden}
+  .phase-band{display:flex;align-items:center;gap:14px;padding:14px 22px;color:#fff}
+  .phase-band .wk{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;opacity:.9}
+  .phase-band h3{margin:0;font-size:20px;font-weight:800}
+  .phase-band .goal{margin-left:auto;font-size:13px;background:rgba(255,255,255,.18);padding:5px 12px;border-radius:999px;font-weight:600}
+
+  /* task */
+  .task{border-top:1px solid var(--line);padding:18px 22px}
+  .task:first-child{border-top:none}
+  .task .top{display:flex;gap:13px;align-items:flex-start}
+  .chk{flex:0 0 22px;height:22px;margin-top:2px;border:2px solid var(--rose);border-radius:6px;cursor:pointer;
+    display:grid;place-items:center;font-size:14px;color:#fff;transition:.15s;background:#fff;user-select:none}
+  .chk.done{background:var(--mint);border-color:var(--mint)}
+  .task h4{margin:0;font-size:16.5px;font-weight:700}
+  .task .why{margin:3px 0 0;font-size:13.5px;color:var(--ink-soft)}
+  .task .body{margin:12px 0 0 35px}
+  .badge{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.04em;padding:2px 8px;border-radius:999px;margin-left:8px;vertical-align:middle}
+  .b-now{background:var(--red-soft);color:var(--red)}
+  .b-min{background:var(--mint-soft);color:var(--mint)}
+  .b-care{background:var(--amber-soft);color:var(--amber)}
+
+  .nav{font-size:12.5px;font-weight:600;color:var(--plum);background:var(--plum-soft);border:1px solid #e3d6f7;
+    border-radius:9px;padding:8px 12px;margin:0 0 12px;display:inline-flex;flex-wrap:wrap;gap:6px;align-items:center}
+  .nav b{color:var(--ink)}
+  .nav .sep{opacity:.5}
+
+  ol.steps{margin:0;padding:0;counter-reset:s;list-style:none}
+  ol.steps>li{position:relative;padding:6px 0 6px 34px;font-size:14.5px;border-bottom:1px dashed var(--line)}
+  ol.steps>li:last-child{border-bottom:none}
+  ol.steps>li::before{counter-increment:s;content:counter(s);position:absolute;left:0;top:6px;
+    width:22px;height:22px;background:var(--ink);color:#fff;border-radius:50%;font-size:12px;font-weight:800;
+    display:grid;place-items:center}
+  .done-when{margin-top:11px;font-size:13px;background:var(--mint-soft);border:1px solid #c4ebdc;border-radius:9px;
+    padding:8px 12px;color:#0f7355}
+  .done-when b{color:#0c5c44}
+
+  .copy{position:relative;background:#211d31;color:#f3eefb;border-radius:11px;padding:14px 16px;margin:10px 0;
+    font-size:13px;font-family:'SF Mono',Consolas,Menlo,monospace;line-height:1.55;white-space:pre-wrap}
+  .copy .tagline{position:absolute;top:-9px;left:14px;background:var(--rose-deep);color:#fff;font-size:10px;
+    font-weight:800;letter-spacing:.06em;padding:2px 9px;border-radius:999px;font-family:'Segoe UI',sans-serif}
+  .copy .cp{position:absolute;top:10px;right:10px;background:rgba(255,255,255,.12);border:none;color:#fff;
+    font-size:11px;font-weight:700;padding:4px 10px;border-radius:7px;cursor:pointer;font-family:'Segoe UI',sans-serif}
+  .copy .cp:hover{background:rgba(255,255,255,.24)}
+  .strike{color:#ef9a93;text-decoration:line-through}
+  .ins{color:#8fe6c4}
+
+  .ref{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .ref .r{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font-size:13px}
+  .ref .r .k{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft);font-weight:700}
+  .ref .r .v{font-weight:700;margin-top:2px}
+  .ref .r .v small{font-weight:500;color:var(--ink-soft)}
+
+  .warn{background:var(--amber-soft);border:1px solid #f0d9b0;border-radius:12px;padding:14px 18px;margin:14px 0;font-size:14px}
+  .warn b{color:#9a6612}
+  .stop{background:var(--red-soft);border:1px solid #f3c9c6;border-radius:12px;padding:14px 18px;font-size:14px}
+  .stop b{color:var(--red)}
+
+  .kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:6px 0 4px}
+  .kpi{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:13px 15px;box-shadow:var(--shadow)}
+  .kpi .l{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft);font-weight:700}
+  .kpi .v{font-size:22px;font-weight:800;margin-top:3px}
+
+  .footer{margin-top:36px;padding:26px 0 60px;color:var(--ink-soft);font-size:13px;border-top:1px solid var(--line)}
+  @media(max-width:820px){
+    .ref,.kpi-row{grid-template-columns:1fr 1fr}
+    .hero h1{font-size:31px}
+    .phase-band .goal{display:none}
+    .task .body{margin-left:0}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Meta Ads · Execution Playbook · 90 days</p>
+    <h1>MyForeverBaby<br><span>The Click-by-Click Turnaround Plan</span></h1>
+    <p class="lead">Every move from the audit, sequenced into four phases and written as literal Ads Manager steps — with exact entity names, copy-paste fixes, and a "done-when" check on each task. Tick boxes as you go; your progress saves in this browser.</p>
+    <div class="meta">
+      <span>Account&nbsp; <b>act_1619203665436037</b></span>
+      <span>Goal&nbsp; <b>Restore 3×+ ROAS, then scale</b></span>
+      <span>Live campaign&nbsp; <b>MFB Main Campaign 2026 – Advantage New</b></span>
+    </div>
+  </div>
+</header>
+
+<div class="prog">
+  <div class="wrap">
+    <span class="lbl" id="progLbl">0 / 0 done</span>
+    <div class="track"><div class="fill" id="progFill"></div></div>
+    <span class="lbl"><span id="progPct">0%</span></span>
+  </div>
+</div>
+
+<!-- REFERENCE -->
+<section id="ref">
+  <div class="wrap">
+    <div class="s-head"><span class="s-num">REF</span><h2>Keep this open — your account map</h2></div>
+    <p class="s-sub">The exact IDs and names you'll click on throughout. All entities live under one account.</p>
+    <div class="card" style="padding:18px 22px">
+      <div class="ref">
+        <div class="r"><div class="k">Live campaign (CBO R950/day)</div><div class="v">MFB Main Campaign 2026 – Advantage New <small>· 120250036512090581</small></div></div>
+        <div class="r"><div class="k">Live ad set (keep this one)</div><div class="v">Women with kids 3-8 – Copy <small>· 120250036512480581</small></div></div>
+        <div class="r"><div class="k">Duplicate ad set → archive</div><div class="v">Women with kids 3-8 – Experiment <small>· …490581</small></div></div>
+        <div class="r"><div class="k">Duplicate ad set → archive</div><div class="v">Women with kids 3-8 Winner <small>· …450581</small></div></div>
+        <div class="r" style="border-color:var(--mint)"><div class="k" style="color:var(--mint)">⭐ WINNER — scale this ad (3.13×)</div><div class="v">Video Ad October English <small>· ad 120250036512300581</small></div></div>
+        <div class="r" style="border-color:var(--red)"><div class="k" style="color:var(--red)">🐷 BUDGET HOG — throttle (1.91×, 51% spend)</div><div class="v">MFB Reaction Video <small>· ad 120250036512280581</small></div></div>
+        <div class="r" style="border-color:var(--mint)"><div class="k" style="color:var(--mint)">⭐ Re-enable (4.82×)</div><div class="v">Hypermotion – Hope <small>· ad 120250036512140581</small></div></div>
+        <div class="r" style="border-color:var(--red)"><div class="k" style="color:var(--red)">✂ Turn off (0 sales, 11.6% CTR bait)</div><div class="v">Video Ad Unboxing "With Tears" <small>· ad 120250036512290581</small></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PHASE 1 ============ -->
+<section id="p1">
+  <div class="wrap">
+    <div class="s-head"><span class="s-num">01</span><h2>Phase 1 · Week 1 — Quick wins</h2></div>
+    <p class="s-sub">Cheap, reversible, high-certainty. Stop the bleeding and fix trust before touching structure. <b>Do not</b> consolidate ad sets yet — that's Phase 2.</p>
+
+    <div class="card">
+      <div class="phase-band" style="background:linear-gradient(90deg,#c64d7c,#e7739b)">
+        <div><div class="wk">Week 1 · Day 1</div><h3>Get the house in order</h3></div>
+        <div class="goal">~45 min total</div>
+      </div>
+
+      <div class="task">
+        <div class="top">
+          <div class="chk" onclick="tog(this)"></div>
+          <div><h4>1 · Fix the refund-claim mismatch <span class="badge b-now">DO TODAY</span></h4>
+          <p class="why">Multiple ads promise a "7-day refund" while the site says "14-Day Returns." On a R2,000 buy, contradictions kill trust. Align the ads to the (better) site policy.</p></div>
+        </div>
+        <div class="body">
+          <div class="nav"><b>Ads Manager</b><span class="sep">→</span> Ads tab <span class="sep">→</span> tick each video ad <span class="sep">→</span> <b>Edit</b> <span class="sep">→</span> Primary text</div>
+          <div class="copy"><span class="tagline">FIND → REPLACE (in every ad's primary text)</span><button class="cp" onclick="cpy(this)">Copy</button><span class="strike">✅ 7-day full refund guarantee</span>
+<span class="ins">✅ 14-day full refund guarantee</span>
+
+<span style="opacity:.7">Affected creatives: Hypermotion – Hope, Hypermotion – Chloe, and any other ad carrying the "7-day" line. Also check the headline/description fields.</span></div>
+          <ol class="steps">
+            <li>Open the active ad set <b>Women with kids 3-8 – Copy</b> → <b>Ads</b> tab.</li>
+            <li>For each ad, click <b>Edit</b> → scroll to <b>Primary text</b> → replace "7-day" with "14-day".</li>
+            <li>Click <b>Publish</b>. (Editing text only — keeps the ad's learning.)</li>
+          </ol>
+          <div class="done-when"><b>Done when:</b> no live ad contains the string "7-day" anywhere in its copy.</div>
+        </div>
+      </div>
+
+      <div class="task">
+        <div class="top">
+          <div class="chk" onclick="tog(this)"></div>
+          <div><h4>2 · Point every link to the high-trust page <span class="badge b-now">DO TODAY</span></h4>
+          <p class="why">Most ad body links go to the bare homepage (no reviews above the fold). The CTA on the winner already uses <code>/pages/shop</code> — make all of them consistent on the stronger page.</p></div>
+        </div>
+        <div class="body">
+          <div class="nav"><b>Each ad</b><span class="sep">→</span> Edit <span class="sep">→</span> Website URL <span class="sep">→</span> and the link inside Primary text</div>
+          <div class="copy"><span class="tagline">SET AS THE DESTINATION EVERYWHERE</span><button class="cp" onclick="cpy(this)">Copy</button>https://myforeverbaby.co.za/pages/shop</div>
+          <ol class="steps">
+            <li>In each ad's <b>Edit</b> view, set <b>Website URL</b> = <code>/pages/shop</code>.</li>
+            <li>In <b>Primary text</b>, change the in-copy link from <code>MyForeverBaby.co.za</code> to <code>MyForeverBaby.co.za/pages/shop</code>.</li>
+            <li>Leave the WhatsApp line for now (we address the dual-funnel in Phase 3). <b>Publish.</b></li>
+          </ol>
+          <div class="done-when"><b>Done when:</b> every live ad's URL and in-copy link resolve to <code>/pages/shop</code>.</div>
+        </div>
+      </div>
+
+      <div class="task">
+        <div class="top">
+          <div class="chk" onclick="tog(this)"></div>
+          <div><h4>3 · Throttle the budget hog (don't kill it) <span class="badge b-care">CARE</span></h4>
+          <p class="why">"MFB Reaction Video" eats ~51% of spend at 1.91× ROAS — great hook, junk intent (0.35% add-to-cart). On a CBO campaign you can't set ad-level budgets, so you steer spend by pausing the worst and re-enabling proven winners (next task).</p></div>
+        </div>
+        <div class="body">
+          <div class="nav"><b>Ad set: Women with kids 3-8 – Copy</b><span class="sep">→</span> Ads tab</div>
+          <ol class="steps">
+            <li><b>Turn OFF</b> <code>Video Ad Unboxing "With Tears"</code> (ad …290581) — 0 sales, 11.6% CTR pure engagement bait.</li>
+            <li><b>Turn OFF</b> <code>MFB Unboxing Single Video</code> (…270581) — a thin 1-line boosted status post, no offer/CTA.</li>
+            <li><b>Leave</b> <code>MFB Reaction Video</code> ON for now but expect its share to fall once the winners below get traffic. Re-assess in 5–7 days; pause if still &lt;2× while winners climb.</li>
+          </ol>
+          <div class="warn"><b>Why not just delete the Reaction Video?</b> Its hook drives cheap reach that can still assist. We demote, don't destroy — and we judge on ROAS after the winners are funded, not before.</div>
+          <div class="done-when"><b>Done when:</b> the two zero-sale ads are off; Reaction Video flagged for a 7-day review.</div>
+        </div>
+      </div>
+
+      <div class="task">
+        <div class="top">
+          <div class="chk" onclick="tog(this)"></div>
+          <div><h4>4 · Fund the proven winners <span class="badge b-min">QUICK</span></h4>
+          <p class="why">Let CBO push spend toward what already converts: October English (3.13×) and Hope (4.82×).</p></div>
+        </div>
+        <div class="body">
+          <ol class="steps">
+            <li>Confirm <code>Video Ad October English</code> (…300581) is <b>ON</b> in the live ad set.</li>
+            <li>Re-enable <code>Hypermotion – Hope</code> (…140581): it sits in the paused "Experiment" ad set. For now, <b>duplicate it into the live "– Copy" ad set</b> (Select ad → <b>Duplicate</b> → choose destination ad set "Women with kids 3-8 – Copy") so it runs without un-pausing the duplicate ad set.</li>
+            <li><b>Publish.</b></li>
+          </ol>
+          <div class="done-when"><b>Done when:</b> both winners are live inside the single active ad set.</div>
+        </div>
+      </div>
+
+      <div class="task">
+        <div class="top">
+          <div class="chk" onclick="tog(this)"></div>
+          <div><h4>5 · Clean up the account (hygiene) <span class="badge b-min">QUICK</span></h4>
+          <p class="why">14 paused legacy campaigns + inconsistent names make the account hard to manage and easy to mis-edit.</p></div>
+        </div>
+        <div class="body">
+          <div class="nav"><b>Campaigns tab</b><span class="sep">→</span> filter <b>Off</b> <span class="sep">→</span> multi-select <span class="sep">→</span> Archive</div>
+          <ol class="steps">
+            <li>Filter campaigns by status = <b>Off</b>. Multi-select the old "Completed -", "March/April 2026", "MFB 23 April" builds.</li>
+            <li><b>… (More) → Archive</b> (archiving hides them but keeps historical data — safe).</li>
+            <li>Rename what stays using one convention (copy below).</li>
+          </ol>
+          <div class="copy"><span class="tagline">NAMING CONVENTION</span><button class="cp" onclick="cpy(this)">Copy</button>[ASC] Prospecting | Sales | 2026-06
+[MANUAL] Prospecting Broad | Sales | 2026-06
+[RETARGETING] Site+ATC+Buyers | Sales | 2026-06</div>
+          <div class="done-when"><b>Done when:</b> only active/relevant campaigns show by default, all on one naming scheme.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PHASE 2 ============ -->
+<section id="p2">
+  <div class="wrap">
+    <div class="s-head"><span class="s-num">02</span><h2>Phase 2 · Weeks 2–4 — Consolidate into one engine</h2></div>
+    <p class="s-sub">Meta's Opportunity Score (86/100) says the build is sound and the ad sets are <b>budget-limited</b>. So we stop fragmenting: one broad ad set, many creatives, then feed it. Andromeda rewards consolidated signal + creative diversity.</p>
+
+    <div class="card">
+      <div class="phase-band" style="background:linear-gradient(90deg,#d98a2f,#e0b13f)">
+        <div><div class="wk">Weeks 2–4</div><h3>One broad ad set, 5–8 creatives</h3></div>
+        <div class="goal">do once, then leave it</div>
+      </div>
+
+      <div class="task">
+        <div class="top"><div class="chk" onclick="tog(this)"></div>
+          <div><h4>6 · Make "– Copy" the permanent engine; archive the duplicates <span class="badge b-care">CARE</span></h4>
+          <p class="why">Three identical ad sets split learning history. Keep one; archive the rest so they can't be toggled back on by accident.</p></div></div>
+        <div class="body">
+          <ol class="steps">
+            <li>Confirm <b>Women with kids 3-8 – Copy</b> (…480581) is the keeper (it has the live spend/history).</li>
+            <li>Select <b>– Experiment</b> (…490581) and <b>Winner</b> (…450581) → <b>… → Archive</b>.</li>
+            <li>Rename the keeper → <code>[MANUAL] Prospecting Broad — Adv+ Audience | 2026-06</code>.</li>
+          </ol>
+          <div class="done-when"><b>Done when:</b> exactly one ad set runs under the campaign.</div>
+        </div>
+      </div>
+
+      <div class="task">
+        <div class="top"><div class="chk" onclick="tog(this)"></div>
+          <div><h4>7 · Confirm the broad / Advantage+ Audience posture <span class="badge b-min">QUICK</span></h4>
+          <p class="why">This is already right — verify it survived the edits.</p></div></div>
+        <div class="body">
+          <div class="nav"><b>Ad set</b><span class="sep">→</span> Edit <span class="sep">→</span> Audience</div>
+          <ol class="steps">
+            <li><b>Advantage+ Audience: ON.</b> Location = South Africa. No hand-picked interests.</li>
+            <li>Leave age/gender to Advantage (don't hard-restrict — let retrieval work).</li>
+            <li>Optimisation event = <b>Purchase</b>. Confirm pixel <code>720795893991105</code> is firing (Events Manager).</li>
+          </ol>
+          <div class="done-when"><b>Done when:</b> ad set is broad ZA, Advantage+ Audience ON, optimising for Purchase.</div>
+        </div>
+      </div>
+
+      <div class="task">
+        <div class="top"><div class="chk" onclick="tog(this)"></div>
+          <div><h4>8 · Stack 5–8 diverse creatives into the one ad set <span class="badge b-care">CARE</span></h4>
+          <p class="why">Andromeda matches the right creative to the right person — give it range, not repeats. Kill duplicate copy.</p></div></div>
+        <div class="body">
+          <ol class="steps">
+            <li>Keep live: <b>October English</b> (winner), <b>Hope</b> (winner), the best single <b>Reaction</b> cut, one <b>Afrikaans</b> variant.</li>
+            <li>De-duplicate: two ads currently share identical primary text — rewrite one or drop it.</li>
+            <li>Add the <b>2 new angles</b> briefed in tasks 9–10.</li>
+            <li>Aim for <b>5–8 active ads</b> total. Publish all at once so the set re-enters learning only once.</li>
+          </ol>
+          <div class="warn"><b>Learning phase:</b> expect 3–5 days of wobble after this batch. Don't edit again mid-learning — you'll reset it.</div>
+          <div class="done-when"><b>Done when:</b> 5–8 distinct creatives live, no duplicate copy.</div>
+        </div>
+      </div>
+
+      <div class="task">
+        <div class="top"><div class="chk" onclick="tog(this)"></div>
+          <div><h4>9 · Brief new creative — Testimonial / social proof <span class="badge b-min">BRIEF</span></h4></div></div>
+        <div class="body">
+          <div class="copy"><span class="tagline">CREATIVE BRIEF — paste to editor</span><button class="cp" onclick="cpy(this)">Copy</button>Format: 9:16 video, 15–25s, captions burned in
+Hook (0–3s): real SA mom on camera — "I didn't expect to cry…"
+Mid: 2–3 stitched customer reactions + the doll in-hand (weight/realism)
+Proof: on-screen "★★★★★ Loved by 1,000+ SA families"
+CTA card: "14-day refund · Free SA delivery · Shop now"
+Primary text angle: trust + objection-handling ("is it appropriate? yes—")</div>
+          <div class="done-when"><b>Done when:</b> brief sent to editor / shot-list approved.</div>
+        </div>
+      </div>
+
+      <div class="task">
+        <div class="top"><div class="chk" onclick="tog(this)"></div>
+          <div><h4>10 · Brief new creative — Price justification <span class="badge b-min">BRIEF</span></h4>
+          <p class="why">Aimed squarely at the 99% landing→cart leak: pre-empt price shock before they land.</p></div></div>
+        <div class="body">
+          <div class="copy"><span class="tagline">CREATIVE BRIEF — paste to editor</span><button class="cp" onclick="cpy(this)">Copy</button>Format: 9:16 video, 20–30s
+Angle: "Why it's R2,099 — and worth it"
+Show: hand-painting, soft-vinyl weighting, gift-box, QC close-ups
+Value stack: handcrafted • lifelike • gift-ready • 14-day refund • free delivery
+End: "Meet her today → /pages/shop"</div>
+          <div class="done-when"><b>Done when:</b> brief sent / first cut received.</div>
+        </div>
+      </div>
+
+      <div class="task">
+        <div class="top"><div class="chk" onclick="tog(this)"></div>
+          <div><h4>11 · Turn on Advantage+ Creative (with guardrails) <span class="badge b-care">CARE</span></h4>
+          <p class="why">Currently opted out. It gives the model more permutations per person — more retrieval surface — but keep brand-safe toggles off.</p></div></div>
+        <div class="body">
+          <div class="nav"><b>Each ad</b><span class="sep">→</span> Edit <span class="sep">→</span> Advantage+ creative</div>
+          <ol class="steps">
+            <li>Enable <b>Standard enhancements</b> (already on) + <b>Advantage+ creative</b> per ad.</li>
+            <li><b>Keep OFF:</b> "Add text overlay", "Music", and any auto-text that could misstate the offer/price. Brand voice &gt; automation here.</li>
+            <li>Publish with the Phase-2 batch (task 8) so it's one learning reset.</li>
+          </ol>
+          <div class="done-when"><b>Done when:</b> Advantage+ creative on, risky auto-toggles off.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PHASE 3 ============ -->
+<section id="p3">
+  <div class="wrap">
+    <div class="s-head"><span class="s-num">03</span><h2>Phase 3 · Weeks 4–8 — Close the cart leak &amp; decide the volume play</h2></div>
+    <p class="s-sub">Only 1% of landing-page visitors add to cart. Checkout itself is healthy — so this is a <b>belief gap</b>, not a checkout bug. Fix the page, broaden the framing, then make the budget-vs-signal call.</p>
+
+    <div class="card">
+      <div class="phase-band" style="background:linear-gradient(90deg,#6d4aa8,#8a63cf)">
+        <div><div class="wk">Weeks 4–8</div><h3>CRO offensive + scaling decision</h3></div>
+        <div class="goal">biggest ROAS lever</div>
+      </div>
+
+      <div class="task">
+        <div class="top"><div class="chk" onclick="tog(this)"></div>
+          <div><h4>12 · Landing page: stack proof above the fold <span class="badge b-care">DEV</span></h4>
+          <p class="why">Cold buyers of a niche R2,000 item need conviction fast.</p></div></div>
+        <div class="body">
+          <ol class="steps">
+            <li>Add a <b>review/star module above the fold</b> on <code>/pages/shop</code> (e.g. "★4.8 · 1,000+ SA families").</li>
+            <li>Add an <b>FAQ block</b> handling the real objection: "Is it appropriate / safe / worth it?" + materials, age 3+, care.</li>
+            <li>Add <b>security &amp; guarantee badges</b> (secure checkout, 14-day refund, free delivery) near the buy button.</li>
+            <li>Fix the pricing contradiction: footer "From R1,299" vs on-page R2,099+. Make one true number.</li>
+          </ol>
+          <div class="done-when"><b>Done when:</b> a first-time visitor sees price + proof + guarantee without scrolling.</div>
+        </div>
+      </div>
+
+      <div class="task">
+        <div class="top"><div class="chk" onclick="tog(this)"></div>
+          <div><h4>13 · Broaden the framing beyond "mum → daughter" <span class="badge b-min">COPY</span></h4>
+          <p class="why">Current hero excludes collectors, grandparents, and therapeutic/companionship buyers — a real slice of this market.</p></div></div>
+        <div class="body">
+          <ol class="steps">
+            <li>Add a secondary hero line / section: "A meaningful gift — for daughters, grandchildren, collectors, and comfort."</li>
+            <li>Mirror it in one ad variant so targeting + page tell the same story.</li>
+          </ol>
+          <div class="done-when"><b>Done when:</b> page + at least one ad speak to a broader buyer than just young mums.</div>
+        </div>
+      </div>
+
+      <div class="task">
+        <div class="top"><div class="chk" onclick="tog(this)"></div>
+          <div><h4>14 · Resolve the dual funnel (web vs WhatsApp) <span class="badge b-care">CARE</span></h4>
+          <p class="why">Every ad offers a site link AND WhatsApp; some "sales" are messaging threads, muddying attribution and ROAS.</p></div></div>
+        <div class="body">
+          <ol class="steps">
+            <li>Pick <b>website purchase</b> as the primary path for cold prospecting ads; remove the wa.me line from those (keep WhatsApp for retargeting/support).</li>
+            <li>Ensure CAPI / pixel purchase events fire server-side so web sales are fully counted.</li>
+          </ol>
+          <div class="done-when"><b>Done when:</b> prospecting ads drive one measurable path; attribution stops leaking.</div>
+        </div>
+      </div>
+
+      <div class="task">
+        <div class="top"><div class="chk" onclick="tog(this)"></div>
+          <div><h4>15 · The volume decision (model against margin FIRST) <span class="badge b-now">DECISION</span></h4>
+          <p class="why">At ~7 sales/week the ad set can't exit learning. Meta's #1 lever (+11 pts) is "increase budget." But more spend at 2.4× only helps if margin clears CPA.</p></div></div>
+        <div class="body">
+          <div class="warn"><b>Gate:</b> confirm gross margin / COGS before spending. If contribution per sale &gt; ~R900 CPA, scaling is profitable; if not, fix CRO first and don't add budget.</div>
+          <ol class="steps">
+            <li><b>Path A — if margin supports it:</b> raise campaign budget in <b>+20% steps every 3–4 days</b> toward more daily conversions. Don't double overnight (resets learning).</li>
+            <li><b>Path B — if margin is tight:</b> keep budget flat; give Meta denser signal by also optimising for <b>Add-to-Cart</b> in a test ad set, or add <b>value rules</b>. Revisit purchase-optimisation once volume rises.</li>
+            <li>Track CPA and ROAS daily through each step; hold at the budget where ROAS stays ≥ your breakeven.</li>
+          </ol>
+          <div class="done-when"><b>Done when:</b> a margin-backed budget path is chosen and the first step is live.</div>
+        </div>
+      </div>
+
+      <div class="task">
+        <div class="top"><div class="chk" onclick="tog(this)"></div>
+          <div><h4>16 · Launch Advantage+ Sales (ASC) — the scaling vehicle <span class="badge b-care">BUILD</span></h4>
+          <p class="why">An ASC campaign already sits paused. ASC is the native Andromeda format. Stand it up alongside the manual set, fed by the winners.</p></div></div>
+        <div class="body">
+          <div class="nav"><b>+ Create</b><span class="sep">→</span> Sales <span class="sep">→</span> Advantage+ sales campaign</div>
+          <ol class="steps">
+            <li>Create with objective <b>Sales</b>, choose <b>Advantage+ sales campaign</b>.</li>
+            <li>Set the purchase pixel + (optional) existing-customer budget cap if you want new-customer focus.</li>
+            <li>Load the proven winners + the 2 new angles (tasks 9–10).</li>
+            <li>Budget: start at parity with the manual set; name it <code>[ASC] Prospecting | Sales | 2026-06</code>.</li>
+            <li>Run ASC and the manual broad set in parallel for a fair read.</li>
+          </ol>
+          <div class="done-when"><b>Done when:</b> ASC is live with winning creatives, running beside the manual set.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PHASE 4 ============ -->
+<section id="p4">
+  <div class="wrap">
+    <div class="s-head"><span class="s-num">04</span><h2>Phase 4 · Weeks 8–12 — Scale what works &amp; defend it</h2></div>
+    <p class="s-sub">Shift spend to the proven vehicle, out-run fatigue with fresh creative, and finally build the lower-funnel layer this R690k-buyer account is missing.</p>
+
+    <div class="card">
+      <div class="phase-band" style="background:linear-gradient(90deg,#12996f,#16b187)">
+        <div><div class="wk">Weeks 8–12</div><h3>Compound &amp; protect</h3></div>
+        <div class="goal">target 3×+ at ≥ current spend</div>
+      </div>
+
+      <div class="task">
+        <div class="top"><div class="chk" onclick="tog(this)"></div>
+          <div><h4>17 · Shift spend to the winner (ASC vs manual) <span class="badge b-care">CARE</span></h4></div></div>
+        <div class="body">
+          <ol class="steps">
+            <li>After ~2 weeks of parallel data, compare ROAS &amp; CPA: ASC vs manual broad set.</li>
+            <li>Move budget to the winner in <b>+20% steps</b>; taper the loser rather than hard-cutting.</li>
+          </ol>
+          <div class="done-when"><b>Done when:</b> majority of spend sits on the higher-ROAS vehicle.</div>
+        </div>
+      </div>
+
+      <div class="task">
+        <div class="top"><div class="chk" onclick="tog(this)"></div>
+          <div><h4>18 · Build the retargeting / retention layer <span class="badge b-now">MISSING TODAY</span></h4>
+          <p class="why">There's no lower-funnel campaign despite a large buyer base — leaving warm money on the table.</p></div></div>
+        <div class="body">
+          <div class="nav"><b>Audiences</b><span class="sep">→</span> Create <span class="sep">→</span> Custom Audience</div>
+          <ol class="steps">
+            <li>Build Custom Audiences: <b>site visitors (30/60/180d)</b>, <b>Add-to-Cart no purchase (14/30d)</b>, <b>past purchasers</b> (for cross-sell/accessories).</li>
+            <li>Create <code>[RETARGETING] Site+ATC+Buyers | Sales</code> campaign with a small budget.</li>
+            <li>Creative: cart-abandon reminder, social proof, accessory upsell, "build your bundle".</li>
+            <li>Build a <b>1% Lookalike of purchasers</b> as a future prospecting expansion (optional, test broad first).</li>
+          </ol>
+          <div class="done-when"><b>Done when:</b> a retargeting campaign is live capturing warm traffic.</div>
+        </div>
+      </div>
+
+      <div class="task">
+        <div class="top"><div class="chk" onclick="tog(this)"></div>
+          <div><h4>19 · Lock a creative cadence (out-run fatigue) <span class="badge b-min">RHYTHM</span></h4>
+          <p class="why">Frequency is already ~3–4.5 on a finite ZA audience — fresh creative is the antidote.</p></div></div>
+        <div class="body">
+          <ol class="steps">
+            <li>Ship <b>3–4 new concepts per week</b> into the winning vehicle (new hooks, UGC, angles).</li>
+            <li>Retire any ad whose ROAS drops below breakeven for 5+ days; keep the engine stocked.</li>
+            <li>Maintain a simple swipe file of winning hooks to iterate, not reinvent.</li>
+          </ol>
+          <div class="done-when"><b>Done when:</b> a weekly creative-refresh routine is running.</div>
+        </div>
+      </div>
+
+      <div class="task">
+        <div class="top"><div class="chk" onclick="tog(this)"></div>
+          <div><h4>20 · Set the scorecard &amp; review rhythm <span class="badge b-min">GOVERN</span></h4></div></div>
+        <div class="body">
+          <div class="kpi-row">
+            <div class="kpi"><div class="l">ROAS target</div><div class="v">3.0×+</div></div>
+            <div class="kpi"><div class="l">CPA ceiling</div><div class="v">≤ margin</div></div>
+            <div class="kpi"><div class="l">LPV→ATC</div><div class="v">1% → 2.5%</div></div>
+            <div class="kpi"><div class="l">Creative/wk</div><div class="v">3–4 new</div></div>
+          </div>
+          <ol class="steps">
+            <li>Weekly: ROAS, CPA, spend, LPV→ATC, frequency, top/bottom ads. Re-pull Meta Opportunity Score monthly.</li>
+            <li>Only scale budget while ROAS holds ≥ breakeven; otherwise fix CRO/creative first.</li>
+          </ol>
+          <div class="done-when"><b>Done when:</b> a weekly review cadence and target scorecard are in place.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stop">
+      <b>⛔ Guardrails — do NOT:</b> double budgets overnight (resets learning) · edit ad sets mid-learning · re-enable the archived duplicate ad sets · run prospecting + WhatsApp links on the same cold ad · scale spend before confirming gross margin clears CPA · judge a new creative on &lt;3 days or &lt;~R500 spend.
+    </div>
+  </div>
+</section>
+
+<div class="wrap footer">
+  <p>Prepared by JCE Media · Execution playbook for MyForeverBaby (act_1619203665436037), derived from the live account audit via the official Meta Ads MCP, 11 Jun 2026. Entity IDs and ROAS figures are as reported by Meta (ZAR, purchase attribution). Ads Manager labels may shift as Meta updates its UI; paths describe the current Sales-objective flow. Checkbox progress is stored locally in your browser only.</p>
+</div>
+
+<script>
+  function tog(el){el.classList.toggle('done');el.innerHTML=el.classList.contains('done')?'✓':'';save();upd();}
+  function upd(){var all=document.querySelectorAll('.chk');var d=document.querySelectorAll('.chk.done').length;
+    var t=all.length;var p=t?Math.round(d/t*100):0;
+    document.getElementById('progFill').style.width=p+'%';
+    document.getElementById('progLbl').textContent=d+' / '+t+' done';
+    document.getElementById('progPct').textContent=p+'%';}
+  function save(){var s=[];document.querySelectorAll('.chk').forEach(function(c,i){if(c.classList.contains('done'))s.push(i)});
+    try{localStorage.setItem('mfb_playbook',JSON.stringify(s))}catch(e){}}
+  function load(){try{var s=JSON.parse(localStorage.getItem('mfb_playbook')||'[]');
+    document.querySelectorAll('.chk').forEach(function(c,i){if(s.indexOf(i)>=0){c.classList.add('done');c.innerHTML='✓'}})}catch(e){}}
+  function cpy(b){var t=b.parentNode.innerText.replace(/^Copy/,'').trim();
+    navigator.clipboard.writeText(t).then(function(){b.textContent='Copied';setTimeout(function(){b.textContent='Copy'},1200)})}
+  load();upd();
+</script>
+</body>
+</html>

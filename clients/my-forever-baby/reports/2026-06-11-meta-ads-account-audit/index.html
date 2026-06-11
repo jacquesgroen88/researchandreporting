@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MyForeverBaby — Meta Ads Account Audit</title>
+<style>
+  :root{
+    --ink:#1c1a26; --ink-soft:#4b4760; --line:#ece8f2; --bg:#faf8fc; --card:#ffffff;
+    --rose:#e7739b; --rose-deep:#c64d7c; --rose-soft:#fde9f1;
+    --plum:#6d4aa8; --plum-soft:#f0eafb; --mint:#16b187; --mint-soft:#e3f7f0;
+    --amber:#e0922f; --amber-soft:#fcf0dd; --red:#e2544e; --red-soft:#fdebe9;
+    --sky:#3d8bd4; --shadow:0 1px 2px rgba(28,26,38,.04),0 8px 28px rgba(108,74,168,.07);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+  a{color:var(--rose-deep)}
+
+  /* HERO */
+  .hero{background:
+      radial-gradient(1200px 400px at 12% -10%,rgba(231,115,155,.22),transparent 60%),
+      radial-gradient(900px 380px at 100% 0%,rgba(109,74,168,.20),transparent 55%),
+      linear-gradient(160deg,#231f33 0%,#322a4d 100%);
+    color:#fff;padding:62px 0 54px;position:relative;overflow:hidden}
+  .hero .wrap{position:relative;z-index:2}
+  .eyebrow{letter-spacing:.22em;text-transform:uppercase;font-size:12px;font-weight:700;
+    color:#f4c4d8;margin:0 0 14px}
+  .hero h1{font-size:43px;line-height:1.08;margin:0 0 14px;font-weight:800;letter-spacing:-.5px}
+  .hero h1 span{background:linear-gradient(90deg,#f7a8c6,#c9aef0);-webkit-background-clip:text;
+    background-clip:text;-webkit-text-fill-color:transparent}
+  .hero p.lead{font-size:18px;max-width:680px;color:#e7e2f2;margin:0 0 26px}
+  .hero .meta{display:flex;flex-wrap:wrap;gap:10px 26px;font-size:13.5px;color:#cfc7e3}
+  .hero .meta b{color:#fff;font-weight:600}
+  .verdict{margin-top:30px;display:inline-flex;align-items:center;gap:14px;
+    background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);
+    padding:14px 20px;border-radius:14px;backdrop-filter:blur(6px)}
+  .verdict .grade{font-size:34px;font-weight:800;line-height:1;
+    background:linear-gradient(90deg,#ffd27a,#f7a8c6);-webkit-background-clip:text;
+    background-clip:text;-webkit-text-fill-color:transparent}
+  .verdict .grade small{display:block;font-size:11px;letter-spacing:.12em;color:#cfc7e3;
+    -webkit-text-fill-color:#cfc7e3;font-weight:600;margin-top:4px}
+  .verdict .vtext{font-size:14px;color:#ece7f6;max-width:430px}
+
+  section{padding:46px 0 8px}
+  .s-head{display:flex;align-items:baseline;gap:14px;margin-bottom:6px}
+  .s-num{font-size:13px;font-weight:800;color:var(--rose-deep);letter-spacing:.1em}
+  h2{font-size:27px;font-weight:800;margin:0;letter-spacing:-.3px}
+  .s-sub{color:var(--ink-soft);margin:6px 0 26px;font-size:15.5px;max-width:760px}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;
+    padding:22px 24px;box-shadow:var(--shadow);margin-bottom:18px}
+
+  /* KPI tiles */
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:6px}
+  .kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 16px;
+    box-shadow:var(--shadow);position:relative}
+  .kpi .l{font-size:12px;color:var(--ink-soft);font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+  .kpi .v{font-size:27px;font-weight:800;margin-top:6px;letter-spacing:-.5px}
+  .kpi .d{font-size:12.5px;margin-top:4px;font-weight:600}
+  .up{color:var(--mint)} .down{color:var(--red)} .flat{color:var(--ink-soft)}
+
+  table{width:100%;border-collapse:collapse;font-size:14px;margin-top:4px}
+  th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--line)}
+  th{font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft);font-weight:700}
+  td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+  tr:last-child td{border-bottom:none}
+  .row-hl{background:var(--rose-soft)}
+  .row-good{background:var(--mint-soft)}
+
+  .bar{height:8px;border-radius:6px;background:var(--line);overflow:hidden;min-width:60px}
+  .bar > i{display:block;height:100%;border-radius:6px}
+
+  .pill{display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;
+    letter-spacing:.02em}
+  .p-red{background:var(--red-soft);color:var(--red)}
+  .p-amber{background:var(--amber-soft);color:var(--amber)}
+  .p-green{background:var(--mint-soft);color:var(--mint)}
+  .p-plum{background:var(--plum-soft);color:var(--plum)}
+  .p-grey{background:#eef0f4;color:#5d6470}
+
+  /* findings */
+  .find{display:flex;gap:16px;padding:18px 0;border-bottom:1px solid var(--line)}
+  .find:last-child{border-bottom:none}
+  .find .ico{flex:0 0 42px;height:42px;border-radius:12px;display:grid;place-items:center;
+    font-size:20px;font-weight:800}
+  .find h4{margin:0 0 4px;font-size:16.5px}
+  .find p{margin:0;color:var(--ink-soft);font-size:14.5px}
+  .find .ev{margin-top:8px;font-size:13px;color:var(--ink);background:var(--bg);
+    border:1px solid var(--line);border-radius:9px;padding:8px 12px;display:inline-block}
+
+  /* funnel */
+  .funnel{display:flex;flex-direction:column;gap:9px}
+  .fstep{display:grid;grid-template-columns:170px 1fr 120px;align-items:center;gap:14px}
+  .fstep .fl{font-size:13.5px;font-weight:600}
+  .fbar{height:34px;border-radius:9px;display:flex;align-items:center;padding-left:14px;
+    color:#fff;font-weight:700;font-size:14px}
+  .fdrop{font-size:12.5px;color:var(--red);font-weight:700;text-align:right}
+  .fdrop.ok{color:var(--mint)}
+
+  /* trend bars */
+  .tbars{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;align-items:end;
+    height:200px;padding:10px 4px 0;border-bottom:2px solid var(--line);margin-bottom:10px}
+  .tcol{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+  .tcol .tb{width:62%;border-radius:9px 9px 0 0;position:relative;transition:.3s}
+  .tcol .tv{font-weight:800;font-size:17px;margin-bottom:6px}
+  .tcol .tl{font-size:12px;color:var(--ink-soft);margin-top:8px;text-align:center;font-weight:600}
+  .tline{border-top:2px dashed var(--mint);position:relative;margin:-2px 0 0}
+
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+
+  .lp{border:1px solid var(--line);border-radius:14px;padding:18px 20px;background:var(--card);box-shadow:var(--shadow)}
+  .lp h4{margin:0 0 4px;font-size:16px;display:flex;align-items:center;gap:8px}
+  .lp .score{font-size:13px;font-weight:800}
+  ul.tick{list-style:none;padding:0;margin:10px 0 0}
+  ul.tick li{padding:5px 0 5px 26px;position:relative;font-size:14px;color:var(--ink-soft)}
+  ul.tick li::before{position:absolute;left:0;top:4px;font-weight:800}
+  ul.tick li.y::before{content:"✓";color:var(--mint)}
+  ul.tick li.n::before{content:"✕";color:var(--red)}
+
+  /* timeline */
+  .tl{position:relative;margin-top:10px;padding-left:8px}
+  .phase{position:relative;padding:0 0 6px 34px;margin-bottom:22px}
+  .phase::before{content:"";position:absolute;left:9px;top:4px;bottom:-22px;width:2px;background:var(--line)}
+  .phase:last-child::before{display:none}
+  .phase .dot{position:absolute;left:0;top:2px;width:20px;height:20px;border-radius:50%;
+    border:3px solid #fff;box-shadow:0 0 0 2px var(--rose)}
+  .phase .when{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--rose-deep)}
+  .phase h4{margin:3px 0 8px;font-size:17px}
+  .phase ul{margin:0;padding-left:18px}
+  .phase li{margin:3px 0;font-size:14.5px;color:var(--ink-soft)}
+  .phase li b{color:var(--ink)}
+
+  .andro{background:linear-gradient(160deg,#2a2440,#3a2f57);color:#fff;border:none}
+  .andro h2,.andro h4{color:#fff}
+  .andro .s-sub,.andro p{color:#d8d1ea}
+  .andro .gridx{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:18px}
+  .andro .box{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);
+    border-radius:13px;padding:16px 18px}
+  .andro .box h4{margin:0 0 6px;font-size:15.5px;display:flex;gap:8px;align-items:center}
+  .andro .box p{margin:0;font-size:14px}
+
+  blockquote{margin:0;padding:16px 20px;background:var(--plum-soft);border-left:4px solid var(--plum);
+    border-radius:0 12px 12px 0;font-size:15px;color:var(--ink)}
+
+  .selfeval td{vertical-align:top}
+  .conf{font-weight:800;font-size:12.5px}
+  .footer{margin-top:40px;padding:30px 0 60px;color:var(--ink-soft);font-size:13px;border-top:1px solid var(--line)}
+  .tag{display:inline-block;background:var(--plum-soft);color:var(--plum);font-size:11px;font-weight:700;
+    padding:3px 10px;border-radius:999px;margin:0 6px 6px 0}
+  @media(max-width:880px){
+    .kpis,.three,.tbars{grid-template-columns:repeat(2,1fr)}
+    .two,.andro .gridx{grid-template-columns:1fr}
+    .fstep{grid-template-columns:110px 1fr 80px}
+    .hero h1{font-size:33px}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Meta Ads Account Audit &nbsp;·&nbsp; Prepared for handover</p>
+    <h1>MyForeverBaby<br><span>Paid Social Performance &amp; Growth Plan</span></h1>
+    <p class="lead">A full diagnostic of the Meta ad account ahead of taking over management — performance trend, account structure, creative &amp; copy, and landing-page conversion, mapped against Meta's Andromeda-era best practice.</p>
+    <div class="meta">
+      <span>Account&nbsp; <b>act_1619203665436037</b></span>
+      <span>Currency&nbsp; <b>ZAR (R)</b></span>
+      <span>Lifetime spend&nbsp; <b>R189,679</b></span>
+      <span>Data window&nbsp; <b>Jun 2025 – 11 Jun 2026</b></span>
+      <span>Status&nbsp; <b>Active · 1 live campaign</b></span>
+    </div>
+    <div class="verdict">
+      <div class="grade">C+<small>HEALTH SCORE</small></div>
+      <div class="vtext"><b>Profitable but sliding.</b> A genuinely good product with proven 4×+ history is now running at ~2.3× because of a thin, fragmented structure and a budget that flows to the wrong creative. The fix is structural, not a rebuild — and it's available inside 90 days.</div>
+    </div>
+  </div>
+</header>
+
+<!-- ============ EXEC SUMMARY KPIs ============ -->
+<section id="summary">
+  <div class="wrap">
+    <div class="s-head"><span class="s-num">01</span><h2>The headline numbers</h2></div>
+    <p class="s-sub">Last 30 days (12 May – 10 Jun 2026), purchase-conversion attribution. Deltas compare against the account's lifetime average.</p>
+    <div class="kpis">
+      <div class="kpi"><div class="l">Spend (30d)</div><div class="v">R25,385</div><div class="d flat">≈ R950 / day · 1 campaign</div></div>
+      <div class="kpi"><div class="l">ROAS (30d)</div><div class="v">2.41×</div><div class="d down">▼ vs 3.62× lifetime</div></div>
+      <div class="kpi"><div class="l">Purchases</div><div class="v">27</div><div class="d flat">R61,148 revenue</div></div>
+      <div class="kpi"><div class="l">Cost / Purchase</div><div class="v">R940</div><div class="d down">▲ 45% vs R650 lifetime</div></div>
+      <div class="kpi"><div class="l">CTR</div><div class="v">6.67%</div><div class="d up">▲ strong — top of funnel is healthy</div></div>
+      <div class="kpi"><div class="l">CPC (link)</div><div class="v">R1.07</div><div class="d up">▲ cheap clicks</div></div>
+      <div class="kpi"><div class="l">AOV</div><div class="v">R2,265</div><div class="d flat">premium price point</div></div>
+      <div class="kpi"><div class="l">LPV → Purchase</div><div class="v">0.30%</div><div class="d down">▼ the core leak</div></div>
+    </div>
+    <blockquote><b>One-line diagnosis:</b> Traffic is cheap and abundant (6.67% CTR, R1.07 CPC) and the product converts when it reaches the right person — but the live ad set is funnelling half its budget into the creative that brings the <i>least</i> qualified clicks, and the account structure is too fragmented and too thin to let Meta's algorithm optimise its way out.</blockquote>
+  </div>
+</section>
+
+<!-- ============ TREND ============ -->
+<section id="trend">
+  <div class="wrap">
+    <div class="s-head"><span class="s-num">02</span><h2>Performance is decaying — and the timing is the clue</h2></div>
+    <p class="s-sub">ROAS across every available window. The overlapping windows tell a consistent story: the account historically returned <b>~4×</b>, and everything since the late-May restructure sits at <b>2.3–2.4×</b>.</p>
+    <div class="card">
+      <div class="tbars">
+        <div class="tcol"><div class="tv">3.62×</div><div class="tb" style="height:74%;background:linear-gradient(180deg,#8a63cf,#6d4aa8)"></div><div class="tl">Lifetime<br>~12 months</div></div>
+        <div class="tcol"><div class="tv">2.30×</div><div class="tb" style="height:47%;background:linear-gradient(180deg,#ef8aac,#c64d7c)"></div><div class="tl">Last 90 days</div></div>
+        <div class="tcol"><div class="tv">2.41×</div><div class="tb" style="height:49%;background:linear-gradient(180deg,#ef8aac,#c64d7c)"></div><div class="tl">Last 30 days</div></div>
+        <div class="tcol"><div class="tv">2.33×</div><div class="tb" style="height:48%;background:linear-gradient(180deg,#ef8aac,#c64d7c)"></div><div class="tl">Last 7 days</div></div>
+      </div>
+      <p style="margin:6px 2px 0;font-size:13.5px;color:var(--ink-soft)">
+        <span class="pill p-plum">Derived</span> Stripping the last 90 days out of the lifetime figure, the <b>earlier ~9 months returned ≈ 4.09× ROAS at a R568 cost-per-purchase</b>. The decline is real, not noise — and it coincides with the new <i>"MFB Main Campaign 2026 – Advantage New"</i> launched 24 May. That campaign is only ~2.5 weeks old and generating &lt;2 sales/day, so part of this is an unfinished learning phase — but the structure it launched with will keep it stuck there (see §4).
+      </p>
+    </div>
+    <div class="card">
+      <table>
+        <thead><tr><th>Window</th><th class="n">Spend</th><th class="n">Purchases</th><th class="n">Revenue</th><th class="n">ROAS</th><th class="n">CPA</th><th class="n">CTR</th><th class="n">CPM</th></tr></thead>
+        <tbody>
+          <tr><td>Last 7 days</td><td class="n">R6,691</td><td class="n">8</td><td class="n">R15,585</td><td class="n">2.33×</td><td class="n">R836</td><td class="n">8.34%</td><td class="n">R55.68</td></tr>
+          <tr><td>Last 30 days</td><td class="n">R25,385</td><td class="n">27</td><td class="n">R61,148</td><td class="n">2.41×</td><td class="n">R940</td><td class="n">6.67%</td><td class="n">R71.42</td></tr>
+          <tr><td>Last 90 days</td><td class="n">R50,050</td><td class="n">46</td><td class="n">R115,179</td><td class="n">2.30×</td><td class="n">R1,088</td><td class="n">5.35%</td><td class="n">R62.77</td></tr>
+          <tr class="row-good"><td>Earlier ~9 mo <span class="pill p-plum">derived</span></td><td class="n">R139,629</td><td class="n">246</td><td class="n">R571,199</td><td class="n">4.09×</td><td class="n">R568</td><td class="n">—</td><td class="n">—</td></tr>
+          <tr><td><b>Lifetime</b></td><td class="n">R189,679</td><td class="n">292</td><td class="n">R686,378</td><td class="n">3.62×</td><td class="n">R650</td><td class="n">5.34%</td><td class="n">R87.54</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FUNNEL ============ -->
+<section id="funnel">
+  <div class="wrap">
+    <div class="s-head"><span class="s-num">03</span><h2>Where the money leaks: the funnel</h2></div>
+    <p class="s-sub">Last 30 days, account-wide. The clicks show up — they just evaporate between landing and the cart. <b>Only 1 in 100 landing-page visitors adds to cart.</b></p>
+    <div class="card">
+      <div class="funnel">
+        <div class="fstep"><div class="fl">Link clicks</div><div class="fbar" style="width:100%;background:linear-gradient(90deg,#6d4aa8,#8a63cf)">14,777</div><div class="fdrop">&nbsp;</div></div>
+        <div class="fstep"><div class="fl">Landing-page views</div><div class="fbar" style="width:61%;background:linear-gradient(90deg,#7d5cb8,#9a73d8)">8,941</div><div class="fdrop">▼ 40% bounce/abandon</div></div>
+        <div class="fstep"><div class="fl">Add to cart</div><div class="fbar" style="width:14%;background:linear-gradient(90deg,#c64d7c,#e7739b)">92</div><div class="fdrop">▼ 99.0% &nbsp;←&nbsp; <b>biggest leak</b></div></div>
+        <div class="fstep"><div class="fl">Initiate checkout</div><div class="fbar" style="width:10%;background:linear-gradient(90deg,#d96a4a,#e0922f)">57</div><div class="fdrop ok">▼ 38%</div></div>
+        <div class="fstep"><div class="fl">Purchase</div><div class="fbar" style="width:7%;background:linear-gradient(90deg,#12996f,#16b187)">27</div><div class="fdrop ok">▼ 53%</div></div>
+      </div>
+      <p style="margin:16px 2px 0;font-size:14px;color:var(--ink-soft)">
+        Checkout itself is <b>healthy</b> — 47% of carts and ~half of checkouts complete. The damage is done <b>before</b> the cart: 8,941 people land, only 92 add to cart. That points at two culprits working together — <b>(a)</b> a chunk of the traffic is low-intent (driven by an engagement-bait creative, see §5), and <b>(b)</b> the landing experience isn't closing the price/skepticism gap for cold buyers of a R2,000+ niche product (see §6).
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STRUCTURE ============ -->
+<section id="structure">
+  <div class="wrap">
+    <div class="s-head"><span class="s-num">04</span><h2>Account structure audit</h2></div>
+    <p class="s-sub">What's actually live, how it's wired, and where it fights the algorithm.</p>
+
+    <div class="card" style="background:var(--plum-soft);border-color:#d9c9f2">
+      <div style="display:flex;gap:22px;align-items:center;flex-wrap:wrap">
+        <div style="text-align:center;min-width:120px">
+          <div style="font-size:46px;font-weight:800;line-height:1;color:var(--plum)">86<span style="font-size:20px;color:var(--ink-soft)">/100</span></div>
+          <div style="font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--ink-soft);margin-top:4px">META OPPORTUNITY SCORE</div>
+        </div>
+        <div style="flex:1;min-width:280px">
+          <p style="margin:0 0 8px;font-size:14.5px"><b>Meta's own verdict: the account is well-aligned with best practice (86/100).</b> That's an important check on this audit — the strategy isn't broken. Meta surfaces just two levers, and the bigger one points at <b>budget, not structure</b>:</p>
+          <ul style="margin:0;padding-left:18px;font-size:14px;color:var(--ink-soft)">
+            <li><b>+11 pts · "Budget-limited" ad sets</b> — Meta flags the live campaign's ad sets as constrained: <i>"your current budget may be limiting performance — consider increasing it."</i> This independently corroborates the volume-starvation finding below.</li>
+            <li><b>+3 pts · Conversion optimisation</b> — guidance to ensure delivery is optimised for the purchase event (est. 17% lower cost per result).</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="find">
+        <div class="ico" style="background:var(--red-soft);color:var(--red)">1</div>
+        <div>
+          <h4>Three near-identical ad sets inside one campaign <span class="pill p-red">High impact</span></h4>
+          <p>The live campaign holds ad sets named <i>"Women with kids 3-8 – Experiment / – Copy / Winner."</i> All three carry <b>identical targeting</b> (South Africa, women, 23–65, Advantage Audience ON, optimising for purchases). Only "– Copy" is currently live. This is legacy manual A/B-testing logic: duplicating a "winner" into parallel ad sets that chase the same people, splitting learning history into three thin pools.</p>
+          <p style="margin-top:8px"><span class="pill p-green">Verified with Meta</span> Honest correction to my first draft: I expected live <b>auction overlap / self-competition</b>, but Meta's auction-ranking diagnostic did <b>not</b> flag it — because only one ad set is active right now, so there's nothing to overlap <i>today</i>. The real cost is <b>fragmented learning history</b> and the <b>risk the moment the duplicate sets are switched back on</b>. So this is a clean-up-and-prevent issue, not a live fire.</p>
+          <div class="ev">Fix → keep <b>one</b> broad ad set as the permanent engine; archive the duplicates rather than toggling them.</div>
+        </div>
+      </div>
+
+      <div class="find">
+        <div class="ico" style="background:var(--amber-soft);color:var(--amber)">2</div>
+        <div>
+          <h4>The account is volume-starved for its CPA <span class="pill p-amber">Structural</span></h4>
+          <p>At a ~R900 cost-per-purchase on a ~R950/day budget, the live ad set produces roughly <b>1 purchase a day — about 7 per week</b>. Meta's optimiser wants ~50 conversions per ad set per week to stabilise. This ad set will likely <b>never fully exit the learning phase</b> at current budget/CPA, which explains the volatility and the slide.</p>
+          <p style="margin-top:8px"><span class="pill p-green">Verified with Meta</span> Meta's Opportunity Score names this its <b>single biggest lever (+11 pts): the ad sets are "budget-limited."</b> Its prescription is "increase budget." Mine differs in <i>sequence</i>: consolidate to one engine first so added budget compounds in one signal pool — and only scale spend if margin supports a 2.4× ROAS. Same diagnosis, disciplined order.</p>
+          <div class="ev">The single most important truth in the account: it is <b>volume-starved for its CPA</b>. Consolidate, then feed it (budget and/or a richer conversion signal).</div>
+        </div>
+      </div>
+
+      <div class="find">
+        <div class="ico" style="background:var(--plum-soft);color:var(--plum)">3</div>
+        <div>
+          <h4>14 paused legacy campaigns &amp; messy naming <span class="pill p-grey">Hygiene</span></h4>
+          <p>15 campaigns exist; 14 are paused (multiple "Completed -" builds, duplicate "Advantage+", "March/April 2026", "MFB 23 April"). It's not hurting delivery, but it makes the account hard to read, hard to hand over, and easy to mis-edit. A real <b>"Advantage+ Sales" campaign sits paused</b> — relevant, because that's the format Meta now steers spend toward.</p>
+          <div class="ev">Fix → archive/relabel with a clean convention (e.g. <code>[ASC] Prospecting | Sales | 2026-06</code>).</div>
+        </div>
+      </div>
+
+      <div class="find">
+        <div class="ico" style="background:var(--mint-soft);color:var(--mint)">✓</div>
+        <div>
+          <h4>What's already right</h4>
+          <p>Campaign-budget optimisation (CBO) is on. Targeting is <b>broad with Advantage Audience enabled</b> — exactly the Andromeda-era posture (don't hand-pick interests; let the model find buyers). The objective is correctly <b>Sales / purchase conversions</b> with pixel + multiple conversion events firing. The creative library is video-first. These are good foundations — the problem is how they're packaged, not the strategy itself.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h4 style="margin:0 0 10px">Live tree (as audited)</h4>
+      <table>
+        <thead><tr><th>Level</th><th>Name</th><th>Status</th><th class="n">Budget / Note</th></tr></thead>
+        <tbody>
+          <tr><td><span class="pill p-plum">Campaign</span></td><td>MFB Main Campaign 2026 – Advantage New</td><td><span class="pill p-green">Active</span></td><td class="n">R950/day · CBO · Sales</td></tr>
+          <tr><td>↳ Ad set</td><td>Women with kids 3-8 – Copy</td><td><span class="pill p-green">Active</span></td><td class="n">Broad ZA · Adv. Audience</td></tr>
+          <tr><td>↳ Ad set</td><td>Women with kids 3-8 – Experiment</td><td><span class="pill p-grey">Paused</span></td><td class="n">identical targeting</td></tr>
+          <tr><td>↳ Ad set</td><td>Women with kids 3-8 Winner</td><td><span class="pill p-grey">Paused</span></td><td class="n">identical targeting</td></tr>
+          <tr><td>↳↳ Ads</td><td>4 live creatives in the active set (≈12 total incl. paused)</td><td><span class="pill p-green">Active</span></td><td class="n">video-first</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CREATIVE ============ -->
+<section id="creative">
+  <div class="wrap">
+    <div class="s-head"><span class="s-num">05</span><h2>Creative &amp; copy: the budget is backing the wrong horse</h2></div>
+    <p class="s-sub">Ad-level performance, last 30 days, live campaign. Sorted by spend. The ROAS bar makes the misallocation obvious at a glance.</p>
+    <div class="card">
+      <table>
+        <thead><tr><th>Ad / angle</th><th class="n">Spend</th><th class="n">Purch.</th><th class="n">ROAS</th><th style="width:130px">ROAS vs 2.5× target</th><th class="n">CTR</th><th class="n">LPV→ATC</th></tr></thead>
+        <tbody>
+          <tr class="row-hl">
+            <td><b>MFB Reaction Video</b><br><span style="font-size:12px;color:var(--ink-soft)">UGC reaction · gets 51% of budget</span></td>
+            <td class="n">R8,164</td><td class="n">8</td><td class="n">1.91×</td>
+            <td><div class="bar"><i style="width:76%;background:var(--red)"></i></div></td>
+            <td class="n">8.39%</td><td class="n">0.35%</td>
+          </tr>
+          <tr class="row-good">
+            <td><b>Video Ad October (English)</b><br><span style="font-size:12px;color:var(--ink-soft)">the real winner — under-funded</span></td>
+            <td class="n">R4,277</td><td class="n">5</td><td class="n">3.13×</td>
+            <td><div class="bar"><i style="width:100%;background:var(--mint)"></i></div></td>
+            <td class="n">3.58%</td><td class="n">1.85%</td>
+          </tr>
+          <tr>
+            <td>Hypermotion – Chloe <span class="pill p-grey">adset paused</span></td>
+            <td class="n">R2,043</td><td class="n">2</td><td class="n">1.71×</td>
+            <td><div class="bar"><i style="width:68%;background:var(--red)"></i></div></td>
+            <td class="n">5.85%</td><td class="n">1.07%</td>
+          </tr>
+          <tr>
+            <td><b>Video Ad Unboxing "With Tears"</b><br><span style="font-size:12px;color:var(--ink-soft)">11.6% CTR, zero sales — engagement bait</span></td>
+            <td class="n">R589</td><td class="n">0</td><td class="n">0.00×</td>
+            <td><div class="bar"><i style="width:2%;background:var(--red)"></i></div></td>
+            <td class="n">11.61%</td><td class="n">2.0%</td>
+          </tr>
+          <tr>
+            <td>Hypermotion – Hope <span class="pill p-grey">adset paused</span></td>
+            <td class="n">R435</td><td class="n">1</td><td class="n">4.82×</td>
+            <td><div class="bar"><i style="width:100%;background:var(--mint)"></i></div></td>
+            <td class="n">3.89%</td><td class="n">—</td>
+          </tr>
+          <tr>
+            <td>MFB Unboxing Single Video</td>
+            <td class="n">R216</td><td class="n">0</td><td class="n">0.00×</td>
+            <td><div class="bar"><i style="width:2%;background:var(--red)"></i></div></td>
+            <td class="n">6.90%</td><td class="n">—</td>
+          </tr>
+        </tbody>
+      </table>
+      <p style="margin:14px 2px 0;font-size:14px;color:var(--ink-soft)">
+        <b>The pattern:</b> CTR and ROAS are <i>inversely</i> related here. The "Reaction" and "Unboxing With Tears" videos are scroll-stopping (8–12% CTR, sub-R0.65 clicks) but pull <b>curiosity clicks that don't buy</b> — Reaction sends 4,270 people to the site and converts 8; "With Tears" sends 148 and converts none. Meanwhile <b>"Video Ad October English" — lower CTR, pricier clicks — quietly returns 3.13× because it attracts intent</b> (1.85% add-to-cart, 5× the Reaction Video's rate). CBO is doing exactly what it's told: chase cheap conversions-signal, which on a thin pixel skews toward the cheap-click creative. <b>The optimiser is being misled by the wrong creative, not malfunctioning.</b>
+      </p>
+    </div>
+
+    <div class="two">
+      <div class="card">
+        <h4 style="margin:0 0 8px">Creative library — angle coverage</h4>
+        <p style="font-size:14px;color:var(--ink-soft);margin:0 0 10px">Decent diversity of <i>angles</i>, but it's split across paused ad sets instead of feeding one engine:</p>
+        <span class="tag">UGC reaction</span><span class="tag">Unboxing</span><span class="tag">"Hypermotion" AI motion</span>
+        <span class="tag">EN + Afrikaans localisation</span><span class="tag">Promo / Sale</span><span class="tag">Iteration tests (Sep/Oct V1·V2)</span>
+        <p style="font-size:13.5px;color:var(--ink-soft);margin:12px 0 0"><b>Gaps:</b> no static/image variants for placement diversity, no testimonial/founder-story angle, no price-justification ("why R2,000" / handcrafted) creative to pre-empt the cart leak. Advantage+ Creative is <b>opted out</b> on the audited creative (Standard Enhancements is on).</p>
+      </div>
+      <div class="card">
+        <h4 style="margin:0 0 8px">Copy review <span class="pill p-green">all live creatives pulled</span></h4>
+        <p style="font-size:13.5px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:10px 12px;margin:0 0 10px">Winner's hook (3.13×): <i>"👩‍👧 'Mommy, she's real!' … a soft, lifelike doll that feels just like a real baby sister in her arms."</i> Strong emotional + scarcity framing.</p>
+        <ul class="tick">
+          <li class="y">Hooks are genuinely good — emotional, benefit-led, local trust cues (free SA delivery, SA-mom reviews)</li>
+          <li class="n"><b>Trust mismatch (now confirmed across multiple creatives):</b> several ads promise a <b>"7-day refund guarantee"</b> while the site says <b>"14-Day Returns."</b> Fix everywhere — inconsistency erodes trust on a R2,000 buy.</li>
+          <li class="n"><b>Destinations are inconsistent:</b> most body links point at the bare homepage (<code>MyForeverBaby.co.za</code>, weak — no reviews above fold), while some CTAs go to the stronger <code>/pages/shop</code>. Standardise on <code>/pages/shop</code>.</li>
+          <li class="n"><b>Duplicate primary text:</b> two live video ads share identical copy — that's wasted creative diversity Andromeda could be using.</li>
+          <li class="n"><b>One "ad" is a thin boosted post</b> ("Thank you mommy for this unboxing 🩷" — a 1-line status, no offer/CTA). Fine organically, weak as paid cold-traffic.</li>
+          <li class="n">Every ad runs a website link <i>and</i> a WhatsApp link — two funnels competing; some "sales" are messaging threads, muddying attribution.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LANDING ============ -->
+<section id="landing">
+  <div class="wrap">
+    <div class="s-head"><span class="s-num">06</span><h2>Landing-page &amp; offer review</h2></div>
+    <p class="s-sub">Where the 99% cart-leak lives. Two destinations are in play, and they are <b>not</b> equal — yet ads point at both.</p>
+    <div class="two">
+      <div class="lp" style="border-color:var(--mint)">
+        <h4>/pages/shop &nbsp;<span class="score" style="color:var(--mint)">7.5 / 10 · use this one</span></h4>
+        <ul class="tick">
+          <li class="y">Emotional hero: "Meet your little one's forever friend"</li>
+          <li class="y">5-star reviews + real customer photos + SA city testimonials</li>
+          <li class="y">Bundle/AOV builder (+ free gift, "save R499")</li>
+          <li class="y">Scarcity ("only 1–2 left"), time-bound offer, free delivery, 14-day returns</li>
+          <li class="n">No FAQ tackling the "isn't this a bit creepy?" objection cold buyers feel</li>
+          <li class="n">Footer "From R1,299" contradicts on-page R2,099+ pricing</li>
+        </ul>
+      </div>
+      <div class="lp" style="border-color:var(--amber)">
+        <h4>Homepage (/) &nbsp;<span class="score" style="color:var(--amber)">6 / 10 · stop sending ads here</span></h4>
+        <ul class="tick">
+          <li class="y">Clean hero, clear product, free delivery + 14-day returns stated</li>
+          <li class="n"><b>No reviews / star ratings / social proof above the fold</b></li>
+          <li class="n">No payment-security badges or guarantee block</li>
+          <li class="n">Narrow "mum→daughter gift" framing excludes collectors / therapeutic / grandparent buyers</li>
+          <li class="n">No price justification — cold traffic can't judge if R2,099 is fair</li>
+        </ul>
+      </div>
+    </div>
+    <blockquote style="margin-top:16px"><b>Conversion thesis:</b> the product, price and checkout work — the account has banked nearly <b>R690k</b> in tracked sales. The cart leak is a <b>belief gap</b>, not a checkout bug: cold buyers of a R2,000 niche item need review density, objection-handling ("is it appropriate / safe / worth it?"), and a single consistent high-trust destination. Tighten those and the existing 6.67% CTR converts far harder — without touching ad spend.</blockquote>
+  </div>
+</section>
+
+<!-- ============ ANDROMEDA ============ -->
+<section id="andromeda">
+  <div class="wrap">
+    <div class="card andro">
+      <div class="s-head"><span class="s-num" style="color:#f7a8c6">07</span><h2>Reading this through Meta's Andromeda update</h2></div>
+      <p class="s-sub">Andromeda is Meta's ML retrieval engine (built with NVIDIA) that lets the ad system sift a vastly larger pool of ad–person matches per impression. The practical consequence for advertisers: <b>stop hand-segmenting audiences and start feeding the machine consolidated budget, broad targeting and creative volume</b> — then let retrieval find the buyer. Here's how MyForeverBaby maps to that.</p>
+      <div class="gridx">
+        <div class="box"><h4>✓ Already aligned</h4><p>Broad targeting + Advantage Audience, CBO, purchase objective, video-first library. The instincts are modern — the account isn't fighting Andromeda on strategy.</p></div>
+        <div class="box"><h4>✗ Fights the model — fragmented signal</h4><p>3 identical ad sets split the conversion signal Andromeda needs to retrieve well. Consolidate to one broad ad set so 100% of the (already thin) signal compounds in a single pool.</p></div>
+        <div class="box"><h4>✗ Fights the model — creative starvation</h4><p>Andromeda rewards <b>creative diversity</b> — it matches the right ad to the right person. The good angles are stranded in paused ad sets. Load 5–8 diverse live creatives into the one engine and let retrieval allocate.</p></div>
+        <div class="box"><h4>↗ Untapped — Advantage+ Sales</h4><p>An ASC campaign sits paused. ASC is the native Andromeda vehicle (minimal manual structure, model-led). It's the logical destination once the single broad ad set proves out.</p></div>
+        <div class="box"><h4>↗ Untapped — Advantage+ Creative</h4><p>Advantage+ Creative is opted out. Turning it on (with brand-safe guardrails) gives the model more creative permutations to test per person — more retrieval surface.</p></div>
+        <div class="box"><h4>⚑ The hard constraint</h4><p>Andromeda still needs <b>signal volume</b>. At 7 sales/week this account is below the threshold for clean optimisation. Feeding the model (consolidation + creative + a richer conversion signal) is the unlock — not more micro-management.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ NEXT STEPS / TIMELINE ============ -->
+<section id="plan">
+  <div class="wrap">
+    <div class="s-head"><span class="s-num">08</span><h2>The 90-day plan</h2></div>
+    <p class="s-sub">Sequenced so the cheap, reversible, high-certainty moves come first. Nothing here requires a rebuild — it's consolidate, redirect, and reinforce.</p>
+    <div class="tl">
+
+      <div class="phase">
+        <div class="dot" style="background:var(--red)"></div>
+        <div class="when">Week 1 · quick wins (do today)</div>
+        <h4>Stop the bleeding &amp; fix trust</h4>
+        <ul>
+          <li><b>Fix the refund mismatch</b> — change ad copy "7-day" → "14-day" to match the site. Zero cost, protects trust.</li>
+          <li><b>Point every link to <code>/pages/shop</code></b> (the high-trust page). Kill the bare-homepage body link.</li>
+          <li><b>Cap or pause the Reaction Video's dominance</b> — it's eating 51% of budget at 1.91×. Don't kill the angle (great hook), but stop it monopolising spend.</li>
+          <li><b>Increase budget share to "Video Ad October English"</b> (3.13×) and re-enable "Hypermotion – Hope" (4.82×).</li>
+          <li><b>Archive the 14 dead campaigns</b> and apply a clean naming convention.</li>
+        </ul>
+      </div>
+
+      <div class="phase">
+        <div class="dot" style="background:var(--amber)"></div>
+        <div class="when">Weeks 2–4 · structural reset</div>
+        <h4>Consolidate into one engine</h4>
+        <ul>
+          <li><b>Collapse the 3 ad sets into 1</b> broad ZA / Advantage-Audience ad set. End the self-competition; pool the signal.</li>
+          <li><b>Stack 5–8 diverse live creatives</b> in that one ad set: the proven October English + Hope, the best Reaction cut, an Afrikaans variant, plus <b>2 new angles</b> (testimonial, price-justification/handcrafted).</li>
+          <li><b>Turn on Advantage+ Creative</b> with brand guardrails.</li>
+          <li><b>Add a value/price-justification creative</b> aimed squarely at the cart leak.</li>
+          <li>Hold budget at ~R950/day; let the consolidated set re-enter learning <b>once</b>, cleanly.</li>
+        </ul>
+      </div>
+
+      <div class="phase">
+        <div class="dot" style="background:var(--plum)"></div>
+        <div class="when">Weeks 4–8 · conversion-rate offensive</div>
+        <h4>Close the 99% cart leak</h4>
+        <ul>
+          <li><b>Landing page:</b> review density above the fold, an FAQ that handles the "is this appropriate/safe/worth it" objection, security/guarantee badges, fix the "From R1,299" pricing contradiction.</li>
+          <li><b>Broaden the framing</b> beyond mum→daughter (collectors, grandparents, therapeutic/companionship).</li>
+          <li><b>Decide the volume play:</b> either lift budget to push toward ~50 conv/week, <i>or</i> add an Add-to-Cart optimisation event / value rules to give Andromeda denser signal. Model both against margin before committing.</li>
+          <li><b>Launch the paused Advantage+ Sales (ASC)</b> campaign as the scaling vehicle, fed by the winning creatives.</li>
+        </ul>
+      </div>
+
+      <div class="phase">
+        <div class="dot" style="background:var(--mint)"></div>
+        <div class="when">Weeks 8–12 · scale what works</div>
+        <h4>Compound &amp; protect</h4>
+        <ul>
+          <li>Shift primary spend to ASC once it beats the manual broad set on ROAS.</li>
+          <li><b>Creative cadence:</b> 3–4 fresh concepts/week into the engine to outrun fatigue (frequency is already ~3–4.5 on a finite ZA audience).</li>
+          <li><b>Build a retention/retargeting layer</b> (site visitors, ATC, past buyers) — currently no lower-funnel campaign exists despite a R690k buyer base.</li>
+          <li><b>Target:</b> restore ROAS to <b>3×+</b> at ≥ current spend, then scale budget against a defended CPA.</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ UNBIASED SELF-EVAL ============ -->
+<section id="eval">
+  <div class="wrap">
+    <div class="s-head"><span class="s-num">09</span><h2>Unbiased evaluation — grading my own findings</h2></div>
+    <p class="s-sub">What I'm confident about, what I'm inferring, and what I could <b>not</b> verify. Read this before acting on anything above.</p>
+    <div class="card">
+      <table class="selfeval">
+        <thead><tr><th style="width:34%">Claim / recommendation</th><th style="width:14%">Confidence</th><th>Basis &amp; caveat</th></tr></thead>
+        <tbody>
+          <tr><td>Performance has declined from ~4× to ~2.3×</td><td><span class="conf up">High</span></td><td>Directly from Meta insights across 4 windows; the "earlier 9-month" 4.09× is <i>derived</i> by subtracting 90d from lifetime, so it's an average, not a clean period read.</td></tr>
+          <tr><td>Reaction Video is over-funded / low-intent</td><td><span class="conf up">High</span></td><td>Ad-level data: 51% of spend, 1.91× ROAS, 0.35% ATC vs 1.85% for the winner. Solid.</td></tr>
+          <tr><td>3 identical ad sets hurt the algorithm</td><td><span class="conf" style="color:var(--amber)">Corrected ↓</span></td><td><b>Revised down after checking Meta's auction diagnostic</b> — no live overlap flagged (only one set active). Re-scoped to a fragmented-history + hygiene issue, not a live auction cost. Honest correction to my first draft.</td></tr>
+          <tr><td>Account is below learning-phase volume</td><td><span class="conf up">High ↑</span></td><td><b>Independently confirmed by Meta:</b> Opportunity Score's top lever (+11 pts) is "budget-limited." 7 purchases/week vs ~50 threshold is arithmetic. Remedy (budget vs event) still depends on margin I don't have.</td></tr>
+          <tr><td>Creative copy issues (7-day vs 14-day, homepage links, dupes)</td><td><span class="conf up">High ↑</span></td><td><b>Upgraded from inferred to verified</b> — all live creatives pulled via the official Meta MCP; copy facts are now direct, not from ad names.</td></tr>
+          <tr><td>Landing page is the main cart-leak driver</td><td><span class="conf" style="color:var(--amber)">Medium</span></td><td>Funnel math is hard (1% LPV→ATC); attribution of the leak between "low-intent traffic" vs "page" is inferred. A/B testing would confirm. LP review was automated (model-read), not a manual UX pass.</td></tr>
+          <tr><td>Andromeda-aligned recommendations</td><td><span class="conf" style="color:var(--amber)">Med</span></td><td>Directionally consistent with Meta's public guidance (consolidate, broad, creative volume, ASC). Andromeda is a retrieval-layer change; I'm applying its <i>implications</i>, not a documented per-account playbook.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card" style="background:var(--amber-soft);border-color:#f0d9b0">
+      <h4 style="margin:0 0 8px">⚠ What I could NOT verify — get these before executing</h4>
+      <ul class="tick" style="columns:2;column-gap:30px">
+        <li class="n"><b>Gross margin / COGS</b> — decides whether 2.4× ROAS is profit or loss, and whether to scale budget. <i>Critical.</i></li>
+        <li class="y"><b>Creative-level detail — now resolved.</b> Re-pulled all live creatives via the official Meta Ads MCP; copy is verified, not inferred.</li>
+        <li class="n"><b>External ROAS benchmark</b> — Meta's industry-benchmark API returned no data for this cohort/period, so "is 2.4× good?" still lacks an outside reference. Margin is the better yardstick.</li>
+        <li class="n"><b>True attribution window / model</b> — figures are Meta-reported; not reconciled against Shopify back-end sales.</li>
+        <li class="n"><b>WhatsApp-driven sales</b> — a parallel messaging funnel exists; some revenue may be under/over-counted here.</li>
+        <li class="n"><b>Seasonality</b> — can't separate the May restructure's effect from any seasonal dip without YoY same-period data.</li>
+        <li class="n"><b>Manual LP UX / mobile speed</b> — page review was model-read, not hands-on device testing.</li>
+      </ul>
+    </div>
+    <blockquote style="margin-top:4px"><b>Net, honestly:</b> this is a fundamentally <b>healthy account with a fixable problem</b>, not a turnaround case. The biggest risk in my own analysis is over-attributing the decline to structure when an unfinished learning phase on a brand-new campaign explains part of it. That's <i>also</i> why the plan front-loads reversible, low-cost moves — so we learn whether structure or maturation is the bigger driver before spending real money. The one number that could change the whole verdict is gross margin; confirm it first.</blockquote>
+  </div>
+</section>
+
+<div class="wrap footer">
+  <p>Prepared by JCE Media · Meta Ads diagnostic for MyForeverBaby (act_1619203665436037). Figures pulled live from the <b>official Meta Ads MCP</b> (insights, all live creatives, Opportunity Score, auction-ranking diagnostics) on 11 Jun 2026, ZAR, purchase-conversion attribution as reported by Meta. Industry-benchmark data was unavailable for this cohort. Landing pages reviewed via automated fetch. Derived figures are flagged inline. This document is an audit and plan, not a performance guarantee.</p>
+</div>
+
+</body>
+</html>
