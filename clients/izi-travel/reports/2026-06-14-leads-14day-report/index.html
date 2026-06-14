@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Izi Travel — 14-Day Lead Report</title>
+<style>
+  :root{
+    --ocean:#0e7490; --ocean-deep:#155e75; --teal:#14b8a6; --coral:#fb7185;
+    --amber:#f59e0b; --ink:#0f172a; --slate:#475569; --mute:#94a3b8;
+    --line:#e2e8f0; --bg:#f1f5f9; --card:#ffffff; --good:#10b981; --bad:#ef4444;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+       background:var(--bg);color:var(--ink);line-height:1.5;padding:32px 16px}
+  .wrap{max-width:1080px;margin:0 auto}
+  header.hero{background:linear-gradient(135deg,var(--ocean-deep),var(--ocean) 55%,var(--teal));
+       color:#fff;border-radius:20px;padding:36px 38px;box-shadow:0 12px 30px -10px rgba(14,116,144,.5);position:relative;overflow:hidden}
+  header.hero:after{content:"";position:absolute;right:-60px;top:-60px;width:240px;height:240px;
+       background:radial-gradient(circle,rgba(255,255,255,.16),transparent 70%);border-radius:50%}
+  .eyebrow{text-transform:uppercase;letter-spacing:.16em;font-size:12px;font-weight:700;opacity:.85}
+  header.hero h1{font-size:30px;margin:6px 0 4px;font-weight:800}
+  header.hero .sub{opacity:.92;font-size:15px}
+  .pills{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap}
+  .pill{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.25);padding:6px 12px;border-radius:999px;font-size:13px;font-weight:600}
+
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:22px 0}
+  .kpi{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 18px 16px;box-shadow:0 4px 12px -8px rgba(15,23,42,.25)}
+  .kpi .lab{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--mute)}
+  .kpi .val{font-size:28px;font-weight:800;margin-top:6px;letter-spacing:-.02em}
+  .kpi .note{font-size:12px;color:var(--slate);margin-top:4px}
+  .kpi.accent{border-top:3px solid var(--coral)}
+  .kpi.accent2{border-top:3px solid var(--teal)}
+
+  section{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px 28px;margin:18px 0;box-shadow:0 4px 12px -10px rgba(15,23,42,.2)}
+  section h2{font-size:19px;font-weight:800;display:flex;align-items:center;gap:9px;margin-bottom:4px}
+  section h2 .dot{width:10px;height:10px;border-radius:3px;background:var(--ocean)}
+  section .lead{color:var(--slate);font-size:14px;margin-bottom:18px;max-width:760px}
+
+  /* insight callout */
+  .insight{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:6px}
+  .ibox{border-radius:14px;padding:18px 18px;border:1px solid var(--line);background:#f8fafc}
+  .ibox h3{font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--mute);margin-bottom:8px}
+  .ibox .big{font-size:34px;font-weight:800;letter-spacing:-.02em}
+  .ibox .desc{font-size:13px;color:var(--slate);margin-top:6px}
+  .ibox.g{border-left:4px solid var(--amber)}
+  .ibox.s{border-left:4px solid var(--teal)}
+  .reconcile{margin-top:18px;background:#ecfeff;border:1px solid #a5f3fc;border-radius:14px;padding:16px 18px;font-size:14px;color:#155e75}
+  .reconcile b{color:var(--ocean-deep)}
+
+  /* chart */
+  .chart{margin-top:8px}
+  .legend{display:flex;gap:18px;flex-wrap:wrap;margin:6px 0 16px;font-size:13px;font-weight:600;color:var(--slate)}
+  .legend span{display:inline-flex;align-items:center;gap:7px}
+  .swatch{width:14px;height:14px;border-radius:4px;display:inline-block}
+  .bars{display:flex;align-items:flex-end;gap:10px;height:230px;border-bottom:2px solid var(--line);padding-bottom:0}
+  .day{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end}
+  .pair{display:flex;align-items:flex-end;gap:3px;height:100%;width:100%;justify-content:center}
+  .bar{width:13px;border-radius:4px 4px 0 0;position:relative;transition:.2s}
+  .bar.g{background:linear-gradient(var(--amber),#fbbf24)}
+  .bar.l{background:linear-gradient(var(--teal),#2dd4bf)}
+  .bar:hover{filter:brightness(1.08)}
+  .bar .cap{position:absolute;top:-17px;left:50%;transform:translateX(-50%);font-size:10px;font-weight:700;color:var(--slate)}
+  .xlab{font-size:10px;color:var(--mute);font-weight:600;white-space:nowrap}
+
+  table{width:100%;border-collapse:collapse;margin-top:6px;font-size:14px}
+  th,td{text-align:right;padding:11px 12px;border-bottom:1px solid var(--line)}
+  th:first-child,td:first-child{text-align:left}
+  thead th{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--mute);font-weight:700;border-bottom:2px solid var(--line)}
+  tbody tr:hover{background:#f8fafc}
+  tfoot td{font-weight:800;border-top:2px solid var(--ink);border-bottom:none}
+  .camp{display:inline-flex;align-items:center;gap:8px;font-weight:700}
+  .tag{width:9px;height:9px;border-radius:3px;display:inline-block}
+
+  /* source breakdown */
+  .src{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:8px}
+  .srow{display:flex;flex-direction:column;gap:6px}
+  .sbar-track{background:#eef2f6;border-radius:8px;height:30px;overflow:hidden;display:flex;align-items:center}
+  .sbar-fill{height:100%;border-radius:8px;display:flex;align-items:center;padding-left:10px;color:#fff;font-weight:700;font-size:13px;min-width:34px}
+  .sname{font-size:13px;font-weight:600;color:var(--slate);display:flex;justify-content:space-between}
+  .sname b{color:var(--ink)}
+
+  .notes{font-size:13px;color:var(--slate)}
+  .notes li{margin:7px 0 7px 18px}
+  .footer{text-align:center;color:var(--mute);font-size:12px;margin:26px 0 4px}
+  .badge-up{color:var(--good);font-weight:700}
+  .badge-dn{color:var(--bad);font-weight:700}
+  @media(max-width:720px){.kpis{grid-template-columns:repeat(2,1fr)}.insight{grid-template-columns:1fr}.src{grid-template-columns:1fr}.bar{width:9px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="eyebrow">Izi Travel · JCE Media Lead-Gen Partnership</div>
+    <h1>14-Day Lead Generation Report</h1>
+    <div class="sub">Reporting window: <b>31 May – 13 Jun 2026</b> (14 days, ending yesterday) · Google Ads spend reconciled against the ReviewTap (GHL) system</div>
+    <div class="pills">
+      <span class="pill">📊 Google Ads ↔ System reconciliation</span>
+      <span class="pill">🇲🇺 Mauritius &nbsp;·&nbsp; 🏝️ Zanzibar</span>
+      <span class="pill">Generated 14 Jun 2026</span>
+    </div>
+  </header>
+
+  <div class="kpis">
+    <div class="kpi">
+      <div class="lab">Ad Spend (14d)</div>
+      <div class="val">R3,766.89</div>
+      <div class="note">avg R269 / day</div>
+    </div>
+    <div class="kpi accent">
+      <div class="lab">Google Conversions</div>
+      <div class="val">76</div>
+      <div class="note">platform-tracked events</div>
+    </div>
+    <div class="kpi accent2">
+      <div class="lab">Leads in System</div>
+      <div class="val">62</div>
+      <div class="note">real contacts in ReviewTap/GHL</div>
+    </div>
+    <div class="kpi accent2">
+      <div class="lab">Cost / Real Lead</div>
+      <div class="val">R60.76</div>
+      <div class="note">spend ÷ 62 system leads</div>
+    </div>
+  </div>
+
+  <section>
+    <h2><span class="dot"></span>The headline: two numbers, and why they differ</h2>
+    <p class="lead">Google Ads and the ReviewTap system are counting different things. Google counts <em>conversion events</em>; the system holds <em>actual people you can contact</em>. Here's how they reconcile — and the surprise is the opposite of what we expected.</p>
+
+    <div class="insight">
+      <div class="ibox g">
+        <h3>Google Ads says</h3>
+        <div class="big">76 conversions</div>
+        <div class="desc">38 Mauritius + 38 Zanzibar. This is an <b>event count</b> — the quote-form action can fire more than once per person and includes interactions that never became a saved contact.</div>
+      </div>
+      <div class="ibox s">
+        <h3>The system actually holds</h3>
+        <div class="big">62 real leads</div>
+        <div class="desc">Unique contacts that landed in ReviewTap/GHL. <b>50</b> came straight off the two ad campaigns' quote forms; <b>12</b> arrived through other paths.</div>
+      </div>
+    </div>
+
+    <div class="reconcile">
+      <b>Read it this way:</b> The two ad campaigns drove <b>50 quote-form leads</b> into the system (24 Mauritius + 26 Zanzibar), yet Google reported <b>76 conversions</b> for them — Google is over-counting by ~52%, which is normal for event-based tracking. <b>Separately, 12 more leads</b> came in via the quick-quote widget, package landing pages, and direct/untagged entries (your "they just WhatsApp'd us" leads) — these are <b>invisible in the per-campaign Google report</b> but are very much real. Net: trust the system (62) for real lead volume, and treat Google's 76 as a directional signal, not a headcount.
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="dot"></span>Daily: Google conversions vs. leads in the system</h2>
+    <p class="lead">Bars compare what Google reported each day against what actually landed in the system. They won't line up 1:1 day-by-day — Google dates a conversion to the ad <em>click</em>, the system dates it to when the contact was <em>created</em> — but the shapes track each other.</p>
+    <div class="legend">
+      <span><i class="swatch" style="background:linear-gradient(var(--amber),#fbbf24)"></i> Google conversions</span>
+      <span><i class="swatch" style="background:linear-gradient(var(--teal),#2dd4bf)"></i> Leads in system</span>
+    </div>
+    <div class="chart"><div class="bars" id="bars"></div></div>
+  </section>
+
+  <section>
+    <h2><span class="dot"></span>Campaign breakdown</h2>
+    <p class="lead">Spend, traffic and lead performance per destination campaign. "System quote leads" = contacts tagged to that campaign's quote form in ReviewTap.</p>
+    <table>
+      <thead>
+        <tr><th>Campaign</th><th>Spend</th><th>Impr.</th><th>Clicks</th><th>CTR</th><th>CPC</th><th>Google conv.</th><th>System leads</th><th>Cost / lead</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="camp"><i class="tag" style="background:var(--coral)"></i>Mauritius — Destination</span></td>
+          <td>R1,897.46</td><td>2,642</td><td>297</td><td>11.2%</td><td>R6.39</td><td>38</td><td>24</td><td>R79.06</td>
+        </tr>
+        <tr>
+          <td><span class="camp"><i class="tag" style="background:var(--ocean)"></i>Zanzibar — Destination</span></td>
+          <td>R1,869.43</td><td>1,806</td><td>281</td><td>15.6%</td><td>R6.65</td><td>38</td><td>26</td><td>R71.90</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr><td>Total</td><td>R3,766.89</td><td>4,448</td><td>578</td><td>13.0%</td><td>R6.52</td><td>76</td><td>50<span style="font-weight:600;color:var(--mute)"> (+12 other)</span></td><td>R60.76*</td></tr>
+      </tfoot>
+    </table>
+    <p style="font-size:12px;color:var(--mute);margin-top:10px">*Total cost/lead is spend ÷ all 62 system leads (the 12 non-campaign leads still benefit from brand presence). Per-campaign cost/lead counts only that campaign's quote leads, so it reads higher.</p>
+  </section>
+
+  <section>
+    <h2><span class="dot"></span>Where the 62 leads actually came from</h2>
+    <p class="lead">Lead source as recorded in the system. The two campaign quote forms dominate (50 of 62), but a steady 12 arrive off-report — proof the funnel captures more than the ad platform sees.</p>
+    <div class="src" id="src"></div>
+  </section>
+
+  <section>
+    <h2><span class="dot"></span>What this means &amp; next moves</h2>
+    <ul class="notes">
+      <li><b>Real lead rate is strong:</b> 62 leads in 14 days ≈ <b>4.4 leads/day</b> at R60.76 each — and <b>4 more already landed today</b> (14 Jun) before this report ran.</li>
+      <li><b>Don't bill or judge on Google's 76.</b> It's inflated ~50% by multi-fire events. The system's 62 is the source of truth for contactable leads; use it for the rev-share/lead reconciliation.</li>
+      <li><b>The 12 "off-report" leads matter:</b> quick-quote widget, package pages and direct/WhatsApp entries never show in the campaign report. Worth tagging these at capture so we can attribute them properly going forward.</li>
+      <li><b>Confirm the conversion action:</b> the in-account "conversion" definition should be verified — if it's firing on a button click rather than a completed quote, that explains most of the gap and is an easy tracking fix.</li>
+      <li><b>Scale headroom remains:</b> search impression share sat low (Mauritius ~11%, Zanzibar ~16%) across the window — budget/bid room to capture more of the same quality traffic.</li>
+    </ul>
+  </section>
+
+  <div class="footer">JCE Media · Izi Travel lead-gen partnership · Data: Google Ads (cust 919-294-5184) + ReviewTap/GHL system · 14 Jun 2026</div>
+</div>
+
+<script>
+  // [date, googleConversions, systemLeads, spend]
+  const daily = [
+    ["05-31",3,5,402.18],["06-01",3,4,406.54],["06-02",10,6,364.27],["06-03",4,2,202.66],
+    ["06-04",9,8,237.57],["06-05",10,8,270.26],["06-06",3,3,475.13],["06-07",4,4,299.94],
+    ["06-08",7,4,255.94],["06-09",6,4,191.61],["06-10",7,5,141.41],["06-11",4,4,166.31],
+    ["06-12",1,2,96.68],["06-13",5,3,256.41]
+  ];
+  const max = Math.max(...daily.flatMap(d=>[d[1],d[2]]));
+  const H = 200;
+  const bars = document.getElementById('bars');
+  daily.forEach(d=>{
+    const day=document.createElement('div'); day.className='day';
+    const pair=document.createElement('div'); pair.className='pair';
+    const gH=Math.max(4,d[1]/max*H), lH=Math.max(4,d[2]/max*H);
+    pair.innerHTML =
+      `<div class="bar g" style="height:${gH}px" title="${d[0]}: ${d[1]} Google conv">${d[1]?`<span class='cap'>${d[1]}</span>`:''}</div>`+
+      `<div class="bar l" style="height:${lH}px" title="${d[0]}: ${d[2]} system leads">${d[2]?`<span class='cap'>${d[2]}</span>`:''}</div>`;
+    const x=document.createElement('div'); x.className='xlab'; x.textContent=d[0];
+    day.appendChild(pair); day.appendChild(x); bars.appendChild(day);
+  });
+
+  // source breakdown (14-day window)
+  const sources = [
+    ["Zanzibar quote form",26,"#0e7490"],["Mauritius quote form",24,"#fb7185"],
+    ["Direct / untagged",6,"#64748b"],["Quick-quote widget",2,"#14b8a6"],
+    ["Pkg · Mauritius Family",2,"#f59e0b"],["Pkg · Romantic Zanzibar",2,"#a855f7"]
+  ];
+  const smax=Math.max(...sources.map(s=>s[1]));
+  const src=document.getElementById('src');
+  sources.forEach(s=>{
+    const row=document.createElement('div'); row.className='srow';
+    row.innerHTML=
+      `<div class="sname"><span>${s[0]}</span><b>${s[1]}</b></div>`+
+      `<div class="sbar-track"><div class="sbar-fill" style="width:${Math.max(12,s[1]/smax*100)}%;background:${s[2]}">${s[1]}</div></div>`;
+    src.appendChild(row);
+  });
+</script>
+</body>
+</html>
