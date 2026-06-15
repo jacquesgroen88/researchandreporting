@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mako Outbound — Implementation Plan | Pixsan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#19325B;--navy-deep:#102140;--cyan:#31C3FF;--cyan-light:#77D7FF;
+    --ink:#32373C;--muted:#6A7686;--line:#E4E9F0;--bg:#F5F7FA;--white:#FFFFFF;
+    --good:#1FAE6B;--warn:#E8A33D;--warm:#F08C4B;--cold:#3E9BD8;--soft:#EAF7FF;
+    --shadow:0 10px 30px rgba(16,33,64,.08);--shadow-lg:0 24px 60px rgba(16,33,64,.14);--radius:18px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:'Montserrat',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+  #progress{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--cyan),var(--cyan-light));z-index:120;transition:width .1s}
+  header.nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.92);backdrop-filter:saturate(160%) blur(10px);border-bottom:1px solid var(--line)}
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;gap:18px;height:68px}
+  .brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+  .brand img{height:34px;display:block}
+  .brand .wordmark{font-weight:800;font-size:22px;color:var(--navy);letter-spacing:-.5px;display:none}
+  .navlinks{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}
+  .navlinks a{font-size:12px;font-weight:600;color:var(--muted);text-decoration:none;padding:7px 10px;border-radius:9px;transition:.18s;white-space:nowrap}
+  .navlinks a:hover{color:var(--navy);background:var(--soft)}
+  @media(max-width:900px){.navlinks{display:none}}
+  .hero{position:relative;overflow:hidden;color:#fff;background:radial-gradient(1200px 500px at 80% -10%,rgba(49,195,255,.40),transparent 60%),linear-gradient(135deg,var(--navy) 0%,var(--navy-deep) 100%)}
+  .hero:after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(115deg,rgba(255,255,255,.035) 0 2px,transparent 2px 26px);pointer-events:none}
+  .hero .wrap{position:relative;padding:74px 24px 86px;z-index:2}
+  .eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:12px;font-weight:700;letter-spacing:2.2px;text-transform:uppercase;color:var(--cyan-light);margin-bottom:22px;border:1px solid rgba(119,215,255,.35);padding:7px 14px;border-radius:100px;background:rgba(49,195,255,.08)}
+  .eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 0 4px rgba(49,195,255,.25)}
+  .hero h1{font-size:clamp(34px,5.4vw,58px);line-height:1.04;font-weight:900;letter-spacing:-1.2px;margin-bottom:20px}
+  .hero h1 .accent{color:var(--cyan-light)}
+  .hero p.lead{font-size:clamp(16px,2vw,20px);max-width:780px;color:#D6E2F2;font-weight:500}
+  .meta-row{display:flex;flex-wrap:wrap;gap:14px;margin-top:38px}
+  .meta-chip{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);border-radius:12px;padding:12px 16px;min-width:150px}
+  .meta-chip .k{font-size:10.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--cyan-light);font-weight:700}
+  .meta-chip .v{font-size:14px;font-weight:600;color:#fff;margin-top:3px}
+  section{padding:64px 0;border-bottom:1px solid var(--line)}
+  .sec-head{display:flex;align-items:center;gap:14px;margin-bottom:10px}
+  .sec-num{flex:0 0 auto;width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:linear-gradient(135deg,var(--navy),var(--navy-deep));color:var(--cyan-light);font-weight:800;font-size:15px;box-shadow:var(--shadow)}
+  h2{font-size:clamp(24px,3.2vw,33px);font-weight:800;color:var(--navy);letter-spacing:-.6px;line-height:1.1}
+  .sub{color:var(--muted);font-size:16px;max-width:820px;margin:6px 0 30px;font-weight:500}
+  .sub.indent{margin-left:52px}
+  .grid{display:grid;gap:18px}
+  .g2{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+  @media(max-width:820px){.g2,.g3,.g4{grid-template-columns:1fr}}
+  .card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);transition:.2s}
+  .card:hover{box-shadow:var(--shadow-lg);transform:translateY(-2px)}
+  .card .ic{width:44px;height:44px;border-radius:12px;background:var(--soft);display:grid;place-items:center;margin-bottom:14px;font-size:22px}
+  .card h3{font-size:16.5px;color:var(--navy);font-weight:700;margin-bottom:6px}
+  .card p{font-size:14px;color:var(--muted);font-weight:500}
+  .callout{background:linear-gradient(135deg,#fff,#F4FBFF);border:1px solid #CDEBFB;border-left:5px solid var(--cyan);border-radius:14px;padding:22px 24px;display:flex;gap:16px;align-items:flex-start}
+  .callout .big{font-size:26px;line-height:1}
+  .callout p{font-size:15px;color:var(--ink)}
+  .callout strong{color:var(--navy)}
+  .lead-in{font-size:16px;color:var(--ink);font-weight:500;max-width:840px;margin-bottom:24px}
+  /* segment bar */
+  .segbar{display:flex;border-radius:12px;overflow:hidden;box-shadow:var(--shadow);margin:6px 0 22px;height:58px}
+  .segbar .seg{display:flex;flex-direction:column;justify-content:center;align-items:center;color:#fff;font-weight:800;padding:6px}
+  .segbar .seg small{font-weight:600;font-size:10.5px;letter-spacing:.5px;text-transform:uppercase;opacity:.95}
+  .segbar .warm{background:linear-gradient(135deg,#F08C4B,#E8A33D)}
+  .segbar .cold{background:linear-gradient(135deg,#3E9BD8,#31C3FF)}
+  .segbar .defer{background:linear-gradient(135deg,#8A98AB,#6A7686)}
+  .legend{display:flex;gap:18px;flex-wrap:wrap;font-size:12.5px;font-weight:600;color:var(--muted);margin-bottom:8px}
+  .legend span{display:inline-flex;align-items:center;gap:7px}
+  .legend i{width:12px;height:12px;border-radius:3px;display:inline-block}
+  table{width:100%;border-collapse:collapse;background:#fff;border-radius:14px;overflow:hidden;box-shadow:var(--shadow);font-size:13.5px}
+  th{background:var(--navy);color:#fff;text-align:left;padding:13px 15px;font-size:11.5px;letter-spacing:.5px;text-transform:uppercase;font-weight:700}
+  td{padding:12px 15px;border-top:1px solid var(--line);font-weight:500;color:var(--ink);vertical-align:top}
+  tr:nth-child(even) td{background:#FAFCFE}
+  .tagdot{display:inline-block;font-size:10.5px;font-weight:800;padding:3px 9px;border-radius:100px;letter-spacing:.3px}
+  .tagdot.warm{background:#FDEEE2;color:#C26A2B}
+  .tagdot.cold{background:#E4F4FE;color:#1B7FB0}
+  .tagdot.defer{background:#EEF1F5;color:#67748A}
+  .pill{display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:100px}
+  .pill.k{background:#EAF7FF;color:#1B7FB0}.pill.m{background:#EDEBFF;color:#5247B0}.pill.j{background:#FDEFE8;color:#B0552F}
+  /* architecture */
+  .arch{display:grid;grid-template-columns:1fr auto 1fr;gap:18px;align-items:stretch}
+  @media(max-width:820px){.arch{grid-template-columns:1fr}}
+  .pl{border-radius:16px;padding:22px;border:1px solid var(--line);background:#fff;box-shadow:var(--shadow)}
+  .pl.cold{border-top:4px solid var(--cyan)}.pl.live{border-top:4px solid var(--navy)}
+  .pl .tag{font-size:11px;letter-spacing:1.4px;text-transform:uppercase;font-weight:800;margin-bottom:4px}
+  .pl.cold .tag{color:var(--cyan)}.pl.live .tag{color:var(--navy)}
+  .pl h4{font-size:18px;color:var(--navy);font-weight:800;margin-bottom:14px}
+  .stage{display:flex;align-items:center;gap:10px;font-size:13.5px;font-weight:600;color:var(--ink);padding:9px 12px;border-radius:9px;background:var(--bg);margin-bottom:7px}
+  .stage .n{flex:0 0 auto;width:20px;height:20px;border-radius:6px;background:var(--navy);color:#fff;font-size:11px;font-weight:700;display:grid;place-items:center}
+  .stage.win{background:#E7F8F0;color:#0E7A4A}.stage.win .n{background:var(--good)}
+  .stage.win2{background:#FDF2E2;color:#A86A18}.stage.win2 .n{background:var(--warn)}
+  .stage.drop{opacity:.55;text-decoration:line-through;background:#fff;border:1px dashed var(--line)}
+  .stage.drop .n{background:#B7C0CD}
+  .arch-mid{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-width:120px}
+  .arch-arrow{font-size:30px;color:var(--cyan);font-weight:800;line-height:1}
+  .arch-mid .lbl{font-size:11px;font-weight:700;color:var(--navy);text-align:center;background:var(--soft);padding:8px 10px;border-radius:9px;line-height:1.3}
+  @media(max-width:820px){.arch-arrow{transform:rotate(90deg)}}
+  .flow{display:flex;flex-wrap:wrap;gap:10px;align-items:stretch}
+  .flow .step{flex:1 1 150px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px;box-shadow:var(--shadow);position:relative}
+  .flow .step .s{font-size:10.5px;letter-spacing:1px;text-transform:uppercase;color:var(--cyan);font-weight:800}
+  .flow .step .t{font-size:14px;font-weight:700;color:var(--navy);margin-top:3px}
+  .flow .step .d{font-size:12px;color:var(--muted);margin-top:4px;font-weight:500}
+  .note{border-radius:14px;padding:20px 22px;font-size:14px;font-weight:500}
+  .note.flag{background:#FFF7EC;border:1px solid #F4DDB4}
+  .note.flag .h{font-weight:800;color:#A86A18;font-size:13px;letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px;display:flex;gap:8px;align-items:center}
+  .note.info{background:var(--soft);border:1px solid #CDEBFB}
+  /* verified box */
+  .verify{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:8px}
+  @media(max-width:820px){.verify{grid-template-columns:1fr}}
+  .vcol{border-radius:14px;padding:18px 20px;border:1px solid var(--line);background:#fff;box-shadow:var(--shadow)}
+  .vcol.ok{border-top:4px solid var(--good)}.vcol.doc{border-top:4px solid var(--cyan)}.vcol.todo{border-top:4px solid var(--warn)}
+  .vcol .vh{font-size:11.5px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:7px}
+  .vcol.ok .vh{color:var(--good)}.vcol.doc .vh{color:#1B7FB0}.vcol.todo .vh{color:#A86A18}
+  .vcol ul{list-style:none}
+  .vcol li{font-size:12.5px;color:var(--ink);font-weight:500;padding:5px 0 5px 18px;position:relative;border-top:1px dashed var(--line)}
+  .vcol li:first-child{border-top:none}
+  .vcol li:before{content:"›";position:absolute;left:2px;top:5px;font-weight:800;color:var(--muted)}
+  /* phasing */
+  .phase{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px 22px;box-shadow:var(--shadow);margin-bottom:14px;display:grid;grid-template-columns:96px 1fr;gap:18px;align-items:center}
+  @media(max-width:680px){.phase{grid-template-columns:1fr}}
+  .phase .pw{text-align:center}
+  .phase .pw .ph-n{font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--cyan)}
+  .phase .pw .ph-w{font-size:12.5px;font-weight:700;color:var(--navy);margin-top:2px}
+  .phase .pc h4{font-size:16px;color:var(--navy);font-weight:800;margin-bottom:3px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .phase .pc .cnt{font-size:12px;font-weight:800;color:#fff;background:var(--navy);padding:2px 9px;border-radius:100px}
+  .phase .pc p{font-size:13px;color:var(--muted);font-weight:500}
+  .tl{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  @media(max-width:820px){.tl{grid-template-columns:1fr}}
+  .tl .ph2{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:var(--shadow);border-top:4px solid var(--cyan)}
+  .tl .ph2 .w{font-size:11px;letter-spacing:1.4px;text-transform:uppercase;font-weight:800;color:var(--cyan)}
+  .tl .ph2 h4{font-size:17px;color:var(--navy);font-weight:800;margin:4px 0 12px}
+  .tl ul{list-style:none}
+  .tl li{font-size:13px;color:var(--ink);font-weight:500;padding:6px 0 6px 22px;position:relative;border-top:1px dashed var(--line)}
+  .tl li:first-child{border-top:none}
+  .tl li:before{content:"";position:absolute;left:2px;top:13px;width:8px;height:8px;border-radius:50%;background:var(--cyan)}
+  .who{font-size:10.5px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);display:block;margin-top:1px}
+  .stats{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+  @media(max-width:820px){.stats{grid-template-columns:repeat(2,1fr)}}
+  .stat{background:linear-gradient(150deg,var(--navy),var(--navy-deep));color:#fff;border-radius:16px;padding:22px 16px;text-align:center;box-shadow:var(--shadow)}
+  .stat .num{font-size:clamp(22px,3.4vw,30px);font-weight:900;color:var(--cyan-light);letter-spacing:-1px;line-height:1}
+  .stat .lbl{font-size:11.5px;font-weight:600;color:#CBD8EC;margin-top:8px;line-height:1.25}
+  .dec{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow);margin-bottom:16px;display:grid;grid-template-columns:54px 1fr}
+  .dec .qn{background:linear-gradient(160deg,var(--cyan),#1AA9EC);color:#fff;display:grid;place-items:center;font-weight:900;font-size:20px}
+  .dec .body{padding:20px 22px}
+  .dec h3{font-size:17px;color:var(--navy);font-weight:800;margin-bottom:8px}
+  .dec .rec{font-size:14px;color:var(--ink);font-weight:500}
+  .dec .rec b{color:var(--navy)}
+  .dec .foot{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .tagline{font-size:11px;font-weight:700;letter-spacing:.4px;padding:4px 11px;border-radius:100px;background:var(--soft);color:#1B7FB0}
+  .tagline.need{background:#FFF1E0;color:#A86A18}
+  .next{background:linear-gradient(135deg,var(--navy),var(--navy-deep));color:#fff;border-radius:20px;padding:34px;box-shadow:var(--shadow-lg)}
+  .next h2{color:#fff}
+  .next ol{margin:18px 0 0 20px}
+  .next li{font-size:15px;color:#DCE7F6;font-weight:500;margin-bottom:10px;padding-left:6px}
+  .next li b{color:#fff}
+  footer{background:var(--navy-deep);color:#9FB2CC;padding:46px 0 40px;text-align:center}
+  footer .fm{font-size:26px;font-weight:900;color:#fff;letter-spacing:-.5px}
+  footer .ft{font-size:12.5px;letter-spacing:2px;text-transform:uppercase;color:var(--cyan-light);margin-top:4px;font-weight:600}
+  footer .fc{font-size:13px;margin-top:18px;font-weight:500}
+  footer .fc a{color:var(--cyan-light);text-decoration:none}
+  footer .conf{margin-top:18px;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#6F86A6;opacity:.85}
+  @media print{
+    header.nav,#progress{display:none}
+    .card:hover{transform:none;box-shadow:var(--shadow)}
+    section{break-inside:avoid;padding:34px 0}
+    .hero .wrap{padding:46px 24px}
+    body{background:#fff}
+  }
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="#top">
+      <img src="./pixsan-new-header-logo.png"
+           alt="Pixsan" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+      <span class="wordmark">pixsan</span>
+    </a>
+    <nav class="navlinks">
+      <a href="#approach">Approach</a>
+      <a href="#list">Your list</a>
+      <a href="#architecture">Architecture</a>
+      <a href="#pipeline">Pipeline</a>
+      <a href="#ghl">GHL build</a>
+      <a href="#deliverability">Deliverability</a>
+      <a href="#phasing">Phasing</a>
+      <a href="#outcomes">Outcomes</a>
+      <a href="#decisions">Decisions</a>
+    </nav>
+  </div>
+</header>
+
+<div class="hero" id="top">
+  <div class="wrap">
+    <span class="eyebrow"><span class="dot"></span> Prepared for Mako &nbsp;•&nbsp; June 2026</span>
+    <h1>Outbound Program<br><span class="accent">Implementation Plan</span></h1>
+    <p class="lead">How we'll extend your GoHighLevel setup to run Kat's outreach — handled by relationship,
+      not as blanket cold email — without changing how she works and without touching the live Mako pipeline
+      your deals already run on.</p>
+    <div class="meta-row">
+      <div class="meta-chip"><div class="k">Prepared by</div><div class="v">Pixsan</div></div>
+      <div class="meta-chip"><div class="k">For</div><div class="v">Mako — Kat, Matt &amp; Johnny</div></div>
+      <div class="meta-chip"><div class="k">Stage</div><div class="v">Pre-build alignment</div></div>
+      <div class="meta-chip"><div class="k">Platform</div><div class="v">GoHighLevel + Microsoft 365</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- 1 APPROACH -->
+  <section id="approach">
+    <div class="sec-head"><span class="sec-num">1</span><h2>The approach</h2></div>
+    <p class="sub indent">Personal notes, handled by relationship — not a campaign, and not blanket cold email.</p>
+    <div class="callout" style="margin-bottom:26px">
+      <span class="big">✍️</span>
+      <p>The strategy depends on each email reading as a <strong>personal one-to-one note from a real person at
+      Mako</strong>. That holds whether the recipient is a stranger or someone you already know — but
+      <strong>how we treat them differs</strong>. Existing customers and people the team has dealt with are
+      approached as warm reconnects; only genuinely new prospects are true cold outreach. Our job is to make GHL
+      do the <strong>plumbing</strong> around all of it (logging, follow-ups, hand-offs) so the system stays
+      sustainable while Kat's voice stays human at every touchpoint.</p>
+    </div>
+    <div class="grid g3">
+      <div class="card"><div class="ic">🤝</div><h3>Relationship-aware</h3><p>The list is tiered by how well Mako already knows each contact. Warm relationships are never treated as cold strangers.</p></div>
+      <div class="card"><div class="ic">🎯</div><h3>Low volume, high craft</h3><p>Hand-written notes earn far higher reply rates than templated sends — warmer conversations, not more noise.</p></div>
+      <div class="card"><div class="ic">⚙️</div><h3>GHL does the plumbing</h3><p>Logging, stage moves, follow-up reminders and clean hand-offs to Matt &amp; Johnny — the admin disappears so Kat can focus on writing.</p></div>
+    </div>
+  </section>
+
+  <!-- 2 YOUR LIST -->
+  <section id="list">
+    <div class="sec-head"><span class="sec-num">2</span><h2>Your list is tiered, not cold</h2></div>
+    <p class="sub indent">Of the 4,034 contacts, only about a third are genuinely cold. We've built the plan around that.</p>
+
+    <div class="legend">
+      <span><i style="background:#F08C4B"></i> Warm / existing relationship</span>
+      <span><i style="background:#31C3FF"></i> Genuinely cold</span>
+      <span><i style="background:#8A98AB"></i> Lower-priority / deferred</span>
+    </div>
+    <div class="segbar">
+      <div class="seg warm" style="flex:1937">1,937<small>Warm · 48%</small></div>
+      <div class="seg cold" style="flex:1453">1,453<small>Cold · 36%</small></div>
+      <div class="seg defer" style="flex:644">644<small>Defer · 16%</small></div>
+    </div>
+
+    <p class="lead-in">Kat's own spreadsheet breaks the list out by relationship. A large share are people Mako
+      already sells to or has dealt with directly, which is exactly why this can't be run as one blanket cold
+      campaign. Here is the real picture:</p>
+
+    <table>
+      <tr><th>Segment</th><th>Contacts</th><th>Type</th><th>Who they are</th></tr>
+      <tr><td>Job changers</td><td>192</td><td><span class="tagdot warm">Warm</span></td><td>Old relationships at new companies — highest expected reply rate.</td></tr>
+      <tr><td>Pro-Set displacement</td><td>75</td><td><span class="tagdot warm">Warm</span></td><td>Companies known to use a direct competitor.</td></tr>
+      <tr><td>Existing PTMW customers</td><td>1,445</td><td><span class="tagdot warm">Warm</span></td><td>People who <b>already buy from PTMW</b> — MAKO cross-sell, paced so we don't flood familiar customers.</td></tr>
+      <tr><td>High-fit cold prospects</td><td>802</td><td><span class="tagdot cold">Cold</span></td><td>Small composites-shop executives (463) and procurement contacts (339).</td></tr>
+      <tr><td>Broader cold ICP</td><td>651</td><td><span class="tagdot cold">Cold</span></td><td>Directors / VPs (371) and engineering / operations (280) at small–mid companies.</td></tr>
+      <tr><td>"Default" tier</td><td>644</td><td><span class="tagdot defer">Defer</span></td><td>Appropriate but lower priority — reached only after the warmer buckets play out.</td></tr>
+      <tr><td>Matt — technical peers</td><td>163</td><td><span class="tagdot warm">Relationship</span></td><td>Technical Fellows &amp; Materials / M&amp;P leadership at major primes — Matt sends; starts technical.</td></tr>
+      <tr><td>Johnny — C-suite</td><td>62</td><td><span class="tagdot warm">Relationship</span></td><td>C-suite at Honeywell, Leidos, BAE, GD Mission Systems — peer-level, CEO-to-CEO from Johnny.</td></tr>
+    </table>
+    <div class="note info" style="margin-top:20px">
+      <b>Why this matters for the build:</b> a warm reconnect and a cold introduction are different emails, and
+      ideally sent from different addresses (more on that in Deliverability). Treating a long-standing customer
+      like a cold lead is the fastest way to undo the relationship — so the system routes each segment to the
+      right messaging, sender and pacing.
+    </div>
+  </section>
+
+  <!-- 3 ARCHITECTURE -->
+  <section id="architecture">
+    <div class="sec-head"><span class="sec-num">3</span><h2>How it fits your GHL setup</h2></div>
+    <p class="sub indent">A separate outreach pipeline feeds your live Mako pipeline — which stays exactly as it is.</p>
+    <p class="lead-in">We add a <b>new, separate</b> outreach pipeline that Kat manages. The moment a prospect
+      replies positively, that opportunity <b>graduates</b> into your existing Mako pipeline at <b>New Lead</b>,
+      with full context attached — so Matt and Johnny pick it up in the workflow they already know.</p>
+    <div class="arch">
+      <div class="pl cold">
+        <div class="tag">New — Kat manages</div>
+        <h4>Outreach pipeline (feeder)</h4>
+        <div class="stage"><span class="n">1</span> Targeted</div>
+        <div class="stage"><span class="n">2</span> Email Sent</div>
+        <div class="stage drop"><span class="n">–</span> Engaged / Opened</div>
+        <div class="stage"><span class="n">3</span> Follow-up Sent</div>
+        <div class="stage win"><span class="n">★</span> Replied — Positive</div>
+        <div class="stage"><span class="n">4</span> Replied — Not Interested</div>
+        <div class="stage win2"><span class="n">↻</span> No Response / Nurture</div>
+        <div class="stage"><span class="n">✕</span> Bounced</div>
+      </div>
+      <div class="arch-mid">
+        <div class="arch-arrow">➜</div>
+        <div class="lbl">Positive reply<br>graduates across<br>+ notifies Matt&nbsp;&amp;&nbsp;Johnny</div>
+      </div>
+      <div class="pl live">
+        <div class="tag">Existing — unchanged</div>
+        <h4>Mako Pipeline (your deals)</h4>
+        <div class="stage win"><span class="n">★</span> New Lead &nbsp;←&nbsp; graduates here</div>
+        <div class="stage"><span class="n">2</span> Rep Contact Made</div>
+        <div class="stage"><span class="n">3</span> Qualification &amp; Sampling</div>
+        <div class="stage"><span class="n">4</span> Quote Sent</div>
+        <div class="stage"><span class="n">5</span> PO Received</div>
+        <div class="stage"><span class="n">6</span> Closed Won</div>
+      </div>
+    </div>
+    <div class="grid g2" style="margin-top:22px">
+      <div class="card"><h3>Your pipeline doesn't balloon</h3><p>The 4,034 contacts stay in their own pipeline — your view of real open deals never jumps from ~200 to ~4,200.</p></div>
+      <div class="card"><h3>Clean, automated hand-off</h3><p>On a positive reply you get a notification, the opportunity is already at New Lead, and everything you need is on the record. Outreach metrics report separately.</p></div>
+    </div>
+  </section>
+
+  <!-- 4 PIPELINE STAGES -->
+  <section id="pipeline">
+    <div class="sec-head"><span class="sec-num">4</span><h2>The outreach journey</h2></div>
+    <p class="sub indent">Every contact — warm or cold — moves through these stages while Kat works them.</p>
+    <div class="flow">
+      <div class="step"><div class="s">Stage 1</div><div class="t">Targeted</div><div class="d">Loaded and assigned, not yet contacted.</div></div>
+      <div class="step"><div class="s">Stage 2</div><div class="t">Email Sent</div><div class="d">First personal note went out.</div></div>
+      <div class="step"><div class="s">Stage 3</div><div class="t">Follow-up Sent</div><div class="d">One short follow-up after 5 business days.</div></div>
+      <div class="step" style="border-top:3px solid var(--good)"><div class="s" style="color:var(--good)">★ Success</div><div class="t">Replied — Positive</div><div class="d">Graduates to Mako pipeline automatically.</div></div>
+      <div class="step"><div class="s">Closed</div><div class="t">Not Interested</div><div class="d">We never email them again.</div></div>
+      <div class="step" style="border-top:3px solid var(--warn)"><div class="s" style="color:var(--warn)">↻ Recycle</div><div class="t">No Response / Nurture</div><div class="d">Cycle back in 3–6 months.</div></div>
+      <div class="step"><div class="s">Removed</div><div class="t">Bounced</div><div class="d">Bad email — pulled from outreach.</div></div>
+    </div>
+    <div class="note flag" style="margin-top:22px">
+      <div class="h">⚑ One proposed change — see Decision 4</div>
+      Kat's draft included an <b>"Engaged / Opened"</b> stage driven by open-tracking. We recommend
+      <b>removing it</b>. Tracking opens means embedding a pixel in every email — the same thing that makes a
+      personal note start looking like a campaign to spam filters. We track <b>replies</b> (the signal that
+      actually matters) without it, which protects both deliverability and the personal feel.
+    </div>
+  </section>
+
+  <!-- 5 GHL BUILD -->
+  <section id="ghl">
+    <div class="sec-head"><span class="sec-num">5</span><h2>How the GHL build actually works</h2></div>
+    <p class="sub indent">The wraparound automation — and exactly what we've verified.</p>
+
+    <div class="note info" style="margin-bottom:22px">
+      <b>One important mechanic up front:</b> for GHL to log sends and run the automation, Kat sends from
+      <b>inside GHL using her connected Microsoft 365 mailbox</b>. The email still goes out as her, from her
+      address, through Microsoft — but routing it through GHL is what establishes the two-way sync. (A reply only
+      threads and triggers automatically once the first message in the thread originates from the CRM.) This is a
+      small change to <i>where</i> Kat hits send, not <i>what</i> she writes.
+    </div>
+
+    <div class="grid g3" style="margin-bottom:22px">
+      <div class="card"><div class="ic">🗂️</div><h3>Auto-logs every send</h3><p>Each email Kat sends through GHL logs itself to the contact record via the Microsoft 365 connection — no double entry.</p></div>
+      <div class="card"><div class="ic">↪️</div><h3>Replies move the card</h3><p>A genuine reply fires the "Customer Replied" trigger and a workflow advances the stage. Out-of-office replies are filtered so they don't false-trigger.</p></div>
+      <div class="card"><div class="ic">⏰</div><h3>5-day follow-up reminder</h3><p>If a contact sits in "Email Sent" for 5 business days, GHL surfaces it so the follow-up never slips.</p></div>
+      <div class="card"><div class="ic">📨</div><h3>Bounces handled</h3><p>Hard bounces move to "Bounced" automatically and drop out of outreach.</p></div>
+      <div class="card"><div class="ic">🚀</div><h3>Auto-graduation + alert</h3><p>A positive reply creates the opportunity in your Mako pipeline at New Lead and notifies Matt &amp; Johnny by SMS or email.</p></div>
+      <div class="card"><div class="ic">🏷️</div><h3>Context travels with it</h3><p>Custom fields — source, tier, industry, why-they're-a-fit, template used — live on the contact, so they're already attached when the opportunity graduates.</p></div>
+    </div>
+
+    <h3 style="color:var(--navy);font-weight:800;margin:6px 0 12px;font-size:18px">What we've verified</h3>
+    <div class="verify">
+      <div class="vcol ok">
+        <div class="vh">✓ Confirmed live in a GHL account</div>
+        <ul>
+          <li>An account can run multiple separate pipelines, each with its own stages</li>
+          <li>Custom fields are stored on the <b>contact</b> — so context carries across pipelines</li>
+          <li>Opportunities link to a contact ID, which is what makes the graduation hand-off work</li>
+        </ul>
+      </div>
+      <div class="vcol doc">
+        <div class="vh">✓ Confirmed in GHL platform docs</div>
+        <ul>
+          <li>Two-way Outlook / M365 sync (first send must originate from the CRM)</li>
+          <li>"Customer Replied" trigger fires on synced replies from known contacts</li>
+          <li>Workflows can move stages, create opportunities and send notifications</li>
+        </ul>
+      </div>
+      <div class="vcol todo">
+        <div class="vh">⌁ To confirm in Mako's account</div>
+        <ul>
+          <li>Outlook two-way sync enabled and Microsoft 365 permissions granted</li>
+          <li>End-to-end test: send → log → reply → stage move → graduation</li>
+          <li>This is a setup &amp; QA step once we have access — not a question of whether it works</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 DELIVERABILITY -->
+  <section id="deliverability">
+    <div class="sec-head"><span class="sec-num">6</span><h2>Deliverability, domain &amp; sender</h2></div>
+    <p class="sub indent">Sending each segment from the address that lands best, while protecting your main domain.</p>
+
+    <div class="grid g2" style="margin-bottom:20px">
+      <div class="card"><div class="ic">🌐</div><h3>Dedicated cold domain</h3><p><b>makoteam.co</b>, with two inboxes (<b>kat@</b> primary, <b>contact@</b> backup) on Microsoft 365 so Kat stays in Outlook. AIS sets up SPF, DKIM and DMARC, then we warm the inbox for ~a week before sending.</p></div>
+      <div class="card"><div class="ic">📤</div><h3>Right sender per segment</h3><p>The new domain is ideal for <b>genuinely cold</b> prospects (~1,453). For warm contacts who already know Mako — existing customers, old relationships — a note from a brand-new unknown domain lands worse than one from the address they recognise.</p></div>
+    </div>
+
+    <div class="note flag" style="margin-bottom:20px">
+      <div class="h">⚑ Sender strategy — see Decision 1</div>
+      Kat's draft routes everything through kat@makoteam.co. We'd suggest splitting it: send the <b>warm
+      segments</b> (existing PTMW customers, job-changer reconnects, and the director-led lists) from a
+      <b>recognised Mako / PTMW address</b>, and reserve the new <b>makoteam.co</b> domain for the truly cold
+      prospects. Warm sends are low spam-risk, so they're safe from a known domain — and they perform better there.
+    </div>
+
+    <div class="note flag">
+      <div class="h">⚑ For the record — the tenant decision</div>
+      Mako has decided to add makoteam.co to the <b>existing Microsoft 365 tenant</b> (shared with makobond.com),
+      on the basis that this is low-volume, low-risk outreach — reasonable for launch. One thing on record:
+      because Microsoft also weighs <b>tenant-level reputation</b>, heavy spam complaints on the cold domain could
+      in theory touch deliverability on makobond.com too. <b>Mitigation:</b> keep cold volume low and genuinely
+      personal, send warm segments from the known domain (above), monitor reputation and bounce signals, and keep
+      an isolated tenant or dedicated platform as the fallback only if Mako ever scales into automated sequences.
+    </div>
+  </section>
+
+  <!-- 7 PHASING & OWNERSHIP -->
+  <section id="phasing">
+    <div class="sec-head"><span class="sec-num">7</span><h2>Phasing &amp; ownership</h2></div>
+    <p class="sub indent">Kat's own warmest-first plan — loaded in waves, sent by whoever's best placed to make the first move.</p>
+
+    <div class="phase">
+      <div class="pw"><div class="ph-n">Phase 1</div><div class="ph-w">Weeks 1–2</div></div>
+      <div class="pc"><h4>Warmest reconnects <span class="cnt">267</span> <span class="tagdot warm">Warm</span></h4>
+        <p>Job changers (192) and Pro-Set displacement targets (75). Highest expected reply rate — best place to start and prove the system.</p></div>
+    </div>
+    <div class="phase">
+      <div class="pw"><div class="ph-n">Phase 2</div><div class="ph-w">Weeks 3–4</div></div>
+      <div class="pc"><h4>Existing PTMW customers <span class="cnt">1,445</span> <span class="tagdot warm">Warm</span></h4>
+        <p>MAKO cross-sell to people who already buy from PTMW. Paced at 10–15/day so we don't flood familiar customers all at once.</p></div>
+    </div>
+    <div class="phase">
+      <div class="pw"><div class="ph-n">Phase 3</div><div class="ph-w">Weeks 5–8</div></div>
+      <div class="pc"><h4>High-fit cold prospects <span class="cnt">802</span> <span class="tagdot cold">Cold</span></h4>
+        <p>Small composites-shop executives (463) and procurement contacts (339). Paced at 25/day — where the bulk of new pipeline gets built.</p></div>
+    </div>
+    <div class="phase">
+      <div class="pw"><div class="ph-n">Phase 4</div><div class="ph-w">Weeks 9–12</div></div>
+      <div class="pc"><h4>Broader cold ICP <span class="cnt">651</span> <span class="tagdot cold">Cold</span></h4>
+        <p>Directors / VPs (371) and engineering / operations (280) at small–mid companies. The 644 "default" tier follows after.</p></div>
+    </div>
+
+    <h3 style="color:var(--navy);font-weight:800;margin:22px 0 12px;font-size:18px">Director-led, in parallel</h3>
+    <table>
+      <tr><th>Owner</th><th>Contacts</th><th>Why they send it</th></tr>
+      <tr><td><span class="pill m">Matt</span></td><td>163</td><td>Technical Fellows &amp; Materials / M&amp;P leadership at primes — these start technical, so the intro lands better from Matt.</td></tr>
+      <tr><td><span class="pill j">Johnny</span></td><td>62</td><td>C-suite &amp; senior VPs at aerospace / defense primes — peer-level outreach from the president moves the needle a marketing intro can't.</td></tr>
+      <tr><td><span class="pill k">Kat</span></td><td>3,809</td><td>Everything else — the phased plan above.</td></tr>
+    </table>
+  </section>
+
+  <!-- 8 OUTCOMES -->
+  <section id="outcomes">
+    <div class="sec-head"><span class="sec-num">8</span><h2>The 90-day model</h2></div>
+    <p class="sub indent">Kat's projection at a steady 25 emails/day, 5 days a week, once ramped.</p>
+    <div class="stats">
+      <div class="stat"><div class="num">1,500</div><div class="lbl">Personal emails sent</div></div>
+      <div class="stat"><div class="num">225–375</div><div class="lbl">Replies (15–25%)</div></div>
+      <div class="stat"><div class="num">50–100</div><div class="lbl">Positive replies to work</div></div>
+      <div class="stat"><div class="num">20–40</div><div class="lbl">Meetings booked</div></div>
+      <div class="stat"><div class="num">3–8</div><div class="lbl">New customers</div></div>
+    </div>
+    <p class="sub" style="margin-top:20px">Planning figures, not guarantees — but the warm-first sequencing is what
+      front-loads the reply rate, since the earliest sends go to people who already know Mako.</p>
+  </section>
+
+  <!-- 9 DECISIONS -->
+  <section id="decisions">
+    <div class="sec-head"><span class="sec-num">9</span><h2>What we need from you</h2></div>
+    <p class="sub indent">A handful of decisions and we can begin the build. Everything else is ready.</p>
+
+    <div class="dec"><div class="qn">1</div><div class="body">
+      <h3>Sender per segment</h3>
+      <div class="rec"><b>Our recommendation:</b> send warm segments (existing PTMW customers, job-changer reconnects,
+        director lists) from a recognised Mako / PTMW address, and use the new makoteam.co domain only for the
+        genuinely cold prospects. Better deliverability where it's known, isolation where it's risky.</div>
+      <div class="foot"><span class="tagline need">Needs Kat / Matt input</span></div>
+    </div></div>
+
+    <div class="dec"><div class="qn">2</div><div class="body">
+      <h3>Confirm the warmest-first phasing</h3>
+      <div class="rec"><b>Our recommendation:</b> run Kat's plan as laid out — Phase 1 starts with the 267 warm
+        reconnects. We load the first wave only (not all 4,034) and provide a self-serve import guide so your
+        team can load each subsequent wave.</div>
+      <div class="foot"><span class="tagline need">Confirm with Kat</span></div>
+    </div></div>
+
+    <div class="dec"><div class="qn">3</div><div class="body">
+      <h3>Kat sends from inside GHL</h3>
+      <div class="rec"><b>Our recommendation:</b> Kat composes and sends from within GHL using her Outlook / M365
+        mailbox (still her writing, her address). This is what enables the logging and automation — pure
+        native-Outlook sends won't sync reliably. Worth confirming she's comfortable with that small change.</div>
+      <div class="foot"><span class="tagline need">Confirm with Kat</span></div>
+    </div></div>
+
+    <div class="dec"><div class="qn">4</div><div class="body">
+      <h3>Open-tracking &amp; the "Engaged" stage</h3>
+      <div class="rec"><b>Our recommendation:</b> turn open-tracking off and drop the "Engaged / Opened" stage.
+        The pixel hurts deliverability and the personal feel; we track replies — the signal that matters — without it.</div>
+      <div class="foot"><span class="tagline need">Needs Kat's sign-off</span></div>
+    </div></div>
+
+    <div class="dec"><div class="qn">5</div><div class="body">
+      <h3>Second inbox — now or later?</h3>
+      <div class="rec"><b>Our recommendation:</b> set up the second inbox now, while AIS is already in the tenant —
+        it lets us split cold volume and means one flagged inbox can't take the whole channel down. Waiting until
+        volume grows is workable too.</div>
+      <div class="foot"><span class="tagline">Your call</span></div>
+    </div></div>
+
+    <div class="note info" style="margin-top:8px">
+      <b>Already decided (FYI):</b> the sending domain goes in the existing Microsoft 365 tenant — see section 6
+      for the residual-risk note and mitigation.
+    </div>
+  </section>
+
+  <section style="border-bottom:none">
+    <div class="next">
+      <h2>Next steps</h2>
+      <ol>
+        <li><b>You:</b> settle the decisions above (a short reply by email is perfect).</li>
+        <li><b>AIS:</b> finish the domain, tenant and DNS authentication, then create the inbox(es).</li>
+        <li><b>Pixsan:</b> build the outreach pipeline, automations and custom fields, connect Kat's mailbox, and send your import guide.</li>
+        <li><b>Mako:</b> load Phase 1; Kat drafts templates per segment and warms the inbox.</li>
+      </ol>
+      <p style="margin-top:18px;color:#DCE7F6;font-weight:500">Once the decisions are in and we have GHL access, we run the setup and an end-to-end test before any live sends.</p>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="fm">pixsan</div>
+    <div class="ft">Digital Marketing Solutions Driven by Data</div>
+    <div class="fc">Questions? Reach us at
+      <a href="mailto:anri.v@pixsansolutions.com">anri.v@pixsansolutions.com</a> ·
+      <a href="https://www.pixsansolutions.com">pixsansolutions.com</a>
+    </div>
+    <div class="conf">Prepared by Pixsan for Mako · Confidential · June 2026</div>
+  </div>
+</footer>
+
+<script>
+  var p=document.getElementById('progress');
+  function upd(){var h=document.documentElement;var sc=h.scrollTop||document.body.scrollTop;var max=(h.scrollHeight-h.clientHeight);p.style.width=(max>0?(sc/max*100):0)+'%';}
+  document.addEventListener('scroll',upd,{passive:true});upd();
+  var links={};document.querySelectorAll('.navlinks a').forEach(function(a){links[a.getAttribute('href').slice(1)]=a;});
+  var obs=new IntersectionObserver(function(es){es.forEach(function(e){
+    if(e.isIntersecting){var l=links[e.target.id];if(l){Object.values(links).forEach(function(x){x.style.color='';x.style.background='';});
+    l.style.color='var(--navy)';l.style.background='var(--soft)';}}});},{rootMargin:'-45% 0px -50% 0px'});
+  document.querySelectorAll('section[id]').forEach(function(s){if(links[s.id])obs.observe(s);});
+</script>
+</body>
+</html>
