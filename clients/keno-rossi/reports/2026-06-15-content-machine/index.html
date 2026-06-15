@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>KENO — The Content Machine</title>
+<title>KENO · The Content Machine</title>
 <style>
   :root{--bg:#08080a;--panel:#101014;--panel2:#16161c;--line:#26262e;--txt:#f4f4f6;--mut:#9a9aa6;--dim:#6c6c78;--gold:#e3b341;--red:#ff5a5a;--green:#46d39a;--blue:#5aa9ff;--purple:#b78bff;--rad:14px}
   *{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
@@ -14,16 +14,20 @@
   .dim{color:var(--dim)}.mut{color:var(--mut)}
   section{padding:54px 0;border-top:1px solid var(--line)}
   .sec-h{font-size:28px;font-weight:800;margin:6px 0}
-  .sec-sub{color:var(--mut);max-width:720px;margin-bottom:26px}
+  .sec-sub{color:var(--mut);max-width:740px;margin-bottom:26px}
   .hero{padding:78px 0 46px;position:relative;overflow:hidden;border:none}
   .hero::before{content:"";position:absolute;inset:0;background:radial-gradient(760px 420px at 80% -10%,rgba(227,179,65,.12),transparent 60%)}
   .hero h1{font-size:56px;font-weight:900;letter-spacing:-.03em}.hero h1 span{color:var(--gold)}
-  .hero p{font-size:18px;color:var(--mut);max-width:640px;margin-top:16px}
+  .hero p{font-size:18px;color:var(--mut);max-width:660px;margin-top:16px}
   .stats{display:flex;gap:12px;margin-top:26px;flex-wrap:wrap}
   .stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 18px}
   .stat b{font-size:24px;font-weight:800;color:var(--gold);display:block}.stat span{font-size:12px;color:var(--mut)}
-  .grid{display:grid;gap:14px}.g2{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(3,1fr)}
+  .grid{display:grid;gap:14px}.g2{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
   .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--rad);padding:20px}
+  /* assurance band */
+  .why{background:var(--panel);border:1px solid var(--line);border-radius:var(--rad);padding:18px 20px;border-left:3px solid var(--gold)}
+  .why h3{font-size:15px;font-weight:750;margin-bottom:5px}.why p{font-size:13px;color:var(--mut)}
+  .why b{color:var(--txt)}
   /* atomization */
   .atom{display:grid;grid-template-columns:200px 1fr;gap:18px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:var(--rad);padding:18px 20px;margin-bottom:12px}
   .atom .src{font-weight:800;font-size:16px}.atom .src small{display:block;color:var(--dim);font-weight:500;font-size:12px;margin-top:3px}
@@ -44,6 +48,7 @@
   .fmt h3{font-size:15px;font-weight:750;margin-bottom:3px}
   .fmt .job{font-size:12.5px;color:var(--mut);margin-bottom:8px}
   .fmt .freq{font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.05em}
+  .fmt .edge{font-size:11.5px;color:var(--green);font-weight:600;margin-top:8px}
   /* post bank compact */
   .post{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;border-left:3px solid var(--gold)}
   .post.climb{border-left-color:var(--red)}.post.run{border-left-color:var(--green)}.post.grind{border-left-color:var(--purple)}
@@ -56,53 +61,86 @@
   .day .d{font-size:11px;font-weight:800;color:var(--gold);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
   .day p{font-size:13px;color:var(--mut)}
   /* hooks */
-  .hooks{display:grid;gap:9px}
+  .hooks{display:grid;gap:9px}.hooks.two{grid-template-columns:1fr 1fr}
   .hook{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 16px;font-size:14.5px;color:var(--txt)}
   .hook span{color:var(--dim);font-size:12px;display:block;margin-top:2px}
+  /* CTA / follow loop */
+  .cta{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:13px 16px;border-left:3px solid var(--gold);font-size:14.5px}
+  .cta.save{border-left-color:var(--green)}.cta.send{border-left-color:var(--blue)}.cta.comment{border-left-color:var(--purple)}
+  .cta .lbl{font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:4px}
+  .cta.save .lbl{color:var(--green)}.cta.send .lbl{color:var(--blue)}.cta.comment .lbl{color:var(--purple)}
+  .mix{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+  .mixr{font-size:12.5px;padding:7px 12px;border-radius:999px;background:var(--panel);border:1px solid var(--line);color:var(--mut)}
+  .mixr b{color:var(--txt)}
+  /* golden hour timeline */
+  .gh{display:grid;gap:10px}
+  .ghr{display:grid;grid-template-columns:90px 1fr;gap:16px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 18px}
+  .ghr .t{font-size:13px;font-weight:800;color:var(--gold)}
+  .ghr p{font-size:13.5px;color:var(--mut)}.ghr p b{color:var(--txt)}
+  .ghnote{margin-top:14px;background:#15150d;border:1px solid rgba(227,179,65,.25);border-radius:12px;padding:14px 18px;font-size:14px;color:var(--txt)}
+  .ghnote b{color:var(--gold)}
+  /* intel */
+  .intel{display:flex;gap:14px;align-items:flex-start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}
+  .intel .ic{flex:none;width:36px;height:36px;border-radius:9px;background:#1d1d24;display:flex;align-items:center;justify-content:center;font-size:17px;border:1px solid var(--line)}
+  .intel h4{font-size:14.5px;margin-bottom:3px}.intel p{font-size:13px;color:var(--mut)}.intel .data{color:var(--gold);font-weight:700}
   .legend{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
   .lg{font-size:12px;font-weight:600;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--panel)}
   .lg .dt{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:7px;vertical-align:middle}
   .d-why{background:var(--gold)}.d-climb{background:var(--red)}.d-iq{background:var(--blue)}.d-grind{background:var(--purple)}.d-run{background:var(--green)}
   footer{padding:34px 0 56px;border-top:1px solid var(--line);color:var(--dim);font-size:12px}
-  @media(max-width:820px){.g2,.g3,.rhythm{grid-template-columns:1fr 1fr}.atom{grid-template-columns:1fr}.hero h1{font-size:40px}}
-  @media(max-width:520px){.g3,.rhythm{grid-template-columns:1fr}}
+  .srcline{font-size:11px;color:var(--dim);line-height:1.8;margin-top:10px;max-width:820px}
+  @media(max-width:820px){.g2,.g3,.g4,.rhythm,.hooks.two{grid-template-columns:1fr 1fr}.atom{grid-template-columns:1fr}.hero h1{font-size:40px}.ghr{grid-template-columns:1fr}}
+  @media(max-width:520px){.g3,.g4,.rhythm,.hooks.two{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <header class="hero"><div class="wrap">
   <div class="eyebrow">The Content Machine · June 2026</div>
   <h1>Built to <span>Never Run Dry</span></h1>
-  <p>Not a posting schedule — a <b>system</b>. A few rich training sessions become a week of content through atomisation, repeatable formats, and a tight production rhythm.</p>
+  <p>This is not a posting schedule. It is a <b>system</b>. A handful of rich training sessions become a full week of content through atomisation, a library of repeatable formats, a follow loop that turns viewers into fans, and a tight production rhythm that runs without a single meeting.</p>
   <div class="stats">
-    <div class="stat"><b>10–14</b><span>posts / week at scale</span></div>
+    <div class="stat"><b>10&ndash;14</b><span>posts / week at scale</span></div>
     <div class="stat"><b>10</b><span>repeatable formats</span></div>
-    <div class="stat"><b>1 → 5</b><span>posts per footage drop</span></div>
+    <div class="stat"><b>1 &rarr; 5</b><span>posts per footage drop</span></div>
     <div class="stat"><b>10</b><span>already in the bank</span></div>
   </div>
 </div></header>
 
+<!-- WHY THIS WORKS -->
+<section><div class="wrap">
+  <div class="eyebrow">Why you can trust this</div>
+  <h2 class="sec-h">The machine already exists. Now we feed it.</h2>
+  <p class="sec-sub">Most "content strategies" are a slide deck and a prayer. This one is built, tested, and loaded. Here is why it holds up.</p>
+  <div class="grid g2">
+    <div class="why"><h3>The math is on your side</h3><p>3 to 4 smart sessions a week, each broken into roughly 3 posts, is <b>10+ posts a week</b> without you ever staring at a blank page. Volume is an output of the system, not extra work for you.</p></div>
+    <div class="why"><h3>The tooling is already built</h3><p>A catalogued footage library, free auto-transcription, a branded cutting system, and one-command publishing. <b>We are not starting from zero.</b> The engine is running, it just needs your raw footage.</p></div>
+    <div class="why"><h3>You launch from strength</h3><p><b>10 finished posts are already in the bank.</b> That is a two to three week runway on day one, so the account never looks empty while it warms up.</p></div>
+    <div class="why"><h3>It is tuned to how the platforms reward you in 2026</h3><p>Every format, hook, and CTA below is built around what is actually winning right now: completion, saves, sends, and a creator's real voice in the comments. Details in the intelligence section at the bottom.</p></div>
+  </div>
+</div></section>
+
 <!-- THE PRINCIPLE -->
 <section><div class="wrap">
   <div class="eyebrow">The core idea</div>
-  <h2 class="sec-h">Atomisation: one drop → many posts</h2>
-  <p class="sec-sub">The machine doesn't need Keno filming constantly. It needs him filming <b>smart</b> — a few rich sessions a week — which we then break into many posts. This is how we hit volume without burning him out.</p>
-  <div class="atom"><div class="src">1 Training session <small>bag / spar / strength</small></div><div class="out"><span class="mult">→ up to 5 posts</span> <span class="o"><b>Montage</b> (The Grind)</span><span class="o"><b>Form Check</b> (technique)</span><span class="o"><b>POV</b> clip</span><span class="o"><b>Mic'd Up</b> (raw audio)</span><span class="o"><b>Human moment</b> / blooper</span></div></div>
-  <div class="atom"><div class="src">1 Talk-to-camera <small>or sit-down interview</small></div><div class="out"><span class="mult">→ 6–8 posts</span> <span class="o"><b>The Why</b> ×2</span><span class="o"><b>The Climb</b> ×2</span><span class="o"><b>Fight IQ</b> ×2</span><span class="o"><b>Ask Keno</b></span></div></div>
-  <div class="atom"><div class="src">1 Run <small>road / trail</small></div><div class="out"><span class="mult">→ 2–3 posts</span> <span class="o"><b>POV</b> + candid VO</span><span class="o"><b>1% Better</b> progress note</span><span class="o"><b>Mic'd Up</b> thought</span></div></div>
-  <div class="atom"><div class="src">1 Fight / event <small>his or one he reacts to</small></div><div class="out"><span class="mult">→ 4+ posts</span> <span class="o">Walk-in</span><span class="o">Corner / aftermath</span><span class="o"><b>Reaction</b></span><span class="o"><b>Recap</b> / lessons</span></div></div>
-  <p class="dim" style="margin-top:14px;font-size:13px">⚙️ The same post is then mirrored to <b>TikTok + Reels + Shorts</b> — so 1 cut = 3 platform posts. Plus stills → IG carousels &amp; Stories.</p>
+  <h2 class="sec-h">Atomisation: one drop, many posts</h2>
+  <p class="sec-sub">The machine does not need Keno filming constantly. It needs him filming <b>smart</b>, a few rich sessions a week, which we then break into many posts. This is how we hit volume without burning him out.</p>
+  <div class="atom"><div class="src">1 Training session <small>bag / spar / strength</small></div><div class="out"><span class="mult">&rarr; up to 5 posts</span> <span class="o"><b>Montage</b> (The Grind)</span><span class="o"><b>Form Check</b> (technique)</span><span class="o"><b>POV</b> clip</span><span class="o"><b>Mic'd Up</b> (raw audio)</span><span class="o"><b>Human moment</b> / blooper</span></div></div>
+  <div class="atom"><div class="src">1 Talk-to-camera <small>or sit-down interview</small></div><div class="out"><span class="mult">&rarr; 6&ndash;8 posts</span> <span class="o"><b>The Why</b> &times;2</span><span class="o"><b>The Climb</b> &times;2</span><span class="o"><b>Fight IQ</b> &times;2</span><span class="o"><b>Ask Keno</b></span></div></div>
+  <div class="atom"><div class="src">1 Run <small>road / trail</small></div><div class="out"><span class="mult">&rarr; 2&ndash;3 posts</span> <span class="o"><b>POV</b> + candid VO</span><span class="o"><b>1% Better</b> progress note</span><span class="o"><b>Mic'd Up</b> thought</span></div></div>
+  <div class="atom"><div class="src">1 Fight / event <small>his or one he reacts to</small></div><div class="out"><span class="mult">&rarr; 4+ posts</span> <span class="o">Walk-in</span><span class="o">Corner / aftermath</span><span class="o"><b>Reaction</b></span><span class="o"><b>Recap</b> / lessons</span></div></div>
+  <p class="dim" style="margin-top:14px;font-size:13px">&#9881;&#65039; The same cut is then mirrored to <b>TikTok + Reels + Shorts</b>, so 1 edit = 3 platform posts. Plus stills become IG carousels and Stories.</p>
 </div></section>
 
 <!-- VOLUME -->
 <section><div class="wrap">
   <div class="eyebrow">The numbers</div>
-  <h2 class="sec-h">Volume — ramp, don't sprint</h2>
-  <p class="sec-sub">Start sustainable, scale as the system tightens. The footage math: ~3–4 sessions/week × ~3 posts each = 9–12 posts comfortably.</p>
+  <h2 class="sec-h">Volume: ramp, do not sprint</h2>
+  <p class="sec-sub">Start sustainable, scale as the system tightens. Consistency beats volume early, so we lock a rhythm first, then push. The footage math: roughly 3 to 4 sessions a week, about 3 posts each, is 9 to 12 posts comfortably.</p>
   <div class="tbl"><table>
     <tr><th>Phase</th><th>Posts / week</th><th>Footage from Keno</th><th>Focus</th></tr>
-    <tr><td><b>Phase 1</b> · Wk 1–4</td><td class="big">5–7</td><td>2–3 sessions + 2 talks</td><td>Launch, find what resonates</td></tr>
-    <tr><td><b>Phase 2</b> · Wk 5–8</td><td class="big">7–10</td><td>3 sessions + 2–3 talks</td><td>Double down, ramp Fight IQ</td></tr>
-    <tr><td><b>Phase 3</b> · Wk 9–12+</td><td class="big">10–14</td><td>3–4 sessions + 3 talks</td><td>1–2/day, scale &amp; community</td></tr>
+    <tr><td><b>Phase 1</b> · Wk 1&ndash;4</td><td class="big">5&ndash;7</td><td>2&ndash;3 sessions + 2 talks</td><td>Launch, find what resonates</td></tr>
+    <tr><td><b>Phase 2</b> · Wk 5&ndash;8</td><td class="big">7&ndash;10</td><td>3 sessions + 2&ndash;3 talks</td><td>Double down, ramp Fight IQ</td></tr>
+    <tr><td><b>Phase 3</b> · Wk 9&ndash;12+</td><td class="big">10&ndash;14</td><td>3&ndash;4 sessions + 3 talks</td><td>1&ndash;2 / day, scale and community</td></tr>
   </table></div>
 </div></section>
 
@@ -110,19 +148,57 @@
 <section><div class="wrap">
   <div class="eyebrow">Never out of ideas</div>
   <h2 class="sec-h">The Format Library</h2>
-  <p class="sec-sub">10 repeatable formats. Every footage drop slots into these — so production is fast and we're never staring at a blank page.</p>
+  <p class="sec-sub">10 repeatable formats. Every footage drop slots into these, so production is fast and we are never staring at a blank page. The green line on each card is the edge we know is working right now.</p>
   <div class="grid g3">
-    <div class="fmt climb"><div class="freq">Weekly</div><h3>The Climb</h3><div class="job">Story drops — validation, doubt, breakthroughs. The differentiator.</div></div>
-    <div class="fmt iq"><div class="freq">2× / week</div><h3>Fight IQ</h3><div class="job">Takes &amp; breakdowns on current fights. The comment engine.</div></div>
-    <div class="fmt grind"><div class="freq">2× / week</div><h3>The Grind</h3><div class="job">Action montages to sound. Replay value + volume.</div></div>
-    <div class="fmt run"><div class="freq">1–2× / week</div><h3>Run With Me</h3><div class="job">POV + candid voice. Relatable, low-production.</div></div>
-    <div class="fmt"><div class="freq">Weekly</div><h3>Ask Keno</h3><div class="job">Answering the best comment/DM questions. Builds community.</div></div>
-    <div class="fmt iq"><div class="freq">Reactive</div><h3>React</h3><div class="job">Reacting to fights/fighters the moment they happen. Rides trends.</div></div>
-    <div class="fmt"><div class="freq">Weekly</div><h3>Form Check</h3><div class="job">Teach one technique. Positions him as knowledgeable + saves.</div></div>
-    <div class="fmt climb"><div class="freq">Campaign</div><h3>Road To [fight]</h3><div class="job">Build-up series when a fight is booked. The flagship arc.</div></div>
-    <div class="fmt"><div class="freq">Bi-weekly</div><h3>1% Better</h3><div class="job">Honest progress markers — same lift/combo over time.</div></div>
-    <div class="fmt grind"><div class="freq">Weekly</div><h3>Mic'd Up</h3><div class="job">Raw training audio &amp; banter. Authentic, easy, sticky.</div></div>
+    <div class="fmt grind"><div class="freq">2&times; / week</div><h3>Mic'd Up</h3><div class="job">Raw training audio, breath, pad smack, coach calls and banter.</div><div class="edge">&#9650; Highest replay value of any fighter format right now</div></div>
+    <div class="fmt iq"><div class="freq">2&times; / week</div><h3>Fight IQ</h3><div class="job">Takes and breakdowns on current fights. The comment engine.</div><div class="edge">&#9650; Breakdowns drive rewatches, the strongest combat signal</div></div>
+    <div class="fmt climb"><div class="freq">Weekly</div><h3>The Climb</h3><div class="job">Story drops: validation, doubt, breakthroughs. The differentiator.</div><div class="edge">&#9650; Story is the fastest way to earn the follow</div></div>
+    <div class="fmt iq"><div class="freq">Reactive</div><h3>React</h3><div class="job">Reacting to fights and fighters the moment they happen.</div><div class="edge">&#9650; Borrows a big search wave (Dricus, Khamzat)</div></div>
+    <div class="fmt grind"><div class="freq">2&times; / week</div><h3>The Grind</h3><div class="job">Action montages to sound. Replay value plus volume.</div></div>
+    <div class="fmt run"><div class="freq">1&ndash;2&times; / week</div><h3>Run With Me</h3><div class="job">POV plus candid voice. Relatable, low-production, one continuous arc.</div></div>
+    <div class="fmt"><div class="freq">Weekly</div><h3>Form Check</h3><div class="job">Teach one technique. Positions him as knowledgeable and drives saves.</div><div class="edge">&#9650; Save magnet, saves now weigh heavily on IG</div></div>
+    <div class="fmt"><div class="freq">Weekly</div><h3>Ask Keno</h3><div class="job">Answering the best comment and DM questions. Builds community.</div></div>
+    <div class="fmt climb"><div class="freq">Campaign</div><h3>Road To [fight]</h3><div class="job">Build-up series when a fight is booked. The flagship arc and the follow loop.</div></div>
+    <div class="fmt"><div class="freq">Bi-weekly</div><h3>1% Better</h3><div class="job">Honest progress markers, same lift or combo over time.</div></div>
   </div>
+</div></section>
+
+<!-- THE FOLLOW LOOP -->
+<section><div class="wrap">
+  <div class="eyebrow">Turn viewers into fans</div>
+  <h2 class="sec-h">The Follow Loop</h2>
+  <p class="sec-sub">Views are nice. Followers are the business. The trick is to make every post feel like an episode of one ongoing story, so following is the only way not to miss the next one. We brand the whole journey as <b>"Road to my next fight"</b>: each clip is a chapter, and the CTA closes it.</p>
+  <div class="grid g2">
+    <div class="cta"><span class="lbl">Follow / journey</span>"Follow the road to my next fight. I'm posting every step."</div>
+    <div class="cta"><span class="lbl">Follow / journey</span>"I'm 8 weeks out. Follow so you see how this ends."</div>
+    <div class="cta"><span class="lbl">Follow / journey</span>"Part 1 of the road to [event]. Hit follow so part 2 finds you."</div>
+    <div class="cta"><span class="lbl">Follow / journey</span>"Want to watch a South African fighter try to make it? You know what to do."</div>
+    <div class="cta save"><span class="lbl">Save</span>"Save this counter so you can drill it this week."</div>
+    <div class="cta save"><span class="lbl">Save</span>"Save this for your next sparring session."</div>
+    <div class="cta send"><span class="lbl">Send</span>"Send this to your training partner who skips cardio."</div>
+    <div class="cta comment"><span class="lbl">Comment</span>"Tell me what I should work on next round."</div>
+  </div>
+  <div class="mix">
+    <span class="mixr">Weekly CTA mix: <b>~50% follow / journey</b></span>
+    <span class="mixr"><b>~25% save</b></span>
+    <span class="mixr"><b>~25% send / comment</b></span>
+  </div>
+  <p class="dim" style="margin-top:12px;font-size:13px">One clear CTA per post. Saves and sends are now the highest-value signals on Reels and TikTok, so we ask for them on purpose, we never leave it to chance.</p>
+</div></section>
+
+<!-- GOLDEN HOUR -->
+<section><div class="wrap">
+  <div class="eyebrow">The first 60 minutes</div>
+  <h2 class="sec-h">The Golden Hour is Keno's, not ours</h2>
+  <p class="sec-sub">Early engagement velocity is what pushes a post from your followers out to strangers. The single biggest lever in that window is <b>Keno replying to his own comments in his own voice</b>. A managed agency reply kills the debate. Keno's reply extends it. So the rule is simple: <b>we do not reply in the first hour, he does.</b> We schedule, we monitor, and then we turn his best replies into the next posts.</p>
+  <div class="gh">
+    <div class="ghr"><div class="t">0&ndash;2 min</div><p>Post, then drop the <b>seed question</b> as your own first comment and pin it. (e.g. "Who wins, [Fighter A] or [Fighter B]? Change my mind.")</p></div>
+    <div class="ghr"><div class="t">0&ndash;15 min</div><p>Reply to <b>every</b> comment, fast. End each reply with a question so they comment again. This is the highest-leverage window of the whole day.</p></div>
+    <div class="ghr"><div class="t">15&ndash;30 min</div><p>Escalate on the spicy ones. Disagree, challenge, defend your Fight IQ take. Debate is the goal, and only the real you can credibly throw punches back.</p></div>
+    <div class="ghr"><div class="t">30&ndash;45 min</div><p>Take the best comment and start a <b>reply-with-video</b>. That becomes a brand new post that reaches the commenter's network and yours again. One idea, a second at-bat.</p></div>
+    <div class="ghr"><div class="t">45&ndash;60 min</div><p>Final sweep. Answer stragglers, re-pin if a better debate comment appeared, nudge a save or a send.</p></div>
+  </div>
+  <div class="ghnote">&#128241; <b>Only post when you can sit on your phone for an hour.</b> The hour you spend in the comments is worth more than the hour spent making the clip. The studio's job in that window is to watch, capture, and feed your replies back into the machine.</div>
 </div></section>
 
 <!-- RHYTHM -->
@@ -132,9 +208,9 @@
   <p class="sec-sub">One loop, repeated weekly. No meetings required.</p>
   <div class="rhythm">
     <div class="day"><div class="d">Through the week · Keno</div><p>Film training, runs, talk-to-camera. Capture the wins <i>and</i> the hard days.</p></div>
-    <div class="day"><div class="d">Sunday · Keno</div><p>Drop everything in the shared folder. No editing — just dump it.</p></div>
+    <div class="day"><div class="d">Sunday · Keno</div><p>Drop everything in the shared folder. No editing, just dump it.</p></div>
     <div class="day"><div class="d">Monday · Studio</div><p>Batch-cut the week from the drop. Schedule across all platforms.</p></div>
-    <div class="day"><div class="d">Daily · Studio</div><p>Post at peak times · reply in the first hour · slot in reactive Fight IQ when news breaks.</p></div>
+    <div class="day"><div class="d">Daily · Keno + Studio</div><p>Studio posts at peak times and queues reactive Fight IQ when news breaks. Keno owns the golden hour in the comments.</p></div>
   </div>
 </div></section>
 
@@ -147,35 +223,58 @@
     <span class="lg"><span class="dt d-grind"></span>The Grind</span><span class="lg"><span class="dt d-run"></span>Run With Me</span>
   </div>
   <div class="grid g3">
-    <div class="post climb"><div class="top"><span>The Climb ★</span><span>41s</span></div><h4>Champion</h4><div class="st ready">● Ready</div></div>
-    <div class="post climb"><div class="top"><span>The Climb ★</span><span>42s</span></div><h4>Just Started</h4><div class="st ready">● Ready</div></div>
-    <div class="post"><div class="top"><span>The Why</span><span>31s</span></div><h4>There Is No Failure</h4><div class="st ready">● Ready</div></div>
-    <div class="post"><div class="top"><span>The Why</span><span>33s</span></div><h4>My One Regret</h4><div class="st ready">● Ready</div></div>
-    <div class="post"><div class="top"><span>The Why</span><span>8s</span></div><h4>For Everyone</h4><div class="st ready">● Ready</div></div>
-    <div class="post"><div class="top"><span>The Why · legacy</span><span>22s</span></div><h4>It's In My Blood</h4><div class="st pending">● Pending photos</div></div>
-    <div class="post climb"><div class="top"><span>The Climb</span><span>25s</span></div><h4>This Is Working</h4><div class="st ready">● Ready</div></div>
-    <div class="post run"><div class="top"><span>Run With Me</span><span>23s</span></div><h4>Next Time 15K</h4><div class="st ready">● Ready</div></div>
-    <div class="post"><div class="top"><span>The Why · meta</span><span>28s</span></div><h4>Just Post It</h4><div class="st ready">● Ready</div></div>
-    <div class="post grind"><div class="top"><span>The Grind</span><span>19s</span></div><h4>The Grind (w/ music)</h4><div class="st ready">● Ready</div></div>
+    <div class="post climb"><div class="top"><span>The Climb &#9733;</span><span>41s</span></div><h4>Champion</h4><div class="st ready">&#9679; Ready</div></div>
+    <div class="post climb"><div class="top"><span>The Climb &#9733;</span><span>42s</span></div><h4>Just Started</h4><div class="st ready">&#9679; Ready</div></div>
+    <div class="post"><div class="top"><span>The Why</span><span>31s</span></div><h4>There Is No Failure</h4><div class="st ready">&#9679; Ready</div></div>
+    <div class="post"><div class="top"><span>The Why</span><span>33s</span></div><h4>My One Regret</h4><div class="st ready">&#9679; Ready</div></div>
+    <div class="post"><div class="top"><span>The Why</span><span>8s</span></div><h4>For Everyone</h4><div class="st ready">&#9679; Ready</div></div>
+    <div class="post"><div class="top"><span>The Why · legacy</span><span>22s</span></div><h4>It's In My Blood</h4><div class="st pending">&#9679; Pending photos</div></div>
+    <div class="post climb"><div class="top"><span>The Climb</span><span>25s</span></div><h4>This Is Working</h4><div class="st ready">&#9679; Ready</div></div>
+    <div class="post run"><div class="top"><span>Run With Me</span><span>23s</span></div><h4>Next Time 15K</h4><div class="st ready">&#9679; Ready</div></div>
+    <div class="post"><div class="top"><span>The Why · meta</span><span>28s</span></div><h4>Just Post It</h4><div class="st ready">&#9679; Ready</div></div>
+    <div class="post grind"><div class="top"><span>The Grind</span><span>19s</span></div><h4>The Grind (w/ music)</h4><div class="st ready">&#9679; Ready</div></div>
   </div>
-  <p class="dim" style="margin-top:14px;font-size:13px">= a 2-week head start while the machine spins up. <b>Fight IQ</b> needs fresh talk-to-camera footage — first priority to capture.</p>
+  <p class="dim" style="margin-top:14px;font-size:13px">That is a two-week head start while the machine spins up. <b>Fight IQ</b> needs fresh talk-to-camera footage, so that is the first priority to capture.</p>
 </div></section>
 
 <!-- HOOK BANK -->
 <section><div class="wrap">
   <div class="eyebrow">Stop the scroll</div>
   <h2 class="sec-h">Hook Bank</h2>
-  <p class="sec-sub">The first 3 seconds decide everything. A rotating bank of proven hook shapes — fill with Keno's real moments.</p>
-  <div class="hooks">
-    <div class="hook">"My coach told me something I can't stop thinking about…" <span>Curiosity → The Climb</span></div>
-    <div class="hook">"I took a week off boxing. Here's the truth about why." <span>Vulnerability → The Climb</span></div>
-    <div class="hook">"Everyone's wrong about [fighter]. Here's what actually happens." <span>Hot take → Fight IQ</span></div>
-    <div class="hook">"POV: it's 5am and you're the only one in the gym." <span>Aesthetic → The Grind</span></div>
-    <div class="hook">"I wanted to quit at 9km. Then I remembered why I started." <span>Relatable → Run With Me</span></div>
-    <div class="hook">"No man should die without knowing his full potential." <span>Quote → The Why</span></div>
+  <p class="sec-sub">The first 2 seconds decide everything. Deliver the full hook fast, with 4 to 7 words of on-screen text and a hard cut or snap-zoom in the first second. A rotating bank of proven shapes, filled with Keno's real moments.</p>
+  <div class="hooks two">
+    <div class="hook">"This is the punch [pro] keeps getting caught with." <span>Hot take &rarr; Fight IQ</span></div>
+    <div class="hook">"POV: 5am, cutting weight for a fight nobody believes you'll win." <span>Aesthetic &rarr; The Grind</span></div>
+    <div class="hook">"South African fighter. No sponsor. Training to make the UFC." <span>Underdog &rarr; The Climb</span></div>
+    <div class="hook">"I sparred a pro this week. Here's what I learned the hard way." <span>Story &rarr; The Climb</span></div>
+    <div class="hook">"Everyone throws this wrong." <span>Demo &rarr; Form Check</span></div>
+    <div class="hook">"Round 3. Mic on. No edits." <span>Raw audio &rarr; Mic'd Up</span></div>
+    <div class="hook">"They said I was too small for this weight class." <span>Vulnerability &rarr; The Climb</span></div>
+    <div class="hook">"Day 1 vs Day 90 of the road to my next fight." <span>Transformation &rarr; Road To</span></div>
+    <div class="hook">"I asked my coach why I keep getting hit. His answer changed everything." <span>Curiosity &rarr; The Why</span></div>
+    <div class="hook">"No man should die without knowing his full potential." <span>Quote &rarr; The Why</span></div>
+  </div>
+  <p class="dim" style="margin-top:12px;font-size:13px">Make 2 to 3 hook versions of the same clip and ship the winner. Small hook changes swing retention hard.</p>
+</div></section>
+
+<!-- WHAT'S WORKING NOW -->
+<section><div class="wrap">
+  <div class="eyebrow">Current intelligence</div>
+  <h2 class="sec-h">What's Working Right Now (June 2026)</h2>
+  <p class="sec-sub">This machine is tuned to the platforms as they behave today, not last year. The signals we engineer every post around:</p>
+  <div class="grid g2">
+    <div class="intel"><div class="ic">&#9201;&#65039;</div><div><h4>The 60 to 90 second band is rewarded again</h4><p>After years of favouring 7 to 15s clips, all three platforms now reward a longer watch session. <span class="data">A 45s clip at 70% completion beats a 15s clip at 40%.</span> Edit for completion, not length.</p></div></div>
+    <div class="intel"><div class="ic">&#128228;</div><div><h4>Saves and sends are the new currency</h4><p>On Reels in 2026, a DM <span class="data">send is weighted 3 to 5&times; a like</span>, a save about 3&times;. They beat comments for reach, which is why the CTA mix leans on them.</p></div></div>
+    <div class="intel"><div class="ic">&#128293;</div><div><h4>Mic'd-up and breakdowns overperform</h4><p>For combat content, raw mic'd-up training and technique breakdowns get the most rewatches, and rewatch is the strongest quality signal the algorithm reads.</p></div></div>
+    <div class="intel"><div class="ic">&#128202;</div><div><h4>The window for a small account is open</h4><p>Small accounts (1k to 5k) are currently growing <span class="data">roughly 8&times; faster</span> than 100k+ accounts. A sub-50k fighter who ships consistently can scale fast right now.</p></div></div>
+    <div class="intel"><div class="ic">&#127908;</div><div><h4>Sound-first, with original audio as the power play</h4><p>Build clips to a trending sound on Reels and TikTok, but lead with original raw audio on mic'd-up and breakdown content. The breath and the pad smack <i>are</i> the audio.</p></div></div>
+    <div class="intel"><div class="ic">&#129534;</div><div><h4>What a hit looks like</h4><p>Solid = 1 to 3&times; your follower count in views. <span class="data">Breakout = 5 to 10&times;+ with 60%+ completion</span> and a visible save or share spike. That is the algorithm expanding you past your own audience.</p></div></div>
   </div>
 </div></section>
 
-<footer><div class="wrap"><b style="color:var(--txt)">KENO — The Content Machine</b> · part of the Keno content strategy set · June 2026</div></footer>
+<footer><div class="wrap">
+  <div><b style="color:var(--txt)">KENO · The Content Machine</b> · part of the Keno content strategy set · June 2026</div>
+  <div class="srcline">Current-platform intelligence drawn from June 2026 short-form research (TikTok, Reels and Shorts 2026 algorithm changes, fitness and combat-creator benchmarks, hook and CTA frameworks). Numbers are directional and validated against Keno's own analytics in the first 3 to 4 weeks of posting.</div>
+</div></footer>
 </body>
 </html>
