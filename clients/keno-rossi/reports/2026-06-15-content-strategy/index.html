@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>KENO — Content Strategy & Growth Playbook</title>
+<style>
+  :root{
+    --bg:#08080a; --panel:#101014; --panel2:#16161c; --line:#26262e;
+    --txt:#f4f4f6; --mut:#9a9aa6; --dim:#6c6c78;
+    --gold:#e3b341; --red:#ff4d4d; --green:#46d39a; --blue:#5aa9ff;
+    --rad:16px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--txt);font-family:-apple-system,"Segoe UI",Inter,Roboto,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 22px}
+  a{color:var(--gold);text-decoration:none}
+  h1,h2,h3{letter-spacing:-.02em;line-height:1.1}
+  .eyebrow{font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);font-weight:700}
+  .muted{color:var(--mut)} .dim{color:var(--dim)}
+  section{padding:62px 0;border-top:1px solid var(--line)}
+  .sec-h{font-size:30px;font-weight:800;margin:6px 0 6px}
+  .sec-sub{color:var(--mut);max-width:680px;margin-bottom:30px}
+
+  /* hero */
+  .hero{padding:84px 0 58px;border:none;position:relative;overflow:hidden}
+  .hero::before{content:"";position:absolute;inset:0;background:radial-gradient(800px 460px at 78% -10%,rgba(227,179,65,.13),transparent 60%);pointer-events:none}
+  .hero h1{font-size:64px;font-weight:900;letter-spacing:-.03em}
+  .hero h1 span{color:var(--gold)}
+  .hero p.lede{font-size:19px;color:var(--mut);max-width:640px;margin-top:18px}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:38px}
+  .stat{background:var(--panel);border:1px solid var(--line);border-radius:var(--rad);padding:18px}
+  .stat b{display:block;font-size:30px;font-weight:800;color:var(--gold)}
+  .stat span{font-size:12.5px;color:var(--mut)}
+
+  .grid{display:grid;gap:16px}
+  .g2{grid-template-columns:repeat(2,1fr)} .g3{grid-template-columns:repeat(3,1fr)} .g4{grid-template-columns:repeat(4,1fr)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--rad);padding:22px;transition:.18s}
+  .card:hover{border-color:#3a3a46;transform:translateY(-2px)}
+  .card h3{font-size:17px;font-weight:750;margin-bottom:7px}
+  .card p{font-size:14px;color:var(--mut)}
+  .tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 9px;border-radius:999px;background:#1d1d24;color:var(--mut);border:1px solid var(--line)}
+  .pill-accent{color:var(--gold);border-color:rgba(227,179,65,.35);background:rgba(227,179,65,.08)}
+
+  /* engine flow */
+  .flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:10px;margin-top:8px}
+  .step{flex:1;min-width:140px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;position:relative}
+  .step .n{font-size:11px;color:var(--gold);font-weight:800;letter-spacing:.12em}
+  .step h4{font-size:14.5px;margin:6px 0 3px}
+  .step p{font-size:12px;color:var(--dim)}
+  .step.you{border-color:rgba(90,169,255,.35)} .step.us{border-color:rgba(227,179,65,.3)}
+  .arrow{display:flex;align-items:center;color:var(--dim);font-size:20px}
+
+  /* pillars */
+  .pillar{border-left:3px solid var(--gold)}
+  .pillar .who{font-size:12px;color:var(--gold);font-weight:700;margin-bottom:4px}
+  .pillar ul{margin:10px 0 0 16px;padding:0}
+  .pillar li{font-size:13px;color:var(--mut);margin-bottom:3px}
+
+  /* roadmap */
+  .phase{display:grid;grid-template-columns:130px 1fr;gap:20px;padding:20px 0;border-bottom:1px solid var(--line)}
+  .phase:last-child{border-bottom:none}
+  .phase .when{color:var(--gold);font-weight:800;font-size:15px}
+  .phase .when small{display:block;color:var(--dim);font-weight:500;font-size:12px;margin-top:3px}
+  .phase h3{font-size:18px;margin-bottom:6px}
+  .phase p{font-size:14px;color:var(--mut);margin-bottom:8px}
+  .goal{font-size:12.5px;color:var(--green);font-weight:600}
+
+  /* signals */
+  .sig{display:flex;gap:14px;align-items:flex-start}
+  .sig .ic{flex:none;width:38px;height:38px;border-radius:10px;background:#1d1d24;display:flex;align-items:center;justify-content:center;font-size:18px;border:1px solid var(--line)}
+  .sig h4{font-size:15px;margin-bottom:3px}
+  .sig p{font-size:13px;color:var(--mut)}
+  .sig .data{color:var(--gold);font-weight:700}
+
+  /* creators */
+  .creator h3{display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .creator .h{font-size:12px;color:var(--blue);font-weight:600}
+  .steal{margin-top:10px;font-size:13px;color:var(--txt);background:#15150d;border:1px solid rgba(227,179,65,.25);border-radius:10px;padding:9px 11px}
+  .steal b{color:var(--gold)}
+
+  .check{list-style:none;display:grid;gap:9px}
+  .check li{font-size:14px;color:var(--mut);padding-left:26px;position:relative}
+  .check li::before{content:"▸";position:absolute;left:4px;color:var(--gold)}
+  .check li b{color:var(--txt)}
+
+  .kpi{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+  .kpi .row{display:flex;justify-content:space-between;font-size:13.5px;padding:11px 14px;background:var(--panel);border:1px solid var(--line);border-radius:10px}
+  .kpi .row b{color:var(--gold)}
+
+  .ladder{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .rung{font-size:12.5px;padding:8px 13px;border-radius:999px;background:var(--panel);border:1px solid var(--line);color:var(--mut)}
+  .rung b{color:var(--txt)}
+
+  footer{padding:40px 0 60px;border-top:1px solid var(--line);color:var(--dim);font-size:12px}
+  footer a{color:var(--mut)}
+  .src{font-size:11px;color:var(--dim);line-height:1.8;margin-top:10px}
+  @media(max-width:820px){.g2,.g3,.g4,.stats,.kpi{grid-template-columns:1fr 1fr}.hero h1{font-size:42px}.phase{grid-template-columns:1fr}}
+  @media(max-width:520px){.g3,.g4,.stats,.kpi{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Content Strategy &amp; Growth Playbook · June 2026</div>
+    <h1>KENO<span>.</span><br>The Fighter's <span>Climb</span></h1>
+    <p class="lede">A repeatable engine to turn raw training footage into a boxing creator brand built on three things almost no one else combines: <b>elite talent</b>, <b>radical honesty</b>, and <b>fight IQ</b>.</p>
+    <div class="stats">
+      <div class="stat"><b>59</b><span>raw clips catalogued &amp; ready</span></div>
+      <div class="stat"><b>10</b><span>finished posts in the bank</span></div>
+      <div class="stat"><b>5</b><span>content pillars defined</span></div>
+      <div class="stat"><b>~3 hrs</b><span>of footage already mined</span></div>
+    </div>
+  </div>
+</header>
+
+<!-- THE ENGINE -->
+<section><div class="wrap">
+  <div class="eyebrow">How we work</div>
+  <h2 class="sec-h">The Content Engine</h2>
+  <p class="sec-sub">The whole point: Keno trains and films, then drops raw footage in a shared folder. We do the rest. This loop runs every week without a meeting.</p>
+  <div class="flow">
+    <div class="step you"><div class="n">KENO · 01</div><h4>Train &amp; Film</h4><p>Shoot vertical. Talk to camera. Capture the wins and the hard days.</p></div>
+    <div class="arrow">→</div>
+    <div class="step you"><div class="n">KENO · 02</div><h4>Drop the Footage</h4><p>One shared folder. No editing, no thinking. Just dump it.</p></div>
+    <div class="arrow">→</div>
+    <div class="step us"><div class="n">STUDIO · 03</div><h4>Mine &amp; Cut</h4><p>Transcribe → pull the gold soundbites → cut to pillars, brand, caption.</p></div>
+    <div class="arrow">→</div>
+    <div class="step us"><div class="n">STUDIO · 04</div><h4>Publish &amp; Measure</h4><p>TikTok + Reels + Shorts. Read the signals, feed learnings back in.</p></div>
+  </div>
+  <p class="dim" style="margin-top:16px;font-size:13px">⚙️ Already built: a footage library + catalogue, auto-transcription (free via Groq / Scribe for interviews), a branded cutting system, and a one-command Drive upload. The machine exists — now we feed it.</p>
+</div></section>
+
+<!-- POSITIONING -->
+<section><div class="wrap">
+  <div class="eyebrow">Why Keno wins</div>
+  <h2 class="sec-h">The Positioning</h2>
+  <p class="sec-sub">Most fitness accounts post highlights. Keno's edge is the <b>story underneath</b> the highlights — and he's wired for it.</p>
+  <div class="grid g3">
+    <div class="card"><span class="tag pill-accent">The Talent</span><h3 style="margin-top:10px">A real prospect</h3><p>His coach: "I've never seen someone get so good so fast — you're gonna be a champion." That's not a gimmick. The ceiling is the story.</p></div>
+    <div class="card"><span class="tag pill-accent">The Honesty</span><h3 style="margin-top:10px">Unusually vulnerable</h3><p>"I took a week off because I felt unmotivated." "My confidence dropped to nothing." Almost no athlete shows this. It's his unfair advantage.</p></div>
+    <div class="card"><span class="tag pill-accent">The Mind</span><h3 style="margin-top:10px">Genuine fight IQ</h3><p>He breaks down Dricus, Khamzat, Strickland like an analyst. That makes him a <i>voice</i>, not just a body — and voices get comments.</p></div>
+  </div>
+</div></section>
+
+<!-- PILLARS -->
+<section><div class="wrap">
+  <div class="eyebrow">What we post</div>
+  <h2 class="sec-h">The 5 Content Pillars</h2>
+  <p class="sec-sub">80% of posts live here (niche focus = up to 45% more reach). Each pillar has a job — together they build a person, not a feed.</p>
+  <div class="grid g2">
+    <div class="card pillar"><div class="who">THE WHY · identity</div><h3>Philosophy &amp; motivation</h3><p>His beliefs over training visuals. Builds meaning &amp; saves.</p><ul><li>"No man should die without knowing his full potential"</li><li>"There's no failure in working on yourself"</li><li>Fitness is for everyone</li></ul></div>
+    <div class="card pillar"><div class="who">THE CLIMB · the human story</div><h3>Validation &amp; vulnerability</h3><p>The differentiator. The journey, the doubt, the breakthroughs.</p><ul><li>The coach's "you'll be a champion" moment</li><li>The honest low days &amp; comebacks</li><li>"This is working — upgrade later"</li></ul></div>
+    <div class="card pillar"><div class="who">BOXING IQ · authority</div><h3>Takes &amp; analysis</h3><p>The engagement engine. Opinions → comments → reach.</p><ul><li>Breakdowns of Dricus / Khamzat / SA fighters</li><li>"Why he's predictable" hot takes</li><li>Technique &amp; fight-game explainers</li></ul></div>
+    <div class="card pillar"><div class="who">THE GRIND · the aesthetic</div><h3>Action montages</h3><p>Pure work, set to sound. Replay value &amp; volume content.</p><ul><li>Bag combos, sparring, deadlifts, skip rope</li><li>Beat-synced, fast-cut, no talking</li><li>Infinite variations from the training library</li></ul></div>
+    <div class="card pillar" style="grid-column:span 2"><div class="who">RUN WITH ME · relatable</div><h3>POV &amp; candid voice</h3><p>Low-production, high-authenticity. The "you're in it with him" pillar — running selfies, real-time thoughts, the days he falls short and shows up anyway. ("Wanted 10k, got a stitch at 9… next time we go 15k.")</p></div>
+  </div>
+</div></section>
+
+<!-- ROADMAP -->
+<section><div class="wrap">
+  <div class="eyebrow">The game plan</div>
+  <h2 class="sec-h">90-Day Roadmap</h2>
+  <p class="sec-sub">Cold-start → niche-lock → momentum. The first 10 posts are already banked, so we launch from a position of strength.</p>
+
+  <div class="phase">
+    <div class="when">Phase 0<small>This week</small></div>
+    <div><h3>Foundation</h3><p>Lock the account: handle, MONO brand, bio that says "amateur boxer documenting the climb to champion," and a pinned intro. Schedule the 10 banked posts as a 3-week runway.</p><div class="goal">✓ Goal: launch-ready, nothing blocking the first post.</div></div>
+  </div>
+  <div class="phase">
+    <div class="when">Phase 1<small>Weeks 1–4</small></div>
+    <div><h3>Launch &amp; find the resonance</h3><p>Post 4–5×/week, consistently, across all 5 pillars. "Just post it" energy — survive the cold start. Reply to every comment in the first hour. Watch which pillar over-performs.</p><div class="goal">✓ Goal: get past cold-start, identify the 1–2 pillars that hit.</div></div>
+  </div>
+  <div class="phase">
+    <div class="when">Phase 2<small>Weeks 5–8</small></div>
+    <div><h3>Double down</h3><p>Lean hard into the winning pillar. Ramp BOXING IQ for comment velocity. Build series cohesion so people follow for the next episode, not just the clip. First collab attempts at the local gym.</p><div class="goal">✓ Goal: first real spike (100k+ view post), follower momentum.</div></div>
+  </div>
+  <div class="phase">
+    <div class="when">Phase 3<small>Weeks 9–12</small></div>
+    <div><h3>Scale &amp; community</h3><p>Ride the SA combat-sports wave (Dricus &amp; the UFC moment). Collabs with local fighters/gyms. Tighten the brand. If a real fight lands — that's the flagship moment everything has been building toward.</p><div class="goal">✓ Goal: a defined brand &amp; a community that shows up for every post.</div></div>
+  </div>
+</div></section>
+
+<!-- SIGNALS -->
+<section><div class="wrap">
+  <div class="eyebrow">The data</div>
+  <h2 class="sec-h">Signals — How to Win the Algorithm</h2>
+  <p class="sec-sub">2026 short-form is a watch-time game, and it now <b>favours authentic human creators</b> — which is exactly Keno's lane. The rules we'll engineer every post around:</p>
+  <div class="grid g2">
+    <div class="card sig"><div class="ic">⚡</div><div><h4>Hook in 3 seconds</h4><p>The algorithm measures "intro retention." Top creators keep <span class="data">70%+</span> past 3s. Open on the payoff/action — never an intro. A strong hook cuts scroll-offs up to 20%.</p></div></div>
+    <div class="card sig"><div class="ic">⏱️</div><div><h4>Watch time &gt; views</h4><p><span class="data">2k views at 80% watched beats 10k at 30%.</span> Don't chase length — chase completion. A gripping 40s story can out-rank a 15s clip.</p></div></div>
+    <div class="card sig"><div class="ic">💬</div><div><h4>The first 60 minutes</h4><p>Early engagement is weighted heavily. Be online at post time to reply fast. BOXING IQ takes are built to bait comments — that's the point.</p></div></div>
+    <div class="card sig"><div class="ic">🎯</div><div><h4>Niche consistency</h4><p>Posting across 3+ unrelated topics = <span class="data">~45% less reach.</span> Stay boxing/fitness. 80% core pillars, 20% experiments.</p></div></div>
+    <div class="card sig"><div class="ic">🔁</div><div><h4>Build replay value</h4><p>Complex moves get rewatched — and rewatches signal quality. Crisp combos, a clean KO-power shot, a satisfying deadlift lockout = loops.</p></div></div>
+    <div class="card sig"><div class="ic">📅</div><div><h4>Cadence &amp; timing</h4><p><span class="data">1–3 posts/day</span> sweet spot, but consistency &gt; volume. Fitness peaks: <b>6–7am, 6–8pm</b>, and <b>Sunday mornings</b>. Cross-post TikTok + Reels + Shorts.</p></div></div>
+    <div class="card sig"><div class="ic">🫶</div><div><h4>Authenticity is the meta</h4><p>2026 algorithms down-rank generic AI content and reward real humans. Keno's raw "phone-in-the-car confession" footage isn't a weakness — it's the moat.</p></div></div>
+    <div class="card sig"><div class="ic">📈</div><div><h4>Honest transformation</h4><p>Progress content (60–90s) drives the highest engagement <i>if credible</i>. Document real markers over time — fake arcs get called out in comments.</p></div></div>
+  </div>
+</div></section>
+
+<!-- CREATORS -->
+<section><div class="wrap">
+  <div class="eyebrow">Inspiration</div>
+  <h2 class="sec-h">Creators to Study — &amp; What to Steal</h2>
+  <p class="sec-sub">Keno's blend doesn't fully exist yet, which is the opportunity. But each of these has cracked one piece of it.</p>
+  <div class="grid g2">
+    <div class="card creator"><h3>Sunday J. Martins <span class="h">@iam_degeneral · 2M</span></h3><p>Amateur boxer <i>and</i> filmmaker — cinematic, story-driven boxing content.</p><div class="steal"><b>Steal:</b> production value &amp; narrative framing. Treat each post like a mini-film, not a clip.</div></div>
+    <div class="card creator"><h3>Leandro Gomez <span class="h">amateur→pro + teacher</span></h3><p>Documents the amateur-to-pro pathway with fight analysis &amp; humour.</p><div class="steal"><b>Steal:</b> the "teach the fight game" angle — this <i>is</i> Keno's BOXING IQ pillar.</div></div>
+    <div class="card creator"><h3>Salt Papi <span class="h">@saltpapi · crossover</span></h3><p>Boxing + motivation + transformation + humour. Mass-appeal personality.</p><div class="steal"><b>Steal:</b> personality &amp; lightness. Keno is intense — a little humour widens the top of funnel.</div></div>
+    <div class="card creator"><h3>Sauhalit Lertsethtakarn <span class="h">@sauhalit_fights</span></h3><p>Gym camaraderie, comedic skits, training culture over competition.</p><div class="steal"><b>Steal:</b> the gym/team as recurring "cast." Community is sticky.</div></div>
+    <div class="card creator"><h3>David Goggins <span class="h">archetype · mental grind</span></h3><p>The mindset/suffering-as-content blueprint that built a movement.</p><div class="steal"><b>Steal:</b> the philosophical voice — Keno already speaks this language (THE WHY).</div></div>
+    <div class="card creator"><h3>Dricus du Plessis &amp; SA scene <span class="h">proximity play</span></h3><p>SA combat sports is having a global moment (UFC champ, national pride).</p><div class="steal"><b>Steal:</b> ride the wave — take on SA fights, tag the moment, be the local voice on a global stage.</div></div>
+  </div>
+</div></section>
+
+<!-- CAPTURE LIST -->
+<section><div class="wrap">
+  <div class="eyebrow">Feed the engine</div>
+  <h2 class="sec-h">Keno's Capture List</h2>
+  <p class="sec-sub">What to film going forward so the drop-folder keeps producing. The more of this he banks, the more we ship.</p>
+  <div class="grid g2">
+    <ul class="check">
+      <li><b>Crisp vertical sparring.</b> The best fight footage so far was landscape — phone vertical = cleaner, punchier clips.</li>
+      <li><b>Talk while you train.</b> Real-time thoughts during/after sessions = authentic VO gold (the running chats already prove this).</li>
+      <li><b>Reaction / face-cam on hard days.</b> The "in the car after a bad spar" content is the moat — keep capturing the lows, not just wins.</li>
+      <li><b>Hot takes to camera.</b> 30 seconds on the latest fight, the moment it happens. Fuels BOXING IQ.</li>
+    </ul>
+    <ul class="check">
+      <li><b>A real fight / competition.</b> The flagship. "This is what it was all for." Film the walk-in, the corner, the aftermath.</li>
+      <li><b>Day-in-the-life.</b> 5am alarm, the meal, the recovery, the routine — the human texture between highlights.</li>
+      <li><b>Progress markers.</b> Same lift / same combo, monthly. Honest transformation content over time.</li>
+      <li><b>Parents &amp; legacy.</b> The "it's in my blood" story (P5) is waiting on photos of mom &amp; dad — a guaranteed emotional hit.</li>
+    </ul>
+  </div>
+</div></section>
+
+<!-- KPIS -->
+<section><div class="wrap">
+  <div class="eyebrow">Keep score</div>
+  <h2 class="sec-h">What We Measure</h2>
+  <p class="sec-sub">Views are vanity. These are the numbers that actually predict growth — we'll review them every 2 weeks.</p>
+  <div class="kpi">
+    <div class="row"><span>Intro retention (past 3s)</span><b>Target 65%+</b></div>
+    <div class="row"><span>Avg watch time / completion</span><b>The north star</b></div>
+    <div class="row"><span>Saves + shares</span><b>Intent signal</b></div>
+    <div class="row"><span>Comments (esp. BOXING IQ)</span><b>Reach multiplier</b></div>
+    <div class="row"><span>Profile visit → follow rate</span><b>Bio is working?</b></div>
+    <div class="row"><span>Follower growth / week</span><b>Momentum</b></div>
+  </div>
+  <div class="ladder">
+    <span class="rung">🥉 First <b>1,000</b> followers</span>
+    <span class="rung">🔥 First <b>100k-view</b> post</span>
+    <span class="rung">🥈 <b>10,000</b> followers</span>
+    <span class="rung">🤝 First <b>collab</b> / duet</span>
+    <span class="rung">🥇 A post the <b>SA fight scene</b> notices</span>
+    <span class="rung">🏆 The <b>fight</b> flagship</span>
+  </div>
+</div></section>
+
+<!-- NEXT -->
+<section><div class="wrap">
+  <div class="eyebrow">Right now</div>
+  <h2 class="sec-h">Immediate Next Steps</h2>
+  <div class="grid g3">
+    <div class="card"><span class="tag pill-accent">1 · Decide</span><h3 style="margin-top:10px">Lock the account</h3><p>Pick the handle &amp; platform priority (TikTok-first), finalise bio. I'll add the handle to every hook card.</p></div>
+    <div class="card"><span class="tag pill-accent">2 · Launch</span><h3 style="margin-top:10px">Post the bank</h3><p>Start the 3-week runway. P1 "Champion" + P12 "The Grind" as openers. I can write captions + hashtags for all 10.</p></div>
+    <div class="card"><span class="tag pill-accent">3 · Refill</span><h3 style="margin-top:10px">Next footage drop</h3><p>Keno films from the capture list. New raw → I cut the next wave. Finish P5 the moment the parent photos land.</p></div>
+  </div>
+</div></section>
+
+<footer><div class="wrap">
+  <div><b style="color:var(--txt)">KENO — The Fighter's Climb</b> · Content strategy prepared by the studio, June 2026.</div>
+  <div class="src">
+    Signals &amp; benchmarks drawn from 2026 short-form research:
+    Modash &amp; Favikon boxing-creator rankings · Buffer / JoinBrands posting-cadence data ·
+    Hootsuite &amp; OpusClip TikTok-algorithm 2026 guides · Miracamp &amp; FluxNote fitness-content strategy · Conbersa hook frameworks.
+    Creator references are illustrative of style/angle to emulate, not endorsements.
+  </div>
+</div></footer>
+
+</body>
+</html>
