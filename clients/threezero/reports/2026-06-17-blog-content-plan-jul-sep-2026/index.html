@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Threezero Blog Plan — Jul–Sep 2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0D0D0D;
+      --card: #141414;
+      --border: #222222;
+      --gold: #C9A84C;
+      --gold-light: #E2C87A;
+      --text: #E5E5E5;
+      --muted: #888888;
+      --green: #4CAF50;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 15px;
+      line-height: 1.65;
+      padding: 48px 24px 96px;
+    }
+
+    .container { max-width: 900px; margin: 0 auto; }
+
+    /* Header */
+    .header { text-align: center; padding-bottom: 48px; border-bottom: 1px solid var(--border); margin-bottom: 48px; }
+    .logo-mark {
+      display: inline-block;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      border: 1px solid var(--gold);
+      padding: 5px 14px;
+      border-radius: 3px;
+      margin-bottom: 20px;
+    }
+    .header h1 {
+      font-size: 32px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 8px;
+      letter-spacing: -0.02em;
+    }
+    .header .sub {
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .header .sub strong { color: var(--text); }
+
+    /* Strategy section */
+    .strategy { margin-bottom: 56px; }
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 14px;
+    }
+    .strategy h2 { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 16px; }
+    .strategy p { color: #aaa; font-size: 14px; margin-bottom: 20px; line-height: 1.7; }
+
+    .cluster-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 12px;
+      margin-top: 20px;
+    }
+    .cluster-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px 18px;
+    }
+    .cluster-card .cluster-num {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+    .cluster-card .cluster-name { font-size: 14px; font-weight: 600; color: #fff; margin-bottom: 6px; }
+    .cluster-card .cluster-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+    /* Month section */
+    .month-block { margin-bottom: 60px; }
+    .month-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .month-badge {
+      background: var(--gold);
+      color: #000;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 3px;
+    }
+    .month-header h2 { font-size: 20px; font-weight: 700; color: #fff; }
+    .month-header .month-theme { font-size: 13px; color: var(--muted); }
+
+    /* Post cards */
+    .posts { display: flex; flex-direction: column; gap: 14px; }
+    .post-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px 22px;
+      display: grid;
+      grid-template-columns: 36px 1fr;
+      gap: 16px;
+      align-items: start;
+      transition: border-color 0.2s;
+    }
+    .post-card:hover { border-color: #333; }
+    .post-card.pillar { border-color: var(--gold); background: #161208; }
+    .post-num {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--border);
+      line-height: 1;
+      padding-top: 3px;
+    }
+    .post-card.pillar .post-num { color: var(--gold); }
+    .post-body {}
+    .post-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+    .tag {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 3px;
+    }
+    .tag-pillar { background: var(--gold); color: #000; }
+    .tag-local { background: #1a2a1a; color: #5cb85c; border: 1px solid #2a3a2a; }
+    .tag-longevity { background: #1a1a2a; color: #7b7bf5; border: 1px solid #2a2a3a; }
+    .tag-trend { background: #2a1a1a; color: #e06c6c; border: 1px solid #3a2a2a; }
+    .tag-conversion { background: #2a2018; color: var(--gold-light); border: 1px solid #3a3020; }
+    .tag-vitality { background: #182218; color: #5cb85c; border: 1px solid #283228; }
+
+    .post-wc { font-size: 11px; color: var(--muted); }
+    .post-title { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 8px; line-height: 1.35; }
+    .post-keyword { font-size: 12px; color: var(--gold); margin-bottom: 8px; }
+    .post-keyword span { color: var(--muted); }
+    .post-reason { font-size: 13px; color: #999; line-height: 1.6; }
+
+    /* SEO plan section */
+    .seo-section { margin-bottom: 56px; }
+    .seo-section h2 { font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 20px; }
+    .checklist { list-style: none; }
+    .checklist li {
+      font-size: 13px;
+      color: #aaa;
+      padding: 9px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      gap: 10px;
+    }
+    .checklist li::before { content: "→"; color: var(--gold); flex-shrink: 0; }
+
+    .alert-box {
+      background: #1a1208;
+      border: 1px solid #3a2a08;
+      border-left: 3px solid var(--gold);
+      border-radius: 6px;
+      padding: 14px 18px;
+      margin-top: 24px;
+      font-size: 13px;
+      color: #bba060;
+      line-height: 1.6;
+    }
+    .alert-box strong { color: var(--gold-light); }
+
+    /* CTA block */
+    .cta-block {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px 36px;
+      text-align: center;
+    }
+    .cta-block h3 { font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 10px; }
+    .cta-block p { font-size: 14px; color: var(--muted); margin-bottom: 24px; }
+    .cta-block a {
+      display: inline-block;
+      background: var(--gold);
+      color: #000;
+      font-weight: 700;
+      font-size: 14px;
+      padding: 12px 28px;
+      border-radius: 6px;
+      text-decoration: none;
+      letter-spacing: 0.04em;
+    }
+    .cta-block .note { font-size: 12px; color: var(--muted); margin-top: 14px; }
+
+    /* Footer */
+    footer {
+      margin-top: 60px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      font-size: 12px;
+      color: #555;
+    }
+
+    @media (max-width: 600px) {
+      body { padding: 24px 16px 64px; }
+      .header h1 { font-size: 24px; }
+      .post-card { grid-template-columns: 1fr; gap: 8px; }
+      .post-num { font-size: 13px; }
+    }
+
+    /* Post 1 full draft */
+    .post-draft { margin-top: 64px; }
+    .post-draft .draft-title { font-size: 25px; font-weight: 700; color: #fff; margin: 10px 0 16px; line-height: 1.3; }
+    .post-draft .draft-meta { font-size: 12px; color: var(--muted); margin-bottom: 28px; padding-bottom: 22px; border-bottom: 1px solid var(--border); line-height: 1.85; }
+    .post-draft .draft-meta strong { color: var(--gold); font-weight: 600; }
+    .post-draft article h3 { font-size: 17px; font-weight: 700; color: var(--gold-light); margin: 34px 0 12px; }
+    .post-draft article p { font-size: 15px; color: #c2c2c2; margin-bottom: 16px; line-height: 1.75; }
+    .post-draft article strong { color: #fff; }
+    .post-draft article em { color: var(--muted); }
+    .post-draft article ul { margin: 4px 0 18px; padding: 0; list-style: none; }
+    .post-draft article ul li { font-size: 15px; color: #c2c2c2; padding: 7px 0 7px 22px; position: relative; line-height: 1.6; }
+    .post-draft article ul li::before { content: "\2022"; color: var(--gold); position: absolute; left: 4px; }
+    .post-draft article .draft-cta { display: inline-block; background: var(--gold); color: #000; font-weight: 700; padding: 11px 26px; border-radius: 6px; text-decoration: none; margin: 6px 0 8px; letter-spacing: 0.04em; }
+    .post-draft article .draft-divider { border: none; border-top: 1px solid var(--border); margin: 28px 0; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="logo-mark">Threezero &times; JCE Media</div>
+    <h1>Blog Content Plan</h1>
+    <p class="sub">July &ndash; September 2026 &nbsp;&middot;&nbsp; <strong>18 posts</strong> &nbsp;&middot;&nbsp; Prepared for <strong>Andrew Collins</strong></p>
+  </div>
+
+  <!-- Strategy -->
+  <div class="strategy">
+    <p class="section-label">The Strategy</p>
+    <h2>Six topic clusters. One clear goal.</h2>
+    <p>These 18 posts are not random fitness content. Each one targets a specific search query and belongs to one of six topic clusters, chosen so Threezero ranks for people who are ready to join now and people who are researching the longevity worldview Threezero is built on.</p>
+    <p>The longevity cluster builds around a single cornerstone post (Post 2) that all longevity content links back to. Over three months, this tells Google that Threezero is the authority on longevity training in Cape Town, not just another gym listing.</p>
+
+    <div class="cluster-grid">
+      <div class="cluster-card">
+        <div class="cluster-num">Cluster 1</div>
+        <div class="cluster-name">Local commercial</div>
+        <div class="cluster-desc">Green Point, Atlantic Seaboard, Cape Town gym searches. Direct trial bookings.</div>
+      </div>
+      <div class="cluster-card">
+        <div class="cluster-num">Cluster 2</div>
+        <div class="cluster-name">Longevity / healthspan</div>
+        <div class="cluster-desc">The brand differentiator. Builds topical authority on the category Threezero owns.</div>
+      </div>
+      <div class="cluster-card">
+        <div class="cluster-num">Cluster 3</div>
+        <div class="cluster-name">The "two numbers" science</div>
+        <div class="cluster-desc">VO2 max, grip strength, the measurable markers. Makes homepage content rank.</div>
+      </div>
+      <div class="cluster-card">
+        <div class="cluster-num">Cluster 4</div>
+        <div class="cluster-name">GLP-1 / Ozempic</div>
+        <div class="cluster-desc">Enormous current search demand. Routes weight-loss-drug users to strength training.</div>
+      </div>
+      <div class="cluster-card">
+        <div class="cluster-num">Cluster 5</div>
+        <div class="cluster-name">Time-efficient training</div>
+        <div class="cluster-desc">Maps to the 30-min Biocircuit product. Captures time-poor professionals.</div>
+      </div>
+      <div class="cluster-card">
+        <div class="cluster-num">Cluster 6</div>
+        <div class="cluster-name">Discovery Vitality</div>
+        <div class="cluster-desc">High commercial intent, low competition. Captures Vitality members directly.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Month 1 -->
+  <div class="month-block">
+    <div class="month-header">
+      <div class="month-badge">July</div>
+      <div>
+        <h2>Month 1</h2>
+        <div class="month-theme">Foundation: local visibility and owning the longevity category</div>
+      </div>
+    </div>
+    <div class="posts">
+
+      <div class="post-card">
+        <div class="post-num">01</div>
+        <div class="post-body">
+          <div class="post-meta">
+            <span class="tag tag-local">Local</span>
+            <span class="post-wc">900 words</span>
+          </div>
+          <div class="post-title">The Best Gym in Green Point for Busy Professionals: What to Actually Look For</div>
+          <div class="post-keyword"><span>Keyword: </span>gym in Green Point / gyms Green Point Cape Town</div>
+          <div class="post-reason">Bottom-funnel local capture. Anyone searching for a gym in the catchment area lands on a page where Threezero is framed as the time-efficient, premium answer. This is the post most likely to drive trial bookings in month one. A full draft of this post is included at the bottom of this page (<a href="#post-1-draft" style="color:var(--gold)">read it here</a>).</div>
+        </div>
+      </div>
+
+      <div class="post-card pillar">
+        <div class="post-num">02</div>
+        <div class="post-body">
+          <div class="post-meta">
+            <span class="tag tag-pillar">Pillar Post</span>
+            <span class="tag tag-longevity">Longevity</span>
+            <span class="post-wc">1,400 words</span>
+          </div>
+          <div class="post-title">Lifespan vs Healthspan: Why Living Longer Is Not the Goal</div>
+          <div class="post-keyword"><span>Keyword: </span>healthspan vs lifespan</div>
+          <div class="post-reason">The cornerstone of the entire content strategy. Defines Threezero's worldview in Google's eyes and becomes the internal-link hub every other longevity post points back to. Written for the educated Atlantic Seaboard reader who already knows the word "longevity" but wants the nuance explained.</div>
+        </div>
+      </div>
+
+      <div class="post-card">
+        <div class="post-num">03</div>
+        <div class="post-body">
+          <div class="post-meta">
+            <span class="tag tag-longevity">Longevity</span>
+            <span class="post-wc">1,000 words</span>
+          </div>
+          <div class="post-title">What Is Longevity Training? A Plain Guide to Training for Your Healthspan</div>
+          <div class="post-keyword"><span>Keyword: </span>longevity training / what is longevity training</div>
+          <div class="post-reason">Threezero should own the definition of the category it sells. This is mid-funnel education for people curious about the term. It routes them to the pillar post and then to the trial. Without this post, a competitor who publishes it first owns the definition.</div>
+        </div>
+      </div>
+
+      <div class="post-card">
+        <div class="post-num">04</div>
+        <div class="post-body">
+          <div class="post-meta">
+            <span class="tag tag-longevity">Longevity</span>
+            <span class="post-wc">1,100 words</span>
+          </div>
+          <div class="post-title">Two Numbers That Predict How Long You Will Live: VO2 Max and Grip Strength</div>
+          <div class="post-keyword"><span>Keyword: </span>VO2 max longevity / grip strength and lifespan</div>
+          <div class="post-reason">Directly mirrors the "two numbers that predict your future" section on the homepage. Takes an existing brand message and makes it rank in Google. High authority, highly shareable, and the kind of specific, surprising post that earns backlinks from health and wellness sites.</div>
+        </div>
+      </div>
+
+      <div class="post-card">
+        <div class="post-num">05</div>
+        <div class="post-body">
+          <div class="post-meta">
+            <span class="tag tag-vitality">Vitality</span>
+            <span class="post-wc">800 words</span>
+          </div>
+          <div class="post-title">How to Earn Discovery Vitality Points at the Gym: A Cape Town Guide</div>
+          <div class="post-keyword"><span>Keyword: </span>Discovery Vitality gym points / Vitality accredited gym Cape Town</div>
+          <div class="post-reason">Very specific, high commercial intent, low competition. Threezero is a Vitality Accredited Fitness centre, so this is a credibility-plus-search win that competitors are almost certainly not writing. Captures Vitality members at the exact moment they are deciding where to exercise.</div>
+        </div>
+      </div>
+
+      <div class="post-card">
+        <div class="post-num">06</div>
+        <div class="post-body">
+          <div class="post-meta">
+            <span class="tag tag-longevity">Longevity</span>
+            <span class="post-wc">1,000 words</span>
+          </div>
+          <div class="post-title">Strength Training After 40: The Most Important Thing You Can Do for Your Future</div>
+          <div class="post-keyword"><span>Keyword: </span>strength training after 40 / building muscle after 40</div>
+          <div class="post-reason">Core demographic, high evergreen volume. Speaks directly to Threezero's primary member age group and feeds the longevity pillar. The kind of post that stays relevant for years and continues to earn traffic long after it is published.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Month 2 -->
+  <div class="month-block">
+    <div class="month-header">
+      <div class="month-badge">August</div>
+      <div>
+        <h2>Month 2</h2>
+        <div class="month-theme">Authority and trend capture</div>
+      </div>
+    </div>
+    <div class="posts">
+
+      <div class="post-card">
+        <div class="post-num">07</div>
+        <div class="post-body">
+          <div class="post-meta">
+            <span class="tag tag-trend">Trending</span>
+            <span class="post-wc">1,100 words</span>
+          </div>
+          <div class="post-title">Losing Weight on Ozempic? Here Is How to Protect Your Muscle</div>
+          <div class="post-keyword"><span>Keyword: </span>muscle loss on Ozempic / strength training on GLP-1</div>
+          <div class="post-reason">Trend capture. GLP-1 search demand is very large right now and the muscle loss concern is real and underserved in search. This positions Threezero as the strength solution for the weight-loss-drug wave, and it aligns with the existing blog theme already on the homepage.</div>
+        </div>
+      </div>
+
+      <div class="post-card">
+        <div class="post-num">08</div>
+        <div class="post-body">
+          <div class="post-meta">
+            <span class="tag tag-longevity">Longevity</span>
+            <span class="post-wc">1,200 words</span>
+          </div>
+          <div class="post-title">Why Muscle Is the Organ of Longevity</div>
+          <div class="post-keyword"><span>Keyword: </span>muscle mass and longevity / muscle and aging</div>
+          <div class="post-reason">Deep authority piece, highly shareable, reframes muscle as a health asset rather than an aesthetic one. Reinforces the longevity pillar and is the kind of content that gets referenced by other websites and earns organic backlinks over time.</div>
+        </div>
+      </div>
+
+      <div class="post-card">
+        <div class="post-num">09</div>
+        <div class="post-body">
+          <div class="post-meta">
+            <span class="tag tag-conversion">Conversion</span>
+            <span class="post-wc">900 words</span>
+          </div>
+          <div class="post-title">The 30-Minute Workout That Actually Works (and the Science Behind It)</div>
+          <div class="post-keyword"><span>Keyword: </span>30 minute workout / short effective workout</div>
+          <div class="post-reason">Maps directly to the product. The 30-minute Biocircuit session is the core offer, and this post answers the exact question time-poor professionals ask before they commit. Mid-funnel with high conversion potential because the post describes the session they can book.</div>
+        </div>
+      </div>
+
+      <div class="post-card">
+        <div class="post-num">10</div>
+        <div class="post-body">
+          <div class="post-meta">
+            <span class="tag tag-longevity">Longevity</span>
+            <span class="post-wc">900 words</span>
+          </div>
+          <div class="post-title">Personal Trainer vs AI-Guided Strength Training: What Is the Difference?</div>
+          <div class="post-keyword"><span>Keyword: </span>AI personal training / AI guided gym</div>
+          <div class="post-reason">Explains the Technogym Biocircuit tech advantage as a search topic. Captures curiosity around AI in fitness and turns it into a reason Threezero is different. Positions the tech as a feature, not a gimmick.</div>
+        </div>
+      </div>
+
+      <div class="post-card">
+        <div class="post-num">11</div>
+        <div class="post-body">
+          <div class="post-meta">
+            <span class="tag tag-local">Local</span>
+            <span class="post-wc">850 words</span>
+          </div>
+          <div class="post-title">Staying Strong on the Atlantic Seaboard: A Local's Guide to Fitness in Cape Town</div>
+          <div class="post-keyword"><span>Keyword: </span>Atlantic Seaboard gym / fitness Cape Town City Bowl</div>
+          <div class="post-reason">Widens the local footprint beyond Green Point to the broader affluent catchment. A lifestyle-led local SEO post that pulls in the Sea Point, Waterfront and City Bowl audience who may not have searched "Green Point" specifically.</div>
+        </div>
+      </div>
+
+      <div class="post-card">
+        <div class="post-num">12</div>
+        <div class="post-body">
+          <div class="post-meta">
+            <span class="tag tag-longevity">Longevity</span>
+            <span class="post-wc">950 words</span>
+          </div>
+          <div class="post-title">How Much Protein Do You Really Need to Build Muscle After 40?</div>
+          <div class="post-keyword"><span>Keyword: </span>protein to build muscle after 40 / protein for muscle over 50</div>
+          <div class="post-reason">High-volume, practical search query that people ask constantly. Supports the strength cluster and gives members genuine value, which earns return visits and positions Threezero as a trusted source, not just a sales vehicle.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Month 3 -->
+  <div class="month-block">
+    <div class="month-header">
+      <div class="month-badge">September</div>
+      <div>
+        <h2>Month 3</h2>
+        <div class="month-theme">Conversion, spring seasonal push, and depth</div>
+      </div>
+    </div>
+    <div class="posts">
+
+      <div class="post-card">
+        <div class="post-num">13</div>
+        <div class="post-body">
+          <div class="post-meta">
+            <span class="tag tag-longevity">Longevity</span>
+            <span class="post-wc">1,100 words</span>
+          </div>
+          <div class="post-title">Menopause and Strength: Why Resistance Training Matters for Women Over 45</div>
+          <div class="post-keyword"><span>Keyword: </span>strength training menopause / exercise for menopause</div>
+          <div class="post-reason">A high-intent, underserved female audience with rising search demand. Empathy-led and evidence-backed. Speaks directly to one of the three audience segments the website already identifies and gives them a specific, credible reason to book a trial session.</div>
+        </div>
+      </div>
+
+      <div class="post-card">
+        <div class="post-num">14</div>
+        <div class="post-body">
+          <div class="post-meta">
+            <span class="tag tag-conversion">Conversion</span>
+            <span class="post-wc">800 words</span>
+          </div>
+          <div class="post-title">What to Expect at Your First Threezero Session</div>
+          <div class="post-keyword"><span>Keyword: </span>Threezero gym + "first gym session what to expect"</div>
+          <div class="post-reason">Pure conversion content. Removes the anxiety that stops people from booking, ranks for brand searches, and becomes the natural internal-link destination from every other post in this plan. Every post should link to this one, which links to the trial form.</div>
+        </div>
+      </div>
+
+      <div class="post-card">
+        <div class="post-num">15</div>
+        <div class="post-body">
+          <div class="post-meta">
+            <span class="tag tag-longevity">Longevity</span>
+            <span class="post-wc">900 words</span>
+          </div>
+          <div class="post-title">Grip Strength: The Longevity Marker Most People Ignore</div>
+          <div class="post-keyword"><span>Keyword: </span>grip strength / how to improve grip strength</div>
+          <div class="post-reason">Niche but highly engaging longevity science that links directly to the "two numbers" theme from Post 4. Specific, surprising, the kind of post that gets shared on WhatsApp groups and personal finance newsletters. Earns links from longevity and health media.</div>
+        </div>
+      </div>
+
+      <div class="post-card">
+        <div class="post-num">16</div>
+        <div class="post-body">
+          <div class="post-meta">
+            <span class="tag tag-local">Seasonal</span>
+            <span class="post-wc">850 words</span>
+          </div>
+          <div class="post-title">Spring Into Summer: How to Set Fitness Goals That Actually Last</div>
+          <div class="post-keyword"><span>Keyword: </span>how to stay consistent at the gym / setting fitness goals</div>
+          <div class="post-reason">Seasonal. September is spring in South Africa and the start of the summer-prep mindset. This captures that motivation wave early and channels it into a trial booking before the December rush. Timely content that hits at the right moment in the year.</div>
+        </div>
+      </div>
+
+      <div class="post-card">
+        <div class="post-num">17</div>
+        <div class="post-body">
+          <div class="post-meta">
+            <span class="tag tag-trend">Trending</span>
+            <span class="post-wc">1,000 words</span>
+          </div>
+          <div class="post-title">Why Sitting Is the New Smoking (and What 30 Minutes a Day Can Undo)</div>
+          <div class="post-keyword"><span>Keyword: </span>sitting too much health risks / sedentary lifestyle</div>
+          <div class="post-reason">Top-funnel awareness hook aimed at desk-bound professionals. A big, sticky topic that leads naturally to the short-workout solution Threezero sells. The title is widely searched and the post plants a seed for people who have not yet considered a gym at all.</div>
+        </div>
+      </div>
+
+      <div class="post-card">
+        <div class="post-num">18</div>
+        <div class="post-body">
+          <div class="post-meta">
+            <span class="tag tag-longevity">Longevity</span>
+            <span class="post-wc">1,100 words</span>
+          </div>
+          <div class="post-title">Sleep, Strength and Recovery: The Longevity Trio Most People Get Wrong</div>
+          <div class="post-keyword"><span>Keyword: </span>sleep and muscle recovery / recovery for longevity</div>
+          <div class="post-reason">Holistic authority piece that broadens the longevity cluster beyond training alone. Positions Threezero as thinking about the whole healthspan picture, not just the 30 minutes you spend in the studio. Shareable and useful enough to earn return visits and newsletter mentions.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SEO ground rules -->
+  <div class="seo-section">
+    <p class="section-label">How Each Post Is Built</p>
+    <h2>On-page SEO checklist</h2>
+    <ul class="checklist">
+      <li>Primary keyword in the title, URL slug, first 100 words, one subheading, and meta description</li>
+      <li>900–1,400 words for authority posts. 700–900 words for local and conversion posts</li>
+      <li>One internal link up to the pillar post (Post 2) and one link to the trial booking page, in every post</li>
+      <li>Cape Town, Green Point, and Cape Quarter referenced naturally in local and general posts</li>
+      <li>One studio image per post with descriptive alt text using target keywords</li>
+      <li>CTA at the end of every post: "Book a trial session" (no "free" language, per Threezero brand rule)</li>
+      <li>All posts interlink within clusters. Post 14 ("What to Expect") is the conversion hub every post links to</li>
+    </ul>
+    <div class="alert-box">
+      <strong>One thing to sort before we publish Post 1.</strong> GA4 and the Facebook Pixel are still pending on the site. Without them, we cannot report which posts are driving trial bookings or search impressions. Recommend getting GA4 and Google Search Console connected before or alongside the first post so we can measure results from day one.
+    </div>
+  </div>
+
+  <!-- CTA block -->
+  <div class="cta-block">
+    <h3>Ready to approve the plan?</h3>
+    <p>Reply with any posts you would like to swap, rename, or reorder. Once you are happy with the list, we will publish the first draft of Post 1 for your copy review before anything goes live.</p>
+    <a href="mailto:jacques@jcemedia.com?subject=Threezero Blog Plan Feedback">Send feedback to Jacques</a>
+    <p class="note">The full draft of Post 1 is included below for voice and quality review. <a href="#post-1-draft" style="color:var(--gold-light)">Jump to it</a>.</p>
+  </div>
+
+  <!-- Full draft of Post 1 -->
+  <div class="post-draft" id="post-1-draft">
+    <p class="section-label">Sample Post &middot; Full Draft</p>
+    <div class="draft-title">The Best Gym in Green Point for Busy Professionals: What to Actually Look For</div>
+    <div class="draft-meta">
+      <strong>Target keyword:</strong> gym in Green Point / gyms Green Point Cape Town<br />
+      <strong>Length:</strong> 900 words &nbsp;&middot;&nbsp; <strong>Status:</strong> Draft 1, for your review
+    </div>
+    <article>
+      <p>You have 45 minutes between a client call and school pickup. Or you finish work at 6:30 and the idea of spending that hour commuting across town, finding parking, waiting for a machine, and driving back again is exactly why you have not gone in three weeks.</p>
+      <p>If you live or work around Green Point, the geography is on your side. The Atlantic Seaboard has gyms. What it does not always have is a gym designed around the way your week actually runs.</p>
+      <p>Here is what to look for, and why the difference matters more than most people realise before they sign a contract.</p>
+
+      <h3>The problem with most gym memberships</h3>
+      <p>Most gym memberships are sold on floor space and machine count. The pitch is always the same: more equipment, more classes, more options. For a professional in their 40s who needs training to fit around a career and a life, more options usually means more friction.</p>
+      <p>You walk in. The cardio floor is busy. The weights area has its own social dynamic. Thirty minutes later you have not done anything particularly useful. You go home. You tell yourself you will be more focused next time.</p>
+      <p>It is not a discipline problem. It is a design problem.</p>
+
+      <h3>What the research actually says about effective training</h3>
+      <p>Exercise science has been fairly clear on this for a decade. For strength and cardiovascular health, the quality and consistency of effort matters more than the number of hours you log. Two or three focused strength sessions per week, where you genuinely push the muscle and recover properly, produce results that three hours of moderate gym-floor wandering cannot match.</p>
+      <p>The catch is that "focused" requires either a good personal trainer or a training system that guides you through it. Left to their own devices, most people default to what is comfortable. Comfortable is not the same as effective.</p>
+      <p>This is where gym design either helps or works against you.</p>
+
+      <h3>What to actually look for in a Green Point gym</h3>
+      <p>Before you sign anything, there are a few practical questions worth asking:</p>
+      <p><strong>Does it have a structured session format?</strong> A workout that has a start, a sequence, and an end. Not a floor full of options and no direction.</p>
+      <p><strong>Does the time commitment suit your week?</strong> For most people over 35, thirty minutes of well-programmed guided strength training is more effective than ninety minutes of self-directed work. If a gym's model depends on you spending hours there, its incentives and yours are pointed in different directions.</p>
+      <p><strong>Can you measure your progress?</strong> The point of training is adaptation. Your body should be demonstrably stronger over weeks and months. If there is no way to track that, you are guessing.</p>
+      <p><strong>Is it actually close enough that you will go?</strong> Green Point, Sea Point, and the City Bowl have enough friction built into daily life without adding a 25-minute drive to the equation. The best gym is usually the one you will actually use.</p>
+
+      <h3>Why Threezero is worth a look</h3>
+      <p>Threezero, at Cape Quarter on Somerset Road in Green Point, is built around a specific idea: that a 30-minute session, done three times a week, is enough to meaningfully improve your strength, your cardiovascular fitness, and your long-term health. Provided it is the right 30 minutes.</p>
+      <p>The studio uses Technogym's Biocircuit system, which is AI-guided resistance training. You move through a sequence of machines, each calibrated to your current capacity. There is no guessing about weight. There is no waiting for equipment. The system guides you through the session, adjusts as you get stronger, and tracks your numbers over time.</p>
+      <p>The average Threezero member sees a 14% increase in strength over three months. That is an average, across actual members, not a marketing projection.</p>
+      <p>Threezero is also a Discovery Vitality Accredited Fitness centre, which means sessions count toward your Vitality points if your plan rewards activity.</p>
+
+      <h3>Who the studio suits</h3>
+      <p>Threezero tends to work well for people who:</p>
+      <ul>
+        <li>Are in their 40s, 50s, or 60s and want training that fits where they are now, not where they were at university</li>
+        <li>Have had gym memberships before and found themselves not using them</li>
+        <li>Want to know what longevity research actually says about how to train, not just how to look</li>
+        <li>Need something structured enough that they do not have to make decisions when they walk in after a long day</li>
+      </ul>
+      <p>It is a small, focused studio. If you want a busy social gym environment with dozens of class options, this is not that. If you want something that consistently delivers results in the time you actually have available, it is worth a conversation.</p>
+
+      <h3>How to try it</h3>
+      <p>Threezero is at 27 Somerset Road, Cape Quarter, Green Point. Sessions are 30 minutes. There is no long-form commitment required to start.</p>
+      <p>You can book a trial session on their website and see for yourself whether it fits your week. Most people know within the first session.</p>
+      <p>If you have been putting off finding something that works around your schedule, this is a reasonable place to start.</p>
+      <p><a class="draft-cta" href="https://threezero.co.za">Book a trial session at Threezero</a></p>
+      <hr class="draft-divider" />
+      <p><em>Threezero is a Vitality Accredited Fitness centre located at Cape Quarter, Green Point, Cape Town.</em></p>
+    </article>
+  </div>
+
+  <footer>
+    Threezero &times; JCE Media &nbsp;&middot;&nbsp; Prepared June 2026 &nbsp;&middot;&nbsp; <a href="mailto:jacques@jcemedia.com" style="color: #555;">jacques@jcemedia.com</a>
+  </footer>
+
+</div>
+</body>
+</html>
