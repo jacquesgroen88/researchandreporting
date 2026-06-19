@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JCE Media &mdash; Financial Report &mdash; April 2026</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#064E3B;--teal:#059669;--ltblue:#D1FAE5;
+  --green:#1E6B2E;--green-bg:#E6F4EA;
+  --red:#C00000;--red-bg:#FDECEA;
+  --amber:#B45309;--amber-bg:#FEF9C3;
+  --grey:#F4F6F8;--border:#E2E8F0;--text:#1A202C;--muted:#64748B;--white:#FFF;
+  --r:8px;--sh:0 1px 4px rgba(0,0,0,.10);--sh-lg:0 4px 16px rgba(0,0,0,.12)
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;font-size:13px;color:var(--text);background:#EEF2F7;line-height:1.5}
+.page{max-width:1100px;margin:0 auto;padding:24px 20px 60px}
+.rpt-hdr{background:linear-gradient(135deg,#064E3B 0%,#059669 100%);color:#fff;
+  border-radius:var(--r);padding:28px 32px;display:flex;justify-content:space-between;
+  align-items:flex-start;margin-bottom:24px;box-shadow:var(--sh-lg)}
+.biz-name{font-size:22px;font-weight:700;letter-spacing:-.3px}
+.biz-sub{font-size:12px;opacity:.72;margin-top:4px}
+.period{text-align:right}
+.period-lbl{font-size:11px;opacity:.65;text-transform:uppercase;letter-spacing:.8px}
+.period-val{font-size:18px;font-weight:700;margin-top:2px}
+.hdr-actions{display:flex;gap:8px;margin-top:14px}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:5px;
+  font-size:12px;font-weight:600;cursor:pointer;border:none}
+.btn-ghost{background:rgba(255,255,255,.18);color:#fff;border:1px solid rgba(255,255,255,.30)}
+.btn-ghost:hover{background:rgba(255,255,255,.28)}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px}
+.kpi{background:#fff;border-radius:var(--r);padding:20px 22px;box-shadow:var(--sh);border-top:3px solid var(--border)}
+.kpi.k-teal{border-top-color:var(--teal)}.kpi.k-green{border-top-color:var(--green)}.kpi.k-red{border-top-color:var(--red)}.kpi.k-amber{border-top-color:var(--amber)}
+.kpi-lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;font-weight:600}
+.kpi-val{font-size:22px;font-weight:700;margin-top:4px}
+.kpi-val.teal{color:var(--teal)}.kpi-val.green{color:var(--green)}.kpi-val.red{color:var(--red)}.kpi-val.amber{color:var(--amber)}
+.kpi-meta{font-size:11px;color:var(--muted);margin-top:4px}
+.card{background:#fff;border-radius:var(--r);box-shadow:var(--sh);margin-bottom:20px;overflow:hidden}
+.card-hdr{display:flex;align-items:center;justify-content:space-between;padding:13px 20px;
+  background:var(--navy);color:#fff;cursor:pointer;user-select:none}
+.card-hdr:hover{background:#065f49}
+.ch-left{display:flex;align-items:center;gap:10px}
+.ch-title{font-size:13px;font-weight:700}
+.ch-cnt{font-size:11px;font-weight:600;padding:2px 9px;border-radius:20px;background:rgba(255,255,255,.18)}
+.ch-total{font-size:14px;font-weight:700}
+.ch-total.pos{color:#86EFAC}.ch-total.neg{color:#FCA5A5}
+.tog{font-size:15px;transition:transform .2s;margin-left:12px}
+.card-hdr.closed .tog{transform:rotate(-90deg)}
+.card-body{overflow:hidden;transition:max-height .3s ease}
+.card-body.closed{max-height:0!important}
+.pnl-tbl{width:100%;border-collapse:collapse}
+.pnl-tbl td{padding:10px 20px;border-bottom:1px solid var(--border)}
+.pnl-grp td{background:var(--ltblue);font-size:11px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.6px;color:var(--teal);padding:7px 20px}
+.pnl-row:hover td{background:var(--grey)}
+.pnl-sub td{background:var(--ltblue);font-weight:700}
+.pnl-total td{background:var(--navy);color:#fff;font-weight:700;font-size:14px}
+.pnl-amt{text-align:right;width:18%;font-variant-numeric:tabular-nums;white-space:nowrap}
+.pnl-src{width:26%}.pnl-desc{width:56%}
+.src{display:inline-block;font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;
+  letter-spacing:.4px;vertical-align:middle}
+.src-bank{background:#D1FAE5;color:#065F46}
+.src-paypal{background:#003087;color:#fff}
+.teal{color:var(--teal)}
+.src-calc{background:#EDE9FE;color:#5B21B6}
+.ref{display:inline-block;font-size:10px;color:var(--muted);margin-left:5px;
+  font-family:'Consolas','Courier New',monospace}
+.dtbl{width:100%;border-collapse:collapse}
+.dtbl thead tr{background:var(--grey);border-bottom:2px solid var(--border)}
+.dtbl thead th{padding:9px 14px;text-align:left;font-size:11px;font-weight:700;
+  color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.dtbl tbody tr{border-bottom:1px solid var(--border)}
+.dtbl tbody tr:hover{background:#F8FAFC}
+.dtbl td{padding:8px 14px;vertical-align:middle}
+.dtbl tfoot tr{background:var(--navy);color:#fff;font-weight:700}
+.dtbl tfoot td{padding:10px 14px}
+.dtbl tfoot .neg{color:#FCA5A5}
+.num{text-align:right;font-variant-numeric:tabular-nums;font-family:'Consolas',monospace;font-size:12px}
+.pos{color:var(--green)}.neg{color:var(--red)}.amber-txt{color:var(--amber)}
+.muted{font-size:11px;color:var(--muted)}
+.badge{display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px}
+.bdg-m{background:var(--ltblue);color:var(--teal)}
+.notice{display:flex;align-items:flex-start;gap:12px;padding:13px 18px;border-radius:6px;margin:0 20px 16px}
+.notice-info{background:var(--ltblue);border-left:3px solid var(--teal)}
+.notice-warn{background:var(--amber-bg);border-left:3px solid var(--amber)}
+.notice-icon{font-size:16px;flex-shrink:0;margin-top:1px}
+.notice-title{font-weight:700;font-size:12px}.notice-text{font-size:11px;color:var(--muted);margin-top:2px}
+.biz-nav{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--border);
+  border-radius:var(--r);padding:10px 18px;margin-bottom:16px;box-shadow:var(--sh);flex-wrap:wrap}
+.biz-nav-lbl{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.biz-nav-active{font-weight:700;font-size:13px;color:var(--text);padding:4px 12px;background:var(--grey);border-radius:20px}
+.biz-nav-link{font-size:13px;font-weight:600;color:var(--teal);text-decoration:none;padding:4px 14px;
+  border:1px solid var(--teal);border-radius:20px;transition:all .15s}
+.biz-nav-link:hover{background:var(--teal);color:#fff}
+{DOWNLOAD_CSS}
+.rpt-footer{{margin-top:32px;padding:16px 0;border-top:1px solid var(--border);
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:11px;color:var(--muted);gap:16px;flex-wrap:wrap}
+.tbc-box{background:var(--amber-bg);border:1px solid var(--amber);border-radius:var(--r);
+  padding:16px 20px;margin-bottom:20px}
+.tbc-box h3{font-size:13px;color:var(--amber);margin-bottom:8px}
+.tbc-box table{width:100%;border-collapse:collapse;font-size:12px}
+.tbc-box td{padding:6px 10px;border-bottom:1px solid rgba(180,83,9,.2)}
+@media print{
+  body{background:white;font-size:11px}.page{padding:0;max-width:100%}
+  .hdr-actions,.btn{display:none}
+  .card-body.closed{max-height:none!important}
+  .card{box-shadow:none;border:1px solid #ddd;page-break-inside:avoid}
+  .rpt-hdr,.card-hdr,.pnl-grp td,.pnl-total td,.dtbl thead tr,.dtbl tfoot tr,
+  .pnl-sub td{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body><div class="page">
+
+<div class="biz-nav">
+  <span class="biz-nav-lbl">&#128202; April 2026</span>
+  <a class="biz-nav-link" href="../2026-06-19-reviewtap-april-2026/">Reviewtap (RT)</a>
+  <a class="biz-nav-link" href="../2026-06-19-mfb-april-2026/">MyForeverBaby (MFB)</a>
+  <span class="biz-nav-active">&#127916; JCE Media</span>
+</div>
+
+<div class="rpt-hdr">
+  <div>
+    <div class="biz-name">JCE Media</div>
+    <div class="biz-sub">Duel Digital &nbsp;&bull;&nbsp; Media &amp; Marketing &nbsp;&bull;&nbsp; Not VAT Registered</div>
+    <div class="hdr-actions">
+      <button class="btn btn-ghost" onclick="window.print()">&#128438; Print / PDF</button>
+      <button class="btn btn-ghost" onclick="toggleAll(true)">&#9660; Expand All</button>
+      <button class="btn btn-ghost" onclick="toggleAll(false)">&#9650; Collapse All</button>
+    </div>
+  </div>
+  <div class="period">
+    <div class="period-lbl">Reporting Period</div>
+    <div class="period-val">April 2026</div>
+    <div class="biz-sub" style="margin-top:8px">Month ended 30 April 2026</div>
+    <div class="biz-sub">Generated: 19 Jun 2026</div>
+  </div>
+</div>
+
+<div class="kpi-grid">
+  <div class="kpi k-teal">
+    <div class="kpi-lbl">Bank Revenue</div>
+    <div class="kpi-val teal">R 6,500.00</div>
+    <div class="kpi-meta">1 EFT payments</div>
+  </div>
+  <div class="kpi k-teal">
+    <div class="kpi-lbl">PayPal</div>
+    <div class="kpi-val teal">R 18,231.04</div>
+    <div class="kpi-meta">USD 1,122.00 &bull; approx ZAR</div>
+  </div>
+  <div class="kpi k-red">
+    <div class="kpi-lbl">Total Expenses</div>
+    <div class="kpi-val red">R 12,665.09</div>
+    <div class="kpi-meta">6 items</div>
+  </div>
+  <div class="kpi k-green">
+    <div class="kpi-lbl">Net Profit</div>
+    <div class="kpi-val green">R 12,065.95</div>
+    <div class="kpi-meta">Net margin 48.8%</div>
+  </div>
+</div>
+
+<!-- P&L SUMMARY -->
+<div class="card">
+  <div class="card-hdr" onclick="toggleCard(this)">
+    <div class="ch-left"><span class="ch-title">&#128196; Profit &amp; Loss Summary</span><span class="ch-cnt">April 2026</span></div>
+    <div style="display:flex;align-items:center"><span class="ch-total pos">R&nbsp;12,065.95</span><span class="tog">&#9660;</span></div>
+  </div>
+  <div class="card-body">
+    <table class="pnl-tbl">
+      <colgroup><col style="width:56%"><col style="width:18%"><col style="width:26%"></colgroup>
+      <tbody>
+        <tr class="pnl-grp"><td colspan="3">Revenue</td></tr>
+        <tr class="pnl-row">
+          <td>Reptilia Marketing<span class="muted"> &mdash; 2026/04/02</span></td>
+          <td class="pnl-amt pos">R&nbsp;6,500.00</td>
+          <td class="pnl-src"><span class="src src-bank">BANK STMT</span><span class="ref">FNB acc 62435283809</span></td>
+        </tr>
+        <tr class="pnl-sub">
+          <td>Total Bank Revenue (1 payments)</td>
+          <td class="pnl-amt pos">R&nbsp;6,500.00</td>
+          <td class="pnl-src"><span class="src src-calc">CALCULATED</span></td>
+        </tr>
+
+        <tr class="pnl-grp"><td colspan="3">Revenue &mdash; PayPal (approx. ZAR at 16.2487 per USD)</td></tr>
+        <tr class="pnl-row">
+          <td>MySalonSuite (Rachel Kueppers) via PayPal <span class="muted">2026/04/23 &mdash; USD 800.00</span></td>
+          <td class="pnl-amt pos">R&nbsp;12,998.96</td>
+          <td class="pnl-src"><span class="src src-paypal">PAYPAL</span><span class="ref">TXN&nbsp;6YS062086N64&hellip;</span></td>
+        </tr><tr class="pnl-row">
+          <td>Wix.com refund (received as income) <span class="muted">2026/04/27 &mdash; USD 322.00</span></td>
+          <td class="pnl-amt pos">R&nbsp;5,232.08</td>
+          <td class="pnl-src"><span class="src src-paypal">PAYPAL</span><span class="ref">TXN&nbsp;4W760347CX81&hellip;</span></td>
+        </tr>
+        <tr class="pnl-sub">
+          <td>Total PayPal &nbsp;<span class="muted amber-txt">USD 1,122.00 &mdash; approx. ZAR, verify against FNB withdrawal</span></td>
+          <td class="pnl-amt pos">R&nbsp;18,231.04</td>
+          <td class="pnl-src"><span class="src src-calc">CALCULATED</span></td>
+        </tr>
+
+        <tr class="pnl-sub" style="background:#1a4731">
+          <td style="color:#86EFAC;font-weight:700">Total Revenue (Bank + PayPal)</td>
+          <td class="pnl-amt" style="color:#86EFAC;font-weight:700;background:#1a4731">R&nbsp;24,731.04</td>
+          <td style="background:#1a4731"></td>
+        </tr>
+
+        <tr class="pnl-grp"><td colspan="3">Operating Expenses</td></tr>
+<tr class="pnl-row"><td>VICTUS    399095675 NETCASH<span class="muted"> &mdash; 2026/04/01</span></td><td class="pnl-amt neg">(R&nbsp;2,970.00)</td><td class="pnl-src"><span class="src src-bank">BANK STMT</span><span class="ref">FNB acc 62435283809</span></td></tr>
+<tr class="pnl-grp"><td colspan="3">SARS Tax Payment</td></tr>
+<tr class="pnl-row"><td>SARSEFLNG 0095265017<span class="muted"> &mdash; 2026/04/07</span></td><td class="pnl-amt neg">(R&nbsp;5,205.89)</td><td class="pnl-src"><span class="src src-bank">BANK STMT</span><span class="ref">FNB acc 62435283809</span></td></tr>
+<tr class="pnl-row"><td>SARSEFLNG 0095699452<span class="muted"> &mdash; 2026/04/30</span></td><td class="pnl-amt neg">(R&nbsp;510.21)</td><td class="pnl-src"><span class="src src-bank">BANK STMT</span><span class="ref">FNB acc 62435283809</span></td></tr>
+<tr class="pnl-grp"><td colspan="3">Platform Costs</td></tr>
+<tr class="pnl-row"><td>MWEB      64081977:R43855168<span class="muted"> &mdash; 2026/04/30</span></td><td class="pnl-amt neg">(R&nbsp;1,349.00)</td><td class="pnl-src"><span class="src src-bank">BANK STMT</span><span class="ref">FNB acc 62435283809</span></td></tr>
+<tr class="pnl-row"><td>PURCH Google One 400568******9251<span class="muted"> &mdash; 2026/04/20</span></td><td class="pnl-amt neg">(R&nbsp;429.99)</td><td class="pnl-src"><span class="src src-bank">BANK STMT</span><span class="ref">FNB acc 62435283809</span></td></tr>
+<tr class="pnl-grp"><td colspan="3">Payments</td></tr>
+<tr class="pnl-row"><td>Joyce Plaatjie<span class="muted"> &mdash; 2026/04/30</span></td><td class="pnl-amt neg">(R&nbsp;2,200.00)</td><td class="pnl-src"><span class="src src-bank">BANK STMT</span><span class="ref">FNB acc 62435283809</span></td></tr>
+
+        <tr class="pnl-sub">
+          <td>Total Expenses</td>
+          <td class="pnl-amt neg">(R&nbsp;12,665.09)</td>
+          <td class="pnl-src"><span class="src src-calc">CALCULATED</span></td>
+        </tr>
+
+        <tr class="pnl-total">
+          <td>Net Profit &mdash; April 2026</td>
+          <td class="pnl-amt" style="color:#86EFAC">R&nbsp;12,065.95</td>
+          <td class="pnl-src" style="font-size:12px;opacity:.7">Net margin 48.8%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- INCOME DETAIL -->
+<div class="card">
+  <div class="card-hdr" onclick="toggleCard(this)">
+    <div class="ch-left"><span class="ch-title">&#128178; Revenue &mdash; Client Payments</span><span class="ch-cnt">1 payments</span><span class="src src-bank" style="font-size:10px">BANK STMT</span></div>
+    <div style="display:flex;align-items:center"><span class="ch-total pos">R&nbsp;24,731.04</span><span class="tog">&#9660;</span></div>
+  </div>
+  <div class="card-body closed">
+    <div class="notice notice-info" style="margin-top:16px">
+      <span class="notice-icon">&#8505;</span>
+      <div class="notice-body"><div class="notice-title">Source</div>
+      <div class="notice-text">FNB Business Account 62435283809 &nbsp;&bull;&nbsp; Incoming EFT payments from clients &nbsp;&bull;&nbsp; April 2026</div></div>
+    </div>
+    <table class="dtbl">
+      <thead><tr><th>Date</th><th>Client</th><th>Bank Description</th><th class="num">Amount (R)</th><th>Source</th><th>Note</th></tr></thead>
+      <tbody><tr><td>2026/04/02</td><td>Reptilia Marketing</td><td class="muted">FNB APP PAYMENT FROM REPTILIA MARKETING</td><td class="num pos">R&nbsp;6,500.00</td><td><span class="src src-bank">BANK STMT</span><span class="ref">FNB acc 62435283809</span></td><td>Direct EFT</td></tr></tbody>
+      <tfoot><tr><td colspan="3">TOTAL REVENUE</td><td class="num pos">R&nbsp;24,731.04</td><td colspan="2"></td></tr></tfoot>
+    </table>
+  </div>
+</div>
+
+<!-- EXPENSES DETAIL -->
+<div class="card">
+  <div class="card-hdr" onclick="toggleCard(this)">
+    <div class="ch-left"><span class="ch-title">&#128203; Expenses Detail</span><span class="ch-cnt">6 items</span><span class="src src-bank" style="font-size:10px">BANK STMT</span></div>
+    <div style="display:flex;align-items:center"><span class="ch-total neg">(R&nbsp;12,665.09)</span><span class="tog">&#9660;</span></div>
+  </div>
+  <div class="card-body closed">
+    <div class="notice notice-info" style="margin-top:16px">
+      <span class="notice-icon">&#8505;</span>
+      <div class="notice-body"><div class="notice-title">Source</div>
+      <div class="notice-text">FNB Business Account 62435283809 &nbsp;&bull;&nbsp; All expenses attributed to JCE Media per owner instruction</div></div>
+    </div>
+    <table class="dtbl">
+      <thead><tr><th>Date</th><th>Description</th><th>Category</th><th class="num">Amount (R)</th><th>Source</th></tr></thead>
+      <tbody><tr><td>2026/04/01</td><td>VICTUS    399095675 NETCASH</td><td><span class="badge bdg-m">Operating Expenses</span></td><td class="num neg">(R&nbsp;2,970.00)</td><td><span class="src src-bank">BANK STMT</span><span class="ref">FNB acc 62435283809</span></td></tr><tr><td>2026/04/07</td><td>SARSEFLNG 0095265017</td><td><span class="badge bdg-m">SARS Tax Payment</span></td><td class="num neg">(R&nbsp;5,205.89)</td><td><span class="src src-bank">BANK STMT</span><span class="ref">FNB acc 62435283809</span></td></tr><tr><td>2026/04/30</td><td>SARSEFLNG 0095699452</td><td><span class="badge bdg-m">SARS Tax Payment</span></td><td class="num neg">(R&nbsp;510.21)</td><td><span class="src src-bank">BANK STMT</span><span class="ref">FNB acc 62435283809</span></td></tr><tr><td>2026/04/30</td><td>MWEB      64081977:R43855168</td><td><span class="badge bdg-m">Platform Costs</span></td><td class="num neg">(R&nbsp;1,349.00)</td><td><span class="src src-bank">BANK STMT</span><span class="ref">FNB acc 62435283809</span></td></tr><tr><td>2026/04/20</td><td>PURCH Google One 400568******9251</td><td><span class="badge bdg-m">Platform Costs</span></td><td class="num neg">(R&nbsp;429.99)</td><td><span class="src src-bank">BANK STMT</span><span class="ref">FNB acc 62435283809</span></td></tr><tr><td>2026/04/30</td><td>Joyce Plaatjie</td><td><span class="badge bdg-m">Payments</span></td><td class="num neg">(R&nbsp;2,200.00)</td><td><span class="src src-bank">BANK STMT</span><span class="ref">FNB acc 62435283809</span></td></tr></tbody>
+      <tfoot><tr><td colspan="3">TOTAL EXPENSES</td><td class="num neg">(R&nbsp;12,665.09)</td><td></td></tr></tfoot>
+    </table>
+  </div>
+</div>
+
+<!-- PAYPAL / UPWORK -->
+<div class="card">
+  <div class="card-hdr" onclick="toggleCard(this)">
+    <div class="ch-left"><span class="ch-title">&#128179; PayPal Income</span><span class="ch-cnt">2 payments</span><span class="src src-paypal" style="font-size:10px">PAYPAL</span></div>
+    <div style="display:flex;align-items:center"><span class="ch-total pos">R&nbsp;18,231.04</span><span class="tog">&#9660;</span></div>
+  </div>
+  <div class="card-body closed">
+    <div class="notice notice-warn" style="margin-top:16px">
+      <span class="notice-icon">&#9888;</span>
+      <div class="notice-body"><div class="notice-title">ZAR amounts are approximate &mdash; verify against FNB bank statement</div>
+      <div class="notice-text">Converted at 1 USD = 16.2487 ZAR (derived from April PayPal withdrawal $305.36 = R4,961.89). PayPal withdraws to FNB account linked to jacquesgroenewald88@gmail.com. Confirm ZAR amounts from the FNB statement on the withdrawal dates.</div></div>
+    </div>
+    <table class="dtbl">
+      <thead><tr><th>Date</th><th>Description</th><th>Transaction ID</th><th class="num">USD</th><th class="num">Approx ZAR</th><th>Source</th></tr></thead>
+      <tbody>
+        <tr><td>2026/04/23</td><td>MySalonSuite (Rachel Kueppers) via PayPal<br><span class="muted">General Payment — withdrawn to FNB</span></td>
+          <td class="ref">6YS062086N6410516</td>
+          <td class="num">$ 800.00</td>
+          <td class="num pos">R&nbsp;12,998.96</td>
+          <td><span class="src src-paypal">PAYPAL</span><span class="ref">PayPal April 62267462168-linked.csv</span></td></tr><tr><td>2026/04/27</td><td>Wix.com refund (received as income)<br><span class="muted">Net $305.36 after PayPal fee — FNB R4,961.89 on 28 Apr</span></td>
+          <td class="ref">4W760347CX818121B</td>
+          <td class="num">$ 322.00</td>
+          <td class="num pos">R&nbsp;5,232.08</td>
+          <td><span class="src src-paypal">PAYPAL</span><span class="ref">PayPal April 62267462168-linked.csv</span></td></tr>
+      </tbody>
+      <tfoot><tr>
+        <td colspan="3">TOTAL (2 payments)</td>
+        <td class="num">$ 1,122.00</td>
+        <td class="num pos">R&nbsp;18,231.04</td>
+        <td></td>
+      </tr></tfoot>
+    </table>
+  </div>
+</div>
+
+<!-- TBC ITEMS -->
+<div class="tbc-box">
+  <h3>&#9888; Items Pending Confirmation (not included in above)</h3>
+  <table>
+    <tr><td><strong>01 + 30 Apr — Business acc</strong></td><td>SANTAM J126734139 / J126988868</td><td><strong>R1,766.33 ×2</strong></td><td>Insurance — excluded (likely personal/vehicle). Confirm if JCE.</td></tr>
+    <tr><td><strong>PayPal (both)</strong></td><td>ZAR approximate</td><td>rate 16.2487</td><td>Verify ZAR against FNB withdrawals.</td></tr>
+  </table>
+</div>
+
+<!-- SOURCE FILES DOWNLOAD -->
+<div class="card">
+  <div class="card-hdr" onclick="toggleCard(this)">
+    <div class="ch-left"><span class="ch-title">&#128196; Source Files</span><span class="ch-cnt">4 files</span></div>
+    <div style="display:flex;align-items:center"><span style="font-size:12px;color:#ccc;margin-right:4px">Click to download originals</span><span class="tog">&#9660;</span></div>
+  </div>
+  <div class="card-body closed">
+    <div class="notice notice-info" style="margin-top:16px">
+      <span class="notice-icon">&#8505;</span>
+      <div class="notice-body"><div class="notice-title">Raw source files</div>
+      <div class="notice-text">All source documents used to compile this report. Click any Download button to save the file directly from this page &mdash; no server required.</div></div>
+    </div>
+    <div class="src-files-grid"><div class="src-file"><div class="src-file-info"><span class="src-icon">🏦</span><div><div class="src-label">Business Bank Statement</div><div class="src-desc">FNB Business Cheque Acc 62435283809 — April 2026 &nbsp;&bull;&nbsp; <span class="src-size">5.5&nbsp;KB</span></div></div></div><a class="dl-btn" href="data:text/csv;base64,QUNDT1VOVCBUUkFOU0FDVElPTiBISVNUT1JZCgpOYW1lOiwgSmFjcXVlcywgR3JvZW5ld2FsZApBY2NvdW50OiwgNjI0MzUyODM4MDksIFtCdXNpbmVzcyBBY2NvdW50XQpCYWxhbmNlOiwgMTAxNDMuNzUsIDYyNjMuNzYKCkRhdGUsIEFtb3VudCwgQmFsYW5jZSwgRGVzY3JpcHRpb24KMjAyNi8wNC8zMCwgLTE3NjYuMzMsIDYwNi43NSwgU0FOVEFNICAgIEoxMjY5ODg4NjgKMjAyNi8wNC8zMCwgLTEzNDkuMDAsIDIzNzMuMDgsIE1XRUIgICAgICA2NDA4MTk3NzpSNDM4NTUxNjgKMjAyNi8wNC8zMCwgMTg5OS4wMCwgMzcyMi4wOCwgQUJTQSBCQU5LIFRPIFNUUkFORCBJTlYwMDEwODA5CjIwMjYvMDQvMjgsIC0yNjAyLjM1LCAxODIzLjA4LCBQVVJDSCBGQUNFQksgKkxDM0pNTEhIMzIgIDQwMDU2OCoqKioqKjkyNTEKMjAyNi8wNC8yOCwgLTEzNzguMDYsIDQ0MjUuNDMsIFBVUkNIIEhJR0hMRVZFTCBJTkMuICAgICAgNDAwNTY4KioqKioqOTI1MQoyMDI2LzA0LzMwLCAtNjUyNy4wMCwgNTgwMy40OSwgTWZiIFN0b2NrCjIwMjYvMDQvMzAsIDMyODYuMDAsIDEyMzMwLjQ5LCBGTkIgQVBQIFRSQU5TRkVSIEZST00gU0FWSU5HIFdJVEhEUkFXQUwKMjAyNi8wNC8zMCwgLTIyMDAuMDAsIDkwNDQuNDksIEpveWNlIFBsYWF0amllCjIwMjYvMDQvMzAsIC01MTAuMjEsIDExMjQ0LjQ5LCBTQVJTRUZMTkcgMDA5NTY5OTQ1MgoyMDI2LzA0LzMwLCAtMzE4Ni4wMCwgMTE3NTQuNzAsIFZBVUxUIEFDQ09VTlQgU0FWSU5HCjIwMjYvMDQvMjksIC0xMDAuMDAsIDE0OTQwLjcwLCAjSU5UIFBZTVQgRkVFLUZBQ0VCSyAqM05ICjIwMjYvMDQvMjksIC05LjY3LCAxNTA0MC43MCwgI0lOVCBQWU1UIEZFRS1Hb29nbGUgT25lCjIwMjYvMDQvMjgsIDEwMDAuMDAsIDE1MDUwLjM3LCBESUUgVkVJTElORyBTQVNPTAoyMDI2LzA0LzI4LCAyODk5LjUxLCAxNDA1MC4zNywgTkVUQ0FTSDAyMVBBWUZBU1QgNDcxMzcwMQoyMDI2LzA0LzI0LCAtMzMwLjI3LCAxMTE1MC44NiwgUFVSQ0ggSE9TVElOR0VSKiBIT1NUSU5HRSA0MDA1NjgqKioqKio5MjUxCjIwMjYvMDQvMjUsIC0xMjc3Ni4yNSwgMTE0ODEuMTMsIERJQU5FIENPTFFVSE9VTiBTQUxBCjIwMjYvMDQvMjUsIDIwMDAwLjAwLCAyNDI1Ny4zOCwgRk5CIEFQUCBUUkFOU0ZFUiBGUk9NIFRSQU5TRkVSIEpCCjIwMjYvMDQvMjQsIC0wLjg1LCA0MjU3LjM4LCAjSU5UIFBZTVQgRkVFLUROSCpHT0RBRERZCjIwMjYvMDQvMjMsIC00MzYuMTgsIDQyNTguMjMsIFBVUkNIIFNVUEVSU1BBUiBWQUFMUEFSSyAgNDAwNTY4KioqKioqOTI1MQoyMDI2LzA0LzIxLCAtNTAwOS40MCwgNDY5NC40MSwgUFVSQ0ggRkFDRUJLICozTkg5M0tSRzMyICA0MDA1NjgqKioqKio5MjUxCjIwMjYvMDQvMjEsIC0xNjkuMDUsIDk3MDMuODEsIFBVUkNIIEhJR0hMRVZFTCBJTkMuICAgICAgNDAwNTY4KioqKioqOTI1MQoyMDI2LzA0LzIwLCAtMTg4MS42MiwgOTg3Mi44NiwgUFVSQ0ggSElHSExFVkVMIElOQy4gICAgICA0MDA1NjgqKioqKio5MjUxCjIwMjYvMDQvMjAsIC01MjguMjksIDExNzU0LjQ4LCBQVVJDSCBDT01NSVggICAgICAgICAgICAgIDQwMDU2OCoqKioqKjkyNTEKMjAyNi8wNC8yMCwgLTQyOS45OSwgMTIyODIuNzcsIFBVUkNIIEdvb2dsZSBPbmUgICAgICAgICAgNDAwNTY4KioqKioqOTI1MQoyMDI2LzA0LzIwLCAtMzUzLjY3LCAxMjcxMi43NiwgUFVSQ0ggS0FJIFRBSyBTUE9SVFMgUEFSSyA0MDA1NjgqKioqKio5MjUxCjIwMjYvMDQvMTgsIC0yNzYuMDAsIDEzMDY2LjQzLCBQVVJDSCBPWUFTVU1JIExJTUlURUQgICAgIDQwMDU2OCoqKioqKjkyNTEKMjAyNi8wNC8xOCwgLTEyNS4wNiwgMTMzNDIuNDMsIFBVUkNIIDctRWxldmVuLCBISyAoMDg4NykgNDAwNTY4KioqKioqOTI1MQoyMDI2LzA0LzE4LCAtMTgwLjAwLCAxMzQ2Ny40OSwgUFVSQ0ggQUNTQSBKSUEgICAgICAgICAgICA0MDA1NjgqKioqKio5MjUxCjIwMjYvMDQvMjAsIDIwMDkuNDYsIDEzNjQ3LjQ5LCBORVRDQVNIMDIxUEFZRkFTVCA0NjgzNjg3CjIwMjYvMDQvMTcsIC01NzYwLjg4LCAxMTYzOC4wMywgUFVSQ0ggSElHSExFVkVMIEFHRU5DWSBTVSA0MDA1NjgqKioqKio5MjUxCjIwMjYvMDQvMTYsIC01MDAuMDAsIDE3Mzk4LjkxLCBQVVJDSCBTQVNPTCBWQUFMIFBBUksgICAgIDQwMDU2OCoqKioqKjkyNTEKMjAyNi8wNC8xNiwgLTIxMC4wMCwgMTc4OTguOTEsIFBVUkNIIE9DRUFOIEJBU0tFVCBBSVJQT1IgNDAwNTY4KioqKioqOTI1MQoyMDI2LzA0LzE3LCAxMjM4LjkwLCAxODEwOC45MSwgTkVUQ0FTSDAyMVBBWUZBU1QgNDY3OTYyOQoyMDI2LzA0LzE0LCAtNDcwLjAwLCAxNjg3MC4wMSwgUFVSQ0ggWW9jbyAgICpDb21wdXRlciBEaSA0MDA1NjgqKioqKio5MjUxCjIwMjYvMDQvMTUsIDYwMC4wMCwgMTczNDAuMDEsIEZOQiBPQiBQTVQgICAgICAgICAgICBUSEUgQUNSRUFHRQoyMDI2LzA0LzE1LCAtMTAwMC4wMCwgMTY3NDAuMDEsIE1GQiBQQVlGQVNUIFBBWU9VVAoyMDI2LzA0LzE1LCAtNjAwMC4wMCwgMTc3NDAuMDEsIENSRURJVCBSRVBBWQoyMDI2LzA0LzEzLCAtMTAwMC4wMCwgMjM3NDAuMDEsIFBVUkNIIFNBU09MIFZBQUwgUEFSSyAgICAgNDAwNTY4KioqKioqOTI1MQoyMDI2LzA0LzE0LCAtMzAwMC4wMCwgMjQ3NDAuMDEsIENFTEwgQ0FTSCBXSVQwMDk2MDE2OSAwMDAwMDI3Nzk1MTI0MjkyCjIwMjYvMDQvMTQsIDExNTQ1LjE0LCAyNzc0MC4wMSwgTkVUQ0FTSDAyMVBBWUZBU1QgNDY2NDQ5NQoyMDI2LzA0LzExLCAtMzcuOTUsIDE2MTk0Ljg3LCBQVVJDSCBETkgqR09EQUREWSM0MDYxMjMwIDQwMDU2OCoqKioqKjkyNTEKMjAyNi8wNC8xMywgMzAwMC4wMCwgMTYyMzIuODIsIEZOQiBPQiBQTVQgICAgICAgICAgICBDT00gT0ZGSUNFIFNZU1RFTVMgQwoyMDI2LzA0LzEzLCAtNjAwLjAwLCAxMzIzMi44MiwgTWZiIHN0b2NrCjIwMjYvMDQvMTMsIC0yNTAwLjAwLCAxMzgzMi44MiwgTWZiIHN0b2NrCjIwMjYvMDQvMTMsIC0zMDAwLjAwLCAxNjMzMi44MiwgQ29ybmVhIE1GQgoyMDI2LzA0LzEzLCAxNzMwOC45MywgMTkzMzIuODIsIE5FVENBU0gwMjFQQVlGQVNUIDQ2NjIwNTEKMjAyNi8wNC8xMywgLTg1MC4wMCwgMjAyMy44OSwgQ1JFRElUIFJFUEFZCjIwMjYvMDQvMDksIC00MzI2LjEyLCAyODczLjg5LCBQVVJDSCBGbHlTYWZhaXIgU0IzT1oxOjUyIDQwMDU2OCoqKioqKjkyNTEKMjAyNi8wNC8xMCwgLTE1MDAuMDAsIDcyMDAuMDEsIFRSQU5TRkVSIEoKMjAyNi8wNC8xMCwgMzA2My4yMCwgODcwMC4wMSwgTkVUQ0FTSDAyMVBBWUZBU1QgNDY1NTcxMQoyMDI2LzA0LzA4LCAtNjk1LjAwLCA1NjM2LjgxLCBQVVJDSCBNT1dNRUNIIExPV05NT1dFUlMgIDQwMDU2OCoqKioqKjkyNTEKMjAyNi8wNC8wOCwgLTIwMC4wMCwgNjMzMS44MSwgUFVSQ0ggQk9CIFBBWSAgICAgICAgICAgICA0MDA1NjgqKioqKio5MjUxCjIwMjYvMDQvMDcsIC01MDMwLjgyLCA2NTMxLjgxLCBQVVJDSCBGQUNFQksgKkwyN0hUSFpHMzIgIDQwMDU2OCoqKioqKjkyNTEKMjAyNi8wNC8wNywgLTEwODYuOTQsIDExNTYyLjYzLCBQVVJDSCBTSE9QSUZZKiA1MTIwMTcyNzMgIDQwMDU2OCoqKioqKjkyNTEKMjAyNi8wNC8wNywgLTM3Ljk1LCAxMjY0OS41NywgUFVSQ0ggRE5IKkdPREFERFkjNDA1NzU1NiA0MDA1NjgqKioqKio5MjUxCjIwMjYvMDQvMDgsIDI2MDAuMDAsIDEyNjg3LjUyLCBGTkIgQVBQIFRSQU5TRkVSIEZST00gQ1JFRElUIFJFUEFZCjIwMjYvMDQvMDgsIC01MDAuMDAsIDEwMDg3LjUyLCBDRUxMIENBU0ggV0lUMDA5NjAwMjAgMDAwMDAyNzc5NTEyNDI5MgoyMDI2LzA0LzA4LCAxMzgyLjA0LCAxMDU4Ny41MiwgTkVUQ0FTSDAyMVBBWUZBU1QgNDY0NjI2NwoyMDI2LzA0LzA3LCAtODguNzQsIDkyMDUuNDgsICNTRVJWSUNFIEZFRVMKMjAyNi8wNC8wNywgLTM0OS4wMCwgOTI5NC4yMiwgI01PTlRITFkgQUNDT1VOVCBGRUUKMjAyNi8wNC8wNywgLTAuMjYsIDk2NDMuMjIsIElOVCBPTiBERUJJVCBCQUxBTkNFCjIwMjYvMDQvMDcsIC00NTAuNzcsIDk2NDMuNDgsIENPUlBHVUFSQU4KMjAyNi8wNC8wNCwgLTE0OS45OSwgMTAwOTQuMjUsIFBVUkNIIEdvb2dsZSBZb3VUdWJlUHJlbWkgNDAwNTY4KioqKioqOTI1MQoyMDI2LzA0LzA0LCAtNi4wMCwgMTAyNDQuMjQsICNGRUUgICBERUNMSU5FRCBQVVJDSCBUUkFOIDQwMDU2OCoqKioqKjkyNQoyMDI2LzA0LzA3LCAyMTIwLjIyLCAxMDI1MC4yNCwgTkVUQ0FTSDAyMVBBWUZBU1QgNDYzMzg2NQoyMDI2LzA0LzA3LCAtNTIwNS44OSwgODEzMC4wMiwgU0FSU0VGTE5HIDAwOTUyNjUwMTcKMjAyNi8wNC8wNywgMzIzOC41NywgMTMzMzUuOTEsIFBBWUZBU1QgNDY0NjI2OQoyMDI2LzA0LzA3LCAzNTAwLjAwLCAxMDA5Ny4zNCwgRk5CIEFQUCBUUkFOU0ZFUiBGUk9NIFRSQU5TRkVSIEpCCjIwMjYvMDQvMDcsIC00MjAwLjAwLCA2NTk3LjM0LCBDUkVESVQgUkVQQVkKMjAyNi8wNC8wNywgMzUwMC4wMCwgMTA3OTcuMzQsIEZOQiBBUFAgVFJBTlNGRVIgRlJPTSBUUkFOU0ZFUiBKQgoyMDI2LzA0LzA3LCAtMTAwLjAwLCA3Mjk3LjM0LCBTQ0hEIFRSRiA2Mjg5MDAxNTg0NwoyMDI2LzA0LzA3LCAyMDAwLjAwLCA3Mzk3LjM0LCBGTkIgQVBQIFRSQU5TRkVSIEZST00gVFJBTlNGRVIgSgoyMDI2LzA0LzAyLCAtODguMzMsIDUzOTcuMzQsIFBVUkNIIEtpZSBBSSAgICAgICAgICAgICAgNDAwNTY4KioqKioqOTI1MQoyMDI2LzA0LzAyLCAtODEuMDAsIDU0ODUuNjcsIFBVUkNIIEZSRVNIQlJFVyBWRU5ESSAgICAgNDAwNTY4KioqKioqOTI1MQoyMDI2LzA0LzA0LCAtMTk1LjAwLCA1NTY2LjY3LCBIT1NUSU5HCjIwMjYvMDQvMDIsIC01MC44NywgNTc2MS42NywgI0lOVCBQWU1UIEZFRS1GQUNFQksgKjZCRgoyMDI2LzA0LzAyLCAxODk5LjAwLCA1ODEyLjU0LCBBQlNBIEJBTksgVE8gU1RSQU5EIElOVjAwMTA4MAoyMDI2LzA0LzAxLCAtMjU1LjAwLCAzOTEzLjU0LCBQVVJDSCBSQUZURVJaIExBVEUgTklURSBMIDQwMDU2OCoqKioqKjkyNTEKMjAyNi8wNC8wMiwgLTQ1MDAuMDAsIDQxNjguNTQsIFRSQU5TRkVSIEoKMjAyNi8wNC8wMiwgNjUwMC4wMCwgODY2OC41NCwgRk5CIEFQUCBQQVlNRU5UIEZST00gIFJFUFRJTElBIE1BUktFVElORwoyMDI2LzA0LzAyLCAtMzUwMC4wMCwgMjE2OC41NCwgQ1JFRElUIFJFUEFZCjIwMjYvMDQvMDEsIC0xNzY2LjMzLCA1NjY4LjU0LCBTQU5UQU0gICAgSjEyNjczNDEzOQoyMDI2LzA0LzAxLCAtMjk3MC4wMCwgNzQzNC44NywgVklDVFVTICAgIDM5OTA5NTY3NSBORVRDQVNICjIwMjYvMDMvMzEsIC0xMTAwLjAwLCAxMDQwNC44NywgUFVSQ0ggU0FTT0wgVkFBTCBQQVJLICAgICA0MDA1NjgqKioqKio5MjUxCjIwMjYvMDMvMzEsIC0xMTAuMDAsIDExNTA0Ljg3LCBQVVJDSCBDT0NLIEFORCBCVUxMIEJBUiAgIDQwMDU2OCoqKioqKjkyNTEKMjAyNi8wNC8wMSwgMjAwOS40NiwgMTE2MTQuODcsIE5FVENBU0gwMjFQQVlGQVNUIDQ2MjU3MTMKMjAyNi8wNC8wMSwgMTgxNi44MiwgOTYwNS40MSwgTkVUQ0FTSDAyMVBBWUZBU1QgNDYyNDEwMQoyMDI2LzA0LzAxLCAtMTUuMDAsIDc3ODguNTksIFNNQVJULUFQIFBSRVBBSUQgICAgICBBSVJUSU1FIDA3OTUxMjQyOTIKMjAyNi8wNC8wMSwgNzAwMC4wMCwgNzgwMy41OSwgRk5CIEFQUCBUUkFOU0ZFUiBGUk9NIFRSQU5TRkVSIEoK" download="Business Cheque Account April 62435283809.csv">&#11015; Download</a></div>
+<div class="src-file"><div class="src-file-info"><span class="src-icon">💳</span><div><div class="src-label">PayPal Statement</div><div class="src-desc">PayPal account — April 2026 &nbsp;&bull;&nbsp; <span class="src-size">2.0&nbsp;KB</span></div></div></div><a class="dl-btn" href="data:text/csv;base64,77u/IkRhdGUiLCJUaW1lIiwiVGltZVpvbmUiLCJOYW1lIiwiVHlwZSIsIlN0YXR1cyIsIkN1cnJlbmN5IiwiR3Jvc3MiLCJGZWUiLCJOZXQiLCJGcm9tIEVtYWlsIEFkZHJlc3MiLCJUbyBFbWFpbCBBZGRyZXNzIiwiVHJhbnNhY3Rpb24gSUQiLCJTaGlwcGluZyBBZGRyZXNzIiwiQWRkcmVzcyBTdGF0dXMiLCJJdGVtIFRpdGxlIiwiSXRlbSBJRCIsIlNoaXBwaW5nIGFuZCBIYW5kbGluZyBBbW91bnQiLCJJbnN1cmFuY2UgQW1vdW50IiwiU2FsZXMgVGF4IiwiT3B0aW9uIDEgTmFtZSIsIk9wdGlvbiAxIFZhbHVlIiwiT3B0aW9uIDIgTmFtZSIsIk9wdGlvbiAyIFZhbHVlIiwiUmVmZXJlbmNlIFR4biBJRCIsIkludm9pY2UgTnVtYmVyIiwiQ3VzdG9tIE51bWJlciIsIlF1YW50aXR5IiwiUmVjZWlwdCBJRCIsIkJhbGFuY2UiLCJBZGRyZXNzIExpbmUgMSIsIkFkZHJlc3MgTGluZSAyL0Rpc3RyaWN0L05laWdoYm9yaG9vZCIsIlRvd24vQ2l0eSIsIlN0YXRlL1Byb3ZpbmNlL1JlZ2lvbi9Db3VudHkvVGVycml0b3J5L1ByZWZlY3R1cmUvUmVwdWJsaWMiLCJaaXAvUG9zdGFsIENvZGUiLCJDb3VudHJ5IiwiQ29udGFjdCBQaG9uZSBOdW1iZXIiLCJTdWJqZWN0IiwiTm90ZSIsIkNvdW50cnkgQ29kZSIsIkJhbGFuY2UgSW1wYWN0IgoiMjAyNi8wNC8yMyIsIjA0OjUyOjA3IiwiU0FTVCIsIlJhY2hlbCBLdWVwcGVycyIsIkdlbmVyYWwgUGF5bWVudCIsIkNvbXBsZXRlZCIsIlVTRCIsIjgwMC4wMCIsIjAuMDAiLCI4MDAuMDAiLCJya3VlcHBlcnNAbXlzYWxvbnN1aXRlLmNvbSIsImphY3F1ZXNncm9lbmV3YWxkODhAZ21haWwuY29tIiwiNllTMDYyMDg2TjY0MTA1MTYiLCIiLCJOb24tQ29uZmlybWVkIiwiIiwiIiwiIiwiIiwiMC4wMCIsIiIsIiIsIiIsIiIsIiIsIiIsIiIsIiIsIiIsIjgwMC4wMCIsIiIsIiIsIiIsIiIsIiIsIiIsIiIsIiIsIiIsIiIsIkNyZWRpdCIKIjIwMjYvMDQvMjMiLCIwNTo1ODoxOSIsIlNBU1QiLCJGTkIgV2l0aGRyYXciLCJXZWJzaXRlIFBheW1lbnQiLCJDb21wbGV0ZWQiLCJVU0QiLCItODAwLjAwIiwiMC4wMCIsIi04MDAuMDAiLCJqYWNxdWVzZ3JvZW5ld2FsZDg4QGdtYWlsLmNvbSIsInBheXBhbHdpdGhkcmF3QGZuYi5jby56YSIsIjdKSDAxNDQ4MUg5MzI3OTE2IiwiIiwiTm9uLUNvbmZpcm1lZCIsIiIsIiIsIjAuMDAiLCIiLCIwLjAwIiwiIiwiIiwiIiwiIiwiIiwiUjAyNlQ3NUpNMCIsIiIsIjEiLCIiLCIwLjAwIiwiIiwiIiwiIiwiIiwiIiwiIiwiMDg2MTcyOTcyNSIsIiIsIiIsIiIsIkRlYml0IgoiMjAyNi8wNC8yNyIsIjE2OjA5OjA2IiwiU0FTVCIsIldpeC5jb20gTHRkIiwiR2VuZXJhbCBQYXltZW50IiwiQ29tcGxldGVkIiwiVVNEIiwiMzIyLjAwIiwiLTE2LjY0IiwiMzA1LjM2IiwidGhlYmlnZ2FtZUB3aXguY29tIiwiamFjcXVlc2dyb2VuZXdhbGQ4OEBnbWFpbC5jb20iLCI0Vzc2MDM0N0NYODE4MTIxQiIsIkF2aXNoYWksIEFicmFoYW1pLCA0MCDXoNee15wg16rXnCDXkNeR15nXkSwgLiwg16rXnCDXkNeR15nXkSAtINeZ16TXlSwgLiwgNjM1MDUsIElzcmFlbCIsIk5vbi1Db25maXJtZWQiLCIiLCIiLCIiLCIiLCIwLjAwIiwiIiwiIiwiIiwiIiwiIiwiIiwiIiwiIiwiIiwiMzA1LjM2IiwiNDAg16DXntecINeq15wg15DXkdeZ15EiLCIuIiwi16rXnCDXkNeR15nXkSAtINeZ16TXlSIsIi4iLCI2MzUwNSIsIklzcmFlbCIsIiIsIiIsIiIsIklMIiwiQ3JlZGl0IgoiMjAyNi8wNC8yNyIsIjE3OjI4OjAxIiwiU0FTVCIsIkZOQiBXaXRoZHJhdyIsIldlYnNpdGUgUGF5bWVudCIsIkNvbXBsZXRlZCIsIlVTRCIsIi0zMDUuMzYiLCIwLjAwIiwiLTMwNS4zNiIsImphY3F1ZXNncm9lbmV3YWxkODhAZ21haWwuY29tIiwicGF5cGFsd2l0aGRyYXdAZm5iLmNvLnphIiwiMlNUNjg2ODZFWDI2OTYwNDYiLCIiLCJOb24tQ29uZmlybWVkIiwiIiwiIiwiMC4wMCIsIiIsIjAuMDAiLCIiLCIiLCIiLCIiLCIiLCJSMDI2U1RaQlIwIiwiIiwiMSIsIiIsIjAuMDAiLCIiLCIiLCIiLCIiLCIiLCIiLCIwODYxNzI5NzI1IiwiIiwiIiwiIiwiRGViaXQiCg==" download="PayPal April 62267462168-linked.csv">&#11015; Download</a></div>
+<div class="src-file"><div class="src-file-info"><span class="src-icon">🏦</span><div><div class="src-label">Personal Bank Statement</div><div class="src-desc">FNB Personal Cheque Acc 62267462168 — April 2026 &nbsp;&bull;&nbsp; <span class="src-size">4.1&nbsp;KB</span></div></div></div><a class="dl-btn" href="data:text/csv;base64,QUNDT1VOVCBUUkFOU0FDVElPTiBISVNUT1JZCgpOYW1lOiwgSmFjcXVlcywgR3JvZW5ld2FsZApBY2NvdW50OiwgNjIyNjc0NjIxNjgsIFtDaGVxdWUgQWNjb3VudF0KQmFsYW5jZTosIC01NjE0Mi4zMSwgMzA4NTQuMzkKCkRhdGUsIEFtb3VudCwgQmFsYW5jZSwgRGVzY3JpcHRpb24KMjAyNi8wNC8zMCwgLTI2MDQuNDEsIC0zODIxNC4xMiwgVk9EQUNPTSAwNDgzMTE5ODAwIEkxODkzNjIxCjIwMjYvMDQvMzAsIC03ODQuNTQsIC0zNTYwOS43MSwgT0xETVVUQ09MICAgIDMzMTQ5MzU5MzIwMjYwNDMwCjIwMjYvMDQvMzAsIC0yNzAwLjAwLCAtMzQ4MjUuMTcsIEhXQiBXSU4KMjAyNi8wNC8zMCwgLTUwMC4wMCwgLTMyMTI1LjE3LCBTQ0hFRFVMRUQgNjMxMDA4OTQzODUKMjAyNi8wNC8zMCwgMTUwMDAuMDAsIC0zMTYyNS4xNywgSiBBQkFOSwoyMDI2LzA0LzI5LCAyNzAwLjAwLCAtNDY2MjUuMTcsIDI0NTc5MTgwMzQyCjIwMjYvMDQvMjgsIDcyOC4wMCwgLTQ5MzI1LjE3LCBBQlNBIEJBTksgeHh4CjIwMjYvMDQvMjgsIC03NC40MywgLTUwMDUzLjE3LCAjUjAyNlNUWkJSMCBQQVlQQUwgRkVFCjIwMjYvMDQvMjgsIDQ5NjEuODksIC00OTk3OC43NCwgUjAyNlNUWkJSMAoyMDI2LzA0LzI4LCAtMTUwMC4wMCwgLTU0OTQwLjYzLCBLQVRJTktBIFZPUwoyMDI2LzA0LzI4LCAtMjUwMC4wMCwgLTUzNDQwLjYzLCBIV0IgV0lOCjIwMjYvMDQvMjgsIDMwMDAuMDAsIC01MDk0MC42MywgUmVmIDI0NTU5NzA3MTQwCjIwMjYvMDQvMjUsIDE4MDAuMDAsIC01Mzk0MC42MywgUmVmIDI0NTQ4NTAwODY3CjIwMjYvMDQvMjUsIDUwMC4wMCwgLTU1NzQwLjYzLCBSZWYgMjQ1NDgyNTMzODAKMjAyNi8wNC8yNSwgLTIzMDAuMDAsIC01NjI0MC42MywgSFdCIFdJTk5JTkcKMjAyNi8wNC8yNSwgLTQwMC4wMCwgLTUzOTQwLjYzLCBFTEVDVFJJQ0lUWSAwNDE2ODY3MzM1MAoyMDI2LzA0LzI1LCAtMjAwMDAuMDAsIC01MzU0MC42MywgVFJBTlNGRVIgSkIKMjAyNi8wNC8yNCwgLTMzOTIuMzYsIC0zMzU0MC42MywgRk5CIFBMT0FOIENSMDAwMDAyNzY5MTc4MjYwNDI0CjIwMjYvMDQvMjMsIDUuMDAsIC0zMDE0OC4yNywgTE9UVE8gV0lOTklOR1MgVk9EU0c5VDZQVjZQCjIwMjYvMDQvMjMsIC0yNjAwLjAwLCAtMzAxNTMuMjcsIFZBQUxQQVJLIFNLT09MCjIwMjYvMDQvMjMsIC0yMDAwLjAwLCAtMjc1NTMuMjcsIE1VTklDSVBBTElUWQoyMDI2LzA0LzIzLCA1MDAwMC4wMCwgLTI1NTUzLjI3LCA2NDcyNjA0MwoyMDI2LzA0LzIzLCAyNTc2Ljk0LCAtNzU1NTMuMjcsIElOVEVSTkVUIFRSRiBGUk9NICAgICBTSEFSRSBTQVZFUiBXSVRIRFJBVwoyMDI2LzA0LzIyLCAtODAuMDAsIC03ODEzMC4yMSwgTE9UVE8gUFVSQ0hBU0UgUEFJRCAgIExPVFRPIFBVUkNIQVNFCjIwMjYvMDQvMjIsIC02NDEuMDAsIC03ODA1MC4yMSwgTGljIFJlbmV3YWwgKjE3MjUxOTAKMjAyNi8wNC8yMiwgLTI1MDAuMDAsIC03NzQwOS4yMSwgQ1JFRElUIFJFUEFZCjIwMjYvMDQvMjEsIC00MDAuMDAsIC03NDkwOS4yMSwgRUxFQ1RSSUNJVFkgMDQxNjg2NzMzNTAKMjAyNi8wNC8yMSwgNTAwMC4wMCwgLTc0NTA5LjIxLCBGTkIgQVBQIFRSQU5TRkVSIEZST00gQ1JFRElUIFJFUEFZCjIwMjYvMDQvMjAsIDQwNC4wMCwgLTc5NTA5LjIxLCBQRUFDSFBBWSAgUEVBQ0gtMTY0LTIwMDQyMDI2CjIwMjYvMDQvMTgsIC0yNTAwLjAwLCAtNzk5MTMuMjEsIENSRURJVCBSRVBBWQoyMDI2LzA0LzE3LCAtMTUwMC4wMCwgLTc3NDEzLjIxLCBDUkVESVQgUkVQQVkKMjAyNi8wNC8xNywgODQwNS4zMywgLTc1OTEzLjIxLCBBTExBTiBHUkFZQUdSQTEwMjQxNTUgQUdMSVNQUkUKMjAyNi8wNC8xNywgLTIwMDAuMDAsIC04NDMxOC41NCwgQ1JFRElUIFJFUEFZCjIwMjYvMDQvMTUsIC02LjQwLCAtODIzMTguNTQsICNTRVJWSUNFIEZFRVMKMjAyNi8wNC8xNSwgLTEzLjIwLCAtODIzMTIuMTQsICNWQUxVRSBBRERFRCBTRVJWIEZFRVMKMjAyNi8wNC8xNSwgLTQ1NS4wMCwgLTgyMjk4Ljk0LCAjTU9OVEhMWSBBQ0NPVU5UIEZFRQoyMDI2LzA0LzE1LCAzNTAwLjAwLCAtODE4NDMuOTQsIHh4eAoyMDI2LzA0LzE0LCAtNjkuMDAsIC04NTM0My45NCwgI01PTlRITFkgQ1JFRElUIEZFRQoyMDI2LzA0LzE0LCA0OTAuNjYsIC04NTI3NC45NCwgRFIgSU5URVJFU1QgUkVCQVRFCjIwMjYvMDQvMTQsIC0xMjI2LjY1LCAtODU3NjUuNjAsIElOVCBPTiBERUJJVCBCQUxBTkNFCjIwMjYvMDQvMTQsIC0zMDAwLjAwLCAtODQ1MzguOTUsIENSRURJVCBSRVBBWQoyMDI2LzA0LzEzLCAyNzUwLjAwLCAtODE1MzguOTUsIFBFQUNIUEFZICBQRUFDSC0xNjMtMTMwNDIwMjYKMjAyNi8wNC8xMCwgLTE1MDAuMDAsIC04NDI4OC45NSwgQ1JFRElUIFJFUEFZCjIwMjYvMDQvMTAsIDE1MDAuMDAsIC04Mjc4OC45NSwgRk5CIEFQUCBUUkFOU0ZFUiBGUk9NIFRSQU5TRkVSIEoKMjAyNi8wNC8xMCwgMjUwMC4wMCwgLTg0Mjg4Ljk1LCBGTkIgQVBQIFRSQU5TRkVSIEZST00gU0hBUkUgV0lUSERSQVdBTAoyMDI2LzA0LzEwLCAtNzAwLjAwLCAtODY3ODguOTUsIENSRURJVCBSRVBBWQoyMDI2LzA0LzEwLCAtMjAwLjAwLCAtODYwODguOTUsIFBMQVlUSU1FIFRSQU5TUE9SVAoyMDI2LzA0LzA4LCAtMjYwMC4wMCwgLTg1ODg4Ljk1LCBDUkVESVQgUkVQQVkKMjAyNi8wNC8wOCwgLTE1MDAuMDAsIC04MzI4OC45NSwgQ1JFRElUIFJFUEFZCjIwMjYvMDQvMDgsIC00MDAwLjAwLCAtODE3ODguOTUsIENSRURJVCBSRVBBWQoyMDI2LzA0LzA3LCAtMTE4MTIuNzQsIC03Nzc4OC45NSwgU0FITCAgICAgIDcwNzY4NTcgMDE2NDg4NjU3CjIwMjYvMDQvMDcsIC00NjEzLjE3LCAtNjU5NzYuMjEsIFVNQSBPTUkgICAyNjA0MDE5MzEgICBSRjFUTDhOWgoyMDI2LzA0LzA3LCA1MDAwLjAwLCAtNjEzNjMuMDQsIEFCU0EgQkFOSyBHSUZUCjIwMjYvMDQvMDcsIC0zNTAwLjAwLCAtNjYzNjMuMDQsIFRSQU5TRkVSIEpCCjIwMjYvMDQvMDcsIC0zNTAwLjAwLCAtNjI4NjMuMDQsIFRSQU5TRkVSIEpCCjIwMjYvMDQvMDcsIDE1MDAwLjAwLCAtNTkzNjMuMDQsIHh4eAoyMDI2LzA0LzA3LCAtMjAwMC4wMCwgLTc0MzYzLjA0LCBUUkFOU0ZFUiBKCjIwMjYvMDQvMDQsIC03NzUuOTAsIC03MjM2My4wNCwgTElCRVJUWTA0ODU5ODU0MjE0NzAwQy9QMDRBUFIKMjAyNi8wNC8wNCwgLTMyNi4wMCwgLTcxNTg3LjE0LCBTQVNPTEFMQVJNRjIxMDgKMjAyNi8wNC8wNCwgLTQwMC4wMCwgLTcxMjYxLjE0LCBFTEVDVFJJQ0lUWSAwNDE2ODY3MzM1MAoyMDI2LzA0LzAyLCAtMTgwMC4wMCwgLTcwODYxLjE0LCBDUkVESVQgUkVQQVkKMjAyNi8wNC8wMiwgNDUwMC4wMCwgLTY5MDYxLjE0LCBGTkIgQVBQIFRSQU5TRkVSIEZST00gVFJBTlNGRVIgSgoyMDI2LzA0LzAyLCA2MTguMDAsIC03MzU2MS4xNCwgRk5CIEFQUCBUUkFOU0ZFUiBGUk9NIFNIQVJFIFNBVkVSCjIwMjYvMDQvMDIsIC0xNTAwLjAwLCAtNzQxNzkuMTQsIENSRURJVCBSRVBBWQoyMDI2LzA0LzAyLCAzNTAwLjAwLCAtNzI2NzkuMTQsIEZOQiBBUFAgVFJBTlNGRVIgRlJPTSBDUkVESVQgUkVQQVkKMjAyNi8wNC8wMSwgLTE1MTMuMDAsIC03NjE3OS4xNCwgT0xEIE1VVFVBTDI5ODgyODk3NSAgICAgMjYwNDAxCjIwMjYvMDQvMDEsIC0xMDAwLjAwLCAtNzQ2NjYuMTQsIEFCIElOViAgICA5MDAwMjY0NDUzNAoyMDI2LzA0LzAxLCAtMTA1MC42MywgLTczNjY2LjE0LCBBTExBTiBHUkFZQUdSQTEwMjQxNTUgQUdMUERFQkkKMjAyNi8wNC8wMSwgLTM2OC45NiwgLTcyNjE1LjUxLCBUUkFDS0VSICAgMDBDTEkyMzI0OTQ0ICBUTDY3NTEKMjAyNi8wNC8wMSwgLTMwMDAuMDAsIC03MjI0Ni41NSwgQ1JFRElUIFJFUEFZCjIwMjYvMDQvMDEsIDMyODYuMDAsIC02OTI0Ni41NSwgSU5URVJORVQgVFJGIEZST00gICAgIFNBVklOR1MgVFJBTlNGRVIgQ0hFCjIwMjYvMDQvMDEsIC00MDAwLjAwLCAtNzI1MzIuNTUsIENSRURJVCBSRVBBWQoyMDI2LzA0LzAxLCAtNzAwMC4wMCwgLTY4NTMyLjU1LCBUUkFOU0ZFUiBKCjIwMjYvMDQvMDEsIDE1MDAwLjAwLCAtNjE1MzIuNTUsIFZlcmphYXJzZGFnCjIwMjYvMDQvMDEsIC00MDAuMDAsIC03NjUzMi41NSwgRUxFQ1RSSUNJVFkgMDQxNjg2NzMzNTAKMjAyNi8wMy8zMSwgLTI2LjQzLCAtNzYxMzIuNTUsIFJFLURJUkVDVEVEIEZFRVMgRlJPTSA2MzEwMDg5NDM4NQo=" download="Jacques Cheque Account April 62267462168.csv">&#11015; Download</a></div>
+<div class="src-file"><div class="src-file-info"><span class="src-icon">💳</span><div><div class="src-label">Business Credit Card</div><div class="src-desc">FNB Commercial Platinum 422824******4000 — April 2026 &nbsp;&bull;&nbsp; <span class="src-size">2.1&nbsp;KB</span></div></div></div><a class="dl-btn" href="data:text/csv;base64,QUNDT1VOVCBUUkFOU0FDVElPTiBISVNUT1JZCgpOYW1lOiwgSmFjcXVlcywgR3JvZW5ld2FsZApBY2NvdW50OiwgNDIyODI0KioqKioqNDAwMCwgW0ZOQiBDb21tZXJjaWFsIFBsYXRpbnVtXQpCYWxhbmNlOiwgTi9BLCBOL0EKCkRhdGUsIEFtb3VudCwgQmFsYW5jZSwgRGVzY3JpcHRpb24KMjAyNi8wNC8wOSwgLTQwMDAuMDAsIDAsIENBU0ggQURWIDA1NDU4MDMxICAgICAgICAgICBWT0RTUzFXN1AxNFAKMjAyNi8wNC8wOSwgLTEwNC44MCwgMCwgI0FUTSBUUkFOU0FDVElPTiBGRUUgICAgICAgICAgICAgICAgICAgIAoyMDI2LzA0LzA5LCAtNjg4LjIxLCAwLCAxMFdFQi5JTyAgICAgICAgICAgICAgICAxMFdFQi5JTyAgICAgREUgCjIwMjYvMDQvMTAsIC0yMDUuMDAsIDAsIFBBWUZBU1QqU3F1aXJyZWwgTWVkaWEgIER1cmJhbiAgICAgICAgICAKMjAyNi8wNC8xMCwgLTk0Mi4wNywgMCwgR29vZ2xlIFdvcmtzcGFjZV9qY2VtZWRpRHVibGluICAgICAgICAgIAoyMDI2LzA0LzEzLCA4NTAuMDAsIDAsIDFTQSBDUkVESVQgUkVQQVkgICAgICAgICAgICBWT0RTOVZHWEZKNVAKMjAyNi8wNC8xMywgLTYuMDAsIDAsICNERUNMSU5FRCBBVVRIIEZFRSAgICAgICAgICAgICAgICAgICAgICAKMjAyNi8wNC8xMiwgLTM4OC43MywgMCwgQ0xBVURFLkFJIFNVQlNDUklQVElPTiAgQU5USFJPUElDLkNPTUNBIAoyMDI2LzA0LzEzLCAtMjkxLjU1LCAwLCBBTlRIUk9QSUMgICAgICAgICAgICAgICBBTlRIUk9QSUMuQ09NQ0EgCjIwMjYvMDQvMTMsIC0zODguNzMsIDAsIE9QRU5BSSAqQ0hBVEdQVCBTVUJTQ1IgIE9QRU5BSS5DT00gICBDQSAKMjAyNi8wNC8xMiwgLTUwMC4wMCwgMCwgQk9CIFBBWSAgICAgICAgICAgICAgICAgQnJ5YW5zdG9uICAgICAgIAoyMDI2LzA0LzEyLCAtOTAwLjAwLCAwLCBCT0IgUEFZICAgICAgICAgICAgICAgICBCcnlhbnN0b24gICAgICAgCjIwMjYvMDQvMTMsIC0zMTAuMDAsIDAsIEZseVNhZmFpciBTQjNPWjEtNzM2NzMgIFNvdXRoIEFmcmljYSAgICAKMjAyNi8wNC8xNSwgNjAwMC4wMCwgMCwgMVNBIENSRURJVCBSRVBBWSAgICAgICAgICAgIFZPRFMxVktGVlM1UAoyMDI2LzA0LzE1LCAtMzg4LjUyLCAwLCBBTlRIUk9QSUMgICAgICAgICAgICAgICBBTlRIUk9QSUMuQ09NQ0EgCjIwMjYvMDQvMTUsIC0zMDEuNTIsIDAsIFdXVy5KRVRQQUNHTE9CQUwuQ09NICAgIFNJTkdBUE9SRSAgICAgICAKMjAyNi8wNC8xNSwgLTUwMC4wMCwgMCwgQk9CIFBBWSAgICAgICAgICAgICAgICAgQnJ5YW5zdG9uICAgICAgIAoyMDI2LzA0LzE5LCAtODYyLjU5LCAwLCBIQVNFL01UUiBUU0lNU0hBVFNVSSBBIElIT05HIEtPTkcsICAgICAgCjIwMjYvMDQvMTksIC0xMTYuOTgsIDAsIENBU0ggVFJBTlNBQ1RJT04gRkVFICAgICAgICAgICAgICAgICAgICAKMjAyNi8wNC8yMiwgLTE1MC4wMCwgMCwgQUZSSUhPU1QuQ09NICAgICAgICAgICAgU0FORFRPTiAgICAgICAgIAoyMDI2LzA0LzIyLCAtMzIzLjQ3LCAwLCBORVRMSUZZICAgICAgICAgICAgICAgICBORVRMSUZZLkNPTSAgQ0EgCjIwMjYvMDQvMjIsIC02MDAuMDAsIDAsIFNBU09MIFZBQUwgUEFSSyAgICAgICAgIFNhc29sYnVyZyAgICAgICAKMjAyNi8wNC8yMiwgLTEuMDAsIDAsIEFGUklIT1NULkNPTSAgICAgICAgICAgIFNBTkRUT04gICAgICAgICAKMjAyNi8wNC8yMiwgLTM3OC40NywgMCwgQk9CIFBBWSAgICAgICAgICAgICAgICAgQnJ5YW5zdG9uICAgICAgIAoyMDI2LzA0LzIyLCAtNTAwLjAwLCAwLCBCT0IgUEFZICAgICAgICAgICAgICAgICBCcnlhbnN0b24gICAgICAgCjIwMjYvMDQvMjcsIC0xODEuMjksIDAsIFdXVy5NQUtFLkNPTSAgICAgICAgICAgIFdXVy5NQUtFLkNPTSBOWSAKMjAyNi8wNC8yOCwgLTIuOTAsIDAsIEFGUklIT1NULkNPTSAgICAgICAgICAgIFNBTkRUT04gICAgICAgICAKMjAyNi8wNC8yOSwgLTk3MC4zMiwgMCwgSU5URVJFU1QgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAoyMDI2LzA0LzI5LCA0OTA1LjAwLCAwLCBCQUxBTkNFIFRSQU5TRkVSUkVEICAgICAgICAgICAgICAgICAgICAgCjIwMjYvMDQvMzAsIC0yMDcuODEsIDAsIFRSRUxMTy5DT00qIEFUTEFTU0lBTiAgIEFUTEFTU0lBTi5DT01OWSAK" download="Business Credit Card April 422824-4000.csv">&#11015; Download</a></div></div>
+  </div>
+</div>
+
+<div class="rpt-footer">
+  <div><strong>JCE Media</strong> &nbsp;&bull;&nbsp; Duel Digital &nbsp;&bull;&nbsp; Not VAT Registered</div>
+  <div>Sources: <span class="src src-bank">BANK STMT</span> 62435283809 &nbsp;&nbsp;<span class="src src-paypal">PAYPAL</span> PayPal April 62267462168-linked.csv</div>
+</div>
+
+</div>
+<script>
+function toggleCard(h){
+  const b=h.nextElementSibling,c=b.classList.contains('closed');
+  if(c){b.style.maxHeight=b.scrollHeight+'px';setTimeout(()=>b.style.maxHeight='none',300);}
+  else{b.style.maxHeight=b.scrollHeight+'px';requestAnimationFrame(()=>requestAnimationFrame(()=>b.style.maxHeight='0'));setTimeout(()=>b.style.maxHeight='',300);}
+  b.classList.toggle('closed',!c);h.classList.toggle('closed',!c);
+}
+function toggleAll(open){
+  document.querySelectorAll('.card-hdr').forEach(h=>{
+    const b=h.nextElementSibling;
+    if(open&&b.classList.contains('closed'))toggleCard(h);
+    if(!open&&!b.classList.contains('closed'))toggleCard(h);
+  });
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  const f=document.querySelector('.card-hdr');
+  if(f){const b=f.nextElementSibling;b.classList.remove('closed');b.style.maxHeight='none';}
+});
+</script>
+</body></html>

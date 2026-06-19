@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Reviewtap &mdash; Financial Report &mdash; April 2026</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#1F3864;--teal:#2E75B6;--ltblue:#D6E4F0;
+  --green:#1E6B2E;--green-bg:#E6F4EA;
+  --red:#C00000;--red-bg:#FDECEA;
+  --amber:#B45309;--amber-bg:#FEF9C3;
+  --meta:#1877F2;--meta-bg:#E7F0FD;
+  --peach:#FF6B35;--peach-bg:#FFF0EB;
+  --temu:#FF6900;--temu-bg:#FFF3EE;
+  --grey:#F4F6F8;--border:#E2E8F0;--text:#1A202C;--muted:#64748B;--white:#FFF;
+  --r:8px;--sh:0 1px 4px rgba(0,0,0,.10);--sh-lg:0 4px 16px rgba(0,0,0,.12)
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;font-size:13px;color:var(--text);background:#EEF2F7;line-height:1.5}
+.page{max-width:1260px;margin:0 auto;padding:24px 20px 60px}
+.rpt-hdr{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);
+  color:#fff;border-radius:var(--r);padding:28px 32px;display:flex;
+  justify-content:space-between;align-items:flex-start;margin-bottom:24px;box-shadow:var(--sh-lg)}
+.biz-name{font-size:22px;font-weight:700;letter-spacing:-.3px}
+.biz-tag{display:inline-block;background:rgba(255,255,255,.15);font-size:11px;padding:2px 9px;
+  border-radius:20px;margin-left:10px;vertical-align:middle}
+.biz-sub{font-size:12px;opacity:.72;margin-top:4px}
+.period{text-align:right}
+.period-lbl{font-size:11px;opacity:.65;text-transform:uppercase;letter-spacing:.8px}
+.period-val{font-size:18px;font-weight:700;margin-top:2px}
+.hdr-actions{display:flex;gap:8px;margin-top:14px}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:5px;
+  font-size:12px;font-weight:600;cursor:pointer;border:none}
+.btn-ghost{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.30)}
+.btn-ghost:hover{background:rgba(255,255,255,.25)}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:24px}
+.kpi{background:#fff;border-radius:var(--r);padding:18px 20px;box-shadow:var(--sh);border-top:3px solid var(--border)}
+.kpi.k-teal{border-top-color:var(--teal)}.kpi.k-green{border-top-color:var(--green)}
+.kpi.k-red{border-top-color:var(--red)}.kpi.k-amber{border-top-color:var(--amber)}
+.kpi.k-meta{border-top-color:var(--meta)}.kpi.k-peach{border-top-color:var(--peach)}
+.kpi-lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;font-weight:600}
+.kpi-val{font-size:20px;font-weight:700;margin-top:4px}
+.kpi-val.teal{color:var(--teal)}.kpi-val.green{color:var(--green)}.kpi-val.red{color:var(--red)}
+.kpi-val.amber{color:var(--amber)}.kpi-val.meta{color:var(--meta)}.kpi-val.peach{color:var(--peach)}
+.kpi-meta{font-size:11px;color:var(--muted);margin-top:4px}
+.card{background:#fff;border-radius:var(--r);box-shadow:var(--sh);margin-bottom:20px;overflow:hidden}
+.card-hdr{display:flex;align-items:center;justify-content:space-between;padding:13px 20px;
+  background:var(--navy);color:#fff;cursor:pointer;user-select:none}
+.card-hdr:hover{background:#263f77}
+.ch-left{display:flex;align-items:center;gap:10px}
+.ch-title{font-size:13px;font-weight:700}
+.ch-cnt{font-size:11px;font-weight:600;padding:2px 9px;border-radius:20px;background:rgba(255,255,255,.18)}
+.ch-total{font-size:14px;font-weight:700}
+.ch-total.pos{color:#86EFAC}.ch-total.neg{color:#FCA5A5}.ch-total.neutral{color:#ccc;font-size:12px}
+.tog{font-size:15px;transition:transform .2s;margin-left:12px}
+.card-hdr.closed .tog{transform:rotate(-90deg)}
+.card-body{overflow:hidden;transition:max-height .3s ease}
+.card-body.closed{max-height:0!important}
+.pnl-tbl{width:100%;border-collapse:collapse}
+.pnl-tbl td{padding:10px 20px;border-bottom:1px solid var(--border)}
+.pnl-grp td{background:var(--ltblue);font-size:11px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.6px;color:var(--teal);padding:7px 20px}
+.pnl-row:hover td{background:var(--grey)}
+.pnl-sub td{background:var(--ltblue);font-weight:700}
+.pnl-total td{background:var(--navy);color:#fff;font-weight:700;font-size:14px}
+.pnl-amt{text-align:right;width:16%;font-variant-numeric:tabular-nums;white-space:nowrap}
+.pnl-src{width:26%}.pnl-desc{width:58%}
+.src{display:inline-block;font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;
+  letter-spacing:.4px;vertical-align:middle;cursor:default}
+.src-pf{background:#DBEAFE;color:#1D4ED8}
+.src-bank{background:#D1FAE5;color:#065F46}
+.src-peach{background:#FFF0EB;color:#C2410C}
+.src-meta{background:#E7F0FD;color:#1877F2}
+.src-temu{background:#FFF3EE;color:#C2410C}
+.src-alibaba{background:#FEF3C7;color:#92400E}
+.src-calc{background:#EDE9FE;color:#5B21B6}
+.src-cc{background:#F3F4F6;color:#374151;border:1px solid #D1D5DB}
+.ref{display:inline-block;font-size:10px;color:var(--muted);margin-left:5px;
+  font-family:'Consolas','Courier New',monospace}
+.dtbl{width:100%;border-collapse:collapse}
+.dtbl thead tr{background:var(--grey);border-bottom:2px solid var(--border)}
+.dtbl thead th{padding:9px 14px;text-align:left;font-size:11px;font-weight:700;
+  color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.dtbl tbody tr{border-bottom:1px solid var(--border)}
+.dtbl tbody tr:hover{background:#F8FAFC}
+.dtbl tbody tr.row-warn{background:var(--amber-bg)}
+.dtbl td{padding:8px 14px;vertical-align:middle}
+.dtbl tfoot tr{background:var(--navy);color:#fff;font-weight:700}
+.dtbl tfoot td{padding:10px 14px}
+.dtbl tfoot .neg{color:#FCA5A5}
+.dtbl tfoot .pos{color:#86EFAC}
+.num{text-align:right;font-variant-numeric:tabular-nums;font-family:'Consolas',monospace;font-size:12px}
+.pos{color:var(--green)}.neg{color:var(--red)}.amber-txt{color:var(--amber)}
+.muted{font-size:11px;color:var(--muted)}.small{font-size:11px}
+.badge{display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px}
+.bdg-m{background:var(--ltblue);color:var(--teal)}
+.stat-badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px}
+.stat-ok{background:var(--green-bg);color:var(--green)}.stat-warn{background:var(--amber-bg);color:var(--amber)}
+.notice{display:flex;align-items:flex-start;gap:12px;padding:13px 18px;border-radius:6px;margin:0 20px 16px}
+.notice-warn{background:var(--amber-bg);border-left:3px solid var(--amber)}
+.notice-info{background:var(--ltblue);border-left:3px solid var(--teal)}
+.notice-icon{font-size:16px;flex-shrink:0;margin-top:1px}
+.notice-title{font-weight:700;font-size:12px}.notice-text{font-size:11px;color:var(--muted);margin-top:2px}
+.recon-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--border)}
+.recon-strip .rs{padding:16px 20px;text-align:center;border-right:1px solid var(--border)}
+.recon-strip .rs:last-child{border-right:none}
+.rs-val{font-size:20px;font-weight:700}.rs-lbl{font-size:11px;color:var(--muted);margin-top:3px}
+.rev-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--border)}
+.rev-strip .rs{padding:16px 20px;text-align:center;border-right:1px solid var(--border)}
+.rev-strip .rs:last-child{border-right:none}
+.biz-nav{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--border);
+  border-radius:var(--r);padding:10px 18px;margin-bottom:16px;box-shadow:var(--sh);flex-wrap:wrap}
+.biz-nav-lbl{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.biz-nav-active{font-weight:700;font-size:13px;color:var(--text);padding:4px 12px;
+  background:var(--grey);border-radius:20px}
+.biz-nav-link{font-size:13px;font-weight:600;color:var(--teal);text-decoration:none;
+  padding:4px 14px;border:1px solid var(--teal);border-radius:20px;transition:all .15s}
+.biz-nav-link:hover{background:var(--teal);color:#fff}
+{DOWNLOAD_CSS}
+.rpt-footer{margin-top:32px;padding:16px 0;border-top:1px solid var(--border);
+  display:flex;justify-content:space-between;align-items:center;font-size:11px;
+  color:var(--muted);gap:16px;flex-wrap:wrap}
+@media print{
+  body{background:white;font-size:11px}.page{padding:0;max-width:100%}
+  .hdr-actions,.btn{display:none}
+  .card-body.closed{max-height:none!important}
+  .card{box-shadow:none;border:1px solid #ddd;page-break-inside:avoid}
+  .rpt-hdr,.card-hdr,.pnl-grp td,.pnl-total td,.dtbl thead tr,.dtbl tfoot tr,
+  .pnl-sub td{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body><div class="page">
+
+<div class="biz-nav">
+  <span class="biz-nav-lbl">&#128202; April 2026</span>
+  <span class="biz-nav-active">&#129302; Reviewtap (RT)</span>
+  <a class="biz-nav-link" href="../2026-06-19-mfb-april-2026/">MyForeverBaby (MFB)</a>
+  <a class="biz-nav-link" href="../2026-06-19-jce-media-april-2026/">JCE Media</a>
+</div>
+<div class="rpt-hdr">
+  <div>
+    <div class="biz-name">Reviewtap <span class="biz-tag">RT</span></div>
+    <div class="biz-sub">Duel Digital TA &nbsp;&bull;&nbsp; NFC Review Platform &amp; SaaS &nbsp;&bull;&nbsp; Not VAT Registered</div>
+    <div class="hdr-actions">
+      <button class="btn btn-ghost" onclick="window.print()">&#128438; Print / PDF</button>
+      <button class="btn btn-ghost" onclick="toggleAll(true)">&#9660; Expand All</button>
+      <button class="btn btn-ghost" onclick="toggleAll(false)">&#9650; Collapse All</button>
+    </div>
+  </div>
+  <div class="period">
+    <div class="period-lbl">Reporting Period</div>
+    <div class="period-val">April 2026</div>
+    <div class="biz-sub" style="margin-top:8px">Month ended 30 April 2026</div>
+    <div class="biz-sub">Generated: 19 Jun 2026</div>
+  </div>
+</div>
+
+<div class="kpi-grid">
+  <div class="kpi k-teal">
+    <div class="kpi-lbl">Payfast Revenue</div>
+    <div class="kpi-val teal">R 15,348.00</div>
+    <div class="kpi-meta">4 subscriptions</div>
+  </div>
+  <div class="kpi k-peach">
+    <div class="kpi-lbl">Peach Payments</div>
+    <div class="kpi-val peach">R 3,154.00</div>
+    <div class="kpi-meta">3 orders &bull; R 0.00 outstanding</div>
+  </div>
+  <div class="kpi k-teal">
+    <div class="kpi-lbl">Direct EFT Sales</div>
+    <div class="kpi-val teal">R 8,398.00</div>
+    <div class="kpi-meta">5 confirmed payments</div>
+  </div>
+  <div class="kpi k-teal">
+    <div class="kpi-lbl">Total Revenue</div>
+    <div class="kpi-val teal">R 26,900.00</div>
+    <div class="kpi-meta">3 channels combined</div>
+  </div>
+  <div class="kpi k-red">
+    <div class="kpi-lbl">Staff Costs (50%)</div>
+    <div class="kpi-val red">R 12,776.25</div>
+    <div class="kpi-meta">Jacques R 0.00 &bull; Diane R 6,388.12</div>
+  </div>
+  <div class="kpi k-red">
+    <div class="kpi-lbl">Facebook Ads</div>
+    <div class="kpi-val red">R 0.00</div>
+    <div class="kpi-meta">Incl. VAT R 0.00 (non-recoverable)</div>
+  </div>
+  <div class="kpi k-amber">
+    <div class="kpi-lbl">Stock (COGS)</div>
+    <div class="kpi-val amber">R 0.00</div>
+    <div class="kpi-meta">Temu R 0.00 &bull; Alibaba R 0.00</div>
+  </div>
+  <div class="kpi k-amber">
+    <div class="kpi-lbl">BobGo Shipping + Sub</div>
+    <div class="kpi-val amber">R 0.00</div>
+    <div class="kpi-meta">n/a &bull; due 07 Jun 2026</div>
+  </div>
+  <div class="kpi k-green">
+    <div class="kpi-lbl">Net Profit</div>
+    <div class="kpi-val green">R 1,039.00</div>
+    <div class="kpi-meta">Net margin -3.9%</div>
+  </div>
+</div>
+
+<!-- P&L SUMMARY -->
+<div class="card">
+  <div class="card-hdr" onclick="toggleCard(this)">
+    <div class="ch-left"><span class="ch-title">&#128196; Profit &amp; Loss Summary</span><span class="ch-cnt">April 2026</span></div>
+    <div style="display:flex;align-items:center"><span class="ch-total pos">R&nbsp;1,039.00</span><span class="tog">&#9660;</span></div>
+  </div>
+  <div class="card-body">
+    <table class="pnl-tbl">
+      <colgroup><col style="width:58%"><col style="width:16%"><col style="width:26%"></colgroup>
+      <tbody>
+        <tr class="pnl-grp"><td colspan="3">Revenue — Payfast Subscriptions</td></tr>
+        <tr class="pnl-row">
+          <td>Gross Subscription Sales (4 payments)</td>
+          <td class="pnl-amt pos">R&nbsp;15,348.00</td>
+          <td class="pnl-src"><span class="src src-pf">PAYFAST</span><span class="ref">RT Payfast.csv</span></td>
+        </tr>
+        <tr class="pnl-row">
+          <td>Less: Payfast Transaction Fees</td>
+          <td class="pnl-amt neg">(R&nbsp;574.00)</td>
+          <td class="pnl-src"><span class="src src-pf">PAYFAST</span></td>
+        </tr>
+        <tr class="pnl-row">
+          <td>Less: Payfast Payout Fees (2 payouts)</td>
+          <td class="pnl-amt neg">(R&nbsp;30.00)</td>
+          <td class="pnl-src"><span class="src src-pf">PAYFAST</span></td>
+        </tr>
+
+        <tr class="pnl-grp"><td colspan="3">Revenue — Peach Payments (Shopify Store)</td></tr>
+        <tr class="pnl-row">
+          <td>Gross Shopify Sales (3 orders)</td>
+          <td class="pnl-amt pos">R&nbsp;3,154.00</td>
+          <td class="pnl-src"><span class="src src-peach">PEACH</span><span class="ref">Peachpayments.csv</span></td>
+        </tr>
+        <tr class="pnl-row">
+          <td>Less: Peach Payments Service Fee <span class="muted">(monthly — 202604-AS920-ZA)</span></td>
+          <td class="pnl-amt neg">(R&nbsp;0.00)</td>
+          <td class="pnl-src"><span class="src src-bank">BANK STMT</span><span class="ref">Personal acc 62267462168</span></td>
+        </tr>
+
+        <tr class="pnl-grp"><td colspan="3">Revenue — Direct EFT Payments</td></tr>
+        <tr class="pnl-row"><td>TO Strand <span class="muted">2026/04/02 &mdash; RT invoice INV001080</span></td>
+          <td class="pnl-amt pos">R&nbsp;1,899.00</td>
+          <td class="pnl-src"><span class="src src-bank">BANK STMT</span><span class="ref">FNB acc 62435283809</span></td></tr><tr class="pnl-row"><td>Dot Com Office Systems <span class="muted">2026/04/13 &mdash; RT (as per May)</span></td>
+          <td class="pnl-amt pos">R&nbsp;3,000.00</td>
+          <td class="pnl-src"><span class="src src-bank">BANK STMT</span><span class="ref">FNB acc 62435283809</span></td></tr><tr class="pnl-row"><td>The Acreage <span class="muted">2026/04/15 &mdash; RT (new client, confirm)</span></td>
+          <td class="pnl-amt pos">R&nbsp;600.00</td>
+          <td class="pnl-src"><span class="src src-bank">BANK STMT</span><span class="ref">FNB acc 62435283809</span></td></tr><tr class="pnl-row"><td>Die Veiling Sasol <span class="muted">2026/04/28 &mdash; Direct EFT (RT)</span></td>
+          <td class="pnl-amt pos">R&nbsp;1,000.00</td>
+          <td class="pnl-src"><span class="src src-bank">BANK STMT</span><span class="ref">FNB acc 62435283809</span></td></tr><tr class="pnl-row"><td>TO Strand <span class="muted">2026/04/30 &mdash; RT invoice INV0010809</span></td>
+          <td class="pnl-amt pos">R&nbsp;1,899.00</td>
+          <td class="pnl-src"><span class="src src-bank">BANK STMT</span><span class="ref">FNB acc 62435283809</span></td></tr>
+        <tr class="pnl-sub">
+          <td>Total Direct EFT</td>
+          <td class="pnl-amt pos">R&nbsp;8,398.00</td>
+          <td class="pnl-src"><span class="src src-calc">CALCULATED</span></td>
+        </tr>
+
+        <tr class="pnl-sub" style="background:#1F3864">
+          <td style="color:#86EFAC;font-weight:700">Net Revenue (all channels, after processor fees)</td>
+          <td class="pnl-amt" style="color:#86EFAC;font-weight:700;background:#1F3864">R&nbsp;26,296.00</td>
+          <td style="background:#1F3864"></td>
+        </tr>
+
+        <tr class="pnl-grp"><td colspan="3">Marketing &mdash; Facebook Ads</td></tr>
+        <tr class="pnl-row">
+          <td>Meta Platforms &mdash; Ad Spend excl. VAT <span class="muted">Ad Account 641218531785624</span></td>
+          <td class="pnl-amt neg">(R&nbsp;0.00)</td>
+          <td class="pnl-src" rowspan="2"><span class="src src-meta">META</span><span class="ref">RT FB Ads May.csv</span></td>
+        </tr>
+        <tr class="pnl-row">
+          <td>Meta Platforms &mdash; VAT @ 15% &nbsp;<span class="muted amber-txt">non-recoverable</span></td>
+          <td class="pnl-amt amber-txt">(R&nbsp;0.00)</td>
+        </tr>
+        <tr class="pnl-sub">
+          <td>Total Facebook Ad Spend (incl. VAT) <span class="muted">0 billing entries</span></td>
+          <td class="pnl-amt neg">(R&nbsp;0.00)</td>
+          <td class="pnl-src"><span class="src src-meta">META</span></td>
+        </tr>
+
+        <tr class="pnl-grp"><td colspan="3">Cost of Goods Sold &mdash; NFC Stock Purchases</td></tr>
+        
+        <tr class="pnl-row">
+          <td>Alibaba &mdash; 40× White + 20× Black PVC NFC Stands (120×140×50mm) &nbsp;<span class="muted">Order No Alibaba order in April</span></td>
+          <td class="pnl-amt neg">(R&nbsp;0.00)</td>
+          <td class="pnl-src"><span class="src src-alibaba">ALIBABA</span><span class="ref">-</span></td>
+        </tr>
+        <tr class="pnl-sub">
+          <td>Total Stock (COGS)</td>
+          <td class="pnl-amt neg">(R&nbsp;0.00)</td>
+          <td class="pnl-src"><span class="src src-calc">CALCULATED</span></td>
+        </tr>
+
+        <tr class="pnl-grp"><td colspan="3">Staff Costs (50% share &mdash; business bank FNB 62435283809)</td></tr>
+        <tr class="pnl-row"><td>DIANE COLQUHOUN SALA <span class="muted">2026/04/25</span></td>
+          <td class="pnl-amt neg">(R&nbsp;6,388.12)</td>
+          <td class="pnl-src"><span class="src src-bank">BANK STMT</span><span class="ref">50% of R&nbsp;12,776.25</span></td></tr>
+        <tr class="pnl-sub">
+          <td>Total Staff Costs (RT 50% share)</td>
+          <td class="pnl-amt neg">(R&nbsp;12,776.25)</td>
+          <td class="pnl-src"><span class="src src-calc">CALCULATED</span></td>
+        </tr>
+
+        <tr class="pnl-grp"><td colspan="3">SaaS &amp; Platform Tools (100% RT &mdash; business credit card)</td></tr>
+        <tr class="pnl-row"><td>Google Workspace (JCEME) <span class="muted">2026/04/10 &mdash; Business Tools</span></td>
+          <td class="pnl-amt neg">(R&nbsp;942.07)</td>
+          <td class="pnl-src"><span class="src src-cc">CREDIT CARD</span><span class="ref">422824******4000</span></td></tr><tr class="pnl-row"><td>Afrihost (×3) <span class="muted">2026/04/22 &mdash; Hosting</span></td>
+          <td class="pnl-amt neg">(R&nbsp;153.90)</td>
+          <td class="pnl-src"><span class="src src-cc">CREDIT CARD</span><span class="ref">422824******4000</span></td></tr><tr class="pnl-row"><td>GoDaddy domains ×2 <span class="muted">2026/04/07 &mdash; Hosting</span></td>
+          <td class="pnl-amt neg">(R&nbsp;75.90)</td>
+          <td class="pnl-src"><span class="src src-cc">CREDIT CARD</span><span class="ref">422824******4000</span></td></tr><tr class="pnl-row"><td>Trello (Atlassian) <span class="muted">2026/04/30 &mdash; Business Tools</span></td>
+          <td class="pnl-amt neg">(R&nbsp;207.81)</td>
+          <td class="pnl-src"><span class="src src-cc">CREDIT CARD</span><span class="ref">422824******4000</span></td></tr><tr class="pnl-row"><td>OpenAI / ChatGPT <span class="muted">2026/04/13 &mdash; AI Tools</span></td>
+          <td class="pnl-amt neg">(R&nbsp;388.73)</td>
+          <td class="pnl-src"><span class="src src-cc">CREDIT CARD</span><span class="ref">422824******4000</span></td></tr><tr class="pnl-row"><td>10Web.io <span class="muted">2026/04/09 &mdash; Hosting</span></td>
+          <td class="pnl-amt neg">(R&nbsp;688.21)</td>
+          <td class="pnl-src"><span class="src src-cc">CREDIT CARD</span><span class="ref">422824******4000</span></td></tr><tr class="pnl-row"><td>Netlify <span class="muted">2026/04/22 &mdash; Hosting</span></td>
+          <td class="pnl-amt neg">(R&nbsp;323.47)</td>
+          <td class="pnl-src"><span class="src src-cc">CREDIT CARD</span><span class="ref">422824******4000</span></td></tr><tr class="pnl-row"><td>Make.com <span class="muted">2026/04/27 &mdash; Business Tools</span></td>
+          <td class="pnl-amt neg">(R&nbsp;181.29)</td>
+          <td class="pnl-src"><span class="src src-cc">CREDIT CARD</span><span class="ref">422824******4000</span></td></tr><tr class="pnl-row"><td>YouTube Premium <span class="muted">2026/04/04 &mdash; Business Tools</span></td>
+          <td class="pnl-amt neg">(R&nbsp;149.99)</td>
+          <td class="pnl-src"><span class="src src-cc">CREDIT CARD</span><span class="ref">422824******4000</span></td></tr><tr class="pnl-row"><td>Hosting (generic) <span class="muted">2026/04/04 &mdash; Hosting</span></td>
+          <td class="pnl-amt neg">(R&nbsp;195.00)</td>
+          <td class="pnl-src"><span class="src src-cc">CREDIT CARD</span><span class="ref">422824******4000</span></td></tr>
+        <tr class="pnl-sub">
+          <td>Total SaaS &amp; Tools</td>
+          <td class="pnl-amt neg">(R&nbsp;3,306.37)</td>
+          <td class="pnl-src"><span class="src src-calc">CALCULATED</span></td>
+        </tr>
+
+        <tr class="pnl-grp"><td colspan="3">Platform &amp; Tools (business bank)</td></tr>
+        <tr class="pnl-row"><td>PURCH HIGHLEVEL AGENCY SU 400568******9251<span class="muted"> &mdash; 2026/04/17 GoHighLevel CRM</span></td>
+          <td class="pnl-amt neg">(R&nbsp;5,760.88)</td>
+          <td class="pnl-src"><span class="src src-bank">BANK STMT</span><span class="ref">FNB acc 62435283809</span></td></tr><tr class="pnl-row"><td>PURCH HIGHLEVEL INC.      400568******9251<span class="muted"> &mdash; 2026/04/20 GoHighLevel CRM</span></td>
+          <td class="pnl-amt neg">(R&nbsp;1,881.62)</td>
+          <td class="pnl-src"><span class="src src-bank">BANK STMT</span><span class="ref">FNB acc 62435283809</span></td></tr><tr class="pnl-row"><td>PURCH HIGHLEVEL INC.      400568******9251<span class="muted"> &mdash; 2026/04/21 GoHighLevel CRM</span></td>
+          <td class="pnl-amt neg">(R&nbsp;169.05)</td>
+          <td class="pnl-src"><span class="src src-bank">BANK STMT</span><span class="ref">FNB acc 62435283809</span></td></tr><tr class="pnl-row"><td>PURCH HIGHLEVEL INC.      400568******9251<span class="muted"> &mdash; 2026/04/28 GoHighLevel CRM</span></td>
+          <td class="pnl-amt neg">(R&nbsp;1,378.06)</td>
+          <td class="pnl-src"><span class="src src-bank">BANK STMT</span><span class="ref">FNB acc 62435283809</span></td></tr>
+        <tr class="pnl-row">
+          <td>Hostinger hosting<span class="muted"> &mdash; 2026/04/24</span></td>
+          <td class="pnl-amt neg">(R&nbsp;330.27)</td>
+          <td class="pnl-src"><span class="src src-bank">BANK STMT</span><span class="ref">FNB acc 62435283809</span></td>
+        </tr>
+        <tr class="pnl-row">
+          <td>Guru Print<span class="muted"> &mdash; n/a</span></td>
+          <td class="pnl-amt neg">(R&nbsp;0.00)</td>
+          <td class="pnl-src"><span class="src src-bank">BANK STMT</span><span class="ref">FNB acc 62435283809</span></td>
+        </tr>
+        <tr class="pnl-sub">
+          <td>Total Platform &amp; Tools</td>
+          <td class="pnl-amt neg">(R&nbsp;9,519.88)</td>
+          <td class="pnl-src"><span class="src src-calc">CALCULATED</span></td>
+        </tr>
+
+        <tr class="pnl-grp"><td colspan="3">Platform Subscriptions &mdash; Higgsfield</td></tr>
+        <tr class="pnl-row">
+          <td>Higgsfield subscription &nbsp;<span class="muted"> &mdash; business bank</span></td>
+          <td class="pnl-amt neg">(R&nbsp;0.00)</td>
+          <td class="pnl-src"><span class="src src-bank">BANK STMT</span><span class="ref">FNB acc 62435283809</span></td>
+        </tr>
+
+        <tr class="pnl-grp"><td colspan="3">Technology &mdash; AI Tools (50% share of business credit card)</td></tr>
+        <tr class="pnl-row">
+          <td>Anthropic API &amp; Claude.ai Subscription &nbsp;<span class="muted">9 charges, 50% attributed to RT &mdash; credit card 422824******4000</span></td>
+          <td class="pnl-amt neg">(R&nbsp;534.40)</td>
+          <td class="pnl-src"><span class="src src-cc">CREDIT CARD</span><span class="ref">50% of R1,068.80</span></td>
+        </tr>
+
+        <tr class="pnl-grp"><td colspan="3">Finance Charges (business credit card)</td></tr>
+        <tr class="pnl-row"><td>Credit card interest<span class="muted"> &mdash; 2026/04/29</span></td>
+          <td class="pnl-amt neg">(R&nbsp;970.32)</td>
+          <td class="pnl-src"><span class="src src-cc">CREDIT CARD</span><span class="ref">422824******4000</span></td></tr><tr class="pnl-row"><td>ATM transaction fee<span class="muted"> &mdash; 2026/04/09</span></td>
+          <td class="pnl-amt neg">(R&nbsp;104.80)</td>
+          <td class="pnl-src"><span class="src src-cc">CREDIT CARD</span><span class="ref">422824******4000</span></td></tr><tr class="pnl-row"><td>Cash transaction fee<span class="muted"> &mdash; 2026/04/19</span></td>
+          <td class="pnl-amt neg">(R&nbsp;116.98)</td>
+          <td class="pnl-src"><span class="src src-cc">CREDIT CARD</span><span class="ref">422824******4000</span></td></tr><tr class="pnl-row"><td>Declined auth fee<span class="muted"> &mdash; 2026/04/13</span></td>
+          <td class="pnl-amt neg">(R&nbsp;6.00)</td>
+          <td class="pnl-src"><span class="src src-cc">CREDIT CARD</span><span class="ref">422824******4000</span></td></tr>
+        <tr class="pnl-sub">
+          <td>Total Finance Charges</td>
+          <td class="pnl-amt neg">(R&nbsp;1,198.10)</td>
+          <td class="pnl-src"><span class="src src-calc">CALCULATED</span></td>
+        </tr>
+
+        <tr class="pnl-grp"><td colspan="3">Delivery &amp; Platform &mdash; BobGo</td></tr>
+        <tr class="pnl-row">
+          <td>BobGo Shipping charges &nbsp;<span class="muted">n/a &mdash; excl. VAT R&nbsp;0.00</span></td>
+          <td class="pnl-amt neg">(R&nbsp;0.00)</td>
+          <td class="pnl-src" rowspan="3"><span class="src src-bg">BOBGO INV</span><span class="ref">n/a</span></td>
+        </tr>
+        <tr class="pnl-row">
+          <td>BobGo Starter subscription &nbsp;<span class="muted">01&ndash;30 April 2026 &mdash; excl. VAT R&nbsp;0.00</span></td>
+          <td class="pnl-amt neg">(R&nbsp;0.00)</td>
+        </tr>
+        <tr class="pnl-row">
+          <td>VAT @ 15% &nbsp;<span class="muted amber-txt">non-recoverable &mdash; not VAT registered</span></td>
+          <td class="pnl-amt amber-txt">(R&nbsp;0.00)</td>
+        </tr>
+        <tr class="pnl-sub">
+          <td>Total BobGo (incl. VAT) &nbsp;<span class="muted">Due 07 Jun 2026</span></td>
+          <td class="pnl-amt neg">(R&nbsp;0.00)</td>
+        </tr>
+
+        <tr class="pnl-total">
+          <td>Net Profit &mdash; April 2026</td>
+          <td class="pnl-amt" style="color:#86EFAC">R&nbsp;1,039.00</td>
+          <td class="pnl-src" style="font-size:12px;opacity:.7">Net margin -3.9%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- PAYFAST SUBSCRIPTIONS -->
+<div class="card">
+  <div class="card-hdr" onclick="toggleCard(this)">
+    <div class="ch-left"><span class="ch-title">&#128179; Payfast &mdash; Subscription Sales</span><span class="ch-cnt">4 payments</span><span class="src src-pf" style="font-size:10px">PAYFAST</span></div>
+    <div style="display:flex;align-items:center"><span class="ch-total pos">R&nbsp;15,348.00</span><span class="tog">&#9660;</span></div>
+  </div>
+  <div class="card-body closed">
+    <div class="notice notice-info" style="margin-top:16px">
+      <span class="notice-icon">&#8505;</span>
+      <div class="notice-body"><div class="notice-title">Source file</div>
+      <div class="notice-text">RT Payfast.csv &nbsp;&bull;&nbsp; Payfast Account (RT) &nbsp;&bull;&nbsp; Reputation Suite subscriptions &nbsp;&bull;&nbsp; Payouts to FNB acc 62435283809</div></div>
+    </div>
+    <table class="dtbl">
+      <thead><tr><th>Date</th><th>Customer</th><th>Description</th><th>Method</th><th class="num">Gross (R)</th><th class="num">Fee (R)</th><th class="num">Net (R)</th><th>Source Ref</th></tr></thead>
+      <tbody><tr><td>2026-04-02</td><td>ReviewTap Reputation Suite</td><td class="muted small"></td><td><span class="badge bdg-m">Credit Card</span></td><td class="num pos">R&nbsp;950.00</td><td class="num neg">(R&nbsp;37.26)</td><td class="num pos">R&nbsp;912.74</td><td><span class="src src-pf">PAYFAST</span><span class="ref">ID&nbsp;291827429</span></td></tr><tr><td>2026-04-03</td><td>ReviewTap Reputation Suite</td><td class="muted small"></td><td><span class="badge bdg-m">Credit Card</span></td><td class="num pos">R&nbsp;500.00</td><td class="num neg">(R&nbsp;20.70)</td><td class="num pos">R&nbsp;479.30</td><td><span class="src src-pf">PAYFAST</span><span class="ref">ID&nbsp;292102907</span></td></tr><tr><td>2026-04-10</td><td>ReviewTap Reputation Suite</td><td class="muted small">Reputation, CRM and Social Media Automation Service</td><td><span class="badge bdg-m">Credit Card</span></td><td class="num pos">R&nbsp;11,999.00</td><td class="num neg">(R&nbsp;443.86)</td><td class="num pos">R&nbsp;11,555.14</td><td><span class="src src-pf">PAYFAST</span><span class="ref">ID&nbsp;293362681</span></td></tr><tr><td>2026-04-27</td><td>ReviewTap Reputation Suite</td><td class="muted small"></td><td><span class="badge bdg-m">Credit Card</span></td><td class="num pos">R&nbsp;1,899.00</td><td class="num neg">(R&nbsp;72.18)</td><td class="num pos">R&nbsp;1,826.82</td><td><span class="src src-pf">PAYFAST</span><span class="ref">ID&nbsp;296625979</span></td></tr></tbody>
+      <tfoot><tr><td colspan="4">TOTAL</td><td class="num pos">R&nbsp;15,348.00</td><td class="num neg">(R&nbsp;574.00)</td><td class="num pos">R&nbsp;14,774.00</td><td></td></tr></tfoot>
+    </table>
+  </div>
+</div>
+
+<!-- PEACH PAYMENTS -->
+<div class="card">
+  <div class="card-hdr" onclick="toggleCard(this)">
+    <div class="ch-left"><span class="ch-title">&#128722; Peach Payments &mdash; Shopify Store</span><span class="ch-cnt">3 orders</span><span class="src src-peach" style="font-size:10px">PEACH</span></div>
+    <div style="display:flex;align-items:center"><span class="ch-total pos">R&nbsp;3,154.00</span><span class="tog">&#9660;</span></div>
+  </div>
+  <div class="card-body closed">
+    <div class="notice notice-info" style="margin-top:16px">
+      <span class="notice-icon">&#8505;</span>
+      <div class="notice-body"><div class="notice-title">Source file &amp; settlement flow</div>
+      <div class="notice-text">Peachpayments.csv &nbsp;&bull;&nbsp; Merchant: Review Tap &nbsp;&bull;&nbsp; Settlements batch to personal account (FNB 62267462168) &rarr; transferred to business account &nbsp;&bull;&nbsp; 3 successful, 0 failed</div></div>
+    </div>
+    <div class="notice notice-warn">
+      <span class="notice-icon">&#9888;</span>
+      <div class="notice-body"><div class="notice-title">Outstanding revenue — R 0.00</div>
+      <div class="notice-text">0 transactions from 29&ndash;30 April 2026 not yet settled. Will appear in June settlement batches.</div></div>
+    </div>
+    <table class="dtbl">
+      <thead><tr><th>Date</th><th>Customer</th><th>Method</th><th class="num">Amount (R)</th><th>Settlement</th><th>Source Ref</th></tr></thead>
+      <tbody><tr><td>2026-04-10</td><td>Lihle Soja</td><td><span class="badge bdg-m">card</span></td><td class="num pos">R&nbsp;754.00</td><td><span class="stat-badge stat-ok">&#10003; PEACH-163-13042026</span></td><td><span class="src src-peach">PEACH</span><span class="ref">df83e465ca4241389f&hellip;</span></td></tr><tr><td>2026-04-11</td><td>Jade Mann</td><td><span class="badge bdg-m">card</span></td><td class="num pos">R&nbsp;1,996.00</td><td><span class="stat-badge stat-ok">&#10003; PEACH-163-13042026</span></td><td><span class="src src-peach">PEACH</span><span class="ref">7fd002c5dee546979b&hellip;</span></td></tr><tr><td>2026-04-19</td><td>lionel rodrigues</td><td><span class="badge bdg-m">card</span></td><td class="num pos">R&nbsp;404.00</td><td><span class="stat-badge stat-ok">&#10003; PEACH-164-20042026</span></td><td><span class="src src-peach">PEACH</span><span class="ref">eb54f0c71eb04123a2&hellip;</span></td></tr></tbody>
+      <tfoot><tr><td colspan="3">TOTAL (3 successful)</td><td class="num pos">R&nbsp;3,154.00</td><td></td><td></td></tr></tfoot>
+    </table>
+    <div class="recon-strip">
+      <div class="rs"><div class="rs-val pos">R 3,154.00</div><div class="rs-lbl">Settled in May bank</div></div>
+      <div class="rs"><div class="rs-val amber-txt">R 0.00</div><div class="rs-lbl">Outstanding (arrives June)</div></div>
+      <div class="rs"><div class="rs-val" style="color:var(--teal)">R 0.00</div><div class="rs-lbl">Peach monthly fee (bank)</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- DIRECT EFT -->
+<div class="card">
+  <div class="card-hdr" onclick="toggleCard(this)">
+    <div class="ch-left"><span class="ch-title">&#128196; Direct EFT Payments</span><span class="ch-cnt">5 confirmed</span><span class="src src-bank" style="font-size:10px">BANK STMT</span></div>
+    <div style="display:flex;align-items:center"><span class="ch-total pos">R&nbsp;8,398.00</span><span class="tog">&#9660;</span></div>
+  </div>
+  <div class="card-body closed">
+    <div class="notice notice-info" style="margin-top:16px">
+      <span class="notice-icon">&#8505;</span>
+      <div class="notice-body"><div class="notice-title">Source file</div>
+      <div class="notice-text">62435283809.csv &nbsp;&bull;&nbsp; FNB Business Account &nbsp;&bull;&nbsp; Clients paying via EFT directly into business account &nbsp;&bull;&nbsp; Identified by client name or RT order reference numbers (#16XX)</div></div>
+    </div>
+    <table class="dtbl">
+      <thead><tr><th>Date</th><th>Client</th><th>Bank Description</th><th class="num">Amount (R)</th><th>Source Ref</th><th>Note</th></tr></thead>
+      <tbody><tr><td>2026/04/02</td><td>TO Strand</td><td class="muted">ABSA BANK TO STRAND INV001080</td><td class="num pos">R&nbsp;1,899.00</td><td><span class="src src-bank">BANK STMT</span><span class="ref">FNB acc 62435283809</span></td><td class="muted">RT invoice INV001080</td></tr><tr><td>2026/04/13</td><td>Dot Com Office Systems</td><td class="muted">FNB OB PMT COM OFFICE SYSTEMS C</td><td class="num pos">R&nbsp;3,000.00</td><td><span class="src src-bank">BANK STMT</span><span class="ref">FNB acc 62435283809</span></td><td class="muted">RT (as per May)</td></tr><tr><td>2026/04/15</td><td>The Acreage</td><td class="muted">FNB OB PMT THE ACREAGE</td><td class="num pos">R&nbsp;600.00</td><td><span class="src src-bank">BANK STMT</span><span class="ref">FNB acc 62435283809</span></td><td class="muted">RT (new client, confirm)</td></tr><tr><td>2026/04/28</td><td>Die Veiling Sasol</td><td class="muted">DIE VEILING SASOL</td><td class="num pos">R&nbsp;1,000.00</td><td><span class="src src-bank">BANK STMT</span><span class="ref">FNB acc 62435283809</span></td><td class="muted">Direct EFT (RT)</td></tr><tr><td>2026/04/30</td><td>TO Strand</td><td class="muted">ABSA BANK TO STRAND INV0010809</td><td class="num pos">R&nbsp;1,899.00</td><td><span class="src src-bank">BANK STMT</span><span class="ref">FNB acc 62435283809</span></td><td class="muted">RT invoice INV0010809</td></tr></tbody>
+      <tfoot><tr><td colspan="3">TOTAL DIRECT EFT</td><td class="num pos">R&nbsp;8,398.00</td><td colspan="2"></td></tr></tfoot>
+    </table>
+  </div>
+</div>
+
+<!-- FACEBOOK ADS -->
+<div class="card">
+  <div class="card-hdr" onclick="toggleCard(this)">
+    <div class="ch-left"><span class="ch-title">&#128241; Facebook Ads (Meta)</span><span class="ch-cnt">0 entries</span><span class="src src-meta" style="font-size:10px">META</span></div>
+    <div style="display:flex;align-items:center"><span class="ch-total neg">(R&nbsp;0.00)</span><span class="tog">&#9660;</span></div>
+  </div>
+  <div class="card-body closed">
+    <div class="notice notice-info" style="margin-top:16px">
+      <span class="notice-icon">&#8505;</span>
+      <div class="notice-body"><div class="notice-title">Source file</div>
+      <div class="notice-text">RT FB Ads May.csv &nbsp;&bull;&nbsp; Meta Platforms Ireland Limited &nbsp;&bull;&nbsp; Ad Account 641218531785624 &nbsp;&bull;&nbsp; Billing period 01 May &ndash; 01 Jun 2026 &nbsp;&bull;&nbsp; Primary card: Visa **** 9251; one charge via Visa **** 4075</div></div>
+    </div>
+    <div class="notice notice-warn">
+      <span class="notice-icon">&#9888;</span>
+      <div class="notice-body"><div class="notice-title">VAT note &mdash; non-recoverable &nbsp;&bull;&nbsp; Prepaid balance</div>
+      <div class="notice-text">Total billed to cards: R 0.00 &nbsp;&bull;&nbsp; VAT @ 15%: R 0.00 (excl. VAT: R 0.00) &nbsp;&bull;&nbsp; Prepaid balance used: R 0.00 (charged to card 09 May, spent on ads via N/A entries — not double-counted)</div></div>
+    </div>
+    <table class="dtbl">
+      <thead><tr><th>Date</th><th>Transaction ID</th><th>Payment Method</th><th class="num">Amount (R)</th><th>Source Ref</th></tr></thead>
+      <tbody></tbody>
+      <tfoot><tr><td colspan="3">TOTAL BILLED (incl. VAT) &nbsp; | &nbsp; Excl. VAT: R 0.00 &nbsp; | &nbsp; VAT: R 0.00</td><td class="num neg">(R&nbsp;0.00)</td><td></td></tr></tfoot>
+    </table>
+  </div>
+</div>
+
+<!-- STOCK / COGS -->
+<div class="card">
+  <div class="card-hdr" onclick="toggleCard(this)">
+    <div class="ch-left">
+      <span class="ch-title">&#128230; NFC Stock Purchases (COGS)</span>
+      <span class="ch-cnt">Temu + Alibaba</span>
+      <span class="src src-temu" style="font-size:10px">TEMU</span>
+      <span class="src src-alibaba" style="font-size:10px;margin-left:4px">ALIBABA</span>
+    </div>
+    <div style="display:flex;align-items:center"><span class="ch-total neg">(R&nbsp;0.00)</span><span class="tog">&#9660;</span></div>
+  </div>
+  <div class="card-body closed">
+    <div class="notice notice-warn" style="margin-top:16px">
+      <span class="notice-icon">&#9888;</span>
+      <div class="notice-body"><div class="notice-title">Stock in transit — not yet received</div>
+      <div class="notice-text">All Temu orders show estimated delivery 1&ndash;13 Jun 2026. Alibaba order placed 23 April 2026. Goods paid for in May but not yet received. Recorded as a May expense on cash basis.</div></div>
+    </div>
+
+    <div style="padding:12px 20px 4px;font-size:12px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.5px">Temu Orders</div>
+    <table class="dtbl">
+      <thead><tr><th>Order Date</th><th>Order ID</th><th>Items</th><th class="num">Amount (R)</th><th>Source Ref</th></tr></thead>
+      <tbody></tbody>
+      <tfoot><tr><td colspan="3">TOTAL TEMU</td><td class="num neg">(R&nbsp;0.00)</td><td></td></tr></tfoot>
+    </table>
+
+    <div style="padding:16px 20px 4px;font-size:12px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.5px">Alibaba Order</div>
+    <table class="dtbl" style="margin-bottom:0">
+      <thead><tr><th>Date</th><th>Order No.</th><th>Items</th><th>Supplier</th><th class="num">Product (R)</th><th class="num">Shipping (R)</th><th class="num">Proc. Fee (R)</th><th class="num">Total Paid (R)</th><th>Source Ref</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>n/a</td>
+          <td><span class="ref" style="font-size:11px">No Alibaba order in April</span></td>
+          <td style="font-size:11px">40&times; White PVC NFC Stand + 20&times; Black PVC NFC Stand<br>(120&times;140&times;50mm, 213-chip, PVC)</td>
+          <td style="font-size:11px">-&hellip;</td>
+          <td class="num">R&nbsp;0.00</td>
+          <td class="num amber-txt">R&nbsp;0.00</td>
+          <td class="num amber-txt">R&nbsp;0.00</td>
+          <td class="num neg"><strong>R&nbsp;0.00</strong></td>
+          <td><span class="src src-alibaba" title="RT Alibaba Receipt PDF">ALIBABA</span><span class="ref">-</span></td>
+        </tr>
+        <tr style="background:var(--grey)">
+          <td colspan="9" style="font-size:11px;color:var(--muted);padding:8px 14px">
+            Order total USD 153.01 &mdash; converted at 1 USD = 16.759739 ZAR. Payment processing fee ZAR 76.76 included. Source: <code>RT Alibaba Receipt_n/a_1780287367263.pdf</code>
+          </td>
+        </tr>
+      </tbody>
+      <tfoot><tr><td colspan="7">TOTAL ALIBABA</td><td class="num neg">(R&nbsp;0.00)</td><td></td></tr></tfoot>
+    </table>
+
+    <div class="recon-strip">
+      <div class="rs"><div class="rs-val amber-txt">R 0.00</div><div class="rs-lbl">Temu (3 orders)</div></div>
+      <div class="rs"><div class="rs-val amber-txt">R 0.00</div><div class="rs-lbl">Alibaba (60 NFC stands)</div></div>
+      <div class="rs"><div class="rs-val neg">R 0.00</div><div class="rs-lbl">Total COGS</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- STAFF COSTS -->
+<div class="card">
+  <div class="card-hdr" onclick="toggleCard(this)">
+    <div class="ch-left"><span class="ch-title">&#128100; Staff &amp; Owner Costs</span><span class="ch-cnt">50% share</span><span class="src src-bank" style="font-size:10px">BANK STMT</span></div>
+    <div style="display:flex;align-items:center"><span class="ch-total neg">(R&nbsp;12,776.25)</span><span class="tog">&#9660;</span></div>
+  </div>
+  <div class="card-body closed">
+    <div class="notice notice-info" style="margin-top:16px">
+      <span class="notice-icon">&#8505;</span>
+      <div class="notice-body"><div class="notice-title">Source &amp; split</div>
+      <div class="notice-text">FNB Business Account 62435283809 &nbsp;&bull;&nbsp; Total across both businesses: R 12,776.25 &nbsp;&bull;&nbsp; Split 50/50 between RT and MFB &nbsp;&bull;&nbsp; RT share: R 12,776.25</div></div>
+    </div>
+    <table class="dtbl">
+      <thead><tr><th>Date</th><th>Description</th><th class="num">Full Amount (R)</th><th class="num">RT 50% (R)</th><th>Source</th></tr></thead>
+      <tbody><tr><td>2026/04/25</td><td>DIANE COLQUHOUN SALA</td><td class="num">R&nbsp;12,776.25</td><td class="num neg">(R&nbsp;6,388.12)</td><td><span class="src src-bank">BANK STMT</span><span class="ref">FNB 62435283809</span></td></tr></tbody>
+      <tfoot><tr><td colspan="2">TOTAL (RT 50% share)</td><td class="num">R&nbsp;12,776.25</td><td class="num neg">(R&nbsp;12,776.25)</td><td></td></tr></tfoot>
+    </table>
+  </div>
+</div>
+
+<!-- SAAS TOOLS -->
+<div class="card">
+  <div class="card-hdr" onclick="toggleCard(this)">
+    <div class="ch-left"><span class="ch-title">&#128187; SaaS &amp; Platform Tools</span><span class="ch-cnt">10 subscriptions</span><span class="src src-cc" style="font-size:10px">CREDIT CARD</span></div>
+    <div style="display:flex;align-items:center"><span class="ch-total neg">(R&nbsp;3,306.37)</span><span class="tog">&#9660;</span></div>
+  </div>
+  <div class="card-body closed">
+    <div class="notice notice-info" style="margin-top:16px">
+      <span class="notice-icon">&#8505;</span>
+      <div class="notice-body"><div class="notice-title">Source</div>
+      <div class="notice-text">Business credit card 422824******4000 (FNB Commercial Platinum) &nbsp;&bull;&nbsp; All attributed 100% to Reviewtap per owner instruction</div></div>
+    </div>
+    <table class="dtbl">
+      <thead><tr><th>Date</th><th>Tool / Service</th><th>Category</th><th class="num">Amount (R)</th><th>Source</th></tr></thead>
+      <tbody><tr><td>2026/04/10</td><td>Google Workspace (JCEME)</td><td><span class="badge bdg-m">Business Tools</span></td><td class="num neg">(R&nbsp;942.07)</td><td><span class="src src-cc">CREDIT CARD</span><span class="ref">422824******4000</span></td></tr><tr><td>2026/04/22</td><td>Afrihost (×3)</td><td><span class="badge bdg-m">Hosting</span></td><td class="num neg">(R&nbsp;153.90)</td><td><span class="src src-cc">CREDIT CARD</span><span class="ref">422824******4000</span></td></tr><tr><td>2026/04/07</td><td>GoDaddy domains ×2</td><td><span class="badge bdg-m">Hosting</span></td><td class="num neg">(R&nbsp;75.90)</td><td><span class="src src-cc">CREDIT CARD</span><span class="ref">422824******4000</span></td></tr><tr><td>2026/04/30</td><td>Trello (Atlassian)</td><td><span class="badge bdg-m">Business Tools</span></td><td class="num neg">(R&nbsp;207.81)</td><td><span class="src src-cc">CREDIT CARD</span><span class="ref">422824******4000</span></td></tr><tr><td>2026/04/13</td><td>OpenAI / ChatGPT</td><td><span class="badge bdg-m">AI Tools</span></td><td class="num neg">(R&nbsp;388.73)</td><td><span class="src src-cc">CREDIT CARD</span><span class="ref">422824******4000</span></td></tr><tr><td>2026/04/09</td><td>10Web.io</td><td><span class="badge bdg-m">Hosting</span></td><td class="num neg">(R&nbsp;688.21)</td><td><span class="src src-cc">CREDIT CARD</span><span class="ref">422824******4000</span></td></tr><tr><td>2026/04/22</td><td>Netlify</td><td><span class="badge bdg-m">Hosting</span></td><td class="num neg">(R&nbsp;323.47)</td><td><span class="src src-cc">CREDIT CARD</span><span class="ref">422824******4000</span></td></tr><tr><td>2026/04/27</td><td>Make.com</td><td><span class="badge bdg-m">Business Tools</span></td><td class="num neg">(R&nbsp;181.29)</td><td><span class="src src-cc">CREDIT CARD</span><span class="ref">422824******4000</span></td></tr><tr><td>2026/04/04</td><td>YouTube Premium</td><td><span class="badge bdg-m">Business Tools</span></td><td class="num neg">(R&nbsp;149.99)</td><td><span class="src src-cc">CREDIT CARD</span><span class="ref">422824******4000</span></td></tr><tr><td>2026/04/04</td><td>Hosting (generic)</td><td><span class="badge bdg-m">Hosting</span></td><td class="num neg">(R&nbsp;195.00)</td><td><span class="src src-cc">CREDIT CARD</span><span class="ref">422824******4000</span></td></tr></tbody>
+      <tfoot><tr><td colspan="3">TOTAL SAAS &amp; TOOLS</td><td class="num neg">(R&nbsp;3,306.37)</td><td></td></tr></tfoot>
+    </table>
+  </div>
+</div>
+
+<!-- HIGGSFIELD -->
+<div class="card">
+  <div class="card-hdr" onclick="toggleCard(this)">
+    <div class="ch-left"><span class="ch-title">&#128187; Higgsfield Subscription</span><span class="ch-cnt">1 charge</span><span class="src src-bank" style="font-size:10px">BANK STMT</span></div>
+    <div style="display:flex;align-items:center"><span class="ch-total neg">(R&nbsp;0.00)</span><span class="tog">&#9660;</span></div>
+  </div>
+  <div class="card-body closed">
+    <div class="notice notice-info" style="margin-top:16px">
+      <span class="notice-icon">&#8505;</span>
+      <div class="notice-body"><div class="notice-title">Source</div>
+      <div class="notice-text">FNB Business Account 62435283809 &nbsp;&bull;&nbsp; Card 400568******9251 &nbsp;&bull;&nbsp; Attributed 100% to Reviewtap per owner instruction</div></div>
+    </div>
+    <table class="dtbl">
+      <thead><tr><th>Date</th><th>Description</th><th class="num">Amount (R)</th><th>Source</th></tr></thead>
+      <tbody><tr><td></td><td></td><td class="num neg">(R&nbsp;0.00)</td><td><span class="src src-bank">BANK STMT</span><span class="ref">FNB acc 62435283809</span></td></tr></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ANTHROPIC / CLAUDE AI -->
+<div class="card">
+  <div class="card-hdr" onclick="toggleCard(this)">
+    <div class="ch-left"><span class="ch-title">&#129302; Anthropic / Claude AI</span><span class="ch-cnt">9 charges &mdash; 50% share</span><span class="src src-cc" style="font-size:10px">CREDIT CARD</span></div>
+    <div style="display:flex;align-items:center"><span class="ch-total neg">(R&nbsp;534.40)</span><span class="tog">&#9660;</span></div>
+  </div>
+  <div class="card-body closed">
+    <div class="notice notice-info" style="margin-top:16px">
+      <span class="notice-icon">&#8505;</span>
+      <div class="notice-body"><div class="notice-title">Source &amp; split methodology</div>
+      <div class="notice-text">Business credit card 422824******4000 &nbsp;&bull;&nbsp; Total across both businesses: R 1,068.80 &nbsp;&bull;&nbsp; Split 50/50 (no per-business usage data available) &nbsp;&bull;&nbsp; RT share: R 534.40 &nbsp;&bull;&nbsp; MFB share: R 534.40</div></div>
+    </div>
+    <table class="dtbl">
+      <thead><tr><th>Date</th><th>Description</th><th class="num">Full Amount (R)</th><th class="num">RT 50% (R)</th><th>Source</th></tr></thead>
+      <tbody><tr><td>2026/04/12</td><td>CLAUDE.AI SUBSCRIPTION</td><td class="num">R&nbsp;388.73</td><td class="num neg">(R&nbsp;194.37)</td><td><span class="src src-cc">CREDIT CARD</span><span class="ref">422824******4000</span></td></tr><tr><td>2026/04/13</td><td>ANTHROPIC API</td><td class="num">R&nbsp;291.55</td><td class="num neg">(R&nbsp;145.78)</td><td><span class="src src-cc">CREDIT CARD</span><span class="ref">422824******4000</span></td></tr><tr><td>2026/04/15</td><td>ANTHROPIC API</td><td class="num">R&nbsp;388.52</td><td class="num neg">(R&nbsp;194.26)</td><td><span class="src src-cc">CREDIT CARD</span><span class="ref">422824******4000</span></td></tr></tbody>
+      <tfoot><tr><td colspan="2">TOTAL (RT 50% share)</td><td class="num">R&nbsp;1,068.80</td><td class="num neg">(R&nbsp;534.40)</td><td></td></tr></tfoot>
+    </table>
+  </div>
+</div>
+
+<!-- FINANCE CHARGES -->
+<div class="card">
+  <div class="card-hdr" onclick="toggleCard(this)">
+    <div class="ch-left"><span class="ch-title">&#128176; Finance Charges</span><span class="ch-cnt">4 entries</span><span class="src src-cc" style="font-size:10px">CREDIT CARD</span></div>
+    <div style="display:flex;align-items:center"><span class="ch-total neg">(R&nbsp;1,198.10)</span><span class="tog">&#9660;</span></div>
+  </div>
+  <div class="card-body closed">
+    <div class="notice notice-info" style="margin-top:16px">
+      <span class="notice-icon">&#8505;</span>
+      <div class="notice-body"><div class="notice-title">Source</div>
+      <div class="notice-text">Business credit card 422824******4000 (FNB Commercial Platinum) &nbsp;&bull;&nbsp; All finance charges attributed to Reviewtap per owner instruction</div></div>
+    </div>
+    <table class="dtbl">
+      <thead><tr><th>Date</th><th>Description</th><th class="num">Amount (R)</th><th>Source</th></tr></thead>
+      <tbody><tr><td>2026/04/29</td><td>Credit card interest</td><td class="num neg">(R&nbsp;970.32)</td><td><span class="src src-cc">CREDIT CARD</span><span class="ref">422824******4000</span></td></tr><tr><td>2026/04/09</td><td>ATM transaction fee</td><td class="num neg">(R&nbsp;104.80)</td><td><span class="src src-cc">CREDIT CARD</span><span class="ref">422824******4000</span></td></tr><tr><td>2026/04/19</td><td>Cash transaction fee</td><td class="num neg">(R&nbsp;116.98)</td><td><span class="src src-cc">CREDIT CARD</span><span class="ref">422824******4000</span></td></tr><tr><td>2026/04/13</td><td>Declined auth fee</td><td class="num neg">(R&nbsp;6.00)</td><td><span class="src src-cc">CREDIT CARD</span><span class="ref">422824******4000</span></td></tr></tbody>
+      <tfoot><tr><td colspan="2">TOTAL FINANCE CHARGES</td><td class="num neg">(R&nbsp;1,198.10)</td><td></td></tr></tfoot>
+    </table>
+  </div>
+</div>
+
+<!-- PLATFORM TOOLS -->
+<div class="card">
+  <div class="card-hdr" onclick="toggleCard(this)">
+    <div class="ch-left"><span class="ch-title">&#128736; Platform &amp; Tools</span><span class="ch-cnt">GoHighLevel &bull; Hostinger &bull; Print</span><span class="src src-bank" style="font-size:10px">BANK STMT</span></div>
+    <div style="display:flex;align-items:center"><span class="ch-total neg">(R&nbsp;9,519.88)</span><span class="tog">&#9660;</span></div>
+  </div>
+  <div class="card-body closed">
+    <div class="notice notice-info" style="margin-top:16px">
+      <span class="notice-icon">&#8505;</span>
+      <div class="notice-body"><div class="notice-title">Source</div>
+      <div class="notice-text">FNB Business Account 62435283809 &nbsp;&bull;&nbsp; All attributed 100% to Reviewtap per owner instruction</div></div>
+    </div>
+    <table class="dtbl">
+      <thead><tr><th>Date</th><th>Description</th><th>Category</th><th class="num">Amount (R)</th><th>Source</th></tr></thead>
+      <tbody>
+        <tr><td>2026/04/17</td><td>PURCH HIGHLEVEL AGENCY SU 400568******9251</td><td><span class="badge bdg-m">GoHighLevel CRM</span></td><td class="num neg">(R&nbsp;5,760.88)</td><td><span class="src src-bank">BANK STMT</span><span class="ref">FNB 62435283809</span></td></tr><tr><td>2026/04/20</td><td>PURCH HIGHLEVEL INC.      400568******9251</td><td><span class="badge bdg-m">GoHighLevel CRM</span></td><td class="num neg">(R&nbsp;1,881.62)</td><td><span class="src src-bank">BANK STMT</span><span class="ref">FNB 62435283809</span></td></tr><tr><td>2026/04/21</td><td>PURCH HIGHLEVEL INC.      400568******9251</td><td><span class="badge bdg-m">GoHighLevel CRM</span></td><td class="num neg">(R&nbsp;169.05)</td><td><span class="src src-bank">BANK STMT</span><span class="ref">FNB 62435283809</span></td></tr><tr><td>2026/04/28</td><td>PURCH HIGHLEVEL INC.      400568******9251</td><td><span class="badge bdg-m">GoHighLevel CRM</span></td><td class="num neg">(R&nbsp;1,378.06)</td><td><span class="src src-bank">BANK STMT</span><span class="ref">FNB 62435283809</span></td></tr>
+        <tr><td>2026/04/24</td><td>PURCH HOSTINGER* HOSTINGE 400568******9251</td><td><span class="badge bdg-m">Hosting</span></td><td class="num neg">(R&nbsp;330.27)</td><td><span class="src src-bank">BANK STMT</span><span class="ref">FNB 62435283809</span></td></tr>
+        <tr><td>n/a</td><td>No Guru Print in April</td><td><span class="badge bdg-m">Printing</span></td><td class="num neg">(R&nbsp;0.00)</td><td><span class="src src-bank">BANK STMT</span><span class="ref">FNB 62435283809</span></td></tr>
+      </tbody>
+      <tfoot><tr><td colspan="3">TOTAL</td><td class="num neg">(R&nbsp;9,519.88)</td><td></td></tr></tfoot>
+    </table>
+  </div>
+</div>
+
+<!-- BOBGO -->
+<div class="card">
+  <div class="card-hdr" onclick="toggleCard(this)">
+    <div class="ch-left"><span class="ch-title">&#128667; BobGo &mdash; Shipping &amp; Subscription</span><span class="ch-cnt">n/a</span><span class="src src-bg" style="font-size:10px">BOBGO INV</span></div>
+    <div style="display:flex;align-items:center"><span class="ch-total neg">(R&nbsp;0.00)</span><span class="tog">&#9660;</span></div>
+  </div>
+  <div class="card-body closed">
+    <div class="notice notice-warn" style="margin-top:16px">
+      <span class="notice-icon">&#9888;</span>
+      <div class="notice-body"><div class="notice-title">Invoice outstanding &mdash; due 07 Jun 2026</div>
+      <div class="notice-text">Bob Group (Pty) Ltd &nbsp;&bull;&nbsp; VAT no. 4490188267 &nbsp;&bull;&nbsp; Account REV019 &nbsp;&bull;&nbsp; Source: RT bob_go_REV019_invoice_n/a.pdf</div></div>
+    </div>
+    <table class="dtbl">
+      <thead><tr><th>Date</th><th>Description</th><th>Invoice No.</th><th class="num">Excl. VAT (R)</th><th class="num">VAT 15% (R)</th><th class="num">Total incl. VAT (R)</th><th>Source</th></tr></thead>
+      <tbody>
+        <tr>
+          <td rowspan="2">n/a</td>
+          <td>Shipping charges &mdash; April 2026</td>
+          <td rowspan="2"><span class="ref" style="font-size:12px">n/a</span></td>
+          <td class="num">R&nbsp;0.00</td>
+          <td class="num amber-txt">R&nbsp;0.00</td>
+          <td class="num">R&nbsp;0.00</td>
+          <td rowspan="2"><span class="src src-bg">BOBGO INV</span><span class="ref">n/a</span></td>
+        </tr>
+        <tr>
+          <td>BobGo Starter subscription &mdash; 01 May to 30 April 2026</td>
+          <td class="num">R&nbsp;0.00</td>
+          <td class="num amber-txt">R&nbsp;0.00</td>
+          <td class="num">R&nbsp;0.00</td>
+        </tr>
+        <tr style="background:var(--amber-bg)">
+          <td colspan="7" style="font-size:11px;color:var(--amber);padding:8px 14px">
+            &#9888;&nbsp; VAT R&nbsp;0.00 is non-recoverable (not VAT registered). Full invoice amount R&nbsp;0.00 expensed. &nbsp; Source: <code>RT bob_go_REV019_invoice_n/a.pdf</code>
+          </td>
+        </tr>
+      </tbody>
+      <tfoot><tr>
+        <td colspan="3"><strong>TOTAL</strong></td>
+        <td class="num">R&nbsp;0.00</td>
+        <td class="num neg">(R&nbsp;0.00)</td>
+        <td class="num neg">(R&nbsp;0.00)</td>
+        <td></td>
+      </tr></tfoot>
+    </table>
+  </div>
+</div>
+
+
+
+<!-- SOURCE FILES -->
+<div class="card">
+  <div class="card-hdr" onclick="toggleCard(this)">
+    <div class="ch-left"><span class="ch-title">&#128196; Source Files</span><span class="ch-cnt">5 files</span></div>
+    <div style="display:flex;align-items:center"><span style="font-size:12px;color:#ccc;margin-right:4px">Click to download originals</span><span class="tog">&#9660;</span></div>
+  </div>
+  <div class="card-body closed">
+    <div class="notice notice-info" style="margin-top:16px">
+      <span class="notice-icon">&#8505;</span>
+      <div class="notice-body"><div class="notice-title">Raw source files</div>
+      <div class="notice-text">All source documents used to compile this report. Click any Download button to save the file directly from this page &mdash; no server required.</div></div>
+    </div>
+    <div class="src-files-grid"><div class="src-file"><div class="src-file-info"><span class="src-icon">💳</span><div><div class="src-label">RT Payfast CSV</div><div class="src-desc">Payfast (RT subscriptions) - Apr-April 2026 &nbsp;&bull;&nbsp; <span class="src-size">3.4&nbsp;KB</span></div></div></div><a class="dl-btn" href="data:text/csv;base64,IkRhdGUiLCJUeXBlIiwiU2lnbiIsIlBhcnR5IiwiRW1haWwgLyBDZWxsIiwiTmFtZSIsIkRlc2NyaXB0aW9uIiwiQ3VycmVuY3kiLCJGdW5kaW5nIFR5cGUiLCJHcm9zcyIsIkZlZSIsIk5ldCIsIkJhbGFuY2UiLCJNIFBheW1lbnQgSUQiLCJQRiBQYXltZW50IElEIiwiQ3VzdG9tX3N0cjEiLCJDdXN0b21fc3RyMiIsIkN1c3RvbV9zdHIzIiwiQ3VzdG9tX3N0cjQiLCJDdXN0b21fc3RyNSIsIkN1c3RvbV9pbnQxIiwiQ3VzdG9tX2ludDIiLCJDdXN0b21faW50MyIsIkN1c3RvbV9pbnQ0IiwiQ3VzdG9tX2ludDUiCiIyMDI2LTA1LTEyIDExOjU4OjI3IiwiUGF5b3V0IiwiRGViaXQiLCJNeSBCYW5rIEFjY291bnQiLCIiLCJQYXlvdXQgdG8gYmFuayBhY2NvdW50IiwiUGF5b3V0IHRvIGJhbmsgYWNjb3VudDogRk5CLCBuYSAoMjUwNjU1KSwgNjI0MzUyODM4MDkgKENoZXF1ZS9UcmFuc21pc3Npb24pIiwiWkFSIiwiIiwiLTExNTQ1LjE0IiwiLTEwLjAwIiwiLTExNTU1LjE0IiwiMC4wMCIsIiIsIjMwMDM4MDM5NSIsIiIsIiIsIiIsIiIsIiIsIiIsIiIsIiIsIiIsIiIKIjIwMjYtMDUtMTAgMDQ6MjA6MzIiLCJGdW5kcyBSZWNlaXZlZCIsIkNyZWRpdCIsIkNoYXJpc3NhIEFzaCIsImluZm9AbGlxdWlkbG91bmdlLmNvLnphIiwiUmV2aWV3VGFwIFJlcHV0YXRpb24gU3VpdGUiLCJSZXB1dGF0aW9uLCBDUk0gYW5kIFNvY2lhbCBNZWRpYSBBdXRvbWF0aW9uIFNlcnZpY2UiLCJaQVIiLCJDcmVkaXQgQ2FyZCIsIjExOTk5LjAwIiwiLTQ0My44NiIsIjExNTU1LjE0IiwiMTE1NTUuMTQiLCJMaXF1aWQgTG91bmdlIFJlcHV0YXRpb24gU3VpdGUiLCIyOTk5NjA4NjEiLCIiLCIiLCIiLCIiLCIiLCIiLCIiLCIiLCIiLCIiCiIyMDI2LTA1LTA4IDA4OjEzOjQ0IiwiUGF5b3V0IiwiRGViaXQiLCJNeSBCYW5rIEFjY291bnQiLCIiLCJQYXlvdXQgdG8gYmFuayBhY2NvdW50IiwiUGF5b3V0IHRvIGJhbmsgYWNjb3VudDogRk5CLCBuYSAoMjUwNjU1KSwgNjI0MzUyODM4MDkgKENoZXF1ZS9UcmFuc21pc3Npb24pIiwiWkFSIiwiIiwiLTEzODIuMDQiLCItMTAuMDAiLCItMTM5Mi4wNCIsIjAuMDAiLCIiLCIyOTk2Mjg4MDEiLCIiLCIiLCIiLCIiLCIiLCIiLCIiLCIiLCIiLCIiCiIyMDI2LTA1LTAzIDA1OjAwOjIzIiwiRnVuZHMgUmVjZWl2ZWQiLCJDcmVkaXQiLCJJZGlyIEhhbXppIiwiaGFtemlpZGlyNzhAZ21haWwuY29tIiwiUmV2aWV3VGFwIFJlcHV0YXRpb24gU3VpdGUiLCIiLCJaQVIiLCJDcmVkaXQgQ2FyZCIsIjUwMC4wMCIsIi0yMC43MCIsIjQ3OS4zMCIsIjEzOTIuMDQiLCJFc3NlbmNlIG9mIE1pZGRsZSBFYXN0IC0gQ1QiLCIyOTgzNzY0NjkiLCIiLCIiLCIiLCIiLCIiLCIiLCIiLCIiLCIiLCIiCiIyMDI2LTA1LTAyIDA0OjU5OjExIiwiRnVuZHMgUmVjZWl2ZWQiLCJDcmVkaXQiLCJtdXN0YWZhIG1haGFtZWVkIiwibXVzdGFmYW1haGFtZWVkMzJAZ21haWwuY29tIiwiUmV2aWV3VGFwIFJlcHV0YXRpb24gU3VpdGUiLCIiLCJaQVIiLCJDcmVkaXQgQ2FyZCIsIjk1MC4wMCIsIi0zNy4yNiIsIjkxMi43NCIsIjkxMi43NCIsIkVzc2VuY2Ugb2YgTWlkZGxlIEVhc3QgLSBQRSIsIjI5ODE5NDkzOSIsIiIsIiIsIiIsIiIsIiIsIiIsIiIsIiIsIiIsIiIKIjIwMjYtMDQtMzAgMTA6MTE6NDMiLCJQYXlvdXQiLCJEZWJpdCIsIk15IEJhbmsgQWNjb3VudCIsIiIsIlBheW91dCB0byBiYW5rIGFjY291bnQiLCJQYXlvdXQgdG8gYmFuayBhY2NvdW50OiBGTkIsIG5hICgyNTA2NTUpLCA2MjQzNTI4MzgwOSAoQ2hlcXVlL1RyYW5zbWlzc2lvbikiLCJaQVIiLCIiLCItMTgxNi44MiIsIi0xMC4wMCIsIi0xODI2LjgyIiwiMC4wMCIsIiIsIjI5NzM3MTIwNSIsIiIsIiIsIiIsIiIsIiIsIiIsIiIsIiIsIiIsIiIKIjIwMjYtMDQtMjcgMDQ6NTY6MjkiLCJGdW5kcyBSZWNlaXZlZCIsIkNyZWRpdCIsIkpvaG5ueSBQZWVucyIsImpwYmx1ZWJ1bGxzQGdtYWlsLmNvbSIsIlJldmlld1RhcCBSZXB1dGF0aW9uIFN1aXRlIiwiIiwiWkFSIiwiQ3JlZGl0IENhcmQiLCIxODk5LjAwIiwiLTcyLjE4IiwiMTgyNi44MiIsIjE4MjYuODIiLCJTZWViZWRlcmZpZSBHdWVzdGhvdXNlIiwiMjk2NjI1OTc5IiwiIiwiIiwiIiwiIiwiIiwiIiwiIiwiIiwiIiwiIgoiMjAyNi0wNC0xMyAwNzo0NTo1OCIsIlBheW91dCIsIkRlYml0IiwiTXkgQmFuayBBY2NvdW50IiwiIiwiUGF5b3V0IHRvIGJhbmsgYWNjb3VudCIsIlBheW91dCB0byBiYW5rIGFjY291bnQ6IEZOQiwgbmEgKDI1MDY1NSksIDYyNDM1MjgzODA5IChDaGVxdWUvVHJhbnNtaXNzaW9uKSIsIlpBUiIsIiIsIi0xMTU0NS4xNCIsIi0xMC4wMCIsIi0xMTU1NS4xNCIsIjAuMDAiLCIiLCIyOTM4NDcxMDkiLCIiLCIiLCIiLCIiLCIiLCIiLCIiLCIiLCIiLCIiCiIyMDI2LTA0LTEwIDA0OjI0OjI5IiwiRnVuZHMgUmVjZWl2ZWQiLCJDcmVkaXQiLCJDaGFyaXNzYSBBc2giLCJpbmZvQGxpcXVpZGxvdW5nZS5jby56YSIsIlJldmlld1RhcCBSZXB1dGF0aW9uIFN1aXRlIiwiUmVwdXRhdGlvbiwgQ1JNIGFuZCBTb2NpYWwgTWVkaWEgQXV0b21hdGlvbiBTZXJ2aWNlIiwiWkFSIiwiQ3JlZGl0IENhcmQiLCIxMTk5OS4wMCIsIi00NDMuODYiLCIxMTU1NS4xNCIsIjExNTU1LjE0IiwiTGlxdWlkIExvdW5nZSBSZXB1dGF0aW9uIFN1aXRlIiwiMjkzMzYyNjgxIiwiIiwiIiwiIiwiIiwiIiwiIiwiIiwiIiwiIiwiIgoiMjAyNi0wNC0wNyAxMjoxNjoyNyIsIlBheW91dCIsIkRlYml0IiwiTXkgQmFuayBBY2NvdW50IiwiIiwiUGF5b3V0IHRvIGJhbmsgYWNjb3VudCIsIlBheW91dCB0byBiYW5rIGFjY291bnQ6IEZOQiwgbmEgKDI1MDY1NSksIDYyNDM1MjgzODA5IChDaGVxdWUvVHJhbnNtaXNzaW9uKSIsIlpBUiIsIiIsIi0xMzgyLjA0IiwiLTEwLjAwIiwiLTEzOTIuMDQiLCIwLjAwIiwiIiwiMjkyNzY0MzY3IiwiIiwiIiwiIiwiIiwiIiwiIiwiIiwiIiwiIiwiIgoiMjAyNi0wNC0wMyAwNDo1OToyMyIsIkZ1bmRzIFJlY2VpdmVkIiwiQ3JlZGl0IiwiSWRpciBIYW16aSIsImhhbXppaWRpcjc4QGdtYWlsLmNvbSIsIlJldmlld1RhcCBSZXB1dGF0aW9uIFN1aXRlIiwiIiwiWkFSIiwiQ3JlZGl0IENhcmQiLCI1MDAuMDAiLCItMjAuNzAiLCI0NzkuMzAiLCIxMzkyLjA0IiwiRXNzZW5jZSBvZiBNaWRkbGUgRWFzdCAtIENUIiwiMjkyMTAyOTA3IiwiIiwiIiwiIiwiIiwiIiwiIiwiIiwiIiwiIiwiIgoiMjAyNi0wNC0wMiAwNToxMTozNSIsIkZ1bmRzIFJlY2VpdmVkIiwiQ3JlZGl0IiwibXVzdGFmYSBtYWhhbWVlZCIsIm11c3RhZmFtYWhhbWVlZDMyQGdtYWlsLmNvbSIsIlJldmlld1RhcCBSZXB1dGF0aW9uIFN1aXRlIiwiIiwiWkFSIiwiQ3JlZGl0IENhcmQiLCI5NTAuMDAiLCItMzcuMjYiLCI5MTIuNzQiLCI5MTIuNzQiLCJFc3NlbmNlIG9mIE1pZGRsZSBFYXN0IC0gUEUiLCIyOTE4Mjc0MjkiLCIiLCIiLCIiLCIiLCIiLCIiLCIiLCIiLCIiLCIiCg==" download="RT Payfast.csv">&#11015; Download</a></div>
+<div class="src-file"><div class="src-file-info"><span class="src-icon">🛒</span><div><div class="src-label">Peach Payments CSV</div><div class="src-desc">Peach Payments Shopify - Apr-April 2026 &nbsp;&bull;&nbsp; <span class="src-size">30.4&nbsp;KB</span></div></div></div><a class="dl-btn" href="data:text/csv;base64,RGF0ZSAoR01UKzIpLFN0YXR1cyxDdXN0b21lciBOYW1lLFRyYW5zYWN0aW9uIElELE1lcmNoYW50IE9yZGVyIElELEludm9pY2UgSUQsVHlwZSxBbW91bnQsQ3VycmVuY3ksQnJhbmQsUGF5bWVudCBNZXRob2QsUmVzdWx0IENvZGUsUmVzdWx0IENvZGUgRGVzY3JpcHRpb24sQ3VzdG9tZXIgRW1haWwsQ29udGFjdCBOdW1iZXIsSVAgQWRkcmVzcyxDaGFubmVsIE5hbWUsQ2hhbm5lbCBJRCxDYXJkIEJJTiAgKEZpcnN0IDYpLENhcmQgKExhc3QgNCksQUNLL05PSyxFQ0ksU2V0dGxlbWVudCBSZWZlcmVuY2UsU2V0dGxlbWVudCBTdGF0dXMsU2V0dGxlbWVudCBEYXRlLFJSTixUZXJtaW5hbCBTZXJpYWwgTnVtYmVyLE1lcmNoYW50IE5hbWUsTWVyY2hhbnQgSUQsUGF5bWVudCBTb3VyY2UsQ3VzdG9tIERldGFpbHMKMjAyNi0wNS0zMSAyMDo1Njo1MCxzdWNjZXNzZnVsLEpvYW5pdGEgVG9ua3MsOGQwMDA0OTk3MjMxNDRkMDk3NDZhZjNiN2Y2MzM1YjQscnBWQ1NERDJzeVVKTHEwWW84dHUzNnNJUSwsREIsNzU0LjAwLFpBUixhbWV4LGNhcmQsMDAwLjAwMC4wMDAsVHJhbnNhY3Rpb24gc3VjY2VlZGVkLHRvbmtzam9hbml0YUBnbWFpbC5jb20sLDQxLjEyMS41My4xNDUsUmV2aWV3IFRhcCBTaG9waWZ5LDhhYzlhNGNjOTRlZjY1OTQwMTk0ZjRhMzQwNDYxZjNlLDM3NzA4OSwyMjg0LEFDSywwNSxQRUFDSC0xODEtMDEwNjIwMjYsU0VUVExFRCwyMDI2LTA2LTAxIDEwOjI0OjQ2LjE3MSw2MTY5MDcwMjU5OTUsLFJldmlldyBUYXAsMDQ1MDQ1ODQyZDZmNDM0ZWE0ZTVhZTg2OGI4YjU4ODAsLAoyMDI2LTA1LTMxIDE3OjMwOjEzLHN1Y2Nlc3NmdWwsUCBOYWlkb28sOGFjZGE0YTg5ZTY5MTRmOTAxOWU3ZWE4MzMwNzM5NDIscndaYVM5cUxYZnpjb3ZtVnk4NFRpSmYyTywsREIsMzI0NS4wMCxaQVIsdmlzYSxhcHBsZV9wYXksMDAwLjAwMC4wMDAsVHJhbnNhY3Rpb24gc3VjY2VlZGVkLGRycEBza2luc29sdXRpb25zc2EuY28uemEsLCxSZXZpZXcgVGFwIFNob3BpZnksOGFjOWE0Y2M5NGVmNjU5NDAxOTRmNGEzNDA0NjFmM2UsNDQ1ODg1LDkxMTAsQUNLLDA1LFBFQUNILTE4MS0wMTA2MjAyNixTRVRUTEVELDIwMjYtMDYtMDEgMTA6MjQ6NDYuMTcxLDY4MzMxMjc3NTc1NSwsUmV2aWV3IFRhcCwwNDUwNDU4NDJkNmY0MzRlYTRlNWFlODY4YjhiNTg4MCwsCjIwMjYtMDUtMzEgMTU6MDE6MjIsc3VjY2Vzc2Z1bCxEb25hbGQgTmR3YWxhemEsOGFjZGE0YTE5ZTY4YzVkNDAxOWU3ZTFmZThiNTA2ODAscmVsOXVJY05uV3hLRVpmMG1panJVWlF6diwsREIsNzU0LjAwLFpBUixtYXN0ZXIsYXBwbGVfcGF5LDAwMC4wMDAuMDAwLFRyYW5zYWN0aW9uIHN1Y2NlZWRlZCx0ZWJvZ29kb25hbGRAaWNsb3VkLmNvbSwsLFJldmlldyBUYXAgU2hvcGlmeSw4YWM5YTRjYzk0ZWY2NTk0MDE5NGY0YTM0MDQ2MWYzZSw1MzQ5NjcsMTM3MixBQ0ssLFBFQUNILTE4MS0wMTA2MjAyNixTRVRUTEVELDIwMjYtMDYtMDEgMTA6MjQ6NDYuMTcxLDUwMDQxMDI2MDA0MywsUmV2aWV3IFRhcCwwNDUwNDU4NDJkNmY0MzRlYTRlNWFlODY4YjhiNTg4MCwsCjIwMjYtMDUtMzEgMDk6NTY6MTYsc3VjY2Vzc2Z1bCxNYXJrIEtlcndhbiw4YWNkYTQ5ZjllNjhjNTdkMDE5ZTdkMDg5OTQ3NDczNyxyOHBZZW8zZ2lvdkh4VnpjdHJuSG9qN2VBLCxEQiw5NDguMDAsWkFSLHZpc2EsYXBwbGVfcGF5LDAwMC4wMDAuMDAwLFRyYW5zYWN0aW9uIHN1Y2NlZWRlZCxrZXJ3YW5AeWViby5jby56YSwsLFJldmlldyBUYXAgU2hvcGlmeSw4YWM5YTRjYzk0ZWY2NTk0MDE5NGY0YTM0MDQ2MWYzZSw0NDY5NzIsNzM4MyxBQ0ssMDUsUEVBQ0gtMTgxLTAxMDYyMDI2LFNFVFRMRUQsMjAyNi0wNi0wMSAxMDoyNDo0Ni4xNzEsMzcwNjIyNzg5MDY3LCxSZXZpZXcgVGFwLDA0NTA0NTg0MmQ2ZjQzNGVhNGU1YWU4NjhiOGI1ODgwLCwKMjAyNi0wNS0zMCAyMjowODowMyxzdWNjZXNzZnVsLFJvc2FsaWUgTWFrZW1lLDhhY2RhNGEzOWU2OGM1ZTQwMTllN2E4MDM2MGY2YTllLHJVdGNMQ3hITWxmSExMbDM0aDltUmFMUFEsLERCLDc1NC4wMCxaQVIsdmlzYSxhcHBsZV9wYXksMDAwLjAwMC4wMDAsVHJhbnNhY3Rpb24gc3VjY2VlZGVkLHJvc2FsaWUubWFrZW1lQGdtYWlsLmNvbSwsLFJldmlldyBUYXAgU2hvcGlmeSw4YWM5YTRjYzk0ZWY2NTk0MDE5NGY0YTM0MDQ2MWYzZSw0NjEyNzksMzg5OCxBQ0ssMDUsUEVBQ0gtMTgxLTAxMDYyMDI2LFNFVFRMRUQsMjAyNi0wNi0wMSAxMDoyNDo0Ni4xNzEsMDgyOTI5MzYxMzU1LCxSZXZpZXcgVGFwLDA0NTA0NTg0MmQ2ZjQzNGVhNGU1YWU4NjhiOGI1ODgwLCwKMjAyNi0wNS0zMCAxOTo0MDozMyxzdWNjZXNzZnVsLFNpbXMgUGhha2F0aGksOGFjZGE0YTY5ZTY5MTRjZTAxOWU3OWY5Mjg1ZTViODAsckNyRFB6OEtua0lSOEkyQkszRGpPN1B5aywsREIsOTk4LjAwLFpBUixtYXN0ZXIsYXBwbGVfcGF5LDAwMC4wMDAuMDAwLFRyYW5zYWN0aW9uIHN1Y2NlZWRlZCxzaW1zLnBoYWthdGhpQGdtYWlsLmNvbSwsLFJldmlldyBUYXAgU2hvcGlmeSw4YWM5YTRjYzk0ZWY2NTk0MDE5NGY0YTM0MDQ2MWYzZSw1MjE0MzQsODgxMSxBQ0ssLFBFQUNILTE4MS0wMTA2MjAyNixTRVRUTEVELDIwMjYtMDYtMDEgMTA6MjQ6NDYuMTcxLDI1NjQ3MTc3NTY5MSwsUmV2aWV3IFRhcCwwNDUwNDU4NDJkNmY0MzRlYTRlNWFlODY4YjhiNTg4MCwsCjIwMjYtMDUtMjkgMDg6Mzk6NTcsc3VjY2Vzc2Z1bCxSb2RnZXIgTWV5ZXIsOGFjZGE0YTg5ZTY5MTRmOTAxOWU3Mjc2MDQzZjUwOGUscktPb3lXN251WmdjYTJDMDVFNlNBaWFJbiwsREIsNjA0LjAwLFpBUix2aXNhLGFwcGxlX3BheSwwMDAuMDAwLjAwMCxUcmFuc2FjdGlvbiBzdWNjZWVkZWQsZHJtZXllckBtd2ViLmNvLnphLCwsUmV2aWV3IFRhcCBTaG9waWZ5LDhhYzlhNGNjOTRlZjY1OTQwMTk0ZjRhMzQwNDYxZjNlLDQ3NTY5MiwzNzU1LEFDSywwNSxQRUFDSC0xODEtMDEwNjIwMjYsU0VUVExFRCwyMDI2LTA2LTAxIDEwOjI0OjQ2LjE3MSw3OTE3NjY3Njc4MTksLFJldmlldyBUYXAsMDQ1MDQ1ODQyZDZmNDM0ZWE0ZTVhZTg2OGI4YjU4ODAsLAoyMDI2LTA1LTI4IDIyOjMzOjIxLHN1Y2Nlc3NmdWwsU29uamEgVm9zLDAxYmExNmFkOTZlMDQzOGI5OWEyZTNjMjU4ZGNkYTQyLHJPNm1sVjBib0dxS2RvSUthb0daTGl2RGwsLERCLDc1NC4wMCxaQVIsYWJzYWVmdCxwYXlieWJhbmssMDAwLjAwMC4wMDAsVHJhbnNhY3Rpb24gc3VjY2VlZGVkLHNvbmphQHNvbmphdm9zLmNvLnphLCwsUmV2aWV3IFRhcCBTaG9waWZ5LDhhYzlhNGNjOTRlZjY1OTQwMTk0ZjRhMzQwNDYxZjNlLCwsQUNLLCxQRUFDSC0xODAtMjkwNTIwMjYsU0VUVExFRCwyMDI2LTA1LTI5IDEyOjQ0OjMxLjkwNywzNjE1MjA2NjcxLCxSZXZpZXcgVGFwLDA0NTA0NTg0MmQ2ZjQzNGVhNGU1YWU4NjhiOGI1ODgwLCwKMjAyNi0wNS0yOCAyMTowNTo1MCxzdWNjZXNzZnVsLEtldmluZHJhIE5haWR1LDFlZDA5ZmQ3ZGI5MDRhNzI4OWMxNjMzMjQ2YjljYWM3LHJJY2NMMk9UQ290MXhsOXA4Tk1DZkpsQ0ssLERCLDc1NC4wMCxaQVIsdmlzYSxjYXJkLDAwMC4wMDAuMDAwLFRyYW5zYWN0aW9uIHN1Y2NlZWRlZCxkci5rZXZpLm5haWR1QGdtYWlsLmNvbSwsNDEuNzkuMTU3LjQsUmV2aWV3IFRhcCBTaG9waWZ5LDhhYzlhNGNjOTRlZjY1OTQwMTk0ZjRhMzQwNDYxZjNlLDQwMDU2OCw1MjA4LEFDSywwNSxQRUFDSC0xODAtMjkwNTIwMjYsU0VUVExFRCwyMDI2LTA1LTI5IDEyOjQ0OjMxLjkwNyw0Mjg1MzU0ODQxMDcsLFJldmlldyBUYXAsMDQ1MDQ1ODQyZDZmNDM0ZWE0ZTVhZTg2OGI4YjU4ODAsLAoyMDI2LTA1LTI4IDEyOjI4OjE3LHN1Y2Nlc3NmdWwsQWx1d2FuaSBNdWZhbWFkaSw4YWNkYTRhODllNjkxNGY5MDE5ZTZlMjBiMWViMzlhNixyV3RwNjRaQlNLUFZHTk5ISXlRRHlXVTdHLCxEQiwxMjk4LjAwLFpBUix2aXNhLGFwcGxlX3BheSwwMDAuMDAwLjAwMCxUcmFuc2FjdGlvbiBzdWNjZWVkZWQsYWx1d2FuaUBkcmVhbWJvb3RoLmNvLnphLCwsUmV2aWV3IFRhcCBTaG9waWZ5LDhhYzlhNGNjOTRlZjY1OTQwMTk0ZjRhMzQwNDYxZjNlLDQxNjEyNiwwNjg5LEFDSywwNSxQRUFDSC0xODAtMjkwNTIwMjYsU0VUVExFRCwyMDI2LTA1LTI5IDEyOjQ0OjMxLjkwNyw4NDk3NDUyMDE4NjcsLFJldmlldyBUYXAsMDQ1MDQ1ODQyZDZmNDM0ZWE0ZTVhZTg2OGI4YjU4ODAsLAoyMDI2LTA1LTI4IDA5OjQ0OjE0LHN1Y2Nlc3NmdWwsSm9leSBSYW1hbGhvLDA5MTk2NGVhMWMzNDQxY2U4YjA0YjEwMGU0ZGVhOGJmLHI0V0k4dFM4YUdOQjJOSnhPMXNCSWw1cGssLERCLDc1NC4wMCxaQVIsbWFzdGVyLGNhcmQsMDAwLjAwMC4wMDAsVHJhbnNhY3Rpb24gc3VjY2VlZGVkLGpvZXk5OGtAaWNsb3VkLmNvbSwsMTk2LjI1LjEzNC45MCxSZXZpZXcgVGFwIFNob3BpZnksOGFjOWE0Y2M5NGVmNjU5NDAxOTRmNGEzNDA0NjFmM2UsNTE3OTg5LDA3NjQsQUNLLDAyLFBFQUNILTE4MC0yOTA1MjAyNixTRVRUTEVELDIwMjYtMDUtMjkgMTI6NDQ6MzEuOTA3LDIyNTkwMTI1Mzg5OSwsUmV2aWV3IFRhcCwwNDUwNDU4NDJkNmY0MzRlYTRlNWFlODY4YjhiNTg4MCwsCjIwMjYtMDUtMjcgMjM6MDU6MTEsc3VjY2Vzc2Z1bCxLYXJsYSBDaHJpY2gsOGFjZGE0YTI5ZTY5MTQzZTAxOWU2YjQxNmI3MzMxOTQscmZZZkFFelVsTmwydkl6eDY2c0lpS2xRTywsREIsNjA0LjAwLFpBUixtYXN0ZXIsYXBwbGVfcGF5LDAwMC4wMDAuMDAwLFRyYW5zYWN0aW9uIHN1Y2NlZWRlZCxrYXJsYUBrZW50b25vcHRvbS5jby56YSwsLFJldmlldyBUYXAgU2hvcGlmeSw4YWM5YTRjYzk0ZWY2NTk0MDE5NGY0YTM0MDQ2MWYzZSw1MzQ5OTQsMDkwOSxBQ0ssLFBFQUNILTE3OS0yODA1MjAyNixTRVRUTEVELDIwMjYtMDUtMjggMDk6NDI6NDEuODk5LDg2NjI4NDM1NTg1MSwsUmV2aWV3IFRhcCwwNDUwNDU4NDJkNmY0MzRlYTRlNWFlODY4YjhiNTg4MCwsCjIwMjYtMDUtMjcgMjM6MDI6NTcsZmFpbGVkLEthcmxhIENocmljaCw4YWNkYTQ5ZjllNjhjNTdkMDE5ZTZiM2Y1ZjkwMWFkNixyZllmQUV6VWxObDJ2SXp4NjZzSWlLbFFPLCxEQiw2MDQuMDAsWkFSLG1hc3RlcixhcHBsZV9wYXksODAwLjEwMC4yMDMsSW5zdWZmaWNpZW50IEZ1bmRzLGthcmxhQGtlbnRvbm9wdG9tLmNvLnphLCwsUmV2aWV3IFRhcCBTaG9waWZ5LDhhYzlhNGNjOTRlZjY1OTQwMTk0ZjRhMzQwNDYxZjNlLDUzNDk5NCwwOTA5LE5PSywsLCwsNTQ1MTA0NzA3ODUxLCxSZXZpZXcgVGFwLDA0NTA0NTg0MmQ2ZjQzNGVhNGU1YWU4NjhiOGI1ODgwLCwKMjAyNi0wNS0yNyAyMDoxMzo1OCxzdWNjZXNzZnVsLEdyYWNlIFJ1Z2lyYSwxMjgwZGIzNjliM2E0MjNiYWRmZTcxMmQyYzQxNDQzOSxyUzJzdTA4T3ZIVHk3Y2tHNlhaNGg4Y0hpLCxEQiw3NTQuMDAsWkFSLHZpc2EsY2FyZCwwMDAuMDAwLjAwMCxUcmFuc2FjdGlvbiBzdWNjZWVkZWQscnVnaXJhZ3Vlc3QwMDFAZ21haWwuY29tLCw0MS4xMjEuMjguMTczLFJldmlldyBUYXAgU2hvcGlmeSw4YWM5YTRjYzk0ZWY2NTk0MDE5NGY0YTM0MDQ2MWYzZSw0NDgzODYsNDk2MixBQ0ssMDUsUEVBQ0gtMTc5LTI4MDUyMDI2LFNFVFRMRUQsMjAyNi0wNS0yOCAwOTo0Mjo0MS44OTksNjM0MDIwNDM2MjM1LCxSZXZpZXcgVGFwLDA0NTA0NTg0MmQ2ZjQzNGVhNGU1YWU4NjhiOGI1ODgwLCwKMjAyNi0wNS0yNyAxOToxNTo1NCxzdWNjZXNzZnVsLFNldGggdmFuIFJlbnNidXJnLDM3Y2Q3MzE0ZjFkNDQzZGM4Yjg0ZTQxMzgyOTc3NzRlLHJxcHNwMHVvR3pxa29COGRyb0xZNWh6VEksLERCLDYwNC4wMCxaQVIsdmlzYSxjYXJkLDAwMC4wMDAuMDAwLFRyYW5zYWN0aW9uIHN1Y2NlZWRlZCxzZXRoZHZyQGdtYWlsLmNvbSwsMTA1LjE4Ni4yMTEuODYsUmV2aWV3IFRhcCBTaG9waWZ5LDhhYzlhNGNjOTRlZjY1OTQwMTk0ZjRhMzQwNDYxZjNlLDQyNzgxOSwwMzkwLEFDSywwNSxQRUFDSC0xNzktMjgwNTIwMjYsU0VUVExFRCwyMDI2LTA1LTI4IDA5OjQyOjQxLjg5OSw0NDUxMTM3NzYzOTUsLFJldmlldyBUYXAsMDQ1MDQ1ODQyZDZmNDM0ZWE0ZTVhZTg2OGI4YjU4ODAsLAoyMDI2LTA1LTI3IDE2OjU1OjA0LHN1Y2Nlc3NmdWwsRGF2ZSBXb29kLDhhNWFkMjYwMzc4OTQ0Yzk4NjhiNzYxZmNhOGQzZGI3LHJ0QjRlSEczRDhUVm8weW52RzBMd210STMsLERCLDc1NC4wMCxaQVIsdmlzYSxjYXJkLDAwMC4wMDAuMDAwLFRyYW5zYWN0aW9uIHN1Y2NlZWRlZCxhY2NvdW50c0BkeW5hbG9naWMuY28uemEsLDE1Ni4xNTUuMjQuMzEsUmV2aWV3IFRhcCBTaG9waWZ5LDhhYzlhNGNjOTRlZjY1OTQwMTk0ZjRhMzQwNDYxZjNlLDQ5MTA1MCwwODQ0LEFDSywwNSxQRUFDSC0xNzktMjgwNTIwMjYsU0VUVExFRCwyMDI2LTA1LTI4IDA5OjQyOjQxLjg5OSw2MjQ0MjkzNzc4MDMsLFJldmlldyBUYXAsMDQ1MDQ1ODQyZDZmNDM0ZWE0ZTVhZTg2OGI4YjU4ODAsLAoyMDI2LTA1LTI3IDE1OjU4OjE1LGZhaWxlZCxaYWhlZXJhIEVzc29wLDUxZmNhZjBkZDgzZTRjMmZiZTQxNzRlMzQ5MDRjNDRjLHJLQWZPSjdya0h2Q3lTem9acDZTRlBsUHQsLERCLDYwNC4wMCxaQVIsbWFzdGVyLGNhcmQsMTAwLjM4MC41MDEsUmlzayBtYW5hZ2VtZW50IHRyYW5zYWN0aW9uIHRpbWVvdXQsZ2lmdHNob3BwZTUxNkBnbWFpbC5jb20sLDE5Ny4xODQuODcuNzIsUmV2aWV3IFRhcCBTaG9waWZ5LDhhYzlhNGNjOTRlZjY1OTQwMTk0ZjRhMzQwNDYxZjNlLDUyODQ5NywwMjM3LE5PSywwMSwsLCwsLFJldmlldyBUYXAsMDQ1MDQ1ODQyZDZmNDM0ZWE0ZTVhZTg2OGI4YjU4ODAsLAoyMDI2LTA1LTI3IDE1OjU2OjAwLGZhaWxlZCxaYWhlZXJhIEVzc29wLDM1ZjY3MjA2ZTQyYTQ0ZGJhZGUzMTEwYWFlNmUwMWQ4LHJLQWZPSjdya0h2Q3lTem9acDZTRlBsUHQsLERCLDYwNC4wMCxaQVIsbWFzdGVyLGNhcmQsODAwLjEwMC4xNTIsdHJhbnNhY3Rpb24gZGVjbGluZWQgYnkgYXV0aG9yaXphdGlvbiBzeXN0ZW0sZ2lmdHNob3BwZTUxNkBnbWFpbC5jb20sLDE5Ny4xODQuODcuNzIsUmV2aWV3IFRhcCBTaG9waWZ5LDhhYzlhNGNjOTRlZjY1OTQwMTk0ZjRhMzQwNDYxZjNlLDUyODQ5NywwMjM3LE5PSywwMiwsLCwyODE0MzAxMjAyMDMsLFJldmlldyBUYXAsMDQ1MDQ1ODQyZDZmNDM0ZWE0ZTVhZTg2OGI4YjU4ODAsLAoyMDI2LTA1LTI3IDE1OjI1OjEyLHN1Y2Nlc3NmdWwsQnVyZ2VydCBFcmFzbXVzLDhhY2RhNGE4OWU2OTE0ZjkwMTllNjk5YzRmMTk0YTI4LHI4bEl3a3J4ZmEyVXR0WGxDRHRkWXdvZmUsLERCLDc1NC4wMCxaQVIsdmlzYSxhcHBsZV9wYXksMDAwLjAwMC4wMDAsVHJhbnNhY3Rpb24gc3VjY2VlZGVkLGJ1cmdlcnRAdG9yZ2FvcHRpY2FsLmNvLnphLCwsUmV2aWV3IFRhcCBTaG9waWZ5LDhhYzlhNGNjOTRlZjY1OTQwMTk0ZjRhMzQwNDYxZjNlLDQ0NDQzOSwyMTk2LEFDSywwNSxQRUFDSC0xNzktMjgwNTIwMjYsU0VUVExFRCwyMDI2LTA1LTI4IDA5OjQyOjQxLjg5OSwzNTUyODQ3MTkzNzEsLFJldmlldyBUYXAsMDQ1MDQ1ODQyZDZmNDM0ZWE0ZTVhZTg2OGI4YjU4ODAsLAoyMDI2LTA1LTI3IDE0OjUxOjE1LHN1Y2Nlc3NmdWwsUm9ieW4gVmFuIGRlbiBlbmRlLDUwMzEzZjFjZjQ1NDQ5OGRiZjkwNmVhZTg1ODUyNDg3LHJER2NhWHRndHNwQ3dscFBBN3BRWEswOEIsLERCLDc1NC4wMCxaQVIsdmlzYSxjYXJkLDAwMC4wMDAuMDAwLFRyYW5zYWN0aW9uIHN1Y2NlZWRlZCxyb2J5bmx2ZGVAZ21haWwuY29tLCwxMDIuMjQ5LjM2LjMzLFJldmlldyBUYXAgU2hvcGlmeSw4YWM5YTRjYzk0ZWY2NTk0MDE5NGY0YTM0MDQ2MWYzZSw0MDE2MDAsOTcxNSxBQ0ssMDUsUEVBQ0gtMTc5LTI4MDUyMDI2LFNFVFRMRUQsMjAyNi0wNS0yOCAwOTo0Mjo0MS44OTksODQ2Nzg5NDA4NTIzLCxSZXZpZXcgVGFwLDA0NTA0NTg0MmQ2ZjQzNGVhNGU1YWU4NjhiOGI1ODgwLCwKMjAyNi0wNS0yNyAxMDoyODoyNCxzdWNjZXNzZnVsLE5hdGFzaGEgU3RhbnRvbiw3ZDRmZDVjNGY4YTM0MTNhOWEwNTM5YWMzY2M2NjIzOCxyMWcybVFDclZEemVTQzQzOGV5WWxQeHFLLCxEQiw3NTQuMDAsWkFSLHZpc2EsY2FyZCwwMDAuMDAwLjAwMCxUcmFuc2FjdGlvbiBzdWNjZWVkZWQsbmF0YXNoYUB0cnVzdGhzLmNvLnphLCwxOTcuMjQ1LjIzMy43NCxSZXZpZXcgVGFwIFNob3BpZnksOGFjOWE0Y2M5NGVmNjU5NDAxOTRmNGEzNDA0NjFmM2UsNDcyMjUwLDcwMTcsQUNLLDA1LFBFQUNILTE3OS0yODA1MjAyNixTRVRUTEVELDIwMjYtMDUtMjggMDk6NDI6NDEuODk5LDk2MDM0MjEzMDQ0MywsUmV2aWV3IFRhcCwwNDUwNDU4NDJkNmY0MzRlYTRlNWFlODY4YjhiNTg4MCwsCjIwMjYtMDUtMjcgMDg6MzU6NDcsc3VjY2Vzc2Z1bCxFc21hcmllIFZlbmllciw4MjljNDdkZmFmNzk0Nzg1YjgxZDQ2ODI3NDgyZDJkMixya2YxbXU3UjhPeERQem9aU09teUNUYTFVLCxEQiw3NTQuMDAsWkFSLHZpc2EsY2FyZCwwMDAuMDAwLjAwMCxUcmFuc2FjdGlvbiBzdWNjZWVkZWQsZXN2ZW5vdGdAZ21haWwuY29tLCwxODUuMjAzLjEyMi45MSxSZXZpZXcgVGFwIFNob3BpZnksOGFjOWE0Y2M5NGVmNjU5NDAxOTRmNGEzNDA0NjFmM2UsNDc5MDgxLDYwMTYsQUNLLDA1LFBFQUNILTE3OS0yODA1MjAyNixTRVRUTEVELDIwMjYtMDUtMjggMDk6NDI6NDEuODk5LDc5NTY5MTg4MDIwMywsUmV2aWV3IFRhcCwwNDUwNDU4NDJkNmY0MzRlYTRlNWFlODY4YjhiNTg4MCwsCjIwMjYtMDUtMjcgMDg6MjU6MDgsc3VjY2Vzc2Z1bCxOaWNvIEphY29icyw4YWNkYTQ5ZjllNGE4YWQ3MDE5ZTY4MWJiOTI0NGVmNixya050UTdjdUZ2RU1rQlZJSVhLRHpqZUdWLCxEQiw3NTQuMDAsWkFSLHZpc2EsYXBwbGVfcGF5LDAwMC4wMDAuMDAwLFRyYW5zYWN0aW9uIHN1Y2NlZWRlZCxuaWNvakBjYXJ0aW1lLmNvLnphLCwsUmV2aWV3IFRhcCBTaG9waWZ5LDhhYzlhNGNjOTRlZjY1OTQwMTk0ZjRhMzQwNDYxZjNlLDQ0NzI3OSw3MzY3LEFDSywwNSxQRUFDSC0xNzktMjgwNTIwMjYsU0VUVExFRCwyMDI2LTA1LTI4IDA5OjQyOjQxLjg5OSwzNzcwNjc2OTU4ODMsLFJldmlldyBUYXAsMDQ1MDQ1ODQyZDZmNDM0ZWE0ZTVhZTg2OGI4YjU4ODAsLAoyMDI2LTA1LTI2IDA3OjQ1OjM5LHN1Y2Nlc3NmdWwsR2F2aW4gU3RyeWRvbSw4YWNkYTRhMjllNGE5MThlMDE5ZTYyZDEzNzFiMTEzYixyZVlZakNHNnF0bTVwWkJuMFQ4ZWI3bjNILCxEQiw3NTQuMDAsWkFSLHZpc2EsYXBwbGVfcGF5LDAwMC4wMDAuMDAwLFRyYW5zYWN0aW9uIHN1Y2NlZWRlZCxnYXZpbkBlY29sYXVuZHJ5LmNvLnphLCwsUmV2aWV3IFRhcCBTaG9waWZ5LDhhYzlhNGNjOTRlZjY1OTQwMTk0ZjRhMzQwNDYxZjNlLDQ0MTU5NSwxNjA1LEFDSywwNSxQRUFDSC0xNzgtMjcwNTIwMjYsU0VUVExFRCwyMDI2LTA1LTI3IDExOjM5OjUzLjgwNCw2OTk4NTMyODEyOTEsLFJldmlldyBUYXAsMDQ1MDQ1ODQyZDZmNDM0ZWE0ZTVhZTg2OGI4YjU4ODAsLAoyMDI2LTA1LTI1IDE0OjIxOjAzLHN1Y2Nlc3NmdWwsUnVpIFNpbHZhLDIwYzFhZmNlZThkMTQwYWE4Y2Q2OGMzMjlhNWZkNDdhLHJsMDFxb0I1ZGQxUEdFQzVQenoxZU9ZTFQsLERCLDU1NC4wMCxaQVIsdmlzYSxjYXJkLDAwMC4wMDAuMDAwLFRyYW5zYWN0aW9uIHN1Y2NlZWRlZCxydWlAdW5haGluYXNvbHV0aW9ucy5jby56YSwsNDEuMTYxLjMyLjE2MixSZXZpZXcgVGFwIFNob3BpZnksOGFjOWE0Y2M5NGVmNjU5NDAxOTRmNGEzNDA0NjFmM2UsNDE3MjkwLDMwMDksQUNLLDA1LFBFQUNILTE3Ny0yNjA1MjAyNixTRVRUTEVELDIwMjYtMDUtMjYgMTI6MTQ6NDAuMTI0LDE5OTMyMzkwMDQyNywsUmV2aWV3IFRhcCwwNDUwNDU4NDJkNmY0MzRlYTRlNWFlODY4YjhiNTg4MCwsCjIwMjYtMDUtMjUgMTM6NTQ6MjQsc3VjY2Vzc2Z1bCxCaWFuY2EgVmVybWFhaywyOGE5Nzk2OGVhODI0NDc5OTExNDBhNWNhY2JkMjdkMixyMGFNTVN3YWVqMWpCTUQzTEV5cExmQ2MxLCxEQiw0MDQuMDAsWkFSLHZpc2EsY2FyZCwwMDAuMDAwLjAwMCxUcmFuc2FjdGlvbiBzdWNjZWVkZWQsYi5wYXBlcnJvc2VAZ21haWwuY29tLCwxNTYuMTU1LjE0LjIyNSxSZXZpZXcgVGFwIFNob3BpZnksOGFjOWE0Y2M5NGVmNjU5NDAxOTRmNGEzNDA0NjFmM2UsNDg0Nzk1LDY4MTYsQUNLLDA1LFBFQUNILTE3Ny0yNjA1MjAyNixTRVRUTEVELDIwMjYtMDUtMjYgMTI6MTQ6NDAuMTI0LDc5MDMyMjE0MTcwNywsUmV2aWV3IFRhcCwwNDUwNDU4NDJkNmY0MzRlYTRlNWFlODY4YjhiNTg4MCwsCjIwMjYtMDUtMjUgMTM6MzU6NTUsc3VjY2Vzc2Z1bCxNYXJrIE1jQWxsaXN0ZXIsNDdjOTgyYjEyY2ExNDcwNGE1MWRmZDY3YjNlNjE5OGMsckk3b1dqdTdOOEtleFVGd2h4NExSdmFnTywsREIsNzU0LjAwLFpBUix2aXNhLGNhcmQsMDAwLjAwMC4wMDAsVHJhbnNhY3Rpb24gc3VjY2VlZGVkLG1hcmsubWNhbGxpc3RlckBob2xib3JuYXNzZXRzLmNvbSwsMTAyLjEzNS4xNDYuMTMwLFJldmlldyBUYXAgU2hvcGlmeSw4YWM5YTRjYzk0ZWY2NTk0MDE5NGY0YTM0MDQ2MWYzZSw0MzA4NjQsNzA3MyxBQ0ssMDUsUEVBQ0gtMTc3LTI2MDUyMDI2LFNFVFRMRUQsMjAyNi0wNS0yNiAxMjoxNDo0MC4xMjQsNTgyNTUzMzExNzU1LCxSZXZpZXcgVGFwLDA0NTA0NTg0MmQ2ZjQzNGVhNGU1YWU4NjhiOGI1ODgwLCwKMjAyNi0wNS0yNCAxMTozODo1NyxzdWNjZXNzZnVsLEFsY29yYSBkdSBQbGVzc2lzLDhhY2RhNGE3OWU0YThhZDUwMTllNTk1YTE4ODY3MmRjLHJpTVY1WVdSSXlPV1YwaVhZOUpnRWZYT0ksLERCLDYwNC4wMCxaQVIsdmlzYSxhcHBsZV9wYXksMDAwLjAwMC4wMDAsVHJhbnNhY3Rpb24gc3VjY2VlZGVkLGFsY29yYWRwQGdtYWlsLmNvbSwsLFJldmlldyBUYXAgU2hvcGlmeSw4YWM5YTRjYzk0ZWY2NTk0MDE5NGY0YTM0MDQ2MWYzZSw0NDE3OTYsNTA0MCxBQ0ssMDUsUEVBQ0gtMTc2LTI1MDUyMDI2LFNFVFRMRUQsMjAyNi0wNS0yNSAxMTozNjo1OC42OTcsMDQwOTQ1MjY0NTIzLCxSZXZpZXcgVGFwLDA0NTA0NTg0MmQ2ZjQzNGVhNGU1YWU4NjhiOGI1ODgwLCwKMjAyNi0wNS0yMyAyMjozMTo0MyxzdWNjZXNzZnVsLFlvdXNoZW4gTmFpZG9vLDhhY2RhNGEzOWU0YThhZDMwMTllNTY4OTU4ZmM0NWIwLHIxQnRwQWxOYWdGUmN0cE1WSld1aWJUSEMsLERCLDc1NC4wMCxaQVIsdmlzYSxhcHBsZV9wYXksMDAwLjAwMC4wMDAsVHJhbnNhY3Rpb24gc3VjY2VlZGVkLHluQHNhaWdyb3VwLmNvLnphLCwsUmV2aWV3IFRhcCBTaG9waWZ5LDhhYzlhNGNjOTRlZjY1OTQwMTk0ZjRhMzQwNDYxZjNlLDQ0NTg4NSw2NjIxLEFDSywwNSxQRUFDSC0xNzYtMjUwNTIwMjYsU0VUVExFRCwyMDI2LTA1LTI1IDExOjM2OjU4LjY5Nyw2NTE0NzI4OTA3NjMsLFJldmlldyBUYXAsMDQ1MDQ1ODQyZDZmNDM0ZWE0ZTVhZTg2OGI4YjU4ODAsLAoyMDI2LTA1LTIzIDE5OjI5OjE0LHN1Y2Nlc3NmdWwsTWR1ZHV6aSBNYWhsYW5ndSw0NjA4MzI0NDZhMWE0MWU2YjJmODRhZWJjZWMzNGM3Yixyd2NkWloyOFRMZlZDemJodW1mNTFJWE9DLCxEQiw2MDQuMDAsWkFSLHZpc2EsY2FyZCwwMDAuMDAwLjAwMCxUcmFuc2FjdGlvbiBzdWNjZWVkZWQsbWR1bWFobGFuZ3UyMUBnbWFpbC5jb20sLDE5Ny4xODUuMTU4LjIzNyxSZXZpZXcgVGFwIFNob3BpZnksOGFjOWE0Y2M5NGVmNjU5NDAxOTRmNGEzNDA0NjFmM2UsNDg1NDQyLDMxNzIsQUNLLDA1LFBFQUNILTE3Ni0yNTA1MjAyNixTRVRUTEVELDIwMjYtMDUtMjUgMTE6MzY6NTguNjk3LDQzNzk2Mzg2MzE3OSwsUmV2aWV3IFRhcCwwNDUwNDU4NDJkNmY0MzRlYTRlNWFlODY4YjhiNTg4MCwsCjIwMjYtMDUtMjMgMTg6NDc6MTcsc3VjY2Vzc2Z1bCxZdXN1ZiBBbmlmZiw4YWNkYTQ5ZjllNGE4YWQ3MDE5ZTU1YmJkZmY0NWI4NSxyNDFJVTlhRjJ6aVVqaTBXazdJNU9McEFrLCxEQiw3NTQuMDAsWkFSLHZpc2EsYXBwbGVfcGF5LDAwMC4wMDAuMDAwLFRyYW5zYWN0aW9uIHN1Y2NlZWRlZCxmYWlyd2F5c3BoYXJtYWN5QGdtYWlsLmNvbSwsLFJldmlldyBUYXAgU2hvcGlmeSw4YWM5YTRjYzk0ZWY2NTk0MDE5NGY0YTM0MDQ2MWYzZSw0NjEyNDMsODE5MCxBQ0ssMDUsUEVBQ0gtMTc2LTI1MDUyMDI2LFNFVFRMRUQsMjAyNi0wNS0yNSAxMTozNjo1OC42OTcsODc4NDk3Mjg1MjU5LCxSZXZpZXcgVGFwLDA0NTA0NTg0MmQ2ZjQzNGVhNGU1YWU4NjhiOGI1ODgwLCwKMjAyNi0wNS0yMyAxNjowOTo0OSxzdWNjZXNzZnVsLEFsYmVydCB2YW4gZGVyIFdlc3RodWl6ZW4sOGFjZGE0YTI5ZTRhOTE4ZTAxOWU1NTJiYjU3MjM1NTEscmN4d05xWUdWOTNsR1NIMERvbDBKbzhveiwsREIsNzU0LjAwLFpBUix2aXNhLGFwcGxlX3BheSwwMDAuMDAwLjAwMCxUcmFuc2FjdGlvbiBzdWNjZWVkZWQsYXZkd2VzdEBnbWFpbC5jb20sLCxSZXZpZXcgVGFwIFNob3BpZnksOGFjOWE0Y2M5NGVmNjU5NDAxOTRmNGEzNDA0NjFmM2UsNDQ1ODg1LDI2NTYsQUNLLDA1LFBFQUNILTE3Ni0yNTA1MjAyNixTRVRUTEVELDIwMjYtMDUtMjUgMTE6MzY6NTguNjk3LDY1NjkxMDMyNjkyMywsUmV2aWV3IFRhcCwwNDUwNDU4NDJkNmY0MzRlYTRlNWFlODY4YjhiNTg4MCwsCjIwMjYtMDUtMjIgMTU6MzU6MzAsc3VjY2Vzc2Z1bCxDaHJpc3RpbmUgS290emUsOGFjZGE0YTM5ZTRhOGFkMzAxOWU0ZmU1ZjFmNjQxMWMscnJlNEI2bnZUejhtdXlybTNqOXhKODhKZiwsREIsNzAzLjAwLFpBUix2aXNhLGFwcGxlX3BheSwwMDAuMDAwLjAwMCxUcmFuc2FjdGlvbiBzdWNjZWVkZWQsa290emVjaHJpc3RpbmU4QGdtYWlsLmNvbSwsLFJldmlldyBUYXAgU2hvcGlmeSw4YWM5YTRjYzk0ZWY2NTk0MDE5NGY0YTM0MDQ2MWYzZSw0NjEyNDEsMTM4NCxBQ0ssMDUsUEVBQ0gtMTc2LTI1MDUyMDI2LFNFVFRMRUQsMjAyNi0wNS0yNSAxMTozNjo1OC42OTcsNjgxNTM2NTA0NDU5LCxSZXZpZXcgVGFwLDA0NTA0NTg0MmQ2ZjQzNGVhNGU1YWU4NjhiOGI1ODgwLCwKMjAyNi0wNS0yMiAwNzo0NDozNCxzdWNjZXNzZnVsLFRhbmlhIHZhbiBSb295ZW4sMDM1OTg1ZjFiM2I5NGQyNzgzNWExYWNmYTZhOTY4NjQscnJEMFhQbDY4eXJCTWY0bjBJYVFGdVBKaywsREIsNjA0LjAwLFpBUix2aXNhLGNhcmQsMDAwLjAwMC4wMDAsVHJhbnNhY3Rpb24gc3VjY2VlZGVkLHRhbmlhLmxhYnVzY2hhZ25lOEBnbWFpbC5jb20sLDQxLjEzLjk0LjQ4LFJldmlldyBUYXAgU2hvcGlmeSw4YWM5YTRjYzk0ZWY2NTk0MDE5NGY0YTM0MDQ2MWYzZSw0NDgzODYsNDIyNSxBQ0ssMDUsUEVBQ0gtMTc2LTI1MDUyMDI2LFNFVFRMRUQsMjAyNi0wNS0yNSAxMTozNjo1OC42OTcsNzA3OTczNzcyNjUxLCxSZXZpZXcgVGFwLDA0NTA0NTg0MmQ2ZjQzNGVhNGU1YWU4NjhiOGI1ODgwLCwKMjAyNi0wNS0yMSAyMTozNToyNyxzdWNjZXNzZnVsLEFzaWYgTWlyemEsNGMxODg5ZDNmNTY0NDMzMWEzMmUzYjRjZGNlMzgzZGUsckZSZWVYVVVyQXdmbnNhT0k2UmxqNTBiWSwsREIsNzU0LjAwLFpBUixtYXN0ZXIsY2FyZCwwMDAuMDAwLjAwMCxUcmFuc2FjdGlvbiBzdWNjZWVkZWQsQXNpZm1pcnphOTlAeWFob28uY29tLCwyMTMuMTcyLjE0Ny43NSxSZXZpZXcgVGFwIFNob3BpZnksOGFjOWE0Y2M5NGVmNjU5NDAxOTRmNGEzNDA0NjFmM2UsNTI4NDk3LDY4NjUsQUNLLDAyLFBFQUNILTE3NS0yMjA1MjAyNixTRVRUTEVELDIwMjYtMDUtMjIgMTA6NDM6NDUuMTYyLDQxNzUyOTgwNzIxMSwsUmV2aWV3IFRhcCwwNDUwNDU4NDJkNmY0MzRlYTRlNWFlODY4YjhiNTg4MCwsCjIwMjYtMDUtMjEgMTM6Mjc6NTMsc3VjY2Vzc2Z1bCxLeWxpZSBTdGV5biw5MTBmODE2MWU3OGM0OTI1YTRjMmEyNDFiZjE2NWM2OSxyam5hS3c2cVNCa1hrV1dXdGF3VHRzNDN2LCxEQiw5OTguMDAsWkFSLG1hc3RlcixjYXJkLDAwMC4wMDAuMDAwLFRyYW5zYWN0aW9uIHN1Y2NlZWRlZCxreWxpZUBzYmguY28uemEsLDE5Ny44OS4xMTMuMTA3LFJldmlldyBUYXAgU2hvcGlmeSw4YWM5YTRjYzk0ZWY2NTk0MDE5NGY0YTM0MDQ2MWYzZSw1NTgyOTQsMTI4NSxBQ0ssMDIsUEVBQ0gtMTc1LTIyMDUyMDI2LFNFVFRMRUQsMjAyNi0wNS0yMiAxMDo0Mzo0NS4xNjIsMjU2NjA0NTM0NjM1LCxSZXZpZXcgVGFwLDA0NTA0NTg0MmQ2ZjQzNGVhNGU1YWU4NjhiOGI1ODgwLCwKMjAyNi0wNS0yMSAxMDozODoxMyxzdWNjZXNzZnVsLFNhcmVsIFJvYmVydHMsNjUxN2I2ZGE5ZDdiNDg2NjhiNjFlZGE4YTQxOGVhNjAscjRvU2l2YWsxYU9QZjVVTVZsUnRwNU5QQSwsREIsNzAzLjAwLFpBUix2aXNhLGNhcmQsMDAwLjAwMC4wMDAsVHJhbnNhY3Rpb24gc3VjY2VlZGVkLHNhcmVsNDY2NEBnbWFpbC5jb20sLDEwMi4yMTkuNzYuNDAsUmV2aWV3IFRhcCBTaG9waWZ5LDhhYzlhNGNjOTRlZjY1OTQwMTk0ZjRhMzQwNDYxZjNlLDQyMjgyNCw4MDE5LEFDSywwNSxQRUFDSC0xNzUtMjIwNTIwMjYsU0VUVExFRCwyMDI2LTA1LTIyIDEwOjQzOjQ1LjE2MiwyOTc5OTgxMDAzMzEsLFJldmlldyBUYXAsMDQ1MDQ1ODQyZDZmNDM0ZWE0ZTVhZTg2OGI4YjU4ODAsLAoyMDI2LTA1LTIxIDEwOjMxOjIwLGZhaWxlZCxTYXJlbCBSb2JlcnRzLGUyNGMyMGY3ZTgxYjRiOTVhNzczNzFhYWY5YjU2Njc1LHI0b1NpdmFrMWFPUGY1VU1WbFJ0cDVOUEEsLERCLDcwMy4wMCxaQVIsdmlzYSxjYXJkLDEwMC4zODAuNDAxLFVzZXIgQXV0aGVudGljYXRpb24gRmFpbGVkLHNhcmVsNDY2NEBnbWFpbC5jb20sLDEwMi4yMTkuNzYuNDAsUmV2aWV3IFRhcCBTaG9waWZ5LDhhYzlhNGNjOTRlZjY1OTQwMTk0ZjRhMzQwNDYxZjNlLDQyMjgyNCw4MDE5LE5PSywwNywsLCwsLFJldmlldyBUYXAsMDQ1MDQ1ODQyZDZmNDM0ZWE0ZTVhZTg2OGI4YjU4ODAsLAoyMDI2LTA1LTIxIDA5OjE4OjQzLHN1Y2Nlc3NmdWwsTGVzZWRpIGxla290YSw5MzU2OWVmZDM4Yjg0YTM0YTM2Njk3OWE1Y2FlOWFlNSxyc3pmR1lMNXZiVGJFd0pEeXQ5ZUJtWXB4LCxEQiw3NTQuMDAsWkFSLHZpc2EsY2FyZCwwMDAuMDAwLjAwMCxUcmFuc2FjdGlvbiBzdWNjZWVkZWQsamxla290YTEyMDZAZ21haWwuY29tLCw0MS4xMjEuMTQuMTUsUmV2aWV3IFRhcCBTaG9waWZ5LDhhYzlhNGNjOTRlZjY1OTQwMTk0ZjRhMzQwNDYxZjNlLDQwNTI2Niw1ODE4LEFDSywwNSxQRUFDSC0xNzUtMjIwNTIwMjYsU0VUVExFRCwyMDI2LTA1LTIyIDEwOjQzOjQ1LjE2Miw3NTg4MzQyNDEzODcsLFJldmlldyBUYXAsMDQ1MDQ1ODQyZDZmNDM0ZWE0ZTVhZTg2OGI4YjU4ODAsLAoyMDI2LTA1LTIxIDA5OjExOjA2LGZhaWxlZCxMZXNlZGkgbGVrb3RhLDQwN2Q4MTBkNWY2YzRjYjZiMGQzMzJlNjAxMDJkOTAxLHIybHFaT1YxeG80SzhCaU9xc2xSUDBueFYsLERCLDc1NC4wMCxaQVIsdmlzYSxjYXJkLDgwMC4xMDAuMjAzLEluc3VmZmljaWVudCBGdW5kcyxqbGVrb3RhMTIwNkBnbWFpbC5jb20sLDQxLjEyMS4xNC4xNSxSZXZpZXcgVGFwIFNob3BpZnksOGFjOWE0Y2M5NGVmNjU5NDAxOTRmNGEzNDA0NjFmM2UsNDA1MjY2LDU4MTgsTk9LLDA1LCwsLDE2OTc4NTc4NjIxOSwsUmV2aWV3IFRhcCwwNDUwNDU4NDJkNmY0MzRlYTRlNWFlODY4YjhiNTg4MCwsCjIwMjYtMDUtMjEgMDY6NDU6NTMsc3VjY2Vzc2Z1bCxSZW5lIFZhbiBBc3dlZ2VuLDhhYzlhNGEwOWUzOWMyOWQwMTllNDhkYWIyMDEwNDM4LHJFNVVqU05YbUNCa292enNoVkNjTVdxMHYsLERCLDc1NC4wMCxaQVIsbWFzdGVyLGFwcGxlX3BheSwwMDAuMDAwLjAwMCxUcmFuc2FjdGlvbiBzdWNjZWVkZWQscmVuZUBkdXBhaW50LmNvLnphLCwsUmV2aWV3IFRhcCBTaG9waWZ5LDhhYzlhNGNjOTRlZjY1OTQwMTk0ZjRhMzQwNDYxZjNlLDU1MzAyNCw3ODM3LEFDSywsUEVBQ0gtMTc1LTIyMDUyMDI2LFNFVFRMRUQsMjAyNi0wNS0yMiAxMDo0Mzo0NS4xNjIsMjQ1MjU1MTM5MTc5LCxSZXZpZXcgVGFwLDA0NTA0NTg0MmQ2ZjQzNGVhNGU1YWU4NjhiOGI1ODgwLCwKMjAyNi0wNS0yMCAxNDoxNTo0MixzdWNjZXNzZnVsLEV5b3VzdWYgQXppeixjOTRhMGI3NzhhODY0MTJiOGVjOGZlZmQ1NzBkZDQ3ZSxybm44S240bDFXUkgxQzN3MDBLeEwzNERiLCxEQiwyNTk2LjAwLFpBUix2aXNhLGNhcmQsMDAwLjAwMC4wMDAsVHJhbnNhY3Rpb24gc3VjY2VlZGVkLGV5b3VzdWZheml6QGdtYWlsLmNvbSwsNDEuMTMuNjQuMTY3LFJldmlldyBUYXAgU2hvcGlmeSw4YWM5YTRjYzk0ZWY2NTk0MDE5NGY0YTM0MDQ2MWYzZSw0Mjc4MTksMzQ4NixBQ0ssMDUsUEVBQ0gtMTc0LTIxMDUyMDI2LFNFVFRMRUQsMjAyNi0wNS0yMSAxMDo1MToyMS44NTMsNjAzMjc4NDkwNzMxLCxSZXZpZXcgVGFwLDA0NTA0NTg0MmQ2ZjQzNGVhNGU1YWU4NjhiOGI1ODgwLCwKMjAyNi0wNS0yMCAwNjo0NzoxMCxzdWNjZXNzZnVsLEJyaWFuIER5b25nbywzNzI0M2JkNjlhNzk0MjZkODE2ZThjZjdlNWVjNTY0MCxyT2JIc2M1UTZqZFVRaEs1aGQwNVhGdzZKLCxEQiw0MDQuMDAsWkFSLHZpc2EsY2FyZCwwMDAuMDAwLjAwMCxUcmFuc2FjdGlvbiBzdWNjZWVkZWQsYnJpYW5zcmVtb3ZhbHNAbGl2ZS5jby56YSwsMTk3Ljk0LjM3LjY0LFJldmlldyBUYXAgU2hvcGlmeSw4YWM5YTRjYzk0ZWY2NTk0MDE5NGY0YTM0MDQ2MWYzZSw0ODU0NDIsMTY3NyxBQ0ssMDUsUEVBQ0gtMTc0LTIxMDUyMDI2LFNFVFRMRUQsMjAyNi0wNS0yMSAxMDo1MToyMS44NTMsNjMwNjk3Mzg0MDQzLCxSZXZpZXcgVGFwLDA0NTA0NTg0MmQ2ZjQzNGVhNGU1YWU4NjhiOGI1ODgwLCwKMjAyNi0wNS0xOSAxOTo0NToxMixzdWNjZXNzZnVsLFNlYW4gSGFsbCw4YWM5YTRhMjllMzljMjliMDE5ZTQxNTc3NzdiMjg1YSxyMExpSjNvWk5jUGdkWlFRak95ZmRNUWluLCxEQiw0MDQuMDAsWkFSLHZpc2EsYXBwbGVfcGF5LDAwMC4wMDAuMDAwLFRyYW5zYWN0aW9uIHN1Y2NlZWRlZCxzZWFuaGFsbEBvbm9tb2hvdGVsLmNvbSwsLFJldmlldyBUYXAgU2hvcGlmeSw4YWM5YTRjYzk0ZWY2NTk0MDE5NGY0YTM0MDQ2MWYzZSw0NTU2MjcsODEyMyxBQ0ssMDUsUEVBQ0gtMTczLTIwMDUyMDI2LFNFVFRMRUQsMjAyNi0wNS0yMCAxMToyNjowNi4zMTgsNDYxNDc1MjAwNjE5LCxSZXZpZXcgVGFwLDA0NTA0NTg0MmQ2ZjQzNGVhNGU1YWU4NjhiOGI1ODgwLCwKMjAyNi0wNS0xOSAwOTo1NjowNyxzdWNjZXNzZnVsLERhd2lkIEZvdXJpZSw1NTQ2OWFjYjViODU0NmI2OThkYzMyYzIyYWNhMDdjNSxycEpScHFwVzlZRmNMWGpPSHBvUUU3ZVF4LCxEQiw3NTQuMDAsWkFSLHZpc2EsY2FyZCwwMDAuMDAwLjAwMCxUcmFuc2FjdGlvbiBzdWNjZWVkZWQsZGF3aWRAdmVudHJ1YS5jby56YSwsMTY5LjAuNDYuMTYwLFJldmlldyBUYXAgU2hvcGlmeSw4YWM5YTRjYzk0ZWY2NTk0MDE5NGY0YTM0MDQ2MWYzZSw0OTEwNTAsMjc4NyxBQ0ssMDUsUEVBQ0gtMTczLTIwMDUyMDI2LFNFVFRMRUQsMjAyNi0wNS0yMCAxMToyNjowNi4zMTgsMjI1Mzk5NjA1ODY3LCxSZXZpZXcgVGFwLDA0NTA0NTg0MmQ2ZjQzNGVhNGU1YWU4NjhiOGI1ODgwLCwKMjAyNi0wNS0xOSAwNToxNToyNyxzdWNjZXNzZnVsLFd5bmFuZCB2YW4gZGVyIE1lcndlLDI2ZjFiNWY2YTMwNDRkOGY5YmEzYjQwODFiN2EyYjJlLHJNSHprY0FoQ3ZCaTA2dXR4OTZ2UnNLT0wsLERCLDc1NC4wMCxaQVIsdmlzYSxjYXJkLDAwMC4wMDAuMDAwLFRyYW5zYWN0aW9uIHN1Y2NlZWRlZCxkcnd5bmFuZHZkbUBnbWFpbC5jb20sLDEwMi4xNjUuMTY3LjIxNSxSZXZpZXcgVGFwIFNob3BpZnksOGFjOWE0Y2M5NGVmNjU5NDAxOTRmNGEzNDA0NjFmM2UsNDAyMTY3LDUwMjAsQUNLLDA1LFBFQUNILTE3My0yMDA1MjAyNixTRVRUTEVELDIwMjYtMDUtMjAgMTE6MjY6MDYuMzE4LDk0MTUyMDI1ODUzOSwsUmV2aWV3IFRhcCwwNDUwNDU4NDJkNmY0MzRlYTRlNWFlODY4YjhiNTg4MCwsCjIwMjYtMDUtMTggMjE6Mjk6MDYsc3VjY2Vzc2Z1bCxSYWplbiBHb3ZlbmRlcixmODYyNzRlYjYxOTg0NDIyYmQ2MjkwZmM1N2E3MTQ1NSxyaXN3ZXM3Mmo0OWxnMjhDY1h2MWI3bEdxLCxEQiw3NTQuMDAsWkFSLG1hc3RlcixjYXJkLDAwMC4wMDAuMDAwLFRyYW5zYWN0aW9uIHN1Y2NlZWRlZCxyYWplbkByZXZsaW5lYWdlbnQuY28uemEsLDEwMi4yNTIuNjkuMTYsUmV2aWV3IFRhcCBTaG9waWZ5LDhhYzlhNGNjOTRlZjY1OTQwMTk0ZjRhMzQwNDYxZjNlLDUyMzk4Miw2MjgyLEFDSywwMixQRUFDSC0xNzItMTkwNTIwMjYsU0VUVExFRCwyMDI2LTA1LTE5IDEwOjI2OjUyLjQxMiw0NjQ3NzU2MDY3NjMsLFJldmlldyBUYXAsMDQ1MDQ1ODQyZDZmNDM0ZWE0ZTVhZTg2OGI4YjU4ODAsLAoyMDI2LTA1LTE4IDE5OjU3OjMwLHN1Y2Nlc3NmdWwsVHNlbGFuZSBMZWdhZSw4YWNkYTRhNjllMzliNWY2MDE5ZTNjM2M1ZTZjNmE4NyxyZ1NJWWZLUTUyQjdpWHBGM1JxamFSQTB3LCxEQiwxOTQ3LjAwLFpBUix2aXNhLGFwcGxlX3BheSwwMDAuMDAwLjAwMCxUcmFuc2FjdGlvbiBzdWNjZWVkZWQsdHNlbGFuZUBsZWdhZWZ1bmVyYWwuY28uemEsLCxSZXZpZXcgVGFwIFNob3BpZnksOGFjOWE0Y2M5NGVmNjU5NDAxOTRmNGEzNDA0NjFmM2UsNDYxMjQzLDc1NDQsQUNLLDA1LFBFQUNILTE3Mi0xOTA1MjAyNixTRVRUTEVELDIwMjYtMDUtMTkgMTA6MjY6NTIuNDEyLDg4ODkwNjY3ODc2MywsUmV2aWV3IFRhcCwwNDUwNDU4NDJkNmY0MzRlYTRlNWFlODY4YjhiNTg4MCwsCjIwMjYtMDUtMTggMTY6NTg6MTUsc3VjY2Vzc2Z1bCxNb3Juw6kgQnJhaW5lcnMsOGFjZGE0YTA5ZTM5YjVmZTAxOWUzYjk4NDI1Yzc4ZmUsclMxYXVodzZ5UGdWWTFhZEYxdmtCalVpdCwsREIsOTk4LjAwLFpBUix2aXNhLGFwcGxlX3BheSwwMDAuMDAwLjAwMCxUcmFuc2FjdGlvbiBzdWNjZWVkZWQsbW9ybmVicmFpbmVyc0BnbWFpbC5jb20sLCxSZXZpZXcgVGFwIFNob3BpZnksOGFjOWE0Y2M5NGVmNjU5NDAxOTRmNGEzNDA0NjFmM2UsNDYxMjQzLDc5MTAsQUNLLDA1LFBFQUNILTE3Mi0xOTA1MjAyNixTRVRUTEVELDIwMjYtMDUtMTkgMTA6MjY6NTIuNDEyLDI4MTIyODU0MDM5NSwsUmV2aWV3IFRhcCwwNDUwNDU4NDJkNmY0MzRlYTRlNWFlODY4YjhiNTg4MCwsCjIwMjYtMDUtMTggMTE6MTY6MDQsc3VjY2Vzc2Z1bCxCaWFuY2EgT2xpdmllciw4YWNkYTRhNTllMzlhNDY0MDE5ZTNhNWVmZDY4MTNmZixycG5xd1U0b2xUTHFNYUo4LCxEQiw3NTQuMDAsWkFSLHZpc2EsYXBwbGVfcGF5LDAwMC4wMDAuMDAwLFRyYW5zYWN0aW9uIHN1Y2NlZWRlZCxiaWFuY2Eub2xpdmllcjI0MUBnbWFpbC5jb20sLCxSZXZpZXcgVGFwIFNob3BpZnksOGFjOWE0Y2M5NGVmNjU5NDAxOTRmNGEzNDA0NjFmM2UsNDYxMjc5LDA5MzksQUNLLDA1LFBFQUNILTE3Mi0xOTA1MjAyNixTRVRUTEVELDIwMjYtMDUtMTkgMTA6MjY6NTIuNDEyLDUwMDQ3NTgwNzcyMywsUmV2aWV3IFRhcCwwNDUwNDU4NDJkNmY0MzRlYTRlNWFlODY4YjhiNTg4MCwsCjIwMjYtMDUtMTggMDk6NTI6MDgsc3VjY2Vzc2Z1bCxSdWFuIERlIFdldCxjZWIwMDg5MmFkMWI0NDEyODE0YThmOTY3NWU0ZjkxOSxya2h4SzJ5QTI1MVFNOHF1WnR5d05Kb0JELCxEQiwxMDEzLjAwLFpBUix2aXNhLGNhcmQsMDAwLjAwMC4wMDAsVHJhbnNhY3Rpb24gc3VjY2VlZGVkLHJ1YW5AdG9wcm9vZndhdGVycHJvb2ZpbmcuY28uemEsLDIwOS4yMDMuMjMuMTg1LFJldmlldyBUYXAgU2hvcGlmeSw4YWM5YTRjYzk0ZWY2NTk0MDE5NGY0YTM0MDQ2MWYzZSw0ODU0NDIsNDA3OSxBQ0ssMDUsUEVBQ0gtMTcyLTE5MDUyMDI2LFNFVFRMRUQsMjAyNi0wNS0xOSAxMDoyNjo1Mi40MTIsNjMxNjA3MDExMzA3LCxSZXZpZXcgVGFwLDA0NTA0NTg0MmQ2ZjQzNGVhNGU1YWU4NjhiOGI1ODgwLCwKMjAyNi0wNS0xOCAwOTo0OTo0MixmYWlsZWQsUnVhbiBEZSBXZXQsMzAzMWFiNDA3NDdjNDlmNmEzZDYxMjc3MjJiMWU0NWEscmlLdlE1QWJOdG9aZlJqbVdrUEZnTUFYViwsREIsMTAxMy4wMCxaQVIsdmlzYSxjYXJkLDEwMC4zODAuNTAxLFJpc2sgbWFuYWdlbWVudCB0cmFuc2FjdGlvbiB0aW1lb3V0LHJ1YW5AdG9wcm9vZndhdGVycHJvb2ZpbmcuY28uemEsLDIwOS4yMDMuMjMuMTg1LFJldmlldyBUYXAgU2hvcGlmeSw4YWM5YTRjYzk0ZWY2NTk0MDE5NGY0YTM0MDQ2MWYzZSw0ODU0NDIsNDA3OSxOT0ssMDYsLCwsLCxSZXZpZXcgVGFwLDA0NTA0NTg0MmQ2ZjQzNGVhNGU1YWU4NjhiOGI1ODgwLCwKMjAyNi0wNS0xOCAwNDo0ODo0MixzdWNjZXNzZnVsLERvbWluaXF1ZSBTcHJ1Y2gsOGFjZGE0YTc5ZTFiNTcxMDAxOWUzOGZjNTY4YTJhNTcscjlETkJqRHZEZ1RUOTZnYiwsREIsMTgxNC4zNSxaQVIsdmlzYSxhcHBsZV9wYXksMDAwLjAwMC4wMDAsVHJhbnNhY3Rpb24gc3VjY2VlZGVkLGRvbWluaXF1ZUBmbG9yYWZhdW5hY29ubmVjdC5jby56YSwsLFJldmlldyBUYXAgU2hvcGlmeSw4YWM5YTRjYzk0ZWY2NTk0MDE5NGY0YTM0MDQ2MWYzZSw0NTEzNzEsMjU4OSxBQ0ssMDUsUEVBQ0gtMTcyLTE5MDUyMDI2LFNFVFRMRUQsMjAyNi0wNS0xOSAxMDoyNjo1Mi40MTIsNzk1Nzg5OTA2OTIzLCxSZXZpZXcgVGFwLDA0NTA0NTg0MmQ2ZjQzNGVhNGU1YWU4NjhiOGI1ODgwLCwKMjAyNi0wNS0xNyAxNjo0NTo0MyxmYWlsZWQsUmFqZW4gR292ZW5kZXIsM2NmNTI3MjM0NGFiNGM4M2I4ZGNjZmYyM2Y0YzJlYjQscmhTYTh5akhObmMxdDhwekwxY1hUcVhDaCwsREIsNzU0LjAwLFpBUix2aXNhLGNhcmQsODAwLjEwMC4xNTgsdHJhbnNhY3Rpb24gZGVjbGluZWQgKHN1c3BlY3RpbmcgbWFuaXB1bGF0aW9uKSxyYWplbkByZXZsaW5lYWdlbnQuY28uemEsLDEwNS4yNDUuMTczLjE0MixSZXZpZXcgVGFwIFNob3BpZnksOGFjOWE0Y2M5NGVmNjU5NDAxOTRmNGEzNDA0NjFmM2UsNDAxNjAwLDk4NzgsTk9LLDA1LCwsLDk4NzcxOTI3MTY1OSwsUmV2aWV3IFRhcCwwNDUwNDU4NDJkNmY0MzRlYTRlNWFlODY4YjhiNTg4MCwsCjIwMjYtMDUtMTcgMTU6NTY6MzgsZmFpbGVkLERvbWluaXF1ZSBTcHJ1Y2gsYTI5YjA3YmVjYTdmNDFjYWIxYmM5YzAwNjcwZDZmNWQsckRnb0l0V2xITjNDYklhQmpTb25DbGhQNywsREIsNTU0LjAwLFpBUix2aXNhLGNhcmQsMTAwLjM4MC41MDEsUmlzayBtYW5hZ2VtZW50IHRyYW5zYWN0aW9uIHRpbWVvdXQsZG9taW5pcXVlQGZsb3JhZmF1bmFjb25uZWN0LmNvLnphLCw0MS4xMy44MC43NSxSZXZpZXcgVGFwIFNob3BpZnksOGFjOWE0Y2M5NGVmNjU5NDAxOTRmNGEzNDA0NjFmM2UsNDc4NzY5LDkwMzksTk9LLDA2LCwsLCwsUmV2aWV3IFRhcCwwNDUwNDU4NDJkNmY0MzRlYTRlNWFlODY4YjhiNTg4MCwsCjIwMjYtMDUtMTcgMTA6MzQ6MjUsc3VjY2Vzc2Z1bCxDaHJpc3RvIFdlaWRlbWFuLGY0MjcyMThiZGI2MjRlY2NiOTVlYzZkNzJmZGNjZmUwLHJtZjh2ZmUxcnJJOGxwUEsxcE40OVk4NE0sLERCLDc1NC4wMCxaQVIsdmlzYSxjYXJkLDAwMC4wMDAuMDAwLFRyYW5zYWN0aW9uIHN1Y2NlZWRlZCxkZW9uQHBoZWFzYW50aGlsbC5jby56YSwsMTk2LjUwLjI0MS43OCxSZXZpZXcgVGFwIFNob3BpZnksOGFjOWE0Y2M5NGVmNjU5NDAxOTRmNGEzNDA0NjFmM2UsNDkwMTM2LDEwNjAsQUNLLDA1LFBFQUNILTE3MS0xODA1MjAyNixQUk9DRVNTSU5HLDIwMjYtMDUtMTggMDc6MTU6MjIuODgxLDAwMjg2NjQ5OTgxOSwsUmV2aWV3IFRhcCwwNDUwNDU4NDJkNmY0MzRlYTRlNWFlODY4YjhiNTg4MCwsCjIwMjYtMDUtMTYgMTA6MDE6MjUsc3VjY2Vzc2Z1bCxFbGllIE11eW9raSw5Nzk2OWYyYzU5MGM0MWYwYWE4MGM5NWFiOTI3NDQzNCxyZ2tzRnpja0ljT3VibU85d1JHRmZKRlU1LCxEQiwxMjk4LjAwLFpBUix2aXNhLGNhcmQsMDAwLjAwMC4wMDAsVHJhbnNhY3Rpb24gc3VjY2VlZGVkLGVsaWVtdXlva2k4QGdtYWlsLmNvbSwsMTA1LjguMS44MixSZXZpZXcgVGFwIFNob3BpZnksOGFjOWE0Y2M5NGVmNjU5NDAxOTRmNGEzNDA0NjFmM2UsNDU0NTg4LDI4MjcsQUNLLDA1LFBFQUNILTE3MS0xODA1MjAyNixQUk9DRVNTSU5HLDIwMjYtMDUtMTggMDc6MTU6MjIuODgxLDY4MTk2OTg1OTMwNywsUmV2aWV3IFRhcCwwNDUwNDU4NDJkNmY0MzRlYTRlNWFlODY4YjhiNTg4MCwsCjIwMjYtMDUtMTUgMTk6Mjc6MjEsc3VjY2Vzc2Z1bCxHbGVuIEpvaG4gQ2FsZW5ib3JuZSw4YWNkYTQ5ZjllMWI1NjU2MDE5ZTJjYWRhZGUwMmI4YyxyM1RCN25XWEJhb0k2cU0yLCxEQiw2MDQuMDAsWkFSLHZpc2EsYXBwbGVfcGF5LDAwMC4wMDAuMDAwLFRyYW5zYWN0aW9uIHN1Y2NlZWRlZCxnbGVuQGRlbnRkb2MuY28uemEsLCxSZXZpZXcgVGFwIFNob3BpZnksOGFjOWE0Y2M5NGVmNjU5NDAxOTRmNGEzNDA0NjFmM2UsNDc3OTU4LDYwNzcsQUNLLDA1LFBFQUNILTE3MS0xODA1MjAyNixQUk9DRVNTSU5HLDIwMjYtMDUtMTggMDc6MTU6MjIuODgxLDQ5MDg4MDk1ODc2MywsUmV2aWV3IFRhcCwwNDUwNDU4NDJkNmY0MzRlYTRlNWFlODY4YjhiNTg4MCwsCjIwMjYtMDUtMTUgMTY6MjA6MjUsc3VjY2Vzc2Z1bCxEb25vdmFuIFN0ZWZmZW4sODRjYzJjZThkOTAzNGRiYmE2NDk1Mjg3NmQyYmYxODEsckpXQmlXVkJTZ0o2RzBLWjJGekU1MjRpWCwsREIsNzU0LjAwLFpBUix2aXNhLGNhcmQsMDAwLjAwMC4wMDAsVHJhbnNhY3Rpb24gc3VjY2VlZGVkLGRvbm92YW5AZmFjdG9ycHJvLmNvLnphLCwxMDIuMzkuOC4xNzksUmV2aWV3IFRhcCBTaG9waWZ5LDhhYzlhNGNjOTRlZjY1OTQwMTk0ZjRhMzQwNDYxZjNlLDQ5MTA1MCw5NTIwLEFDSywwNSxQRUFDSC0xNzEtMTgwNTIwMjYsUFJPQ0VTU0lORywyMDI2LTA1LTE4IDA3OjE1OjIyLjg4MSw2MTI2MTUxOTA4MjcsLFJldmlldyBUYXAsMDQ1MDQ1ODQyZDZmNDM0ZWE0ZTVhZTg2OGI4YjU4ODAsLAoyMDI2LTA1LTE1IDEzOjA1OjMyLHN1Y2Nlc3NmdWwsS2dvbW90c28gTW9rb21hLDQ5MzA4ZGYxZTk0YzQ1NTNiMDk0YTA1OGU4NWVlZmFhLHJEWW5naXByZ01MeVZKdU83bW9IVm5kbjYsLERCLDc1NC4wMCxaQVIsZm5iZWZ0LHBheWJ5YmFuaywwMDAuMDAwLjAwMCxUcmFuc2FjdGlvbiBzdWNjZWVkZWQsa2dvbW90c28ubW9rb21hQGdtYWlsLmNvbSwsLFJldmlldyBUYXAgU2hvcGlmeSw4YWM5YTRjYzk0ZWY2NTk0MDE5NGY0YTM0MDQ2MWYzZSwsLEFDSywsUEVBQ0gtMTcxLTE4MDUyMDI2LFBST0NFU1NJTkcsMjAyNi0wNS0xOCAwNzoxNToyMi44ODEsMzYxNTA0NDUwOSwsUmV2aWV3IFRhcCwwNDUwNDU4NDJkNmY0MzRlYTRlNWFlODY4YjhiNTg4MCwsCjIwMjYtMDUtMTUgMTE6MDE6NTgsc3VjY2Vzc2Z1bCxaYWtpciBCaGFtamVlLDBhZDZkYzIwNjZlNDQ0NWM4MGY4N2E4OTZhMTI1Yzk2LHJuZ1J1bVVScVFySjFlV1FSVEx3OVBFZkssLERCLDYwNC4wMCxaQVIsdmlzYSxjYXJkLDAwMC4wMDAuMDAwLFRyYW5zYWN0aW9uIHN1Y2NlZWRlZCx6YW55YXNwYUBnbWFpbC5jb20sLDEwNS4yNDUuMjQuMTMsUmV2aWV3IFRhcCBTaG9waWZ5LDhhYzlhNGNjOTRlZjY1OTQwMTk0ZjRhMzQwNDYxZjNlLDQ4NTQ0Miw5NjQ2LEFDSywwNSxQRUFDSC0xNzEtMTgwNTIwMjYsUFJPQ0VTU0lORywyMDI2LTA1LTE4IDA3OjE1OjIyLjg4MSw3MjQ4MTkxNjI5MjMsLFJldmlldyBUYXAsMDQ1MDQ1ODQyZDZmNDM0ZWE0ZTVhZTg2OGI4YjU4ODAsLAoyMDI2LTA1LTE0IDE1OjAwOjI1LHN1Y2Nlc3NmdWwsQWx0aGVhIE5lbCwwN2I2MWViNDVmNzU0ZWFkYWFmMzhmYWVmNzQxYWI4MSxybHBCek1ZZDVvTlN2N2MzdVNBTDQwSHNzLCxEQiw0NTAuMDAsWkFSLG1hc3RlcixjYXJkLDAwMC4wMDAuMDAwLFRyYW5zYWN0aW9uIHN1Y2NlZWRlZCxhbHRoZWFAY2xlb3MuY28uemEsLDEwMi4zMy41OS43NixSZXZpZXcgVGFwIFNob3BpZnksOGFjOWE0Y2M5NGVmNjU5NDAxOTRmNGEzNDA0NjFmM2UsNTIyMTE4LDkyNjUsQUNLLDAyLFBFQUNILTE3MC0xNTA1MjAyNixTRVRUTEVELDIwMjYtMDUtMTUgMTE6MDA6NDYuMjksOTI2NTE4MjczMDY3LCxSZXZpZXcgVGFwLDA0NTA0NTg0MmQ2ZjQzNGVhNGU1YWU4NjhiOGI1ODgwLCwKMjAyNi0wNS0xMyAxODo1NToyNSxzdWNjZXNzZnVsLFRhbnlhIFN3ZW1tZXIsOGFjZGE0YTI5ZTFiN2UyYTAxOWUyMjQzYjhjZDJlNzMscnFOM2VKeDltc1ljVzFaQU9mT0tJdTJxcywsREIsNjA0LjAwLFpBUixtYXN0ZXIsYXBwbGVfcGF5LDAwMC4wMDAuMDAwLFRyYW5zYWN0aW9uIHN1Y2NlZWRlZCx0YW55YXN3ZW1tZXJAZ21haWwuY29tLCwsUmV2aWV3IFRhcCBTaG9waWZ5LDhhYzlhNGNjOTRlZjY1OTQwMTk0ZjRhMzQwNDYxZjNlLDUzNDk5OSw2NDIxLEFDSywsUEVBQ0gtMTY5LTE0MDUyMDI2LFNFVFRMRUQsMjAyNi0wNS0xNCAxMToxNToxMy45OTIsMzk2NTIyMDYxMzU1LCxSZXZpZXcgVGFwLDA0NTA0NTg0MmQ2ZjQzNGVhNGU1YWU4NjhiOGI1ODgwLCwKMjAyNi0wNS0xMyAxODozNDo0MyxzdWNjZXNzZnVsLFBpZXJyZSBWYW4gZGVyIEhvdmVuLDM5Nzg3ODllNmNkMTRjODJiYzZmY2EyODBkNDdhODFmLHJtNzI2Z2tueWVkb1ZyV0poTER6TU56cDMsLERCLDc1NC4wMCxaQVIsbWFzdGVyLGNhcmQsMDAwLjAwMC4wMDAsVHJhbnNhY3Rpb24gc3VjY2VlZGVkLHBpZXJyZXZkaG92ZW5AZ21haWwuY29tLCw0MS4xMy4yMDAuMjQsUmV2aWV3IFRhcCBTaG9waWZ5LDhhYzlhNGNjOTRlZjY1OTQwMTk0ZjRhMzQwNDYxZjNlLDUyNjIwNSw2ODM5LEFDSywwMixQRUFDSC0xNjktMTQwNTIwMjYsU0VUVExFRCwyMDI2LTA1LTE0IDExOjE1OjEzLjk5MiwyMDk4OTk0MjEyMjcsLFJldmlldyBUYXAsMDQ1MDQ1ODQyZDZmNDM0ZWE0ZTVhZTg2OGI4YjU4ODAsLAoyMDI2LTA1LTEzIDE2OjM4OjE2LHN1Y2Nlc3NmdWwsSmFuLU1hcmNvIFNjaGVybWVycyxiZjAwNzg3OTk1M2I0MjQ3YWI1OWI0OTA4MDRlNDk2YixyVFMwaEVOVlR2YWFTaGFzUDlTZFJRVWNkLCxEQiw3NTQuMDAsWkFSLHZpc2EsY2FyZCwwMDAuMDAwLjAwMCxUcmFuc2FjdGlvbiBzdWNjZWVkZWQsZmVybmRhbGUxQHRoZWRhaWx5Y29mZmVlY2FmZS5jby56YSwsMTAyLjIyMi4yNDguNTQsUmV2aWV3IFRhcCBTaG9waWZ5LDhhYzlhNGNjOTRlZjY1OTQwMTk0ZjRhMzQwNDYxZjNlLDQ4OTE5NCwxNTI3LEFDSywwNSxQRUFDSC0xNjktMTQwNTIwMjYsU0VUVExFRCwyMDI2LTA1LTE0IDExOjE1OjEzLjk5MiwyMTMzMjA3NTY3NzksLFJldmlldyBUYXAsMDQ1MDQ1ODQyZDZmNDM0ZWE0ZTVhZTg2OGI4YjU4ODAsLAoyMDI2LTA1LTEzIDE0OjUxOjQyLHN1Y2Nlc3NmdWwsUm9jaGUgRGUgQmVlciw2NDIxMjcwNWM4ODc0MjNiOTY2NDIzMzBiNmFlOGI3NSxycFgzUXhkUm9DV083N3VzbDFlTXQyNzlJLCxEQiw3NTQuMDAsWkFSLHZpc2EsY2FyZCwwMDAuMDAwLjAwMCxUcmFuc2FjdGlvbiBzdWNjZWVkZWQscm9jaGVAdG9yZ2FvcHRpY2FsLmNvLnphLCw0MS4xMjIuNzkuMzcsUmV2aWV3IFRhcCBTaG9waWZ5LDhhYzlhNGNjOTRlZjY1OTQwMTk0ZjRhMzQwNDYxZjNlLDQ5MTA1MCw4OTA5LEFDSywwNSxQRUFDSC0xNjktMTQwNTIwMjYsU0VUVExFRCwyMDI2LTA1LTE0IDExOjE1OjEzLjk5MiwyMjU1MzU0MzEyMTEsLFJldmlldyBUYXAsMDQ1MDQ1ODQyZDZmNDM0ZWE0ZTVhZTg2OGI4YjU4ODAsLAoyMDI2LTA1LTEzIDE0OjQ3OjU4LGZhaWxlZCxSb2NoZSBEZSBCZWVyLGI4ZTE4ZDg3ZTAwNzRmMWE4OTZhZGJlN2NhMDRkZDA4LHJwWDNReGRSb0NXTzc3dXNsMWVNdDI3OUksLERCLDc1NC4wMCxaQVIsdmlzYSxjYXJkLDEwMC4zODAuNTAxLFJpc2sgbWFuYWdlbWVudCB0cmFuc2FjdGlvbiB0aW1lb3V0LHJvY2hlQHRvcmdhb3B0aWNhbC5jby56YSwsNDEuMTIyLjc5LjM3LFJldmlldyBUYXAgU2hvcGlmeSw4YWM5YTRjYzk0ZWY2NTk0MDE5NGY0YTM0MDQ2MWYzZSw0OTEwNTAsODkwOSxOT0ssMDYsLCwsLCxSZXZpZXcgVGFwLDA0NTA0NTg0MmQ2ZjQzNGVhNGU1YWU4NjhiOGI1ODgwLCwKMjAyNi0wNS0xMyAxMTo1Mjo1MSxzdWNjZXNzZnVsLFNhc3NpIEdyYWhhbSw1YmU2YzNlNDNjOGY0NTdkYjI1ZDczZGI2ZDhiODE0NSxyaFh0NE90RzRGc0NuazdJUjJYTVpCOXRJLCxEQiwyMjk2LjAwLFpBUix2aXNhLGNhcmQsMDAwLjAwMC4wMDAsVHJhbnNhY3Rpb24gc3VjY2VlZGVkLHNhc3NpQHJvYXJhcm91bmQuY28uemEsLDEwMi4yMTQuMjMxLjM1LFJldmlldyBUYXAgU2hvcGlmeSw4YWM5YTRjYzk0ZWY2NTk0MDE5NGY0YTM0MDQ2MWYzZSw0ODU0NDIsNDMyOCxBQ0ssMDUsUEVBQ0gtMTY5LTE0MDUyMDI2LFNFVFRMRUQsMjAyNi0wNS0xNCAxMToxNToxMy45OTIsMDczNDMxNTA3NDk5LCxSZXZpZXcgVGFwLDA0NTA0NTg0MmQ2ZjQzNGVhNGU1YWU4NjhiOGI1ODgwLCwKMjAyNi0wNS0xMyAwOToyNzo0OCxzdWNjZXNzZnVsLExlamVhbiBTd2FydCw4YWNkYTRhNTllMWI1NmYxMDE5ZTIwM2MwZmQ2MDM5YSxyWjR4UlRrQnZYY3lQY0RMc2N5WUxIdmJILCxEQiwxMjk4LjAwLFpBUix2aXNhLGFwcGxlX3BheSwwMDAuMDAwLjAwMCxUcmFuc2FjdGlvbiBzdWNjZWVkZWQsdmluZXJvb3R0b3Vyc0BnbWFpbC5jb20sLCxSZXZpZXcgVGFwIFNob3BpZnksOGFjOWE0Y2M5NGVmNjU5NDAxOTRmNGEzNDA0NjFmM2UsNDE2MTI2LDU0MjIsQUNLLDA1LFBFQUNILTE2OS0xNDA1MjAyNixTRVRUTEVELDIwMjYtMDUtMTQgMTE6MTU6MTMuOTkyLDk5NTQ3MTk5NzQ4MywsUmV2aWV3IFRhcCwwNDUwNDU4NDJkNmY0MzRlYTRlNWFlODY4YjhiNTg4MCwsCjIwMjYtMDUtMTIgMTY6MjM6MTgsc3VjY2Vzc2Z1bCxSdWFuIERlIFdldCw4MzFjNjVjODA2MTA0Njk2OTE2NGY4MTQ3NDlhZDIwZixyWHBZNnNmY0RRTFJZck95a2hEb01PdnRBLCxEQiwxMzQ3LjAwLFpBUix2aXNhLGNhcmQsMDAwLjAwMC4wMDAsVHJhbnNhY3Rpb24gc3VjY2VlZGVkLHJ1YW5AdG9wcm9vZndhdGVycHJvb2ZpbmcuY28uemEsLDIwOS4yMDMuMjMuMTg1LFJldmlldyBUYXAgU2hvcGlmeSw4YWM5YTRjYzk0ZWY2NTk0MDE5NGY0YTM0MDQ2MWYzZSw0ODU0NDIsMDgxNixBQ0ssMDUsUEVBQ0gtMTY4LTEzMDUyMDI2LFNFVFRMRUQsMjAyNi0wNS0xMyAxMjowMTowMC4yMiw1NDMzNjAyMTEzNzEsLFJldmlldyBUYXAsMDQ1MDQ1ODQyZDZmNDM0ZWE0ZTVhZTg2OGI4YjU4ODAsLAoyMDI2LTA1LTEyIDE0OjU3OjI1LHN1Y2Nlc3NmdWwsUnVhbiBEdSBQcmVleiwzZjUzODUxMzg0ZDM0ZWU2YTI0YzlkMDNlODgxOGNlYixyY1ZVQ0w3ekJJNXU5QUNXVG1CREhMdjZyLCxEQiwzODk0LjAwLFpBUix2aXNhLGNhcmQsMDAwLjAwMC4wMDAsVHJhbnNhY3Rpb24gc3VjY2VlZGVkLGluZm9AaXNvYmVsbGF2aXRhZ3Vlc3Rob3VzZS5jby56YSwsNDEuMTIxLjYwLjY5LFJldmlldyBUYXAgU2hvcGlmeSw4YWM5YTRjYzk0ZWY2NTk0MDE5NGY0YTM0MDQ2MWYzZSw0OTEwNTAsOTEyMCxBQ0ssMDUsUEVBQ0gtMTY4LTEzMDUyMDI2LFNFVFRMRUQsMjAyNi0wNS0xMyAxMjowMTowMC4yMiw5MTgwMjk3MTE3ODcsLFJldmlldyBUYXAsMDQ1MDQ1ODQyZDZmNDM0ZWE0ZTVhZTg2OGI4YjU4ODAsLAoyMDI2LTA1LTExIDEzOjM0OjQwLHN1Y2Nlc3NmdWwsRGVvbiBDYXJlbHNlLDM1ODYxMDU5MTQ1ZDRmZGY5NjRhZTgzMDgwZmJiYmZmLHJSUVVqTDFoS1d5RkN5ZlJuSExtYXNsUDUsLERCLDYwNC4wMCxaQVIsdmlzYSxjYXJkLDAwMC4wMDAuMDAwLFRyYW5zYWN0aW9uIHN1Y2NlZWRlZCxkZW9uQGRiZHRyYXZlbC5jby56YSwsNDEuMTMuMjA4LjE5OSxSZXZpZXcgVGFwIFNob3BpZnksOGFjOWE0Y2M5NGVmNjU5NDAxOTRmNGEzNDA0NjFmM2UsNDQ1MTQ3LDQ4ODgsQUNLLDA1LFBFQUNILTE2Ny0xMjA1MjAyNixTRVRUTEVELDIwMjYtMDUtMTIgMTA6NDY6MTIuODY0LDA2MjY2MjQ2NjczMSwsUmV2aWV3IFRhcCwwNDUwNDU4NDJkNmY0MzRlYTRlNWFlODY4YjhiNTg4MCwsCjIwMjYtMDUtMTAgMTg6NTg6NDMsc3VjY2Vzc2Z1bCxQSiBHb3VzLDhhY2RhNDlmOWRkODViYWIwMTllMTJkM2FkMTEzMzIwLHJuVkxKWTA4TmZydmhWSFBrSkM4Nm41cEMsLERCLDEyOTguMDAsWkFSLHZpc2EsYXBwbGVfcGF5LDAwMC4wMDAuMDAwLFRyYW5zYWN0aW9uIHN1Y2NlZWRlZCxwamdvdXM5NEBnbWFpbC5jb20sLCxSZXZpZXcgVGFwIFNob3BpZnksOGFjOWE0Y2M5NGVmNjU5NDAxOTRmNGEzNDA0NjFmM2UsNDQ0NDM5LDAxNTUsQUNLLDA1LFBFQUNILTE2Ni0xMTA1MjAyNixTRVRUTEVELDIwMjYtMDUtMTEgMTA6MjM6NTIuNDg0LDI0Mjg0NDQ5MTQzNSwsUmV2aWV3IFRhcCwwNDUwNDU4NDJkNmY0MzRlYTRlNWFlODY4YjhiNTg4MCwsCjIwMjYtMDUtMDkgMTY6Mjg6MzYsc3VjY2Vzc2Z1bCxBbHRoZWEgTmVsLGI4ZGE4MWQzODQ0MjQ3ODJiZTkxODRmNDQ2NDYxZmNhLHJYQkxpbWlXMWdjSFRqVUVPVG4yMWtUb1csLERCLDE0OTcuMDAsWkFSLG1hc3RlcixjYXJkLDAwMC4wMDAuMDAwLFRyYW5zYWN0aW9uIHN1Y2NlZWRlZCxhbHRoZWFAY2xlb3MuY28uemEsLDE2OS4xLjk1LjUyLFJldmlldyBUYXAgU2hvcGlmeSw4YWM5YTRjYzk0ZWY2NTk0MDE5NGY0YTM0MDQ2MWYzZSw1MjIxMTgsOTI2NSxBQ0ssMDIsUEVBQ0gtMTY2LTExMDUyMDI2LFNFVFRMRUQsMjAyNi0wNS0xMSAxMDoyMzo1Mi40ODQsMjg4OTQ2NzkwNzQwLCxSZXZpZXcgVGFwLDA0NTA0NTg0MmQ2ZjQzNGVhNGU1YWU4NjhiOGI1ODgwLCwKMjAyNi0wNS0wNSAwNjo1NjowMixmYWlsZWQsRHlsYW4gVHVja2VyLGI4Yzk3OTU4MTczMDQ3NmZhYWY3NWFjMzY5ZDczMjgwLHJQVmxubVlaMkZqcVRqeUdzVGNxTFg5TU8sLERCLDExNjguMjAsWkFSLHZpc2EsY2FyZCwxMDAuMzgwLjUwMSxSaXNrIG1hbmFnZW1lbnQgdHJhbnNhY3Rpb24gdGltZW91dCxkeWx0dWNrZXI5NkBnbWFpbC5jb20sKzI3NzY2MjA5MDkxLDE5Ni40MS4xMC4yMDcsUmV2aWV3IFRhcCBTaG9waWZ5LDhhYzlhNGNjOTRlZjY1OTQwMTk0ZjRhMzQwNDYxZjNlLDQyODEwNCw5NTIwLE5PSywwNiwsLCwsLFJldmlldyBUYXAsMDQ1MDQ1ODQyZDZmNDM0ZWE0ZTVhZTg2OGI4YjU4ODAsLAoyMDI2LTA1LTA1IDA2OjU0OjM0LGZhaWxlZCxEeWxhbiBUdWNrZXIsN2E2MThiMGY5Y2RkNDgxODg2ZmNmYTM5ODMzZjJhMjgsckgxUndLdWE0bldVVTNUNUZuSGZHMHhDTiwsREIsMTE2OC4yMCxaQVIsdmlzYSxjYXJkLDEwMC4zODAuNTAxLFJpc2sgbWFuYWdlbWVudCB0cmFuc2FjdGlvbiB0aW1lb3V0LGR5bHR1Y2tlcjk2QGdtYWlsLmNvbSwrMjc3NjYyMDkwOTEsMTk2LjQxLjEwLjIwNyxSZXZpZXcgVGFwIFNob3BpZnksOGFjOWE0Y2M5NGVmNjU5NDAxOTRmNGEzNDA0NjFmM2UsNDI4MTA0LDk1MjAsTk9LLDA2LCwsLCwsUmV2aWV3IFRhcCwwNDUwNDU4NDJkNmY0MzRlYTRlNWFlODY4YjhiNTg4MCwsCjIwMjYtMDUtMDUgMDY6NTM6MjYsZmFpbGVkLER5bGFuIFR1Y2tlcixmYjA4MjZiYTM1MWU0NjAwOTM4OTMxNjQ2YTdhOGJiNCxyN3VxbDhkRldobmw5U0doV1kxc3d5MjFDLCxEQiwxMTY4LjIwLFpBUix2aXNhLGNhcmQsMTAwLjM4MC41MDEsUmlzayBtYW5hZ2VtZW50IHRyYW5zYWN0aW9uIHRpbWVvdXQsZHlsdHVja2VyOTZAZ21haWwuY29tLCsyNzc2NjIwOTA5MSwxOTYuNDEuMTAuMjA3LFJldmlldyBUYXAgU2hvcGlmeSw4YWM5YTRjYzk0ZWY2NTk0MDE5NGY0YTM0MDQ2MWYzZSw0MjgxMDQsOTUyMCxOT0ssMDYsLCwsLCxSZXZpZXcgVGFwLDA0NTA0NTg0MmQ2ZjQzNGVhNGU1YWU4NjhiOGI1ODgwLCwKMjAyNi0wNS0wNSAwNjo0ODowNCxmYWlsZWQsRHlsYW4gVHVja2VyLDhmZTJjY2I1MDhiNTQ3MmU5ODQ0ZTczYjYwNWI4NzY5LHJFaU1tcjBEVXFrbld1Y0JVYmczUGFMRkksLERCLDExNjguMjAsWkFSLHZpc2EsY2FyZCwxMDAuMzgwLjUwMSxSaXNrIG1hbmFnZW1lbnQgdHJhbnNhY3Rpb24gdGltZW91dCxkeWx0dWNrZXI5NkBnbWFpbC5jb20sKzI3NzY2MjA5MDkxLDE5Ni40MS4xMC4yMDcsUmV2aWV3IFRhcCBTaG9waWZ5LDhhYzlhNGNjOTRlZjY1OTQwMTk0ZjRhMzQwNDYxZjNlLDQyODEwNCw5NTIwLE5PSywwNiwsLCwsLFJldmlldyBUYXAsMDQ1MDQ1ODQyZDZmNDM0ZWE0ZTVhZTg2OGI4YjU4ODAsLAoyMDI2LTA1LTA0IDE1OjM5OjA0LHN1Y2Nlc3NmdWwsQW7DqSBTbWl0LDgzNjVkYTc5NThmNjQ1YzNiMzI1ZGIwMWQyYmQ1ODhkLHJhbGFUU0ZCajR1NHppNTIxN3ViNFNaNVIsLERCLDYwNC4wMCxaQVIsbWFzdGVyLGNhcmQsMDAwLjAwMC4wMDAsVHJhbnNhY3Rpb24gc3VjY2VlZGVkLG1hcmtldGluZ0BkYWxzLmNvLnphLCw0MS43MS4zNy4yNDcsUmV2aWV3IFRhcCBTaG9waWZ5LDhhYzlhNGNjOTRlZjY1OTQwMTk0ZjRhMzQwNDYxZjNlLDU1ODI5NCw5MzAzLEFDSywwMixQRUFDSC0xNjUtMDUwNTIwMjYsU0VUVExFRCwyMDI2LTA1LTA1IDExOjMxOjU4LjA1NiwwMDk1NjQ4OTY5ODAsLFJldmlldyBUYXAsMDQ1MDQ1ODQyZDZmNDM0ZWE0ZTVhZTg2OGI4YjU4ODAsLAoyMDI2LTA0LTE5IDE5OjI2OjQ3LHN1Y2Nlc3NmdWwsbGlvbmVsIHJvZHJpZ3VlcyxlYjU0ZjBjNzFlYjA0MTIzYTI2Yjk2YzBkYjVkNzU1OSxyTW1iMTdMajFJWFNEUzh6RzVFeE5vZFBGLCxEQiw0MDQuMDAsWkFSLHZpc2EsY2FyZCwwMDAuMDAwLjAwMCxUcmFuc2FjdGlvbiBzdWNjZWVkZWQsbGluZTJsaW5lQGhvdG1haWwuY29tLCwxMDIuMTQxLjI0Ni4xOTksUmV2aWV3IFRhcCBTaG9waWZ5LDhhYzlhNGNjOTRlZjY1OTQwMTk0ZjRhMzQwNDYxZjNlLDQ4NTQ0MiwyMzI0LEFDSywwNSxQRUFDSC0xNjQtMjAwNDIwMjYsU0VUVExFRCwyMDI2LTA0LTIwIDExOjM1OjEyLjQ1Niw4NTA3Nzk4NjcxODgsLFJldmlldyBUYXAsMDQ1MDQ1ODQyZDZmNDM0ZWE0ZTVhZTg2OGI4YjU4ODAsLAoyMDI2LTA0LTExIDEyOjE0OjU4LHN1Y2Nlc3NmdWwsSmFkZSBNYW5uLDdmZDAwMmM1ZGVlNTQ2OTc5YjFkY2YzNTA4MjA5NGQ0LHIzWXVDRDk3dlRkRjdUODJwd2RzSmdLWWwsLERCLDE5OTYuMDAsWkFSLHZpc2EsY2FyZCwwMDAuMDAwLjAwMCxUcmFuc2FjdGlvbiBzdWNjZWVkZWQsamFkZUBnb29kYW5kcHJvcGVyZm9vZHRydWNrcy5jby56YSwsMTY1LjQ5LjQxLjE3NCxSZXZpZXcgVGFwIFNob3BpZnksOGFjOWE0Y2M5NGVmNjU5NDAxOTRmNGEzNDA0NjFmM2UsNDg1NDQyLDMxNDYsQUNLLDA1LFBFQUNILTE2My0xMzA0MjAyNixTRVRUTEVELDIwMjYtMDQtMTMgMTQ6MDY6MTYuODcyLDU0MDAwMjA0NDg2OCwsUmV2aWV3IFRhcCwwNDUwNDU4NDJkNmY0MzRlYTRlNWFlODY4YjhiNTg4MCwsCjIwMjYtMDQtMTAgMTI6MzM6Mzksc3VjY2Vzc2Z1bCxMaWhsZSBTb2phLGRmODNlNDY1Y2E0MjQxMzg5ZjdlMjM4ZjgxMDRkNWY2LHJ1ZEhSc3dwc2pGcHUyZWc5NlhDWnhWamIsLERCLDc1NC4wMCxaQVIsdmlzYSxjYXJkLDAwMC4wMDAuMDAwLFRyYW5zYWN0aW9uIHN1Y2NlZWRlZCxsaWhsZXNvamFAZ21haWwuY29tLCwxMDUuNC4zLjE0MyxSZXZpZXcgVGFwIFNob3BpZnksOGFjOWE0Y2M5NGVmNjU5NDAxOTRmNGEzNDA0NjFmM2UsNDEyNzUyLDMyNzgsQUNLLDA1LFBFQUNILTE2My0xMzA0MjAyNixTRVRUTEVELDIwMjYtMDQtMTMgMTQ6MDY6MTYuODcyLDY5Mjk3NDgxNDkxNiwsUmV2aWV3IFRhcCwwNDUwNDU4NDJkNmY0MzRlYTRlNWFlODY4YjhiNTg4MCws" download="Peachpayments.csv">&#11015; Download</a></div>
+<div class="src-file"><div class="src-file-info"><span class="src-icon">🏦</span><div><div class="src-label">Personal Bank Statement</div><div class="src-desc">FNB Personal Cheque Acc 62267462168 - April 2026 &nbsp;&bull;&nbsp; <span class="src-size">4.1&nbsp;KB</span></div></div></div><a class="dl-btn" href="data:text/csv;base64,QUNDT1VOVCBUUkFOU0FDVElPTiBISVNUT1JZCgpOYW1lOiwgSmFjcXVlcywgR3JvZW5ld2FsZApBY2NvdW50OiwgNjIyNjc0NjIxNjgsIFtDaGVxdWUgQWNjb3VudF0KQmFsYW5jZTosIC01NjE0Mi4zMSwgMzA4NTQuMzkKCkRhdGUsIEFtb3VudCwgQmFsYW5jZSwgRGVzY3JpcHRpb24KMjAyNi8wNC8zMCwgLTI2MDQuNDEsIC0zODIxNC4xMiwgVk9EQUNPTSAwNDgzMTE5ODAwIEkxODkzNjIxCjIwMjYvMDQvMzAsIC03ODQuNTQsIC0zNTYwOS43MSwgT0xETVVUQ09MICAgIDMzMTQ5MzU5MzIwMjYwNDMwCjIwMjYvMDQvMzAsIC0yNzAwLjAwLCAtMzQ4MjUuMTcsIEhXQiBXSU4KMjAyNi8wNC8zMCwgLTUwMC4wMCwgLTMyMTI1LjE3LCBTQ0hFRFVMRUQgNjMxMDA4OTQzODUKMjAyNi8wNC8zMCwgMTUwMDAuMDAsIC0zMTYyNS4xNywgSiBBQkFOSwoyMDI2LzA0LzI5LCAyNzAwLjAwLCAtNDY2MjUuMTcsIDI0NTc5MTgwMzQyCjIwMjYvMDQvMjgsIDcyOC4wMCwgLTQ5MzI1LjE3LCBBQlNBIEJBTksgeHh4CjIwMjYvMDQvMjgsIC03NC40MywgLTUwMDUzLjE3LCAjUjAyNlNUWkJSMCBQQVlQQUwgRkVFCjIwMjYvMDQvMjgsIDQ5NjEuODksIC00OTk3OC43NCwgUjAyNlNUWkJSMAoyMDI2LzA0LzI4LCAtMTUwMC4wMCwgLTU0OTQwLjYzLCBLQVRJTktBIFZPUwoyMDI2LzA0LzI4LCAtMjUwMC4wMCwgLTUzNDQwLjYzLCBIV0IgV0lOCjIwMjYvMDQvMjgsIDMwMDAuMDAsIC01MDk0MC42MywgUmVmIDI0NTU5NzA3MTQwCjIwMjYvMDQvMjUsIDE4MDAuMDAsIC01Mzk0MC42MywgUmVmIDI0NTQ4NTAwODY3CjIwMjYvMDQvMjUsIDUwMC4wMCwgLTU1NzQwLjYzLCBSZWYgMjQ1NDgyNTMzODAKMjAyNi8wNC8yNSwgLTIzMDAuMDAsIC01NjI0MC42MywgSFdCIFdJTk5JTkcKMjAyNi8wNC8yNSwgLTQwMC4wMCwgLTUzOTQwLjYzLCBFTEVDVFJJQ0lUWSAwNDE2ODY3MzM1MAoyMDI2LzA0LzI1LCAtMjAwMDAuMDAsIC01MzU0MC42MywgVFJBTlNGRVIgSkIKMjAyNi8wNC8yNCwgLTMzOTIuMzYsIC0zMzU0MC42MywgRk5CIFBMT0FOIENSMDAwMDAyNzY5MTc4MjYwNDI0CjIwMjYvMDQvMjMsIDUuMDAsIC0zMDE0OC4yNywgTE9UVE8gV0lOTklOR1MgVk9EU0c5VDZQVjZQCjIwMjYvMDQvMjMsIC0yNjAwLjAwLCAtMzAxNTMuMjcsIFZBQUxQQVJLIFNLT09MCjIwMjYvMDQvMjMsIC0yMDAwLjAwLCAtMjc1NTMuMjcsIE1VTklDSVBBTElUWQoyMDI2LzA0LzIzLCA1MDAwMC4wMCwgLTI1NTUzLjI3LCA2NDcyNjA0MwoyMDI2LzA0LzIzLCAyNTc2Ljk0LCAtNzU1NTMuMjcsIElOVEVSTkVUIFRSRiBGUk9NICAgICBTSEFSRSBTQVZFUiBXSVRIRFJBVwoyMDI2LzA0LzIyLCAtODAuMDAsIC03ODEzMC4yMSwgTE9UVE8gUFVSQ0hBU0UgUEFJRCAgIExPVFRPIFBVUkNIQVNFCjIwMjYvMDQvMjIsIC02NDEuMDAsIC03ODA1MC4yMSwgTGljIFJlbmV3YWwgKjE3MjUxOTAKMjAyNi8wNC8yMiwgLTI1MDAuMDAsIC03NzQwOS4yMSwgQ1JFRElUIFJFUEFZCjIwMjYvMDQvMjEsIC00MDAuMDAsIC03NDkwOS4yMSwgRUxFQ1RSSUNJVFkgMDQxNjg2NzMzNTAKMjAyNi8wNC8yMSwgNTAwMC4wMCwgLTc0NTA5LjIxLCBGTkIgQVBQIFRSQU5TRkVSIEZST00gQ1JFRElUIFJFUEFZCjIwMjYvMDQvMjAsIDQwNC4wMCwgLTc5NTA5LjIxLCBQRUFDSFBBWSAgUEVBQ0gtMTY0LTIwMDQyMDI2CjIwMjYvMDQvMTgsIC0yNTAwLjAwLCAtNzk5MTMuMjEsIENSRURJVCBSRVBBWQoyMDI2LzA0LzE3LCAtMTUwMC4wMCwgLTc3NDEzLjIxLCBDUkVESVQgUkVQQVkKMjAyNi8wNC8xNywgODQwNS4zMywgLTc1OTEzLjIxLCBBTExBTiBHUkFZQUdSQTEwMjQxNTUgQUdMSVNQUkUKMjAyNi8wNC8xNywgLTIwMDAuMDAsIC04NDMxOC41NCwgQ1JFRElUIFJFUEFZCjIwMjYvMDQvMTUsIC02LjQwLCAtODIzMTguNTQsICNTRVJWSUNFIEZFRVMKMjAyNi8wNC8xNSwgLTEzLjIwLCAtODIzMTIuMTQsICNWQUxVRSBBRERFRCBTRVJWIEZFRVMKMjAyNi8wNC8xNSwgLTQ1NS4wMCwgLTgyMjk4Ljk0LCAjTU9OVEhMWSBBQ0NPVU5UIEZFRQoyMDI2LzA0LzE1LCAzNTAwLjAwLCAtODE4NDMuOTQsIHh4eAoyMDI2LzA0LzE0LCAtNjkuMDAsIC04NTM0My45NCwgI01PTlRITFkgQ1JFRElUIEZFRQoyMDI2LzA0LzE0LCA0OTAuNjYsIC04NTI3NC45NCwgRFIgSU5URVJFU1QgUkVCQVRFCjIwMjYvMDQvMTQsIC0xMjI2LjY1LCAtODU3NjUuNjAsIElOVCBPTiBERUJJVCBCQUxBTkNFCjIwMjYvMDQvMTQsIC0zMDAwLjAwLCAtODQ1MzguOTUsIENSRURJVCBSRVBBWQoyMDI2LzA0LzEzLCAyNzUwLjAwLCAtODE1MzguOTUsIFBFQUNIUEFZICBQRUFDSC0xNjMtMTMwNDIwMjYKMjAyNi8wNC8xMCwgLTE1MDAuMDAsIC04NDI4OC45NSwgQ1JFRElUIFJFUEFZCjIwMjYvMDQvMTAsIDE1MDAuMDAsIC04Mjc4OC45NSwgRk5CIEFQUCBUUkFOU0ZFUiBGUk9NIFRSQU5TRkVSIEoKMjAyNi8wNC8xMCwgMjUwMC4wMCwgLTg0Mjg4Ljk1LCBGTkIgQVBQIFRSQU5TRkVSIEZST00gU0hBUkUgV0lUSERSQVdBTAoyMDI2LzA0LzEwLCAtNzAwLjAwLCAtODY3ODguOTUsIENSRURJVCBSRVBBWQoyMDI2LzA0LzEwLCAtMjAwLjAwLCAtODYwODguOTUsIFBMQVlUSU1FIFRSQU5TUE9SVAoyMDI2LzA0LzA4LCAtMjYwMC4wMCwgLTg1ODg4Ljk1LCBDUkVESVQgUkVQQVkKMjAyNi8wNC8wOCwgLTE1MDAuMDAsIC04MzI4OC45NSwgQ1JFRElUIFJFUEFZCjIwMjYvMDQvMDgsIC00MDAwLjAwLCAtODE3ODguOTUsIENSRURJVCBSRVBBWQoyMDI2LzA0LzA3LCAtMTE4MTIuNzQsIC03Nzc4OC45NSwgU0FITCAgICAgIDcwNzY4NTcgMDE2NDg4NjU3CjIwMjYvMDQvMDcsIC00NjEzLjE3LCAtNjU5NzYuMjEsIFVNQSBPTUkgICAyNjA0MDE5MzEgICBSRjFUTDhOWgoyMDI2LzA0LzA3LCA1MDAwLjAwLCAtNjEzNjMuMDQsIEFCU0EgQkFOSyBHSUZUCjIwMjYvMDQvMDcsIC0zNTAwLjAwLCAtNjYzNjMuMDQsIFRSQU5TRkVSIEpCCjIwMjYvMDQvMDcsIC0zNTAwLjAwLCAtNjI4NjMuMDQsIFRSQU5TRkVSIEpCCjIwMjYvMDQvMDcsIDE1MDAwLjAwLCAtNTkzNjMuMDQsIHh4eAoyMDI2LzA0LzA3LCAtMjAwMC4wMCwgLTc0MzYzLjA0LCBUUkFOU0ZFUiBKCjIwMjYvMDQvMDQsIC03NzUuOTAsIC03MjM2My4wNCwgTElCRVJUWTA0ODU5ODU0MjE0NzAwQy9QMDRBUFIKMjAyNi8wNC8wNCwgLTMyNi4wMCwgLTcxNTg3LjE0LCBTQVNPTEFMQVJNRjIxMDgKMjAyNi8wNC8wNCwgLTQwMC4wMCwgLTcxMjYxLjE0LCBFTEVDVFJJQ0lUWSAwNDE2ODY3MzM1MAoyMDI2LzA0LzAyLCAtMTgwMC4wMCwgLTcwODYxLjE0LCBDUkVESVQgUkVQQVkKMjAyNi8wNC8wMiwgNDUwMC4wMCwgLTY5MDYxLjE0LCBGTkIgQVBQIFRSQU5TRkVSIEZST00gVFJBTlNGRVIgSgoyMDI2LzA0LzAyLCA2MTguMDAsIC03MzU2MS4xNCwgRk5CIEFQUCBUUkFOU0ZFUiBGUk9NIFNIQVJFIFNBVkVSCjIwMjYvMDQvMDIsIC0xNTAwLjAwLCAtNzQxNzkuMTQsIENSRURJVCBSRVBBWQoyMDI2LzA0LzAyLCAzNTAwLjAwLCAtNzI2NzkuMTQsIEZOQiBBUFAgVFJBTlNGRVIgRlJPTSBDUkVESVQgUkVQQVkKMjAyNi8wNC8wMSwgLTE1MTMuMDAsIC03NjE3OS4xNCwgT0xEIE1VVFVBTDI5ODgyODk3NSAgICAgMjYwNDAxCjIwMjYvMDQvMDEsIC0xMDAwLjAwLCAtNzQ2NjYuMTQsIEFCIElOViAgICA5MDAwMjY0NDUzNAoyMDI2LzA0LzAxLCAtMTA1MC42MywgLTczNjY2LjE0LCBBTExBTiBHUkFZQUdSQTEwMjQxNTUgQUdMUERFQkkKMjAyNi8wNC8wMSwgLTM2OC45NiwgLTcyNjE1LjUxLCBUUkFDS0VSICAgMDBDTEkyMzI0OTQ0ICBUTDY3NTEKMjAyNi8wNC8wMSwgLTMwMDAuMDAsIC03MjI0Ni41NSwgQ1JFRElUIFJFUEFZCjIwMjYvMDQvMDEsIDMyODYuMDAsIC02OTI0Ni41NSwgSU5URVJORVQgVFJGIEZST00gICAgIFNBVklOR1MgVFJBTlNGRVIgQ0hFCjIwMjYvMDQvMDEsIC00MDAwLjAwLCAtNzI1MzIuNTUsIENSRURJVCBSRVBBWQoyMDI2LzA0LzAxLCAtNzAwMC4wMCwgLTY4NTMyLjU1LCBUUkFOU0ZFUiBKCjIwMjYvMDQvMDEsIDE1MDAwLjAwLCAtNjE1MzIuNTUsIFZlcmphYXJzZGFnCjIwMjYvMDQvMDEsIC00MDAuMDAsIC03NjUzMi41NSwgRUxFQ1RSSUNJVFkgMDQxNjg2NzMzNTAKMjAyNi8wMy8zMSwgLTI2LjQzLCAtNzYxMzIuNTUsIFJFLURJUkVDVEVEIEZFRVMgRlJPTSA2MzEwMDg5NDM4NQo=" download="Jacques Cheque Account April 62267462168.csv">&#11015; Download</a></div>
+<div class="src-file"><div class="src-file-info"><span class="src-icon">🏦</span><div><div class="src-label">Business Bank Statement</div><div class="src-desc">FNB Business Cheque Acc 62435283809 - April 2026 &nbsp;&bull;&nbsp; <span class="src-size">5.5&nbsp;KB</span></div></div></div><a class="dl-btn" href="data:text/csv;base64,QUNDT1VOVCBUUkFOU0FDVElPTiBISVNUT1JZCgpOYW1lOiwgSmFjcXVlcywgR3JvZW5ld2FsZApBY2NvdW50OiwgNjI0MzUyODM4MDksIFtCdXNpbmVzcyBBY2NvdW50XQpCYWxhbmNlOiwgMTAxNDMuNzUsIDYyNjMuNzYKCkRhdGUsIEFtb3VudCwgQmFsYW5jZSwgRGVzY3JpcHRpb24KMjAyNi8wNC8zMCwgLTE3NjYuMzMsIDYwNi43NSwgU0FOVEFNICAgIEoxMjY5ODg4NjgKMjAyNi8wNC8zMCwgLTEzNDkuMDAsIDIzNzMuMDgsIE1XRUIgICAgICA2NDA4MTk3NzpSNDM4NTUxNjgKMjAyNi8wNC8zMCwgMTg5OS4wMCwgMzcyMi4wOCwgQUJTQSBCQU5LIFRPIFNUUkFORCBJTlYwMDEwODA5CjIwMjYvMDQvMjgsIC0yNjAyLjM1LCAxODIzLjA4LCBQVVJDSCBGQUNFQksgKkxDM0pNTEhIMzIgIDQwMDU2OCoqKioqKjkyNTEKMjAyNi8wNC8yOCwgLTEzNzguMDYsIDQ0MjUuNDMsIFBVUkNIIEhJR0hMRVZFTCBJTkMuICAgICAgNDAwNTY4KioqKioqOTI1MQoyMDI2LzA0LzMwLCAtNjUyNy4wMCwgNTgwMy40OSwgTWZiIFN0b2NrCjIwMjYvMDQvMzAsIDMyODYuMDAsIDEyMzMwLjQ5LCBGTkIgQVBQIFRSQU5TRkVSIEZST00gU0FWSU5HIFdJVEhEUkFXQUwKMjAyNi8wNC8zMCwgLTIyMDAuMDAsIDkwNDQuNDksIEpveWNlIFBsYWF0amllCjIwMjYvMDQvMzAsIC01MTAuMjEsIDExMjQ0LjQ5LCBTQVJTRUZMTkcgMDA5NTY5OTQ1MgoyMDI2LzA0LzMwLCAtMzE4Ni4wMCwgMTE3NTQuNzAsIFZBVUxUIEFDQ09VTlQgU0FWSU5HCjIwMjYvMDQvMjksIC0xMDAuMDAsIDE0OTQwLjcwLCAjSU5UIFBZTVQgRkVFLUZBQ0VCSyAqM05ICjIwMjYvMDQvMjksIC05LjY3LCAxNTA0MC43MCwgI0lOVCBQWU1UIEZFRS1Hb29nbGUgT25lCjIwMjYvMDQvMjgsIDEwMDAuMDAsIDE1MDUwLjM3LCBESUUgVkVJTElORyBTQVNPTAoyMDI2LzA0LzI4LCAyODk5LjUxLCAxNDA1MC4zNywgTkVUQ0FTSDAyMVBBWUZBU1QgNDcxMzcwMQoyMDI2LzA0LzI0LCAtMzMwLjI3LCAxMTE1MC44NiwgUFVSQ0ggSE9TVElOR0VSKiBIT1NUSU5HRSA0MDA1NjgqKioqKio5MjUxCjIwMjYvMDQvMjUsIC0xMjc3Ni4yNSwgMTE0ODEuMTMsIERJQU5FIENPTFFVSE9VTiBTQUxBCjIwMjYvMDQvMjUsIDIwMDAwLjAwLCAyNDI1Ny4zOCwgRk5CIEFQUCBUUkFOU0ZFUiBGUk9NIFRSQU5TRkVSIEpCCjIwMjYvMDQvMjQsIC0wLjg1LCA0MjU3LjM4LCAjSU5UIFBZTVQgRkVFLUROSCpHT0RBRERZCjIwMjYvMDQvMjMsIC00MzYuMTgsIDQyNTguMjMsIFBVUkNIIFNVUEVSU1BBUiBWQUFMUEFSSyAgNDAwNTY4KioqKioqOTI1MQoyMDI2LzA0LzIxLCAtNTAwOS40MCwgNDY5NC40MSwgUFVSQ0ggRkFDRUJLICozTkg5M0tSRzMyICA0MDA1NjgqKioqKio5MjUxCjIwMjYvMDQvMjEsIC0xNjkuMDUsIDk3MDMuODEsIFBVUkNIIEhJR0hMRVZFTCBJTkMuICAgICAgNDAwNTY4KioqKioqOTI1MQoyMDI2LzA0LzIwLCAtMTg4MS42MiwgOTg3Mi44NiwgUFVSQ0ggSElHSExFVkVMIElOQy4gICAgICA0MDA1NjgqKioqKio5MjUxCjIwMjYvMDQvMjAsIC01MjguMjksIDExNzU0LjQ4LCBQVVJDSCBDT01NSVggICAgICAgICAgICAgIDQwMDU2OCoqKioqKjkyNTEKMjAyNi8wNC8yMCwgLTQyOS45OSwgMTIyODIuNzcsIFBVUkNIIEdvb2dsZSBPbmUgICAgICAgICAgNDAwNTY4KioqKioqOTI1MQoyMDI2LzA0LzIwLCAtMzUzLjY3LCAxMjcxMi43NiwgUFVSQ0ggS0FJIFRBSyBTUE9SVFMgUEFSSyA0MDA1NjgqKioqKio5MjUxCjIwMjYvMDQvMTgsIC0yNzYuMDAsIDEzMDY2LjQzLCBQVVJDSCBPWUFTVU1JIExJTUlURUQgICAgIDQwMDU2OCoqKioqKjkyNTEKMjAyNi8wNC8xOCwgLTEyNS4wNiwgMTMzNDIuNDMsIFBVUkNIIDctRWxldmVuLCBISyAoMDg4NykgNDAwNTY4KioqKioqOTI1MQoyMDI2LzA0LzE4LCAtMTgwLjAwLCAxMzQ2Ny40OSwgUFVSQ0ggQUNTQSBKSUEgICAgICAgICAgICA0MDA1NjgqKioqKio5MjUxCjIwMjYvMDQvMjAsIDIwMDkuNDYsIDEzNjQ3LjQ5LCBORVRDQVNIMDIxUEFZRkFTVCA0NjgzNjg3CjIwMjYvMDQvMTcsIC01NzYwLjg4LCAxMTYzOC4wMywgUFVSQ0ggSElHSExFVkVMIEFHRU5DWSBTVSA0MDA1NjgqKioqKio5MjUxCjIwMjYvMDQvMTYsIC01MDAuMDAsIDE3Mzk4LjkxLCBQVVJDSCBTQVNPTCBWQUFMIFBBUksgICAgIDQwMDU2OCoqKioqKjkyNTEKMjAyNi8wNC8xNiwgLTIxMC4wMCwgMTc4OTguOTEsIFBVUkNIIE9DRUFOIEJBU0tFVCBBSVJQT1IgNDAwNTY4KioqKioqOTI1MQoyMDI2LzA0LzE3LCAxMjM4LjkwLCAxODEwOC45MSwgTkVUQ0FTSDAyMVBBWUZBU1QgNDY3OTYyOQoyMDI2LzA0LzE0LCAtNDcwLjAwLCAxNjg3MC4wMSwgUFVSQ0ggWW9jbyAgICpDb21wdXRlciBEaSA0MDA1NjgqKioqKio5MjUxCjIwMjYvMDQvMTUsIDYwMC4wMCwgMTczNDAuMDEsIEZOQiBPQiBQTVQgICAgICAgICAgICBUSEUgQUNSRUFHRQoyMDI2LzA0LzE1LCAtMTAwMC4wMCwgMTY3NDAuMDEsIE1GQiBQQVlGQVNUIFBBWU9VVAoyMDI2LzA0LzE1LCAtNjAwMC4wMCwgMTc3NDAuMDEsIENSRURJVCBSRVBBWQoyMDI2LzA0LzEzLCAtMTAwMC4wMCwgMjM3NDAuMDEsIFBVUkNIIFNBU09MIFZBQUwgUEFSSyAgICAgNDAwNTY4KioqKioqOTI1MQoyMDI2LzA0LzE0LCAtMzAwMC4wMCwgMjQ3NDAuMDEsIENFTEwgQ0FTSCBXSVQwMDk2MDE2OSAwMDAwMDI3Nzk1MTI0MjkyCjIwMjYvMDQvMTQsIDExNTQ1LjE0LCAyNzc0MC4wMSwgTkVUQ0FTSDAyMVBBWUZBU1QgNDY2NDQ5NQoyMDI2LzA0LzExLCAtMzcuOTUsIDE2MTk0Ljg3LCBQVVJDSCBETkgqR09EQUREWSM0MDYxMjMwIDQwMDU2OCoqKioqKjkyNTEKMjAyNi8wNC8xMywgMzAwMC4wMCwgMTYyMzIuODIsIEZOQiBPQiBQTVQgICAgICAgICAgICBDT00gT0ZGSUNFIFNZU1RFTVMgQwoyMDI2LzA0LzEzLCAtNjAwLjAwLCAxMzIzMi44MiwgTWZiIHN0b2NrCjIwMjYvMDQvMTMsIC0yNTAwLjAwLCAxMzgzMi44MiwgTWZiIHN0b2NrCjIwMjYvMDQvMTMsIC0zMDAwLjAwLCAxNjMzMi44MiwgQ29ybmVhIE1GQgoyMDI2LzA0LzEzLCAxNzMwOC45MywgMTkzMzIuODIsIE5FVENBU0gwMjFQQVlGQVNUIDQ2NjIwNTEKMjAyNi8wNC8xMywgLTg1MC4wMCwgMjAyMy44OSwgQ1JFRElUIFJFUEFZCjIwMjYvMDQvMDksIC00MzI2LjEyLCAyODczLjg5LCBQVVJDSCBGbHlTYWZhaXIgU0IzT1oxOjUyIDQwMDU2OCoqKioqKjkyNTEKMjAyNi8wNC8xMCwgLTE1MDAuMDAsIDcyMDAuMDEsIFRSQU5TRkVSIEoKMjAyNi8wNC8xMCwgMzA2My4yMCwgODcwMC4wMSwgTkVUQ0FTSDAyMVBBWUZBU1QgNDY1NTcxMQoyMDI2LzA0LzA4LCAtNjk1LjAwLCA1NjM2LjgxLCBQVVJDSCBNT1dNRUNIIExPV05NT1dFUlMgIDQwMDU2OCoqKioqKjkyNTEKMjAyNi8wNC8wOCwgLTIwMC4wMCwgNjMzMS44MSwgUFVSQ0ggQk9CIFBBWSAgICAgICAgICAgICA0MDA1NjgqKioqKio5MjUxCjIwMjYvMDQvMDcsIC01MDMwLjgyLCA2NTMxLjgxLCBQVVJDSCBGQUNFQksgKkwyN0hUSFpHMzIgIDQwMDU2OCoqKioqKjkyNTEKMjAyNi8wNC8wNywgLTEwODYuOTQsIDExNTYyLjYzLCBQVVJDSCBTSE9QSUZZKiA1MTIwMTcyNzMgIDQwMDU2OCoqKioqKjkyNTEKMjAyNi8wNC8wNywgLTM3Ljk1LCAxMjY0OS41NywgUFVSQ0ggRE5IKkdPREFERFkjNDA1NzU1NiA0MDA1NjgqKioqKio5MjUxCjIwMjYvMDQvMDgsIDI2MDAuMDAsIDEyNjg3LjUyLCBGTkIgQVBQIFRSQU5TRkVSIEZST00gQ1JFRElUIFJFUEFZCjIwMjYvMDQvMDgsIC01MDAuMDAsIDEwMDg3LjUyLCBDRUxMIENBU0ggV0lUMDA5NjAwMjAgMDAwMDAyNzc5NTEyNDI5MgoyMDI2LzA0LzA4LCAxMzgyLjA0LCAxMDU4Ny41MiwgTkVUQ0FTSDAyMVBBWUZBU1QgNDY0NjI2NwoyMDI2LzA0LzA3LCAtODguNzQsIDkyMDUuNDgsICNTRVJWSUNFIEZFRVMKMjAyNi8wNC8wNywgLTM0OS4wMCwgOTI5NC4yMiwgI01PTlRITFkgQUNDT1VOVCBGRUUKMjAyNi8wNC8wNywgLTAuMjYsIDk2NDMuMjIsIElOVCBPTiBERUJJVCBCQUxBTkNFCjIwMjYvMDQvMDcsIC00NTAuNzcsIDk2NDMuNDgsIENPUlBHVUFSQU4KMjAyNi8wNC8wNCwgLTE0OS45OSwgMTAwOTQuMjUsIFBVUkNIIEdvb2dsZSBZb3VUdWJlUHJlbWkgNDAwNTY4KioqKioqOTI1MQoyMDI2LzA0LzA0LCAtNi4wMCwgMTAyNDQuMjQsICNGRUUgICBERUNMSU5FRCBQVVJDSCBUUkFOIDQwMDU2OCoqKioqKjkyNQoyMDI2LzA0LzA3LCAyMTIwLjIyLCAxMDI1MC4yNCwgTkVUQ0FTSDAyMVBBWUZBU1QgNDYzMzg2NQoyMDI2LzA0LzA3LCAtNTIwNS44OSwgODEzMC4wMiwgU0FSU0VGTE5HIDAwOTUyNjUwMTcKMjAyNi8wNC8wNywgMzIzOC41NywgMTMzMzUuOTEsIFBBWUZBU1QgNDY0NjI2OQoyMDI2LzA0LzA3LCAzNTAwLjAwLCAxMDA5Ny4zNCwgRk5CIEFQUCBUUkFOU0ZFUiBGUk9NIFRSQU5TRkVSIEpCCjIwMjYvMDQvMDcsIC00MjAwLjAwLCA2NTk3LjM0LCBDUkVESVQgUkVQQVkKMjAyNi8wNC8wNywgMzUwMC4wMCwgMTA3OTcuMzQsIEZOQiBBUFAgVFJBTlNGRVIgRlJPTSBUUkFOU0ZFUiBKQgoyMDI2LzA0LzA3LCAtMTAwLjAwLCA3Mjk3LjM0LCBTQ0hEIFRSRiA2Mjg5MDAxNTg0NwoyMDI2LzA0LzA3LCAyMDAwLjAwLCA3Mzk3LjM0LCBGTkIgQVBQIFRSQU5TRkVSIEZST00gVFJBTlNGRVIgSgoyMDI2LzA0LzAyLCAtODguMzMsIDUzOTcuMzQsIFBVUkNIIEtpZSBBSSAgICAgICAgICAgICAgNDAwNTY4KioqKioqOTI1MQoyMDI2LzA0LzAyLCAtODEuMDAsIDU0ODUuNjcsIFBVUkNIIEZSRVNIQlJFVyBWRU5ESSAgICAgNDAwNTY4KioqKioqOTI1MQoyMDI2LzA0LzA0LCAtMTk1LjAwLCA1NTY2LjY3LCBIT1NUSU5HCjIwMjYvMDQvMDIsIC01MC44NywgNTc2MS42NywgI0lOVCBQWU1UIEZFRS1GQUNFQksgKjZCRgoyMDI2LzA0LzAyLCAxODk5LjAwLCA1ODEyLjU0LCBBQlNBIEJBTksgVE8gU1RSQU5EIElOVjAwMTA4MAoyMDI2LzA0LzAxLCAtMjU1LjAwLCAzOTEzLjU0LCBQVVJDSCBSQUZURVJaIExBVEUgTklURSBMIDQwMDU2OCoqKioqKjkyNTEKMjAyNi8wNC8wMiwgLTQ1MDAuMDAsIDQxNjguNTQsIFRSQU5TRkVSIEoKMjAyNi8wNC8wMiwgNjUwMC4wMCwgODY2OC41NCwgRk5CIEFQUCBQQVlNRU5UIEZST00gIFJFUFRJTElBIE1BUktFVElORwoyMDI2LzA0LzAyLCAtMzUwMC4wMCwgMjE2OC41NCwgQ1JFRElUIFJFUEFZCjIwMjYvMDQvMDEsIC0xNzY2LjMzLCA1NjY4LjU0LCBTQU5UQU0gICAgSjEyNjczNDEzOQoyMDI2LzA0LzAxLCAtMjk3MC4wMCwgNzQzNC44NywgVklDVFVTICAgIDM5OTA5NTY3NSBORVRDQVNICjIwMjYvMDMvMzEsIC0xMTAwLjAwLCAxMDQwNC44NywgUFVSQ0ggU0FTT0wgVkFBTCBQQVJLICAgICA0MDA1NjgqKioqKio5MjUxCjIwMjYvMDMvMzEsIC0xMTAuMDAsIDExNTA0Ljg3LCBQVVJDSCBDT0NLIEFORCBCVUxMIEJBUiAgIDQwMDU2OCoqKioqKjkyNTEKMjAyNi8wNC8wMSwgMjAwOS40NiwgMTE2MTQuODcsIE5FVENBU0gwMjFQQVlGQVNUIDQ2MjU3MTMKMjAyNi8wNC8wMSwgMTgxNi44MiwgOTYwNS40MSwgTkVUQ0FTSDAyMVBBWUZBU1QgNDYyNDEwMQoyMDI2LzA0LzAxLCAtMTUuMDAsIDc3ODguNTksIFNNQVJULUFQIFBSRVBBSUQgICAgICBBSVJUSU1FIDA3OTUxMjQyOTIKMjAyNi8wNC8wMSwgNzAwMC4wMCwgNzgwMy41OSwgRk5CIEFQUCBUUkFOU0ZFUiBGUk9NIFRSQU5TRkVSIEoK" download="Business Cheque Account April 62435283809.csv">&#11015; Download</a></div>
+<div class="src-file"><div class="src-file-info"><span class="src-icon">💳</span><div><div class="src-label">Business Credit Card</div><div class="src-desc">FNB Commercial Platinum 422824******4000 - April 2026 &nbsp;&bull;&nbsp; <span class="src-size">2.1&nbsp;KB</span></div></div></div><a class="dl-btn" href="data:text/csv;base64,QUNDT1VOVCBUUkFOU0FDVElPTiBISVNUT1JZCgpOYW1lOiwgSmFjcXVlcywgR3JvZW5ld2FsZApBY2NvdW50OiwgNDIyODI0KioqKioqNDAwMCwgW0ZOQiBDb21tZXJjaWFsIFBsYXRpbnVtXQpCYWxhbmNlOiwgTi9BLCBOL0EKCkRhdGUsIEFtb3VudCwgQmFsYW5jZSwgRGVzY3JpcHRpb24KMjAyNi8wNC8wOSwgLTQwMDAuMDAsIDAsIENBU0ggQURWIDA1NDU4MDMxICAgICAgICAgICBWT0RTUzFXN1AxNFAKMjAyNi8wNC8wOSwgLTEwNC44MCwgMCwgI0FUTSBUUkFOU0FDVElPTiBGRUUgICAgICAgICAgICAgICAgICAgIAoyMDI2LzA0LzA5LCAtNjg4LjIxLCAwLCAxMFdFQi5JTyAgICAgICAgICAgICAgICAxMFdFQi5JTyAgICAgREUgCjIwMjYvMDQvMTAsIC0yMDUuMDAsIDAsIFBBWUZBU1QqU3F1aXJyZWwgTWVkaWEgIER1cmJhbiAgICAgICAgICAKMjAyNi8wNC8xMCwgLTk0Mi4wNywgMCwgR29vZ2xlIFdvcmtzcGFjZV9qY2VtZWRpRHVibGluICAgICAgICAgIAoyMDI2LzA0LzEzLCA4NTAuMDAsIDAsIDFTQSBDUkVESVQgUkVQQVkgICAgICAgICAgICBWT0RTOVZHWEZKNVAKMjAyNi8wNC8xMywgLTYuMDAsIDAsICNERUNMSU5FRCBBVVRIIEZFRSAgICAgICAgICAgICAgICAgICAgICAKMjAyNi8wNC8xMiwgLTM4OC43MywgMCwgQ0xBVURFLkFJIFNVQlNDUklQVElPTiAgQU5USFJPUElDLkNPTUNBIAoyMDI2LzA0LzEzLCAtMjkxLjU1LCAwLCBBTlRIUk9QSUMgICAgICAgICAgICAgICBBTlRIUk9QSUMuQ09NQ0EgCjIwMjYvMDQvMTMsIC0zODguNzMsIDAsIE9QRU5BSSAqQ0hBVEdQVCBTVUJTQ1IgIE9QRU5BSS5DT00gICBDQSAKMjAyNi8wNC8xMiwgLTUwMC4wMCwgMCwgQk9CIFBBWSAgICAgICAgICAgICAgICAgQnJ5YW5zdG9uICAgICAgIAoyMDI2LzA0LzEyLCAtOTAwLjAwLCAwLCBCT0IgUEFZICAgICAgICAgICAgICAgICBCcnlhbnN0b24gICAgICAgCjIwMjYvMDQvMTMsIC0zMTAuMDAsIDAsIEZseVNhZmFpciBTQjNPWjEtNzM2NzMgIFNvdXRoIEFmcmljYSAgICAKMjAyNi8wNC8xNSwgNjAwMC4wMCwgMCwgMVNBIENSRURJVCBSRVBBWSAgICAgICAgICAgIFZPRFMxVktGVlM1UAoyMDI2LzA0LzE1LCAtMzg4LjUyLCAwLCBBTlRIUk9QSUMgICAgICAgICAgICAgICBBTlRIUk9QSUMuQ09NQ0EgCjIwMjYvMDQvMTUsIC0zMDEuNTIsIDAsIFdXVy5KRVRQQUNHTE9CQUwuQ09NICAgIFNJTkdBUE9SRSAgICAgICAKMjAyNi8wNC8xNSwgLTUwMC4wMCwgMCwgQk9CIFBBWSAgICAgICAgICAgICAgICAgQnJ5YW5zdG9uICAgICAgIAoyMDI2LzA0LzE5LCAtODYyLjU5LCAwLCBIQVNFL01UUiBUU0lNU0hBVFNVSSBBIElIT05HIEtPTkcsICAgICAgCjIwMjYvMDQvMTksIC0xMTYuOTgsIDAsIENBU0ggVFJBTlNBQ1RJT04gRkVFICAgICAgICAgICAgICAgICAgICAKMjAyNi8wNC8yMiwgLTE1MC4wMCwgMCwgQUZSSUhPU1QuQ09NICAgICAgICAgICAgU0FORFRPTiAgICAgICAgIAoyMDI2LzA0LzIyLCAtMzIzLjQ3LCAwLCBORVRMSUZZICAgICAgICAgICAgICAgICBORVRMSUZZLkNPTSAgQ0EgCjIwMjYvMDQvMjIsIC02MDAuMDAsIDAsIFNBU09MIFZBQUwgUEFSSyAgICAgICAgIFNhc29sYnVyZyAgICAgICAKMjAyNi8wNC8yMiwgLTEuMDAsIDAsIEFGUklIT1NULkNPTSAgICAgICAgICAgIFNBTkRUT04gICAgICAgICAKMjAyNi8wNC8yMiwgLTM3OC40NywgMCwgQk9CIFBBWSAgICAgICAgICAgICAgICAgQnJ5YW5zdG9uICAgICAgIAoyMDI2LzA0LzIyLCAtNTAwLjAwLCAwLCBCT0IgUEFZICAgICAgICAgICAgICAgICBCcnlhbnN0b24gICAgICAgCjIwMjYvMDQvMjcsIC0xODEuMjksIDAsIFdXVy5NQUtFLkNPTSAgICAgICAgICAgIFdXVy5NQUtFLkNPTSBOWSAKMjAyNi8wNC8yOCwgLTIuOTAsIDAsIEFGUklIT1NULkNPTSAgICAgICAgICAgIFNBTkRUT04gICAgICAgICAKMjAyNi8wNC8yOSwgLTk3MC4zMiwgMCwgSU5URVJFU1QgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAoyMDI2LzA0LzI5LCA0OTA1LjAwLCAwLCBCQUxBTkNFIFRSQU5TRkVSUkVEICAgICAgICAgICAgICAgICAgICAgCjIwMjYvMDQvMzAsIC0yMDcuODEsIDAsIFRSRUxMTy5DT00qIEFUTEFTU0lBTiAgIEFUTEFTU0lBTi5DT01OWSAK" download="Business Credit Card April 422824-4000.csv">&#11015; Download</a></div></div>
+  </div>
+</div>
+
+<div class="rpt-footer">
+  <div><strong>Reviewtap</strong> &nbsp;&bull;&nbsp; Duel Digital &nbsp;&bull;&nbsp; Not VAT Registered</div>
+  <div>Sources:&nbsp;
+    <span class="src src-pf">PAYFAST</span> RT Payfast.csv &nbsp;&nbsp;
+    <span class="src src-peach">PEACH</span> Peachpayments.csv &nbsp;&nbsp;
+    <span class="src src-bank">BANK STMT</span> 62435283809.csv + 62267462168.csv &nbsp;&nbsp;
+    <span class="src src-meta">META</span> RT FB Ads May.csv &nbsp;&nbsp;
+    <span class="src src-temu">TEMU</span> Screenshots &nbsp;&nbsp;
+    <span class="src src-alibaba">ALIBABA</span> Receipt PDF &nbsp;&nbsp;
+    <span class="src src-bg">BOBGO INV</span> n/a &nbsp;&nbsp;
+    <span class="src src-cc">CREDIT CARD</span> 422824******4000
+  </div>
+</div>
+
+</div>
+<script>
+function toggleCard(h){
+  const b=h.nextElementSibling,c=b.classList.contains('closed');
+  if(c){b.style.maxHeight=b.scrollHeight+'px';setTimeout(()=>b.style.maxHeight='none',300);}
+  else{b.style.maxHeight=b.scrollHeight+'px';requestAnimationFrame(()=>requestAnimationFrame(()=>b.style.maxHeight='0'));setTimeout(()=>b.style.maxHeight='',300);}
+  b.classList.toggle('closed',!c);h.classList.toggle('closed',!c);
+}
+function toggleAll(open){
+  document.querySelectorAll('.card-hdr').forEach(h=>{
+    const b=h.nextElementSibling;
+    if(open&&b.classList.contains('closed'))toggleCard(h);
+    if(!open&&!b.classList.contains('closed'))toggleCard(h);
+  });
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  const f=document.querySelector('.card-hdr');
+  if(f){const b=f.nextElementSibling;b.classList.remove('closed');b.style.maxHeight='none';}
+});
+</script>
+</body></html>
