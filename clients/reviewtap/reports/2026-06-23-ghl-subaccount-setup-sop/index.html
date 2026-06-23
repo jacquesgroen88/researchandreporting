@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GHL Sub-Account Setup SOP | ReviewTap Internal</title>
+<style>
+  :root {
+    --orange: #F97316;
+    --orange-dark: #EA580C;
+    --orange-light: #FFF7ED;
+    --orange-mid: #FED7AA;
+    --dark: #111827;
+    --mid: #374151;
+    --muted: #6B7280;
+    --border: #E5E7EB;
+    --bg: #F9FAFB;
+    --white: #FFFFFF;
+    --green: #10B981;
+    --green-light: #ECFDF5;
+    --green-dark: #065F46;
+    --red: #EF4444;
+    --red-light: #FEF2F2;
+    --yellow: #F59E0B;
+    --yellow-light: #FFFBEB;
+    --blue: #3B82F6;
+    --blue-light: #EFF6FF;
+    --purple: #8B5CF6;
+    --purple-light: #F5F3FF;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--dark);
+    line-height: 1.6;
+    font-size: 15px;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: linear-gradient(135deg, #111827 0%, #1F2937 100%);
+    padding: 36px 40px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    background: rgba(249,115,22,0.12);
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: 40%;
+    width: 280px; height: 280px;
+    border-radius: 50%;
+    background: rgba(249,115,22,0.05);
+  }
+  .header-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+  .brand-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .brand-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--orange); }
+  .brand-name { font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--orange); }
+  .header h1 { font-size: 28px; font-weight: 800; color: #fff; line-height: 1.2; margin-bottom: 6px; }
+  .header h1 span { color: var(--orange); }
+  .header-sub { font-size: 14px; color: #9CA3AF; margin-bottom: 24px; }
+  .meta-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pill {
+    display: flex; align-items: center; gap: 6px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 20px; padding: 5px 12px;
+    font-size: 12px; color: #E5E7EB;
+  }
+  .pill-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--orange); flex-shrink: 0; }
+
+  /* ── LAYOUT ── */
+  .content { max-width: 960px; margin: 0 auto; padding: 32px 24px 60px; }
+  .section { margin-bottom: 36px; }
+  .section-label { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+  .section-num {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--orange); color: #fff;
+    font-size: 12px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .section-title { font-size: 16px; font-weight: 700; color: var(--dark); text-transform: uppercase; letter-spacing: 0.06em; }
+
+  .card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px;
+    margin-bottom: 12px;
+  }
+  .card-accent { border-left: 4px solid var(--orange); }
+
+  /* ── PACKAGE SELECTOR ── */
+  .package-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 8px; }
+  .pkg-card {
+    border-radius: 12px;
+    border: 2px solid var(--border);
+    padding: 18px;
+    cursor: pointer;
+    transition: all 0.15s;
+    position: relative;
+  }
+  .pkg-card:hover { border-color: var(--orange-mid); background: var(--orange-light); }
+  .pkg-card.active { border-color: var(--orange); background: var(--orange-light); }
+  .pkg-card.active .pkg-check { display: flex; }
+  .pkg-check {
+    display: none;
+    position: absolute; top: 12px; right: 12px;
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--orange); color: #fff;
+    font-size: 13px; font-weight: 800;
+    align-items: center; justify-content: center;
+  }
+  .pkg-price { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--orange-dark); margin-bottom: 4px; }
+  .pkg-name { font-size: 15px; font-weight: 800; color: var(--dark); margin-bottom: 6px; }
+  .pkg-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+  .pkg-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
+  .pkg-tag { font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 10px; background: var(--orange-mid); color: var(--orange-dark); }
+
+  /* ── FEATURE MATRIX TABLE ── */
+  .matrix-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead th {
+    background: var(--dark);
+    color: #fff;
+    padding: 10px 14px;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  thead th:first-child { text-align: left; border-radius: 8px 0 0 0; }
+  thead th:last-child { border-radius: 0 8px 0 0; }
+  tbody tr:nth-child(even) { background: #F9FAFB; }
+  tbody tr:hover { background: var(--orange-light); }
+  td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  td:first-child { font-weight: 600; color: var(--mid); }
+  td.center { text-align: center; }
+  .feat-on { color: var(--green); font-size: 18px; }
+  .feat-off { color: #D1D5DB; font-size: 16px; }
+  .feat-view { color: var(--blue); font-size: 12px; font-weight: 700; }
+  .feat-cat {
+    background: var(--dark);
+    color: #9CA3AF;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 6px 14px;
+  }
+  .feat-cat td { padding: 6px 14px; font-weight: 700; color: #9CA3AF; font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; background: #1F2937; }
+
+  /* ── STEPS ── */
+  .steps { list-style: none; }
+  .step {
+    display: flex;
+    gap: 16px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .step:last-child { border-bottom: none; }
+  .step-num {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--orange);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .step-title { font-size: 15px; font-weight: 700; color: var(--dark); margin-bottom: 5px; }
+  .step-body { font-size: 13px; color: var(--muted); line-height: 1.5; }
+  .step-path {
+    display: inline-block;
+    background: var(--dark);
+    color: #E5E7EB;
+    font-family: monospace;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 5px;
+    margin: 4px 0;
+  }
+  .step-bullets { list-style: none; margin-top: 6px; }
+  .step-bullets li {
+    font-size: 12px; color: var(--muted);
+    padding: 2px 0 2px 14px;
+    position: relative;
+  }
+  .step-bullets li::before { content: '→'; position: absolute; left: 0; color: var(--orange); }
+
+  /* ── CHECKLIST ── */
+  .checklist { list-style: none; }
+  .check-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 10px 4px;
+    border-bottom: 1px dashed var(--border);
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background 0.12s;
+  }
+  .check-item:last-child { border-bottom: none; }
+  .check-item:hover { background: #F3F4F6; }
+  .check-item input[type="checkbox"] { width: 17px; height: 17px; accent-color: var(--orange); cursor: pointer; flex-shrink: 0; margin-top: 3px; }
+  .check-item label { font-size: 13px; color: var(--mid); cursor: pointer; line-height: 1.4; }
+  .check-item input:checked + label { text-decoration: line-through; color: var(--muted); }
+  .check-sub { display: block; font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  .subsection-title {
+    font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--muted); margin: 18px 0 8px;
+  }
+  .divider { height: 1px; background: var(--border); margin: 6px 0 18px; }
+
+  /* ── ALERTS ── */
+  .alert {
+    border-radius: 10px; padding: 13px 16px; margin-bottom: 10px;
+    display: flex; gap: 11px; align-items: flex-start; font-size: 13px;
+  }
+  .alert-icon { font-size: 17px; flex-shrink: 0; }
+  .alert-content strong { display: block; font-size: 13px; font-weight: 700; margin-bottom: 2px; }
+  .alert.warn { background: var(--yellow-light); border: 1px solid #FDE68A; color: #78350F; }
+  .alert.info { background: var(--blue-light); border: 1px solid #BFDBFE; color: #1E3A8A; }
+  .alert.success { background: var(--green-light); border: 1px solid #A7F3D0; color: var(--green-dark); }
+  .alert.orange { background: var(--orange-light); border: 1px solid var(--orange-mid); color: var(--orange-dark); }
+
+  /* ── PERMISSION TABLE ── */
+  .perm-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 8px; }
+  .perm-table th { background: #F3F4F6; padding: 8px 12px; text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); border-bottom: 2px solid var(--border); }
+  .perm-table td { padding: 9px 12px; border-bottom: 1px solid var(--border); color: var(--mid); }
+  .perm-table tr:last-child td { border-bottom: none; }
+  .role-badge {
+    display: inline-block; font-size: 10px; font-weight: 700;
+    padding: 2px 8px; border-radius: 10px;
+    text-transform: uppercase; letter-spacing: 0.06em;
+  }
+  .role-admin { background: var(--orange-light); color: var(--orange-dark); }
+  .role-user { background: var(--blue-light); color: var(--blue); }
+  .role-none { background: #F3F4F6; color: var(--muted); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    .header { padding: 24px 16px 20px; }
+    .header h1 { font-size: 22px; }
+    .content { padding: 24px 14px 48px; }
+    .package-grid { grid-template-columns: 1fr; }
+    table { font-size: 11px; }
+  }
+  @media print {
+    .header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    body { background: white; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<div class="header">
+  <div class="header-inner">
+    <div class="brand-row">
+      <div class="brand-dot"></div>
+      <span class="brand-name">ReviewTap · Internal SOP</span>
+    </div>
+    <h1>GHL Sub-Account Setup<br><span>&amp; Access Control</span></h1>
+    <p class="header-sub">For Diane — run this every time a new client is onboarded into GHL</p>
+    <div class="meta-pills">
+      <div class="pill"><div class="pill-dot"></div> Diane Colquhoun · COO</div>
+      <div class="pill"><div class="pill-dot"></div> Version 1.0 · June 2026</div>
+      <div class="pill"><div class="pill-dot"></div> Applies to all new ReviewTap clients</div>
+    </div>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- ── PURPOSE ── -->
+  <div class="section">
+    <div class="alert orange">
+      <div class="alert-icon">🎯</div>
+      <div class="alert-content">
+        <strong>Why This Matters</strong>
+        When a client logs into their GHL portal, they should only see the features they paid for. A client on the Automation Suite should not see an empty CRM pipeline, unused funnels builder, or social media planner. Seeing unused features creates confusion, support calls, and makes the platform look messy. Every sub-account must be stripped down to exactly what was sold — no more, no less.
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 1: IDENTIFY PACKAGE ── -->
+  <div class="section">
+    <div class="section-label">
+      <div class="section-num">1</div>
+      <div class="section-title">Identify the Client's Package</div>
+    </div>
+    <p style="font-size:13px; color:var(--muted); margin-bottom:16px;">Check the signed proposal or invoice before touching GHL. Select the package below to highlight which features apply.</p>
+
+    <div class="package-grid">
+      <div class="pkg-card" onclick="selectPackage('nfc')">
+        <div class="pkg-check">✓</div>
+        <div class="pkg-price">Hardware Only</div>
+        <div class="pkg-name">NFC Stand + Shield</div>
+        <div class="pkg-desc">NFC devices only. No GHL sub-account required unless client wants to monitor tap activity.</div>
+        <div class="pkg-tags">
+          <span class="pkg-tag">NFC Stands</span>
+          <span class="pkg-tag">Review Shield</span>
+        </div>
+      </div>
+      <div class="pkg-card" onclick="selectPackage('automation')">
+        <div class="pkg-check">✓</div>
+        <div class="pkg-price">R2,200 / month</div>
+        <div class="pkg-name">Automation Suite</div>
+        <div class="pkg-desc">The core ReviewTap package. Review responses, pre-check-in, post-checkout review requests, NFC bot.</div>
+        <div class="pkg-tags">
+          <span class="pkg-tag">Review Responses</span>
+          <span class="pkg-tag">WhatsApp Automation</span>
+          <span class="pkg-tag">NFC Bot</span>
+        </div>
+      </div>
+      <div class="pkg-card" onclick="selectPackage('full')">
+        <div class="pkg-check">✓</div>
+        <div class="pkg-price">R3,100 / month</div>
+        <div class="pkg-name">Automation + WhatsApp AI</div>
+        <div class="pkg-desc">Full package. Everything in Automation Suite plus the WhatsApp AI Booking Assistant (R900 add-on).</div>
+        <div class="pkg-tags">
+          <span class="pkg-tag">Review Responses</span>
+          <span class="pkg-tag">WhatsApp Automation</span>
+          <span class="pkg-tag">NFC Bot</span>
+          <span class="pkg-tag">AI Booking Bot</span>
+        </div>
+      </div>
+    </div>
+
+    <p style="font-size:12px; color:var(--muted); margin-top:10px;">Future paid add-ons (not yet live): CRM/Pipeline, Funnels, Social Planner, Email Marketing — enable only when explicitly sold.</p>
+  </div>
+
+  <!-- ── SECTION 2: FEATURE ACCESS MATRIX ── -->
+  <div class="section">
+    <div class="section-label">
+      <div class="section-num">2</div>
+      <div class="section-title">GHL Feature Access Matrix</div>
+    </div>
+    <p style="font-size:13px; color:var(--muted); margin-bottom:14px;">Use this as your reference when configuring the sub-account and adding the client as a user. <strong>If it's not in the package — turn it off.</strong></p>
+
+    <div class="matrix-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="min-width:200px; text-align:left;">GHL Feature</th>
+            <th>NFC Only</th>
+            <th>Automation Suite</th>
+            <th>+ WhatsApp AI</th>
+            <th style="text-align:left; min-width:200px;">Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="feat-cat"><td colspan="5">Core Navigation</td></tr>
+          <tr>
+            <td>Dashboard</td>
+            <td class="center"><span class="feat-off">—</span></td>
+            <td class="center"><span class="feat-on">✓</span></td>
+            <td class="center"><span class="feat-on">✓</span></td>
+            <td>Shows overview stats. Keep on for paying clients.</td>
+          </tr>
+          <tr>
+            <td>Conversations (Inbox)</td>
+            <td class="center"><span class="feat-off">—</span></td>
+            <td class="center"><span class="feat-on">✓</span></td>
+            <td class="center"><span class="feat-on">✓</span></td>
+            <td>Client can see incoming WhatsApp messages from guests.</td>
+          </tr>
+          <tr>
+            <td>Contacts</td>
+            <td class="center"><span class="feat-off">—</span></td>
+            <td class="center"><span class="feat-view">VIEW</span></td>
+            <td class="center"><span class="feat-view">VIEW</span></td>
+            <td>Read-only. They can see guest contacts but not manage pipelines.</td>
+          </tr>
+          <tr>
+            <td>Reputation Management</td>
+            <td class="center"><span class="feat-on">✓</span></td>
+            <td class="center"><span class="feat-on">✓</span></td>
+            <td class="center"><span class="feat-on">✓</span></td>
+            <td>Core feature across all packages. Always on.</td>
+          </tr>
+          <tr>
+            <td>Reporting</td>
+            <td class="center"><span class="feat-off">—</span></td>
+            <td class="center"><span class="feat-on">✓</span></td>
+            <td class="center"><span class="feat-on">✓</span></td>
+            <td>Shows WhatsApp stats, review count growth.</td>
+          </tr>
+
+          <tr class="feat-cat"><td colspan="5">Features to DISABLE (not sold)</td></tr>
+          <tr>
+            <td>Opportunities / Pipeline (CRM)</td>
+            <td class="center"><span class="feat-off">—</span></td>
+            <td class="center"><span class="feat-off">—</span></td>
+            <td class="center"><span class="feat-off">—</span></td>
+            <td style="color:var(--red); font-weight:600;">OFF unless CRM package purchased.</td>
+          </tr>
+          <tr>
+            <td>Email Marketing / Campaigns</td>
+            <td class="center"><span class="feat-off">—</span></td>
+            <td class="center"><span class="feat-off">—</span></td>
+            <td class="center"><span class="feat-off">—</span></td>
+            <td style="color:var(--red); font-weight:600;">OFF unless Email Marketing add-on purchased.</td>
+          </tr>
+          <tr>
+            <td>Funnels / Sites / Websites</td>
+            <td class="center"><span class="feat-off">—</span></td>
+            <td class="center"><span class="feat-off">—</span></td>
+            <td class="center"><span class="feat-off">—</span></td>
+            <td style="color:var(--red); font-weight:600;">OFF unless Website/Funnel package purchased.</td>
+          </tr>
+          <tr>
+            <td>Social Planner</td>
+            <td class="center"><span class="feat-off">—</span></td>
+            <td class="center"><span class="feat-off">—</span></td>
+            <td class="center"><span class="feat-off">—</span></td>
+            <td style="color:var(--red); font-weight:600;">OFF unless Social Media package purchased.</td>
+          </tr>
+          <tr>
+            <td>Blogs</td>
+            <td class="center"><span class="feat-off">—</span></td>
+            <td class="center"><span class="feat-off">—</span></td>
+            <td class="center"><span class="feat-off">—</span></td>
+            <td style="color:var(--red); font-weight:600;">OFF. Not a ReviewTap offering.</td>
+          </tr>
+          <tr>
+            <td>Memberships</td>
+            <td class="center"><span class="feat-off">—</span></td>
+            <td class="center"><span class="feat-off">—</span></td>
+            <td class="center"><span class="feat-off">—</span></td>
+            <td style="color:var(--red); font-weight:600;">OFF. Not a ReviewTap offering.</td>
+          </tr>
+          <tr>
+            <td>Affiliates</td>
+            <td class="center"><span class="feat-off">—</span></td>
+            <td class="center"><span class="feat-off">—</span></td>
+            <td class="center"><span class="feat-off">—</span></td>
+            <td style="color:var(--red); font-weight:600;">OFF. Not a ReviewTap offering.</td>
+          </tr>
+          <tr>
+            <td>Payments</td>
+            <td class="center"><span class="feat-off">—</span></td>
+            <td class="center"><span class="feat-off">—</span></td>
+            <td class="center"><span class="feat-off">—</span></td>
+            <td style="color:var(--red); font-weight:600;">OFF unless specifically sold.</td>
+          </tr>
+          <tr>
+            <td>Calendars / Appointments</td>
+            <td class="center"><span class="feat-off">—</span></td>
+            <td class="center"><span class="feat-off">—</span></td>
+            <td class="center"><span class="feat-off">—</span></td>
+            <td style="color:var(--red); font-weight:600;">OFF unless booking management sold.</td>
+          </tr>
+          <tr>
+            <td>Surveys / Forms</td>
+            <td class="center"><span class="feat-off">—</span></td>
+            <td class="center"><span class="feat-off">—</span></td>
+            <td class="center"><span class="feat-off">—</span></td>
+            <td style="color:var(--red); font-weight:600;">OFF for client view. Diane uses internally.</td>
+          </tr>
+          <tr>
+            <td>Content AI</td>
+            <td class="center"><span class="feat-off">—</span></td>
+            <td class="center"><span class="feat-off">—</span></td>
+            <td class="center"><span class="feat-off">—</span></td>
+            <td style="color:var(--red); font-weight:600;">OFF. Agency-only tool.</td>
+          </tr>
+
+          <tr class="feat-cat"><td colspan="5">Internal Only (Diane sees, client does not)</td></tr>
+          <tr>
+            <td>Workflows / Automations</td>
+            <td class="center"><span class="feat-off">—</span></td>
+            <td class="center" style="color:var(--purple); font-weight:700; font-size:11px;">INTERNAL</td>
+            <td class="center" style="color:var(--purple); font-weight:700; font-size:11px;">INTERNAL</td>
+            <td>Diane builds and maintains. Client does not need to see or touch these.</td>
+          </tr>
+          <tr>
+            <td>Settings</td>
+            <td class="center"><span class="feat-off">—</span></td>
+            <td class="center" style="color:var(--purple); font-weight:700; font-size:11px;">INTERNAL</td>
+            <td class="center" style="color:var(--purple); font-weight:700; font-size:11px;">INTERNAL</td>
+            <td>Agency-managed. Client should not have access to sub-account settings.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── SECTION 3: STEP-BY-STEP SETUP ── -->
+  <div class="section">
+    <div class="section-label">
+      <div class="section-num">3</div>
+      <div class="section-title">Step-by-Step Sub-Account Setup</div>
+    </div>
+    <div class="card card-accent">
+      <ul class="steps">
+        <li class="step">
+          <div class="step-num">1</div>
+          <div>
+            <div class="step-title">Create the Sub-Account</div>
+            <div class="step-body">In your GHL Agency view, go to <span class="step-path">Accounts → Add Account</span>. Fill in:</div>
+            <ul class="step-bullets">
+              <li>Business name (exactly as on the proposal)</li>
+              <li>Business address and phone number</li>
+              <li>Timezone — confirm with Jacques if unsure (South African clients = SAST / Africa/Johannesburg)</li>
+              <li>Industry (e.g. Hospitality, Salon, Restaurant)</li>
+              <li>Upload the client's logo</li>
+            </ul>
+          </div>
+        </li>
+        <li class="step">
+          <div class="step-num">2</div>
+          <div>
+            <div class="step-title">Set Business Hours</div>
+            <div class="step-body">Go to <span class="step-path">Settings → Business Profile → Business Hours</span>. Set the operating days and hours based on what the client told us on the onboarding call. This affects automation scheduling and calendar defaults.</div>
+          </div>
+        </li>
+        <li class="step">
+          <div class="step-num">3</div>
+          <div>
+            <div class="step-title">Disable Unused Features (Critical)</div>
+            <div class="step-body">Go to <span class="step-path">Settings → Company Profile → Features / Navigation</span>. Turn OFF every feature not in the client's package using the matrix in Section 2 above. Typical toggle-offs for Automation Suite clients:</div>
+            <ul class="step-bullets">
+              <li>Opportunities — OFF</li>
+              <li>Email Marketing — OFF</li>
+              <li>Sites (Funnels, Websites, Blogs) — OFF</li>
+              <li>Social Planner — OFF</li>
+              <li>Calendars — OFF</li>
+              <li>Memberships — OFF</li>
+              <li>Affiliates — OFF</li>
+              <li>Payments — OFF</li>
+              <li>Surveys — OFF</li>
+              <li>Content AI — OFF</li>
+            </ul>
+          </div>
+        </li>
+        <li class="step">
+          <div class="step-num">4</div>
+          <div>
+            <div class="step-title">Add the Client as a User</div>
+            <div class="step-body">Go to <span class="step-path">Settings → My Staff → Add Employee</span>. Enter the client's name and email address. Set the correct role (see Section 4). The client will receive an email invitation to log in.</div>
+            <ul class="step-bullets">
+              <li>Role: <strong>User</strong> (NOT Admin — Admin gives full settings access)</li>
+              <li>Permissions: restrict to features in their package only</li>
+              <li>Do NOT give them access to Automations, Settings, or Billing</li>
+            </ul>
+          </div>
+        </li>
+        <li class="step">
+          <div class="step-num">5</div>
+          <div>
+            <div class="step-title">Connect WhatsApp Business Number</div>
+            <div class="step-body">Go to <span class="step-path">Settings → Phone Numbers → Add Number</span>. Use the number Giorgio sourced for this client. Complete the OTP verification when prompted. This is our number — the client does not provide this.</div>
+          </div>
+        </li>
+        <li class="step">
+          <div class="step-num">6</div>
+          <div>
+            <div class="step-title">Connect Google Business Profile</div>
+            <div class="step-body">Go to <span class="step-path">Reputation → Settings → Connect Google</span>. You will need the client to have accepted the Manager invite to their GBP first (Giorgio gets this during the onboarding call). Once accepted, select their listing from the dropdown.</div>
+          </div>
+        </li>
+        <li class="step">
+          <div class="step-num">7</div>
+          <div>
+            <div class="step-title">Build Workflows (Internal — Client Does Not See)</div>
+            <div class="step-body">Build all automation workflows based on the package sold. Do not give the client edit or view access to Workflows. These run silently in the background.</div>
+            <ul class="step-bullets">
+              <li>Automation Suite: pre-check-in WhatsApp, post-checkout review request, NFC bot (happy + unhappy paths), review auto-response</li>
+              <li>+ WhatsApp AI: booking inquiry bot + lead handoff notification</li>
+            </ul>
+          </div>
+        </li>
+        <li class="step">
+          <div class="step-num">8</div>
+          <div>
+            <div class="step-title">Verify the Client's Login View Before Handover</div>
+            <div class="step-body">Log in as the client (or use the preview feature) to confirm they only see what's in their package. Run through this checklist mentally:</div>
+            <ul class="step-bullets">
+              <li>No empty Opportunities/Pipeline tab visible</li>
+              <li>No Funnels, Social Planner, or Email Marketing in the sidebar</li>
+              <li>Conversations tab shows and works</li>
+              <li>Reputation tab is connected to their GBP</li>
+              <li>Dashboard loads with relevant stats</li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ── SECTION 4: CLIENT USER ROLE ── -->
+  <div class="section">
+    <div class="section-label">
+      <div class="section-num">4</div>
+      <div class="section-title">Client User Role — What They Can and Cannot Do</div>
+    </div>
+
+    <div class="alert warn">
+      <div class="alert-icon">⚠️</div>
+      <div class="alert-content">
+        <strong>Never add a client as Admin</strong>
+        Admin role gives access to sub-account settings, billing, staff management, and integrations. Clients should always be added as a User with restricted permissions. If they need something changed, they contact Giorgio.
+      </div>
+    </div>
+
+    <div class="card">
+      <table class="perm-table">
+        <thead>
+          <tr>
+            <th>Permission Area</th>
+            <th>Client Role</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>View Conversations (inbox)</td>
+            <td><span class="role-badge role-user">View + Reply</span></td>
+            <td>They can see and reply to guest WhatsApp messages</td>
+          </tr>
+          <tr>
+            <td>View Contacts</td>
+            <td><span class="role-badge role-user">View Only</span></td>
+            <td>See the guest contact list, but cannot bulk-delete or export</td>
+          </tr>
+          <tr>
+            <td>Reputation (reviews)</td>
+            <td><span class="role-badge role-user">View + Reply</span></td>
+            <td>Can see review dashboard; auto-responses handle replies automatically</td>
+          </tr>
+          <tr>
+            <td>Reporting / Dashboard</td>
+            <td><span class="role-badge role-user">View Only</span></td>
+            <td>Can see stats but cannot edit reports</td>
+          </tr>
+          <tr>
+            <td>Workflows / Automations</td>
+            <td><span class="role-badge role-none">No Access</span></td>
+            <td>Hidden from client entirely — Diane manages these</td>
+          </tr>
+          <tr>
+            <td>Settings</td>
+            <td><span class="role-badge role-none">No Access</span></td>
+            <td>All settings changes go through Giorgio/Diane</td>
+          </tr>
+          <tr>
+            <td>Opportunities / CRM</td>
+            <td><span class="role-badge role-none">No Access</span></td>
+            <td>Hidden unless CRM package purchased</td>
+          </tr>
+          <tr>
+            <td>Billing</td>
+            <td><span class="role-badge role-none">No Access</span></td>
+            <td>Never visible to client</td>
+          </tr>
+          <tr>
+            <td>Staff Management</td>
+            <td><span class="role-badge role-none">No Access</span></td>
+            <td>Never visible to client</td>
+          </tr>
+          <tr>
+            <td>Phone Numbers / Integrations</td>
+            <td><span class="role-badge role-none">No Access</span></td>
+            <td>These are our infrastructure — client-facing only</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── SECTION 5: SETUP CHECKLIST ── -->
+  <div class="section">
+    <div class="section-label">
+      <div class="section-num">5</div>
+      <div class="section-title">Setup Checklist — Tick Off Per Client</div>
+    </div>
+
+    <div class="card">
+      <div class="subsection-title">Before the Onboarding Call</div>
+      <ul class="checklist">
+        <li class="check-item" onclick="toggle(this)">
+          <input type="checkbox">
+          <label>Read the proposal — confirm which package was sold and note any add-ons<span class="check-sub">Determines which features to enable/disable (use Section 2 matrix)</span></label>
+        </li>
+        <li class="check-item" onclick="toggle(this)">
+          <input type="checkbox">
+          <label>Create the GHL sub-account with correct business name, timezone, industry</label>
+        </li>
+        <li class="check-item" onclick="toggle(this)">
+          <input type="checkbox">
+          <label>Upload the client's logo<span class="check-sub">Get from Giorgio if not yet received — confirm on the call if needed</span></label>
+        </li>
+        <li class="check-item" onclick="toggle(this)">
+          <input type="checkbox">
+          <label>Set business hours (confirm operating days/times from the proposal or with Giorgio)</label>
+        </li>
+      </ul>
+
+      <div class="divider"></div>
+      <div class="subsection-title">Feature Access — Disable Unused Modules</div>
+      <ul class="checklist">
+        <li class="check-item" onclick="toggle(this)">
+          <input type="checkbox">
+          <label>Opportunities / Pipeline — OFF<span class="check-sub">Not sold unless CRM package confirmed</span></label>
+        </li>
+        <li class="check-item" onclick="toggle(this)">
+          <input type="checkbox">
+          <label>Email Marketing / Campaigns — OFF</label>
+        </li>
+        <li class="check-item" onclick="toggle(this)">
+          <input type="checkbox">
+          <label>Sites (Funnels, Websites, Blogs) — OFF</label>
+        </li>
+        <li class="check-item" onclick="toggle(this)">
+          <input type="checkbox">
+          <label>Social Planner — OFF</label>
+        </li>
+        <li class="check-item" onclick="toggle(this)">
+          <input type="checkbox">
+          <label>Calendars / Appointments — OFF</label>
+        </li>
+        <li class="check-item" onclick="toggle(this)">
+          <input type="checkbox">
+          <label>Memberships — OFF</label>
+        </li>
+        <li class="check-item" onclick="toggle(this)">
+          <input type="checkbox">
+          <label>Affiliates — OFF</label>
+        </li>
+        <li class="check-item" onclick="toggle(this)">
+          <input type="checkbox">
+          <label>Payments — OFF</label>
+        </li>
+        <li class="check-item" onclick="toggle(this)">
+          <input type="checkbox">
+          <label>Surveys / Forms — OFF for client view</label>
+        </li>
+        <li class="check-item" onclick="toggle(this)">
+          <input type="checkbox">
+          <label>Content AI — OFF</label>
+        </li>
+      </ul>
+
+      <div class="divider"></div>
+      <div class="subsection-title">After the Onboarding Call</div>
+      <ul class="checklist">
+        <li class="check-item" onclick="toggle(this)">
+          <input type="checkbox">
+          <label>Connect WhatsApp Business number (OTP from number Giorgio sourced)<span class="check-sub">Our number, not the client's — use Settings → Phone Numbers</span></label>
+        </li>
+        <li class="check-item" onclick="toggle(this)">
+          <input type="checkbox">
+          <label>Connect Google Business Profile to Reputation Management<span class="check-sub">Client must have accepted GBP Manager invite first</span></label>
+        </li>
+        <li class="check-item" onclick="toggle(this)">
+          <input type="checkbox">
+          <label>Add client as a User (not Admin) — send them the login invite</label>
+        </li>
+        <li class="check-item" onclick="toggle(this)">
+          <input type="checkbox">
+          <label>Build all workflows for their package<span class="check-sub">Automation Suite: pre-check-in, post-checkout, NFC bot, review responses</span></label>
+        </li>
+        <li class="check-item" onclick="toggle(this)">
+          <input type="checkbox">
+          <label>If WhatsApp AI sold: build the booking inquiry bot + lead handoff workflow</label>
+        </li>
+        <li class="check-item" onclick="toggle(this)">
+          <input type="checkbox">
+          <label>Submit all WhatsApp message templates for Meta approval<span class="check-sub">Allow 24-72 hours — submit as early as possible</span></label>
+        </li>
+
+      </ul>
+
+      <div class="divider"></div>
+      <div class="subsection-title">Before Go-Live Sign-Off</div>
+      <ul class="checklist">
+        <li class="check-item" onclick="toggle(this)">
+          <input type="checkbox">
+          <label>Log in as the client and verify they see ONLY the features in their package</label>
+        </li>
+        <li class="check-item" onclick="toggle(this)">
+          <input type="checkbox">
+          <label>Confirm no empty/unused tabs are visible in their sidebar</label>
+        </li>
+        <li class="check-item" onclick="toggle(this)">
+          <input type="checkbox">
+          <label>Test end-to-end: trigger a workflow and confirm WhatsApp message delivers</label>
+        </li>
+        <li class="check-item" onclick="toggle(this)">
+          <input type="checkbox">
+          <label>All WhatsApp templates approved by Meta</label>
+        </li>
+        <li class="check-item" onclick="toggle(this)">
+          <input type="checkbox">
+          <label>Notify Giorgio: sub-account is live and ready</label>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ── SECTION 6: ADDING FUTURE ADD-ONS ── -->
+  <div class="section">
+    <div class="section-label">
+      <div class="section-num">6</div>
+      <div class="section-title">Enabling Features When a Client Upgrades</div>
+    </div>
+    <div class="alert info">
+      <div class="alert-icon">ℹ️</div>
+      <div class="alert-content">
+        <strong>Only enable a feature when Jacques or Giorgio confirms the client has paid for it</strong>
+        Never enable features proactively or as a trial without explicit confirmation. Upgrades must be invoiced first.
+      </div>
+    </div>
+    <div class="card">
+      <table class="perm-table">
+        <thead>
+          <tr>
+            <th>If Client Upgrades to...</th>
+            <th>Enable in GHL</th>
+            <th>Also required</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>CRM / Pipeline Management</td>
+            <td>Turn ON: Opportunities</td>
+            <td>Build their pipeline stages; set up contact tags</td>
+          </tr>
+          <tr>
+            <td>Email Marketing</td>
+            <td>Turn ON: Email Marketing / Campaigns</td>
+            <td>Verify sending domain (SPF/DKIM); build template library</td>
+          </tr>
+          <tr>
+            <td>Funnels / Landing Pages</td>
+            <td>Turn ON: Sites (Funnels, Forms)</td>
+            <td>Connect their domain; set up hosting subdomain</td>
+          </tr>
+          <tr>
+            <td>Social Media Management</td>
+            <td>Turn ON: Social Planner</td>
+            <td>Connect their FB Page, IG, GMB profiles</td>
+          </tr>
+          <tr>
+            <td>Booking / Appointment System</td>
+            <td>Turn ON: Calendars</td>
+            <td>Set up services, staff, availability, confirmation workflows</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function toggle(item) {
+    const cb = item.querySelector('input[type="checkbox"]');
+    if (event.target !== cb) cb.checked = !cb.checked;
+  }
+
+  function selectPackage(pkg) {
+    document.querySelectorAll('.pkg-card').forEach(c => c.classList.remove('active'));
+    event.currentTarget.classList.add('active');
+  }
+</script>
+</body>
+</html>
