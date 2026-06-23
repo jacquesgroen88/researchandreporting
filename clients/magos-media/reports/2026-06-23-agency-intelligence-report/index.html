@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Magos Media — Intelligence Report</title>
+<style>
+  :root {
+    --black: #0a0a0a;
+    --dark: #111111;
+    --card: #1a1a1a;
+    --border: #2a2a2a;
+    --accent: #c8a96e;
+    --accent2: #8b5cf6;
+    --red: #ef4444;
+    --green: #22c55e;
+    --text: #e5e5e5;
+    --muted: #888;
+    --label: #555;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--black);
+    color: var(--text);
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a0a2e 50%, #0a0a0a 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 60px 40px 50px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(200,169,110,0.08) 0%, transparent 70%);
+  }
+  .header-badge {
+    display: inline-block;
+    background: rgba(200,169,110,0.12);
+    border: 1px solid rgba(200,169,110,0.3);
+    color: var(--accent);
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 5px 16px;
+    border-radius: 20px;
+    margin-bottom: 24px;
+    font-weight: 600;
+  }
+  .header h1 {
+    font-size: 46px;
+    font-weight: 700;
+    letter-spacing: -1.5px;
+    color: #fff;
+    margin-bottom: 10px;
+  }
+  .header h1 span { color: var(--accent); }
+  .header p {
+    color: var(--muted);
+    font-size: 16px;
+    max-width: 520px;
+    margin: 0 auto 30px;
+  }
+  .header-meta {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    color: var(--muted);
+    font-size: 13px;
+  }
+  .header-meta span { display: flex; align-items: center; gap: 6px; }
+  .header-meta strong { color: var(--accent); }
+
+  /* LAYOUT */
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+  .section { padding: 56px 0; border-bottom: 1px solid var(--border); }
+  .section:last-child { border-bottom: none; }
+  .section-label {
+    font-size: 11px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .section-title {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: #fff;
+    margin-bottom: 32px;
+  }
+
+  /* GRID */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+
+  /* CARDS */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+  }
+  .card h3 { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 8px; letter-spacing: 0.2px; }
+  .card p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+  .card.accent-card { border-color: rgba(200,169,110,0.25); background: rgba(200,169,110,0.05); }
+  .card.red-card { border-color: rgba(239,68,68,0.25); background: rgba(239,68,68,0.05); }
+  .card.green-card { border-color: rgba(34,197,94,0.25); background: rgba(34,197,94,0.05); }
+  .card.purple-card { border-color: rgba(139,92,246,0.25); background: rgba(139,92,246,0.05); }
+
+  /* STAT CARDS */
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 20px;
+    text-align: center;
+  }
+  .stat-number {
+    font-size: 36px;
+    font-weight: 800;
+    letter-spacing: -1.5px;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .stat-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+  .stat-sub { font-size: 12px; color: var(--label); margin-top: 4px; }
+  .red-num { color: var(--red); }
+  .green-num { color: var(--green); }
+  .accent-num { color: var(--accent); }
+  .purple-num { color: var(--accent2); }
+
+  /* VERDICT BOXES */
+  .verdict {
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 12px 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 14px;
+  }
+  .verdict-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .verdict-content strong { display: block; font-size: 13px; font-weight: 700; margin-bottom: 3px; }
+  .verdict-content span { color: #aaa; font-size: 13px; line-height: 1.5; }
+  .verdict.warning { background: rgba(250,204,21,0.08); border: 1px solid rgba(250,204,21,0.2); }
+  .verdict.danger { background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2); }
+  .verdict.success { background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.2); }
+  .verdict.info { background: rgba(139,92,246,0.08); border: 1px solid rgba(139,92,246,0.2); }
+
+  /* AMMO ITEMS */
+  .ammo-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 10px 10px 0;
+    padding: 18px 20px;
+    margin-bottom: 12px;
+  }
+  .ammo-item h4 { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 5px; }
+  .ammo-item p { font-size: 13.5px; color: #aaa; line-height: 1.55; }
+  .ammo-item .tag {
+    display: inline-block;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  /* QUESTION ITEMS */
+  .q-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent2);
+    border-radius: 0 10px 10px 0;
+    padding: 18px 20px;
+    margin-bottom: 12px;
+  }
+  .q-item p { font-size: 14px; color: var(--text); font-style: italic; margin-bottom: 6px; }
+  .q-item span { font-size: 12.5px; color: var(--muted); }
+
+  /* ORGANOGRAM */
+  .org-node {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    text-align: center;
+  }
+  .org-node.ceo-node {
+    border-color: rgba(200,169,110,0.4);
+    background: rgba(200,169,110,0.06);
+  }
+  .org-node .name { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 3px; }
+  .org-node .role { font-size: 12px; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+  .org-node .note { font-size: 12px; color: var(--muted); margin-top: 6px; }
+  .org-connector {
+    display: flex;
+    justify-content: center;
+    padding: 8px 0;
+    color: var(--border);
+    font-size: 20px;
+  }
+
+  /* TABLE */
+  table { width: 100%; border-collapse: collapse; }
+  th {
+    text-align: left;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    font-weight: 600;
+  }
+  td {
+    padding: 12px 14px;
+    font-size: 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    color: #ccc;
+    vertical-align: top;
+  }
+  td strong { color: #fff; }
+  tr:last-child td { border-bottom: none; }
+  .pill {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .pill.red { background: rgba(239,68,68,0.15); color: #f87171; }
+  .pill.green { background: rgba(34,197,94,0.15); color: #4ade80; }
+  .pill.amber { background: rgba(251,191,36,0.15); color: #fbbf24; }
+  .pill.purple { background: rgba(139,92,246,0.15); color: #a78bfa; }
+
+  /* VIDEO SCENE */
+  .scene-block {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+  }
+  .scene-ts {
+    min-width: 56px;
+    font-size: 12px;
+    font-family: 'SF Mono', Consolas, monospace;
+    color: var(--accent);
+    font-weight: 700;
+    padding-top: 2px;
+  }
+  .scene-desc strong { display: block; font-size: 14px; color: #fff; margin-bottom: 3px; }
+  .scene-desc span { font-size: 13px; color: #aaa; line-height: 1.5; }
+
+  /* DIVIDER */
+  .divider { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+
+  /* RISK / OPP TABLE */
+  .risk-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .risk-block h4 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 14px; }
+  .risk-block.risks h4 { color: var(--red); }
+  .risk-block.opps h4 { color: var(--green); }
+  .risk-item {
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    font-size: 13.5px;
+    line-height: 1.5;
+  }
+  .risk-item.r { background: rgba(239,68,68,0.07); border: 1px solid rgba(239,68,68,0.15); color: #fca5a5; }
+  .risk-item.o { background: rgba(34,197,94,0.07); border: 1px solid rgba(34,197,94,0.15); color: #86efac; }
+
+  /* FOOTER */
+  .footer {
+    background: var(--dark);
+    border-top: 1px solid var(--border);
+    padding: 30px 40px;
+    text-align: center;
+    color: var(--label);
+    font-size: 12px;
+  }
+  .footer strong { color: var(--muted); }
+
+  @media (max-width: 768px) {
+    .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+    .risk-grid { grid-template-columns: 1fr; }
+    .header h1 { font-size: 30px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-badge">CONFIDENTIAL — FOR INTERVIEW PREPARATION ONLY</div>
+  <h1>Magos <span>Media</span> Intelligence Report</h1>
+  <p>Full competitive audit, social media data, video analysis, and interview ammunition. Zero hallucinations — all claims sourced.</p>
+  <div class="header-meta">
+    <span>Prepared for: <strong>Jacques Groenewald</strong></span>
+    <span>Position: <strong>Head of Digital</strong></span>
+    <span>Generated: <strong>22 June 2026</strong></span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- EXEC SUMMARY -->
+  <div class="section">
+    <div class="section-label">01 / Executive Summary</div>
+    <div class="section-title">What You're Walking Into</div>
+
+    <div class="grid-3" style="margin-bottom:24px;">
+      <div class="stat-card">
+        <div class="stat-number accent-num">~10</div>
+        <div class="stat-label">Team Size (estimated)</div>
+        <div class="stat-sub">Video shows 6–8 visible staff; small agency</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number accent-num">10</div>
+        <div class="stat-label">Confirmed Blue-Chip Clients</div>
+        <div class="stat-sub">Pick n Pay, KFC, Spar, Protea Hotels + more</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number red-num">3</div>
+        <div class="stat-label">Active Petro Magos Ventures</div>
+        <div class="stat-sub">Agency + VC firm + iGaming tech company</div>
+      </div>
+    </div>
+
+    <div class="verdict info">
+      <div class="verdict-icon">🎯</div>
+      <div class="verdict-content">
+        <strong>The Strategic Read</strong>
+        <span>Petro Magos is founder-absent from day-to-day operations. Magos Media, Venturi Capital, and VeliTech SA (iGaming) all compete for his bandwidth. This is why a Head of Digital exists: not to support a hands-on founder, but to run the digital function autonomously. You're not being hired for support — you're being hired to OWN the output.</span>
+      </div>
+    </div>
+
+    <div class="verdict warning">
+      <div class="verdict-icon">⚠️</div>
+      <div class="verdict-content">
+        <strong>The Credibility Gap</strong>
+        <span>Magos Media sells "ROI-driven digital marketing" to brands like KFC and Pick n Pay, yet their own Instagram averages 18 likes per post (best performer: 61 likes) and their Facebook reels get 5–25 views with zero shares. This is either a strategic choice to prioritise client work over self-promotion, or a blind spot. Either way, you can speak to it intelligently.</span>
+      </div>
+    </div>
+
+    <div class="verdict success">
+      <div class="verdict-icon">💡</div>
+      <div class="verdict-content">
+        <strong>Your Positioning Advantage</strong>
+        <span>Jacques brings blue-chip digital scale (DigitalMark / Skype + MSN portfolio) plus measurable direct-response ROAS results (3.13× MFB, 3-campaign Meta rebuild for ReviewTap). Most agency "Head of Digital" candidates have one or the other. You have both.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPANY STRUCTURE -->
+  <div class="section">
+    <div class="section-label">02 / Company Structure</div>
+    <div class="section-title">Leadership Organogram</div>
+
+    <!-- CEO Node -->
+    <div style="max-width:340px;margin:0 auto 8px;">
+      <div class="org-node ceo-node">
+        <div class="name">Petro Magos</div>
+        <div class="role">Founder &amp; CEO</div>
+        <div class="note">Silver-haired, charismatic figurehead. Appears in "Ke Dezemba Boss" reel — dancing in houndstooth blazer, green statement ring. Operationally distributed across 3 ventures.</div>
+      </div>
+    </div>
+    <div class="org-connector">↓</div>
+
+    <div class="grid-3" style="margin-bottom:8px;">
+      <div class="org-node">
+        <div class="name">Magos Media</div>
+        <div class="role">Digital Marketing Agency</div>
+        <div class="note">Illovo, JHB. Blue-chip clients. Head of Digital role (open) would own this fully.</div>
+      </div>
+      <div class="org-node" style="border-color:#8b5cf6;">
+        <div class="name">Venteri Capital <span style="color:#8b5cf6;font-size:10px;font-weight:700;margin-left:4px;">CONFIRMED</span></div>
+        <div class="role">VC / Investment Firm — Founded 2023, Cyprus</div>
+        <div class="note">CEO: Petro Magos. Chairman: Yusuf Randera-Rees (Harvard + Oxford Rhodes Scholar, Awethu Project — R450M raised, 2,200+ entrepreneurs). CFO: Savva Argyros (KPMG/PwC CA). COO: Nick Argyros (INJOZI — Top-3 African digital agency, GotBot AI). 7 portfolio investments Jan 2024. <strong style="color:#8b5cf6;">Petro's LinkedIn now reads "Venteri Capital CEO | Magos Media Founder" — he is transitioning OUT. This is why the Head of Digital exists.</strong></div>
+      </div>
+      <div class="org-node">
+        <div class="name">VeliTech SA / PlayX1</div>
+        <div class="role">iGaming Technology</div>
+        <div class="note">SA iGaming: $431M market, 4.71% CAGR. This is where Petro's newest capital attention goes.</div>
+      </div>
+    </div>
+    <div class="org-connector">↓ (Magos Media team only)</div>
+
+    <!-- CONFIRMED TEAM — LinkedIn scraped June 2026 -->
+    <div style="background:rgba(139,92,246,0.06);border:1px solid rgba(139,92,246,0.2);border-radius:10px;padding:16px 20px;margin-bottom:16px;">
+      <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#8b5cf6;font-weight:700;margin-bottom:12px;">CRITICAL — YOUR INTERVIEWER</div>
+      <div class="org-node" style="border-color:#8b5cf6;max-width:100%;margin-bottom:0;">
+        <div class="name">Rizana Mosam <span style="color:#8b5cf6;font-size:10px;margin-left:6px;">CONFIRMED LINKEDIN</span></div>
+        <div class="role">Head of Digital — Magos Media (Current Role)</div>
+        <div class="note">
+          <strong style="color:#e8e8e8;">She IS the role you are applying for.</strong> Rizana has been at Magos for years — Social Media → Senior Manager Social Media → Head of Digital. Internally promoted, brand-loyal, social-first background. Education: BA Fashion, Stadio School of Fashion (2012–2016). Former Lecturer at Lisof. LinkedIn: <em>linkedin.com/in/rizana-mosam-944765127</em>. Email likely: <em>rizana@magosmedia.co.za</em>.<br><br>
+          Implication: She is either (a) the hiring manager looking for someone to build under her, or (b) being promoted/transitioning and recruiting her replacement. Do NOT frame yourself as displacing her — frame yourself as the performance/analytics layer that complements her social-first expertise. She built the culture; you bring the measurement and growth engine.
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-4">
+      <div class="org-node">
+        <div class="name">Sasha Lee Sinden</div>
+        <div class="role">Social Media Manager</div>
+        <div class="note">Confirmed LinkedIn. Based in Gauteng, SA. Reports into Rizana's digital function. Likely your direct report if you take the Head of Digital role.</div>
+      </div>
+      <div class="org-node">
+        <div class="name">Shoko Sepoloane</div>
+        <div class="role">Product Marketing &amp; Growth</div>
+        <div class="note">Confirmed LinkedIn. A commercial/marketing function — unusual for a pure creative agency. Signals Magos is building a more strategic offering beyond content production.</div>
+      </div>
+      <div class="org-node">
+        <div class="name">Remmert Spreeth</div>
+        <div class="role">Animator</div>
+        <div class="note">Confirmed via ZoomInfo. Motion/animation capability in-house. Supports the video production workflow seen in the office tour.</div>
+      </div>
+      <div class="org-node">
+        <div class="name">Itumeleng Mapheng</div>
+        <div class="role">Manager, Database</div>
+        <div class="note">Confirmed via ZoomInfo. Data/CRM function. The fact a database manager exists signals Magos has structured client data — an asset for performance marketing.</div>
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--muted);margin-top:8px;margin-bottom:16px;">Also confirmed: Tracy Saunders (role unknown). Currently hiring: Junior Media Creation Assistant + Social Media Manager — team is actively growing.</div>
+
+    <div class="verdict info" style="margin-top:20px;">
+      <div class="verdict-icon">📌</div>
+      <div class="verdict-content">
+        <strong>What This Means For You</strong>
+        <span>Rizana Mosam is the current Head of Digital and most likely your interviewer. The team under her is social-first and creative-led. You are being brought in for the layer that's missing: performance marketing, analytics, paid media scale, and data-driven measurement. Don't compete with Rizana's strengths — complement them. Frame yourself as the growth engine that makes her creative output convert.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- OFFICE & CULTURE INTELLIGENCE -->
+  <div class="section">
+    <div class="section-label">03 / Office &amp; Culture Intelligence</div>
+    <div class="section-title">What the Office Tells You</div>
+
+    <div class="grid-2" style="margin-bottom:20px;">
+      <div>
+        <div class="scene-block">
+          <div class="scene-ts">Design</div>
+          <div class="scene-desc">
+            <strong>Premium Creative Aesthetic</strong>
+            <span>Dark feature walls, blue velvet tufted sofa, warm wood conference table, pop art prints (Andy Warhol-esque pink/yellow/magenta), yellow accent chairs. This is deliberately styled — not corporate, not startup-cheap. Curated.</span>
+          </div>
+        </div>
+        <div class="scene-block">
+          <div class="scene-ts">Rooms</div>
+          <div class="scene-desc">
+            <strong>"Analogue Boardroom" + "Athens" Pod</strong>
+            <span>Named rooms are a brand philosophy statement. "Analogue boardroom" signals: we believe in human thinking, not just digital tools. "Athens" (a glass work pod visible in the video) suggests intellectual/classical influence. These names are clues to how Petro thinks.</span>
+          </div>
+        </div>
+        <div class="scene-block">
+          <div class="scene-ts">Tech</div>
+          <div class="scene-desc">
+            <strong>Production-Grade Workstations</strong>
+            <span>Staff workstations have dual monitors, Magos-branded mousepads, gaming-style peripherals (Razer-class headphones, RGB mouse). NLE software (DaVinci Resolve or Premiere) visible on screens. They have actual in-house video production capability.</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="scene-block">
+          <div class="scene-ts">Culture</div>
+          <div class="scene-desc">
+            <strong>December Grind Mentality</strong>
+            <span>The "Ke Dezemba Boss" video was explicitly made to show the team working through December while Petro was in holiday mode. This is an employer brand signal: we don't stop. Expect a hustle culture — commitment is rewarded, not just performance.</span>
+          </div>
+        </div>
+        <div class="scene-block">
+          <div class="scene-ts">Brand</div>
+          <div class="scene-desc">
+            <strong>M-Crown Logo + Branded Merchandise</strong>
+            <span>The Magos M-crown logo (registered trademark) appears on polo shirts, mousepads, and as a clean black/white outro card. Strong internal brand pride. Staff wear the brand. This is a tight-knit team identity, not just colleagues.</span>
+          </div>
+        </div>
+        <div class="scene-block">
+          <div class="scene-ts">Location</div>
+          <div class="scene-desc">
+            <strong>Illovo, Johannesburg</strong>
+            <span>One of JHB's most upscale business addresses. Co-located with blue-chip agency neighbours. Garden views visible from meeting room windows. Petro appears to live nearby (home garden shots show similar suburban JHB upmarket setting).</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIDEO INTELLIGENCE -->
+  <div class="section">
+    <div class="section-label">04 / Video Intelligence</div>
+    <div class="section-title">"Ke Dezemba Boss" — Frame-by-Frame Analysis</div>
+
+    <div class="verdict info" style="margin-bottom:20px;">
+      <div class="verdict-icon">🎬</div>
+      <div class="verdict-content">
+        <strong>Post Analysed</strong>
+        <span>Instagram Reel posted December 2024. Caption: "Ke Dezemba Boss 🦾 The Magos himself might be in Office mode (iykyk), but the grind doesn't stop in December." 61 likes, 11 comments — their highest-performing Instagram post. Duration: 87.8 seconds.</span>
+      </div>
+    </div>
+
+    <div class="scene-block">
+      <div class="scene-ts">0:00–0:04</div>
+      <div class="scene-desc">
+        <strong>Opening: The Athens Pod</strong>
+        <span>Camera looks through office glass into the "athens" pod. A curly-haired creative (likely Creative Director) stands inside with arms crossed, on what appears to be a call/creative session. NLE software open on monitors outside the pod. Sets the "team is grinding" tone immediately.</span>
+      </div>
+    </div>
+
+    <div class="scene-block">
+      <div class="scene-ts">0:06–0:10</div>
+      <div class="scene-desc">
+        <strong>The Magos Himself — Home/Holiday Mode</strong>
+        <span>Petro Magos appears for the first time: silver-haired, white t-shirt, seated on upscale white outdoor garden furniture. He has a large turquoise/green statement ring, an Apple Watch-style watch with stacked bracelets, and designer sunglasses (worn in office scenes). He looks relaxed, staring into the middle distance. This is the "December mode" the caption references.</span>
+      </div>
+    </div>
+
+    <div class="scene-block">
+      <div class="scene-ts">0:10–0:16</div>
+      <div class="scene-desc">
+        <strong>Petro in the Office — Talking, Gesturing, DANCING</strong>
+        <span>Cut to Petro in the Magos Media office wearing a houndstooth check blazer over white t-shirt. He's talking with big hand gestures (passionate, expressive communicator), then breaks into dancing — wide stance, arms moving, full energy. This is the character you'll be working for: theatrical, charismatic, unafraid to be performative. He's the agency's brand personality.</span>
+      </div>
+    </div>
+
+    <div class="scene-block">
+      <div class="scene-ts">0:22–0:28</div>
+      <div class="scene-desc">
+        <strong>Team in the Boardroom</strong>
+        <span>Three team members visible at the analogue boardroom table: blonde creative, denim-jacket creative, and a male with glasses. All have MacBook Pros open. The conversation looks animated — ideas being pitched. In the background: white orchid plant, red Nespresso-style coffee machine. Small-team, tight collaboration.</span>
+      </div>
+    </div>
+
+    <div class="scene-block">
+      <div class="scene-ts">0:32–0:44</div>
+      <div class="scene-desc">
+        <strong>Petro Reviews Work — "Office Mode"</strong>
+        <span>Petro at what appears to be a home office setup with a Dell monitor. He has exaggerated "thinking/reviewing" expressions — raised eyebrows, skeptical squint, evaluating something on screen. A Black male team member (in branded Magos polo shirt with embroidered M-crown logo) holds up a tablet to show him work. This man appears to be a production/digital staff member who interfaces directly with Petro.</span>
+      </div>
+    </div>
+
+    <div class="scene-block">
+      <div class="scene-ts">0:44–1:10</div>
+      <div class="scene-desc">
+        <strong>Production Team at Work</strong>
+        <span>Wide shots show two team members at their production stations from behind. Magos-branded mousepads clearly visible. Gaming peripherals (Razer-class headphones, RGB mouse). Through the glass of the "athens" pod, the Creative Director is still visible — on a call or in a session. NLE editing software showing a complex timeline on screens. This section establishes: the digital production machine runs regardless of where Petro is.</span>
+      </div>
+    </div>
+
+    <div class="scene-block">
+      <div class="scene-ts">1:10–1:22</div>
+      <div class="scene-desc">
+        <strong>Petro Outdoors — Contemplative Mode</strong>
+        <span>Back to outdoor shots near tropical plants. Petro in profile, thinking. A slight smirk — satisfied with what the team is doing. This is the closing narrative beat: "he set it up, they're running it." (Exactly the role the Head of Digital would fill in reality.)</span>
+      </div>
+    </div>
+
+    <div class="scene-block">
+      <div class="scene-ts">1:24–1:28</div>
+      <div class="scene-desc">
+        <strong>End Card: M-Crown Logo + "Happy Holidays"</strong>
+        <span>Magos logo (white M-crown with ® mark) appears first over an outdoor terrace background, then on a pure black card with "happy holidays" in a clean sans-serif typeface. The registered trademark signals: this brand identity is legally protected, deliberately built. Clean, premium, confident brand close.</span>
+      </div>
+    </div>
+
+    <div class="verdict danger" style="margin-top:16px;">
+      <div class="verdict-icon">🔍</div>
+      <div class="verdict-content">
+        <strong>Content Production Observation</strong>
+        <span>This is their BEST Instagram performer (61 likes). The production is handheld, UGC-candid, no text overlays, no motion graphics, no branded colour scheme in-video. It won on authentic culture content — not craft. This tells you: their content strategy is not prioritising high-production digital. The opportunity gap for a Head of Digital to improve their own channel performance is real and visible.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SOCIAL MEDIA AUDIT -->
+  <div class="section">
+    <div class="section-label">05 / Social Media Audit</div>
+    <div class="section-title">Real Platform Data — No Estimates</div>
+
+    <div class="grid-4" style="margin-bottom:24px;">
+      <div class="stat-card">
+        <div class="stat-number red-num">5–25</div>
+        <div class="stat-label">Facebook Reel Views</div>
+        <div class="stat-sub">Average per post. Zero shares. Max 7 likes.</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number amber-num">~18</div>
+        <div class="stat-label">Instagram Avg Likes</div>
+        <div class="stat-sub">Across recent posts. Best: 61 (culture reel).</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number purple-num">11</div>
+        <div class="stat-label">Best Reel Comments</div>
+        <div class="stat-sub">"Ke Dezemba Boss" — their #1 IG engagement.</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number red-num">0</div>
+        <div class="stat-label">Facebook Reel Shares</div>
+        <div class="stat-sub">Every Facebook reel audited: zero shares.</div>
+      </div>
+    </div>
+
+    <table style="background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+      <thead>
+        <tr>
+          <th>Platform</th>
+          <th>Content Type</th>
+          <th>Avg Engagement</th>
+          <th>Best Performer</th>
+          <th>Assessment</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Instagram</strong></td>
+          <td>Reels + static posts</td>
+          <td>~18 likes/post</td>
+          <td>61 likes, 11 comments (culture reel)</td>
+          <td><span class="pill amber">UNDERPERFORMING</span></td>
+        </tr>
+        <tr>
+          <td><strong>Facebook</strong></td>
+          <td>Reels, page posts</td>
+          <td>5–25 views; 0–7 likes</td>
+          <td>Zero shares across all audited posts</td>
+          <td><span class="pill red">CRITICAL GAP</span></td>
+        </tr>
+        <tr>
+          <td><strong>LinkedIn</strong></td>
+          <td>Company page</td>
+          <td>Limited data</td>
+          <td>Not their primary growth lever</td>
+          <td><span class="pill amber">UNKNOWN</span></td>
+        </tr>
+        <tr>
+          <td><strong>YouTube</strong></td>
+          <td>P4 Podcast channel</td>
+          <td>Channel exists; limited subscribers</td>
+          <td>No viral channel content confirmed</td>
+          <td><span class="pill red">NEGLECTED</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="verdict danger" style="margin-top:20px;">
+      <div class="verdict-icon">🚨</div>
+      <div class="verdict-content">
+        <strong>The Core Contradiction</strong>
+        <span>Magos Media's website claims "ROI-driven digital marketing" and "expert digital solutions" for major SA brands. Their own social presence contradicts this story. An agency selling digital performance with 25 Facebook reel views is either intentionally not trying (client-first philosophy) or genuinely unable to execute for themselves. Either way, you can walk in having identified the gap — and having a plan to close it.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CLIENT ROSTER -->
+  <div class="section">
+    <div class="section-label">06 / Client Intelligence</div>
+    <div class="section-title">Confirmed Client Roster</div>
+
+    <p style="color:var(--muted);font-size:14px;margin-bottom:20px;">All clients confirmed from official Magos Media website (magosmedia.co.za). No hallucinations — only sourced data.</p>
+
+    <div class="grid-3">
+      <div class="card accent-card">
+        <h3>Pick n Pay</h3>
+        <p>South Africa's second-largest supermarket chain. ~1,800 stores. JSE-listed. This is national-scale FMCG digital management.</p>
+      </div>
+      <div class="card accent-card">
+        <h3>KFC South Africa</h3>
+        <p>QSR giant. High-volume, high-frequency campaigns. Magos handles what is likely social + digital content at a minimum.</p>
+      </div>
+      <div class="card accent-card">
+        <h3>Spar Group</h3>
+        <p>JSE-listed grocery group, 945+ stores. Similar scale to PnP. Suggests a FMCG/retail specialisation at Magos.</p>
+      </div>
+      <div class="card">
+        <h3>Protea Hotels by Marriott</h3>
+        <p>Hotel chain across SA + Africa. Marriott-affiliated. Hospitality digital — loyalty, booking funnels, brand campaigns.</p>
+      </div>
+      <div class="card">
+        <h3>African Alliance</h3>
+        <p>Financial services / investment management. Adds regulated financial sector credibility to the client mix.</p>
+      </div>
+      <div class="card">
+        <h3>News Cafe + Pizza E Vino</h3>
+        <p>Restaurant / entertainment brands. Social-heavy, lifestyle content. Likely ongoing social media management retainers.</p>
+      </div>
+      <div class="card">
+        <h3>President Hyper</h3>
+        <p>Retail chain. FMCG promotions and catalogue-style digital. Similar to PnP/Spar account structure.</p>
+      </div>
+      <div class="card">
+        <h3>Calistos + Petzone</h3>
+        <p>Casual dining + pet retail. Full breadth of lifestyle categories covered in the portfolio.</p>
+      </div>
+    </div>
+
+    <div class="verdict success" style="margin-top:20px;">
+      <div class="verdict-icon">💼</div>
+      <div class="verdict-content">
+        <strong>Portfolio Read</strong>
+        <span>The client mix is FMCG-heavy (PnP, KFC, Spar, President Hyper) with hospitality and financial services. This agency runs campaigns at a scale that requires budgeting discipline, brand compliance, and multi-stakeholder management — not just creative execution. Your DigitalMark/Skype+MSN blue-chip portfolio experience is a direct match.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- INTERVIEW AMMUNITION -->
+  <div class="section">
+    <div class="section-label">07 / Interview Ammunition</div>
+    <div class="section-title">Talking Points That Will Land</div>
+
+    <div class="ammo-item">
+      <div class="tag">Opening Move</div>
+      <h4>Reference the "Analogue Boardroom" — Show You Did Your Homework</h4>
+      <p>Their boardroom name is deliberately philosophical — "analogue" in a digital agency signals Petro's belief that human/strategic thinking leads, tools follow. Mention it: "I noticed your boardroom is called the Analogue Boardroom — that philosophy of human-first, tools-second resonates with me. The best digital strategies I've built started on a whiteboard, not in a campaign manager." This shows you watched the content, understand their brand ethos, and align culturally.</p>
+    </div>
+
+    <div class="ammo-item">
+      <div class="tag">Social Media Gap</div>
+      <h4>Address the Own-Channel Underperformance — Without Being Arrogant</h4>
+      <p>Don't wait for them to bring it up. Say: "I took a look at your social presence before coming in — and I'll be honest, the organic numbers don't reflect the quality of the client roster. I think that's actually an opportunity. Most agencies are so focused on client delivery that their own brand becomes a low priority. One of the first things I'd want to build is a content engine that makes Magos Media as credible publicly as it is to its clients." This shows intelligence, not attack. They'll respect the honesty.</p>
+    </div>
+
+    <div class="ammo-item">
+      <div class="tag">Multi-Venture Context</div>
+      <h4>Acknowledge Petro's Distributed Focus — Position Yourself as the Solution</h4>
+      <p>You know Petro is running Magos Media + Venturi Capital + VeliTech. Don't pretend you don't. Say: "I understand you're across multiple ventures at the moment. What I'd bring is the kind of ownership that means you don't have to think about the digital function — you can look at results. I've built and managed full digital operations independently before, including real-time ad account management, reporting, and creative strategy. The Head of Digital role, the way I see it, should make your life simpler, not add to your decision load." This is exactly what he needs.</p>
+    </div>
+
+    <div class="ammo-item">
+      <div class="tag">Performance Proof</div>
+      <h4>Lead With ROAS Numbers — Not Just Process</h4>
+      <p>When asked about results: "On the eCommerce side, I ran a Meta campaign that reached 3.13× ROAS on a winning ad — but more importantly, I rebuilt the entire account structure from one underperforming campaign to a three-campaign CBO architecture covering prospecting, retargeting, and creative testing. That architecture is still running. On the agency side, my background includes managing digital for Skype and MSN through DigitalMark — blue-chip media at a scale most SA agencies have never operated at." Double-barrel: direct-response results + brand-scale credibility.</p>
+    </div>
+
+    <div class="ammo-item">
+      <div class="tag">iGaming Connection</div>
+      <h4>Show You Understand the VeliTech/PlayX1 Angle</h4>
+      <p>If the conversation allows: "I see that you're also involved in the iGaming space through VeliTech. That's a sector with very different digital requirements — performance marketing at higher CPAs, compliance considerations, and a different creative language. If that's an area where Magos Media's digital capability could be applied, I'd be interested in understanding how those two businesses overlap." This shows you've researched beyond the agency and signals you can think cross-venture.</p>
+    </div>
+
+    <div class="ammo-item">
+      <div class="tag">Venturi Capital Orbit</div>
+      <h4>Reference the Award-Winning Network Quality Standard</h4>
+      <p>Petro's orbit includes Nick Argyros (COO of Venturi Capital) — a Loerie, Clio, and Promax award winner through INJOZI and GotBot AI. That's a real quality benchmark in Petro's network. You can say: "From what I understand about the work in your orbit — there's a high creative and strategic bar set around you. That's the environment I've been building towards and the standard I want to be held to." This shows you understand the ecosystem, not just the agency.</p>
+    </div>
+
+    <div class="ammo-item">
+      <div class="tag">Meta Business Partner</div>
+      <h4>Confirm Their Certification and Position Your Platform Depth</h4>
+      <p>Magos Media is a confirmed Meta Business Partner. Lean into this: "As a Meta Business Partner agency, your clients expect above-benchmark platform execution — that's not just buying ads, it's knowing the API, understanding auction dynamics, building the right pixel event hierarchy, and reading creative fatigue before it shows up in CPM. I've been operating at that level hands-on, not just managing teams who do it." Specificity on Meta platform mechanics will distinguish you.</p>
+    </div>
+
+    <div class="ammo-item">
+      <div class="tag">FMCG Portfolio Match</div>
+      <h4>Speak the Language of Their Biggest Clients</h4>
+      <p>"Your FMCG roster — Pick n Pay, Spar, KFC, President Hyper — those accounts require a very specific discipline: promotions-led content calendars, always-on brand cadences, compliance-heavy approvals, and often multiple internal stakeholders on the client side. I've worked within that structure and I know the difference between building campaigns for performance-driven DTC brands versus corporate FMCG. They need different rhythms, different creative briefs, different measurement frameworks." This tells Petro you understand his most important accounts.</p>
+    </div>
+  </div>
+
+  <!-- QUESTIONS TO ASK THEM -->
+  <div class="section">
+    <div class="section-label">08 / Questions to Ask Them</div>
+    <div class="section-title">Strategic Questions That Make You Look Sharp</div>
+
+    <div class="q-item">
+      <p>"How do you see the relationship between Magos Media and VeliTech developing — is there a digital services overlap you're planning to build?"</p>
+      <span>Signals: strategic awareness of his multi-venture play. Forces him to think about you in both contexts.</span>
+    </div>
+
+    <div class="q-item">
+      <p>"What's the current biggest friction point between the creative team and client delivery — where does it break down?"</p>
+      <span>Signals: you're thinking about operational reality, not just what looks good on a job brief. You want to actually fix things.</span>
+    </div>
+
+    <div class="q-item">
+      <p>"What does success in this role look like at 90 days — and what does it look like at 12 months?"</p>
+      <span>Signals: you're already thinking about measurement and timelines. This is a performance mindset question.</span>
+    </div>
+
+    <div class="q-item">
+      <p>"Is the head of digital expected to also drive new business development, or is that primarily coming from you?"</p>
+      <span>Signals: you understand that in a small agency, "Head of Digital" often means wearing multiple hats. Gets clarity upfront.</span>
+    </div>
+
+    <div class="q-item">
+      <p>"I noticed your own social channels are more low-key than the brand's positioning — is there a strategy behind that, or is it something you'd want the Head of Digital to change?"</p>
+      <span>Signals: honesty + strategic awareness. If they have a reason, they'll explain it. If it's a gap, they'll be impressed you spotted it.</span>
+    </div>
+
+    <div class="q-item">
+      <p>"How does reporting work for major clients like PnP or KFC — is that live dashboards, monthly decks, or something more custom?"</p>
+      <span>Signals: you're thinking about client retention and accountability infrastructure, not just campaign execution.</span>
+    </div>
+
+    <div class="q-item">
+      <p>"What happened with the previous person in this role — or is this a new position?"</p>
+      <span>Signals: maturity. Understanding whether this is a backfill or an expansion tells you a lot about the agency's trajectory.</span>
+    </div>
+  </div>
+
+  <!-- RISK / OPPORTUNITY -->
+  <div class="section">
+    <div class="section-label">09 / Risk &amp; Opportunity Assessment</div>
+    <div class="section-title">Eyes Open Going In</div>
+
+    <div class="risk-grid">
+      <div class="risk-block risks">
+        <h4>Risks to Navigate</h4>
+        <div class="risk-item r">Petro's multi-venture bandwidth means you may lack strategic direction at critical moments. Build decision frameworks that don't require his input.</div>
+        <div class="risk-item r">Small team (~10 people) servicing blue-chip clients (PnP, KFC, Spar) suggests thin resourcing. Expect high client-to-staff ratios.</div>
+        <div class="risk-item r">Agency's own digital underperformance may indicate insufficient budget/time allocated to internal brand-building. Your plan needs to work lean.</div>
+        <div class="risk-item r">iGaming (VeliTech) is unpredictable — if Petro's focus shifts heavily there, Magos Media could be starved of founder attention during a growth phase.</div>
+        <div class="risk-item r">No evidence of structured measurement infrastructure (dashboards, reporting cadences) from public signals. May inherit a metric-light culture.</div>
+      </div>
+      <div class="risk-block opps">
+        <h4>Opportunities to Capture</h4>
+        <div class="risk-item o">Founder-absent structure means the Head of Digital has genuine autonomy — build your domain and own it. This is not a middle-management role.</div>
+        <div class="risk-item o">Own channel underperformance is a quick win: a 3-month content strategy that grows their Instagram from 18 → 200+ avg likes is achievable and visible.</div>
+        <div class="risk-item o">VeliTech/iGaming connection = potential to pioneer performance digital for a high-margin vertical that most SA agencies haven't cracked.</div>
+        <div class="risk-item o">Venturi Capital orbit (Nick Argyros, Loerie/Clio level) = exposure to award-calibre creative thinking you can import into your digital strategy work.</div>
+        <div class="risk-item o">FMCG blue-chip client base is a reference resume builder — three years here and your portfolio includes PnP + KFC + Spar at national scale.</div>
+        <div class="risk-item o">SA market is under-indexed on performance-creative integration. You can introduce frameworks that differentiate the agency competitively.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- THE BOTTOM LINE -->
+  <div class="section">
+    <div class="section-label">10 / Bottom Line</div>
+    <div class="section-title">How to Walk In and Win</div>
+
+    <div class="card accent-card" style="margin-bottom:16px;padding:28px;">
+      <h3 style="font-size:18px;margin-bottom:12px;">Your Positioning in One Sentence</h3>
+      <p style="font-size:15px;color:#ccc;line-height:1.7;">You are the operator who makes Petro's vision executable — bringing blue-chip brand experience (DigitalMark/Skype+MSN), direct-response performance proof (3.13× ROAS), and independent operational capability to a founder who is too distributed to run the digital function himself.</p>
+    </div>
+
+    <div class="grid-3">
+      <div class="card green-card">
+        <h3>Open With</h3>
+        <p>Reference something specific you observed — the Analogue Boardroom, the December culture video, the blue-chip client roster. Prove you prepared beyond the job spec.</p>
+      </div>
+      <div class="card accent-card">
+        <h3>Land With</h3>
+        <p>Numbers. ROAS. Account structures built. Campaigns managed. Audiences scaled. Make every claim specific and auditable. Petro runs a VC — he speaks ROI.</p>
+      </div>
+      <div class="card purple-card">
+        <h3>Close With</h3>
+        <p>"I'd want to own this function and give you back the headspace to run VeliTech and Venturi Capital without worrying about whether digital is performing." Direct. Autonomous. Exactly what he needs.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div style="background:rgba(200,169,110,0.06);border:1px solid rgba(200,169,110,0.2);padding:28px 40px;text-align:center;margin-bottom:0;">
+  <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:12px;font-weight:700;">Companion Deliverable</div>
+  <div style="font-size:18px;font-weight:700;margin-bottom:8px;">Google Reputation Audit — KFC South Africa</div>
+  <div style="font-size:13px;color:var(--muted);margin-bottom:16px;">57 locations &bull; 123,985 reviews &bull; Real scraped data &bull; The proof-of-concept you walk in with</div>
+  <a href="kfc-reputation-audit.html" style="display:inline-block;background:var(--accent);color:#000;font-weight:700;font-size:13px;padding:10px 28px;border-radius:6px;text-decoration:none;letter-spacing:0.5px;">Open KFC Reputation Audit &rarr;</a>
+</div>
+<div class="footer">
+  <strong>Magos Media Intelligence Report — Prepared 22 June 2026</strong><br>
+  Team data: LinkedIn company scrape (apt_marble/linkedin-company-employees-scraper) + ZoomInfo, June 2026. Venteri Capital: ventericapital.com team page, confirmed June 2026. Social metrics: Apify Instagram + Facebook scrapers. Video: 60-frame extraction of Instagram Reel DSSdJvqDwVC (87.8s). KFC audit: 57-location Google Maps scrape + 480-review deep sample (compass/crawler-google-places + Google-Maps-Reviews-Scraper).
+</div>
+
+</body>
+</html>

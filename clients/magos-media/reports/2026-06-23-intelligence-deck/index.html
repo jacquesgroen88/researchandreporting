@@ -1,0 +1,2223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Magos Media — Intelligence Briefing</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+  :root {
+    --black:   #080808;
+    --surface: #0f0f0f;
+    --card:    #161616;
+    --card2:   #1c1c1c;
+    --border:  #252525;
+    --border2: #2e2e2e;
+    --text:    #e8e8e8;
+    --muted:   #7a7a7a;
+    --muted2:  #555;
+    --gold:    #c8a96e;
+    --gold2:   #e8c87c;
+    --gold3:   #a07840;
+    --red:     #e74c3c;
+    --orange:  #e67e22;
+    --green:   #27ae60;
+    --blue:    #3498db;
+    --purple:  #8b5cf6;
+    --teal:    #1abc9c;
+    --font:    'Inter', system-ui, -apple-system, sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--text);
+    font-family: var(--font);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ─── NAV SIDEBAR ─── */
+  .sidenav {
+    position: fixed;
+    right: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .sidenav a {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--border2);
+    border: 1px solid var(--muted2);
+    display: block;
+    transition: all 0.3s;
+    cursor: pointer;
+    text-decoration: none;
+    position: relative;
+  }
+  .sidenav a:hover,
+  .sidenav a.active {
+    background: var(--gold);
+    border-color: var(--gold);
+    transform: scale(1.4);
+  }
+  .sidenav a::before {
+    content: attr(data-label);
+    position: absolute;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 10px;
+    color: var(--muted);
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.2s;
+    pointer-events: none;
+    background: var(--card);
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+  .sidenav a:hover::before { opacity: 1; }
+
+  /* ─── SECTION BASE ─── */
+  section {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 80px 0;
+    position: relative;
+    border-bottom: 1px solid var(--border);
+  }
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 48px;
+    width: 100%;
+  }
+
+  /* ─── TYPOGRAPHY ─── */
+  .eyebrow {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+  .headline {
+    font-size: clamp(32px, 5vw, 60px);
+    font-weight: 900;
+    letter-spacing: -2px;
+    line-height: 1.05;
+    margin-bottom: 20px;
+  }
+  .headline span { color: var(--gold); }
+  .subhead {
+    font-size: 16px;
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 640px;
+  }
+  .section-num {
+    font-size: 120px;
+    font-weight: 900;
+    color: var(--border);
+    position: absolute;
+    right: 48px;
+    top: 60px;
+    line-height: 1;
+    user-select: none;
+    letter-spacing: -6px;
+  }
+
+  /* ─── DIVIDER ─── */
+  .gold-rule {
+    width: 48px;
+    height: 3px;
+    background: var(--gold);
+    margin: 24px 0;
+  }
+
+  /* ─── COVER ─── */
+  #cover {
+    background: radial-gradient(ellipse at 30% 50%, rgba(200,169,110,0.06) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(200,169,110,0.03) 0%, transparent 50%),
+                var(--black);
+    border-bottom: 1px solid var(--gold);
+    min-height: 100vh;
+  }
+  .cover-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(200,169,110,0.08);
+    border: 1px solid rgba(200,169,110,0.3);
+    color: var(--gold);
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+  .cover-badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--gold);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+  .cover-title {
+    font-size: clamp(48px, 8vw, 96px);
+    font-weight: 900;
+    letter-spacing: -4px;
+    line-height: 0.95;
+    margin-bottom: 8px;
+  }
+  .cover-title .agency { color: var(--gold); }
+  .cover-sub {
+    font-size: 18px;
+    color: var(--muted);
+    margin-top: 24px;
+    margin-bottom: 48px;
+    max-width: 520px;
+    line-height: 1.7;
+  }
+  .cover-meta {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  .cover-meta-item {
+    border-left: 2px solid var(--border2);
+    padding-left: 16px;
+  }
+  .cover-meta-item .label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 4px;
+  }
+  .cover-meta-item .val {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .cover-links {
+    display: flex;
+    gap: 12px;
+    margin-top: 40px;
+  }
+  .cover-link {
+    background: rgba(200,169,110,0.08);
+    border: 1px solid rgba(200,169,110,0.25);
+    color: var(--gold);
+    padding: 8px 20px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+    letter-spacing: 0.5px;
+  }
+  .cover-link:hover {
+    background: rgba(200,169,110,0.15);
+    border-color: var(--gold);
+  }
+  .cover-link.primary {
+    background: var(--gold);
+    color: #000;
+    border-color: var(--gold);
+  }
+  .cover-link.primary:hover { background: var(--gold2); }
+
+  /* ─── AGENCY OVERVIEW ─── */
+  .agency-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    margin-top: 48px;
+    align-items: start;
+  }
+  .agency-stat-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 32px;
+  }
+  .stat-block {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .stat-block .num {
+    font-size: 36px;
+    font-weight: 900;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .stat-block .label {
+    font-size: 12px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .pillar-list {
+    list-style: none;
+    margin-top: 24px;
+  }
+  .pillar-list li {
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .pillar-list li strong { color: var(--text); }
+  .pillar-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: rgba(200,169,110,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 14px;
+  }
+
+  /* ─── LEADERSHIP SIGNAL ─── */
+  #leadership {
+    background: radial-gradient(ellipse at 70% 30%, rgba(139,92,246,0.06) 0%, transparent 60%), var(--black);
+  }
+  .leadership-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin-top: 48px;
+  }
+  .leadership-card {
+    border-radius: 16px;
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .leadership-card.before {
+    background: var(--card);
+    border: 1px solid var(--border2);
+    opacity: 0.7;
+  }
+  .leadership-card.after {
+    background: linear-gradient(135deg, rgba(139,92,246,0.1), rgba(139,92,246,0.03));
+    border: 1px solid rgba(139,92,246,0.4);
+  }
+  .leadership-card .card-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    font-weight: 700;
+  }
+  .leadership-card.before .card-label { color: var(--muted); }
+  .leadership-card.after .card-label { color: var(--purple); }
+  .leadership-card h3 {
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 6px;
+  }
+  .leadership-card .role {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+  .leadership-card p {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+  .arrow-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    color: var(--purple);
+    align-self: center;
+  }
+  .implication-box {
+    margin-top: 32px;
+    padding: 24px 28px;
+    background: rgba(139,92,246,0.06);
+    border: 1px solid rgba(139,92,246,0.25);
+    border-radius: 12px;
+    position: relative;
+  }
+  .implication-box::before {
+    content: 'CRITICAL IMPLICATION';
+    position: absolute;
+    top: -8px; left: 20px;
+    background: var(--purple);
+    color: #fff;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    padding: 2px 10px;
+    border-radius: 4px;
+  }
+  .implication-box p {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  /* ─── VENTERI ─── */
+  #venteri { background: var(--surface); }
+  .venteri-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    margin-top: 40px;
+  }
+  .person-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px;
+    transition: border-color 0.2s;
+  }
+  .person-card:hover { border-color: var(--gold3); }
+  .person-card .role-tag {
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .person-card h4 { font-size: 17px; font-weight: 800; margin-bottom: 4px; }
+  .person-card .bio {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-top: 10px;
+  }
+  .person-card .credentials {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 14px;
+  }
+  .cred-tag {
+    font-size: 10px;
+    background: var(--card2);
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+  .venteri-meta {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 16px;
+    margin-top: 28px;
+  }
+  .vmeta-item {
+    text-align: center;
+    padding: 16px;
+    background: var(--card);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+  .vmeta-item .vnum { font-size: 28px; font-weight: 900; color: var(--purple); }
+  .vmeta-item .vlab { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+  /* ─── TEAM ─── */
+  #team { background: var(--black); }
+  .team-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr;
+    gap: 20px;
+    margin-top: 40px;
+  }
+  .team-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px;
+  }
+  .team-card.featured {
+    background: linear-gradient(135deg, rgba(139,92,246,0.1), var(--card));
+    border-color: rgba(139,92,246,0.4);
+  }
+  .team-card .person-label {
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .team-card.featured .person-label { color: var(--purple); }
+  .team-card:not(.featured) .person-label { color: var(--muted2); }
+  .team-card h4 { font-size: 18px; font-weight: 800; margin-bottom: 2px; }
+  .team-card .role { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
+  .team-card p { font-size: 12px; color: var(--muted); line-height: 1.6; }
+  .strategy-chip {
+    display: inline-block;
+    margin-top: 14px;
+    padding: 5px 12px;
+    background: rgba(139,92,246,0.1);
+    border: 1px solid rgba(139,92,246,0.3);
+    border-radius: 20px;
+    font-size: 11px;
+    color: var(--purple);
+    font-weight: 600;
+  }
+  .secondary-team {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 20px;
+  }
+  .secondary-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .avatar-circle {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: var(--border2);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--gold);
+  }
+  .secondary-card h5 { font-size: 13px; font-weight: 700; margin-bottom: 2px; }
+  .secondary-card .role { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+  .secondary-card .note { font-size: 11px; color: var(--muted2); line-height: 1.5; }
+
+  /* ─── CLIENT PORTFOLIO ─── */
+  #clients { background: var(--surface); }
+  .client-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 40px;
+  }
+  .client-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .client-card:hover {
+    border-color: var(--gold3);
+    transform: translateY(-2px);
+  }
+  .client-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--client-color, var(--gold));
+  }
+  .client-name { font-size: 17px; font-weight: 800; margin-bottom: 4px; }
+  .client-sector {
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+  .client-rating {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    margin-bottom: 6px;
+  }
+  .client-rating .stars { color: var(--gold); font-size: 12px; }
+  .client-desc { font-size: 12px; color: var(--muted); line-height: 1.6; }
+  .client-gap {
+    margin-top: 12px;
+    padding: 8px 12px;
+    background: rgba(231,76,60,0.06);
+    border-left: 2px solid var(--red);
+    border-radius: 0 6px 6px 0;
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .client-gap strong { color: var(--orange); }
+  .audited-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(39,174,96,0.15);
+    border: 1px solid rgba(39,174,96,0.4);
+    color: var(--green);
+    font-size: 9px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 700;
+  }
+
+  /* ─── AUDIT INTRO ─── */
+  #audit-intro {
+    background: radial-gradient(ellipse at 50% 0%, rgba(200,169,110,0.05) 0%, transparent 60%), var(--black);
+  }
+  .audit-hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 24px;
+    margin-top: 48px;
+  }
+  .audit-brand-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    text-align: center;
+    position: relative;
+  }
+  .audit-brand-card .brand-logo {
+    font-size: 28px;
+    font-weight: 900;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .audit-brand-card .big-num {
+    font-size: 48px;
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .audit-brand-card .big-label {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+  }
+  .audit-brand-card .metric-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+  }
+  .audit-brand-card .metric-row .mk { color: var(--muted); }
+  .audit-brand-card .metric-row .mv { font-weight: 700; }
+  .total-corpus-bar {
+    margin-top: 40px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+  }
+  .corpus-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  .corpus-label .title { font-size: 14px; font-weight: 700; }
+  .corpus-label .total { font-size: 28px; font-weight: 900; color: var(--gold); }
+  .corpus-bar-track {
+    height: 12px;
+    background: var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    gap: 2px;
+  }
+  .corpus-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 1s ease;
+  }
+  .corpus-legend {
+    display: flex;
+    gap: 24px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+  .corpus-leg-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .leg-dot {
+    width: 10px; height: 10px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  /* ─── KFC ─── */
+  #kfc-audit {
+    background: radial-gradient(ellipse at 80% 50%, rgba(231,76,60,0.04) 0%, transparent 60%), var(--surface);
+  }
+  .kfc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 48px;
+    margin-top: 40px;
+    align-items: start;
+  }
+  .kfc-metric-stack { display: flex; flex-direction: column; gap: 12px; }
+  .kfc-metric {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 18px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 13px;
+  }
+  .kfc-metric .mk { color: var(--muted); }
+  .kfc-metric .mv { font-weight: 700; font-size: 14px; }
+  .kfc-metric .mv.red { color: var(--red); }
+  .kfc-metric .mv.green { color: var(--green); }
+  .kfc-metric .mv.orange { color: var(--orange); }
+  .template-cards { display: flex; flex-direction: column; gap: 12px; }
+  .template-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--red);
+    border-radius: 0 10px 10px 0;
+    padding: 14px 18px;
+  }
+  .template-card .tcount {
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--red);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .template-card .ttext {
+    font-size: 12px;
+    color: var(--muted);
+    font-style: italic;
+    line-height: 1.5;
+  }
+  .template-card .tfail {
+    font-size: 11px;
+    color: var(--muted2);
+    margin-top: 8px;
+  }
+
+  /* ─── PNP ─── */
+  #pnp-audit { background: var(--black); }
+  .pnp-inconsistency {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 40px;
+    margin-bottom: 28px;
+  }
+  .pnp-store-card {
+    border-radius: 14px;
+    padding: 28px;
+  }
+  .pnp-store-card.best {
+    background: rgba(39,174,96,0.07);
+    border: 1px solid rgba(39,174,96,0.3);
+  }
+  .pnp-store-card.worst {
+    background: rgba(231,76,60,0.07);
+    border: 1px solid rgba(231,76,60,0.3);
+  }
+  .pnp-store-card .store-tag {
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .pnp-store-card.best .store-tag { color: var(--green); }
+  .pnp-store-card.worst .store-tag { color: var(--red); }
+  .pnp-store-card h4 { font-size: 20px; font-weight: 800; margin-bottom: 4px; }
+  .pnp-store-card .location { font-size: 12px; color: var(--muted); margin-bottom: 16px; }
+  .pnp-store-card .big-pct {
+    font-size: 52px;
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .pnp-store-card.best .big-pct { color: var(--green); }
+  .pnp-store-card.worst .big-pct { color: var(--red); }
+  .pnp-store-card .pct-label { font-size: 12px; color: var(--muted); }
+  .pnp-zero-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .pnp-zero-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+  }
+  .pnp-zero-card h5 { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+  .pnp-zero-card .count { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+  .pnp-zero-card .zero { font-size: 22px; font-weight: 900; color: var(--red); }
+  .pnp-template-box {
+    background: var(--card);
+    border: 1px solid var(--border2);
+    border-left: 3px solid var(--orange);
+    border-radius: 0 10px 10px 0;
+    padding: 16px 20px;
+  }
+  .pnp-template-box .tmpl-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--orange);
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .pnp-template-box .tmpl-text {
+    font-size: 13px;
+    color: var(--muted);
+    font-style: italic;
+    line-height: 1.6;
+  }
+  .pnp-template-box .tmpl-note {
+    font-size: 11px;
+    color: var(--muted2);
+    margin-top: 10px;
+  }
+
+  /* ─── SPAR ─── */
+  #spar-audit { background: var(--surface); }
+  .spar-three-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    margin-top: 40px;
+    margin-bottom: 28px;
+  }
+  .spar-franchise-card {
+    border-radius: 14px;
+    padding: 24px;
+    text-align: center;
+  }
+  .spar-franchise-card.high {
+    background: rgba(39,174,96,0.07);
+    border: 1px solid rgba(39,174,96,0.3);
+  }
+  .spar-franchise-card.dead {
+    background: rgba(231,76,60,0.07);
+    border: 1px solid rgba(231,76,60,0.3);
+  }
+  .spar-franchise-card.gold-class {
+    background: rgba(200,169,110,0.07);
+    border: 1px solid rgba(200,169,110,0.3);
+  }
+  .spar-franchise-card .store-label {
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .spar-franchise-card.high .store-label { color: var(--green); }
+  .spar-franchise-card.dead .store-label { color: var(--red); }
+  .spar-franchise-card.gold-class .store-label { color: var(--gold); }
+  .spar-franchise-card .store-name { font-size: 16px; font-weight: 800; margin-bottom: 4px; }
+  .spar-franchise-card .store-city { font-size: 11px; color: var(--muted); margin-bottom: 16px; }
+  .spar-franchise-card .big-pct { font-size: 48px; font-weight: 900; line-height: 1; margin-bottom: 4px; }
+  .spar-franchise-card.high .big-pct { color: var(--green); }
+  .spar-franchise-card.dead .big-pct { color: var(--red); }
+  .spar-franchise-card.gold-class .big-pct { color: var(--gold); }
+  .spar-franchise-card .pct-note { font-size: 12px; color: var(--muted); }
+  .spar-franchise-card .detail { font-size: 12px; color: var(--muted2); margin-top: 12px; line-height: 1.5; }
+  .emoji-problem-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .emoji-row {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .emoji-tile {
+    background: var(--card2);
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+  }
+  .emoji-tile .em { font-size: 32px; margin-bottom: 6px; }
+  .emoji-tile .ecount { font-size: 11px; color: var(--muted); }
+  .rating-spread {
+    display: grid;
+    grid-template-columns: repeat(5,1fr);
+    gap: 8px;
+    margin-top: 16px;
+  }
+  .spread-tile {
+    text-align: center;
+    padding: 14px 8px;
+    border-radius: 10px;
+  }
+  .spread-tile .sr { font-size: 20px; font-weight: 900; }
+  .spread-tile .sl { font-size: 10px; color: var(--muted); margin-top: 4px; }
+
+  /* ─── THE GAP ─── */
+  #the-gap {
+    background: radial-gradient(ellipse at 20% 80%, rgba(200,169,110,0.05) 0%, transparent 50%), var(--black);
+  }
+  .gap-vs-grid {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 24px;
+    margin-top: 48px;
+    align-items: start;
+  }
+  .gap-col h4 {
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid;
+  }
+  .gap-col.has h4 { color: var(--green); border-color: var(--green); }
+  .gap-col.lacks h4 { color: var(--red); border-color: var(--red); }
+  .gap-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .gap-item.has-item .icon { color: var(--green); }
+  .gap-item.lacks-item .icon { color: var(--red); opacity: 0.7; }
+  .gap-item .desc { color: var(--muted); line-height: 1.5; }
+  .gap-divider {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding-top: 40px;
+  }
+  .gap-divider .vs {
+    font-size: 32px;
+    font-weight: 900;
+    color: var(--border2);
+  }
+  .gap-divider .arrow { color: var(--gold); font-size: 20px; }
+
+  /* ─── WHAT JACQUES BRINGS ─── */
+  #the-play {
+    background: var(--surface);
+  }
+  .play-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    margin-top: 48px;
+  }
+  .play-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px;
+    position: relative;
+  }
+  .play-num {
+    font-size: 64px;
+    font-weight: 900;
+    color: var(--border2);
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+  .play-card h4 {
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+  .play-card p {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+  .play-card .script-box {
+    margin-top: 16px;
+    padding: 14px 16px;
+    background: var(--black);
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    font-size: 12px;
+    color: var(--muted);
+    font-style: italic;
+    line-height: 1.6;
+  }
+  .play-card .script-box::before {
+    content: 'SCRIPT';
+    display: block;
+    font-size: 9px;
+    font-style: normal;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--gold3);
+    margin-bottom: 8px;
+  }
+
+  /* ─── CREDENTIALS ─── */
+  #credentials { background: var(--black); }
+  .credentials-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 40px;
+  }
+  .cred-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+  }
+  .cred-num {
+    font-size: 32px;
+    font-weight: 900;
+    color: var(--gold);
+    line-height: 1;
+    flex-shrink: 0;
+    min-width: 80px;
+  }
+  .cred-card h5 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+  .cred-card p { font-size: 12px; color: var(--muted); line-height: 1.6; }
+
+  /* ─── CLOSING ─── */
+  #closing {
+    background: radial-gradient(ellipse at 50% 50%, rgba(200,169,110,0.08) 0%, transparent 70%), var(--black);
+    border-bottom: none;
+    min-height: 60vh;
+  }
+  .closing-inner { text-align: center; max-width: 600px; margin: 0 auto; }
+  .closing-inner .gold-rule { margin: 24px auto; }
+  .closing-meta {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    margin-top: 40px;
+    flex-wrap: wrap;
+  }
+  .closing-meta-item {
+    text-align: center;
+    padding: 0 16px;
+    border-right: 1px solid var(--border);
+  }
+  .closing-meta-item:last-child { border-right: none; }
+  .closing-meta-item .lv { font-size: 22px; font-weight: 900; color: var(--gold); }
+  .closing-meta-item .ll { font-size: 11px; color: var(--muted); margin-top: 4px; }
+  .footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 40px;
+  }
+  .footer-link {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 12px;
+    border: 1px solid var(--border);
+    padding: 6px 16px;
+    border-radius: 20px;
+    transition: all 0.2s;
+  }
+  .footer-link:hover {
+    color: var(--gold);
+    border-color: var(--gold3);
+  }
+
+  /* ─── UTILITIES ─── */
+  .pill {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  .pill-green { background: rgba(39,174,96,0.15); color: var(--green); }
+  .pill-red { background: rgba(231,76,60,0.15); color: var(--red); }
+  .pill-orange { background: rgba(230,126,34,0.15); color: var(--orange); }
+  .pill-gold { background: rgba(200,169,110,0.15); color: var(--gold); }
+  .pill-purple { background: rgba(139,92,246,0.15); color: var(--purple); }
+
+  .key-insight {
+    margin-top: 28px;
+    padding: 20px 24px;
+    background: rgba(200,169,110,0.05);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 10px 10px 0;
+    position: relative;
+  }
+  .key-insight::before {
+    content: 'KEY INSIGHT';
+    display: block;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+  .key-insight p { font-size: 13px; color: var(--text); line-height: 1.7; }
+
+  @media (max-width: 768px) {
+    .agency-grid, .leadership-split, .venteri-grid, .team-grid,
+    .client-grid, .audit-hero-grid, .kfc-grid, .pnp-inconsistency,
+    .spar-three-col, .gap-vs-grid, .play-grid, .credentials-grid,
+    .pnp-zero-row, .secondary-team { grid-template-columns: 1fr; }
+    .section-num { display: none; }
+    .sidenav { display: none; }
+    .container { padding: 0 24px; }
+    .arrow-divider { transform: rotate(90deg); }
+    .cover-title { letter-spacing: -2px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="sidenav" id="sidenav">
+  <a href="#cover" data-label="Cover"></a>
+  <a href="#agency" data-label="The Agency"></a>
+  <a href="#leadership" data-label="Leadership Signal"></a>
+  <a href="#venteri" data-label="Venteri Capital"></a>
+  <a href="#team" data-label="The Team"></a>
+  <a href="#clients" data-label="Client Portfolio"></a>
+  <a href="#hospitality" data-label="Hospitality Clients"></a>
+  <a href="#petzone-threat" data-label="Petzone Threat"></a>
+  <a href="#audit-intro" data-label="Reputation Audit"></a>
+  <a href="#kfc-audit" data-label="KFC"></a>
+  <a href="#pnp-audit" data-label="Pick n Pay"></a>
+  <a href="#spar-audit" data-label="Spar SA"></a>
+  <a href="#the-gap" data-label="The Gap"></a>
+  <a href="#the-play" data-label="The Three Plays"></a>
+  <a href="#credentials" data-label="Credentials"></a>
+  <a href="#closing" data-label="Closing"></a>
+</nav>
+
+<!-- ══════════════════════════════════════
+     01 COVER
+══════════════════════════════════════ -->
+<section id="cover">
+  <div class="container">
+    <div class="cover-badge">Intelligence Brief — Confidential</div>
+    <div class="cover-title">
+      <span class="agency">Magos</span><br>Media
+    </div>
+    <div class="cover-sub">
+      A complete pre-interview intelligence briefing — agency structure, client portfolio, live reputation data across 210,212 Google reviews, team intelligence, and the three plays that win the room.
+    </div>
+    <div class="gold-rule"></div>
+    <div class="cover-meta">
+      <div class="cover-meta-item">
+        <span class="label">Prepared For</span>
+        <span class="val">Jacques Groenewald</span>
+      </div>
+      <div class="cover-meta-item">
+        <span class="label">Role Targeted</span>
+        <span class="val">Head of Digital</span>
+      </div>
+      <div class="cover-meta-item">
+        <span class="label">Data Compiled</span>
+        <span class="val">June 2026 — Live</span>
+      </div>
+      <div class="cover-meta-item">
+        <span class="label">Reviews Scraped</span>
+        <span class="val">210,212</span>
+      </div>
+    </div>
+    <div class="cover-links">
+      <a href="magos-media-intelligence-report.html" class="cover-link" target="_blank">Agency Intelligence Report</a>
+      <a href="kfc-reputation-audit.html" class="cover-link primary" target="_blank">KFC Reputation Audit</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     02 THE AGENCY
+══════════════════════════════════════ -->
+<section id="agency">
+  <div class="container">
+    <div class="section-num">02</div>
+    <div class="eyebrow">The Agency</div>
+    <div class="headline">Who Is<br><span>Magos Media?</span></div>
+    <div class="subhead">A Johannesburg creative and production agency with blue-chip clients, in-store media capabilities, and a recording studio — operating under a founder who is actively transitioning out.</div>
+
+    <div class="agency-grid">
+      <div>
+        <ul class="pillar-list">
+          <li>
+            <div class="pillar-icon">📍</div>
+            <div><strong>Illovo, Johannesburg</strong><br>5 Fricker Road — premium agency address, Sandton corridor. Full-time on-site role.</div>
+          </li>
+          <li>
+            <div class="pillar-icon">📅</div>
+            <div><strong>Founded ~2000</strong><br>Over 25 years operating. Established long-term retainer relationships with blue-chip SA brands.</div>
+          </li>
+          <li>
+            <div class="pillar-icon">🎬</div>
+            <div><strong>Creative + Production + In-Store Media</strong><br>In-house recording studios, video production, brand activations, point-of-sale creative.</div>
+          </li>
+          <li>
+            <div class="pillar-icon">👥</div>
+            <div><strong>~12-person team</strong><br>Small, tight team. Social, creative, production, database, animation. Growing — currently hiring 2 roles.</div>
+          </li>
+          <li>
+            <div class="pillar-icon">🏢</div>
+            <div><strong>9 confirmed clients</strong><br>KFC, Pick n Pay, Spar, Protea Hotels, Hotel Sky, News Cafe, Calistos, Petzone, Doppio Group. All blue-chip, SA-wide.</div>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <div class="agency-stat-row">
+          <div class="stat-block">
+            <div class="num">25+</div>
+            <div class="label">Years Operating</div>
+          </div>
+          <div class="stat-block">
+            <div class="num">14+</div>
+            <div class="label">Confirmed Clients</div>
+          </div>
+          <div class="stat-block">
+            <div class="num">~58</div>
+            <div class="label">Employees</div>
+          </div>
+          <div class="stat-block">
+            <div class="num">$6.3M</div>
+            <div class="label">Est. Revenue (USD)</div>
+          </div>
+        </div>
+        <div style="display:flex; gap:8px; margin-top:16px; flex-wrap:wrap;">
+          <span class="pill pill-gold">Meta Business Partner</span>
+          <span class="pill pill-gold">RISA &amp; CAPASSO Licensed</span>
+          <span class="pill" style="background:rgba(139,92,246,0.15); color:var(--purple);">Recording Studios</span>
+          <span class="pill" style="background:rgba(39,174,96,0.15); color:var(--green);">Greenscreen Studios</span>
+          <span class="pill pill-red">0 Industry Awards</span>
+          <span class="pill pill-red">663 IG Followers</span>
+        </div>
+        <div class="key-insight" style="margin-top:20px;">
+          <p>Magos describes itself as a <strong>"tech-enabled, multi-dimensional creative marketing agency"</strong> — their full service stack spans creative, digital, in-store media (branded radio, digital signage), animation, recording/production, and app development. The digital marketing service line is real, but has no proof of performance outcomes in any public channel. No Loeries. No Bookmarks. No Bizcommunity coverage. Nothing in Campaign Brief Africa. The cobbler's shoes: 663 Instagram followers after 25 years building other brands.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     03 LEADERSHIP SIGNAL
+══════════════════════════════════════ -->
+<section id="leadership">
+  <div class="container">
+    <div class="section-num">03</div>
+    <div class="eyebrow">The Most Important Signal</div>
+    <div class="headline">Petro Is<br><span>Moving On</span></div>
+    <div class="subhead">The Head of Digital hire is not a support role. It is an operational succession play. The founder is building a VC firm — and the agency needs someone who can own the digital function without him.</div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:20px; margin-top:48px;">
+      <div class="leadership-card before" style="opacity:1;">
+        <div class="card-label">THEN — 2000 to ~2022</div>
+        <h3>Magos Media CEO</h3>
+        <div class="role">Full-time agency founder, all client relationships</div>
+        <p>Built the agency from scratch. Hands-on across creative, business development, and major client relationships. Day-to-day operational presence in Illovo.</p>
+      </div>
+      <div class="leadership-card after">
+        <div class="card-label">NOW — Venture 2</div>
+        <h3 style="color:var(--purple)">Venteri Capital CEO</h3>
+        <div class="role">VC firm — Limassol, Cyprus — est. 2023</div>
+        <p>7 portfolio investments by Jan 2024. Yusuf Randera-Rees (Harvard/Oxford, R450M raised) as Chairman. Petro's primary capital-deployment vehicle going forward.</p>
+      </div>
+      <div class="leadership-card" style="background:linear-gradient(135deg, rgba(231,76,60,0.1), rgba(231,76,60,0.03)); border:1px solid rgba(231,76,60,0.4);">
+        <div class="card-label" style="color:var(--red);">ALSO NOW — Venture 3</div>
+        <h3 style="color:var(--red)">PlayX1 / VeliTech CEO</h3>
+        <div class="role">iGaming ML platform — Regional SA Distributor — est. 2025</div>
+        <p>VeliTech is an ML-driven iGaming/GGR platform. Petro is the SA Regional Representative and CEO of PlayX1 (the local distributor). Attended SAAStock 2024 as a tech founder, not an agency CEO.</p>
+      </div>
+    </div>
+
+    <div class="implication-box" style="--insight-color: var(--red); background: rgba(231,76,60,0.05); border-color: rgba(231,76,60,0.3);">
+      <p><strong>Petro is running three companies simultaneously.</strong> Magos Media is his oldest and most established — but it is no longer where his personal attention lives. His LinkedIn title has shifted to VeliTech/PlayX1. He attended a startup conference as a VC/tech investor, not an agency CEO. The Head of Digital hire is not a support role. It is the person who keeps the agency running while he builds his next chapter. Walk in as an autonomous operator. The moment you say "what direction do you want me to go?" you've lost the room.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     04 VENTERI CAPITAL
+══════════════════════════════════════ -->
+<section id="venteri">
+  <div class="container">
+    <div class="section-num">04</div>
+    <div class="eyebrow">Venteri Capital</div>
+    <div class="headline">The VC He's<br><span>Building Instead</span></div>
+    <div class="subhead">Understanding Venteri Capital explains everything about why this role exists — and gives you a conversation angle that no other candidate will have.</div>
+
+    <div class="venteri-grid">
+      <div class="person-card" style="border-color: rgba(139,92,246,0.3);">
+        <div class="role-tag">Founder & CEO</div>
+        <h4>Petro Magos</h4>
+        <div class="bio">Magos Media founder pivoting to venture capital. His digital agency career gives him deal flow in the marketing/media/tech space. Venteri is his primary vehicle going forward.</div>
+        <div class="credentials">
+          <span class="cred-tag">Magos Media — 25yrs</span>
+          <span class="cred-tag">Venture Capital</span>
+          <span class="cred-tag">Illovo JHB</span>
+        </div>
+      </div>
+      <div class="person-card" style="border-color: rgba(200,169,110,0.3);">
+        <div class="role-tag">Chairman</div>
+        <h4>Yusuf Randera-Rees</h4>
+        <div class="bio">Co-founded Awethu Project — raised R450M, backed 2,200+ entrepreneurs. Harvard Business School. Oxford MBA. One of the most credentialed impact investors in Africa. His presence signals Venteri is serious.</div>
+        <div class="credentials">
+          <span class="cred-tag">Harvard Business School</span>
+          <span class="cred-tag">Oxford MBA</span>
+          <span class="cred-tag">R450M Raised</span>
+          <span class="cred-tag">Awethu Project</span>
+        </div>
+      </div>
+      <div class="person-card">
+        <div class="role-tag">CFO</div>
+        <h4>Savva Argyros</h4>
+        <div class="bio">Chartered Accountant (KPMG, PwC). Black Leaf Capital background. Brings institutional-grade financial rigour to the VC operations. Cyprus-based.</div>
+        <div class="credentials">
+          <span class="cred-tag">CA (KPMG/PwC)</span>
+          <span class="cred-tag">Black Leaf Capital</span>
+          <span class="cred-tag">Cyprus</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="venteri-grid" style="margin-top:16px; grid-template-columns: 1fr 1fr;">
+      <div class="person-card">
+        <div class="role-tag">COO</div>
+        <h4>Nick Argyros</h4>
+        <div class="bio">Ran INJOZI Technology Studio — ranked top 3 African digital agency. Also involved in GotBot AI, top 10 at Africa Startupbootcamp. Brings genuine digital-agency operating experience to the VC portfolio.</div>
+        <div class="credentials">
+          <span class="cred-tag">INJOZI — Top 3 Africa</span>
+          <span class="cred-tag">GotBot AI</span>
+          <span class="cred-tag">Startupbootcamp Africa</span>
+        </div>
+      </div>
+      <div>
+        <div class="venteri-meta" style="grid-template-columns:1fr; gap:12px;">
+          <div class="vmeta-item">
+            <div class="vnum">2023</div>
+            <div class="vlab">Founded — Limassol, Cyprus</div>
+          </div>
+          <div class="vmeta-item">
+            <div class="vnum">7</div>
+            <div class="vlab">Portfolio investments by Jan 2024</div>
+          </div>
+          <div class="vmeta-item">
+            <div class="vnum">R450M</div>
+            <div class="vlab">Raised by Chairman's prior venture</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="key-insight">
+      <p><strong>The play:</strong> "Petro, from what I understand, you're building Venteri Capital alongside Magos. That tells me the Head of Digital needs to run independently — not report up for every decision. I've operated three independent businesses simultaneously. I don't need hand-holding to run a digital function. I bring the system; you deploy capital." — Use this if Petro is in the room.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     05 THE TEAM
+══════════════════════════════════════ -->
+<section id="team">
+  <div class="container">
+    <div class="section-num">05</div>
+    <div class="eyebrow">The Interview Room</div>
+    <div class="headline">Who You're<br><span>Walking In To</span></div>
+    <div class="subhead">Rizana Mosam is the current Head of Digital. She likely built or maintained the role you're applying for. Understanding her trajectory changes how you present yourself entirely.</div>
+
+    <div class="team-grid">
+      <div class="team-card featured" style="grid-row: span 2;">
+        <div class="person-label">Your Interviewer</div>
+        <h4>Rizana Mosam</h4>
+        <div class="role">Head of Digital — Current Incumbent</div>
+        <p>Rose through Magos internally: Social Media Manager → Senior Social Media Manager → Head of Digital. BA in Fashion from Stadio (2012–2016). Former lecturer at Lisof. Her entire career is social-first, content-first, brand narrative.</p>
+        <p style="margin-top:12px;">She is not a performance marketer. She has not had to own ROAS, attribution, or Google Ads. That is not a weakness — it is where you complement rather than compete.</p>
+        <div class="strategy-chip">Frame yourself as the performance layer she was never asked to build</div>
+        <div style="margin-top:16px; padding:14px; background:rgba(0,0,0,0.3); border-radius:8px; font-size:12px; color:var(--muted);">
+          <strong style="color:var(--purple);">The room play:</strong> Acknowledge her 25-year brand knowledge and social depth. Say you're not there to replace what she built — you're there to add the measurement engine she never needed to build personally. Make her an ally, not a gatekeeper.
+        </div>
+      </div>
+      <div class="team-card">
+        <div class="person-label">Founder</div>
+        <h4>Petro Magos</h4>
+        <div class="role">CEO / Founder — Transitioning to Venteri Capital</div>
+        <p>May or may not be in the room. If he is: lead with the KFC audit. Show him what his own client data looks like. He responds to proof, not pitch.</p>
+      </div>
+      <div class="team-card">
+        <div class="person-label">Growth Signal</div>
+        <h4>Shoko Sepoloane</h4>
+        <div class="role">Product Marketing & Growth</div>
+        <p>Unusual title for a pure creative agency. Signals that Magos is trying to build a strategic offering beyond execution. Potential ally — she likely wants the performance layer too.</p>
+      </div>
+    </div>
+
+    <div class="secondary-team">
+      <div class="secondary-card">
+        <div class="avatar-circle">SS</div>
+        <div>
+          <h5>Sasha Lee Sinden</h5>
+          <div class="role">Social Media Manager — Gauteng</div>
+          <div class="note">Likely direct report in the current structure. Social-first, content-focused. Reports to Rizana.</div>
+        </div>
+      </div>
+      <div class="secondary-card">
+        <div class="avatar-circle">RS</div>
+        <div>
+          <h5>Remmert Spreeth</h5>
+          <div class="role">Animator</div>
+          <div class="note">In-house animation capability. ZoomInfo confirmed. Part of the production layer.</div>
+        </div>
+      </div>
+      <div class="secondary-card">
+        <div class="avatar-circle">IM</div>
+        <div>
+          <h5>Itumeleng Mapheng</h5>
+          <div class="role">Manager, Database</div>
+          <div class="note">Database/CRM layer in a creative agency. Signals client data infrastructure. Strong asset for performance marketing.</div>
+        </div>
+      </div>
+      <div class="secondary-card">
+        <div class="avatar-circle">+2</div>
+        <div>
+          <h5>Currently Hiring</h5>
+          <div class="role">Junior Media Creation + Social Media Manager</div>
+          <div class="note">Team is actively growing — 2 open roles confirm expansion, not replacement. You are being hired to lead growth.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     06 CLIENT PORTFOLIO
+══════════════════════════════════════ -->
+<section id="clients">
+  <div class="container">
+    <div class="section-num">06</div>
+    <div class="eyebrow">Client Portfolio</div>
+    <div class="headline">Nine Blue-Chip<br><span>Clients. Zero<br>Case Studies.</span></div>
+    <div class="subhead">Every client below is a major South African brand. None of them have a published, measurable outcome attributed to Magos Media. That silence is the wedge.</div>
+
+    <div class="client-grid">
+
+      <div class="client-card" style="--client-color: #e8000d;">
+        <div class="audited-badge">AUDITED</div>
+        <div class="client-name">KFC South Africa</div>
+        <div class="client-sector">Quick Service Restaurant</div>
+        <div class="client-rating">
+          <span class="stars">★★★★</span>
+          <span>4.43★ avg (57 locations)</span>
+        </div>
+        <div class="client-desc">900+ SA outlets. 123,985 reviews scraped. 90% response rate — but 5 rotating templates. "Winner winner chicken dinner" as the official response to a 1-star complaint.</div>
+        <div class="client-gap"><strong>Gap:</strong> High response rate, zero response quality. AI personalisation at scale is the fix.</div>
+      </div>
+
+      <div class="client-card" style="--client-color: #e31837;">
+        <div class="audited-badge">AUDITED</div>
+        <div class="client-name">Pick n Pay</div>
+        <div class="client-sector">Grocery Retail</div>
+        <div class="client-rating">
+          <span class="stars">★★★★</span>
+          <span>4.02★ avg (31 locations)</span>
+        </div>
+        <div class="client-desc">1,800+ SA stores. 37,862 reviews. 39% avg response rate — but 0% at Brixton Family (2,674 reviews) and Annlin West (2,794 reviews). Rosebank at 3.0★ gets 17% neg response.</div>
+        <div class="client-gap"><strong>Gap:</strong> Inverted protection — the better the store, the more it responds. Crisis stores are silenced.</div>
+      </div>
+
+      <div class="client-card" style="--client-color: #e31837;">
+        <div class="audited-badge">AUDITED</div>
+        <div class="client-name">Spar SA</div>
+        <div class="client-sector">Grocery Retail (Franchise)</div>
+        <div class="client-rating">
+          <span class="stars">★★★★</span>
+          <span>4.26★ avg (44 locations)</span>
+        </div>
+        <div class="client-desc">2,400+ stores, franchise model. Monument Park: 4% response rate, silent since Jan 2024. Rosmead: responds with single emojis (😎 ×8). Parklane: genuinely good, named responses.</div>
+        <div class="client-gap"><strong>Gap:</strong> No brand-level control. 97% of formal complaints unresolved. Franchise chaos.</div>
+      </div>
+
+      <div class="client-card" style="--client-color: #003087;">
+        <div class="client-name">Protea Hotels by Marriott</div>
+        <div class="client-sector">Hospitality — Marriott International</div>
+        <div class="client-rating">
+          <span class="stars">★★★★</span>
+          <span>4.2★ Fire &amp; Ice JHB (#2 of 201)</span>
+        </div>
+        <div class="client-desc">60+ SA/Africa properties. Fire &amp; Ice JHB is best-in-class (personalised review responses, Caitlynne F). Fire &amp; Ice Cape Town is the weak link — 3.8★, templated responses, #66 of 128. Cricket SA partnership (Feb 2025) being under-activated digitally. 23K Instagram followers.</div>
+        <div class="client-gap"><strong>Gap:</strong> Cricket SA partnership (Feb 2025) got 40 Facebook reactions. Zero paid amplification around match-day content. JHB-Cape Town quality gap is a conversion leak.</div>
+      </div>
+
+      <div class="client-card" style="--client-color: #1a1a2e;">
+        <div class="client-name">Hotel Sky</div>
+        <div class="client-sector">Boutique Hospitality — R1.9B investment</div>
+        <div class="client-rating">
+          <span class="stars">★★★★</span>
+          <span>4.3★ JHB / 3.8★ CPT (TripAdvisor)</span>
+        </div>
+        <div class="client-desc">Two properties: Sandton + Cape Town. R28M in tech (AI robots, Sky-Hi Ride). 52K Instagram. BUT: HelloPeter TrustIndex 2.8 (JHB) and 2.5 (CPT) — the platform SA consumers use to make trust decisions. 11,927 Booking.com reviews = high OTA dependency, zero direct booking strategy.</div>
+        <div class="client-gap"><strong>Gap:</strong> HelloPeter 2.5 is a reputation crisis. Cape Town is #129 of 288 on TripAdvisor. A R1.9B hotel getting beaten by budget guesthouses in the rankings.</div>
+      </div>
+
+      <div class="client-card" style="--client-color: #ff6b00;">
+        <div class="client-name">News Cafe</div>
+        <div class="client-sector">Casual Dining / Entertainment Bar</div>
+        <div class="client-rating">
+          <span class="stars">★★★</span>
+          <span>3.5★–4.5★ franchise inconsistency</span>
+        </div>
+        <div class="client-desc">Founded 1995. "It's About The Vibe." 20+ SA locations + sub-Saharan expansion. R7.2M–R10.4M franchise cost. 27K Instagram followers. Sports, cocktails, live events. In-store media (branded TV, background music) is a core Magos deliverable.</div>
+        <div class="client-gap"><strong>Gap:</strong> The brand promises live entertainment but posts static promos. No real-time event content, no TikTok clips from match nights, no UGC strategy. The vibe doesn't make it online.</div>
+      </div>
+
+      <div class="client-card" style="--client-color: #c41230;">
+        <div class="client-name">Calisto's</div>
+        <div class="client-sector">Portuguese Restaurant — 30yr Heritage</div>
+        <div class="client-rating">
+          <span class="stars">★★★★</span>
+          <span>4.0–4.3★ — casino/mall locations</span>
+        </div>
+        <div class="client-desc">Founded 1992. 11 restaurants. Heavily casino-located: Gold Reef City, Silverstar, Carnival City, Suncoast, NM Square. Gold Reef renovation (early 2025) drove strong review surge. Instagram fragmented: main account 19K vs @calistos_silverstar with just 32 followers.</div>
+        <div class="client-gap"><strong>Gap:</strong> 12 fragmented social accounts competing against each other. Main account should have 100K+ for a 30-year brand. A unified architecture is the single highest-leverage fix.</div>
+      </div>
+
+      <div class="client-card" style="--client-color: #4caf50;">
+        <div class="client-name">Petzone</div>
+        <div class="client-sector">Pet Retail — West Pack Lifestyle</div>
+        <div class="client-rating">
+          <span class="stars">★★★★</span>
+          <span>4.4★ Boksburg / 4,137 Instagram</span>
+        </div>
+        <div class="client-desc">50+ stores, value pet retail (West Pack Lifestyle parent). Woolworths acquired 93.45% of Absolute Pets in April 2024 — now 180+ stores with Woolworths capital. Absolute Pets Instagram: 18K (4x Petzone). Pet content is the highest-performing organic category on social — Petzone is invisible in it.</div>
+        <div class="client-gap"><strong>Gap — URGENT:</strong> Losing a competitive battle while Woolworths-backed competitor scales. 4,137 Instagram followers for a 50-store chain is existential. No UGC, no creators, no community.</div>
+      </div>
+
+      <div class="client-card" style="--client-color: #8b1a1a;">
+        <div class="client-name">Doppio Zero</div>
+        <div class="client-sector">Premium Italian Dining — Spur-owned</div>
+        <div class="client-rating">
+          <span class="stars">★★★★</span>
+          <span>4.0–4.4★ / 42K Instagram / HelloPeter 2.8</span>
+        </div>
+        <div class="client-desc">30 SA locations + Botswana. Founded 2002 Greenside. 60% owned by Spur Corporation. Also runs 10 Piza e Vino outlets. First Halaal location opened Nov 2024 (Florida Rd Durban, NIHT-certified) — 6 more planned. 42K Instagram, in-house marketing team, structured review management. Best digital operator in the portfolio.</div>
+        <div class="client-gap"><strong>Gap:</strong> No TikTok despite having the most photographable food in the portfolio. Halaal expansion = huge earned-media story going unactivated. HelloPeter 2.8 is the one visible vulnerability.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     07 HOSPITALITY DEEP DIVE
+══════════════════════════════════════ -->
+<section id="hospitality" style="background:var(--surface);">
+  <div class="container">
+    <div class="section-num">07</div>
+    <div class="eyebrow">Hospitality Clients — Live Data</div>
+    <div class="headline">A R1.9 Billion Hotel<br><span>With a 2.5 HelloPeter<br>TrustIndex</span></div>
+    <div class="subhead">Hotel Sky is Magos's most technologically ambitious client. It is also the one with the most urgent and visible reputation problem — on the platform that matters most to South African consumers.</div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:48px;">
+
+      <div style="background:var(--card); border:1px solid var(--border); border-radius:16px; padding:28px;">
+        <div style="font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--orange); font-weight:700; margin-bottom:16px;">HOTEL SKY — THE NUMBERS</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:20px;">
+          <div style="background:var(--card2); border:1px solid var(--border2); border-radius:8px; padding:14px; text-align:center;">
+            <div style="font-size:28px; font-weight:900; color:var(--green);">8.1</div>
+            <div style="font-size:11px; color:var(--muted);">Booking.com — Sandton</div>
+          </div>
+          <div style="background:var(--card2); border:1px solid var(--border2); border-radius:8px; padding:14px; text-align:center;">
+            <div style="font-size:28px; font-weight:900; color:var(--orange);">4.0</div>
+            <div style="font-size:11px; color:var(--muted);">TripAdvisor — Sandton</div>
+          </div>
+          <div style="background:rgba(231,76,60,0.08); border:1px solid rgba(231,76,60,0.3); border-radius:8px; padding:14px; text-align:center;">
+            <div style="font-size:28px; font-weight:900; color:var(--red);">2.8</div>
+            <div style="font-size:11px; color:var(--muted);">HelloPeter — Sandton</div>
+          </div>
+          <div style="background:rgba(231,76,60,0.08); border:1px solid rgba(231,76,60,0.3); border-radius:8px; padding:14px; text-align:center;">
+            <div style="font-size:28px; font-weight:900; color:var(--red);">2.5</div>
+            <div style="font-size:11px; color:var(--muted);">HelloPeter — Cape Town</div>
+          </div>
+        </div>
+        <div style="font-size:12px; color:var(--muted); line-height:1.7; padding:16px; background:rgba(231,76,60,0.05); border-left:3px solid var(--red); border-radius:0 8px 8px 0;">
+          <strong style="color:var(--red);">Why HelloPeter matters:</strong> South Africans go to HelloPeter before booking hotels. A TrustIndex below 3.0 is a brand warning sign. Hotel Sky Cape Town — where Magos is the agency — sits at 2.5. A R1 billion hotel investment is losing guests at the bottom of the trust funnel to unresolved complaints that nobody responds to publicly.
+        </div>
+      </div>
+
+      <div style="background:var(--card); border:1px solid var(--border); border-radius:16px; padding:28px;">
+        <div style="font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--blue); font-weight:700; margin-bottom:16px;">PROTEA HOTELS — JHB VS CPT GAP</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px;">
+          <div style="background:rgba(39,174,96,0.07); border:1px solid rgba(39,174,96,0.3); border-radius:10px; padding:16px; text-align:center;">
+            <div style="font-size:11px; color:var(--green); font-weight:700; letter-spacing:1px; margin-bottom:8px;">FIRE &amp; ICE JHB</div>
+            <div style="font-size:24px; font-weight:900; color:var(--green);">#2</div>
+            <div style="font-size:11px; color:var(--muted);">of 201 hotels in JHB</div>
+            <div style="font-size:11px; color:var(--muted); margin-top:6px;">Caitlynne F responds personally. Named responses. Warm tone.</div>
+          </div>
+          <div style="background:rgba(231,76,60,0.07); border:1px solid rgba(231,76,60,0.3); border-radius:10px; padding:16px; text-align:center;">
+            <div style="font-size:11px; color:var(--red); font-weight:700; letter-spacing:1px; margin-bottom:8px;">FIRE &amp; ICE CPT</div>
+            <div style="font-size:24px; font-weight:900; color:var(--red);">#66</div>
+            <div style="font-size:11px; color:var(--muted);">of 128 hotels in Cape Town</div>
+            <div style="font-size:11px; color:var(--muted); margin-top:6px;">Templated responses. Weeks to reply. No named owner.</div>
+          </div>
+        </div>
+        <div style="font-size:12px; color:var(--muted); line-height:1.7; padding:16px; background:rgba(200,169,110,0.05); border-left:3px solid var(--gold); border-radius:0 8px 8px 0;">
+          <strong style="color:var(--gold);">Cricket SA Partnership (Feb 2025):</strong> Protea Hotels became Official Hotel Partner of Cricket South Africa — a multi-year deal with match-day fan activations, Bonvoy loyalty integration, and player content access. The announcement post on Facebook got <strong style="color:var(--red);">40 reactions.</strong> Zero paid amplification. A partnership with the Proteas (whose name mirrors the hotel brand) is being wasted on a press release.
+        </div>
+      </div>
+
+    </div>
+
+    <div class="key-insight" style="--insight-color: var(--orange);">
+      <p><strong>The question to ask in the room:</strong> "Hotel Sky's HelloPeter TrustIndex is 2.5 in Cape Town. Is that currently in scope for Magos, or is it being managed at the hotel level? Because that number is where SA consumers are deciding not to book — and it's a faster fix than any creative campaign."</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     07b PETZONE COMPETITIVE THREAT
+══════════════════════════════════════ -->
+<section id="petzone-threat" style="background:var(--black);">
+  <div class="container">
+    <div class="section-num">07b</div>
+    <div class="eyebrow">Petzone — Active Competitive Threat</div>
+    <div class="headline">Woolworths Just<br><span>Entered the Ring</span></div>
+    <div class="subhead">In April 2024, Woolworths acquired 93.45% of Absolute Pets. The Competition Tribunal approved it. Petzone is now fighting a 50-store challenger brand against a Woolworths-backed 180-store chain.</div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:48px;">
+      <div style="background:rgba(39,174,96,0.06); border:1px solid rgba(39,174,96,0.3); border-radius:14px; padding:28px;">
+        <div style="font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--green); font-weight:700; margin-bottom:16px;">ABSOLUTE PETS (Woolworths-backed)</div>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <div style="display:flex; justify-content:space-between; font-size:13px; padding:8px 0; border-bottom:1px solid var(--border);">
+            <span style="color:var(--muted);">Store count</span><span style="font-weight:700; color:var(--green);">180+</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; font-size:13px; padding:8px 0; border-bottom:1px solid var(--border);">
+            <span style="color:var(--muted);">Instagram followers</span><span style="font-weight:700; color:var(--green);">18,000</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; font-size:13px; padding:8px 0; border-bottom:1px solid var(--border);">
+            <span style="color:var(--muted);">Revenue growth (5yr)</span><span style="font-weight:700; color:var(--green);">+300%</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; font-size:13px; padding:8px 0;">
+            <span style="color:var(--muted);">SA website traffic rank</span><span style="font-weight:700; color:var(--green);">#1 pet category</span>
+          </div>
+        </div>
+      </div>
+      <div style="background:rgba(231,76,60,0.06); border:1px solid rgba(231,76,60,0.3); border-radius:14px; padding:28px;">
+        <div style="font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--red); font-weight:700; margin-bottom:16px;">PETZONE (Magos Client)</div>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <div style="display:flex; justify-content:space-between; font-size:13px; padding:8px 0; border-bottom:1px solid var(--border);">
+            <span style="color:var(--muted);">Store count</span><span style="font-weight:700; color:var(--orange);">~50</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; font-size:13px; padding:8px 0; border-bottom:1px solid var(--border);">
+            <span style="color:var(--muted);">Instagram followers</span><span style="font-weight:700; color:var(--red);">4,137</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; font-size:13px; padding:8px 0; border-bottom:1px solid var(--border);">
+            <span style="color:var(--muted);">Review response strategy</span><span style="font-weight:700; color:var(--red);">None visible</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; font-size:13px; padding:8px 0;">
+            <span style="color:var(--muted);">UGC / creator strategy</span><span style="font-weight:700; color:var(--red);">None</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="key-insight" style="--insight-color: var(--red);">
+      <p>Pet content is among the highest-performing organic categories on social media globally. Petzone has 50+ stores, loyal customers who photograph their pets in-store every day, and 4,137 Instagram followers to show for it. This is not a competitive disadvantage — it is a <strong>solvable problem in 90 days</strong> with a UGC strategy and creator seeding program. The pitch: Absolute Pets is building on digital right now. Petzone needs to start yesterday.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     09 AUDIT INTRO
+══════════════════════════════════════ -->
+<section id="audit-intro">
+  <div class="container">
+    <div class="section-num">09</div>
+    <div class="eyebrow">The Proof of Concept</div>
+    <div class="headline">I Audited Your<br><span>Clients Before<br>the Interview</span></div>
+    <div class="subhead">210,212 Google reviews scraped across three Magos clients using live data infrastructure. Every number below is real. This is not a proposal — it is a system already running.</div>
+
+    <div class="audit-hero-grid">
+      <div class="audit-brand-card" style="border-color:rgba(232,0,13,0.3);">
+        <div class="brand-logo" style="color:#e8000d;">KFC</div>
+        <div class="big-num" style="color:#e8000d;">123,985</div>
+        <div class="big-label">Reviews Scraped</div>
+        <div class="metric-row"><span class="mk">Locations</span><span class="mv">57</span></div>
+        <div class="metric-row"><span class="mk">Avg Rating</span><span class="mv" style="color:var(--green)">4.43★</span></div>
+        <div class="metric-row"><span class="mk">Negative</span><span class="mv" style="color:var(--red)">12,966 (10.5%)</span></div>
+        <div class="metric-row"><span class="mk">Response Rate</span><span class="mv" style="color:var(--green)">90%</span></div>
+        <div class="metric-row"><span class="mk">Templates Used</span><span class="mv" style="color:var(--orange)">5–6 rotating</span></div>
+      </div>
+
+      <div class="audit-brand-card" style="border-color:rgba(227,24,55,0.3);">
+        <div class="brand-logo" style="color:#e31837;">P n P</div>
+        <div class="big-num" style="color:#e31837;">37,862</div>
+        <div class="big-label">Reviews Scraped</div>
+        <div class="metric-row"><span class="mk">Locations</span><span class="mv">31</span></div>
+        <div class="metric-row"><span class="mk">Avg Rating</span><span class="mv" style="color:var(--orange)">4.02★</span></div>
+        <div class="metric-row"><span class="mk">Negative</span><span class="mv" style="color:var(--red)">4,666 (12.3%)</span></div>
+        <div class="metric-row"><span class="mk">Response Rate</span><span class="mv" style="color:var(--orange)">39% avg</span></div>
+        <div class="metric-row"><span class="mk">Response Range</span><span class="mv" style="color:var(--red)">0%–99%</span></div>
+      </div>
+
+      <div class="audit-brand-card" style="border-color:rgba(227,24,55,0.3);">
+        <div class="brand-logo" style="color:#e31837;">SPAR</div>
+        <div class="big-num" style="color:#c8a96e;">48,365</div>
+        <div class="big-label">Reviews Scraped</div>
+        <div class="metric-row"><span class="mk">Locations</span><span class="mv">44</span></div>
+        <div class="metric-row"><span class="mk">Avg Rating</span><span class="mv" style="color:var(--green)">4.26★</span></div>
+        <div class="metric-row"><span class="mk">Negative</span><span class="mv" style="color:var(--orange)">3,273 (6.8%)</span></div>
+        <div class="metric-row"><span class="mk">Response Rate</span><span class="mv" style="color:var(--orange)">59% avg</span></div>
+        <div class="metric-row"><span class="mk">Response Range</span><span class="mv" style="color:var(--red)">4%–93%</span></div>
+      </div>
+    </div>
+
+    <div class="total-corpus-bar">
+      <div class="corpus-label">
+        <div class="title">Total Review Corpus — June 2026 Live Data</div>
+        <div class="total">210,212 Reviews</div>
+      </div>
+      <div class="corpus-bar-track">
+        <div class="corpus-bar-fill" style="width:59%; background:linear-gradient(90deg, #e8000d, #c00010);" title="KFC: 123,985"></div>
+        <div class="corpus-bar-fill" style="width:18%; background:linear-gradient(90deg, #e31837, #b0101f);" title="PnP: 37,862"></div>
+        <div class="corpus-bar-fill" style="width:23%; background:linear-gradient(90deg, #c8a96e, #a07840);" title="Spar: 48,365"></div>
+      </div>
+      <div class="corpus-legend">
+        <div class="corpus-leg-item"><div class="leg-dot" style="background:#e8000d;"></div>KFC — 123,985 reviews (59%)</div>
+        <div class="corpus-leg-item"><div class="leg-dot" style="background:#e31837;"></div>Pick n Pay — 37,862 reviews (18%)</div>
+        <div class="corpus-leg-item"><div class="leg-dot" style="background:#c8a96e;"></div>Spar SA — 48,365 reviews (23%)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     10 KFC DEEP DIVE
+══════════════════════════════════════ -->
+<section id="kfc-audit">
+  <div class="container">
+    <div class="section-num">10</div>
+    <div class="eyebrow">KFC South Africa — Audited</div>
+    <div class="headline">90% Response Rate.<br><span>Zero Substance.</span></div>
+    <div class="subhead">KFC responds to almost every review. But the responses are copy-paste templates that communicate nothing — and an audience of thousands reads them.</div>
+
+    <div class="kfc-grid">
+      <div>
+        <div class="kfc-metric-stack">
+          <div class="kfc-metric"><span class="mk">Total reviews (57 locs)</span><span class="mv">123,985</span></div>
+          <div class="kfc-metric"><span class="mk">Avg rating</span><span class="mv green">4.43★</span></div>
+          <div class="kfc-metric"><span class="mk">Negative reviews (1+2★)</span><span class="mv red">12,966 (10.5%)</span></div>
+          <div class="kfc-metric"><span class="mk">Recent response rate</span><span class="mv green">90%</span></div>
+          <div class="kfc-metric"><span class="mk">Neg review response rate</span><span class="mv orange">83%</span></div>
+          <div class="kfc-metric"><span class="mk">Avg response length</span><span class="mv red">111 characters</span></div>
+          <div class="kfc-metric"><span class="mk">Unique templates in use</span><span class="mv red">5–6</span></div>
+          <div class="kfc-metric"><span class="mk">Signed by</span><span class="mv orange">"Team KFC"</span></div>
+          <div class="kfc-metric"><span class="mk">Worst location</span><span class="mv red">Langenhoven Park 3.7★</span></div>
+        </div>
+        <div class="key-insight">
+          <p>The gap is not response rate — it is response quality. A customer who describes their meal as inedible gets "Winner winner chicken dinner!" The response performs compliance, not care. The audience reading these responses — which outnumbers the reviewers — learns that KFC has a bot, not a brand.</p>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:12px; letter-spacing:1px; text-transform:uppercase; color:var(--muted); margin-bottom:16px; font-weight:700;">Actual Templates In Use — Live Data</div>
+        <div class="template-cards">
+          <div class="template-card">
+            <div class="tcount">Used 77× — 5-star reviews</div>
+            <div class="ttext">"Winner winner chicken dinner! Thanks for the great feedback, we are so glad you enjoyed your KFC experience."</div>
+            <div class="tfail">Problem: Identical wording across 77 different customers. No name. No acknowledgement of what they specifically said.</div>
+          </div>
+          <div class="template-card">
+            <div class="tcount">Used 49× — negative reviews</div>
+            <div class="ttext">"We are so sorry to hear about your recent experience. Please contact our customer care team at 0800 111 110 so we can assist you further."</div>
+            <div class="tfail">Problem: Moves the conversation offline. The public complaint stays unresolved. Every future reader sees the problem with no resolution.</div>
+          </div>
+          <div class="template-card">
+            <div class="tcount">Used 44× — mixed reviews</div>
+            <div class="ttext">"Thank you for taking the time to share your feedback, Team KFC."</div>
+            <div class="tfail">Problem: 11 words. No empathy, no acknowledgement, no action. Signed by a team rather than a person.</div>
+          </div>
+          <div class="template-card" style="border-color:var(--gold);">
+            <div class="tcount" style="color:var(--gold);">The Opportunity</div>
+            <div class="ttext" style="color:var(--text); font-style:normal;">AI-personalised responses using review context, branch name, specific complaint theme. Different voice for 1★ vs 5★. Signed by a person. Takes 30 seconds to generate, reads like 30 minutes to write.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     11 PNP DEEP DIVE
+══════════════════════════════════════ -->
+<section id="pnp-audit">
+  <div class="container">
+    <div class="section-num">11</div>
+    <div class="eyebrow">Pick n Pay — Audited</div>
+    <div class="headline">The System Protects<br><span>the Wrong Stores</span></div>
+    <div class="subhead">PnP has a centralised review management system. But it is deployed in inverse proportion to need — the flagship stores get the attention, the crisis stores get silence.</div>
+
+    <div class="pnp-inconsistency">
+      <div class="pnp-store-card best">
+        <div class="store-tag">Premium Store — 4.5★</div>
+        <h4>Pick n Pay On Nicol</h4>
+        <div class="location">Sandton — Affluent Flagship</div>
+        <div class="big-pct">99%</div>
+        <div class="pct-label">Response rate — 100% on negative reviews</div>
+        <div style="font-size:13px; color:var(--muted); margin-top:16px;">Dedicated community management. Responds within hours. Lowest negative rate (4.9%) — gets the most attention.</div>
+      </div>
+      <div class="pnp-store-card worst">
+        <div class="store-tag">Crisis Store — 3.0★</div>
+        <h4>Pick n Pay Rosebank</h4>
+        <div class="location">Johannesburg — 42.2% negative reviews</div>
+        <div class="big-pct">17%</div>
+        <div class="pct-label">Negative review response rate — 83 unread 1-star reviews</div>
+        <div style="font-size:13px; color:var(--muted); margin-top:16px;">Staff xenophobia complaint on record. No follow-up. The public record shows the problem with no resolution in sight.</div>
+      </div>
+    </div>
+
+    <div class="pnp-zero-row">
+      <div class="pnp-zero-card">
+        <h5>Pick n Pay Family Brixton</h5>
+        <div class="count">2,674 reviews — 12% negative (320 complaints)</div>
+        <div class="zero">0% response</div>
+      </div>
+      <div class="pnp-zero-card">
+        <h5>Pick n Pay Annlin West</h5>
+        <div class="count">2,794 reviews — 8.6% negative (241 complaints)</div>
+        <div class="zero">0% response</div>
+      </div>
+    </div>
+
+    <div class="pnp-template-box">
+      <div class="tmpl-label">The PnP Deflection Template — Live Data</div>
+      <div class="tmpl-text">"We're disappointed to hear your experience fell short. Please get in touch on 0860303030 or customercare@pnp.co.za so we can assist further."</div>
+      <div class="tmpl-note">The digital complaint is moved offline. The public thread stays unresolved. Every future shopper reads the problem, not the solution. The call centre owns the resolution — and no one reads what happens next.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     12 SPAR DEEP DIVE
+══════════════════════════════════════ -->
+<section id="spar-audit">
+  <div class="container">
+    <div class="section-num">12</div>
+    <div class="eyebrow">Spar SA — Audited</div>
+    <div class="headline">Same Logo.<br><span>Three Different<br>Realities.</span></div>
+    <div class="subhead">Spar's headline metrics look clean. Inside the franchise network, three neighbouring stores are running completely different reputation strategies — or none at all.</div>
+
+    <div class="spar-three-col">
+      <div class="spar-franchise-card high">
+        <div class="store-label">Active — Cape Town</div>
+        <div class="store-name">Rosmead SUPERSPAR</div>
+        <div class="store-city">Kenilworth, Cape Town — 5,555 reviews</div>
+        <div class="big-pct">93%</div>
+        <div class="pct-note">Response rate</div>
+        <div class="detail">Responds to almost everything. But 8 responses are just "😎", 6 are "😊", 4 are "👍". High volume, zero content.</div>
+      </div>
+      <div class="spar-franchise-card dead">
+        <div class="store-label">Dormant — Pretoria</div>
+        <div class="store-name">Monument Park SUPERSPAR</div>
+        <div class="store-city">Pretoria — 4,278 reviews</div>
+        <div class="big-pct">4%</div>
+        <div class="pct-note">Response rate — last active Jan 2024</div>
+        <div class="detail">142 unanswered negative reviews. GBP profile effectively abandoned. Customers who complain receive no signal that anyone is listening.</div>
+      </div>
+      <div class="spar-franchise-card gold-class">
+        <div class="store-label">Best Practice — KZN</div>
+        <div class="store-name">SUPERSPAR Parklane</div>
+        <div class="store-city">Pietermaritzburg — 4,227 reviews</div>
+        <div class="big-pct">81%</div>
+        <div class="pct-note">Response rate — 67% on negatives</div>
+        <div class="detail">"Hi Bafana, this is the type of feedback we work hard to receive!" Personalised by name. This franchise owner actually gets it.</div>
+      </div>
+    </div>
+
+    <div class="emoji-problem-box">
+      <div style="font-size:13px; font-weight:700; margin-bottom:4px;">The Emoji Strategy at Rosmead</div>
+      <div style="font-size:12px; color:var(--muted); margin-bottom:0;">93% response rate sounds excellent — until you see what the responses are:</div>
+      <div class="emoji-row">
+        <div class="emoji-tile"><div class="em">😎</div><div class="ecount">Used 8× as the complete response</div></div>
+        <div class="emoji-tile"><div class="em">😊</div><div class="ecount">Used 6× as the complete response</div></div>
+        <div class="emoji-tile"><div class="em">👍</div><div class="ecount">Used 4× as the complete response</div></div>
+      </div>
+      <div style="font-size:12px; color:var(--muted);">A customer who left a 200-word review about fresh produce and staff kindness gets a thumbs up. Response rate metric: excellent. Communication: zero.</div>
+    </div>
+
+    <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:24px;">
+      <div style="font-size:13px; font-weight:700; margin-bottom:16px;">Franchise Rating Spread — 1.0 Star Gap Across 44 Locations</div>
+      <div class="rating-spread">
+        <div class="spread-tile" style="background:rgba(39,174,96,0.12);">
+          <div class="sr" style="color:var(--green)">4.6★</div>
+          <div class="sl">Best — Umhlanga</div>
+        </div>
+        <div class="spread-tile" style="background:rgba(39,174,96,0.07);">
+          <div class="sr" style="color:var(--green)">4.5★</div>
+          <div class="sl">Monument Pk PTA</div>
+        </div>
+        <div class="spread-tile" style="background:rgba(200,169,110,0.08);">
+          <div class="sr" style="color:var(--gold)">4.26★</div>
+          <div class="sl">Portfolio Avg</div>
+        </div>
+        <div class="spread-tile" style="background:rgba(231,76,60,0.07);">
+          <div class="sr" style="color:var(--orange)">3.8★</div>
+          <div class="sl">Universitas BFN</div>
+        </div>
+        <div class="spread-tile" style="background:rgba(231,76,60,0.12);">
+          <div class="sr" style="color:var(--red)">3.6★</div>
+          <div class="sl">Worst — Warrenton</div>
+        </div>
+      </div>
+      <div style="font-size:12px; color:var(--muted); margin-top:12px;">The brand Spar presents is uniform. The reality a customer experiences depends entirely on which franchise owner has their GBP open that morning.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     13 THE GAP
+══════════════════════════════════════ -->
+<section id="the-gap">
+  <div class="container">
+    <div class="section-num">13</div>
+    <div class="eyebrow">The Strategic Gap</div>
+    <div class="headline">Magos Makes<br><span>Brilliant Creative.<br>Nobody Measures It.</span></div>
+    <div class="subhead">Their entire client roster is underserved by the absence of a performance layer. That absence is not an accident — it is a structural gap that this role is designed to fill.</div>
+
+    <div class="gap-vs-grid">
+      <div class="gap-col has">
+        <h4>What Magos Has</h4>
+        <div class="gap-item has-item">
+          <span class="icon">✓</span>
+          <div class="desc"><strong>Deep creative capability</strong> — in-house video, 2D/3D animation, greenscreen, production studios</div>
+        </div>
+        <div class="gap-item has-item">
+          <span class="icon">✓</span>
+          <div class="desc"><strong>Long-term blue-chip retainers</strong> — Gold Reef City (15+ years), PnP, KFC, Protea Hotels, African Alliance</div>
+        </div>
+        <div class="gap-item has-item">
+          <span class="icon">✓</span>
+          <div class="desc"><strong>In-store media infrastructure</strong> — branded radio, digital signage, RISA/CAPASSO licensed — a recurring revenue moat</div>
+        </div>
+        <div class="gap-item has-item">
+          <span class="icon">✓</span>
+          <div class="desc"><strong>Meta Business Partner</strong> — certified credential most boutique agencies don't hold</div>
+        </div>
+        <div class="gap-item has-item">
+          <span class="icon">✓</span>
+          <div class="desc"><strong>Two documented results</strong> — PnP Heroes Africa (9.9M reach, 30% product growth) + Houghton Hotel (9.9M reach, 90K engagements in 9 days)</div>
+        </div>
+        <div class="gap-item has-item">
+          <span class="icon">✓</span>
+          <div class="desc"><strong>Database function</strong> — Itumeleng Mapheng's role signals client data infrastructure exists and can be leveraged</div>
+        </div>
+      </div>
+
+      <div class="gap-divider">
+        <div class="vs">vs</div>
+        <div class="arrow">↓</div>
+        <div style="font-size:11px; color:var(--muted); text-align:center; max-width:80px;">The gap</div>
+        <div class="arrow">↓</div>
+      </div>
+
+      <div class="gap-col lacks">
+        <h4>What Magos Lacks</h4>
+        <div class="gap-item lacks-item">
+          <span class="icon">✗</span>
+          <div class="desc"><strong>663 Instagram followers</strong> — their own social proof is weaker than most of their clients. Zero trade press coverage in 25 years. No Loeries. No Bookmarks.</div>
+        </div>
+        <div class="gap-item lacks-item">
+          <span class="icon">✗</span>
+          <div class="desc"><strong>No performance / paid media layer</strong> — the two case studies show reach and engagement. No ROAS, no CPA, no attributed revenue in any published output.</div>
+        </div>
+        <div class="gap-item lacks-item">
+          <span class="icon">✗</span>
+          <div class="desc"><strong>No reputation management system</strong> — 210,212 reviews across 3 clients, managed with rotating templates and silence. Hotel Sky's HelloPeter at 2.5.</div>
+        </div>
+        <div class="gap-item lacks-item">
+          <span class="icon">✗</span>
+          <div class="desc"><strong>No analytics or reporting layer</strong> — clients receive creative decks, not dashboards. No evidence of GA4, Meta CAPI, or attribution reporting.</div>
+        </div>
+        <div class="gap-item lacks-item">
+          <span class="icon">✗</span>
+          <div class="desc"><strong>No AI tools visible in production</strong> — despite "tech-enabled" positioning, no evidence of AI personalisation, automation, or data intelligence in client outputs</div>
+        </div>
+        <div class="gap-item lacks-item">
+          <span class="icon">✗</span>
+          <div class="desc"><strong>No Google Partnership</strong> — Meta Business Partner certified but no Google Partner badge. Petzone losing to Woolworths-backed Absolute Pets with no search strategy in sight.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="key-insight">
+      <p>The cobbler has no shoes. Magos runs social media for KFC, Pick n Pay, and Protea Hotels — and has 663 Instagram followers on their own account after 25 years. The agency that adds measurement, AI tools, and performance infrastructure to Magos's existing creative relationships will own those relationships permanently. Clients who can see their results never go back to agencies that can't show them. That is the role. That is the leverage.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     14 THE THREE PLAYS
+══════════════════════════════════════ -->
+<section id="the-play">
+  <div class="container">
+    <div class="section-num">14</div>
+    <div class="eyebrow">Interview Strategy</div>
+    <div class="headline">Three Plays.<br><span>One Room.</span></div>
+    <div class="subhead">Each play targets a different person in the room and activates a different dimension of your positioning. Run them in sequence or pick the one the room calls for.</div>
+
+    <div class="play-grid">
+      <div class="play-card" style="border-top:3px solid var(--red);">
+        <div class="play-num">01</div>
+        <h4>The Opening Move</h4>
+        <p>Open with the audit. Don't wait to be asked what you'd bring. Show them what you already built — before even being hired. This resets the entire power dynamic of the room.</p>
+        <div class="script-box">
+          "Before we start — I pulled your KFC client data this week. Their Langenhoven Park branch has a 3.7★ rating and 668 negative reviews — 25% of all their reviews. Are you managing this proactively right now?" <br><br>
+          Then open your laptop and show the audit.
+        </div>
+      </div>
+      <div class="play-card" style="border-top:3px solid var(--purple);">
+        <div class="play-num">02</div>
+        <h4>The Venteri Angle</h4>
+        <p>If Petro is in the room, address the elephant directly. You know he is building a VC firm. You know the Head of Digital needs to run without him. Say it.</p>
+        <div class="script-box">
+          "Petro — from what I understand, you're building Venteri Capital alongside Magos. The Head of Digital needs to run autonomously — not report up for every decision. I've run three independent businesses simultaneously. I bring the system; you deploy capital. That's the relationship I'm proposing."
+        </div>
+      </div>
+      <div class="play-card" style="border-top:3px solid var(--gold);">
+        <div class="play-num">03</div>
+        <h4>The Rizana Room Play</h4>
+        <p>Rizana built the social culture. She owns the brand relationships. Do not position yourself as a replacement. Position as the complement she never had to build.</p>
+        <div class="script-box">
+          "Rizana — you've built something that most agencies can't replicate: deep, long-term brand relationships and a creative culture that clients trust. I'm not here to change any of that. I'm the performance and analytics layer. You make the client love the brand. I make sure the brand can prove it's working."
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:32px; display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+      <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:24px;">
+        <div class="eyebrow" style="margin-bottom:12px;">Hero Numbers — Have These Ready</div>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border); font-size:13px;">
+            <span style="color:var(--muted);">Live ROAS — MFB Winner Ad</span>
+            <span style="font-weight:700; color:var(--green);">3.13×</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border); font-size:13px;">
+            <span style="color:var(--muted);">ReviewTap Gross Margin</span>
+            <span style="font-weight:700; color:var(--green);">~95%</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border); font-size:13px;">
+            <span style="color:var(--muted);">Client Portfolio Size</span>
+            <span style="font-weight:700;">7+ active</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border); font-size:13px;">
+            <span style="color:var(--muted);">Live Reporting Infra</span>
+            <span style="font-weight:700; color:var(--gold);">jcereports.netlify.app</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; padding:8px 0; font-size:13px;">
+            <span style="color:var(--muted);">Blue-Chip Scale Proof</span>
+            <span style="font-weight:700;">DigitalMark / Skype + MSN</span>
+          </div>
+        </div>
+      </div>
+      <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:24px;">
+        <div class="eyebrow" style="margin-bottom:12px;">Things NOT to Say</div>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <div style="display:flex; gap:12px; font-size:13px;">
+            <span style="color:var(--red); flex-shrink:0;">✗</span>
+            <span style="color:var(--muted);">"I want to grow into a Head of Digital role" — you already are one</span>
+          </div>
+          <div style="display:flex; gap:12px; font-size:13px;">
+            <span style="color:var(--red); flex-shrink:0;">✗</span>
+            <span style="color:var(--muted);">"I'm open to learning your systems" — you come with your own</span>
+          </div>
+          <div style="display:flex; gap:12px; font-size:13px;">
+            <span style="color:var(--red); flex-shrink:0;">✗</span>
+            <span style="color:var(--muted);">"What does a typical day look like?" — you define the role, not inherit it</span>
+          </div>
+          <div style="display:flex; gap:12px; font-size:13px;">
+            <span style="color:var(--red); flex-shrink:0;">✗</span>
+            <span style="color:var(--muted);">"I saw your Instagram and love the content" — complimenting what you'd be leading</span>
+          </div>
+          <div style="display:flex; gap:12px; font-size:13px;">
+            <span style="color:var(--red); flex-shrink:0;">✗</span>
+            <span style="color:var(--muted);">Apologising for the TestGorilla result — never bring it up, never reference it</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     15 CREDENTIALS
+══════════════════════════════════════ -->
+<section id="credentials">
+  <div class="container">
+    <div class="section-num">15</div>
+    <div class="eyebrow">Jacques Groenewald</div>
+    <div class="headline">The<br><span>Performance Half</span></div>
+    <div class="subhead">Magos makes the client the hero. Jacques makes the numbers the proof. These are the credentials that close the gap in the room.</div>
+
+    <div class="credentials-grid">
+      <div class="cred-card">
+        <div class="cred-num">3.13×</div>
+        <div>
+          <h5>Live ROAS — MyForeverBaby Meta Ads</h5>
+          <p>October English video ad running live at R950/day CBO spend. 3.13× ROAS confirmed. This is not historical data — it is running right now. Offer to pull the live dashboard in the room.</p>
+        </div>
+      </div>
+      <div class="cred-card">
+        <div class="cred-num">~95%</div>
+        <div>
+          <h5>Gross Margin — ReviewTap NFC Product</h5>
+          <p>Built and monetised a physical NFC review-collection device. ~R3 COGS, premium price point. ~95% gross margin on hardware. Demonstrates product-level business thinking, not just execution.</p>
+        </div>
+      </div>
+      <div class="cred-card">
+        <div class="cred-num">7+</div>
+        <div>
+          <h5>Active Client Portfolio — JCE Media</h5>
+          <p>Running Liquid Lounge, ThreeZero, Izi Travel, MyForeverBaby, ReviewTap, MySalonSuite and more simultaneously. Agency owner, strategist, and operator — not a specialist looking for a narrow brief.</p>
+        </div>
+      </div>
+      <div class="cred-card">
+        <div class="cred-num">210K</div>
+        <div>
+          <h5>Reviews Scraped — Built This Week</h5>
+          <p>210,212 Google reviews across KFC, PnP, and Spar scraped, analysed, and visualised before the interview. The system exists. The capability is live. This deck is the proof of concept.</p>
+        </div>
+      </div>
+      <div class="cred-card">
+        <div class="cred-num">MSN</div>
+        <div>
+          <h5>DigitalMark — Skype & MSN Portfolio Manager</h5>
+          <p>Managed the Skype and MSN portfolio at DigitalMark — not as a Microsoft employee, but as an agency account director managing blue-chip global brands at scale. Brings global-standard thinking to SA market execution.</p>
+        </div>
+      </div>
+      <div class="cred-card">
+        <div class="cred-num">Live</div>
+        <div>
+          <h5>jcereports.netlify.app — Reporting Infrastructure</h5>
+          <p>Custom-built client reporting platform. Live at jcereports.netlify.app. Clients receive branded monthly intelligence reports — not spreadsheets. Offer to show this in the room as a capability demonstration.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     14 CLOSING
+══════════════════════════════════════ -->
+<section id="closing">
+  <div class="container">
+    <div class="closing-inner">
+      <div class="eyebrow">The Positioning</div>
+      <div class="headline" style="font-size:clamp(28px,5vw,52px);">Magos makes the client<br>the hero.<br><span>You make the numbers<br>the proof.</span></div>
+      <div class="gold-rule" style="margin:28px auto;"></div>
+      <div class="subhead" style="text-align:center; margin:0 auto;">This brief was built in 48 hours using live data infrastructure before a single interview question was asked. That is the capability walking into the room.</div>
+
+      <div class="closing-meta">
+        <div class="closing-meta-item">
+          <div class="lv">210,212</div>
+          <div class="ll">Reviews Scraped</div>
+        </div>
+        <div class="closing-meta-item">
+          <div class="lv">3</div>
+          <div class="ll">Clients Audited</div>
+        </div>
+        <div class="closing-meta-item">
+          <div class="lv">16</div>
+          <div class="ll">Sections</div>
+        </div>
+        <div class="closing-meta-item">
+          <div class="lv">Jun 2026</div>
+          <div class="ll">All Data Live</div>
+        </div>
+      </div>
+
+      <div class="footer-links">
+        <a href="magos-media-intelligence-report.html" class="footer-link" target="_blank">Agency Intel Report</a>
+        <a href="kfc-reputation-audit.html" class="footer-link" target="_blank">KFC Reputation Audit</a>
+      </div>
+
+      <div style="margin-top:48px; font-size:11px; color:var(--muted2); letter-spacing:1px;">
+        PREPARED BY JACQUES GROENEWALD &nbsp;·&nbsp; DUEL DIGITAL (PTY) LTD &nbsp;·&nbsp; JUNE 2026
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Active nav dot highlighting
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.sidenav a');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(link => link.classList.remove('active'));
+        const active = document.querySelector(`.sidenav a[href="#${entry.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { threshold: 0.4 });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
