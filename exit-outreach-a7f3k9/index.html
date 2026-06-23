@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exit Outreach — Email Review (v2)</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f4f5f7; color: #1a1a2e; font-size: 14px; }
+
+  header { background: #1a1a2e; color: #fff; padding: 28px 40px; }
+  header h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.3px; }
+  header p { margin-top: 6px; color: #8b8fa8; font-size: 13px; }
+  .ver { display:inline-block; background:#e85d26; color:#fff; font-size:11px; font-weight:700; padding:2px 9px; border-radius:10px; margin-left:8px; vertical-align:middle; }
+
+  .changelog { background:#fff7ed; border-bottom:1px solid #fed7aa; padding:14px 40px; font-size:12px; color:#9a3412; }
+  .changelog strong { color:#7c2d12; }
+
+  .tabs { display: flex; gap: 0; background: #fff; border-bottom: 2px solid #e5e7ef; padding: 0 40px; }
+  .tab { padding: 14px 24px; font-size: 13px; font-weight: 600; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; color: #6b7280; transition: all 0.15s; }
+  .tab.active { color: #1a1a2e; border-bottom-color: #e85d26; }
+  .tab:hover:not(.active) { color: #374151; }
+
+  .section { display: none; padding: 32px 40px; max-width: 1100px; margin: 0 auto; }
+  .section.active { display: block; }
+
+  .section-label { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #9ca3af; margin-bottom: 20px; }
+
+  .card { background: #fff; border: 1px solid #e5e7ef; border-radius: 10px; margin-bottom: 16px; overflow: hidden; }
+  .card-header { display: grid; grid-template-columns: 52px 1fr 1fr 40px; gap: 16px; align-items: center; padding: 18px 20px; cursor: pointer; }
+  .card-header:hover { background: #fafafa; }
+
+  .priority { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; }
+  .rt .priority { background: #fff3ed; color: #e85d26; }
+  .mfb .priority { background: #eff6ff; color: #2563eb; }
+
+  .name-block .name { font-weight: 600; font-size: 14px; color: #111827; }
+  .name-block .company { font-size: 12px; color: #6b7280; margin-top: 2px; }
+
+  .email-block { font-size: 12px; color: #374151; font-family: 'SF Mono', 'Consolas', monospace; }
+
+  .toggle-btn { width: 28px; height: 28px; border-radius: 6px; background: #f3f4f6; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.2s; color: #6b7280; font-size: 16px; margin-left: auto; }
+  .card.open .toggle-btn { transform: rotate(180deg); }
+
+  .card-body { display: none; border-top: 1px solid #f0f0f5; padding: 0; }
+  .card.open .card-body { display: block; }
+
+  .meta-row { display: grid; grid-template-columns: 120px 1fr; gap: 0; border-bottom: 1px solid #f0f0f5; }
+  .meta-label { padding: 12px 16px; background: #f9fafb; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: #9ca3af; border-right: 1px solid #f0f0f5; display: flex; align-items: flex-start; padding-top: 14px; }
+  .meta-value { padding: 12px 16px; color: #111827; font-size: 13px; line-height: 1.5; }
+
+  .subject-value { font-weight: 600; color: #1a1a2e; }
+  .body-value { white-space: pre-wrap; font-family: inherit; line-height: 1.7; color: #374151; }
+
+  .reason-tag { display: inline-block; background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; border-radius: 4px; padding: 2px 8px; font-size: 11px; font-weight: 500; }
+  .mfb .reason-tag { background: #eff6ff; color: #2563eb; border-color: #bfdbfe; }
+
+  .flag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-left: 8px; }
+  .flag-hot { background: #fef3c7; color: #d97706; }
+  .flag-verify { background: #fef2f2; color: #dc2626; }
+  .flag-alt { background: #f5f3ff; color: #7c3aed; }
+  .flag-platform { background: #f0f9ff; color: #0284c7; }
+
+  .send-rules { background: #fff; border: 1px solid #e5e7ef; border-radius: 10px; padding: 20px 24px; margin-bottom: 28px; }
+  .send-rules h3 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #9ca3af; margin-bottom: 12px; }
+  .rules-grid { display: flex; flex-wrap: wrap; gap: 10px; }
+  .rule { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #374151; background: #f9fafb; border: 1px solid #e5e7ef; border-radius: 6px; padding: 6px 12px; }
+  .rule .dot { width: 6px; height: 6px; border-radius: 50%; background: #e85d26; flex-shrink: 0; }
+
+  .count-badge { display: inline-block; background: #e85d26; color: #fff; border-radius: 12px; font-size: 11px; font-weight: 700; padding: 1px 8px; margin-left: 8px; }
+  .mfb-badge { background: #2563eb; }
+
+  .wc { font-size:11px; color:#9ca3af; font-weight:500; margin-left:8px; }
+
+  .variation { border-top: 3px solid #f0f0f5; }
+  .variation:first-of-type { border-top: none; }
+  .var-head { display:flex; align-items:center; justify-content:space-between; padding: 9px 16px; background:#fbfaf9; }
+  .var-tag { font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:0.7px; color:#9ca3af; }
+  .var-tag.b { color:#e85d26; }
+  .copy-btn { font-size:11px; font-weight:700; color:#fff; background:#e85d26; border:none; border-radius:6px; padding:5px 13px; cursor:pointer; transition:background 0.15s; }
+  .copy-btn:hover { background:#cf4f1e; }
+  .copy-btn.copied { background:#15803d; }
+  .mfb .copy-btn { background:#2563eb; }
+  .mfb .copy-btn:hover { background:#1d4ed8; }
+  .mfb .copy-btn.copied { background:#15803d; }
+  .mfb .var-tag.b { color:#2563eb; }
+
+  @media (max-width: 640px) {
+    header { padding: 20px 16px; }
+    header h1 { font-size: 18px; }
+    .changelog { padding: 12px 16px; }
+    .tabs { padding: 0 10px; }
+    .tab { padding: 12px 14px; }
+    .section { padding: 20px 14px; }
+    .send-rules { padding: 16px; }
+    .card-header { grid-template-columns: 36px 1fr 28px; gap: 10px; }
+    .priority { grid-row: 1; grid-column: 1; }
+    .name-block { grid-row: 1; grid-column: 2; }
+    .toggle-btn { grid-row: 1; grid-column: 3; }
+    .email-block { grid-row: 2; grid-column: 2 / 4; word-break: break-all; }
+    .meta-row { grid-template-columns: 1fr; }
+    .meta-label { border-right: none; border-bottom: 1px solid #f0f0f5; padding-top: 10px; }
+    .var-head { padding: 9px 14px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Exit Outreach — Email Review <span class="ver">v3</span></h1>
+  <p>Revised 2026-06-23 &nbsp;|&nbsp; Send Tuesday or Wednesday, 8am–10am only &nbsp;|&nbsp; Click any card to expand, then Copy</p>
+</header>
+
+<div class="changelog">
+  <strong>v3:</strong> each ReviewTap email now has <strong>Variation B (relevancy hook)</strong> built on verified June 2026 trigger events, alongside the original (Variation A). Every version has a <strong>Copy button</strong>, and RT bodies already include the live one-pager link, ready to paste. &nbsp;<strong>Before sending:</strong> verify each email address; confirm the Zapper/Flow and Birdeye title details are still current; host the MFB one-pager and paste its URL.
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab(event,'rt')">ReviewTap <span class="count-badge">9</span></div>
+  <div class="tab" onclick="switchTab(event,'mfb')">MyForeverBaby <span class="count-badge mfb-badge">10</span></div>
+</div>
+
+<!-- ====== REVIEWTAP ====== -->
+<div class="section active rt" id="tab-rt">
+
+  <div class="send-rules">
+    <h3>Sending Rules</h3>
+    <div class="rules-grid">
+      <div class="rule"><span class="dot"></span>No "acquisition" in subject or opening paragraph</div>
+      <div class="rule"><span class="dot"></span>No em dashes</div>
+      <div class="rule"><span class="dot"></span>Host + link RT-ONE-PAGER (do not attach)</div>
+      <div class="rule"><span class="dot"></span>Verify email before sending</div>
+      <div class="rule"><span class="dot"></span>Send Tue/Wed morning only</div>
+      <div class="rule"><span class="dot"></span>RT-08 Gomo = dead lead, skip</div>
+    </div>
+  </div>
+
+  <div class="section-label">9 active leads</div>
+
+  <!-- RT-01 -->
+  <div class="card rt" onclick="toggle(this)">
+    <div class="card-header">
+      <div class="priority">01</div>
+      <div class="name-block">
+        <div class="name">Mike Bryer <span class="flag flag-hot">Priority 1</span></div>
+        <div class="company">CEO — Zapper</div>
+      </div>
+      <div class="email-block">mike.bryer@zapper.com</div>
+      <button class="toggle-btn">&#8964;</button>
+    </div>
+    <div class="card-body">
+      <div class="meta-row"><div class="meta-label">Angle</div><div class="meta-value"><span class="reason-tag">31,000 QR merchants, not one Google review</span></div></div>
+      <div class="meta-row"><div class="meta-label">Link</div><div class="meta-value"><a href="https://jcereports.netlify.app/reviewtap-snapshot/" target="_blank">jcereports.netlify.app/reviewtap-snapshot/</a></div></div>
+      <div class="variation">
+        <div class="var-head"><span class="var-tag">Variation A · original</span><button class="copy-btn" onclick="event.stopPropagation(); copyEmail(this)">Copy</button></div>
+        <div class="meta-row"><div class="meta-label">Subject</div><div class="meta-value subject-value">Your 31,000 QR codes don't generate a single Google review yet</div></div>
+        <div class="meta-row"><div class="meta-label">Body</div><div class="meta-value body-value">Hi Mike,
+
+Your merchant ratings tool already proves you know the value of post-transaction feedback. What it doesn't do is generate a public Google review, and that's the gap your 31,000 merchants feel every time a competitor ranks higher on Maps.
+
+ReviewTap is the NFC layer that turns a QR-scan location into a Google review engine. One tap at the counter, review published in under 30 seconds, at the same post-payment moment Zapper already owns.
+
+I'm opening a few conversations about ReviewTap's next chapter, whether partnership or ownership. Worth a 15-minute call to see where it fits? The numbers are in a short overview here: https://jcereports.netlify.app/reviewtap-snapshot/
+
+Jacques Groenewald
+ReviewTap
+www.reviewtap.co.za</div></div>
+      </div>
+      <div class="variation">
+        <div class="var-head"><span class="var-tag b">Variation B · relevancy hook</span><button class="copy-btn" onclick="event.stopPropagation(); copyEmail(this)">Copy</button></div>
+        <div class="meta-row"><div class="meta-label">Subject</div><div class="meta-value subject-value">Zapper turns transactions into media. Reviews are the missing layer.</div></div>
+        <div class="meta-row"><div class="meta-label">Body</div><div class="meta-value body-value">Hi Mike,
+
+The move with Flow to turn Zapper transactions into a merchant-growth channel is the exact thesis ReviewTap is built on, one layer further down the counter.
+
+ReviewTap is the NFC layer that turns a QR-scan location into a Google review engine. One tap at the counter, review published in under 30 seconds, at the same post-payment moment Zapper already owns.
+
+I'm opening a few conversations about ReviewTap's next chapter, whether partnership or ownership. Worth a 15-minute call to see where it fits? The numbers are in a short overview here: https://jcereports.netlify.app/reviewtap-snapshot/
+
+Jacques Groenewald
+ReviewTap
+www.reviewtap.co.za</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RT-02 -->
+  <div class="card rt" onclick="toggle(this)">
+    <div class="card-header">
+      <div class="priority">02</div>
+      <div class="name-block">
+        <div class="name">Theresa Emerick</div>
+        <div class="company">Founder and MD — NightsBridge</div>
+      </div>
+      <div class="email-block">theresa@nightsbridge.co.za</div>
+      <button class="toggle-btn">&#8964;</button>
+    </div>
+    <div class="card-body">
+      <div class="meta-row"><div class="meta-label">Angle</div><div class="meta-value"><span class="reason-tag">Post-checkout gap after Semper acquisition</span></div></div>
+      <div class="meta-row"><div class="meta-label">Link</div><div class="meta-value"><a href="https://jcereports.netlify.app/reviewtap-snapshot/" target="_blank">jcereports.netlify.app/reviewtap-snapshot/</a></div></div>
+      <div class="variation">
+        <div class="var-head"><span class="var-tag">Variation A · original</span><button class="copy-btn" onclick="event.stopPropagation(); copyEmail(this)">Copy</button></div>
+        <div class="meta-row"><div class="meta-label">Subject</div><div class="meta-value subject-value">Post-checkout Google reviews for NightsBridge and Semper: one gap, two brands</div></div>
+        <div class="meta-row"><div class="meta-label">Body</div><div class="meta-value body-value">Hi Theresa,
+
+The Semper acquisition was a bold move, and it's gone under-reported given how few SA hospitality tech companies at your scale have done a deal like it. You now cover pre-stay, in-stay, and booking management across much of SA's independent accommodation market.
+
+What's left is post-checkout: getting guests to leave a Google review before they pull out of the driveway. ReviewTap is an NFC stand at the checkout counter. One tap, no login, review on Google in under 30 seconds. It works the same for NightsBridge and Semper properties.
+
+I'm opening a few conversations about ReviewTap's next chapter, whether partnership or ownership. Worth 15 minutes to see if it fits as your review layer? Short overview here: https://jcereports.netlify.app/reviewtap-snapshot/
+
+Jacques Groenewald
+ReviewTap
+www.reviewtap.co.za</div></div>
+      </div>
+      <div class="variation">
+        <div class="var-head"><span class="var-tag b">Variation B · relevancy hook</span><button class="copy-btn" onclick="event.stopPropagation(); copyEmail(this)">Copy</button></div>
+        <div class="meta-row"><div class="meta-label">Subject</div><div class="meta-value subject-value">Post-checkout Google reviews for NightsBridge and Semper: one gap, two brands</div></div>
+        <div class="meta-row"><div class="meta-label">Body</div><div class="meta-value body-value">Hi Theresa,
+
+Folding Semper into NightsBridge gives you the PMS-plus-distribution stack thousands of independent SA properties now run their front desk on, and that is the natural place to add the one thing most still do by hand: collecting Google reviews at checkout.
+
+ReviewTap is an NFC stand at the checkout counter. One tap, no login, review on Google in under 30 seconds. It works the same for NightsBridge and Semper properties.
+
+I'm opening a few conversations about ReviewTap's next chapter, whether partnership or ownership. Worth 15 minutes to see if it fits as your review layer? Short overview here: https://jcereports.netlify.app/reviewtap-snapshot/
+
+Jacques Groenewald
+ReviewTap
+www.reviewtap.co.za</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RT-03 -->
+  <div class="card rt" onclick="toggle(this)">
+    <div class="card-header">
+      <div class="priority">03</div>
+      <div class="name-block">
+        <div class="name">Carsten Höltkemeyer <span class="flag flag-hot">Hot timing</span></div>
+        <div class="company">CEO — Yoco</div>
+      </div>
+      <div class="email-block">carsten@yoco.com &nbsp;/&nbsp; open@yoco.com</div>
+      <button class="toggle-btn">&#8964;</button>
+    </div>
+    <div class="card-body">
+      <div class="meta-row"><div class="meta-label">Angle</div><div class="meta-value"><span class="reason-tag">Yoco Next just launched, review layer missing</span></div></div>
+      <div class="meta-row"><div class="meta-label">Link</div><div class="meta-value"><a href="https://jcereports.netlify.app/reviewtap-snapshot/" target="_blank">jcereports.netlify.app/reviewtap-snapshot/</a></div></div>
+      <div class="variation">
+        <div class="var-head"><span class="var-tag">Variation A · original</span><button class="copy-btn" onclick="event.stopPropagation(); copyEmail(this)">Copy</button></div>
+        <div class="meta-row"><div class="meta-label">Subject</div><div class="meta-value subject-value">Yoco Connect and post-transaction reviews: worth a 15-minute call?</div></div>
+        <div class="meta-row"><div class="meta-label">Body</div><div class="meta-value body-value">Hi Carsten,
+
+Congratulations on the Yoco Next launch. Yoco Loyalty closed the reward loop for your 100,000+ merchants. One piece of the growth loop isn't in the suite yet: the public Google review that turns a happy customer into a visible testimonial on Maps and Search.
+
+ReviewTap is an NFC review platform already deployed across SA restaurants, salons, and hospitality venues. It maps directly to Yoco Connect's API: a tap at the counter, a Google review in under 30 seconds, the data routed back into merchant analytics.
+
+I'm opening a few conversations about ReviewTap's next chapter, whether partnership or ownership. Worth 15 minutes to explore the fit? Short overview here: https://jcereports.netlify.app/reviewtap-snapshot/
+
+Jacques Groenewald
+ReviewTap
+www.reviewtap.co.za</div></div>
+      </div>
+      <div class="variation">
+        <div class="var-head"><span class="var-tag b">Variation B · relevancy hook</span><button class="copy-btn" onclick="event.stopPropagation(); copyEmail(this)">Copy</button></div>
+        <div class="meta-row"><div class="meta-label">Subject</div><div class="meta-value subject-value">Yoco Next said fewer apps. Review collection is one that's missing.</div></div>
+        <div class="meta-row"><div class="meta-label">Body</div><div class="meta-value body-value">Hi Carsten,
+
+Your Yoco Next message last week, that more of the merchant's day should live inside Yoco with fewer separate apps, is exactly why I'm writing. Review collection at the card machine is one tool that belongs in that stack and isn't there yet.
+
+ReviewTap is an NFC review platform already deployed across SA restaurants, salons, and hospitality venues. A tap at the counter, a Google review in under 30 seconds, the data routed back into merchant analytics.
+
+I'm opening a few conversations about ReviewTap's next chapter, whether partnership or ownership. Worth 15 minutes to explore the fit? Short overview here: https://jcereports.netlify.app/reviewtap-snapshot/
+
+Jacques Groenewald
+ReviewTap
+www.reviewtap.co.za</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RT-04 -->
+  <div class="card rt" onclick="toggle(this)">
+    <div class="card-header">
+      <div class="priority">04</div>
+      <div class="name-block">
+        <div class="name">Rahul Jain</div>
+        <div class="company">CEO — Peach Payments &nbsp;<span style="font-size:11px;color:#9ca3af;">CC: Anine de Kock</span></div>
+      </div>
+      <div class="email-block">rahul.jain@peachpayments.com</div>
+      <button class="toggle-btn">&#8964;</button>
+    </div>
+    <div class="card-body">
+      <div class="meta-row"><div class="meta-label">Angle</div><div class="meta-value"><span class="reason-tag">PayDunya acquisition, review layer for 12 markets</span></div></div>
+      <div class="meta-row"><div class="meta-label">Link</div><div class="meta-value"><a href="https://jcereports.netlify.app/reviewtap-snapshot/" target="_blank">jcereports.netlify.app/reviewtap-snapshot/</a></div></div>
+      <div class="variation">
+        <div class="var-head"><span class="var-tag">Variation A · original</span><button class="copy-btn" onclick="event.stopPropagation(); copyEmail(this)">Copy</button></div>
+        <div class="meta-row"><div class="meta-label">Subject</div><div class="meta-value subject-value">A post-transaction review layer for 12 African markets. 15 minutes?</div></div>
+        <div class="meta-row"><div class="meta-label">Body</div><div class="meta-value body-value">Hi Rahul,
+
+The PayDunya acquisition made sense the moment you announced it. Processing payments across 12 African markets is the infrastructure layer. What sits on top of it is the merchant growth layer.
+
+ReviewTap turns the post-payment moment into a public Google review. We're active across SA restaurants, salons, dealerships, and hospitality venues. Every market Peach operates in has the same gap: transactions get processed, but happy customers leave no trace on Google Maps or Search.
+
+I'm opening a few conversations about ReviewTap's next chapter, whether partnership or ownership. Worth a 15-minute call to find the starting point? Short overview here: https://jcereports.netlify.app/reviewtap-snapshot/
+
+Jacques Groenewald
+ReviewTap
+www.reviewtap.co.za</div></div>
+      </div>
+      <div class="variation">
+        <div class="var-head"><span class="var-tag b">Variation B · relevancy hook</span><button class="copy-btn" onclick="event.stopPropagation(); copyEmail(this)">Copy</button></div>
+        <div class="meta-row"><div class="meta-label">Subject</div><div class="meta-value subject-value">R1.86bn through Peach, and not one of those checkouts asked for a review</div></div>
+        <div class="meta-row"><div class="meta-label">Body</div><div class="meta-value body-value">Hi Rahul,
+
+R1.86bn across 2.69 million checkouts over Black Friday weekend, up 93% year on year, is millions of completed payments that each ended without asking the customer for the one thing that brings the next one in: a public Google review.
+
+ReviewTap turns the post-payment moment into exactly that. We're active across SA restaurants, salons, dealerships, and hospitality venues, and every market Peach operates in has the same gap.
+
+I'm opening a few conversations about ReviewTap's next chapter, whether partnership or ownership. Worth a 15-minute call to find the starting point? Short overview here: https://jcereports.netlify.app/reviewtap-snapshot/
+
+Jacques Groenewald
+ReviewTap
+www.reviewtap.co.za</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RT-05 -->
+  <div class="card rt" onclick="toggle(this)">
+    <div class="card-header">
+      <div class="priority">05</div>
+      <div class="name-block">
+        <div class="name">Pieter de Villiers</div>
+        <div class="company">Co-Founder and CEO — Clickatell</div>
+      </div>
+      <div class="email-block">pieter.devilliers@clickatell.com</div>
+      <button class="toggle-btn">&#8964;</button>
+    </div>
+    <div class="card-body">
+      <div class="meta-row"><div class="meta-label">Angle</div><div class="meta-value"><span class="reason-tag">Physical trigger for WhatsApp commerce flow</span></div></div>
+      <div class="meta-row"><div class="meta-label">Link</div><div class="meta-value"><a href="https://jcereports.netlify.app/reviewtap-snapshot/" target="_blank">jcereports.netlify.app/reviewtap-snapshot/</a></div></div>
+      <div class="variation">
+        <div class="var-head"><span class="var-tag">Variation A · original</span><button class="copy-btn" onclick="event.stopPropagation(); copyEmail(this)">Copy</button></div>
+        <div class="meta-row"><div class="meta-label">Subject</div><div class="meta-value subject-value">The physical trigger your WhatsApp commerce flow needs</div></div>
+        <div class="meta-row"><div class="meta-label">Body</div><div class="meta-value body-value">Hi Pieter,
+
+The $91M raise confirmed what the industry already knew: agentic commerce inside WhatsApp is the next layer of merchant-customer interaction in emerging markets.
+
+Here's the gap. Every WhatsApp commerce flow starts with a physical moment: a customer at a restaurant counter, a salon chair, a dealership floor. ReviewTap is an NFC device that lives at that touchpoint and routes the customer into a review or engagement flow, built to feed straight into a WhatsApp follow-up sequence.
+
+I'm opening a few conversations about ReviewTap's next chapter, whether partnership or ownership. Worth 15 minutes to see how it connects? Short overview here: https://jcereports.netlify.app/reviewtap-snapshot/
+
+Jacques Groenewald
+ReviewTap
+www.reviewtap.co.za</div></div>
+      </div>
+      <div class="variation">
+        <div class="var-head"><span class="var-tag b">Variation B · relevancy hook</span><button class="copy-btn" onclick="event.stopPropagation(); copyEmail(this)">Copy</button></div>
+        <div class="meta-row"><div class="meta-label">Subject</div><div class="meta-value subject-value">The one commerce moment WhatsApp still can't reach</div></div>
+        <div class="meta-row"><div class="meta-label">Body</div><div class="meta-value body-value">Hi Pieter,
+
+Clickatell marking 25 years by stepping into agentic commerce got me thinking about the one moment chat still cannot reach: the physical point of sale, where a single tap turns a real customer into a Google review in under 30 seconds.
+
+ReviewTap is an NFC device that lives at that touchpoint and routes the customer into a review or engagement flow, built to feed straight into a WhatsApp follow-up sequence.
+
+I'm opening a few conversations about ReviewTap's next chapter, whether partnership or ownership. Worth 15 minutes to see how it connects? Short overview here: https://jcereports.netlify.app/reviewtap-snapshot/
+
+Jacques Groenewald
+ReviewTap
+www.reviewtap.co.za</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RT-06 -->
+  <div class="card rt" onclick="toggle(this)">
+    <div class="card-header">
+      <div class="priority">06</div>
+      <div class="name-block">
+        <div class="name">Adam Seskis</div>
+        <div class="company">CEO — RMS Cloud</div>
+      </div>
+      <div class="email-block">aseskis@rmscloud.com</div>
+      <button class="toggle-btn">&#8964;</button>
+    </div>
+    <div class="card-body">
+      <div class="meta-row"><div class="meta-label">Angle</div><div class="meta-value"><span class="reason-tag">GuestRevu covers email, we cover the walk-out</span></div></div>
+      <div class="meta-row"><div class="meta-label">Link</div><div class="meta-value"><a href="https://jcereports.netlify.app/reviewtap-snapshot/" target="_blank">jcereports.netlify.app/reviewtap-snapshot/</a></div></div>
+      <div class="variation">
+        <div class="var-head"><span class="var-tag">Variation A · original</span><button class="copy-btn" onclick="event.stopPropagation(); copyEmail(this)">Copy</button></div>
+        <div class="meta-row"><div class="meta-label">Subject</div><div class="meta-value subject-value">GuestRevu covers post-stay email. We cover the walk-out moment</div></div>
+        <div class="meta-row"><div class="meta-label">Body</div><div class="meta-value body-value">Hi Adam,
+
+The GuestRevu integration was smart. Post-stay email surveys are useful, but they land 24 hours after checkout with open rates under 30%, by which point the experience has faded and the emotional peak is gone.
+
+ReviewTap is the physical NFC layer at the front desk. A guest checks out, taps the stand, and leaves a Google review in under 30 seconds, at the highest-intent moment of the stay. For your 7,000+ properties across 70 countries, it feeds the same reputation pipeline as GuestRevu, earlier and at higher conversion.
+
+I'm opening a few conversations about ReviewTap's next chapter, whether partnership or ownership. Worth 15 minutes? Short overview here: https://jcereports.netlify.app/reviewtap-snapshot/
+
+Jacques Groenewald
+ReviewTap
+www.reviewtap.co.za</div></div>
+      </div>
+      <div class="variation">
+        <div class="var-head"><span class="var-tag b">Variation B · relevancy hook</span><button class="copy-btn" onclick="event.stopPropagation(); copyEmail(this)">Copy</button></div>
+        <div class="meta-row"><div class="meta-label">Subject</div><div class="meta-value subject-value">GuestRevu covers post-stay email. We cover the walk-out moment</div></div>
+        <div class="meta-row"><div class="meta-label">Body</div><div class="meta-value body-value">Hi Adam,
+
+The GuestRevu integration fit the partner ecosystem you keep widening around RMS. Post-stay email surveys are valuable, but they land 24 hours after checkout with open rates under 30%, after the emotional peak has faded.
+
+ReviewTap is the physical NFC layer at the front desk. A guest checks out, taps the stand, and leaves a Google review in under 30 seconds, at the highest-intent moment of the stay. For your 7,000+ properties across 70 countries, it feeds the same reputation pipeline as GuestRevu, earlier and at higher conversion.
+
+I'm opening a few conversations about ReviewTap's next chapter, whether partnership or ownership. Worth 15 minutes? Short overview here: https://jcereports.netlify.app/reviewtap-snapshot/
+
+Jacques Groenewald
+ReviewTap
+www.reviewtap.co.za</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RT-07 -->
+  <div class="card rt" onclick="toggle(this)">
+    <div class="card-header">
+      <div class="priority">07</div>
+      <div class="name-block">
+        <div class="name">Bruce von Maltitz</div>
+        <div class="company">Co-CEO — 1Stream</div>
+      </div>
+      <div class="email-block">bvonmaltitz@1stream.co.za</div>
+      <button class="toggle-btn">&#8964;</button>
+    </div>
+    <div class="card-body">
+      <div class="meta-row"><div class="meta-label">Angle</div><div class="meta-value"><span class="reason-tag">AI bots miss the physical exit moment</span></div></div>
+      <div class="meta-row"><div class="meta-label">Link</div><div class="meta-value"><a href="https://jcereports.netlify.app/reviewtap-snapshot/" target="_blank">jcereports.netlify.app/reviewtap-snapshot/</a></div></div>
+      <div class="variation">
+        <div class="var-head"><span class="var-tag">Variation A · original</span><button class="copy-btn" onclick="event.stopPropagation(); copyEmail(this)">Copy</button></div>
+        <div class="meta-row"><div class="meta-label">Subject</div><div class="meta-value subject-value">Your AI bots handle the digital moment. Who handles the walk-out?</div></div>
+        <div class="meta-row"><div class="meta-label">Body</div><div class="meta-value body-value">Hi Bruce,
+
+Your ITWeb piece on the 400ms benchmark made a sharp case for why infrastructure quality beats feature parity in SA AI deployments. You're clearly focused on where the real friction sits in the customer journey.
+
+One friction point your platform doesn't touch: the moment a customer walks out the door. ReviewTap is an NFC device at that exit, a tap that sends them to leave a Google review before they reach their car. For 1Stream clients in hospitality, retail, and F&B, it's the offline action that feeds the online reputation stack you already manage.
+
+I'm opening a few conversations about ReviewTap's next chapter, whether partnership or ownership. Worth a 15-minute call? Short overview here: https://jcereports.netlify.app/reviewtap-snapshot/
+
+Jacques Groenewald
+ReviewTap
+www.reviewtap.co.za</div></div>
+      </div>
+      <div class="variation">
+        <div class="var-head"><span class="var-tag b">Variation B · relevancy hook</span><button class="copy-btn" onclick="event.stopPropagation(); copyEmail(this)">Copy</button></div>
+        <div class="meta-row"><div class="meta-label">Subject</div><div class="meta-value subject-value">Your AI bots handle the digital moment. Who handles the walk-out?</div></div>
+        <div class="meta-row"><div class="meta-label">Body</div><div class="meta-value body-value">Hi Bruce,
+
+Watching 1Stream get AI voice agents under the sub-second threshold this year, the thing that struck me is you are already automating the customer's last digital touchpoint. The one place that automation can't reach is the physical counter, where a tap captures a Google review before the customer leaves.
+
+For 1Stream clients in hospitality, retail, and F&B, it's the offline action that feeds the online reputation stack you already manage.
+
+I'm opening a few conversations about ReviewTap's next chapter, whether partnership or ownership. Worth a 15-minute call? Short overview here: https://jcereports.netlify.app/reviewtap-snapshot/
+
+Jacques Groenewald
+ReviewTap
+www.reviewtap.co.za</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RT-09 -->
+  <div class="card rt" onclick="toggle(this)">
+    <div class="card-header">
+      <div class="priority">09</div>
+      <div class="name-block">
+        <div class="name">Eric Rea</div>
+        <div class="company">CEO and Co-Founder — Podium</div>
+      </div>
+      <div class="email-block">eric.rea@podium.com</div>
+      <button class="toggle-btn">&#8964;</button>
+    </div>
+    <div class="card-body">
+      <div class="meta-row"><div class="meta-label">Angle</div><div class="meta-value"><span class="reason-tag">SA market entry, software needs hardware on the ground</span></div></div>
+      <div class="meta-row"><div class="meta-label">Link</div><div class="meta-value"><a href="https://jcereports.netlify.app/reviewtap-snapshot/" target="_blank">jcereports.netlify.app/reviewtap-snapshot/</a></div></div>
+      <div class="variation">
+        <div class="var-head"><span class="var-tag">Variation A · original</span><button class="copy-btn" onclick="event.stopPropagation(); copyEmail(this)">Copy</button></div>
+        <div class="meta-row"><div class="meta-label">Subject</div><div class="meta-value subject-value">You own the software stack. We own the physical touchpoint and the SA market</div></div>
+        <div class="meta-row"><div class="meta-label">Body</div><div class="meta-value body-value">Hi Eric,
+
+Podium's Australia expansion proved the playbook travels to new anglophone markets. The next logical one is South Africa: English-primary, 60 million people, high smartphone penetration, and a merchant base underserved by reputation tooling.
+
+The structural gap is physical hardware. ReviewTap is an NFC review platform already deployed across SA restaurants, salons, dealerships, and hospitality venues. We bring the market presence, local fulfillment, and the physical touchpoint a software-only stack can't replicate remotely. You bring the platform, the AI, and the review pipeline.
+
+I'm opening a few conversations about ReviewTap's next chapter, whether partnership or ownership. Worth 15 minutes to explore it? Short overview with the operational numbers here: https://jcereports.netlify.app/reviewtap-snapshot/
+
+Jacques Groenewald
+ReviewTap
+www.reviewtap.co.za</div></div>
+      </div>
+      <div class="variation">
+        <div class="var-head"><span class="var-tag b">Variation B · relevancy hook</span><button class="copy-btn" onclick="event.stopPropagation(); copyEmail(this)">Copy</button></div>
+        <div class="meta-row"><div class="meta-label">Subject</div><div class="meta-value subject-value">You crossed $100M in AI ARR. The cheapest conversation still starts at the counter.</div></div>
+        <div class="meta-row"><div class="meta-label">Body</div><div class="meta-value body-value">Hi Eric,
+
+Crossing $100M in AI-agent ARR in under two years says the local-business race is now about who owns the most customer conversations. The cheapest place to start one is a physical tap at the counter that posts a Google review in under 30 seconds, and that is the layer Podium doesn't own in South Africa.
+
+ReviewTap is an NFC review platform already deployed across SA restaurants, salons, dealerships, and hospitality venues. We bring the market presence, local fulfillment, and the physical touchpoint a software-only stack can't replicate remotely. You bring the platform, the AI, and the review pipeline.
+
+I'm opening a few conversations about ReviewTap's next chapter, whether partnership or ownership. Worth 15 minutes to explore it? Short overview with the operational numbers here: https://jcereports.netlify.app/reviewtap-snapshot/
+
+Jacques Groenewald
+ReviewTap
+www.reviewtap.co.za</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RT-10 -->
+  <div class="card rt" onclick="toggle(this)">
+    <div class="card-header">
+      <div class="priority">10</div>
+      <div class="name-block">
+        <div class="name">David Lehman</div>
+        <div class="company">President GTM — Birdeye</div>
+      </div>
+      <div class="email-block">david.lehman@birdeye.com</div>
+      <button class="toggle-btn">&#8964;</button>
+    </div>
+    <div class="card-body">
+      <div class="meta-row"><div class="meta-label">Angle</div><div class="meta-value"><span class="reason-tag">Africa is next after Singapore, we're already there</span></div></div>
+      <div class="meta-row"><div class="meta-label">Link</div><div class="meta-value"><a href="https://jcereports.netlify.app/reviewtap-snapshot/" target="_blank">jcereports.netlify.app/reviewtap-snapshot/</a></div></div>
+      <div class="variation">
+        <div class="var-head"><span class="var-tag">Variation A · original</span><button class="copy-btn" onclick="event.stopPropagation(); copyEmail(this)">Copy</button></div>
+        <div class="meta-row"><div class="meta-label">Subject</div><div class="meta-value subject-value">You just hit Singapore. Africa is next, and we're already there</div></div>
+        <div class="meta-row"><div class="meta-label">Body</div><div class="meta-value body-value">Hi David,
+
+Congratulations on the Singapore expansion and 113% enterprise growth year over year. The roadmap is clear: you land methodically in every English-speaking market with a strong SMB base.
+
+Africa is next, and ReviewTap is already on the ground. We're an NFC review platform deployed across SA restaurants, salons, hospitality venues, and dealerships, the physical hardware layer Birdeye doesn't have and can't build remotely. We bring market presence, local fulfillment, and ZAR-priced distribution. You bring the platform.
+
+I'm opening a few conversations about ReviewTap's next chapter, whether partnership or ownership. Worth 15 minutes? Short overview here: https://jcereports.netlify.app/reviewtap-snapshot/
+
+Jacques Groenewald
+ReviewTap
+www.reviewtap.co.za</div></div>
+      </div>
+      <div class="variation">
+        <div class="var-head"><span class="var-tag b">Variation B · relevancy hook</span><button class="copy-btn" onclick="event.stopPropagation(); copyEmail(this)">Copy</button></div>
+        <div class="meta-row"><div class="meta-label">Subject</div><div class="meta-value subject-value">Enterprise deal sizes up 135%. The next lever is review volume at the counter.</div></div>
+        <div class="meta-row"><div class="meta-label">Body</div><div class="meta-value body-value">Hi David,
+
+Birdeye's enterprise deal sizes jumping 135% on the Agentic Marketing Platform points to one obvious next lever for multi-location brands: review volume at the physical counter, which Birdeye fills with software prompts but no device and no African footprint.
+
+ReviewTap is an NFC review platform deployed across SA restaurants, salons, hospitality venues, and dealerships. We bring market presence, local fulfillment, and ZAR-priced distribution. You bring the platform.
+
+I'm opening a few conversations about ReviewTap's next chapter, whether partnership or ownership. Worth 15 minutes? Short overview here: https://jcereports.netlify.app/reviewtap-snapshot/
+
+Jacques Groenewald
+ReviewTap
+www.reviewtap.co.za</div></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /tab-rt -->
+
+
+<!-- ====== MYFOREVERBABY ====== -->
+<div class="section mfb" id="tab-mfb">
+
+  <div class="send-rules">
+    <h3>Sending Rules</h3>
+    <div class="rules-grid">
+      <div class="rule"><span class="dot" style="background:#2563eb"></span>No "acquisition" in subject or opening</div>
+      <div class="rule"><span class="dot" style="background:#2563eb"></span>No em dashes</div>
+      <div class="rule"><span class="dot" style="background:#2563eb"></span>Host + link MFB-ONE-PAGER (do not attach)</div>
+      <div class="rule"><span class="dot" style="background:#2563eb"></span>Send Tue/Wed morning only</div>
+      <div class="rule"><span class="dot" style="background:#2563eb"></span>Paul Cook (01 &amp; 02): ONE email only</div>
+      <div class="rule"><span class="dot" style="background:#2563eb"></span>MFB-07 Tony Shutts: verify contact first</div>
+    </div>
+  </div>
+
+  <div class="section-label">8 direct outreach + 1 supplier message + 2 platform listings</div>
+
+  <!-- MFB-01 -->
+  <div class="card mfb" onclick="toggle(this)">
+    <div class="card-header">
+      <div class="priority">01</div>
+      <div class="name-block">
+        <div class="name">Paul Cook <span class="flag flag-hot">Priority 1 — highest probability</span></div>
+        <div class="company">Managing Director — Silvertree Brands</div>
+      </div>
+      <div class="email-block">paul@silvertreebrands.com</div>
+      <button class="toggle-btn">&#8964;</button>
+    </div>
+    <div class="card-body">
+      <div class="meta-row"><div class="meta-label">Angle</div><div class="meta-value"><span class="reason-tag">Silvertree thesis = purpose-driven DTC, MFB fits</span></div></div>
+      <div class="meta-row"><div class="meta-label">Note</div><div class="meta-value" style="color:#dc2626;font-size:12px;">Also CEO of Faithful to Nature. Send this version only, do NOT also send MFB-02.</div></div>
+      <div class="meta-row"><div class="meta-label">Link</div><div class="meta-value">Hosted MFB one-pager <span class="wc">[paste URL]</span></div></div>
+      <div class="var-head"><span class="var-tag">Email</span><button class="copy-btn" onclick="event.stopPropagation(); copyEmail(this)">Copy</button></div>
+      <div class="meta-row"><div class="meta-label">Subject</div><div class="meta-value subject-value">A purpose-driven DTC brand: 4.34x ROAS, 0% returns, worth a conversation?</div></div>
+      <div class="meta-row"><div class="meta-label">Body <span class="wc">~95 words</span></div><div class="meta-value body-value">Hi Paul,
+
+Silvertree's thesis is clear from the portfolio: purpose-driven, niche, direct-to-consumer brands with a loyal SA female customer base and strong product conviction. MyForeverBaby fits that profile exactly.
+
+It's a premium reborn baby doll brand on Shopify: R823,000 in lifetime SA revenue, 348 orders, 0% lifetime returns, and a blended Meta ROAS of 4.34x. The customer is the same woman who shops Faithful to Nature and SKOON. She buys premium, she buys with purpose, and she pays full price.
+
+Silvertree is the natural first call given your acquisition model. Worth a short call to see if the fit is real? Full numbers here: [link].
+
+Jacques Groenewald</div></div>
+    </div>
+  </div>
+
+  <!-- MFB-02 -->
+  <div class="card mfb" onclick="toggle(this)">
+    <div class="card-header">
+      <div class="priority">02</div>
+      <div class="name-block">
+        <div class="name">Paul Cook <span class="flag flag-alt">Alternate version</span></div>
+        <div class="company">CEO — Faithful to Nature (same contact as 01)</div>
+      </div>
+      <div class="email-block">paul@silvertreebrands.com</div>
+      <button class="toggle-btn">&#8964;</button>
+    </div>
+    <div class="card-body">
+      <div class="meta-row"><div class="meta-label">Angle</div><div class="meta-value"><span class="reason-tag">FtN buyer already searching premium gifting</span></div></div>
+      <div class="meta-row"><div class="meta-label">Note</div><div class="meta-value" style="color:#7c3aed;font-size:12px;">ALTERNATE to 01, same contact. Only use if you haven't sent 01. FtN brand angle rather than holding company.</div></div>
+      <div class="meta-row"><div class="meta-label">Link</div><div class="meta-value">Hosted MFB one-pager <span class="wc">[paste URL]</span></div></div>
+      <div class="var-head"><span class="var-tag">Email</span><button class="copy-btn" onclick="event.stopPropagation(); copyEmail(this)">Copy</button></div>
+      <div class="meta-row"><div class="meta-label">Subject</div><div class="meta-value subject-value">A premium gifting brand for your Faithful to Nature customer, profitable and ready</div></div>
+      <div class="meta-row"><div class="meta-label">Body <span class="wc">~90 words</span></div><div class="meta-value body-value">Hi Paul,
+
+Faithful to Nature has built one of SA's most loyal female customer bases around purposeful, premium buying. There's a gifting category your buyers already search for that you don't stock: premium reborn and lifelike collector dolls.
+
+MyForeverBaby serves that buyer. A Shopify store with R823,000 in lifetime SA revenue, 0% returns, and a 4.34x Meta ROAS, the kind of performance that signals both product-market fit and a customer who buys with conviction. Adding it to the FtN range or Silvertree's portfolio costs a fraction of building the equivalent from scratch.
+
+Worth 15 minutes to see if the fit is there? Full numbers here: [link].
+
+Jacques Groenewald</div></div>
+    </div>
+  </div>
+
+  <!-- MFB-03 -->
+  <div class="card mfb" onclick="toggle(this)">
+    <div class="card-header">
+      <div class="priority">03</div>
+      <div class="name-block">
+        <div class="name">Hylton Bannon</div>
+        <div class="company">Managing Director — Toy Kingdom</div>
+      </div>
+      <div class="email-block">hylton@toykingdom.co.za</div>
+      <button class="toggle-btn">&#8964;</button>
+    </div>
+    <div class="card-body">
+      <div class="meta-row"><div class="meta-label">Angle</div><div class="meta-value"><span class="reason-tag">Premium collector doll gap on the shelves</span></div></div>
+      <div class="meta-row"><div class="meta-label">Link</div><div class="meta-value">Hosted MFB one-pager <span class="wc">[paste URL]</span></div></div>
+      <div class="var-head"><span class="var-tag">Email</span><button class="copy-btn" onclick="event.stopPropagation(); copyEmail(this)">Copy</button></div>
+      <div class="meta-row"><div class="meta-label">Subject</div><div class="meta-value subject-value">The premium collector doll category you don't have yet, proven and profitable</div></div>
+      <div class="meta-row"><div class="meta-label">Body <span class="wc">~95 words</span></div><div class="meta-value body-value">Hi Hylton,
+
+Toy Kingdom covers almost every premium toy category in South Africa. One gap is the collector and hyper-realistic doll segment, a category Toys R Us is starting to address and one with a growing, high-AOV customer who has outgrown Barbie and Baby Born.
+
+MyForeverBaby is an established SA brand in exactly that segment: R823,000 in lifetime sales, 348 orders at a R2,345 average order value, and 0% lifetime returns. The customer is female, premium, and gift-motivated. She shops at stores like yours but can't find this product on your shelves or online.
+
+If there's a case for adding the category rather than building it, worth 15 minutes? Numbers here: [link].
+
+Jacques Groenewald</div></div>
+    </div>
+  </div>
+
+  <!-- MFB-04 -->
+  <div class="card mfb" onclick="toggle(this)">
+    <div class="card-header">
+      <div class="priority">04</div>
+      <div class="name-block">
+        <div class="name">Frederik Zietsman</div>
+        <div class="company">Group CEO — Takealot</div>
+      </div>
+      <div class="email-block">frederik.zietsman@takealot.com</div>
+      <button class="toggle-btn">&#8964;</button>
+    </div>
+    <div class="card-body">
+      <div class="meta-row"><div class="meta-label">Angle</div><div class="meta-value"><span class="reason-tag">Proven brand, open as preferred seller / partnership</span></div></div>
+      <div class="meta-row"><div class="meta-label">Link</div><div class="meta-value">Hosted MFB one-pager <span class="wc">[paste URL]</span></div></div>
+      <div class="var-head"><span class="var-tag">Email</span><button class="copy-btn" onclick="event.stopPropagation(); copyEmail(this)">Copy</button></div>
+      <div class="meta-row"><div class="meta-label">Subject</div><div class="meta-value subject-value">An SA DTC brand with R823k lifetime sales and 4.34x ROAS. Worth 15 minutes?</div></div>
+      <div class="meta-row"><div class="meta-label">Body <span class="wc">~90 words</span></div><div class="meta-value body-value">Hi Frederik,
+
+Your background in marketplace strategy means you've seen every type of seller, and you know the difference between a brand with validated product-market fit and one still figuring out who buys it.
+
+MyForeverBaby is the first kind: a premium reborn doll brand with R823,000 in lifetime SA revenue, 348 orders, a R2,345 average order value, 0% lifetime returns, and a 4.34x blended Meta ROAS. It comes with proven creative, validated demand data, and an operating playbook that transfers cleanly to a new owner or distribution partner.
+
+Worth 15 minutes to explore what Takealot involvement could look like? One-pager here: [link].
+
+Jacques Groenewald</div></div>
+    </div>
+  </div>
+
+  <!-- MFB-05 -->
+  <div class="card mfb" onclick="toggle(this)">
+    <div class="card-header">
+      <div class="priority">05</div>
+      <div class="name-block">
+        <div class="name">Mark Blair</div>
+        <div class="company">CEO — Mr Price Group / Yuppiechef</div>
+      </div>
+      <div class="email-block">mblair@mrpricegroup.com</div>
+      <button class="toggle-btn">&#8964;</button>
+    </div>
+    <div class="card-body">
+      <div class="meta-row"><div class="meta-label">Angle</div><div class="meta-value"><span class="reason-tag">Yuppiechef premium gifting gap, easy win vs NKD</span></div></div>
+      <div class="meta-row"><div class="meta-label">Link</div><div class="meta-value">Hosted MFB one-pager <span class="wc">[paste URL]</span></div></div>
+      <div class="var-head"><span class="var-tag">Email</span><button class="copy-btn" onclick="event.stopPropagation(); copyEmail(this)">Copy</button></div>
+      <div class="meta-row"><div class="meta-label">Subject</div><div class="meta-value subject-value">A gifting-category DTC brand for Yuppiechef: proven, clean, turnkey</div></div>
+      <div class="meta-row"><div class="meta-label">Body <span class="wc">~90 words</span></div><div class="meta-value body-value">Hi Mark,
+
+The NKD acquisition signals you're thinking hard about what Mr Price's multi-format footprint looks like in 2027 and beyond. Closer to home, Yuppiechef is your premium gifting channel, with the right customer but a gap in the premium collectible category.
+
+MyForeverBaby fills it: a SA Shopify brand with R823,000 in lifetime revenue, 348 orders, a R2,345 average order value, 0% returns, and a 4.34x Meta ROAS. The buyer is Yuppiechef's buyer, female, premium, gift-motivated. Adding it costs far less than building the equivalent.
+
+Worth 15 minutes to see if it fits the Yuppiechef roadmap? One-pager here: [link].
+
+Jacques Groenewald</div></div>
+    </div>
+  </div>
+
+  <!-- MFB-06 -->
+  <div class="card mfb" onclick="toggle(this)">
+    <div class="card-header">
+      <div class="priority">06</div>
+      <div class="name-block">
+        <div class="name">Richard Tinberg</div>
+        <div class="company">President and CEO — Bradford Exchange / Ashton-Drake</div>
+      </div>
+      <div class="email-block">rtinberg@bradfordexchange.com</div>
+      <button class="toggle-btn">&#8964;</button>
+    </div>
+    <div class="card-body">
+      <div class="meta-row"><div class="meta-label">Angle</div><div class="meta-value"><span class="reason-tag">Africa entry in their exact category, no build cost</span></div></div>
+      <div class="meta-row"><div class="meta-label">Link</div><div class="meta-value">Hosted MFB one-pager <span class="wc">[paste URL]</span></div></div>
+      <div class="var-head"><span class="var-tag">Email</span><button class="copy-btn" onclick="event.stopPropagation(); copyEmail(this)">Copy</button></div>
+      <div class="meta-row"><div class="meta-label">Subject</div><div class="meta-value subject-value">Africa entry in your exact category: proven, profitable, ready to transfer</div></div>
+      <div class="meta-row"><div class="meta-label">Body <span class="wc">~90 words</span></div><div class="meta-value body-value">Hi Richard,
+
+Ashton-Drake Galleries has built the most recognized name in realistic collector dolls globally. South Africa is one of the few English-speaking markets where Bradford Exchange has no presence, and where demand in this category is active and growing.
+
+MyForeverBaby is a SA Shopify brand in precisely your category: R823,000 in lifetime sales, 348 orders, 0% lifetime returns, and a 4.34x Meta return. The brand, store, ad creative, and supplier relationships transfer cleanly to a new owner. Africa market entry without the build cost.
+
+Worth a 15-minute call to see if it's an entry opportunity for the group? Full numbers here: [link].
+
+Jacques Groenewald</div></div>
+    </div>
+  </div>
+
+  <!-- MFB-07 -->
+  <div class="card mfb" onclick="toggle(this)">
+    <div class="card-header">
+      <div class="priority">07</div>
+      <div class="name-block">
+        <div class="name">Tony Shutts <span class="flag flag-verify">Verify contact first</span></div>
+        <div class="company">CEO — Charisma Brands / Paradise Galleries</div>
+      </div>
+      <div class="email-block">tony.shutts@charismabrands.com &nbsp;<span style="color:#9ca3af">(low confidence)</span></div>
+      <button class="toggle-btn">&#8964;</button>
+    </div>
+    <div class="card-body">
+      <div class="meta-row"><div class="meta-label">Angle</div><div class="meta-value"><span class="reason-tag">SA unserved by Charisma, proven demand, zero build</span></div></div>
+      <div class="meta-row"><div class="meta-label">Note</div><div class="meta-value" style="color:#dc2626;font-size:12px;">Verify contact via LinkedIn or charismabrands.com contact form before sending.</div></div>
+      <div class="meta-row"><div class="meta-label">Link</div><div class="meta-value">Hosted MFB one-pager <span class="wc">[paste URL]</span></div></div>
+      <div class="var-head"><span class="var-tag">Email</span><button class="copy-btn" onclick="event.stopPropagation(); copyEmail(this)">Copy</button></div>
+      <div class="meta-row"><div class="meta-label">Subject</div><div class="meta-value subject-value">South Africa's leading reborn doll brand: clean data, no build required</div></div>
+      <div class="meta-row"><div class="meta-label">Body <span class="wc">~95 words</span></div><div class="meta-value body-value">Hi Tony,
+
+Charisma has built its business on exactly what MyForeverBaby represents: collector dolls that carry emotional value well beyond their price. South Africa is currently unserved by any Charisma or Paradise Galleries product, and the demand is proven.
+
+MyForeverBaby is a SA Shopify store with R823,000 in lifetime revenue, 348 orders, 0% lifetime returns, and a 4.34x Meta ROAS. The customer already buys premium collectibles and has no local brand to turn to. The store, brand assets, creative library, and supplier relationships transfer to a Charisma entity at a fraction of the cost of building an SA presence from scratch.
+
+Worth 15 minutes to explore the portfolio fit? Numbers here: [link].
+
+Jacques Groenewald</div></div>
+    </div>
+  </div>
+
+  <!-- MFB-08 -->
+  <div class="card mfb" onclick="toggle(this)">
+    <div class="card-header">
+      <div class="priority">08</div>
+      <div class="name-block">
+        <div class="name">Alibaba Supplier <span class="flag flag-platform">Trade message</span></div>
+        <div class="company">Existing supplier contact — Alibaba Trade Manager</div>
+      </div>
+      <div class="email-block">Use existing Alibaba message thread</div>
+      <button class="toggle-btn">&#8964;</button>
+    </div>
+    <div class="card-body">
+      <div class="meta-row"><div class="meta-label">Angle</div><div class="meta-value"><span class="reason-tag">Partnership / licensing, Western DTC vehicle they lack</span></div></div>
+      <div class="var-head"><span class="var-tag">Trade message</span><button class="copy-btn" onclick="event.stopPropagation(); copyEmail(this)">Copy</button></div>
+      <div class="meta-row"><div class="meta-label">Subject</div><div class="meta-value subject-value">Partnership Discussion: MyForeverBaby (South Africa)</div></div>
+      <div class="meta-row"><div class="meta-label">Body</div><div class="meta-value body-value">Hi [Supplier name],
+
+I'm Jacques, owner of MyForeverBaby in South Africa and one of your regular buyers. I'd like to raise a different kind of conversation.
+
+We've built a strong direct-to-consumer brand in South Africa using your products: R823,000 in lifetime revenue, 348 orders, 0% returns, and a 4.34x return on ad spend. It proves SA buyers will pay premium prices for the quality you manufacture.
+
+I'm exploring the brand's next chapter and want to see whether a partnership, licensing arrangement, or acquisition makes sense between us. You would gain a proven Western-market DTC vehicle: the brand, the Shopify store, the customer list, the Meta ad creative, and the supplier playbook, in a market you don't serve directly today.
+
+If it's worth a conversation, I'm happy to share a full business overview.
+
+Regards,
+Jacques Groenewald
+MyForeverBaby</div></div>
+    </div>
+  </div>
+
+  <!-- MFB-09 -->
+  <div class="card mfb" onclick="toggle(this)">
+    <div class="card-header">
+      <div class="priority">09</div>
+      <div class="name-block">
+        <div class="name">Flippa Listing <span class="flag flag-platform">Platform</span></div>
+        <div class="company">flippa.com — submit before October 2026 for Q4 premium</div>
+      </div>
+      <div class="email-block">Create listing at flippa.com</div>
+      <button class="toggle-btn">&#8964;</button>
+    </div>
+    <div class="card-body">
+      <div class="var-head"><span class="var-tag">Listing</span><button class="copy-btn" onclick="event.stopPropagation(); copyEmail(this)">Copy</button></div>
+      <div class="meta-row"><div class="meta-label">Headline</div><div class="meta-value subject-value">SA Premium Ecommerce Brand | 4.34x Meta ROAS | 0% Returns | R823k Lifetime Revenue | Ready to Transfer</div></div>
+      <div class="meta-row"><div class="meta-label">Asking Price</div><div class="meta-value"><strong>R650,000</strong></div></div>
+      <div class="meta-row"><div class="meta-label">Body</div><div class="meta-value body-value">MyForeverBaby is an established South African Shopify brand in the premium reborn and lifelike collector doll niche. The business has generated R823,000 in lifetime revenue from 348 orders at an average order value of R2,345 with zero lifetime returns, proof of both strong product-market fit and buyer conviction.
+
+The brand runs on Meta ads at a blended 4.34x ROAS with a proven creative playbook and customer creative library ready to hand over. The Shopify store is fully operational. Supplier relationships are established and transferable. A new owner familiar with Shopify and Meta ads can run the whole operation in under 5 hours a week.
+
+KEY METRICS:
+- Lifetime revenue: R823,000 (ZAR)
+- Total orders: 348
+- Average order value: R2,345
+- Lifetime returns: 0%
+- Blended Meta ROAS: 4.34x (winner ad: 5.05x Afrikaans creative, lifetime)
+- Platform: Shopify (South African market, ZAR pricing)
+- Asking price: R650,000
+
+WHAT TRANSFERS:
+- Shopify store (domain, theme, product listings, customer history)
+- Meta Ads account and all creative assets (images, videos, copy)
+- Supplier contacts and sourcing playbook
+- Email list and buyer database
+- Brand assets (logo, photography, UGC library)
+- 4-week transition and handover included
+
+IDEAL BUYER:
+An SA eCommerce operator looking for a proven niche brand with no customer acquisition guesswork, a collectibles investor seeking SA market exposure, or an international brand using this as Africa market entry.</div></div>
+    </div>
+  </div>
+
+  <!-- MFB-10 -->
+  <div class="card mfb" onclick="toggle(this)">
+    <div class="card-header">
+      <div class="priority">10</div>
+      <div class="name-block">
+        <div class="name">BusinessesForSale.co.za <span class="flag flag-platform">Platform</span></div>
+        <div class="company">businessesforsale.co.za — list same week as Flippa</div>
+      </div>
+      <div class="email-block">Create listing at businessesforsale.co.za</div>
+      <button class="toggle-btn">&#8964;</button>
+    </div>
+    <div class="card-body">
+      <div class="var-head"><span class="var-tag">Listing</span><button class="copy-btn" onclick="event.stopPropagation(); copyEmail(this)">Copy</button></div>
+      <div class="meta-row"><div class="meta-label">Headline</div><div class="meta-value subject-value">Premium SA Shopify Brand | Reborn Dolls Niche | 4.34x ROAS | Turnkey Transfer</div></div>
+      <div class="meta-row"><div class="meta-label">Asking Price</div><div class="meta-value"><strong>R650,000</strong> (negotiable)</div></div>
+      <div class="meta-row"><div class="meta-label">Body</div><div class="meta-value body-value">Established South African eCommerce brand in the premium collectible doll segment, operating on Shopify with proven Meta advertising performance. The business has generated over R823,000 in lifetime revenue with an average order value of R2,345 and zero lifetime returns, a rare combination in the SA online retail market.
+
+The brand is fully operational and run remotely. All assets transfer on sale: the Shopify store, Meta Ads account, creative library, supplier contacts, and customer database. A 4-week handover period is included.
+
+Financials: R823,000 lifetime revenue | R2,345 AOV | 0% returns | 4.34x blended Meta ROAS
+Asking price: R650,000 (negotiable)
+Contact: jacques@jcemedia.com</div></div>
+    </div>
+  </div>
+
+</div><!-- /tab-mfb -->
+
+<div style="height:60px"></div>
+
+<script>
+  function toggle(card) { card.classList.toggle('open'); }
+  function switchTab(e, tab) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    e.currentTarget.classList.add('active');
+    document.getElementById('tab-' + tab).classList.add('active');
+  }
+  function copyEmail(btn) {
+    var scope = btn.closest('.variation') || btn.closest('.card-body');
+    var subjEl = scope.querySelector('.subject-value');
+    var bodyEl = scope.querySelector('.body-value');
+    var subj = subjEl ? subjEl.innerText.trim() : '';
+    var body = bodyEl ? bodyEl.innerText.trim() : '';
+    var text = (subj ? 'Subject: ' + subj + '\n\n' : '') + body;
+    navigator.clipboard.writeText(text).then(function () {
+      var old = btn.textContent;
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(function () { btn.textContent = old; btn.classList.remove('copied'); }, 1500);
+    });
+  }
+</script>
+</body>
+</html>
