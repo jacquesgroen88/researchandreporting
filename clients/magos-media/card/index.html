@@ -8,157 +8,376 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
-  --bg:#0d0f14;--card:#141720;--border:rgba(255,255,255,0.08);
+  --bg:#0d0f14;--card:#141720;--card2:#1a1f2e;--border:rgba(255,255,255,0.07);
   --text:#e8eaf0;--muted:#8892a4;--gold:#c8a96e;
   --red:#e74c3c;--green:#27ae60;--orange:#e67e22;
 }
-body{
-  font-family:'Inter',system-ui,sans-serif;
-  background:var(--bg);color:var(--text);
-  padding:24px;max-width:900px;margin:0 auto;
-}
-h1{font-size:22px;font-weight:800;margin-bottom:2px;}
-.meta{font-size:12px;color:var(--gold);letter-spacing:1px;text-transform:uppercase;margin-bottom:20px;}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
-.section{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;}
-.section-title{font-size:10px;letter-spacing:2px;text-transform:uppercase;
-  color:var(--gold);font-weight:700;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border);}
-.row{display:flex;justify-content:space-between;align-items:baseline;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
-.row:last-child{border-bottom:none;}
-.row-label{font-size:12px;color:var(--muted);}
-.row-val{font-size:13px;font-weight:700;color:var(--text);}
-.row-val.green{color:var(--green);}
-.row-val.red{color:var(--red);}
-.brand-block{margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border);}
-.brand-block:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
-.brand-name{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
-.brand-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;}
-.bs{text-align:center;padding:6px 4px;background:rgba(255,255,255,0.03);border-radius:6px;}
-.bs-val{font-size:15px;font-weight:800;line-height:1;}
-.bs-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:2px;}
-.pitch{background:rgba(200,169,110,0.06);border:1px solid rgba(200,169,110,0.25);
-  border-radius:10px;padding:16px 20px;margin-bottom:16px;}
-.pitch-text{font-size:15px;font-weight:700;color:var(--text);line-height:1.6;}
-.pitch-text span{color:var(--gold);}
-.w1-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
-.w1{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px;}
-.w1-num{font-size:22px;font-weight:900;color:var(--gold);margin-bottom:6px;line-height:1;}
-.w1-title{font-size:12px;font-weight:700;margin-bottom:4px;line-height:1.4;}
-.w1-sub{font-size:11px;color:var(--muted);line-height:1.5;}
-.w1-tag{display:inline-block;margin-top:8px;font-size:10px;color:var(--gold);
-  padding:2px 8px;border:1px solid rgba(200,169,110,0.3);border-radius:10px;}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);padding:20px;max-width:980px;margin:0 auto;font-size:13px;}
+
+/* ---- HEADER ---- */
+.hdr{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+.hdr-title{font-size:18px;font-weight:900;letter-spacing:-.3px;}
+.hdr-meta{font-size:10px;color:var(--muted);text-align:right;line-height:1.6;}
+.hdr-meta span{color:var(--gold);}
+
+/* ---- OPENING LINE ---- */
+.pitch{background:rgba(200,169,110,0.07);border:1px solid rgba(200,169,110,0.3);
+  border-radius:10px;padding:14px 18px;margin-bottom:14px;}
+.pitch p{font-size:14px;font-weight:700;color:var(--text);line-height:1.65;}
+.pitch p .g{color:var(--green);} .pitch p .r{color:var(--red);} .pitch p .gl{color:var(--gold);}
+
+/* ---- LAYOUT UTILS ---- */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
 .full{grid-column:1/-1;}
-.links{font-size:11px;color:var(--muted);margin-top:16px;padding-top:12px;border-top:1px solid var(--border);}
+
+/* ---- SECTION ---- */
+.sec{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:13px;}
+.sec-title{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);
+  font-weight:700;margin-bottom:10px;padding-bottom:7px;border-bottom:1px solid var(--border);}
+
+/* ---- DATA ROWS ---- */
+.row{display:flex;justify-content:space-between;align-items:baseline;
+  padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.03);}
+.row:last-child{border-bottom:none;}
+.rl{font-size:11px;color:var(--muted);}
+.rv{font-size:12px;font-weight:700;}
+.rv.g{color:var(--green);} .rv.r{color:var(--red);} .rv.gl{color:var(--gold);}
+
+/* ---- CONTRAST ---- */
+.contrast{display:grid;grid-template-columns:1fr auto 1fr;gap:0;margin-bottom:12px;align-items:stretch;}
+.brand-box{border-radius:9px;padding:16px;text-align:center;}
+.brand-box.kfc{background:rgba(39,174,96,0.07);border:1px solid rgba(39,174,96,0.25);}
+.brand-box.pnp{background:rgba(231,76,60,0.07);border:1px solid rgba(231,76,60,0.25);}
+.brand-name{font-size:9px;letter-spacing:2px;text-transform:uppercase;font-weight:700;margin-bottom:8px;}
+.brand-name.g{color:var(--green);} .brand-name.r{color:var(--red);}
+.big-num{font-size:52px;font-weight:900;line-height:1;}
+.big-num.g{color:var(--green);} .big-num.r{color:var(--red);}
+.uncl-pct{font-size:22px;font-weight:700;margin-top:4px;}
+.uncl-pct.g{color:var(--green);} .uncl-pct.r{color:var(--red);}
+.brand-sub{font-size:10px;color:var(--muted);margin-top:4px;}
+.vs-col{display:flex;align-items:center;justify-content:center;padding:0 14px;}
+.vs-text{font-size:16px;font-weight:900;color:var(--muted);}
+.brand-stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:12px;}
+.bsr{text-align:center;padding:5px 4px;background:rgba(255,255,255,0.03);border-radius:5px;}
+.bsr-val{font-size:13px;font-weight:800;}
+.bsr-lbl{font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-top:2px;}
+
+/* ---- SMOKING GUNS ---- */
+.sg-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:12px;}
+.sg{background:rgba(231,76,60,0.06);border:1px solid rgba(231,76,60,0.2);border-radius:9px;padding:13px;}
+.sg-header{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.sg-icon{width:6px;height:6px;background:var(--red);border-radius:50%;flex-shrink:0;}
+.sg-name{font-size:12px;font-weight:700;color:var(--text);}
+.sg-tag{font-size:9px;padding:2px 7px;border-radius:4px;background:rgba(231,76,60,0.15);color:var(--red);border:1px solid rgba(231,76,60,0.3);margin-left:auto;}
+.sg-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:8px;}
+.sg-stat{text-align:center;padding:5px;background:rgba(0,0,0,0.2);border-radius:5px;}
+.sg-stat-val{font-size:14px;font-weight:800;}
+.sg-stat-lbl{font-size:8px;color:var(--muted);text-transform:uppercase;margin-top:1px;}
+.sg-note{font-size:11px;color:var(--muted);line-height:1.5;}
+.sg-note strong{color:var(--text);}
+
+/* ---- STAR DIST ---- */
+.star-bars{margin-top:8px;}
+.star-row{display:flex;align-items:center;gap:6px;margin-bottom:3px;}
+.star-label{font-size:10px;color:var(--muted);width:16px;text-align:right;}
+.star-track{flex:1;background:rgba(255,255,255,0.05);border-radius:3px;height:8px;overflow:hidden;}
+.star-fill{height:100%;border-radius:3px;}
+.star-pct{font-size:10px;font-weight:700;width:38px;text-align:right;}
+
+/* ---- STRATEGIC ANGLES ---- */
+.angle{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:13px;}
+.angle-icon{font-size:18px;margin-bottom:6px;}
+.angle-title{font-size:11px;font-weight:700;margin-bottom:5px;}
+.angle-body{font-size:11px;color:var(--muted);line-height:1.55;}
+.angle-body strong{color:var(--text);}
+
+/* ---- WEEK 1 ---- */
+.w1-row{display:flex;align-items:flex-start;gap:10px;padding:9px 12px;
+  background:var(--card);border:1px solid var(--border);border-radius:8px;margin-bottom:7px;}
+.w1-num{font-size:18px;font-weight:900;color:var(--gold);min-width:24px;line-height:1.1;}
+.w1-body{flex:1;}
+.w1-title{font-size:12px;font-weight:700;margin-bottom:2px;}
+.w1-sub{font-size:10px;color:var(--muted);line-height:1.45;}
+.w1-tag{font-size:9px;color:var(--gold);padding:2px 7px;border:1px solid rgba(200,169,110,0.25);border-radius:8px;white-space:nowrap;align-self:center;}
+
+/* ---- VERBATIM ---- */
+.quote-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+.quote{background:var(--card2);border-left:3px solid var(--gold);border-radius:0 8px 8px 0;padding:11px 13px;}
+.quote-text{font-size:11px;color:var(--text);line-height:1.6;font-style:italic;}
+.quote-text em{color:var(--gold);font-style:normal;font-weight:700;}
+.quote-use{font-size:9px;color:var(--muted);margin-top:6px;text-transform:uppercase;letter-spacing:1px;}
+
+/* ---- LINKS ---- */
+.links{font-size:10px;color:var(--muted);margin-top:14px;padding-top:10px;border-top:1px solid var(--border);
+  display:flex;gap:16px;flex-wrap:wrap;}
 .links a{color:var(--gold);text-decoration:none;}
 
+/* ---- PRINT ---- */
 @media print{
-  body{background:#fff;color:#111;padding:16px;max-width:100%;}
-  :root{
-    --bg:#fff;--card:#f8f8f8;--border:rgba(0,0,0,0.1);
-    --text:#111;--muted:#555;--gold:#8a6a2a;
-    --red:#c0392b;--green:#1a7a3a;
-  }
-  .pitch{background:#fff8ee;border-color:#c8a96e;}
+  body{background:#fff;color:#0d0f14;padding:12px;max-width:100%;font-size:11px;}
+  :root{--bg:#fff;--card:#f5f5f5;--card2:#f0f0f0;--border:rgba(0,0,0,0.1);
+    --text:#0d0f14;--muted:#555;--gold:#7a5c20;--red:#b83228;--green:#1a6b32;}
+  .pitch{background:#fdf6e8;border-color:#c8a96e;}
+  .sg{background:#fff2f0;border-color:#e74c3c;}
+  .brand-box.kfc{background:#f0fdf4;border-color:#27ae60;}
+  .brand-box.pnp{background:#fff2f0;border-color:#e74c3c;}
+  .quote{background:#f8f8f8;}
+  .bsr,.sg-stat,.star-track{background:rgba(0,0,0,0.05);}
+  a{color:#7a5c20;}
 }
 </style>
 </head>
 <body>
 
-<h1>Magos Media &mdash; Interview Battle Card</h1>
-<div class="meta">Jacques Groenewald &middot; Head of Digital &middot; June 2026</div>
+<!-- HEADER -->
+<div class="hdr">
+  <div>
+    <div class="hdr-title">Magos Media &mdash; Interview Battle Card</div>
+    <div style="font-size:10px;color:var(--muted);margin-top:2px;">Head of Digital Application &middot; Jacques Groenewald &middot; June 2026</div>
+  </div>
+  <div class="hdr-meta">
+    <span>630,151 reviews</span> mapped across 3 brands<br>
+    Live Google Maps data &middot; June 2026
+  </div>
+</div>
 
+<!-- PITCH LINE -->
 <div class="pitch">
-  <div class="pitch-text">
-    KFC: <span>1/179 unclaimed (0.6%)</span>. Pick n Pay: <span style="color:var(--red);">47/179 unclaimed (26.3%)</span>.<br>
-    That&rsquo;s not a rating problem &mdash; it&rsquo;s an ownership problem. <span>Fixable in week one.</span>
+  <p>
+    KFC: <span class="g">1 of 179 locations unclaimed (0.6%)</span>.
+    Pick n Pay: <span class="r">47 of 179 unclaimed (26.3%)</span>.
+    Same methodology. Same day. That gap does not happen by accident &mdash; it happens when one account has a system and the other does not.
+    <span class="gl">This is not a rating problem. It is an ownership problem. And it is fixable in week one.</span>
+  </p>
+</div>
+
+<!-- AGENCY INTEL + MY STORY -->
+<div class="g2">
+  <div class="sec">
+    <div class="sec-title">Agency Intel</div>
+    <div class="row"><span class="rl">Type</span><span class="rv">Full-service digital, FMCG &amp; retail</span></div>
+    <div class="row"><span class="rl">Location</span><span class="rv">Illovo, Johannesburg</span></div>
+    <div class="row"><span class="rl">CEO</span><span class="rv">Petro Magos</span></div>
+    <div class="row"><span class="rl">Also runs</span><span class="rv gl">Venteri Capital (growth signal)</span></div>
+    <div class="row"><span class="rl">Key accounts</span><span class="rv">KFC SA &middot; Pick n Pay &middot; Spar</span></div>
+    <div class="row"><span class="rl">Role type</span><span class="rv gl">Strategic hire &mdash; not an exec fill</span></div>
+    <div class="row"><span class="rl">What they need</span><span class="rv">Data-led strategy + performance ops</span></div>
+  </div>
+  <div class="sec">
+    <div class="sec-title">My Positioning</div>
+    <div class="row"><span class="rl">Scale proof</span><span class="rv">Skype + MSN portfolio at DigitalMark</span></div>
+    <div class="row"><span class="rl">Agency now</span><span class="rv">JCE Media (active, FMCG + retail)</span></div>
+    <div class="row"><span class="rl">SaaS</span><span class="rv">ReviewTap (NFC review platform, pre-exit)</span></div>
+    <div class="row"><span class="rl">What I pulled</span><span class="rv gl">630,151 reviews, live data, pre-interview</span></div>
+    <div class="row"><span class="rl">Unclaimed found</span><span class="rv r">47 PnP profiles &mdash; links ready to action</span></div>
+    <div class="row"><span class="rl">When I built this</span><span class="rv g">Before the interview. Not for it.</span></div>
+    <div class="row"><span class="rl">What that signals</span><span class="rv">This is how I approach every account</span></div>
   </div>
 </div>
 
-<div class="grid">
-  <!-- Agency Intel -->
-  <div class="section">
-    <div class="section-title">Agency Intel</div>
-    <div class="row"><span class="row-label">Type</span><span class="row-val">Full-service digital, FMCG focus</span></div>
-    <div class="row"><span class="row-label">Location</span><span class="row-val">Illovo, Johannesburg</span></div>
-    <div class="row"><span class="row-label">CEO</span><span class="row-val">Petro Magos</span></div>
-    <div class="row"><span class="row-label">Signal</span><span class="row-val" style="color:var(--gold);">Also: Venteri Capital</span></div>
-    <div class="row"><span class="row-label">Key accounts</span><span class="row-val">KFC &middot; PnP &middot; Spar</span></div>
-    <div class="row"><span class="row-label">Role type</span><span class="row-val">Strategic hire, not exec fill</span></div>
-  </div>
-
-  <!-- Jacques -->
-  <div class="section">
-    <div class="section-title">My Positioning</div>
-    <div class="row"><span class="row-label">Scale proof</span><span class="row-val">Skype + MSN at DigitalMark</span></div>
-    <div class="row"><span class="row-label">Agency</span><span class="row-val">JCE Media (active)</span></div>
-    <div class="row"><span class="row-label">SaaS</span><span class="row-val">ReviewTap (pre-exit)</span></div>
-    <div class="row"><span class="row-label">Data pulled</span><span class="row-val" style="color:var(--gold);">630,151 reviews, live</span></div>
-    <div class="row"><span class="row-label">Unclaimed found</span><span class="row-val" style="color:var(--red);">47 PnP profiles, links ready</span></div>
-    <div class="row"><span class="row-label">Status</span><span class="row-val" style="color:var(--green);">Before interview, not for it</span></div>
-  </div>
-</div>
-
-<!-- The Numbers -->
-<div class="section" style="margin-bottom:16px;">
-  <div class="section-title">The Numbers &mdash; Live Google Maps Data, June 2026</div>
-  <div class="brand-block">
-    <div class="brand-name" style="color:var(--green);">KFC South Africa &mdash; The Benchmark</div>
-    <div class="brand-stats">
-      <div class="bs"><div class="bs-val">179</div><div class="bs-lbl">Locations</div></div>
-      <div class="bs"><div class="bs-val">4.47&#9733;</div><div class="bs-lbl">Avg Rating</div></div>
-      <div class="bs"><div class="bs-val">458K</div><div class="bs-lbl">Reviews</div></div>
-      <div class="bs"><div class="bs-val" style="color:var(--green);">1/179</div><div class="bs-lbl">Unclaimed</div></div>
+<!-- THE CONTRAST -->
+<div class="sec" style="margin-bottom:12px;">
+  <div class="sec-title">The Contrast &mdash; Unclaimed Google Business Profiles</div>
+  <div class="contrast">
+    <div class="brand-box kfc">
+      <div class="brand-name g">KFC South Africa</div>
+      <div class="big-num g">1</div>
+      <div class="uncl-pct g">0.6% unclaimed</div>
+      <div class="brand-sub">of 179 locations &middot; 1 in Motherwell (0 reviews, 0 exposure)</div>
+      <div class="brand-stats-row">
+        <div class="bsr"><div class="bsr-val">4.47&#9733;</div><div class="bsr-lbl">Rating</div></div>
+        <div class="bsr"><div class="bsr-val">458K</div><div class="bsr-lbl">Reviews</div></div>
+        <div class="bsr"><div class="bsr-val" style="color:var(--green);">8.81%</div><div class="bsr-lbl">Negative</div></div>
+      </div>
+      <div class="star-bars" style="margin-top:10px;">
+        <div class="star-row"><span class="star-label">5&#9733;</span><div class="star-track"><div class="star-fill" style="width:77.1%;background:var(--green);"></div></div><span class="star-pct" style="color:var(--green);">77.1%</span></div>
+        <div class="star-row"><span class="star-label">4&#9733;</span><div class="star-track"><div class="star-fill" style="width:7.8%;background:var(--gold);"></div></div><span class="star-pct" style="color:var(--gold);">7.8%</span></div>
+        <div class="star-row"><span class="star-label">3&#9733;</span><div class="star-track"><div class="star-fill" style="width:6.3%;background:var(--orange);"></div></div><span class="star-pct" style="color:var(--orange);">6.3%</span></div>
+        <div class="star-row"><span class="star-label">2&#9733;</span><div class="star-track"><div class="star-fill" style="width:2.6%;background:#c0392b;"></div></div><span class="star-pct" style="color:#c0392b;">2.6%</span></div>
+        <div class="star-row"><span class="star-label">1&#9733;</span><div class="star-track"><div class="star-fill" style="width:6.2%;background:var(--red);"></div></div><span class="star-pct" style="color:var(--red);">6.2%</span></div>
+      </div>
     </div>
-  </div>
-  <div class="brand-block">
-    <div class="brand-name" style="color:var(--red);">Pick n Pay &mdash; The Gap</div>
-    <div class="brand-stats">
-      <div class="bs"><div class="bs-val">179</div><div class="bs-lbl">Locations</div></div>
-      <div class="bs"><div class="bs-val">4.05&#9733;</div><div class="bs-lbl">Avg Rating</div></div>
-      <div class="bs"><div class="bs-val">123K</div><div class="bs-lbl">Reviews</div></div>
-      <div class="bs"><div class="bs-val" style="color:var(--red);">47/179</div><div class="bs-lbl">Unclaimed</div></div>
-    </div>
-  </div>
-  <div class="brand-block">
-    <div class="brand-name" style="color:var(--muted);">Spar &mdash; Sample Only (44 of 900+ locations)</div>
-    <div class="brand-stats">
-      <div class="bs"><div class="bs-val" style="color:var(--muted);">44</div><div class="bs-lbl">Sampled</div></div>
-      <div class="bs"><div class="bs-val">4.21&#9733;</div><div class="bs-lbl">Avg Rating</div></div>
-      <div class="bs"><div class="bs-val" style="color:var(--muted);">48K</div><div class="bs-lbl">Reviews</div></div>
-      <div class="bs"><div class="bs-val" style="color:var(--muted);">TBD</div><div class="bs-lbl">Unclaimed</div></div>
+    <div class="vs-col"><div class="vs-text">VS</div></div>
+    <div class="brand-box pnp">
+      <div class="brand-name r">Pick n Pay</div>
+      <div class="big-num r">47</div>
+      <div class="uncl-pct r">26.3% unclaimed</div>
+      <div class="brand-sub">of 179 locations &middot; 5,408 reviews with 0% response capability</div>
+      <div class="brand-stats-row">
+        <div class="bsr"><div class="bsr-val">4.05&#9733;</div><div class="bsr-lbl">Rating</div></div>
+        <div class="bsr"><div class="bsr-val">123K</div><div class="bsr-lbl">Reviews</div></div>
+        <div class="bsr"><div class="bsr-val" style="color:var(--red);">11.09%</div><div class="bsr-lbl">Negative</div></div>
+      </div>
+      <div style="margin-top:12px;padding:8px;background:rgba(231,76,60,0.08);border-radius:6px;">
+        <div style="font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--red);margin-bottom:6px;">47 Unclaimed by Sub-brand</div>
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:4px;">
+          <div class="bsr"><div class="bsr-val" style="font-size:16px;color:var(--red);">14</div><div class="bsr-lbl">Clothing</div></div>
+          <div class="bsr"><div class="bsr-val" style="font-size:16px;color:var(--red);">13</div><div class="bsr-lbl">Liquor</div></div>
+          <div class="bsr"><div class="bsr-val" style="font-size:16px;color:var(--red);">12</div><div class="bsr-lbl">Express</div></div>
+          <div class="bsr"><div class="bsr-val" style="font-size:16px;color:var(--red);">8</div><div class="bsr-lbl">Core+Other</div></div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- Week 1 -->
-<div class="w1-grid" style="margin-bottom:16px;">
-  <div class="w1">
+<!-- SMOKING GUNS -->
+<div class="sec" style="margin-bottom:12px;">
+  <div class="sec-title">&#128165; Smoking Guns &mdash; Named Unclaimed Stores (sorted by review exposure)</div>
+  <div class="sg-grid">
+    <div class="sg">
+      <div class="sg-header">
+        <div class="sg-icon"></div>
+        <div class="sg-name">Pick N Pay Maponya Mall</div>
+        <div class="sg-tag">UNCLAIMED</div>
+      </div>
+      <div class="sg-stats">
+        <div class="sg-stat"><div class="sg-stat-val" style="color:var(--red);">1,155</div><div class="sg-stat-lbl">Reviews</div></div>
+        <div class="sg-stat"><div class="sg-stat-val" style="color:var(--orange);">3.8&#9733;</div><div class="sg-stat-lbl">Rating</div></div>
+        <div class="sg-stat"><div class="sg-stat-val" style="color:var(--red);">0</div><div class="sg-stat-lbl">Responses</div></div>
+      </div>
+      <div class="sg-note">Soweto&rsquo;s biggest shopping centre. <strong>1,155 public reviews. Not one has been responded to.</strong> Zero brand control in one of SA&rsquo;s highest-footfall retail locations.</div>
+    </div>
+    <div class="sg">
+      <div class="sg-header">
+        <div class="sg-icon"></div>
+        <div class="sg-name">Pick n Pay Sanbury Square</div>
+        <div class="sg-tag">UNCLAIMED</div>
+      </div>
+      <div class="sg-stats">
+        <div class="sg-stat"><div class="sg-stat-val" style="color:var(--red);">1,158</div><div class="sg-stat-lbl">Reviews</div></div>
+        <div class="sg-stat"><div class="sg-stat-val" style="color:var(--green);">4.3&#9733;</div><div class="sg-stat-lbl">Rating</div></div>
+        <div class="sg-stat"><div class="sg-stat-val" style="color:var(--red);">0</div><div class="sg-stat-lbl">Responses</div></div>
+      </div>
+      <div class="sg-note">Most-reviewed unclaimed store. <strong>4.3&#9733; means customers are happy &mdash; they just have no idea anyone is listening.</strong> Cape Town, Cape Flats corridor.</div>
+    </div>
+    <div class="sg">
+      <div class="sg-header">
+        <div class="sg-icon"></div>
+        <div class="sg-name">Pick n Pay Richmond Corner</div>
+        <div class="sg-tag">UNCLAIMED</div>
+      </div>
+      <div class="sg-stats">
+        <div class="sg-stat"><div class="sg-stat-val" style="color:var(--orange);">852</div><div class="sg-stat-lbl">Reviews</div></div>
+        <div class="sg-stat"><div class="sg-stat-val">4.0&#9733;</div><div class="sg-stat-lbl">Rating</div></div>
+        <div class="sg-stat"><div class="sg-stat-val" style="color:var(--red);">0</div><div class="sg-stat-lbl">Responses</div></div>
+      </div>
+      <div class="sg-note">Milnerton, Cape Town. <strong>852 reviews, active store, not a fringe location.</strong> An agency should have caught this months ago.</div>
+    </div>
+    <div class="sg">
+      <div class="sg-header">
+        <div class="sg-icon"></div>
+        <div class="sg-name">The 5,408 Reviews Nobody Can Read</div>
+        <div class="sg-tag">SYSTEMIC</div>
+      </div>
+      <div class="sg-stats">
+        <div class="sg-stat"><div class="sg-stat-val" style="color:var(--red);">5,408</div><div class="sg-stat-lbl">Total Reviews</div></div>
+        <div class="sg-stat"><div class="sg-stat-val" style="color:var(--red);">0%</div><div class="sg-stat-lbl">Response Rate</div></div>
+        <div class="sg-stat"><div class="sg-stat-val" style="color:var(--red);">47</div><div class="sg-stat-lbl">Profiles Dark</div></div>
+      </div>
+      <div class="sg-note">Across all 47 unclaimed profiles, <strong>5,408 reviews sit completely unmanaged.</strong> Not won&rsquo;t respond &mdash; literally cannot. The login does not exist.</div>
+    </div>
+  </div>
+</div>
+
+<!-- SPAR -->
+<div class="sec" style="margin-bottom:12px;">
+  <div class="sec-title">Spar &mdash; Sample Data Only (limitation noted)</div>
+  <div style="display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:center;">
+    <div style="display:flex;gap:16px;">
+      <div class="bsr" style="min-width:70px;padding:8px;"><div class="bsr-val" style="font-size:20px;color:var(--muted);">44</div><div class="bsr-lbl">of 900+<br>locations</div></div>
+      <div class="bsr" style="min-width:70px;padding:8px;"><div class="bsr-val" style="font-size:20px;">4.21&#9733;</div><div class="bsr-lbl">Avg Rating</div></div>
+      <div class="bsr" style="min-width:70px;padding:8px;"><div class="bsr-val" style="font-size:20px;color:var(--muted);">48K</div><div class="bsr-lbl">Reviews<br>in sample</div></div>
+      <div class="bsr" style="min-width:70px;padding:8px;"><div class="bsr-val" style="font-size:20px;color:var(--muted);">?</div><div class="bsr-lbl">Unclaimed<br>(not measured)</div></div>
+    </div>
+    <div style="font-size:11px;color:var(--muted);line-height:1.6;">
+      44 locations is insufficient to report unclaimed rate for a 900+ store franchise network. Based on PnP precedent, expect <strong style="color:var(--text);">20%+ unclaimed</strong> nationally.
+      A <strong style="color:var(--gold);">full Spar network audit is a day-one deliverable</strong> &mdash; not a three-month project.
+    </div>
+  </div>
+</div>
+
+<!-- STRATEGIC ANGLES -->
+<div class="g3" style="margin-bottom:12px;">
+  <div class="angle">
+    <div class="angle-title" style="color:var(--gold);">Response Rate = Local SEO Signal</div>
+    <div class="angle-body">Google Maps ranks actively managed profiles higher in local results. Every unclaimed profile is a passive ranking <strong>penalty</strong> across all three accounts. This is a performance issue, not just a reputation one.</div>
+  </div>
+  <div class="angle">
+    <div class="angle-title" style="color:var(--red);">Unclaimed Profiles = Renewal Risk</div>
+    <div class="angle-body">&ldquo;What has the agency been doing?&rdquo; &mdash; 47 unclaimed PnP profiles is the worst possible answer to that question at renewal time. <strong>This is a retention liability sitting in plain sight.</strong></div>
+  </div>
+  <div class="angle">
+    <div class="angle-title" style="color:var(--green);">Scale of Impact</div>
+    <div class="angle-body">At 630K reviews, a <strong>1% improvement in response rate = 6,300 more brand touchpoints per year</strong> across three accounts. Reputation management at this scale is a revenue lever, not a reporting metric.</div>
+  </div>
+</div>
+
+<!-- WEEK 1 DELIVERABLES -->
+<div class="sec" style="margin-bottom:12px;">
+  <div class="sec-title">Week 1 &mdash; Three Deliverables (not ideas)</div>
+  <div class="w1-row">
     <div class="w1-num">01</div>
-    <div class="w1-title">Claim 47 PnP Google Business Profiles</div>
-    <div class="w1-sub">Links identified + sorted by review count. Queued, not discovery.</div>
+    <div class="w1-body">
+      <div class="w1-title">Claim all 47 unclaimed Pick n Pay Google Business Profiles</div>
+      <div class="w1-sub">Direct Google Maps links already identified and sorted by review exposure. This is a queued task list. Priority: Maponya Mall (1,155 reviews), Sanbury Square (1,158 reviews), Richmond Corner (852 reviews).</div>
+    </div>
     <div class="w1-tag">Days 1&ndash;2</div>
   </div>
-  <div class="w1">
+  <div class="w1-row">
     <div class="w1-num">02</div>
-    <div class="w1-title">Response System: KFC + PnP + Spar</div>
-    <div class="w1-sub">Templated by category. Track weekly. Target 40%+ response rate.</div>
+    <div class="w1-body">
+      <div class="w1-title">Implement response system across KFC, PnP and Spar</div>
+      <div class="w1-sub">Templated responses by category: food safety, wait time, service, facilities, pricing. Track response rate weekly against 40%+ industry benchmark. Set up alerts for 1&#9733; and 2&#9733; reviews.</div>
+    </div>
     <div class="w1-tag">Days 3&ndash;5</div>
   </div>
-  <div class="w1">
+  <div class="w1-row">
     <div class="w1-num">03</div>
-    <div class="w1-title">Complete Spar Full Network Audit</div>
-    <div class="w1-sub">44 &rarr; 900+ locations. Unclaimed rate + star distribution baseline.</div>
+    <div class="w1-body">
+      <div class="w1-title">Complete Spar full network audit: 44 &rarr; 900+ locations</div>
+      <div class="w1-sub">Unclaimed status, star distribution, and negative review volume across the full national network. Sets the baseline before any engagement metrics are agreed.</div>
+    </div>
     <div class="w1-tag">Week 1</div>
   </div>
 </div>
 
-<div class="links">
-  Full research:
-  <a href="https://jcereports.netlify.app/clients/magos-media/reports/2026-06-23-reputation-audit/" target="_blank">KFC / PnP / Spar Audit</a>
-  &nbsp;&middot;&nbsp;
-  <a href="https://jcereports.netlify.app/clients/magos-media/reports/2026-06-23-intelligence-deck/" target="_blank">Agency Intelligence Deck</a>
-  &nbsp;&middot;&nbsp;
-  <a href="https://jcereports.netlify.app/clients/magos-media/" target="_blank">Full Hub</a>
+<!-- VERBATIM SOUND BITES -->
+<div class="sec" style="margin-bottom:12px;">
+  <div class="sec-title">Verbatim Talking Points &mdash; Drop These Exactly</div>
+  <div class="quote-grid">
+    <div class="quote">
+      <div class="quote-text">&ldquo;Maponya Mall. Soweto&rsquo;s biggest shopping centre. 1,155 Google reviews. 3.8 stars. Completely unclaimed. There is <em>not one person</em> at Pick n Pay or the agency who can respond to a single review there.&rdquo;</div>
+      <div class="quote-use">Use when: they ask what you found</div>
+    </div>
+    <div class="quote">
+      <div class="quote-text">&ldquo;KFC have one unclaimed location out of 179. PnP have 47. <em>Same scraper. Same day.</em> That gap doesn&rsquo;t happen by accident &mdash; it happens when one account has a system and the other doesn&rsquo;t.&rdquo;</div>
+      <div class="quote-use">Use when: making the contrast</div>
+    </div>
+    <div class="quote">
+      <div class="quote-text">&ldquo;5,408 reviews are sitting on profiles the brand <em>literally cannot access.</em> Not won&rsquo;t respond &mdash; can&rsquo;t. The login doesn&rsquo;t exist. Nobody knows what customers are saying at a quarter of their locations.&rdquo;</div>
+      <div class="quote-use">Use when: making the urgency case</div>
+    </div>
+    <div class="quote">
+      <div class="quote-text">&ldquo;I didn&rsquo;t build this for the interview. <em>I built it because this is how I approach any account.</em> Before I touch a brief, I want to know what the data says. This is what I found before I walked in.&rdquo;</div>
+      <div class="quote-use">Use when: closing / why you</div>
+    </div>
+  </div>
 </div>
+
+<!-- LINKS -->
+<div class="links">
+  <strong style="color:var(--text);">Full research:</strong>
+  <a href="https://jcereports.netlify.app/clients/magos-media/reports/2026-06-23-reputation-audit/" target="_blank">KFC / PnP / Spar Audit (with all 47 unclaimed links)</a>
+  &middot;
+  <a href="https://jcereports.netlify.app/clients/magos-media/reports/2026-06-23-intelligence-deck/" target="_blank">Agency Intelligence Deck</a>
+  &middot;
+  <a href="https://jcereports.netlify.app/clients/magos-media/deck/" target="_blank">Slide Deck</a>
+  &middot;
+  <a href="https://jcereports.netlify.app/clients/magos-media/followup/" target="_blank">Leave-Behind Hub</a>
+</div>
+
 </body>
 </html>
