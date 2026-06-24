@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Izi Travel — Turning Quotes Into Bookings</title>
+<style>
+  :root{
+    --navy:#0a2540;
+    --navy-2:#0d2f52;
+    --teal:#0fb6a6;
+    --teal-d:#0d9488;
+    --coral:#ff6b5c;
+    --sun:#f9a826;
+    --sand:#fdf6ec;
+    --ink:#13202e;
+    --muted:#5b6b7a;
+    --line:#e4ebf1;
+    --ok:#16a34a;
+    --bad:#e0413a;
+    --card:#ffffff;
+    --shadow:0 10px 30px rgba(10,37,64,.08);
+    --shadow-lg:0 24px 60px rgba(10,37,64,.16);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink);
+    background:var(--sand);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:860px;margin:0 auto;padding:0 20px}
+
+  /* HERO */
+  .hero{
+    background:radial-gradient(1200px 500px at 80% -10%,rgba(15,182,166,.35),transparent 60%),
+               linear-gradient(160deg,var(--navy) 0%,var(--navy-2) 55%,#0e3a63 100%);
+    color:#fff;padding:64px 0 90px;position:relative;overflow:hidden;
+  }
+  .hero:after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:60px;
+    background:var(--sand);clip-path:polygon(0 100%,100% 100%,100% 0,0 60%)}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.78rem;letter-spacing:.14em;
+    text-transform:uppercase;color:#9fe6dc;font-weight:700;margin-bottom:18px}
+  .eyebrow .dot{width:8px;height:8px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 4px rgba(15,182,166,.25)}
+  .hero h1{font-size:clamp(1.9rem,6vw,3.1rem);line-height:1.08;font-weight:800;letter-spacing:-.02em}
+  .hero h1 span{color:var(--sun)}
+  .hero p.lead{margin-top:18px;font-size:clamp(1rem,2.6vw,1.2rem);color:#cfe0ee;max-width:600px}
+  .hero .meta{margin-top:26px;display:flex;flex-wrap:wrap;gap:10px;font-size:.82rem;color:#9fb4c8}
+  .pill{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);
+    padding:6px 12px;border-radius:100px}
+
+  /* SECTION */
+  section{padding:46px 0}
+  .kicker{display:inline-block;font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;
+    font-weight:800;color:var(--teal-d);margin-bottom:10px}
+  h2{font-size:clamp(1.45rem,4.6vw,2.1rem);font-weight:800;letter-spacing:-.02em;line-height:1.15}
+  h2 .accent{color:var(--coral)}
+  .sub{color:var(--muted);margin-top:10px;font-size:1.02rem;max-width:640px}
+
+  /* HEADLINE STAT STRIP */
+  .leakstrip{
+    margin-top:-50px;position:relative;z-index:3;
+    background:var(--card);border-radius:20px;box-shadow:var(--shadow-lg);
+    padding:26px 22px;display:grid;grid-template-columns:1fr auto 1fr;gap:14px;align-items:center;
+  }
+  .leakstrip .num{font-size:clamp(2.1rem,9vw,3.4rem);font-weight:850;line-height:1;letter-spacing:-.03em}
+  .leakstrip .lab{font-size:.8rem;color:var(--muted);margin-top:6px;font-weight:600}
+  .leakstrip .big{color:var(--teal-d)}
+  .leakstrip .small{color:var(--coral)}
+  .leakstrip .arrow{font-size:1.6rem;color:#c2cedb}
+  .leakstrip .col{text-align:center}
+
+  /* FUNNEL */
+  .funnel{margin-top:30px;display:flex;flex-direction:column;gap:10px}
+  .stage{position:relative;border-radius:14px;padding:16px 18px;color:#fff;overflow:hidden;
+    display:flex;justify-content:space-between;align-items:center;box-shadow:var(--shadow)}
+  .stage .l{font-weight:700;font-size:1rem}
+  .stage .l small{display:block;font-weight:500;font-size:.78rem;opacity:.85;margin-top:2px}
+  .stage .v{font-weight:850;font-size:1.4rem;letter-spacing:-.02em}
+  .s1{background:linear-gradient(135deg,#0fb6a6,#0d9488);width:100%}
+  .s2{background:linear-gradient(135deg,#1593c9,#0d6fa8);width:90%}
+  .s3{background:linear-gradient(135deg,#3a6ea5,#2b5582);width:74%}
+  .s4{background:linear-gradient(135deg,#e0413a,#b4302a);width:52%}
+  .funnel-wrap{position:relative}
+  .leakflag{margin-top:14px;background:#fff3f1;border:1px solid #ffd5cf;border-left:4px solid var(--coral);
+    border-radius:10px;padding:14px 16px;color:#9a2b25;font-size:.95rem}
+  .leakflag b{color:var(--bad)}
+
+  /* CARDS */
+  .grid{display:grid;gap:16px;margin-top:24px}
+  .g2{grid-template-columns:repeat(2,1fr)}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:var(--shadow)}
+  .card h3{font-size:1.05rem;font-weight:750;display:flex;align-items:center;gap:10px}
+  .card p{color:var(--muted);font-size:.94rem;margin-top:8px}
+  .ic{width:38px;height:38px;flex:none;border-radius:11px;display:grid;place-items:center;font-size:1.2rem;
+    background:linear-gradient(135deg,rgba(15,182,166,.16),rgba(15,182,166,.06));}
+
+  /* CAUSE LIST */
+  .cause{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 20px;box-shadow:var(--shadow);
+    margin-top:14px;display:flex;gap:16px;align-items:flex-start}
+  .cause .rank{flex:none;width:34px;height:34px;border-radius:10px;background:var(--navy);color:#fff;
+    font-weight:800;display:grid;place-items:center;font-size:.95rem}
+  .cause h4{font-size:1.02rem;font-weight:750}
+  .cause p{color:var(--muted);font-size:.92rem;margin-top:4px}
+  .quote{margin-top:10px;background:var(--sand);border-left:3px solid var(--sun);border-radius:8px;
+    padding:9px 13px;font-style:italic;color:#6a5320;font-size:.86rem}
+
+  /* SOLUTION STEPS */
+  .fix{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);
+    margin-top:16px;overflow:hidden}
+  .fix .top{display:flex;gap:14px;align-items:center;padding:18px 20px;background:linear-gradient(135deg,#0a2540,#11385f);color:#fff}
+  .fix .top .n{flex:none;width:40px;height:40px;border-radius:11px;background:var(--teal);color:#03201d;
+    font-weight:850;display:grid;place-items:center;font-size:1.05rem}
+  .fix .top h3{font-size:1.08rem;font-weight:750}
+  .fix .top .tag{margin-left:auto;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;font-weight:800;
+    background:rgba(249,168,38,.2);color:var(--sun);padding:5px 10px;border-radius:100px;white-space:nowrap}
+  .fix .body{padding:18px 20px}
+  .fix .body p{color:var(--muted);font-size:.95rem}
+  .fix .body ul{margin:10px 0 0;padding-left:0;list-style:none}
+  .fix .body li{position:relative;padding:6px 0 6px 26px;font-size:.93rem}
+  .fix .body li:before{content:"✓";position:absolute;left:0;top:6px;color:var(--ok);font-weight:800}
+
+  /* CADENCE TIMELINE */
+  .timeline{margin-top:24px;position:relative;padding-left:8px}
+  .tl{position:relative;padding:0 0 6px 30px;margin-bottom:16px;border-left:2px dashed #cdd9e4}
+  .tl:last-child{border-left:2px solid transparent}
+  .tl .node{position:absolute;left:-11px;top:0;width:22px;height:22px;border-radius:50%;
+    background:var(--teal);color:#03201d;font-weight:800;font-size:.72rem;display:grid;place-items:center;box-shadow:0 0 0 4px var(--sand)}
+  .tl .when{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;font-weight:800;color:var(--teal-d)}
+  .tl .chan{font-size:.72rem;color:var(--muted);margin-left:8px}
+  .tl .msg{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-top:7px;
+    box-shadow:var(--shadow);font-size:.9rem}
+  .tl .msg b{color:var(--ink)}
+
+  /* QUOTE EXAMPLE BLOCK */
+  .qexample{margin-top:22px;background:linear-gradient(180deg,#ffffff,#fbfdff);border:1px solid var(--line);
+    border-radius:18px;box-shadow:var(--shadow-lg);overflow:hidden}
+  .qexample .qhead{background:linear-gradient(135deg,#0fb6a6,#0d9488);color:#fff;padding:16px 20px;font-weight:750}
+  .qexample .qhead small{display:block;font-weight:500;opacity:.9;font-size:.8rem;margin-top:2px}
+  .qexample .qbody{padding:20px}
+  .qexample .perk{display:flex;gap:12px;align-items:flex-start;padding:9px 0;border-bottom:1px dashed var(--line)}
+  .qexample .perk:last-of-type{border-bottom:0}
+  .qexample .perk .ck{color:var(--ok);font-weight:800;flex:none}
+  .qexample .perk b{font-weight:700}
+  .qexample .perk span{color:var(--muted);font-size:.88rem}
+  .qexample .rev{margin-top:14px;background:var(--sand);border-radius:12px;padding:14px;font-style:italic;color:#6a5320;font-size:.9rem}
+  .qexample .stars{color:var(--sun);font-style:normal;letter-spacing:2px}
+
+  /* TIMING TABLE */
+  .twocol{display:grid;gap:16px;margin-top:22px;grid-template-columns:1fr 1fr}
+  .tcard{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
+  .tcard .h{padding:14px 18px;font-weight:750;color:#fff;font-size:.98rem}
+  .tcard.a .h{background:linear-gradient(135deg,#f9a826,#e08a0a)}
+  .tcard.b .h{background:linear-gradient(135deg,#3a6ea5,#2b5582)}
+  .tcard .row{display:flex;gap:12px;padding:12px 18px;border-top:1px solid var(--line);font-size:.9rem}
+  .tcard .row .d{flex:none;font-weight:800;color:var(--navy);width:64px}
+  .tcard .row .t{color:var(--muted)}
+
+  /* WORKFLOWS */
+  .wf{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:1px solid var(--line);
+    border-radius:14px;padding:15px 18px;box-shadow:var(--shadow);margin-top:12px}
+  .wf .num{flex:none;width:30px;height:30px;border-radius:9px;font-weight:800;display:grid;place-items:center;
+    background:rgba(15,182,166,.14);color:var(--teal-d)}
+  .wf.prio{border:1px solid rgba(15,182,166,.5);background:linear-gradient(180deg,#f3fffd,#ffffff)}
+  .wf.prio .num{background:var(--teal);color:#03201d}
+  .wf h4{font-size:.98rem;font-weight:750}
+  .wf h4 .star{color:var(--sun);font-size:.8rem;margin-left:6px}
+  .wf p{color:var(--muted);font-size:.88rem;margin-top:3px}
+
+  /* GOAL */
+  .goal{background:linear-gradient(160deg,var(--navy),#0e3a63);color:#fff;border-radius:20px;padding:30px 24px;margin-top:26px;
+    box-shadow:var(--shadow-lg);text-align:center}
+  .goal .g-num{font-size:clamp(2.2rem,10vw,3.4rem);font-weight:850;color:var(--sun);letter-spacing:-.02em}
+  .goal p{color:#cfe0ee;margin-top:6px}
+  .goal .bar{margin:20px auto 0;max-width:460px;background:rgba(255,255,255,.12);border-radius:100px;height:14px;overflow:hidden}
+  .goal .bar i{display:block;height:100%;width:5%;background:linear-gradient(90deg,var(--teal),var(--sun));border-radius:100px}
+  .goal .scale{max-width:460px;margin:8px auto 0;display:flex;justify-content:space-between;font-size:.74rem;color:#9fb4c8}
+
+  /* FOOTER */
+  footer{padding:34px 0 50px;text-align:center;color:var(--muted);font-size:.82rem}
+  footer b{color:var(--ink)}
+
+  @media(max-width:680px){
+    .g2,.g3,.twocol{grid-template-columns:1fr}
+    .leakstrip{grid-template-columns:1fr;gap:6px}
+    .leakstrip .arrow{transform:rotate(90deg)}
+    .fix .top .tag{display:none}
+    section{padding:38px 0}
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow"><span class="dot"></span> Izi Travel &times; JCE Media &middot; Strategy Brief</div>
+    <h1>You don't have a lead problem.<br>You have a <span>booking</span> problem.</h1>
+    <p class="lead">Leads are flowing. Quotes are going out. But the trip from "quote sent" to "booking made" is where it breaks. Here is exactly where, why, and how we fix it.</p>
+    <div class="meta">
+      <span class="pill">23 June 2026</span>
+      <span class="pill">Last 30 days of data</span>
+      <span class="pill">Goal: R50,000/mo commission</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- LEAK STRIP -->
+  <div class="leakstrip">
+    <div class="col">
+      <div class="num big">228</div>
+      <div class="lab">Leads generated<br>(last 30 days)</div>
+    </div>
+    <div class="col arrow">&rarr;</div>
+    <div class="col">
+      <div class="num small">5</div>
+      <div class="lab">Total bookings<br>to date</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- THE PROBLEM -->
+<section>
+  <div class="wrap">
+    <span class="kicker">The Problem</span>
+    <h2>Where the money <span class="accent">leaks out</span></h2>
+    <p class="sub">Every stage above the red one is healthy. The drop-off happens at one specific point, and pouring more ad spend in only fills a leaking bucket faster.</p>
+
+    <div class="funnel-wrap">
+      <div class="funnel">
+        <div class="stage s1"><div class="l">Ad clicks <small>People actively searching for these trips</small></div><div class="v">1,440</div></div>
+        <div class="stage s2"><div class="l">Leads &amp; enquiries <small>Forms + WhatsApp bot</small></div><div class="v">228</div></div>
+        <div class="stage s3"><div class="l">Quotes sent <small>Live in pipeline right now</small></div><div class="v">36</div></div>
+        <div class="stage s4"><div class="l">Bookings <small>The leak lives here</small></div><div class="v">5</div></div>
+      </div>
+      <div class="leakflag">
+        <b>The leak:</b> 23 quotes are sitting in "Quote Sent" and 13 in "Follow-Up" right now, but almost none are crossing the line. The break is between <b>quote sent</b> and <b>booking made</b>, not anywhere earlier.
+      </div>
+    </div>
+
+    <div class="grid g3">
+      <div class="card"><div class="ic">📈</div><h3 style="margin-top:10px">Ads work</h3><p>R11,061 spent in 30 days, ~R48 per lead. Healthy, high-intent search traffic.</p></div>
+      <div class="card"><div class="ic">⚡</div><h3 style="margin-top:10px">Service works</h3><p>Terri turns a quote around in about 20 minutes. Speed is not the issue.</p></div>
+      <div class="card"><div class="ic">🕳️</div><h3 style="margin-top:10px">The close leaks</h3><p>Lots of quotes out, very few coming back as bookings. This is the whole story.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section style="background:linear-gradient(180deg,#ffffff,#fbfdff);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+  <div class="wrap">
+    <span class="kicker">Why It Leaks</span>
+    <h2>Five reasons, pulled from your <span class="accent">real lead notes</span></h2>
+    <p class="sub">These are not guesses. Every quote in the pipeline was read. Here is what is actually killing the bookings, in the clients' own words.</p>
+
+    <div class="cause">
+      <div class="rank">1</div>
+      <div>
+        <h4>Price-shopping &mdash; you're one of three quotes</h4>
+        <p>The single biggest killer. Clients are collecting quotes and going quiet, treating Izi as a commodity line item.</p>
+        <div class="quote">"client has received quote and is awaiting on other quotes" &middot; "awaiting quotes from other agencies"</div>
+      </div>
+    </div>
+
+    <div class="cause">
+      <div class="rank">2</div>
+      <div>
+        <h4>Quotes literally not arriving</h4>
+        <p>Email quotes are landing in spam. The client never sees it, Terri assumes it arrived, and the booking dies silently.</p>
+        <div class="quote">"Client came back to say she never got the email so i have resent it to her"</div>
+      </div>
+    </div>
+
+    <div class="cause">
+      <div class="rank">3</div>
+      <div>
+        <h4>Dead leads clogging the quote queue</h4>
+        <p>Several "Quote Sent" leads can't actually be quoted &mdash; no dates, no answer &mdash; eating Terri's 20-minute cycles.</p>
+        <div class="quote">"tried to contact client but not able to whatsapp and doesnt answer - need more info"</div>
+      </div>
+    </div>
+
+    <div class="cause">
+      <div class="rank">4</div>
+      <div>
+        <h4>No follow-up rhythm</h4>
+        <p>Follow-up is manual and inconsistent. Several quotes are 7&ndash;8 days old with no next step. Travel sells on the 3rd to 5th touch, not the 1st.</p>
+        <div class="quote">3 quotes 8 days old with zero follow-up notes recorded</div>
+      </div>
+    </div>
+
+    <div class="cause">
+      <div class="rank">5</div>
+      <div>
+        <h4>The pipeline doesn't tell the truth</h4>
+        <p>One client accepted a quote but still sits in "Follow-Up". Another has an invoice sent but sits in "Quote Sent". The CRM shows 1 booking; you have 5. You can't fix what you can't measure.</p>
+        <div class="quote">"Client accepted quote IZI-PO0XCM" &mdash; still filed under Quote Follow-Up</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THE SOLUTION -->
+<section>
+  <div class="wrap">
+    <span class="kicker">The Solution</span>
+    <h2>Six fixes that <span class="accent">plug the leak</span></h2>
+    <p class="sub">In priority order. The first three cost almost nothing and attack the leak directly.</p>
+
+    <div class="fix">
+      <div class="top"><div class="n">1</div><h3>Win on value, not price</h3><span class="tag">Biggest lever</span></div>
+      <div class="body">
+        <p>You can't always be cheapest, so stop competing only on price. Terri already gives away room upgrades and travel insurance. Make them stated, named reasons to book, plus your 5-star reviews, right at the top of every quote. (Example below.)</p>
+      </div>
+    </div>
+
+    <div class="fix">
+      <div class="top"><div class="n">2</div><h3>Install a 5-touch follow-up cadence</h3><span class="tag">Fastest win</span></div>
+      <div class="body">
+        <p>Travel quotes are won on the 3rd to 5th touch. A fixed, mostly-automated rhythm the moment a quote goes out. Applied to the 36 open quotes today, this is your highest-ROI move this week.</p>
+      </div>
+    </div>
+
+    <div class="fix">
+      <div class="top"><div class="n">3</div><h3>Deliver quotes WhatsApp-first</h3><span class="tag">Stops silent losses</span></div>
+      <div class="body">
+        <p>Email is where quotes die. Flip the default: WhatsApp is the primary channel, email is the backup, and message #1 confirms it arrived. The "never received it" loss disappears entirely.</p>
+      </div>
+    </div>
+
+    <div class="fix">
+      <div class="top"><div class="n">4</div><h3>Add urgency the quotes lack</h3></div>
+      <div class="body">
+        <p>Quotes are valid 24 hours but nothing pushes the decision. Add two things:</p>
+        <ul>
+          <li><b>Provisional hold</b> &mdash; "I can hold this room for 48 hours, just say the word." Turns a big decision into a small yes.</li>
+          <li><b>Deposit-to-secure</b> &mdash; a small deposit locks the price against forex movement.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="fix">
+      <div class="top"><div class="n">5</div><h3>Qualify before quoting</h3></div>
+      <div class="body">
+        <p>An automated message collects confirmed dates, budget and a reachable WhatsApp number <b>before</b> a lead hits Terri's quote queue. No more 20-minute quotes burned on un-quotable enquiries.</p>
+      </div>
+    </div>
+
+    <div class="fix">
+      <div class="top"><div class="n">6</div><h3>Make the pipeline reflect reality</h3><span class="tag">So we can measure</span></div>
+      <div class="body">
+        <p>Auto-move the stage when a booking event fires (accepted, invoiced, deposit paid). Until this is done you cannot see your true quote-to-booking rate, which means you can't tell if any of the above is working. Do this so the rest is measurable.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CADENCE DETAIL -->
+<section style="background:linear-gradient(180deg,#ffffff,#fbfdff);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+  <div class="wrap">
+    <span class="kicker">Fix #2 In Detail</span>
+    <h2>The follow-up <span class="accent">cadence</span></h2>
+    <p class="sub">Warm, WhatsApp-led, ready to use. If they go quiet after touch 5, they move to nurture, not lost.</p>
+
+    <div class="timeline">
+      <div class="tl">
+        <div class="node">1</div>
+        <div class="when">Same day</div><span class="chan">WhatsApp &middot; confirm delivery</span>
+        <div class="msg">"Hi [Name], it's Terri from Izi Travel 🌴 Just sent your [destination] quote through. Did it come through okay?"</div>
+      </div>
+      <div class="tl">
+        <div class="node">2</div>
+        <div class="when">+1 day</div><span class="chan">WhatsApp &middot; handle objections</span>
+        <div class="msg">"Any questions on the resort or dates? Easy to tweak the room type or add a night. What are you thinking? 😊"</div>
+      </div>
+      <div class="tl">
+        <div class="node">3</div>
+        <div class="when">+3 days</div><span class="chan">Call, then WhatsApp</span>
+        <div class="msg">"Rooms at this rate have been moving fast. Want me to <b>hold one</b> while you decide? No obligation."</div>
+      </div>
+      <div class="tl">
+        <div class="node">4</div>
+        <div class="when">+5 days</div><span class="chan">WhatsApp &middot; scarcity</span>
+        <div class="msg">"This price is valid till [date], after that forex can move it. I can <b>lock it in with a small deposit</b> so it won't change on you."</div>
+      </div>
+      <div class="tl">
+        <div class="node">5</div>
+        <div class="when">+8 days</div><span class="chan">Email + WhatsApp &middot; requote</span>
+        <div class="msg">"I've <b>refreshed your quote</b> with the latest pricing and one alternative I think you'll love. Want me to send it over?"</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUOTE EXAMPLE -->
+<section>
+  <div class="wrap">
+    <span class="kicker">Fix #1 In Detail</span>
+    <h2>What the <span class="accent">"Why book with Izi"</span> block looks like</h2>
+    <p class="sub">It sits at the top of every quote, above the resort options, so it frames everything the client reads after it.</p>
+
+    <div class="qexample">
+      <div class="qhead">Why book this trip with Izi Travel<small>You're not just getting a price. You're getting a real person who handles everything.</small></div>
+      <div class="qbody">
+        <div class="perk"><span class="ck">✓</span><div><b>Complimentary travel insurance</b> <span>&mdash; included on this booking (R850 value)</span></div></div>
+        <div class="perk"><span class="ck">✓</span><div><b>Free room upgrade</b> <span>&mdash; secured where availability allows</span></div></div>
+        <div class="perk"><span class="ck">✓</span><div><b>Backed by Club Travel</b> <span>&mdash; full financial protection, not a faceless booking site</span></div></div>
+        <div class="perk"><span class="ck">✓</span><div><b>One consultant, start to finish</b> <span>&mdash; flights, transfers, resort, any change, all on WhatsApp</span></div></div>
+        <div class="perk"><span class="ck">✓</span><div><b>Rated 5 stars</b> <span>by our travellers</span> <span class="stars">★★★★★</span></div></div>
+        <div class="rev">"Terri made our Zanzibar honeymoon effortless. Every detail handled, answered every message within minutes." <br>&mdash; Denise S. <span class="stars">★★★★★</span></div>
+      </div>
+    </div>
+    <p class="sub" style="margin-top:16px">The insurance and upgrade Terri already gives away stop being invisible margin and become reasons to choose her. Next to two bare-price competitors, yours is the only quote that feels safe and premium.</p>
+  </div>
+</section>
+
+<!-- TIMING -->
+<section style="background:linear-gradient(180deg,#ffffff,#fbfdff);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+  <div class="wrap">
+    <span class="kicker">House Rules</span>
+    <h2>When to <span class="accent">retire</span> a quote</h2>
+    <p class="sub">Two different stale situations, two different clocks. The golden rule: almost never delete, just move to nurture so it can be requoted later.</p>
+
+    <div class="twocol">
+      <div class="tcard a">
+        <div class="h">A &middot; Can't be quoted yet<br><span style="font-weight:500;font-size:.82rem;opacity:.9">No dates / no info / unreachable</span></div>
+        <div class="row"><div class="d">Day 0&ndash;2</div><div class="t">3 contact attempts (WhatsApp + call) to get dates &amp; budget</div></div>
+        <div class="row"><div class="d">Day 2</div><div class="t">Still nothing? Move to "Awaiting Info" out of the active queue</div></div>
+        <div class="row"><div class="d">Day 7</div><div class="t">No response &rarr; long-term nurture (not lost)</div></div>
+      </div>
+      <div class="tcard b">
+        <div class="h">B &middot; Quoted but gone quiet<br><span style="font-weight:500;font-size:.82rem;opacity:.9">Real quote sent, no reply</span></div>
+        <div class="row"><div class="d">Day 0&ndash;8</div><div class="t">Run the full 5-touch cadence</div></div>
+        <div class="row"><div class="d">Day 10&ndash;14</div><div class="t">Zero engagement &rarr; move to nurture</div></div>
+        <div class="row"><div class="d">"Lost"</div><div class="t">Reserved only for an explicit no ("booked elsewhere")</div></div>
+      </div>
+    </div>
+    <p class="sub" style="margin-top:16px"><b>Why nurture, never delete:</b> when travel dates shift closer or forex moves, a refreshed quote reopens a cold lead at near-zero cost. Filed as "Lost", you never touch them again. That nurture bucket is found money against the R50k goal.</p>
+  </div>
+</section>
+
+<!-- WORKFLOWS -->
+<section>
+  <div class="wrap">
+    <span class="kicker">Built For Terri</span>
+    <h2>Automations that <span class="accent">do the remembering</span></h2>
+    <p class="sub">Ranked by impact on her day and on conversion. The top three are where we start.</p>
+
+    <div class="wf prio"><div class="num">1</div><div><h4>Speed-to-lead alert <span class="star">★ start here</span></h4><p>New lead in, Terri pinged on WhatsApp within seconds. Her 20-minute SLA only works if she knows immediately.</p></div></div>
+    <div class="wf prio"><div class="num">2</div><div><h4>5-touch follow-up sequence <span class="star">★ start here</span></h4><p>Auto-fires reminders and pre-drafts each message. Following up stops being something she has to remember. This is the one that fixes the leak.</p></div></div>
+    <div class="wf prio"><div class="num">3</div><div><h4>Hold-expiry reminders <span class="star">★ start here</span></h4><p>A "Hold Expires" date + auto-reminder so a held room never lapses unnoticed. Visible 🔒 flag on the leads board.</p></div></div>
+    <div class="wf"><div class="num">4</div><div><h4>Stale-quote auto-mover</h4><p>Shifts dead-weight leads to Awaiting Info / Nurture automatically. Her active board only shows live deals.</p></div></div>
+    <div class="wf"><div class="num">5</div><div><h4>Qualification gate</h4><p>Blank leads get an automated ask for dates &amp; budget before they ever reach her quote queue.</p></div></div>
+    <div class="wf"><div class="num">6</div><div><h4>Stage auto-move on booking</h4><p>Accepted / invoiced / deposit-paid each advance the pipeline automatically. Finally an honest funnel.</p></div></div>
+    <div class="wf"><div class="num">7</div><div><h4>Requote re-engagement</h4><p>A scheduled nudge that resurfaces nurture leads when it's time to refresh pricing.</p></div></div>
+    <div class="wf"><div class="num">8</div><div><h4>Post-trip review request</h4><p>After travel, auto-trigger the ReviewTap ask. Feeds the 5-star proof straight back into the quote block. The funnel feeds itself.</p></div></div>
+  </div>
+</section>
+
+<!-- GOAL -->
+<section style="padding-top:10px">
+  <div class="wrap">
+    <div class="goal">
+      <div class="kicker" style="color:var(--teal)">The North Star</div>
+      <div class="g-num">R50,000<span style="font-size:1.1rem;color:#cfe0ee;font-weight:600">/month</span></div>
+      <p>Roughly 33 bookings a month at current commission. Conversion fixes get us part of the way. Average booking value (Maldives, Mauritius and Europe over Zanzibar) gets us the rest.</p>
+      <div class="bar"><i></i></div>
+      <div class="scale"><span>Now: ~R2,500/mo</span><span>Goal: R50,000/mo</span></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <b>Izi Travel &times; JCE Media</b> &middot; Conversion Strategy &middot; 23 June 2026<br>
+    Fix the close first. Then open the taps on the ads (we're capturing only ~15% of available searches).
+  </div>
+</footer>
+
+</body>
+</html>
