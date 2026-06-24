@@ -1,0 +1,1407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Threezero — Google Ads Audit &amp; Strategy | JCE Media</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0D0D0D;
+    --card: #141414;
+    --border: #222222;
+    --gold: #C9A84C;
+    --gold-light: #E2C87A;
+    --gold-dark: #A0832E;
+    --text: #E8E8E8;
+    --muted: #888888;
+    --danger: #EF4444;
+    --warn: #F59E0B;
+    --ok: #22C55E;
+    --blue: #3B82F6;
+    --font: 'Plus Jakarta Sans', -apple-system, sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* ── LAYOUT ── */
+  .wrapper { max-width: 960px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  /* ── COVER ── */
+  .cover {
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 48px;
+    margin-bottom: 48px;
+    background: linear-gradient(135deg, #141414 0%, #0f0f0f 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--gold-dark), var(--gold), var(--gold-light));
+  }
+  .cover-tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--gold);
+    margin-bottom: 16px;
+  }
+  .cover h1 {
+    font-size: 36px;
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 12px;
+    color: #fff;
+  }
+  .cover h1 span { color: var(--gold); }
+  .cover-sub { font-size: 16px; color: var(--muted); margin-bottom: 32px; }
+  .cover-meta {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+  }
+  .meta-item label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); display: block; margin-bottom: 4px; }
+  .meta-item span { font-size: 14px; font-weight: 600; color: var(--text); }
+
+  /* ── NAV ── */
+  .sticky-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(13,13,13,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    margin: 0 -24px 40px;
+  }
+  .nav-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    display: flex;
+    gap: 0;
+  }
+  .nav-inner a {
+    display: block;
+    padding: 14px 20px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    transition: color 0.15s, border-color 0.15s;
+    white-space: nowrap;
+  }
+  .nav-inner a:hover { color: var(--gold); border-color: var(--gold); }
+
+  /* ── SECTION HEADERS ── */
+  .section-block { margin-bottom: 56px; }
+  .section-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  .section-num {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 800;
+    flex-shrink: 0;
+  }
+  .s-red .section-num { background: rgba(239,68,68,0.15); color: var(--danger); }
+  .s-gold .section-num { background: rgba(201,168,76,0.15); color: var(--gold); }
+  .s-green .section-num { background: rgba(34,197,94,0.15); color: var(--ok); }
+  .section-tag { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; }
+  .s-red .section-tag { color: var(--danger); }
+  .s-gold .section-tag { color: var(--gold); }
+  .s-green .section-tag { color: var(--ok); }
+  .section-block h2 { font-size: 26px; font-weight: 800; color: #fff; margin-bottom: 6px; }
+  .section-block .section-intro { font-size: 14px; color: var(--muted); margin-bottom: 28px; max-width: 680px; line-height: 1.7; }
+
+  /* ── SUB HEADERS ── */
+  .sub-header { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin: 32px 0 12px; }
+
+  /* ── STAT GRID ── */
+  .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 28px; }
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+  }
+  .stat-card .label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 6px; }
+  .stat-card .value { font-size: 22px; font-weight: 800; color: #fff; }
+  .stat-card .sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .stat-card.warn .value { color: var(--warn); }
+  .stat-card.danger .value { color: var(--danger); }
+  .stat-card.ok .value { color: var(--ok); }
+  .stat-card.gold .value { color: var(--gold); }
+
+  /* ── TABLES ── */
+  .tbl-wrap { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 24px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead { background: #1a1a1a; }
+  th { text-align: left; padding: 10px 14px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); white-space: nowrap; }
+  td { padding: 11px 14px; border-top: 1px solid var(--border); color: var(--text); vertical-align: top; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+  .num { text-align: right; font-variant-numeric: tabular-nums; }
+  .bold { font-weight: 700; color: #fff; }
+  .muted { color: var(--muted); }
+
+  /* ── PILLS ── */
+  .pill { display: inline-block; font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 20px; white-space: nowrap; }
+  .pill-red { background: rgba(239,68,68,0.12); color: var(--danger); border: 1px solid rgba(239,68,68,0.2); }
+  .pill-warn { background: rgba(245,158,11,0.12); color: var(--warn); border: 1px solid rgba(245,158,11,0.2); }
+  .pill-ok { background: rgba(34,197,94,0.12); color: var(--ok); border: 1px solid rgba(34,197,94,0.2); }
+  .pill-gold { background: rgba(201,168,76,0.12); color: var(--gold); border: 1px solid rgba(201,168,76,0.2); }
+  .pill-blue { background: rgba(59,130,246,0.12); color: var(--blue); border: 1px solid rgba(59,130,246,0.2); }
+
+  /* ── ALERT BOXES ── */
+  .alert { border-radius: 10px; padding: 16px 20px; margin-bottom: 16px; display: flex; gap: 14px; align-items: flex-start; }
+  .alert-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .alert-red { background: rgba(239,68,68,0.07); border: 1px solid rgba(239,68,68,0.2); }
+  .alert-warn { background: rgba(245,158,11,0.07); border: 1px solid rgba(245,158,11,0.2); }
+  .alert-ok { background: rgba(34,197,94,0.07); border: 1px solid rgba(34,197,94,0.2); }
+  .alert-gold { background: rgba(201,168,76,0.07); border: 1px solid rgba(201,168,76,0.2); }
+  .alert-body strong { display: block; font-size: 13px; font-weight: 700; margin-bottom: 3px; }
+  .alert-body p { font-size: 12px; color: var(--muted); line-height: 1.6; }
+
+  /* ── CAMPAIGN CARDS ── */
+  .camp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+  .camp-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .camp-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+  }
+  .cc1::before { background: var(--blue); }
+  .cc2::before { background: var(--gold); }
+  .cc3::before { background: var(--warn); }
+  .cc4::before { background: #8B5CF6; }
+  .camp-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
+  .camp-name { font-size: 14px; font-weight: 700; color: #fff; }
+  .camp-budget { font-size: 18px; font-weight: 800; }
+  .cc1 .camp-budget { color: var(--blue); }
+  .cc2 .camp-budget { color: var(--gold); }
+  .cc3 .camp-budget { color: var(--warn); }
+  .cc4 .camp-budget { color: #8B5CF6; }
+  .camp-per-day { font-size: 11px; color: var(--muted); font-weight: 400; }
+  .kw-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); margin: 12px 0 6px; }
+  .kw-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+  .kw-tag { font-size: 11px; padding: 3px 8px; border-radius: 5px; }
+  .kw-exact { background: rgba(59,130,246,0.1); color: #93C5FD; border: 1px solid rgba(59,130,246,0.2); }
+  .kw-phrase { background: rgba(34,197,94,0.1); color: #86EFAC; border: 1px solid rgba(34,197,94,0.2); }
+  .camp-goal { font-size: 12px; color: var(--muted); margin-top: 12px; line-height: 1.6; border-top: 1px solid var(--border); padding-top: 12px; }
+
+  /* ── BUDGET BAR ── */
+  .budget-bar-wrap { margin-bottom: 24px; }
+  .budget-bar {
+    display: flex;
+    height: 44px;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+  .bb-seg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #000;
+    white-space: nowrap;
+    padding: 0 8px;
+  }
+  .bb1 { background: var(--blue); }
+  .bb2 { background: var(--gold); }
+  .bb3 { background: var(--warn); }
+  .bb4 { background: #8B5CF6; color: #fff; }
+  .budget-legend { display: flex; gap: 20px; flex-wrap: wrap; }
+  .bl { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
+  .bl-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+  /* ── AD COPY CARDS ── */
+  .ad-copy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+  .ad-copy-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .ad-copy-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 12px; }
+  .headline-item { font-size: 13px; color: #7BAFF9; font-weight: 600; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .headline-item:last-child { border-bottom: none; }
+  .desc-item { font-size: 12px; color: var(--text); line-height: 1.6; padding: 8px 0 8px 10px; border-left: 2px solid var(--border); margin-bottom: 8px; }
+  .desc-item:last-child { margin-bottom: 0; }
+
+  /* ── NEGATIVES ── */
+  .neg-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 24px; }
+  .neg-card {
+    background: rgba(239,68,68,0.04);
+    border: 1px solid rgba(239,68,68,0.15);
+    border-radius: 10px;
+    padding: 14px;
+  }
+  .neg-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--danger); margin-bottom: 8px; }
+  .neg-tag { font-size: 11px; background: rgba(239,68,68,0.1); color: #FCA5A5; padding: 3px 8px; border-radius: 4px; margin: 3px 3px 3px 0; display: inline-block; }
+
+  /* ── TIMELINE ── */
+  .timeline { display: flex; flex-direction: column; gap: 0; }
+  .tl-item { display: flex; gap: 0; }
+  .tl-left { width: 130px; flex-shrink: 0; padding: 0 20px 28px 0; text-align: right; }
+  .tl-week { font-size: 13px; font-weight: 800; color: #fff; }
+  .tl-phase { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .tl-mid { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+  .tl-dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--bg); flex-shrink: 0; margin-top: 3px; z-index: 1; }
+  .tl-line { width: 2px; background: var(--border); flex: 1; min-height: 28px; }
+  .tl-right { flex: 1; padding: 0 0 28px 20px; }
+  .tl-title { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+  .tl-tasks { list-style: none; }
+  .tl-tasks li { font-size: 12px; color: var(--muted); padding: 3px 0; display: flex; gap: 8px; line-height: 1.5; }
+  .tl-tasks li::before { content: "→"; color: var(--gold); flex-shrink: 0; }
+  .tl-item:last-child .tl-line { display: none; }
+  .d-red .tl-dot { background: var(--danger); }
+  .d-warn .tl-dot { background: var(--warn); }
+  .d-green .tl-dot { background: var(--ok); }
+  .d-gold .tl-dot { background: var(--gold); }
+  .d-blue .tl-dot { background: var(--blue); }
+  .d-purple .tl-dot { background: #8B5CF6; }
+
+  /* ── OUTCOME BOX ── */
+  .outcome-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 28px; }
+  .outcome-card {
+    background: rgba(201,168,76,0.06);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 10px;
+    padding: 18px;
+    text-align: center;
+  }
+  .outcome-card .oc-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 8px; }
+  .outcome-card .oc-val { font-size: 26px; font-weight: 800; color: var(--gold); }
+  .outcome-card .oc-sub { font-size: 11px; color: var(--muted); margin-top: 4px; line-height: 1.5; }
+
+  /* ── COMPARISON TABLE ── */
+  .compare-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+  .compare-col {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .compare-col.bad { border-color: rgba(239,68,68,0.3); }
+  .compare-col.good { border-color: rgba(34,197,94,0.3); }
+  .compare-head {
+    padding: 12px 16px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+  }
+  .compare-col.bad .compare-head { background: rgba(239,68,68,0.08); color: var(--danger); }
+  .compare-col.good .compare-head { background: rgba(34,197,94,0.08); color: var(--ok); }
+  .compare-row { display: flex; justify-content: space-between; padding: 10px 16px; border-top: 1px solid var(--border); font-size: 12px; }
+  .compare-row .cr-label { color: var(--muted); }
+  .compare-row .cr-val { font-weight: 700; color: #fff; }
+  .compare-col.bad .cr-val { color: #FCA5A5; }
+  .compare-col.good .cr-val { color: #86EFAC; }
+
+  /* ── FOOTER ── */
+  .report-footer {
+    margin-top: 60px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .report-footer .rf-brand { font-size: 13px; font-weight: 700; color: var(--gold); }
+  .report-footer .rf-meta { font-size: 11px; color: var(--muted); }
+
+  /* ── MATCH TYPE LEGEND ── */
+  .match-legend { display: flex; gap: 12px; margin-bottom: 10px; }
+  .ml-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--muted); }
+
+  /* ── DIVIDER ── */
+  .divider { height: 1px; background: var(--border); margin: 32px 0; }
+
+  @media (max-width: 680px) {
+    .cover-meta { grid-template-columns: 1fr 1fr; }
+    .stat-grid { grid-template-columns: 1fr 1fr; }
+    .camp-grid, .ad-copy-grid, .compare-wrap { grid-template-columns: 1fr; }
+    .neg-grid { grid-template-columns: 1fr 1fr; }
+    .outcome-grid { grid-template-columns: 1fr 1fr; }
+    .cover h1 { font-size: 26px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+
+  <!-- COVER -->
+  <div class="cover">
+    <div class="cover-tag">JCE Media — Google Ads Audit &amp; Strategy</div>
+    <h1>Threezero <span>Google Ads</span><br>Audit &amp; Rebuild Plan</h1>
+    <p class="cover-sub">Cape Quarter, Green Point, Cape Town &mdash; Account ID 3692836056</p>
+    <div class="cover-meta">
+      <div class="meta-item"><label>Report Date</label><span>22 June 2026</span></div>
+      <div class="meta-item"><label>Next Session</label><span>Wednesday 25 Jun</span></div>
+      <div class="meta-item"><label>Prepared by</label><span>JCE Media</span></div>
+      <div class="meta-item"><label>Monthly Budget Cap</label><span>R3,000</span></div>
+    </div>
+  </div>
+
+  <!-- STICKY NAV -->
+  <nav class="sticky-nav">
+    <div class="nav-inner">
+      <a href="#audit">Section 1: Audit</a>
+      <a href="#strategy">Section 2: Strategy</a>
+      <a href="#timeline">Section 3: Timeline</a>
+      <a href="#outcomes">Expected Outcomes</a>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 1: AUDIT
+  ═══════════════════════════════════════════ -->
+  <section id="audit" class="section-block">
+    <div class="section-label s-red">
+      <div class="section-num">1</div>
+      <div class="section-tag">Account Audit</div>
+    </div>
+    <h2>What Was in Place</h2>
+    <p class="section-intro">A full diagnostic of the Google Ads account as it stood on 22 June 2026. Two campaigns found, one active. The account has been running on Google's Smart Campaign format, which removes all advertiser control and hides what searches are triggering the ads.</p>
+
+    <!-- ACCOUNT STRUCTURE -->
+    <div class="sub-header">Account Structure</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Campaign</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th>Daily Budget</th>
+            <th>Bidding</th>
+            <th>Ad Groups</th>
+            <th>Issue</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="bold">Threezero Fitness Studio</td>
+            <td><span class="pill pill-warn">SMART</span></td>
+            <td><span class="pill pill-ok">ACTIVE</span></td>
+            <td class="num">R40.00</td>
+            <td>Target Spend (Max Clicks)</td>
+            <td class="num">1</td>
+            <td>No keyword control, no search term visibility</td>
+          </tr>
+          <tr>
+            <td class="bold">Threezero gym</td>
+            <td><span class="pill pill-warn">SMART</span></td>
+            <td><span class="pill pill-red">PAUSED</span></td>
+            <td class="num">—</td>
+            <td>—</td>
+            <td class="num">1</td>
+            <td><span class="pill pill-red">CRITICAL</span> Ad copy reads "Real Estate Rental Services" — completely wrong business</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="alert alert-red">
+      <div class="alert-icon">⚠️</div>
+      <div class="alert-body">
+        <strong>Paused campaign has real estate ad copy</strong>
+        <p>The "Threezero gym" campaign has three headlines: "Real Estate Rental Services", "Reliable Real Estate Rentals", and "Professional Rental Agents". This campaign is paused but should be permanently removed. It indicates the account was set up incorrectly at some point.</p>
+      </div>
+    </div>
+
+    <!-- 90-DAY PERFORMANCE -->
+    <div class="sub-header" style="margin-top:32px">90-Day Performance (All Figures in ZAR)</div>
+
+    <div class="stat-grid">
+      <div class="stat-card gold">
+        <div class="label">90-Day Spend</div>
+        <div class="value">R4,380</div>
+        <div class="sub">R1,460/month average</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Total Clicks</div>
+        <div class="value">2,904</div>
+        <div class="sub">968 clicks/month average</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Total Impressions</div>
+        <div class="value">139,936</div>
+        <div class="sub">2.08% average CTR</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Avg CPC</div>
+        <div class="value">R1.51</div>
+        <div class="sub">Very low. Good quality signal.</div>
+      </div>
+    </div>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Period</th>
+            <th class="num">Spend</th>
+            <th class="num">Impressions</th>
+            <th class="num">Clicks</th>
+            <th class="num">CTR</th>
+            <th class="num">Avg CPC</th>
+            <th class="num">"Conversions"</th>
+            <th class="num">CPA</th>
+            <th>Trend</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Last 90 Days (total)</td>
+            <td class="num bold">R4,380</td>
+            <td class="num">139,936</td>
+            <td class="num">2,904</td>
+            <td class="num">2.08%</td>
+            <td class="num">R1.51</td>
+            <td class="num">177</td>
+            <td class="num">R24.75</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>Last 60 Days (total)</td>
+            <td class="num">R2,914</td>
+            <td class="num">83,483</td>
+            <td class="num">1,948</td>
+            <td class="num">2.33%</td>
+            <td class="num">R1.50</td>
+            <td class="num">93</td>
+            <td class="num">R31.34</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>Last 30 Days (total)</td>
+            <td class="num">R1,229</td>
+            <td class="num">30,798</td>
+            <td class="num">646</td>
+            <td class="num">2.10%</td>
+            <td class="num">R1.90</td>
+            <td class="num">41</td>
+            <td class="num">R29.99</td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sub-header">Broken Down into 30-Day Slices</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>30-Day Period</th>
+            <th class="num">Spend</th>
+            <th class="num">Clicks</th>
+            <th class="num">"Conv."</th>
+            <th class="num">CPA</th>
+            <th>vs Prior Period</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Mar 24 – Apr 22 <span class="muted">(oldest)</span></td>
+            <td class="num">R1,466</td>
+            <td class="num">956</td>
+            <td class="num">84</td>
+            <td class="num bold" style="color:var(--ok)">R17.45</td>
+            <td><span class="muted">Baseline</span></td>
+          </tr>
+          <tr>
+            <td>Apr 23 – May 23 <span class="muted">(middle)</span></td>
+            <td class="num">R1,685</td>
+            <td class="num">1,302</td>
+            <td class="num">52</td>
+            <td class="num bold" style="color:var(--danger)">R32.40</td>
+            <td><span class="pill pill-red">CPA +86%</span></td>
+          </tr>
+          <tr>
+            <td>May 24 – Jun 22 <span class="muted">(most recent)</span></td>
+            <td class="num">R1,229</td>
+            <td class="num">646</td>
+            <td class="num">41</td>
+            <td class="num bold" style="color:var(--warn)">R29.99</td>
+            <td><span class="pill pill-warn">Conv. vol. falling</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:12px; color:var(--muted); margin-bottom:24px; line-height:1.7;">Note: the "Conversions" column above are not real business conversions. See the section below for what these actually count. The CPA figures above are included for comparison only and should not be used to evaluate account health.</p>
+
+    <!-- CONVERSION ANALYSIS -->
+    <div class="sub-header">What Counts as a "Conversion" — All 10 Actions</div>
+
+    <div class="alert alert-red">
+      <div class="alert-icon">🚨</div>
+      <div class="alert-body">
+        <strong>Every conversion is valued at R1.00 (Google default). ROAS is meaningless.</strong>
+        <p>Google assigned R1 to each conversion action when the account was set up. This means "41 conversions last month" is 41 micro-events that each contributed R1 of "value" to the account. The 0.03x ROAS reported is not a real number. The table below shows what these conversions actually represent.</p>
+      </div>
+    </div>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Conversion Action</th>
+            <th>Category</th>
+            <th>What Actually Happened</th>
+            <th>Current Value</th>
+            <th>Is This a Lead?</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="bold">www.threezero.co.za (web) purchase</td>
+            <td>Purchase</td>
+            <td>Actual website purchase</td>
+            <td class="num warn">R1 default</td>
+            <td><span class="pill pill-ok">Yes — fix value</span></td>
+          </tr>
+          <tr>
+            <td class="bold">Calls from Smart Campaign Ads</td>
+            <td>Phone Call</td>
+            <td>Phone call directly from ad</td>
+            <td class="num warn">R1 default</td>
+            <td><span class="pill pill-ok">Yes — fix value</span></td>
+          </tr>
+          <tr>
+            <td class="bold">Clicks to call</td>
+            <td>Contact</td>
+            <td>Clicked the phone number in the ad</td>
+            <td class="num warn">R1 default</td>
+            <td><span class="pill pill-ok">Yes — fix value</span></td>
+          </tr>
+          <tr>
+            <td class="bold">Smart campaign map clicks to call</td>
+            <td>Contact</td>
+            <td>Clicked to call from Google Maps listing</td>
+            <td class="num warn">R1 default</td>
+            <td><span class="pill pill-warn">Maybe</span></td>
+          </tr>
+          <tr>
+            <td class="bold">Smart campaign map directions</td>
+            <td>Directions</td>
+            <td>Clicked "Get Directions" on Maps</td>
+            <td class="num warn">R1 default</td>
+            <td><span class="pill pill-warn">Weak signal</span></td>
+          </tr>
+          <tr>
+            <td class="bold">Local actions – Directions</td>
+            <td>Directions</td>
+            <td>Directions from local search pack</td>
+            <td class="num warn">R1 default</td>
+            <td><span class="pill pill-warn">Weak signal</span></td>
+          </tr>
+          <tr>
+            <td class="bold">Local actions – Website visits</td>
+            <td>Page View</td>
+            <td>Clicked "Website" from Maps listing</td>
+            <td class="num warn">R1 default</td>
+            <td><span class="pill pill-red">No — page view only</span></td>
+          </tr>
+          <tr>
+            <td class="bold">Local actions – Other engagements</td>
+            <td>Engagement</td>
+            <td>Unspecified interaction with listing</td>
+            <td class="num warn">R1 default</td>
+            <td><span class="pill pill-red">No — remove</span></td>
+          </tr>
+          <tr>
+            <td class="bold">Store visits</td>
+            <td>Store Visit</td>
+            <td>Google estimates someone walked in (modelled)</td>
+            <td class="num warn">R1 default</td>
+            <td><span class="pill pill-warn">Interesting but not actionable</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- SEARCH TERMS -->
+    <div class="sub-header">Search Term Visibility</div>
+
+    <div class="alert alert-red">
+      <div class="alert-icon">🔒</div>
+      <div class="alert-body">
+        <strong>Zero search term data — Smart Campaign black box</strong>
+        <p>The search_term_view query returned 0 results. This is expected for Smart Campaigns: Google controls all keyword targeting and does not expose which search queries triggered the ads. The account has been spending R40/day with no visibility into what people are actually searching for before seeing the ads. This makes optimisation impossible.</p>
+      </div>
+    </div>
+
+    <!-- NEGATIVE KEYWORDS -->
+    <div class="sub-header">Negative Keywords — 853 Unique Terms (1,118 Records)</div>
+    <p style="font-size:12px; color:var(--muted); margin-bottom:16px; line-height:1.7;">Google auto-populated a large negative list across the Smart Campaign. Most of it is generic junk blocking, applied without advertiser input. Some terms should have never been negated for a gym business.</p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Examples from the List</th>
+            <th>Assessment</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Wrong activity types</td>
+            <td>boxing, mma, muay thai, pilates, yoga, zumba, crossfit, spinning, barre</td>
+            <td><span class="pill pill-ok">Correct — keep</span></td>
+          </tr>
+          <tr>
+            <td>Competitors / wrong areas</td>
+            <td>gym claremont, gym milnerton, gym observatory, woodstock gym, gyms durbanville</td>
+            <td><span class="pill pill-ok">Correct — keep</span></td>
+          </tr>
+          <tr>
+            <td>Price mismatches</td>
+            <td>cheap gym, cheapest gym, 24 hour gym</td>
+            <td><span class="pill pill-ok">Correct if not 24hr/budget</span></td>
+          </tr>
+          <tr>
+            <td class="bold" style="color:var(--danger)">Health</td>
+            <td>"health"</td>
+            <td><span class="pill pill-red">PROBLEM — blocks "health gym" type searches</span></td>
+          </tr>
+          <tr>
+            <td class="bold" style="color:var(--danger)">Training</td>
+            <td>"training"</td>
+            <td><span class="pill pill-red">PROBLEM — blocks "weight training gym" etc.</span></td>
+          </tr>
+          <tr>
+            <td class="bold" style="color:var(--danger)">Memberships</td>
+            <td>"memberships"</td>
+            <td><span class="pill pill-red">PROBLEM — core purchase intent phrase</span></td>
+          </tr>
+          <tr>
+            <td class="bold" style="color:var(--warn)">Classes</td>
+            <td>"classes"</td>
+            <td><span class="pill pill-warn">Check — fine only if no group classes at all</span></td>
+          </tr>
+          <tr>
+            <td>Informational / jobs / other</td>
+            <td>how to, what is, job, career, software, domain, youtube, online</td>
+            <td><span class="pill pill-ok">Correct — keep all</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- AUDIT SUMMARY -->
+    <div class="sub-header">Core Problems — Summary</div>
+
+    <div class="alert alert-red">
+      <div class="alert-icon">1</div>
+      <div class="alert-body">
+        <strong>Smart Campaign = no control, no data</strong>
+        <p>Google runs everything. No keyword visibility, no search term data, no audience control. Can't optimise what you can't see. The account has been effectively operating as a black box for its entire life.</p>
+      </div>
+    </div>
+    <div class="alert alert-red">
+      <div class="alert-icon">2</div>
+      <div class="alert-body">
+        <strong>Conversion tracking is broken — all decisions based on false data</strong>
+        <p>177 "conversions" over 90 days sounds healthy. In reality these are map direction clicks, website taps, and Google-modelled store visit estimates, each worth R1. No trial bookings, no membership sign-ups, no calls have been tracked at real value. ROAS of 0.03x is not a real number.</p>
+      </div>
+    </div>
+    <div class="alert alert-warn">
+      <div class="alert-icon">3</div>
+      <div class="alert-body">
+        <strong>Performance declining month over month</strong>
+        <p>Spend fell from R1,685 to R1,229 while the CPA climbed from R17.45 to R32.40. Whether this is a budget issue, quality score issue, or seasonal shift cannot be determined without search term data. The Smart Campaign has no tools to diagnose or fix it.</p>
+      </div>
+    </div>
+    <div class="alert alert-warn">
+      <div class="alert-icon">4</div>
+      <div class="alert-body">
+        <strong>No GA4 or Facebook Pixel installed</strong>
+        <p>Per project notes, GA4 and Facebook Pixel are still pending on the Threezero site. Without GA4, there is no cross-channel attribution, no audience building for RLSA, and no way to verify conversion tag firing independently of Google Ads. This needs to be resolved in parallel.</p>
+      </div>
+    </div>
+    <div class="alert alert-gold">
+      <div class="alert-icon">✓</div>
+      <div class="alert-body">
+        <strong>Trial booking form is live and connected to GHL</strong>
+        <p>The form at the bottom of the homepage fires a webhook to GHL on submission (live since 15 Jun 2026, tag: trial-booking, verified). This is the ideal primary conversion to track in Google Ads. We just need to add the Google Ads conversion tag to the form's submit handler.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 2: STRATEGY
+  ═══════════════════════════════════════════ -->
+  <section id="strategy" class="section-block">
+    <div class="section-label s-gold">
+      <div class="section-num">2</div>
+      <div class="section-tag">New Strategy</div>
+    </div>
+    <h2>What's Coming</h2>
+    <p class="section-intro">A full rebuild from Smart Campaign to four Standard Search campaigns, with proper keyword control, real conversion tracking, clean negatives, and a budget capped at R3,000/month. At the current average CPC of R1.50–R1.90, this budget should deliver 1,600–2,000 clicks per month, up from the current 646.</p>
+
+    <!-- BEFORE / AFTER -->
+    <div class="sub-header">Before vs After</div>
+    <div class="compare-wrap">
+      <div class="compare-col bad">
+        <div class="compare-head">Current Setup (Smart Campaign)</div>
+        <div class="compare-row"><span class="cr-label">Campaign type</span><span class="cr-val">Smart (black box)</span></div>
+        <div class="compare-row"><span class="cr-label">Keyword control</span><span class="cr-val">None</span></div>
+        <div class="compare-row"><span class="cr-label">Search term visibility</span><span class="cr-val">Zero</span></div>
+        <div class="compare-row"><span class="cr-label">Monthly budget</span><span class="cr-val">R1,229 (actual)</span></div>
+        <div class="compare-row"><span class="cr-label">Clicks/month</span><span class="cr-val">646</span></div>
+        <div class="compare-row"><span class="cr-label">Primary conversion</span><span class="cr-val">Map direction clicks</span></div>
+        <div class="compare-row"><span class="cr-label">Conversion value</span><span class="cr-val">R1 per event</span></div>
+        <div class="compare-row"><span class="cr-label">ROAS</span><span class="cr-val">0.03x (meaningless)</span></div>
+        <div class="compare-row"><span class="cr-label">Bidding</span><span class="cr-val">Max Clicks (no CPA target)</span></div>
+        <div class="compare-row"><span class="cr-label">Campaigns</span><span class="cr-val">2 (1 active, 1 bad)</span></div>
+      </div>
+      <div class="compare-col good">
+        <div class="compare-head">New Setup (Standard Search)</div>
+        <div class="compare-row"><span class="cr-label">Campaign type</span><span class="cr-val">Standard Search</span></div>
+        <div class="compare-row"><span class="cr-label">Keyword control</span><span class="cr-val">Full — exact + phrase</span></div>
+        <div class="compare-row"><span class="cr-label">Search term visibility</span><span class="cr-val">Complete — weekly review</span></div>
+        <div class="compare-row"><span class="cr-label">Monthly budget</span><span class="cr-val">R3,000 (capped)</span></div>
+        <div class="compare-row"><span class="cr-label">Clicks/month</span><span class="cr-val">~1,600–2,000</span></div>
+        <div class="compare-row"><span class="cr-label">Primary conversion</span><span class="cr-val">Trial booking form</span></div>
+        <div class="compare-row"><span class="cr-label">Conversion value</span><span class="cr-val">R300 (trial) / actual (membership)</span></div>
+        <div class="compare-row"><span class="cr-label">ROAS</span><span class="cr-val">Real — based on lead value</span></div>
+        <div class="compare-row"><span class="cr-label">Bidding</span><span class="cr-val">Max Clicks → Target CPA at 30 conv.</span></div>
+        <div class="compare-row"><span class="cr-label">Campaigns</span><span class="cr-val">4 purpose-built campaigns</span></div>
+      </div>
+    </div>
+
+    <!-- BUDGET ALLOCATION -->
+    <div class="sub-header">Budget Allocation — R3,000/month = R100/day</div>
+    <div class="budget-bar-wrap">
+      <div class="budget-bar">
+        <div class="bb-seg bb1" style="width:17%">Brand R500</div>
+        <div class="bb-seg bb2" style="width:50%">Core Intent R1,500</div>
+        <div class="bb-seg bb3" style="width:23%">Location R700</div>
+        <div class="bb-seg bb4" style="width:10%">Problem R300</div>
+      </div>
+      <div class="budget-legend">
+        <div class="bl"><div class="bl-dot" style="background:var(--blue)"></div>Campaign 1 — Brand: R500/mo (R16.67/day)</div>
+        <div class="bl"><div class="bl-dot" style="background:var(--gold)"></div>Campaign 2 — Core Intent: R1,500/mo (R50/day)</div>
+        <div class="bl"><div class="bl-dot" style="background:var(--warn)"></div>Campaign 3 — Location: R700/mo (R23.33/day)</div>
+        <div class="bl"><div class="bl-dot" style="background:#8B5CF6"></div>Campaign 4 — Problem-Aware: R300/mo (R10/day)</div>
+      </div>
+    </div>
+
+    <!-- CAMPAIGN CARDS -->
+    <div class="sub-header">Campaign Structure</div>
+    <div class="match-legend">
+      <div class="ml-item"><span class="kw-tag kw-exact">[exact]</span></div>
+      <div class="ml-item"><span class="kw-tag kw-phrase">"phrase"</span></div>
+    </div>
+    <div class="camp-grid">
+      <div class="camp-card cc1">
+        <div class="camp-head">
+          <div>
+            <div class="camp-name">Campaign 1 — Brand</div>
+            <div style="font-size:11px; color:var(--muted); margin-top:2px">Protect brand. Lowest CPC. No competition.</div>
+          </div>
+          <div style="text-align:right">
+            <div class="camp-budget">R500<span class="camp-per-day">/mo</span></div>
+            <div class="camp-per-day">R16.67/day</div>
+          </div>
+        </div>
+        <div class="kw-label">Keywords</div>
+        <div class="kw-tags">
+          <span class="kw-tag kw-exact">[threezero]</span>
+          <span class="kw-tag kw-exact">[three zero gym]</span>
+          <span class="kw-tag kw-exact">[threezero fitness]</span>
+          <span class="kw-tag kw-exact">[threezero cape town]</span>
+          <span class="kw-tag kw-phrase">"threezero studio"</span>
+          <span class="kw-tag kw-phrase">"biocircuit cape town"</span>
+        </div>
+        <div class="camp-goal">Own every branded search. Prevents competitors from intercepting people already looking for Threezero by name. Expected CPC: under R0.50.</div>
+      </div>
+
+      <div class="camp-card cc2">
+        <div class="camp-head">
+          <div>
+            <div class="camp-name">Campaign 2 — Core Intent</div>
+            <div style="font-size:11px; color:var(--muted); margin-top:2px">Highest priority. Threezero's USP keywords.</div>
+          </div>
+          <div style="text-align:right">
+            <div class="camp-budget">R1,500<span class="camp-per-day">/mo</span></div>
+            <div class="camp-per-day">R50/day</div>
+          </div>
+        </div>
+        <div class="kw-label">Keywords</div>
+        <div class="kw-tags">
+          <span class="kw-tag kw-exact">[30 minute gym cape town]</span>
+          <span class="kw-tag kw-exact">[circuit gym cape town]</span>
+          <span class="kw-tag kw-exact">[circuit training gym cape town]</span>
+          <span class="kw-tag kw-exact">[30 min workout gym]</span>
+          <span class="kw-tag kw-phrase">"30 minute gym"</span>
+          <span class="kw-tag kw-phrase">"circuit gym"</span>
+          <span class="kw-tag kw-phrase">"quick gym workout"</span>
+          <span class="kw-tag kw-phrase">"gym in 30 minutes"</span>
+          <span class="kw-tag kw-phrase">"lunch break gym"</span>
+          <span class="kw-tag kw-phrase">"30 min circuit"</span>
+          <span class="kw-tag kw-phrase">"guided gym workout"</span>
+          <span class="kw-tag kw-phrase">"fitness studio cape town"</span>
+        </div>
+        <div class="camp-goal">Captures people searching Threezero's specific 30-minute/circuit USP. These searchers are already primed for what Threezero offers. Expected to produce the lowest CPA of any campaign.</div>
+      </div>
+
+      <div class="camp-card cc3">
+        <div class="camp-head">
+          <div>
+            <div class="camp-name">Campaign 3 — Location Intent</div>
+            <div style="font-size:11px; color:var(--muted); margin-top:2px">High-volume local gym searches. 8km radius.</div>
+          </div>
+          <div style="text-align:right">
+            <div class="camp-budget">R700<span class="camp-per-day">/mo</span></div>
+            <div class="camp-per-day">R23.33/day</div>
+          </div>
+        </div>
+        <div class="kw-label">Keywords</div>
+        <div class="kw-tags">
+          <span class="kw-tag kw-exact">[gym near me]</span>
+          <span class="kw-tag kw-exact">[gym cape quarter]</span>
+          <span class="kw-tag kw-exact">[gym green point]</span>
+          <span class="kw-tag kw-phrase">"gym membership cape town"</span>
+          <span class="kw-tag kw-phrase">"gym cape town"</span>
+          <span class="kw-tag kw-phrase">"fitness studio near me"</span>
+          <span class="kw-tag kw-phrase">"best gym cape town"</span>
+          <span class="kw-tag kw-phrase">"gym de waterkant"</span>
+          <span class="kw-tag kw-phrase">"gym city bowl"</span>
+          <span class="kw-tag kw-phrase">"join gym cape town"</span>
+        </div>
+        <div class="camp-goal">Captures broad gym intent from the local area. Higher volume but slightly lower intent. Location targeting: 8km radius from Cape Quarter (27 Somerset Road, Green Point). Suburb coverage: Green Point, De Waterkant, Sea Point, Mouille Point, City Bowl, Gardens, Tamboerskloof, Fresnaye.</div>
+      </div>
+
+      <div class="camp-card cc4">
+        <div class="camp-head">
+          <div>
+            <div class="camp-name">Campaign 4 — Problem-Aware</div>
+            <div style="font-size:11px; color:var(--muted); margin-top:2px">Test budget. Threezero's messaging owns this.</div>
+          </div>
+          <div style="text-align:right">
+            <div class="camp-budget">R300<span class="camp-per-day">/mo</span></div>
+            <div class="camp-per-day">R10/day</div>
+          </div>
+        </div>
+        <div class="kw-label">Keywords</div>
+        <div class="kw-tags">
+          <span class="kw-tag kw-phrase">"gym for beginners cape town"</span>
+          <span class="kw-tag kw-phrase">"gym for busy people"</span>
+          <span class="kw-tag kw-phrase">"no waiting gym"</span>
+          <span class="kw-tag kw-phrase">"gym intimidation"</span>
+          <span class="kw-tag kw-phrase">"easy gym workout"</span>
+          <span class="kw-tag kw-phrase">"efficient gym cape town"</span>
+          <span class="kw-tag kw-phrase">"simple gym workout"</span>
+          <span class="kw-tag kw-phrase">"gym that tells you what to do"</span>
+        </div>
+        <div class="camp-goal">Small test. Threezero's "gymtimidation" and "zero guessing" messaging directly addresses these searchers. Low volume but very high-fit if it finds them. Pause if CPA is more than 3x Campaign 2 at month-end.</div>
+      </div>
+    </div>
+
+    <!-- AD COPY -->
+    <div class="sub-header">Ad Copy — Campaign 2 (Core Intent RSA)</div>
+    <p style="font-size:12px; color:var(--muted); margin-bottom:14px; line-height:1.7;">Responsive Search Ads (RSAs) use up to 15 headlines and 4 descriptions. Google tests combinations to find the best-performing mix. Use all 12 headlines and all 4 descriptions below. <strong style="color:var(--warn)">Note: Replace R[X] with actual membership price before launching. Andrew: "no free in CTAs" — use "Book a trial session" not "free trial".</strong></p>
+    <div class="ad-copy-grid">
+      <div class="ad-copy-card">
+        <div class="ad-copy-label">Headlines (12 — all to be used)</div>
+        <div class="headline-item">30 Minute Full Body Workout</div>
+        <div class="headline-item">Cape Town's Smartest Circuit Gym</div>
+        <div class="headline-item">Gym Done in Your Lunch Break</div>
+        <div class="headline-item">No Waiting. No Guessing. Just Results.</div>
+        <div class="headline-item">Biocircuit Gym at Cape Quarter</div>
+        <div class="headline-item">Zero Gymtimidation. Guaranteed.</div>
+        <div class="headline-item">Guided Workout. Every Single Visit.</div>
+        <div class="headline-item">Fit in 30 Minutes Flat</div>
+        <div class="headline-item">30-Min Circuit Training Cape Town</div>
+        <div class="headline-item">Smart Workouts. Real Results.</div>
+        <div class="headline-item">Join Threezero Fitness Studio</div>
+        <div class="headline-item">Book a Trial Session Today</div>
+      </div>
+      <div class="ad-copy-card">
+        <div class="ad-copy-label">Descriptions (4 — all to be used)</div>
+        <div class="desc-item">Zero waiting. Zero thinking. Our Biocircuit guides your full-body workout in exactly 30 minutes — done.</div>
+        <div class="desc-item">Not sure what to do in the gym? We do the thinking for you. Show up, follow the circuit, leave in 30 minutes.</div>
+        <div class="desc-item">No more waiting for machines or wondering what to do next. A fully guided, gamified circuit every time.</div>
+        <div class="desc-item">Cape Quarter's most efficient gym. Membership from R[X]/month. Book a trial session and see for yourself.</div>
+      </div>
+    </div>
+
+    <div class="sub-header">Ad Copy — Campaign 3 (Location Intent RSA)</div>
+    <div class="ad-copy-grid">
+      <div class="ad-copy-card">
+        <div class="ad-copy-label">Headlines (10)</div>
+        <div class="headline-item">Gym Near Cape Quarter CT</div>
+        <div class="headline-item">Cape Town Gym Membership</div>
+        <div class="headline-item">30 Min Gym — City Bowl CT</div>
+        <div class="headline-item">Fitness Studio De Waterkant</div>
+        <div class="headline-item">Cape Town Gym Done Differently</div>
+        <div class="headline-item">Green Point Fitness Studio</div>
+        <div class="headline-item">Book a Trial Session Today</div>
+        <div class="headline-item">Threezero — Cape Town Gym</div>
+        <div class="headline-item">Membership Options Available</div>
+        <div class="headline-item">Guided 30-Min Workout Cape Town</div>
+      </div>
+      <div class="ad-copy-card">
+        <div class="ad-copy-label">Descriptions (4)</div>
+        <div class="desc-item">Located at Cape Quarter, Green Point. Guided 30-minute Biocircuit workout — zero waiting, zero guessing. Book your trial.</div>
+        <div class="desc-item">Cape Town gym with a difference. Biocircuit technology guides every workout. Efficient, effective, done in 30 minutes.</div>
+        <div class="desc-item">New to the gym or just hate waiting? Threezero removes all the guesswork — fully guided circuit every visit.</div>
+        <div class="desc-item">Conveniently at Cape Quarter. Membership from R[X]/month. Book a trial session and start your 30-minute journey.</div>
+      </div>
+    </div>
+
+    <!-- EXTENSIONS -->
+    <div class="sub-header">Ad Extensions (Assets) — Add on All Campaigns</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr><th>Extension Type</th><th>Content</th><th>Priority</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="bold">Sitelinks</td>
+            <td>Book a Trial Session · How It Works · Membership Pricing · Find Us at Cape Quarter</td>
+            <td><span class="pill pill-ok">Priority 1</span></td>
+          </tr>
+          <tr>
+            <td class="bold">Callouts</td>
+            <td>30-Minute Workout · No Waiting · No Guessing · Guided Every Visit · Cape Quarter</td>
+            <td><span class="pill pill-ok">Priority 1</span></td>
+          </tr>
+          <tr>
+            <td class="bold">Call Extension</td>
+            <td>+27 76 588 0709 — enabled on all campaigns, click-to-call tracking on</td>
+            <td><span class="pill pill-ok">Priority 1</span></td>
+          </tr>
+          <tr>
+            <td class="bold">Location Extension</td>
+            <td>Cape Quarter, 27 Somerset Road, Green Point, Cape Town — link to Google Business Profile</td>
+            <td><span class="pill pill-warn">Priority 2</span></td>
+          </tr>
+          <tr>
+            <td class="bold">Structured Snippets</td>
+            <td>Header: "Services" — Values: Biocircuit Training, 30-Minute Workouts, Guided Circuit, Vitality Accredited</td>
+            <td><span class="pill pill-warn">Priority 2</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- CONVERSION TRACKING -->
+    <div class="sub-header">Conversion Tracking — Fix Before Launch</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr><th>Conversion Action</th><th>Current</th><th>Action</th><th>New Value</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="bold">Trial booking form (GHL webhook)</td>
+            <td>Not tracked in Google Ads</td>
+            <td>Add Google Ads conversion tag to form submit handler in homepage JS</td>
+            <td class="num bold" style="color:var(--ok)">R300</td>
+            <td><span class="pill pill-ok">Create — Priority 1</span></td>
+          </tr>
+          <tr>
+            <td class="bold">Web purchase (threezero.co.za)</td>
+            <td>Enabled, R1 default</td>
+            <td>Update to actual membership price</td>
+            <td class="num">Actual price</td>
+            <td><span class="pill pill-ok">Fix value — Priority 1</span></td>
+          </tr>
+          <tr>
+            <td class="bold">Calls from ads (60+ seconds)</td>
+            <td>Enabled, R1 default</td>
+            <td>Update value. Set minimum call duration to 60 seconds.</td>
+            <td class="num">R250</td>
+            <td><span class="pill pill-ok">Fix value — Priority 1</span></td>
+          </tr>
+          <tr>
+            <td class="bold">Clicks to call</td>
+            <td>Enabled, R1 default</td>
+            <td>Keep. Lower value than answered call.</td>
+            <td class="num">R100</td>
+            <td><span class="pill pill-warn">Fix value — Priority 2</span></td>
+          </tr>
+          <tr>
+            <td class="bold">Map directions</td>
+            <td>Enabled, R1 default</td>
+            <td>Demote to secondary conversion. Will no longer count in primary CPA column.</td>
+            <td class="num">R0 (signal)</td>
+            <td><span class="pill pill-warn">Demote — Priority 2</span></td>
+          </tr>
+          <tr>
+            <td class="bold">Local actions – Website visits</td>
+            <td>Enabled, R1 default</td>
+            <td>Demote to secondary conversion.</td>
+            <td class="num">R0 (signal)</td>
+            <td><span class="pill pill-warn">Demote — Priority 2</span></td>
+          </tr>
+          <tr>
+            <td class="bold">Local actions – Other engagements</td>
+            <td>Enabled, R1 default</td>
+            <td>Remove from conversion tracking entirely.</td>
+            <td class="num">—</td>
+            <td><span class="pill pill-red">Remove</span></td>
+          </tr>
+          <tr>
+            <td class="bold">Store visits</td>
+            <td>Enabled, R1 default</td>
+            <td>Demote to secondary. Useful data, not a primary conversion goal.</td>
+            <td class="num">R0 (signal)</td>
+            <td><span class="pill pill-warn">Demote — Priority 2</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- NEGATIVE KEYWORDS -->
+    <div class="sub-header">Negative Keywords — Clean Rebuild (Replace Existing List)</div>
+    <p style="font-size:12px; color:var(--muted); margin-bottom:14px; line-height:1.7;">The current 853-term list is an auto-generated mess. This is a purpose-built replacement of ~55 terms, organised by category. Build this as a shared negative keyword list and apply to all 4 campaigns. Add to it weekly as search terms come in.</p>
+    <div class="neg-grid">
+      <div class="neg-card">
+        <div class="neg-title">Price / Value Mismatches</div>
+        <span class="neg-tag">free</span>
+        <span class="neg-tag">cheap</span>
+        <span class="neg-tag">cheapest</span>
+        <span class="neg-tag">discount</span>
+        <span class="neg-tag">discounted</span>
+        <span class="neg-tag">coupon</span>
+        <span class="neg-tag">voucher</span>
+      </div>
+      <div class="neg-card">
+        <div class="neg-title">Wrong Activity Type</div>
+        <span class="neg-tag">boxing</span>
+        <span class="neg-tag">mma</span>
+        <span class="neg-tag">muay thai</span>
+        <span class="neg-tag">pilates</span>
+        <span class="neg-tag">yoga</span>
+        <span class="neg-tag">zumba</span>
+        <span class="neg-tag">crossfit</span>
+        <span class="neg-tag">spinning</span>
+        <span class="neg-tag">barre</span>
+        <span class="neg-tag">aqua</span>
+        <span class="neg-tag">dance</span>
+        <span class="neg-tag">martial arts</span>
+        <span class="neg-tag">ballet</span>
+        <span class="neg-tag">badminton</span>
+      </div>
+      <div class="neg-card">
+        <div class="neg-title">Wrong Features / Facilities</div>
+        <span class="neg-tag">24 hour</span>
+        <span class="neg-tag">24hr</span>
+        <span class="neg-tag">24h</span>
+        <span class="neg-tag">sauna</span>
+        <span class="neg-tag">pool</span>
+        <span class="neg-tag">hot tub</span>
+        <span class="neg-tag">kids area</span>
+        <span class="neg-tag">childcare</span>
+        <span class="neg-tag">crèche</span>
+      </div>
+      <div class="neg-card">
+        <div class="neg-title">Out of Area (Cape Town)</div>
+        <span class="neg-tag">claremont</span>
+        <span class="neg-tag">milnerton</span>
+        <span class="neg-tag">observatory</span>
+        <span class="neg-tag">woodstock</span>
+        <span class="neg-tag">durbanville</span>
+        <span class="neg-tag">table view</span>
+        <span class="neg-tag">somerset west</span>
+        <span class="neg-tag">kuilsriver</span>
+        <span class="neg-tag">pinelands</span>
+        <span class="neg-tag">newlands</span>
+        <span class="neg-tag">parow</span>
+        <span class="neg-tag">rondebosch</span>
+      </div>
+      <div class="neg-card">
+        <div class="neg-title">Equipment / Buy Intent</div>
+        <span class="neg-tag">equipment</span>
+        <span class="neg-tag">buy</span>
+        <span class="neg-tag">for sale</span>
+        <span class="neg-tag">purchase</span>
+        <span class="neg-tag">dumbbell</span>
+        <span class="neg-tag">treadmill</span>
+        <span class="neg-tag">weights for sale</span>
+        <span class="neg-tag">home gym</span>
+      </div>
+      <div class="neg-card">
+        <div class="neg-title">Informational / Employment</div>
+        <span class="neg-tag">how to</span>
+        <span class="neg-tag">what is</span>
+        <span class="neg-tag">youtube</span>
+        <span class="neg-tag">online</span>
+        <span class="neg-tag">job</span>
+        <span class="neg-tag">jobs</span>
+        <span class="neg-tag">career</span>
+        <span class="neg-tag">hiring</span>
+        <span class="neg-tag">vacancy</span>
+        <span class="neg-tag">vacancies</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 3: TIMELINE
+  ═══════════════════════════════════════════ -->
+  <section id="timeline" class="section-block">
+    <div class="section-label s-green">
+      <div class="section-num">3</div>
+      <div class="section-tag">Implementation</div>
+    </div>
+    <h2>Step-by-Step Timeline</h2>
+    <p class="section-intro">Six-phase rollout. Do not skip Week 1 — launching campaigns without fixing conversion tracking first means the new campaigns will optimise toward the same meaningless signals as the old one.</p>
+
+    <div class="alert alert-gold">
+      <div class="alert-icon">📋</div>
+      <div class="alert-body">
+        <strong>Before starting: one thing needed from Andrew</strong>
+        <p>The ad copy has a placeholder "Membership from R[X]/month." Confirm the membership price with Andrew before Week 2 builds. Everything else can proceed without it.</p>
+      </div>
+    </div>
+
+    <div class="timeline" style="margin-top:28px">
+
+      <div class="tl-item d-warn">
+        <div class="tl-left"><div class="tl-week">Week 1</div><div class="tl-phase">Pre-launch</div></div>
+        <div class="tl-mid"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-right">
+          <div class="tl-title">Fix Conversion Tracking — Do This Before Anything Else</div>
+          <ul class="tl-tasks">
+            <li>Add Google Ads conversion tag to trial booking form submit handler (homepage JS, handleFormSubmit function — add gtag event after the fetch POST succeeds). Value: R300.</li>
+            <li>Update web purchase conversion action from R1 to actual membership price.</li>
+            <li>Update call conversion actions to R250. Set minimum call duration: 60 seconds.</li>
+            <li>Demote map directions, website visits, store visits to secondary conversion status.</li>
+            <li>Remove "Local actions – Other engagements" from conversion tracking.</li>
+            <li>Permanently pause (or remove) the "Threezero gym" campaign with the real estate ads.</li>
+            <li>Verify trial booking form tag is firing: submit a test form entry, confirm it shows in Google Ads conversion report within 24hrs.</li>
+            <li>Confirm Andrew is not running 24-hour access (keep "24 hour" as negative). Confirm activity types they don't offer.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tl-item d-blue">
+        <div class="tl-left"><div class="tl-week">Week 2</div><div class="tl-phase">Build</div></div>
+        <div class="tl-mid"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-right">
+          <div class="tl-title">Build All 4 Standard Search Campaigns</div>
+          <ul class="tl-tasks">
+            <li>Create shared negative keyword list (6 categories, ~55 terms from Section 2). Apply to all campaigns.</li>
+            <li>Campaign 1 Brand (R16.67/day): exact match only, bid high (~R5–8 CPC cap), target branded keywords + biocircuit.</li>
+            <li>Campaign 2 Core Intent (R50/day): 2 ad groups ("30-minute" and "circuit training"), exact + phrase match, RSA with 12 headlines and 4 descriptions from Section 2.</li>
+            <li>Campaign 3 Location (R23.33/day): phrase + exact match, location targeting set to 8km radius from Cape Quarter (27 Somerset Road, Green Point).</li>
+            <li>Campaign 4 Problem-Aware (R10/day): phrase match only, single ad group, test budget.</li>
+            <li>Bidding: all campaigns start on Maximise Clicks (no CPA target yet — need 30 conversions first to switch to smart bidding).</li>
+            <li>Add all ad extensions: sitelinks, callouts, call extension (+27 76 588 0709), structured snippets.</li>
+            <li>Set ad schedule if Andrew confirms peak enquiry times (e.g. 7am–8pm Mon–Sat).</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tl-item d-green">
+        <div class="tl-left"><div class="tl-week">Week 3</div><div class="tl-phase">Launch</div></div>
+        <div class="tl-mid"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-right">
+          <div class="tl-title">Go Live — Pause Smart Campaign</div>
+          <ul class="tl-tasks">
+            <li>Launch all 4 Standard Search campaigns.</li>
+            <li>Immediately pause "Threezero Fitness Studio" Smart Campaign (do not delete yet — keep for 60 days as data reference).</li>
+            <li>Monitor search terms daily for the first 7 days — this is the first time actual query data will be visible. Add irrelevant terms to the shared negative list aggressively in the first week.</li>
+            <li>Check impression share on Campaign 2: target 70%+ search impression share. If lost IS (budget) is high, shift R100/mo from Campaign 4 to Campaign 2.</li>
+            <li>Verify conversion tags are firing on real traffic (check conversion report in Google Ads after 48hrs).</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tl-item d-gold">
+        <div class="tl-left"><div class="tl-week">Week 4</div><div class="tl-phase">Optimise</div></div>
+        <div class="tl-mid"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-right">
+          <div class="tl-title">First Optimisation Pass</div>
+          <ul class="tl-tasks">
+            <li>Search terms audit: pull the full search term report for the first 7 days. Add any new irrelevant queries to the shared negative list.</li>
+            <li>Kill any keywords with 50+ clicks and zero conversions — pause them and review match type.</li>
+            <li>RSA asset performance: check which headlines/descriptions are rated "Good" or "Best" in Google Ads. Pin the top 2 headlines if a clear winner has emerged.</li>
+            <li>Compare Campaign 4 (Problem-Aware) CPA vs Campaign 2 CPA. If Campaign 4 CPA is more than 3x Campaign 2 and has 15+ clicks, pause it and reallocate R300 to Campaign 2.</li>
+            <li>Report to Andrew: first 7-day snapshot (spend, clicks, trial form submissions, calls).</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tl-item d-blue">
+        <div class="tl-left"><div class="tl-week">Month 2</div><div class="tl-phase">Scale</div></div>
+        <div class="tl-mid"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-right">
+          <div class="tl-title">Smart Bidding Switch + Budget Rebalance</div>
+          <ul class="tl-tasks">
+            <li>Once Campaign 2 reaches 30 real conversions (trial form + calls), switch it from Maximise Clicks to Target CPA. Set initial Target CPA at 1.5x the observed real CPA to give Google flexibility.</li>
+            <li>Rebalance budget: shift spend away from campaigns with high CPA or low volume toward the best-performing campaign.</li>
+            <li>Add RLSA audiences: bid +20% on past website visitors in Campaigns 3 and 4 (warm audience, more likely to convert).</li>
+            <li>Build second RSA per ad group in Campaign 2: use an alternative angle ("longevity fitness", "science-backed" — ties in with Threezero's positioning vs a commoditised gym).</li>
+            <li>Install GA4 on Threezero site if not yet done — required for audience building and cross-channel attribution.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tl-item d-purple">
+        <div class="tl-left"><div class="tl-week">Month 3</div><div class="tl-phase">Review</div></div>
+        <div class="tl-mid"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-right">
+          <div class="tl-title">Full Review Against Baseline</div>
+          <ul class="tl-tasks">
+            <li>Compare real trial booking CPA and call CPA vs Smart Campaign baseline of R30/conv (which was false). The new numbers will be the first real benchmark this account has ever had.</li>
+            <li>Decision point: if real CPA per trial booking is under R200 and leads are converting to members, increase budget beyond R3,000/month. Recommended next threshold: R4,500/month.</li>
+            <li>Assess Performance Max: if GA4 is installed and purchase data is flowing, a Performance Max campaign for display/YouTube retargeting could make sense as a fourth channel (separate from the R3k Search budget).</li>
+            <li>Full monthly report delivered to Andrew with: spend, clicks, trial form submissions, calls, estimated member conversions, cost per acquired member.</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- EXPECTED OUTCOMES -->
+  <section id="outcomes" class="section-block">
+    <div class="section-label s-gold">
+      <div class="section-num">+</div>
+      <div class="section-tag">Projections</div>
+    </div>
+    <h2>Expected Outcomes at R3,000/Month</h2>
+    <p class="section-intro">These are conservative estimates based on current CPC rates and industry-typical conversion rates for local gym search campaigns. Actual results will be refined once real search term data is available after Week 1.</p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Assumption</th>
+            <th>Basis</th>
+            <th>Conservative</th>
+            <th>Optimistic</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Average CPC</td>
+            <td>90-day account average was R1.51</td>
+            <td class="num">R2.00 (search is more expensive)</td>
+            <td class="num">R1.60</td>
+          </tr>
+          <tr>
+            <td>Clicks/month from R3,000 budget</td>
+            <td>Budget ÷ CPC</td>
+            <td class="num bold">1,500 clicks</td>
+            <td class="num bold">1,875 clicks</td>
+          </tr>
+          <tr>
+            <td>Trial form conversion rate</td>
+            <td>Industry benchmark for local gym search ads: 3–5%</td>
+            <td class="num">3%</td>
+            <td class="num">5%</td>
+          </tr>
+          <tr>
+            <td class="bold">Trial form submissions/month</td>
+            <td>Clicks × conversion rate</td>
+            <td class="num bold" style="color:var(--gold)">45 trial leads</td>
+            <td class="num bold" style="color:var(--gold)">94 trial leads</td>
+          </tr>
+          <tr>
+            <td>Cost per trial lead</td>
+            <td>R3,000 ÷ submissions</td>
+            <td class="num">R67/lead</td>
+            <td class="num">R32/lead</td>
+          </tr>
+          <tr>
+            <td>Trial-to-member conversion rate</td>
+            <td>Estimate — confirm with Andrew's actual close rate</td>
+            <td class="num">20%</td>
+            <td class="num">35%</td>
+          </tr>
+          <tr>
+            <td class="bold">New members/month from Google Ads</td>
+            <td>Leads × close rate</td>
+            <td class="num bold" style="color:var(--ok)">9 members</td>
+            <td class="num bold" style="color:var(--ok)">33 members</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="outcome-grid">
+      <div class="outcome-card">
+        <div class="oc-label">Clicks/Month</div>
+        <div class="oc-val">~1,600</div>
+        <div class="oc-sub">vs 646 current — 2.5x increase at same CPC</div>
+      </div>
+      <div class="outcome-card">
+        <div class="oc-label">Trial Leads/Month</div>
+        <div class="oc-val">45–94</div>
+        <div class="oc-sub">Conservative to optimistic. First real lead data ever.</div>
+      </div>
+      <div class="outcome-card">
+        <div class="oc-label">Cost per Lead</div>
+        <div class="oc-val">R32–R67</div>
+        <div class="oc-sub">Depends on conversion rate. Refine with Week 1 data.</div>
+      </div>
+    </div>
+
+    <div class="alert alert-gold" style="margin-top:20px">
+      <div class="alert-icon">📌</div>
+      <div class="alert-body">
+        <strong>The most important number to track: cost per member acquired</strong>
+        <p>Ask Andrew what percentage of trial sessions convert to paid memberships. If it's 25% and a membership is worth R500/month over 12 months (R6,000 LTV), a cost per acquired member of R268–R268 is a strong return. The projections above are the starting point. Once real data flows in after Week 1, everything becomes sharper.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <div class="report-footer">
+    <div class="rf-brand">JCE Media × Threezero</div>
+    <div class="rf-meta">Google Ads Audit &amp; Strategy — 22 June 2026 · Pickup: Wednesday 25 June 2026</div>
+  </div>
+
+</div><!-- /wrapper -->
+</body>
+</html>
