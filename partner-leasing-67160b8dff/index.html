@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Leasing Conversion System — Partnership</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap');
+  :root{
+    --ink:#0E1726; --ink2:#162542; --accent:#E0903D; --accentDeep:#C8782D;
+    --cream:#FAF6EF; --paper:#FFFFFF; --muted:#6B7686; --line:#E6E9EF; --good:#2F8F5B;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ scroll-behavior:smooth; }
+  body{ font-family:'Inter',sans-serif; color:var(--ink); background:var(--paper); line-height:1.6; -webkit-font-smoothing:antialiased; }
+  .serif{ font-family:'Playfair Display',serif; }
+  .progress{ position:fixed; top:0; left:0; height:4px; background:linear-gradient(90deg,var(--accent),var(--accentDeep)); width:0; z-index:100; transition:width .1s linear; }
+  section{ padding:88px 8vw; position:relative; }
+  .dark{ background:var(--ink); color:#EAEFF7; }
+  .dark2{ background:linear-gradient(160deg,var(--ink) 0%,var(--ink2) 100%); color:#EAEFF7; }
+  .kick{ text-transform:uppercase; letter-spacing:4px; font-size:12px; font-weight:700; color:var(--accent); margin-bottom:18px; }
+  h1{ font-family:'Playfair Display',serif; font-weight:700; font-size:clamp(34px,6vw,68px); line-height:1.05; letter-spacing:-.01em; }
+  h2{ font-family:'Playfair Display',serif; font-weight:700; font-size:clamp(26px,3.6vw,42px); line-height:1.1; margin-bottom:10px; }
+  h3{ font-size:19px; font-weight:600; margin-bottom:6px; }
+  .lead{ font-size:clamp(16px,1.5vw,20px); color:var(--muted); max-width:760px; margin-top:14px; }
+  .dark .lead,.dark2 .lead{ color:#A9B6CC; }
+  .accent{ color:var(--accent); }
+  .reveal{ opacity:0; transform:translateY(22px); transition:opacity .7s ease, transform .7s ease; }
+  .reveal.in{ opacity:1; transform:none; }
+
+  /* HERO */
+  .hero{ min-height:100vh; display:flex; flex-direction:column; justify-content:center; background:radial-gradient(1200px 600px at 80% -10%, rgba(224,144,61,.18), transparent), var(--ink); }
+  .hero h1{ max-width:14ch; }
+  .hero .sig{ margin-top:46px; display:flex; gap:40px; flex-wrap:wrap; align-items:center; }
+  .hero .sig div span{ display:block; font-size:12px; letter-spacing:2px; text-transform:uppercase; color:var(--accent); }
+  .hero .sig div b{ font-size:17px; font-weight:600; color:#EAEFF7; }
+  .rule{ width:70px; height:4px; background:var(--accent); margin:0 0 24px; border-radius:3px; }
+
+  /* GRID CARDS */
+  .grid{ display:grid; gap:20px; margin-top:34px; }
+  .g3{ grid-template-columns:repeat(3,1fr); } .g2{ grid-template-columns:repeat(2,1fr); } .g4{ grid-template-columns:repeat(4,1fr); }
+  .card{ background:var(--paper); border:1px solid var(--line); border-radius:14px; padding:24px; }
+  .dark .card,.dark2 .card{ background:rgba(255,255,255,.04); border-color:rgba(255,255,255,.10); }
+  .card .n{ font-family:'Playfair Display',serif; font-size:40px; color:var(--accent); line-height:1; }
+  .card p{ font-size:14px; color:var(--muted); margin-top:6px; }
+  .dark .card p,.dark2 .card p{ color:#A9B6CC; }
+  .chip{ display:inline-block; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; padding:4px 11px; border-radius:30px; background:rgba(224,144,61,.15); color:var(--accentDeep); }
+  .dark .chip,.dark2 .chip{ color:var(--accent); }
+
+  /* SPLIT visual */
+  .splitbar{ display:flex; border-radius:14px; overflow:hidden; margin-top:8px; font-weight:700; color:#fff; box-shadow:0 14px 40px rgba(0,0,0,.12); }
+  .splitbar .seg{ padding:26px 22px; }
+  .seg-r{ background:linear-gradient(135deg,#E0903D,#C8782D); }
+  .seg-j{ background:linear-gradient(135deg,#1E3559,#162542); }
+  .seg .lbl{ font-size:12px; letter-spacing:1.5px; text-transform:uppercase; opacity:.85; font-weight:600; }
+  .seg .pc{ font-family:'Playfair Display',serif; font-size:34px; }
+  .seg .amt{ font-size:14px; font-weight:500; opacity:.9; }
+
+  /* TABLES */
+  table{ width:100%; border-collapse:collapse; margin-top:22px; font-size:15px; }
+  th,td{ padding:14px 16px; text-align:left; border-bottom:1px solid var(--line); }
+  th{ font-size:12px; text-transform:uppercase; letter-spacing:.6px; color:var(--muted); font-weight:600; }
+  td.num,th.num{ text-align:right; font-variant-numeric:tabular-nums; }
+  tr.hi td{ background:#FBF4E9; font-weight:600; }
+  .r{ color:var(--accentDeep); font-weight:600; } .j{ color:#1E3559; font-weight:600; }
+  .dark table th,.dark2 table th{ color:#9FB0CC; }
+  .dark table td,.dark2 table td{ border-color:rgba(255,255,255,.10); }
+
+  .pricecards{ display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-top:30px; }
+  .price{ border:1px solid var(--line); border-radius:16px; padding:28px; background:var(--paper); position:relative; }
+  .price.feature{ border:2px solid var(--accent); box-shadow:0 20px 50px rgba(224,144,61,.18); }
+  .price .name{ font-size:13px; text-transform:uppercase; letter-spacing:1px; color:var(--muted); font-weight:600; }
+  .price .big{ font-family:'Playfair Display',serif; font-size:40px; margin:8px 0 2px; }
+  .price .per{ font-size:14px; color:var(--muted); }
+  .price ul{ list-style:none; margin-top:16px; } .price li{ font-size:14px; padding:6px 0 6px 24px; position:relative; }
+  .price li:before{ content:'✓'; position:absolute; left:0; color:var(--good); font-weight:700; }
+
+  .note{ background:rgba(224,144,61,.10); border-left:3px solid var(--accent); border-radius:8px; padding:14px 18px; font-size:15px; margin-top:22px; }
+  .dark .note,.dark2 .note{ background:rgba(224,144,61,.12); color:#EAEFF7; }
+  .foot{ font-size:12.5px; color:var(--muted); margin-top:14px; }
+  .dark .foot,.dark2 .foot{ color:#8595B0; }
+  .steps{ counter-reset:s; margin-top:26px; }
+  .step{ counter-increment:s; display:flex; gap:18px; padding:16px 0; border-bottom:1px solid rgba(255,255,255,.1); }
+  .step:before{ content:counter(s); flex:0 0 42px; height:42px; border-radius:50%; background:var(--accent); color:var(--ink); font-weight:700; display:flex; align-items:center; justify-content:center; font-size:18px; }
+  @media(max-width:780px){ .g3,.g4,.g2,.pricecards{ grid-template-columns:1fr; } .splitbar{ flex-direction:column; } section{ padding:64px 7vw; } }
+</style>
+</head>
+<body>
+<div class="progress" id="prog"></div>
+
+<!-- 1 HERO -->
+<section class="hero">
+  <div class="reveal">
+    <div class="kick">JCE Media &times; Rachel Kueppers &bull; Partnership</div>
+    <h1>The Leasing<br>Conversion <span class="accent">System</span></h1>
+    <p class="lead">We built a system that fills salon suites. Here is how we take it to every location, and how it pays both of us.</p>
+    <div class="sig">
+      <div><span>Built by</span><b>JCE Media</b></div>
+      <div><span>Sold &amp; owned by</span><b>Rachel Kueppers</b></div>
+      <div><span>Proven at</span><b>My Salon Suite, Minnesota</b></div>
+    </div>
+  </div>
+</section>
+
+<!-- 2 STORY -->
+<section>
+  <div class="reveal">
+    <div class="rule"></div>
+    <div class="kick">The story so far</div>
+    <h2>What started as one page<br>became a complete system.</h2>
+    <p class="lead">The brief was a single landing page and a nurture funnel. What we delivered is a full leasing engine: six location pages, a complete email journey for leads and members, SMS, and the automation logic behind it. That was deliberate. A system this polished is exactly what we can sell again and again.</p>
+  </div>
+  <div class="grid g4 reveal">
+    <div class="card"><div class="n">6</div><p>Location landing pages, each customised</p></div>
+    <div class="card"><div class="n">26</div><p>Emails across the lead and member journey</p></div>
+    <div class="card"><div class="n">5</div><p>SMS touchpoints designed into the flow</p></div>
+    <div class="card"><div class="n">1</div><p>Reusable, templatized system</p></div>
+  </div>
+</section>
+
+<!-- 3 WHAT IT DOES -->
+<section class="dark2">
+  <div class="reveal">
+    <div class="rule"></div>
+    <div class="kick">What the system does</div>
+    <h2>Every inquiry answered.<br>Every lead nurtured. More tours booked.</h2>
+  </div>
+  <div class="grid g3 reveal">
+    <div class="card"><h3>Instant response</h3><p>The second an inquiry lands, the prospect gets a reply, the team gets alerted, and a call bridge connects them. The critical first minutes are never missed.</p></div>
+    <div class="card"><h3>Guided to a tour</h3><p>A conversion-focused landing page and booking flow move prospects straight to a booked tour, with the date and time captured automatically.</p></div>
+    <div class="card"><h3>Nurtured to a lease</h3><p>A structured email and SMS journey keeps prospects engaged until they are ready, then onboards and retains them as members.</p></div>
+  </div>
+</section>
+
+<!-- 4 OPPORTUNITY -->
+<section>
+  <div class="reveal">
+    <div class="rule"></div>
+    <div class="kick">The opportunity</div>
+    <h2>Salon suites are a <span class="accent">multi-location</span> world.</h2>
+    <p class="lead">Most operators run several locations with the exact leasing problem we just solved. One relationship Rachel opens is rarely one location. It is six, or more. And because the build is now templatized, each new location is fast to stand up and mostly margin.</p>
+  </div>
+  <div class="grid g3 reveal">
+    <div class="card"><div class="n">6</div><p>Locations at My Salon Suite Minnesota alone</p></div>
+    <div class="card"><div class="n">100s</div><p>Of salon-suite locations across national franchises</p></div>
+    <div class="card"><div class="n">1 sale</div><p>Can mean six or more locations of recurring revenue</p></div>
+  </div>
+</section>
+
+<!-- 5 OFFER -->
+<section class="cream" style="background:var(--cream);">
+  <div class="reveal">
+    <div class="rule"></div>
+    <div class="kick">The offer</div>
+    <h2>What each location pays.</h2>
+    <p class="lead">Anchored to what already works at Minnesota, with volume pricing for operators running several locations.</p>
+  </div>
+  <div class="pricecards reveal">
+    <div class="price"><div class="name">Single location</div><div class="big">$4,000</div><div class="per">setup, then $497 / month</div><ul><li>Conversion landing page</li><li>Full lead nurture funnel</li><li>Instant response + call bridge</li><li>Leasing dashboard</li></ul></div>
+    <div class="price feature"><span class="chip" style="position:absolute;top:20px;right:20px;">Best value</span><div class="name">Additional location</div><div class="big">$1,200</div><div class="per">setup, then $397 / month</div><ul><li>Templated clone of the system</li><li>Location photos + manager swap</li><li>Lighter build, faster launch</li><li>Same engine, per location</li></ul></div>
+    <div class="price"><div class="name">Member lifecycle add-on</div><div class="big">$750</div><div class="per">setup, then +$100 / month</div><ul><li>Onboarding sequence</li><li>Check-ins + benefits review</li><li>Review requests</li><li>Retention, not just leasing</li></ul></div>
+  </div>
+  <div class="note"><b>Worth discussing:</b> at $497 a location we are likely under-priced for a system that fills suites worth thousands per month in rent. As a proven offer, $597 to $697 is defensible and lifts both partners equally (see the price lever ahead).</div>
+  <p class="foot">Telephony / SMS usage (~$30-70 per location per month) is passed to the client. Budget ~$100 per location per month for the platform, taken off the top before the split.</p>
+</section>
+
+<!-- 6 SPLIT -->
+<section class="dark">
+  <div class="reveal">
+    <div class="rule"></div>
+    <div class="kick">The partnership split</div>
+    <h2>Paid for the part each of us carries.</h2>
+    <p class="lead">The build is shared equally. The monthly is led by Rachel, who owns the client and the relationship. Simple, and fair on both sides.</p>
+  </div>
+  <div class="grid g2 reveal" style="margin-top:30px;">
+    <div>
+      <h3 style="color:#fff;margin-bottom:4px;">Setup &nbsp;<span class="chip">50 / 50</span></h3>
+      <p class="foot" style="margin:2px 0 10px;">One-time, per location &bull; $4,000</p>
+      <div class="splitbar">
+        <div class="seg seg-r" style="flex:1;"><div class="lbl">Rachel</div><div class="pc">50%</div><div class="amt">$2,000</div></div>
+        <div class="seg seg-j" style="flex:1;"><div class="lbl">Jacques</div><div class="pc">50%</div><div class="amt">$2,000</div></div>
+      </div>
+    </div>
+    <div>
+      <h3 style="color:#fff;margin-bottom:4px;">Monthly &nbsp;<span class="chip">60 / 40</span></h3>
+      <p class="foot" style="margin:2px 0 10px;">Recurring, per location &bull; $497</p>
+      <div class="splitbar">
+        <div class="seg seg-r" style="flex:.6;"><div class="lbl">Rachel</div><div class="pc">60%</div><div class="amt">$298</div></div>
+        <div class="seg seg-j" style="flex:.4;"><div class="lbl">Jacques</div><div class="pc">40%</div><div class="amt">$199</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="note">Equal on the build we both invest in to launch. Rachel-led on the recurring, because she carries the client relationship and account work month after month.</div>
+</section>
+
+<!-- 7 ECONOMICS -->
+<section>
+  <div class="reveal">
+    <div class="rule"></div>
+    <div class="kick">What it earns as it scales</div>
+    <h2>Recurring income, per partner.</h2>
+    <p class="lead">Monthly split (60 / 40) as locations go live. Setup fees ($2,000 each to each partner) come on top and front-load the cash.</p>
+  </div>
+  <div class="reveal" style="overflow-x:auto;">
+  <table>
+    <tr><th>Locations live</th><th class="num">Total monthly</th><th class="num r">Rachel / mo</th><th class="num j">Jacques / mo</th><th class="num j">Jacques (ZAR)</th></tr>
+    <tr><td>1</td><td class="num">$497</td><td class="num r">$298</td><td class="num j">$199</td><td class="num j">R3,600</td></tr>
+    <tr><td>3</td><td class="num">$1,491</td><td class="num r">$895</td><td class="num j">$596</td><td class="num j">R10,700</td></tr>
+    <tr class="hi"><td>6 &nbsp;(one MSS-size operator)</td><td class="num">$2,982</td><td class="num r">$1,789</td><td class="num j">$1,193</td><td class="num j">R21,500</td></tr>
+    <tr><td>10</td><td class="num">$4,970</td><td class="num r">$2,982</td><td class="num j">$1,988</td><td class="num j">R35,800</td></tr>
+    <tr class="hi"><td>15</td><td class="num">$7,455</td><td class="num r">$4,473</td><td class="num j">$2,982</td><td class="num j">R53,700</td></tr>
+    <tr><td>20</td><td class="num">$9,940</td><td class="num r">$5,964</td><td class="num j">$3,976</td><td class="num j">R71,600</td></tr>
+  </table>
+  </div>
+  <div class="note"><b>Plus setup fees:</b> onboarding one six-location operator pays each partner <b>$12,000 up front</b> (≈ R216k to Jacques), then $2,000 per location after. Two to three multi-location operators is a serious recurring income for both, on top of the setup cash.</div>
+</section>
+
+<!-- 8 PRICE LEVER -->
+<section class="dark2">
+  <div class="reveal">
+    <div class="rule"></div>
+    <div class="kick">The price lever</div>
+    <h2>A small price move lifts both of us.</h2>
+    <p class="lead">Same system, same effort. Pricing the monthly correctly is the cleanest win we have. At 10 locations live:</p>
+  </div>
+  <div class="reveal" style="overflow-x:auto;">
+  <table>
+    <tr><th>Monthly price / location</th><th class="num">Total MRR (10 loc)</th><th class="num r">Rachel / mo</th><th class="num j">Jacques / mo</th></tr>
+    <tr><td>$497 &nbsp;<span class="foot">(current anchor)</span></td><td class="num">$4,970</td><td class="num r">$2,982</td><td class="num j">$1,988</td></tr>
+    <tr class="hi"><td>$597</td><td class="num">$5,970</td><td class="num r">$3,582</td><td class="num j">$2,388</td></tr>
+    <tr class="hi"><td>$697</td><td class="num">$6,970</td><td class="num r">$4,182</td><td class="num j">$2,788</td></tr>
+  </table>
+  </div>
+  <div class="note">Moving from $497 to $697 adds roughly <b>$800 a month to each partner</b> at ten locations, for zero extra work. The system fills suites worth far more than this. We should price from value, not from cost.</div>
+</section>
+
+<!-- 9 CLOSE -->
+<section class="dark">
+  <div class="reveal">
+    <div class="rule"></div>
+    <div class="kick">The path forward</div>
+    <h2>Lock the model. Then scale it.</h2>
+  </div>
+  <div class="steps reveal">
+    <div class="step"><div><h3 style="color:#fff;">Agree the split and price</h3><p class="lead" style="margin-top:2px;">Setup 50/50, monthly 60/40, and settle on the monthly price point.</p></div></div>
+    <div class="step"><div><h3 style="color:#fff;">Finish Minnesota as the flagship</h3><p class="lead" style="margin-top:2px;">Six live locations become the proof case and the template.</p></div></div>
+    <div class="step"><div><h3 style="color:#fff;">Take it to the next operator</h3><p class="lead" style="margin-top:2px;">Rachel opens the relationship, JCE clones the system, recurring stacks.</p></div></div>
+  </div>
+  <p class="lead" style="margin-top:40px;color:#EAEFF7;">Built once. Sold many times. Worth it for both of us.</p>
+</section>
+
+<script>
+  // progress bar
+  const prog=document.getElementById('prog');
+  addEventListener('scroll',()=>{ const h=document.documentElement; const p=h.scrollTop/(h.scrollHeight-h.clientHeight)*100; prog.style.width=p+'%'; });
+  // reveal on scroll
+  const io=new IntersectionObserver((es)=>{ es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} }); },{threshold:.12});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
