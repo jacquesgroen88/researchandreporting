@@ -872,7 +872,7 @@
 
     <!-- AD COPY -->
     <div class="sub-header">Ad Copy for Campaign 1, Ad Group B: USP / 30-Minute Angle (RSA)</div>
-    <p style="font-size:12px; color:var(--muted); margin-bottom:14px; line-height:1.7;">Responsive Search Ads (RSAs) use up to 15 headlines and 4 descriptions. Google tests combinations to find the best-performing mix. Use all 12 headlines and all 4 descriptions below. <strong style="color:var(--warn)">Note: Replace R[X] with actual membership price before launching. Andrew: "no free in CTAs", use "Book a trial session" not "free trial".</strong></p>
+    <p style="font-size:12px; color:var(--muted); margin-bottom:14px; line-height:1.7;">Responsive Search Ads (RSAs) use up to 15 headlines and 4 descriptions. Google tests combinations to find the best-performing mix. Use all 12 headlines and all 4 descriptions below. <strong style="color:var(--warn)">Note: "Membership from R950/month" reflects the 18-month rate. Andrew: "no free in CTAs", use "Book a trial session" not "free trial".</strong></p>
     <div class="ad-copy-grid">
       <div class="ad-copy-card">
         <div class="ad-copy-label">Headlines (12, all to be used)</div>
@@ -894,7 +894,7 @@
         <div class="desc-item">Zero waiting. Zero thinking. Our Biocircuit guides your full-body workout in exactly 30 minutes, done.</div>
         <div class="desc-item">Not sure what to do in the gym? We do the thinking for you. Show up, follow the circuit, leave in 30 minutes.</div>
         <div class="desc-item">No more waiting for machines or wondering what to do next. A fully guided, gamified circuit every time.</div>
-        <div class="desc-item">Cape Quarter's most efficient gym. Membership from R[X]/month. Book a trial session and see for yourself.</div>
+        <div class="desc-item">Cape Quarter's most efficient gym. Membership from R950/month. Book a trial session and see for yourself.</div>
       </div>
     </div>
 
@@ -918,7 +918,7 @@
         <div class="desc-item">Located at Cape Quarter, Green Point. Guided 30-minute Biocircuit workout, zero waiting, zero guessing. Book your trial.</div>
         <div class="desc-item">Cape Town gym with a difference. Biocircuit technology guides every workout. Efficient, effective, done in 30 minutes.</div>
         <div class="desc-item">New to the gym or just hate waiting? Threezero removes all the guesswork, fully guided circuit every visit.</div>
-        <div class="desc-item">Conveniently at Cape Quarter. Membership from R[X]/month. Book a trial session and start your 30-minute journey.</div>
+        <div class="desc-item">Conveniently at Cape Quarter. Membership from R950/month. Book a trial session and start your 30-minute journey.</div>
       </div>
     </div>
 
@@ -978,16 +978,16 @@
           <tr>
             <td class="bold">Trial booking form (Reviewtap System)</td>
             <td>Not tracked in Google Ads</td>
-            <td>Add Google Ads conversion tag to form submit handler in homepage JS</td>
+            <td>Add Google Ads conversion tag on form submission. The single primary conversion.</td>
             <td class="num bold" style="color:var(--ok)">R300</td>
             <td><span class="pill pill-ok">Create, Priority 1</span></td>
           </tr>
           <tr>
-            <td class="bold">Web purchase (threezero.co.za)</td>
-            <td>Enabled, R1 default</td>
-            <td>Update to actual membership price</td>
-            <td class="num">Actual price</td>
-            <td><span class="pill pill-ok">Fix value, Priority 1</span></td>
+            <td class="bold">Membership join (Itensity)</td>
+            <td>Off-site, untrackable by pixel</td>
+            <td>The join completes on threezero.itensityonline.com, a separate system we cannot tag. Track via offline conversion import later (see timeline), not a pixel.</td>
+            <td class="num">via offline import</td>
+            <td><span class="pill pill-warn">Phase 2</span></td>
           </tr>
           <tr>
             <td class="bold">Calls from ads (60+ seconds)</td>
@@ -1033,6 +1033,14 @@
           </tr>
         </tbody>
       </table>
+    </div>
+
+    <div class="alert alert-gold">
+      <div class="alert-icon">🧮</div>
+      <div class="alert-body">
+        <strong>How the R300 trial booking value is set</strong>
+        <p>The trial booking is valued at the 12-month membership price (R1,195/month) multiplied by a conservative 25% trial-to-member conversion rate, which gives roughly R300. Andrew estimates closer to 50%, but that is unproven at volume and paid-search leads typically convert lower, so we deliberately use the conservative figure. Under-valuing slightly costs nothing. Over-valuing makes Google over-spend once smart bidding switches on. We raise this number once offline conversion import gives us the real close rate.</p>
+      </div>
     </div>
 
     <!-- NEGATIVE KEYWORDS -->
@@ -1136,8 +1144,8 @@
     <div class="alert alert-gold">
       <div class="alert-icon">📋</div>
       <div class="alert-body">
-        <strong>Before starting: one thing needed from Andrew</strong>
-        <p>The ad copy has a placeholder "Membership from R[X]/month." Confirm the membership price with Andrew before Week 2 builds. Everything else can proceed without it.</p>
+        <strong>Pricing confirmed, one tracking note</strong>
+        <p>Membership pricing is confirmed from the Itensity join page (from R950/month on the 18-month plan). The one structural limit to be aware of: the membership join completes off-site on Itensity, so Google Ads cannot pixel-track the actual sale. The trial booking form is therefore the primary conversion, and we close the loop on real joins later with offline conversion import (Month 2 to 3).</p>
       </div>
     </div>
 
@@ -1150,7 +1158,7 @@
           <div class="tl-title">Fix Conversion Tracking: Do This Before Anything Else</div>
           <ul class="tl-tasks">
             <li>Add Google Ads conversion tag to trial booking form submit handler (homepage JS, handleFormSubmit function, add gtag event after the fetch POST succeeds). Value: R300.</li>
-            <li>Update web purchase conversion action from R1 to actual membership price.</li>
+            <li>Capture the Google Click ID (gclid) on the trial form and store it with the lead in the Reviewtap System. This is what makes offline conversion import possible later, so we can credit real member joins back to the ads that drove them.</li>
             <li>Update call conversion actions to R250. Set minimum call duration: 60 seconds.</li>
             <li>Demote map directions, website visits, store visits to secondary conversion status.</li>
             <li>Remove "Local actions – Other engagements" from conversion tracking.</li>
@@ -1216,6 +1224,7 @@
             <li>Rebalance budget: shift spend away from the ad group with high CPA or low volume toward the best performer.</li>
             <li>Add RLSA audiences: bid +20% on past website visitors in Campaign 1 (warm audience, more likely to convert).</li>
             <li>Build a second RSA per ad group in Campaign 1: use an alternative angle ("longevity fitness", "science-backed", ties in with Threezero's positioning vs a commoditised gym).</li>
+            <li>Set up offline conversion import to close the loop on real joins: export joined members from Itensity, match them to the stored gclid from the trial form, and upload to Google Ads as a "Membership join" conversion at real value. This is what finally lets Google optimise toward paying members, not just enquiries, and replaces the conservative 25% estimate with the proven rate.</li>
             <li>Install GA4 on Threezero site if not yet done, required for audience building and cross-channel attribution.</li>
           </ul>
         </div>
@@ -1292,15 +1301,15 @@
           </tr>
           <tr>
             <td>Trial-to-member conversion rate</td>
-            <td>Estimate, confirm with Andrew's actual close rate</td>
-            <td class="num">20%</td>
-            <td class="num">35%</td>
+            <td>Andrew estimates ~50%, unproven at volume. Modelled conservatively.</td>
+            <td class="num">25%</td>
+            <td class="num">40%</td>
           </tr>
           <tr>
             <td class="bold">New members/month from Google Ads</td>
             <td>Leads × close rate</td>
-            <td class="num bold" style="color:var(--ok)">9 members</td>
-            <td class="num bold" style="color:var(--ok)">33 members</td>
+            <td class="num bold" style="color:var(--ok)">11 members</td>
+            <td class="num bold" style="color:var(--ok)">38 members</td>
           </tr>
         </tbody>
       </table>
@@ -1328,7 +1337,7 @@
       <div class="alert-icon">📌</div>
       <div class="alert-body">
         <strong>The most important number to track: cost per member acquired</strong>
-        <p>Ask Andrew what percentage of trial sessions convert to paid memberships. If it's 25% and a membership is worth R500/month over 12 months (R6,000 LTV), a cost per acquired member of R268–R268 is a strong return. The projections above are the starting point. Once real data flows in after Week 1, everything becomes sharper.</p>
+        <p>Threezero memberships run from R950/month (18-month) to R1,595/month (flexi), so a single 12-month member at R1,195 is worth R14,340 over the term. At a conservative 25% trial-to-member rate, the R3,000 budget buys roughly 11 members a month, about R270 per acquired member against R14,340 of member value. That is a very strong return even at the pessimistic end. Once offline conversion import feeds real join data back in (Month 2 to 3), this stops being an estimate and becomes exact.</p>
       </div>
     </div>
   </section>
