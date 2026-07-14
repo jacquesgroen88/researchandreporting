@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JCE Media — AI Solutions for Financial Advisory Firms</title>
+<style>
+  :root {
+    --bg: #0a0d14;
+    --surface: #111520;
+    --surface2: #161c2d;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --accent: #4f6ef7;
+    --accent2: #7c3aed;
+    --text: #e8eaf0;
+    --muted: #6b7280;
+    --muted2: #9aa3b2;
+    --green: #10b981;
+    --orange: #f59e0b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  /* ── background glow ── */
+  .bg-glow {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(600px circle at 15% 0%, rgba(79,110,247,0.10), transparent 60%),
+      radial-gradient(700px circle at 90% 10%, rgba(124,58,237,0.10), transparent 55%);
+  }
+  .wrap { position: relative; z-index: 1; }
+
+  /* ── NAV ── */
+  nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 40px; height: 64px;
+    background: rgba(17,21,32,0.72);
+    border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; z-index: 100;
+    backdrop-filter: blur(14px);
+  }
+  .nav-logo { display: flex; align-items: center; gap: 12px; }
+  .nav-logo-mark {
+    width: 34px; height: 34px; border-radius: 8px;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 900; font-size: 13px; color: white; letter-spacing: -0.5px;
+  }
+  .nav-logo-text { font-weight: 700; font-size: 15px; }
+  .nav-logo-sub { font-size: 11px; color: var(--muted); font-weight: 400; }
+  .nav-cta {
+    font-size: 13px; font-weight: 600; padding: 9px 18px; border-radius: 8px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff; transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(79,110,247,0.35); }
+
+  /* ── layout ── */
+  .section { max-width: 1120px; margin: 0 auto; padding: 0 40px; }
+  .eyebrow {
+    font-size: 12px; font-weight: 700; letter-spacing: 1.6px;
+    text-transform: uppercase; color: var(--accent);
+    display: flex; align-items: center; gap: 10px; margin-bottom: 18px;
+  }
+  .eyebrow::before {
+    content: ''; width: 22px; height: 2px; border-radius: 2px;
+    background: var(--accent);
+  }
+  .section-label {
+    font-size: 13px; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; color: var(--muted2);
+    display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
+  }
+  .section-label::before {
+    content: ''; width: 3px; height: 15px; border-radius: 3px;
+    background: linear-gradient(var(--accent), var(--accent2));
+  }
+  h2 { font-size: clamp(26px, 3.2vw, 38px); font-weight: 800; letter-spacing: -1px; line-height: 1.15; }
+  .grad {
+    background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.62) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .grad-accent {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+
+  /* ── HERO ── */
+  .hero { padding: 84px 40px 40px; }
+  .hero h1 {
+    font-size: clamp(34px, 5.4vw, 62px); font-weight: 800;
+    letter-spacing: -2px; line-height: 1.06; margin-bottom: 22px; max-width: 880px;
+  }
+  .hero-sub { font-size: clamp(16px, 2vw, 19px); color: var(--muted2); max-width: 660px; margin-bottom: 34px; }
+  .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+  .btn-primary {
+    font-size: 15px; font-weight: 600; padding: 14px 26px; border-radius: 10px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff;
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(79,110,247,0.4); }
+  .btn-ghost {
+    font-size: 15px; font-weight: 600; padding: 14px 26px; border-radius: 10px;
+    border: 1px solid var(--border2); color: var(--text);
+    transition: background .15s ease, border-color .15s ease;
+  }
+  .btn-ghost:hover { background: rgba(255,255,255,0.04); border-color: var(--accent); }
+
+  .hero-strip {
+    display: flex; gap: 40px; flex-wrap: wrap; margin-top: 56px;
+    padding-top: 34px; border-top: 1px solid var(--border);
+  }
+  .strip-item { max-width: 240px; }
+  .strip-num { font-size: 15px; font-weight: 700; color: var(--accent); margin-bottom: 4px; }
+  .strip-txt { font-size: 13.5px; color: var(--muted2); line-height: 1.5; }
+
+  /* ── PROBLEM ── */
+  .problem { padding: 72px 40px; }
+  .problem-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+  .problem-grid p { color: var(--muted2); font-size: 16px; margin-top: 18px; }
+  .problem-grid p strong { color: var(--text); font-weight: 600; }
+  .leaks { display: flex; flex-direction: column; gap: 12px; }
+  .leak {
+    display: flex; gap: 14px; align-items: flex-start;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px 18px;
+  }
+  .leak-icon {
+    flex-shrink: 0; width: 30px; height: 30px; border-radius: 8px;
+    background: rgba(245,158,11,0.12); color: var(--orange);
+    display: flex; align-items: center; justify-content: center; font-size: 15px;
+  }
+  .leak-txt { font-size: 14px; color: var(--muted2); }
+  .leak-txt b { color: var(--text); font-weight: 600; }
+
+  /* ── PILLARS ── */
+  .pillars { padding: 40px 40px 30px; }
+  .pillar { margin-top: 64px; }
+  .pillar:first-child { margin-top: 40px; }
+  .pillar-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 8px; flex-wrap: wrap; }
+  .pillar-num {
+    font-size: 13px; font-weight: 800; letter-spacing: 1px;
+    color: var(--accent); border: 1px solid rgba(79,110,247,0.3);
+    background: rgba(79,110,247,0.08); border-radius: 6px; padding: 3px 9px;
+  }
+  .pillar-head h3 { font-size: clamp(22px, 3vw, 30px); font-weight: 800; letter-spacing: -0.8px; }
+  .pillar-lede { color: var(--muted2); font-size: 16px; max-width: 720px; margin-bottom: 26px; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 18px; }
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 16px; padding: 24px; transition: transform .18s ease, border-color .18s ease, background .18s ease;
+  }
+  .card:hover { transform: translateY(-3px); border-color: var(--border2); background: var(--surface2); }
+  .card-icon {
+    width: 42px; height: 42px; border-radius: 11px; margin-bottom: 16px;
+    display: flex; align-items: center; justify-content: center; font-size: 20px;
+    background: linear-gradient(135deg, rgba(79,110,247,0.18), rgba(124,58,237,0.18));
+    border: 1px solid rgba(79,110,247,0.2);
+  }
+  .card h4 { font-size: 16.5px; font-weight: 700; margin-bottom: 9px; letter-spacing: -0.3px; }
+  .card p { font-size: 14px; color: var(--muted2); line-height: 1.6; }
+  .card-outcome {
+    display: inline-flex; align-items: center; gap: 7px; margin-top: 16px;
+    font-size: 12.5px; font-weight: 600; color: var(--green);
+    background: rgba(16,185,129,0.09); border: 1px solid rgba(16,185,129,0.2);
+    border-radius: 20px; padding: 5px 12px;
+  }
+  .card-outcome::before { content: '↗'; font-size: 13px; }
+
+  /* ── JOURNEY ── */
+  .journey { padding: 76px 40px; }
+  .flow { display: flex; flex-direction: column; gap: 2px; margin-top: 34px; }
+  .step {
+    display: grid; grid-template-columns: 54px 1fr; gap: 20px; align-items: start;
+    position: relative; padding: 4px 0 26px;
+  }
+  .step:not(:last-child)::before {
+    content: ''; position: absolute; left: 26px; top: 46px; bottom: -2px; width: 2px;
+    background: linear-gradient(var(--accent), rgba(124,58,237,0.15));
+  }
+  .step-dot {
+    width: 54px; height: 54px; border-radius: 14px; flex-shrink: 0;
+    background: var(--surface2); border: 1px solid var(--border2);
+    display: flex; align-items: center; justify-content: center; font-size: 22px; z-index: 1;
+  }
+  .step-body { padding-top: 5px; }
+  .step-body .stage { font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--accent); margin-bottom: 5px; }
+  .step-body h4 { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+  .step-body p { font-size: 14.5px; color: var(--muted2); max-width: 720px; }
+  .step-body .who { display: inline-block; margin-top: 9px; font-size: 12px; color: var(--muted); font-style: italic; }
+
+  /* ── WHY ── */
+  .why { padding: 40px 40px 76px; }
+  .why-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 18px; margin-top: 30px; }
+  .why-card {
+    background: linear-gradient(180deg, var(--surface2), var(--surface));
+    border: 1px solid var(--border); border-radius: 16px; padding: 24px;
+  }
+  .why-card .k { font-size: 14px; font-weight: 700; margin-bottom: 9px; display: flex; align-items: center; gap: 9px; }
+  .why-card .k span {
+    width: 26px; height: 26px; border-radius: 7px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-size: 14px;
+    background: rgba(124,58,237,0.14); color: #b79cff;
+  }
+  .why-card p { font-size: 13.5px; color: var(--muted2); }
+
+  /* ── ENGAGE ── */
+  .engage { padding: 40px 40px 76px; }
+  .engage-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 30px; }
+  .phase {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 16px; padding: 26px; position: relative; overflow: hidden;
+  }
+  .phase::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+  }
+  .phase .ph-tag { font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+  .phase h4 { font-size: 18px; font-weight: 800; margin-bottom: 10px; letter-spacing: -0.4px; }
+  .phase p { font-size: 14px; color: var(--muted2); }
+
+  /* ── CTA ── */
+  .cta {
+    max-width: 1120px; margin: 40px auto 0; padding: 56px 40px;
+  }
+  .cta-inner {
+    background: linear-gradient(135deg, rgba(79,110,247,0.14), rgba(124,58,237,0.14));
+    border: 1px solid rgba(124,58,237,0.28); border-radius: 24px;
+    padding: 52px 48px; text-align: center;
+  }
+  .cta-inner h2 { margin-bottom: 16px; }
+  .cta-inner p { color: var(--muted2); font-size: 17px; max-width: 560px; margin: 0 auto 30px; }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border); margin-top: 40px;
+    padding: 30px 40px; text-align: center; color: var(--muted); font-size: 13px;
+  }
+  footer b { color: var(--muted2); font-weight: 600; }
+
+  @media (max-width: 760px) {
+    nav, .section, .hero, .problem, .pillars, .journey, .why, .engage, .cta { padding-left: 22px; padding-right: 22px; }
+    .problem-grid { grid-template-columns: 1fr; gap: 30px; }
+    .engage-grid { grid-template-columns: 1fr; }
+    .hero-strip { gap: 24px; }
+  }
+</style>
+</head>
+<body>
+<div class="bg-glow"></div>
+<div class="wrap">
+
+  <nav>
+    <div class="nav-logo">
+      <div class="nav-logo-mark">JCE</div>
+      <div>
+        <div class="nav-logo-text">JCE Media</div>
+        <div class="nav-logo-sub">AI Growth Systems</div>
+      </div>
+    </div>
+    <a href="#talk" class="nav-cta">Book a walkthrough</a>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero section">
+    <div class="eyebrow">AI Solutions for Financial Advisory Firms</div>
+    <h1>We build the AI systems that <span class="grad-accent">win clients, market the practice, and run the back office</span> while your advisors advise.</h1>
+    <p class="hero-sub">Most advisory firms do not have a lead problem. They have a follow-up problem, an admin problem, and a "the good advisor is buried in tasks a machine should do" problem. We fix that with practical AI, built into the tools you already use, with a human in the loop on everything a client sees.</p>
+    <div class="hero-actions">
+      <a href="#deliver" class="btn-primary">See what we deliver</a>
+      <a href="#talk" class="btn-ghost">Talk to us</a>
+    </div>
+    <div class="hero-strip">
+      <div class="strip-item">
+        <div class="strip-num">Sales</div>
+        <div class="strip-txt">Never let a warm lead go cold. Instant response, automatic follow-up, booked calls.</div>
+      </div>
+      <div class="strip-item">
+        <div class="strip-num">Marketing</div>
+        <div class="strip-txt">A pipeline that fills itself, with content and campaigns produced at a fraction of the cost.</div>
+      </div>
+      <div class="strip-item">
+        <div class="strip-num">Operations</div>
+        <div class="strip-txt">One command center for the whole firm, and automations that erase the busywork.</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- PROBLEM -->
+  <section class="problem section">
+    <div class="problem-grid">
+      <div>
+        <div class="section-label">Why now</div>
+        <h2 class="grad">Where advisory firms quietly lose money</h2>
+        <p>A financial advisory practice runs on trust and timing. The firms that grow are not the ones with the best brochure. They are the ones that <strong>respond first, follow up relentlessly, and free their advisors to sit in front of clients.</strong></p>
+        <p>Every one of the leaks on the right is a place where AI does the boring, repetitive part perfectly, every time, so nothing falls through the cracks and your people spend their hours where the money actually is.</p>
+      </div>
+      <div class="leaks">
+        <div class="leak">
+          <div class="leak-icon">⏱</div>
+          <div class="leak-txt"><b>Slow speed-to-lead.</b> A prospect enquires at 9pm. By the time someone replies the next afternoon, they have already booked with a competitor who answered in five minutes.</div>
+        </div>
+        <div class="leak">
+          <div class="leak-icon">🕳</div>
+          <div class="leak-txt"><b>Follow-up that stops after one try.</b> Most advisory sales cycles need seven-plus touches. Manual follow-up almost always dies at two, and the deal dies with it.</div>
+        </div>
+        <div class="leak">
+          <div class="leak-icon">📋</div>
+          <div class="leak-txt"><b>Advisors doing admin.</b> Onboarding paperwork, data capture, scheduling, note-taking. Hours a week of expensive time spent on work a system should handle.</div>
+        </div>
+        <div class="leak">
+          <div class="leak-icon">🌫</div>
+          <div class="leak-txt"><b>No single view of the business.</b> Leads in one place, clients in another, numbers in a spreadsheet nobody updates. Decisions get made on gut, not data.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PILLARS -->
+  <section id="deliver" class="pillars section">
+    <div class="section-label">What we deliver</div>
+    <h2 class="grad">Three systems. One growing practice.</h2>
+
+    <!-- PILLAR 1 -->
+    <div class="pillar">
+      <div class="pillar-head">
+        <span class="pillar-num">01 · SALES</span>
+        <h3>Turn more enquiries into booked clients</h3>
+      </div>
+      <p class="pillar-lede">The single highest-leverage fix for an advisory firm is closing the gap between "someone raised their hand" and "they are sitting in a meeting with an advisor." We automate that entire gap.</p>
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">💬</div>
+          <h4>24/7 AI intake assistant</h4>
+          <p>A conversational assistant on your site and WhatsApp that answers questions, qualifies the prospect (assets, goals, timeline), and captures their details the moment they are curious, day or night.</p>
+          <div class="card-outcome">Every enquiry answered in seconds</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">⚡</div>
+          <h4>Instant speed-to-lead</h4>
+          <p>The second a form is filled or a call is missed, the system responds by text and email, and alerts the right advisor. First to respond wins, and now that is always you.</p>
+          <div class="card-outcome">Reply in under 60 seconds</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🔁</div>
+          <h4>Relentless smart follow-up</h4>
+          <p>Multi-step, multi-channel nurture that keeps working a lead until they book or opt out. Personalised, spaced correctly, and it never forgets, never gets busy, never gives up at touch two.</p>
+          <div class="card-outcome">Recover deals that used to slip</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">📅</div>
+          <h4>Automated booking</h4>
+          <p>Qualified prospects book straight into the right advisor's calendar, with reminders that cut no-shows. No phone tag, no back-and-forth, no lost momentum.</p>
+          <div class="card-outcome">More calls, fewer no-shows</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">📊</div>
+          <h4>Live pipeline visibility</h4>
+          <p>Every prospect, every stage, every follow-up date on one board. You can see exactly where revenue is stuck and who needs a nudge, in real time.</p>
+          <div class="card-outcome">Nothing falls through the cracks</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">⭐</div>
+          <h4>Reviews &amp; referral engine</h4>
+          <p>Automated, well-timed requests that turn happy clients into public reviews and warm referrals, the two things that sell an advisory practice better than any ad.</p>
+          <div class="card-outcome">Compounding social proof</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PILLAR 2 -->
+    <div class="pillar">
+      <div class="pillar-head">
+        <span class="pillar-num">02 · MARKETING</span>
+        <h3>Fill the pipeline, at a fraction of the cost</h3>
+      </div>
+      <p class="pillar-lede">AI does not replace good marketing. It lets a small team produce the output of a large one. We run the campaigns and the content engine that keep qualified prospects coming in, so the sales system always has something to work.</p>
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">🎯</div>
+          <h4>Lead-generation campaigns</h4>
+          <p>Meta and Google campaigns built to bring in the right prospects, not just clicks. Managed, tested, and reported by the same team that has run ad accounts for years.</p>
+          <div class="card-outcome">Qualified leads, tracked to revenue</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">✍️</div>
+          <h4>AI content engine</h4>
+          <p>Blogs, emails, and social posts that establish the firm as the trusted expert, produced at scale in the firm's voice. Every client-facing piece is reviewed by a human before it goes out.</p>
+          <div class="card-outcome">Weeks of content in a day</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">📧</div>
+          <h4>Nurture that educates</h4>
+          <p>Long advisory sales cycles need patience. Automated email journeys keep the firm top of mind and slowly build the trust that turns a curious lead into a signed client.</p>
+          <div class="card-outcome">Stay top of mind for months</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🖥</div>
+          <h4>Landing pages that convert</h4>
+          <p>Fast, credible, conversion-optimised pages for each offer or campaign. We have redesigned and rebuilt sites specifically to lift the percentage of visitors who become leads.</p>
+          <div class="card-outcome">More leads from the same traffic</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🔎</div>
+          <h4>Get found &amp; get cited</h4>
+          <p>SEO and content built so the firm shows up when people search, and increasingly when they ask an AI assistant for a recommendation. New search behaviour, covered.</p>
+          <div class="card-outcome">Visible where clients look</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">📈</div>
+          <h4>Reporting you actually read</h4>
+          <p>Clean monthly and live reporting that ties spend to leads to booked clients, so every marketing rand is accountable and the next decision is obvious.</p>
+          <div class="card-outcome">Clarity on what works</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PILLAR 3 -->
+    <div class="pillar">
+      <div class="pillar-head">
+        <span class="pillar-num">03 · OPERATIONS</span>
+        <h3>Run the firm from one screen</h3>
+      </div>
+      <p class="pillar-lede">The back office is where advisory firms lose their best hours. We build the command center and the automations that take the repetitive work off your people entirely, so capacity goes up without headcount going up.</p>
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">🛰</div>
+          <h4>Firm command center</h4>
+          <p>A single dashboard for the whole business: leads, pipeline, clients, marketing, and the numbers that matter, pulled together and kept current. This is the exact kind of cockpit we run our own portfolio on.</p>
+          <div class="card-outcome">Whole business at a glance</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🤝</div>
+          <h4>Client onboarding automation</h4>
+          <p>New client, and the system fires: welcome sequence, document requests, data capture, task creation, and calendar setup. A consistent, professional first impression with almost no manual work.</p>
+          <div class="card-outcome">Onboard in minutes, not days</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🗂</div>
+          <h4>Document &amp; data handling</h4>
+          <p>AI that reads, sorts, and summarises the paperwork an advisory firm drowns in, and files it where it belongs. Less manual capture, fewer errors, faster turnaround.</p>
+          <div class="card-outcome">Hours of admin removed weekly</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">📝</div>
+          <h4>Meeting notes &amp; recaps</h4>
+          <p>Every client meeting captured, summarised, and turned into action items and follow-up automatically, so the advisor stays present in the room instead of scribbling notes.</p>
+          <div class="card-outcome">Nothing said gets forgotten</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🧠</div>
+          <h4>Internal AI assistant</h4>
+          <p>A private assistant trained on the firm's own processes and knowledge, so the team gets instant, correct answers instead of interrupting a senior advisor or digging through folders.</p>
+          <div class="card-outcome">The team's questions, answered</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🔗</div>
+          <h4>Everything connected</h4>
+          <p>We wire your CRM, calendar, email, forms, and tools together so data flows automatically. No more double-entry, no more copy-paste between systems that should already talk.</p>
+          <div class="card-outcome">One source of truth</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- JOURNEY -->
+  <section class="journey section">
+    <div class="section-label">In practice</div>
+    <h2 class="grad">One lead, through the whole system</h2>
+    <p class="hero-sub" style="margin-top:14px;">Here is what it looks like for a financial advisory firm when the three systems work together. A single prospect, from first click to loyal client, with AI carrying the load at every stage.</p>
+    <div class="flow">
+      <div class="step">
+        <div class="step-dot">🎯</div>
+        <div class="step-body">
+          <div class="stage">Marketing</div>
+          <h4>A prospect sees the firm</h4>
+          <p>They meet a campaign or a piece of content that positions the firm as the trusted expert, and click through to a page built to convert.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-dot">💬</div>
+        <div class="step-body">
+          <div class="stage">Sales · Capture</div>
+          <h4>The assistant engages them instantly</h4>
+          <p>The AI intake assistant answers their questions, understands their situation, qualifies them, and captures their details, whatever the hour.</p>
+          <span class="who">AI handles it. Advisor is not interrupted.</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-dot">⚡</div>
+        <div class="step-body">
+          <div class="stage">Sales · Respond</div>
+          <h4>They get an instant, personal response</h4>
+          <p>Within seconds, a tailored reply goes out and the right advisor is alerted. If the prospect goes quiet, smart follow-up keeps working for as long as it takes.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-dot">📅</div>
+        <div class="step-body">
+          <div class="stage">Sales · Book</div>
+          <h4>They book a meeting</h4>
+          <p>Straight into the advisor's calendar, with reminders that make sure they actually show up. The advisor walks in already briefed on who they are.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-dot">🤝</div>
+        <div class="step-body">
+          <div class="stage">Operations · Onboard</div>
+          <h4>They sign, and onboarding fires itself</h4>
+          <p>Welcome sequence, document collection, data capture, and setup all run automatically. A flawless first impression with almost no manual work.</p>
+          <span class="who">Advisor spends the time advising, not filing.</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-dot">⭐</div>
+        <div class="step-body">
+          <div class="stage">Sales · Compound</div>
+          <h4>They become a review and a referral</h4>
+          <p>At the right moment, the system asks for a review and opens the door to referrals, feeding the next prospect back into the top of the funnel.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY -->
+  <section class="why section">
+    <div class="section-label">Why JCE Media</div>
+    <h2 class="grad">Built by operators, not a slide deck</h2>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="k"><span>⚙</span> We already run this</div>
+        <p>These are not concepts. AI booking assistants, CRM automations, and command centers we have built are live in production across real businesses today.</p>
+      </div>
+      <div class="why-card">
+        <div class="k"><span>👤</span> Human in the loop</div>
+        <p>Nothing client-facing goes out without a person approving it. AI does the volume and the speed. Your firm keeps the judgement and the voice.</p>
+      </div>
+      <div class="why-card">
+        <div class="k"><span>🛡</span> Compliance-aware</div>
+        <p>We build for a regulated world: approval steps, records, and controlled messaging, so the firm stays on the right side of its obligations.</p>
+      </div>
+      <div class="why-card">
+        <div class="k"><span>🔧</span> On your tools</div>
+        <p>We build into the CRM, calendar, and stack you already use, or bring a proven one. No rip-and-replace, no year-long project.</p>
+      </div>
+      <div class="why-card">
+        <div class="k"><span>🚀</span> Fast to value</div>
+        <p>We start with the one system that pays for itself quickest, prove it, then expand. You see a return before you commit to the next phase.</p>
+      </div>
+      <div class="why-card">
+        <div class="k"><span>🤝</span> One accountable partner</div>
+        <p>Strategy, build, and the ongoing marketing all under one roof. One team owns the outcome, not a chain of vendors pointing at each other.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ENGAGE -->
+  <section class="engage section">
+    <div class="section-label">How we start</div>
+    <h2 class="grad">A clear, low-risk path in</h2>
+    <div class="engage-grid">
+      <div class="phase">
+        <div class="ph-tag">Step 01</div>
+        <h4>Map &amp; prioritise</h4>
+        <p>A short working session to map how leads and clients move through the firm today, find the biggest leak, and agree the one system that pays back fastest.</p>
+      </div>
+      <div class="phase">
+        <div class="ph-tag">Step 02</div>
+        <h4>Build the first win</h4>
+        <p>We build and launch that first system, wired into your tools, and measure it against a number we both agreed on up front. Value before scale.</p>
+      </div>
+      <div class="phase">
+        <div class="ph-tag">Step 03</div>
+        <h4>Expand &amp; run</h4>
+        <p>Once it is working, we layer in the next system and take the ongoing marketing and optimisation off your plate, so the practice keeps compounding.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="talk" class="cta">
+    <div class="cta-inner">
+      <div class="eyebrow" style="justify-content:center;">Let's build it</div>
+      <h2 class="grad">See it mapped to your firm</h2>
+      <p>Give us 30 minutes and the shape of your practice, and we will show you exactly where AI moves the needle first, and what the return looks like. No jargon, no obligation.</p>
+      <a href="mailto:jacques@jcemedia.com?subject=AI%20Solutions%20for%20our%20advisory%20firm" class="btn-primary">Book a walkthrough</a>
+    </div>
+  </section>
+
+  <footer>
+    <b>JCE Media</b> · AI Growth Systems for Financial Advisory Firms<br>
+    jacques@jcemedia.com · Built with practical AI, run by a human team.
+  </footer>
+
+</div>
+</body>
+</html>
