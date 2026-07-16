@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Threezero — Google Ads Performance Review</title>
+<style>
+  :root{
+    --bg:#0D0D0D; --card:#141414; --card2:#181818; --border:#222; --border2:#2c2c2c;
+    --gold:#C9A84C; --gold-l:#E2C87A; --gold-d:#A0832E;
+    --text:#EDEDED; --muted:#9a9a9a; --dim:#6f6f6f;
+    --green:#4CAF77; --red:#D9776B;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg); color:var(--text);
+    font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    line-height:1.6; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:960px;margin:0 auto;padding:0 24px}
+  .section{padding:64px 0;border-bottom:1px solid var(--border)}
+  .section:last-child{border-bottom:none}
+
+  /* Header */
+  header{padding:72px 0 56px;text-align:center;border-bottom:1px solid var(--border)}
+  .eyebrow{color:var(--gold);font-size:13px;letter-spacing:.28em;text-transform:uppercase;font-weight:600}
+  header h1{font-size:44px;font-weight:800;margin:16px 0 10px;letter-spacing:-.02em;line-height:1.1}
+  header .sub{color:var(--muted);font-size:17px}
+  .meta{margin-top:22px;color:var(--dim);font-size:13px;letter-spacing:.04em}
+
+  h2{font-size:13px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:8px}
+  h3{font-size:29px;font-weight:800;letter-spacing:-.01em;margin-bottom:18px;line-height:1.2}
+  h4{font-size:18px;font-weight:700;margin-bottom:6px;color:var(--text)}
+  p{color:#cfcfcf;font-size:16px}
+  p + p{margin-top:14px}
+  .lead{font-size:18px;color:var(--text)}
+  strong{color:#fff;font-weight:700}
+  .g{color:var(--gold-l);font-weight:700}
+
+  /* Stat row */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:8px 0 4px}
+  .stat{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px 18px}
+  .stat .n{font-size:34px;font-weight:800;color:var(--gold-l);line-height:1;letter-spacing:-.02em}
+  .stat .l{color:var(--muted);font-size:13px;margin-top:8px;line-height:1.35}
+
+  /* Cards */
+  .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px 24px}
+  .card + .card{margin-top:14px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+  /* Before/after */
+  .ba{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:20px}
+  .ba .col{border-radius:14px;padding:22px;border:1px solid var(--border)}
+  .ba .before{background:#160f0f;border-color:#3a2020}
+  .ba .after{background:#0f1410;border-color:#1f3a28}
+  .ba .tag{font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;margin-bottom:14px}
+  .ba .before .tag{color:var(--red)}
+  .ba .after .tag{color:var(--green)}
+  .ba ul{list-style:none}
+  .ba li{padding-left:22px;position:relative;margin-bottom:11px;font-size:15px;color:#cfcfcf}
+  .ba .before li::before{content:"\2715";position:absolute;left:0;color:var(--red);font-weight:700}
+  .ba .after li::before{content:"\2713";position:absolute;left:0;color:var(--green);font-weight:700}
+
+  /* Table */
+  table{width:100%;border-collapse:collapse;margin-top:6px;font-size:14.5px}
+  th{text-align:left;color:var(--gold);font-weight:700;font-size:12px;letter-spacing:.08em;text-transform:uppercase;padding:12px 12px;border-bottom:1px solid var(--border2)}
+  td{padding:13px 12px;border-bottom:1px solid var(--border)}
+  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+  tr:last-child td{border-bottom:none}
+  .rowlabel{font-weight:700;color:#fff}
+  .pill{display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;letter-spacing:.04em}
+  .pill.live{background:#12271b;color:var(--green);border:1px solid #234a34}
+  .pill.paused{background:#241717;color:var(--red);border:1px solid #4a2626}
+  .totalrow td{border-top:2px solid var(--border2);font-weight:700;color:#fff;background:var(--card2)}
+
+  .callout{background:linear-gradient(135deg,#1a160c,#141414);border:1px solid var(--gold-d);border-radius:14px;padding:26px 26px;margin-top:20px}
+  .callout h4{color:var(--gold-l)}
+
+  .termlist{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}
+  .term{display:flex;justify-content:space-between;align-items:center;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 16px}
+  .term .t{font-weight:600;color:#e8e8e8;font-size:15px}
+  .term .m{color:var(--muted);font-size:13px;font-variant-numeric:tabular-nums}
+
+  .funnel{margin-top:22px}
+  .fstep{display:flex;align-items:center;gap:18px;margin-bottom:12px}
+  .fbar{height:56px;border-radius:12px;display:flex;align-items:center;padding:0 22px;font-weight:800;color:#0D0D0D;font-size:19px;background:linear-gradient(90deg,var(--gold-l),var(--gold));white-space:nowrap}
+  .fstep .desc{color:var(--muted);font-size:14.5px}
+  .fstep .desc b{color:#fff}
+
+  .next li{margin-bottom:14px;padding-left:6px}
+  ul.clean{list-style:none}
+  ul.clean li{position:relative;padding-left:26px;margin-bottom:13px;color:#cfcfcf;font-size:15.5px}
+  ul.clean li::before{content:"";position:absolute;left:0;top:9px;width:8px;height:8px;border-radius:50%;background:var(--gold)}
+
+  .note{color:var(--dim);font-size:13px;margin-top:14px;font-style:italic}
+  footer{padding:48px 0 60px;text-align:center;color:var(--dim);font-size:13px}
+  footer .b{color:var(--gold);font-weight:700;letter-spacing:.04em}
+
+  @media(max-width:760px){
+    header h1{font-size:32px}
+    h3{font-size:23px}
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .grid2,.ba,.termlist{grid-template-columns:1fr}
+    .fbar{font-size:16px}
+    table{font-size:13px}
+    th,td{padding:10px 8px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">Google Ads · Performance Review</div>
+    <h1>Threezero &times; JCE Media</h1>
+    <div class="sub">Where the account was, what we changed, and what it's producing now.</div>
+    <div class="meta">Prepared for Andrew Collins &nbsp;·&nbsp; 16 July 2026 &nbsp;·&nbsp; Account 369-283-6056</div>
+  </div>
+</header>
+
+<!-- SUMMARY -->
+<section class="section">
+  <div class="wrap">
+    <h2>The short version</h2>
+    <h3>We inherited an account that was spending but not selling. We rebuilt it into something that captures real gym demand and, for the first time, actually measures who books.</h3>
+    <p class="lead">The old setup was quietly wasting budget on a "Smart" campaign that reported feel-good numbers (map clicks, website taps) but couldn't tell us a single real trial booking. We replaced it with proper search campaigns targeting people actively looking for a gym, and we fixed a broken tracking pipe that had been silently dropping every booking Google sent. In the same window the trial-booking form has quietly filled with real enquiries.</p>
+    <div class="stats" style="margin-top:30px">
+      <div class="stat"><div class="n">17</div><div class="l">real trial enquiries captured since the form went live (15 Jun)</div></div>
+      <div class="stat"><div class="n">3.6%</div><div class="l">click-through rate on the new search campaigns (strong for local search)</div></div>
+      <div class="stat"><div class="n">54</div><div class="l">clicks from "gym near me" alone last 30 days, 8.1% CTR</div></div>
+      <div class="stat"><div class="n">1</div><div class="l">confirmed new member from the rebuild so far (Alexander)</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT WE INHERITED -->
+<section class="section">
+  <div class="wrap">
+    <h2>Starting point</h2>
+    <h3>What the account looked like when we took it over</h3>
+    <p>The account was running a single Google "Smart" campaign. Smart campaigns are a black box: Google decides everything, you can't see the searches you're paying for, and the reporting counts things like map-direction clicks and website taps as "conversions." It looked busy, but none of those numbers represented an actual person booking a trial.</p>
+    <div class="ba">
+      <div class="col before">
+        <div class="tag">Before — the old Smart campaign</div>
+        <ul>
+          <li>A black-box "Smart" campaign eating the majority of the budget</li>
+          <li>"Conversions" were map clicks &amp; website taps, valued at R1 each. Not bookings.</li>
+          <li>Zero visibility into which searches we were paying for</li>
+          <li>A second paused campaign still carrying wrong real-estate ad copy</li>
+          <li>Trial bookings from Google were being silently dropped, never recorded</li>
+        </ul>
+      </div>
+      <div class="col after">
+        <div class="tag">After — the rebuild</div>
+        <ul>
+          <li>Two focused Search campaigns targeting real gym intent</li>
+          <li>A proper Trial Booking conversion, valued at R300, now firing correctly</li>
+          <li>Full visibility into every search term that triggers an ad</li>
+          <li>Old Smart campaign paused so budget stops leaking</li>
+          <li>Every trial booking is now measurable end-to-end</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT WE DID -->
+<section class="section">
+  <div class="wrap">
+    <h2>The work</h2>
+    <h3>What we actually changed</h3>
+    <div class="card">
+      <h4>1 &nbsp; Paused the wasteful Smart campaign</h4>
+      <p>It was absorbing most of the daily budget while reporting vanity conversions. We paused it so spend redirects to campaigns we can see and steer.</p>
+    </div>
+    <div class="card">
+      <h4>2 &nbsp; Built two Standard Search campaigns</h4>
+      <p><strong>Local Demand Capture</strong> targets people searching for a gym in the area ("gym near me", "gym Cape Town", "gym Sea Point"). <strong>Brand Defence</strong> makes sure that when someone searches "Threezero" directly, they land on us and not a competitor's ad.</p>
+    </div>
+    <div class="card">
+      <h4>3 &nbsp; Fixed the broken conversion tracking <span class="pill live" style="margin-left:8px">the big one</span></h4>
+      <p>This is the most important fix. Your website was sending trial bookings to the <em>wrong Google Ads account</em>. Every real booking Google generated was being silently thrown away, which is why the account showed "awaiting conversions" for weeks. We rerouted it to the correct account, pushed the fix live, and verified it end-to-end with a live test booking on 13 July. From that date forward, every trial booking from Google is measurable.</p>
+    </div>
+    <div class="card">
+      <h4>4 &nbsp; Cleaned up the plumbing</h4>
+      <p>Added negative keywords to stop wasted spend (competitor-brand and foreign-language searches), demoted the vanity "map click" actions, and turned off Google's auto-apply, which had been quietly making changes to the account on its own.</p>
+    </div>
+    <div class="card">
+      <h4>5 &nbsp; Content &amp; site, feeding the ads a stronger destination</h4>
+      <p><strong>6 blog posts are now published</strong> on the site, which gives Google more relevant content to rank and gives ad visitors more reason to trust and stay. We're currently bringing the blog's look and feel in line with the new homepage design so the whole site reads as one polished brand, top to bottom.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CURRENT PERFORMANCE -->
+<section class="section">
+  <div class="wrap">
+    <h2>Current performance</h2>
+    <h3>Last 30 days, by campaign</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Campaign</th>
+          <th>Status</th>
+          <th class="num">Impressions</th>
+          <th class="num">Clicks</th>
+          <th class="num">CTR</th>
+          <th class="num">Spend</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="rowlabel">Local Demand Capture<br><span style="color:var(--dim);font-weight:400;font-size:12px">"gym near me" &amp; local intent</span></td>
+          <td><span class="pill live">Live</span></td>
+          <td class="num">8,131</td><td class="num">269</td><td class="num">3.31%</td><td class="num">R934</td>
+        </tr>
+        <tr>
+          <td class="rowlabel">Brand Defence<br><span style="color:var(--dim);font-weight:400;font-size:12px">people searching "Threezero"</span></td>
+          <td><span class="pill live">Live</span></td>
+          <td class="num">1,887</td><td class="num">94</td><td class="num">4.98%</td><td class="num">R177</td>
+        </tr>
+        <tr>
+          <td class="rowlabel">Threezero Fitness Studio<br><span style="color:var(--dim);font-weight:400;font-size:12px">old Smart campaign</span></td>
+          <td><span class="pill paused">Paused</span></td>
+          <td class="num">15,278</td><td class="num">338</td><td class="num">2.21%</td><td class="num">R720</td>
+        </tr>
+        <tr class="totalrow">
+          <td>Total</td><td></td>
+          <td class="num">25,296</td><td class="num">701</td><td class="num">2.77%</td><td class="num">R1,831</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="note">The old Smart campaign still shows spend because it only got paused partway through this window. Notice the two new search campaigns already out-perform it on click-through rate (3.3% and 5.0% vs 2.2%), on a tighter, more relevant audience.</p>
+  </div>
+</section>
+
+<!-- SEARCH TERMS -->
+<section class="section">
+  <div class="wrap">
+    <h2>What people are searching</h2>
+    <h3>The actual searches putting Threezero in front of people</h3>
+    <p>This is what we could never see under the old Smart campaign. Every one of these is a real person in Cape Town typing this into Google and clicking your ad. High-intent, local, exactly the audience a boutique studio wants.</p>
+    <div class="termlist">
+      <div class="term"><span class="t">gym near me</span><span class="m">54 clicks · 8.1% CTR</span></div>
+      <div class="term"><span class="t">gyms near me</span><span class="m">20 clicks · 10.6% CTR</span></div>
+      <div class="term"><span class="t">threezero</span><span class="m">12 clicks · 27.9% CTR</span></div>
+      <div class="term"><span class="t">threezero gym</span><span class="m">6 clicks · booked a trial</span></div>
+      <div class="term"><span class="t">gym cape town</span><span class="m">2 clicks · 12.5% CTR</span></div>
+      <div class="term"><span class="t">bungee fitness cape town</span><span class="m">3 clicks · 30% CTR</span></div>
+      <div class="term"><span class="t">private gym cape town</span><span class="m">local intent</span></div>
+      <div class="term"><span class="t">month-to-month membership CT</span><span class="m">ready-to-buy intent</span></div>
+    </div>
+    <p class="note">"gym near me" and "gyms near me" together drove ~74 clicks last month, the core of the studio's local demand. Brand searches for "threezero" convert at a very high click-through rate, which is why Brand Defence earns its small budget.</p>
+  </div>
+</section>
+
+<!-- THE LEADS -->
+<section class="section">
+  <div class="wrap">
+    <h2>The conversations</h2>
+    <h3>17 real trial enquiries, and the pace is picking up</h3>
+    <p>Since the trial-booking form went live on 15 June, <strong>17 genuine prospects</strong> have submitted their details asking to book a trial (excluding our own test entries). Each one lands directly in your CRM, tagged, with an automated WhatsApp going out. Crucially, the flow is accelerating: roughly <span class="g">6 enquiries in late June</span> jumped to about <span class="g">11 in the first half of July alone</span>.</p>
+
+    <div class="funnel">
+      <div class="fstep"><div class="fbar" style="width:100%">17 &nbsp; trial enquiries captured</div><div class="desc">real prospects, form → CRM → auto WhatsApp</div></div>
+      <div class="fstep"><div class="fbar" style="width:56%">~9 booked a trial slot</div><div class="desc">picked a time and got a confirmation</div></div>
+      <div class="fstep"><div class="fbar" style="width:38%">Attended a session</div><div class="desc"><b>tracked manually today</b> — see recommendation below</div></div>
+      <div class="fstep"><div class="fbar" style="width:20%">1 confirmed member — Alexander Wörz</div><div class="desc">first paying member attributable to the rebuild</div></div>
+    </div>
+
+    <p style="margin-top:24px">Recent enquiries include Candice, Conrad, Julia, Skyla, Sinovuyo, Monique and more, all in the last two weeks. This is a healthy, growing top-of-funnel on a modest budget.</p>
+
+    <div class="callout">
+      <h4>One honest gap we should close</h4>
+      <p>Right now, <strong>attendance and sign-ups aren't logged anywhere systematically</strong>, so the middle of that funnel is estimated, not measured. We know Alexander joined and several others attended, but we can't yet prove the full enquiry &rarr; attended &rarr; joined rate. Closing this is the single biggest unlock for judging (and scaling) the ad spend, covered in next steps.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONVERSATION READ -->
+<section class="section">
+  <div class="wrap">
+    <h2>Inside the conversations</h2>
+    <h3>We read every trial chat. Here's what's working, and where we're losing people</h3>
+    <p>The automated WhatsApp assistant does a genuinely good job: it replies in seconds, asks the right questions, and books people cleanly. Julia (does yoga &amp; Pilates), Conrad (Andrew jumped in personally), Skyla, Yonela, Anelisiwe and Alexander all booked smoothly. But reading the full threads surfaced a clear, fixable pattern of lost bookings.</p>
+
+    <div class="grid2" style="margin-top:22px">
+      <div class="card" style="border-color:#1f3a28">
+        <h4 style="color:var(--green)">What's working</h4>
+        <ul class="clean">
+          <li>Instant, friendly replies, prospects get a response within seconds of enquiring</li>
+          <li>The assistant asks goals and books a slot without a human lifting a finger</li>
+          <li>When Andrew steps in personally (Conrad), the prospect lights up, that human touch converts</li>
+          <li>Clean end-to-end bookings for the majority who reply</li>
+        </ul>
+      </div>
+      <div class="card" style="border-color:#3a2020">
+        <h4 style="color:var(--red)">Where we're losing people</h4>
+        <ul class="clean">
+          <li><strong>~6 of 17 went silent mid-booking</strong> — the bot offered slots and they never replied, with no follow-up nudge to bring them back</li>
+          <li><strong>Slot mismatches</strong> — people asked for Sunday, Monday/Tuesday or 6am and were told "not available", then dropped off</li>
+          <li><strong>Wayfinding</strong> — one booked prospect couldn't find the studio on arrival ("where is it? I can't see it")</li>
+          <li><strong>Small polish glitches</strong> — a "Africa/Harare" timezone label shown to Cape Town clients, and a couple of name hiccups</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout">
+      <h4>The single biggest opportunity: the people who went quiet</h4>
+      <p>Roughly a third of enquiries filled in the form, got as far as choosing a time, and then simply didn't reply, and nothing followed up with them. These are the <em>hottest</em> leads we have: they raised their hand and asked to book. A short automated reopener (a gentle "still keen to lock in your trial?" a day later) would recover a meaningful share of them at zero extra ad spend. This is now a priority next step.</p>
+    </div>
+  </div>
+</section>
+
+<!-- BUDGET -->
+<section class="section">
+  <div class="wrap">
+    <h2>The budget question</h2>
+    <h3>We're leaving ~40% of "gym near me" searches on the table</h3>
+    <p>Here is exactly what each campaign runs on today, and what the numbers say we should do. The key data point: <strong>Local Demand Capture is currently capturing only 27% of the searches it's eligible for, and losing 39% of them purely to budget</strong>. That's the cheapest growth available, real, high-intent local demand we're being outbid on for want of daily budget.</p>
+    <table>
+      <thead>
+        <tr><th>Campaign</th><th class="num">Daily budget now</th><th class="num">Recommended</th><th>Why</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="rowlabel">Local Demand Capture</td>
+          <td class="num">R80</td>
+          <td class="num g">R150</td>
+          <td style="font-size:14px;color:var(--muted)">Losing 39% of "gym near me" searches to budget. This is the workhorse.</td>
+        </tr>
+        <tr>
+          <td class="rowlabel">Brand Defence</td>
+          <td class="num">R20</td>
+          <td class="num">R20 <span style="color:var(--dim);font-size:12px">hold</span></td>
+          <td style="font-size:14px;color:var(--muted)">Already at 92% impression share. Efficient. No need to spend more.</td>
+        </tr>
+        <tr class="totalrow">
+          <td>Total</td>
+          <td class="num">R100/day<br><span style="font-weight:400;color:var(--dim);font-size:12px">≈ R3,000/mo</span></td>
+          <td class="num">R170/day<br><span style="font-weight:400;color:var(--dim);font-size:12px">≈ R5,100/mo</span></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout">
+      <h4>Our recommendation: step Local Demand up to R150/day now</h4>
+      <p>At R950/month per membership, a single new member pays back nearly a full month of that increase, and members stay for many months. The impression-share data proves the demand is already there and searching, we just aren't showing up for all of it. We suggest moving now to <strong>R170/day total (~R5,100/mo)</strong>, then, once the newly-fixed tracking has 3–4 weeks of real cost-per-member data, scaling Local Demand further toward R250/day <em>if</em> the economics hold. We won't scale blind, we'll scale on proof.</p>
+    </div>
+  </div>
+</section>
+
+<!-- NEXT STEPS -->
+<section class="section">
+  <div class="wrap">
+    <h2>What's next</h2>
+    <h3>Where we take it from here</h3>
+    <ul class="clean next">
+      <li><strong>Increase the Local Demand budget to R150/day</strong> (details above), to capture the ~40% of local searches we're currently missing.</li>
+      <li><strong>Build a reopener sequence.</strong> Automatically follow up with everyone who enquired but didn't attend or didn't reply, a gentle "still keen to book your trial?" a day or two later. Reading the chats, this is the biggest quick win: about a third of leads went quiet mid-booking with nothing chasing them.</li>
+      <li><strong>Let the fixed tracking accumulate data.</strong> Now that bookings record correctly, the next 3–4 weeks give us true cost-per-trial and cost-per-member for the first time, so we can bid toward bookings instead of clicks.</li>
+      <li><strong>Close the attendance loop.</strong> A lightweight step (a daily WhatsApp prompt you reply to, or a simple Enquiry &rarr; Booked &rarr; Attended &rarr; Joined pipeline) so we can measure true conversion and feed "who actually joined" back to Google to sharpen targeting.</li>
+      <li><strong>Tidy the booking assistant.</strong> Fix the "Africa/Harare" timezone label, widen the trial slots on offer (people asked for days/times we weren't showing), and add a "how to find us" line to confirmations, small fixes that recover real bookings.</li>
+      <li><strong>Finish the blog restyle</strong> so the whole site matches the new homepage, giving ad visitors a consistent, credible experience end to end.</li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="b">JCE MEDIA</div>
+    <p style="margin-top:8px;color:var(--dim)">Google Ads management for Threezero · Cape Quarter · Prepared 16 July 2026</p>
+  </div>
+</footer>
+
+</body>
+</html>
