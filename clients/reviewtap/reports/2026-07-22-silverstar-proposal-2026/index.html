@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ReviewTap for Silverstar | Billy G &amp; Cafe Vigour</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --gold:#f5a623;
+    --orange:#ff994d;
+    --teal:#00d4aa;
+    --red:#ff4757;
+    --ink:#080d1a;
+    --ink2:#0d1424;
+    --line:rgba(255,255,255,0.08);
+    --card:rgba(255,255,255,0.04);
+    --text:#e8ecf3;
+    --muted:#9aa6bd;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--ink);color:var(--text);font-family:'Inter',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:920px;margin:0 auto;padding:0 24px}
+  section{padding:88px 0;border-bottom:1px solid var(--line)}
+  h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.15;letter-spacing:-0.01em}
+  h1{font-size:clamp(2.2rem,5.5vw,3.6rem);font-weight:800}
+  h2{font-size:clamp(1.7rem,3.8vw,2.5rem);font-weight:700;margin-bottom:18px}
+  h3{font-size:1.15rem;font-weight:700;margin-bottom:8px}
+  p{color:var(--muted);font-size:1.04rem}
+  .lead{font-size:1.18rem;color:var(--text)}
+  .accent{color:var(--gold)}
+  .chip{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(245,166,35,.35);border-radius:100px;padding:6px 14px;margin-bottom:22px}
+  .eyebrow{font-size:.8rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--orange);margin-bottom:14px}
+  .grid{display:grid;gap:18px}
+  .g2{grid-template-columns:repeat(2,1fr)}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  @media(max-width:680px){.g2,.g3{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px}
+  .card p{font-size:.98rem}
+  .stat{font-family:'Playfair Display',serif;font-size:2.4rem;font-weight:800;color:var(--gold);line-height:1}
+  .stat.red{color:var(--red)}
+  .stat.teal{color:var(--teal)}
+  .stat-label{font-size:.86rem;color:var(--muted);margin-top:8px}
+  .cover{min-height:100vh;display:flex;flex-direction:column;justify-content:center;background:
+     radial-gradient(1000px 500px at 80% -10%,rgba(245,166,35,.16),transparent),
+     radial-gradient(800px 500px at 0% 110%,rgba(0,212,170,.10),transparent),var(--ink)}
+  .cover .meta{margin-top:34px;padding-top:24px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:30px}
+  .cover .meta div span{display:block}
+  .cover .meta .k{font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .cover .meta .v{font-size:1rem;color:var(--text);font-weight:600;margin-top:3px}
+  .cover-figs{display:flex;gap:40px;margin-top:30px;flex-wrap:wrap}
+  .cover-figs .f .n{font-family:'Playfair Display',serif;font-size:2rem;font-weight:800}
+  .cover-figs .f .n.red{color:var(--red)}
+  .cover-figs .f .n.gold{color:var(--gold)}
+  .cover-figs .f small{color:var(--muted);font-size:.85rem}
+  ul.clean{list-style:none;display:grid;gap:14px;margin-top:8px}
+  ul.clean li{padding-left:30px;position:relative;color:var(--text);font-size:1rem}
+  ul.clean li:before{content:"";position:absolute;left:0;top:9px;width:12px;height:12px;border-radius:4px;background:var(--gold)}
+  ul.clean.teal li:before{background:var(--teal)}
+  .flow{display:grid;gap:14px;margin-top:10px}
+  .flow .step{display:flex;gap:16px;align-items:flex-start}
+  .flow .num{flex:none;width:34px;height:34px;border-radius:50%;background:rgba(245,166,35,.14);color:var(--gold);font-weight:700;display:flex;align-items:center;justify-content:center;font-size:.95rem}
+  .prow{display:flex;justify-content:space-between;gap:18px;padding:16px 0;border-bottom:1px solid var(--line)}
+  .prow:last-child{border-bottom:none}
+  .prow .d{color:var(--text);font-weight:500}
+  .prow .d small{display:block;color:var(--muted);font-weight:400;font-size:.85rem;margin-top:3px}
+  .prow .amt{font-family:'Playfair Display',serif;font-weight:700;color:var(--gold);white-space:nowrap;font-size:1.05rem}
+  .tag-tbc{font-size:.7rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);border:1px solid rgba(255,153,77,.4);border-radius:6px;padding:2px 7px;margin-left:8px;vertical-align:middle}
+  .guarantee{margin-top:22px;background:rgba(0,212,170,.07);border:1px solid rgba(0,212,170,.3);border-radius:14px;padding:18px 22px;color:var(--text);font-size:.98rem}
+  .note{font-size:.86rem;color:var(--muted);margin-top:18px}
+  .cta{display:inline-block;margin-top:8px;background:linear-gradient(135deg,var(--gold),#e08c0a);color:#1a1200;font-weight:700;text-decoration:none;padding:15px 30px;border-radius:100px;font-size:1rem}
+  .contact{display:flex;flex-wrap:wrap;gap:28px;margin-top:26px}
+  .contact .k{font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .contact .v{font-size:1.02rem;color:var(--text);font-weight:600;margin-top:3px}
+  .quote{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:600;color:var(--text);line-height:1.4}
+  .footer{padding:40px 0;text-align:center;color:var(--muted);font-size:.85rem}
+  .src{font-size:.78rem;color:#5f6b82;margin-top:14px}
+</style>
+</head>
+<body>
+
+<section class="cover">
+  <div class="wrap">
+    <span class="chip">Proposal &middot; July 2026</span>
+    <h1>More five-star reviews,<br>for <span class="accent">Billy G</span> and <span class="accent">Cafe Vigour</span>.</h1>
+    <p class="lead" style="margin-top:20px;max-width:640px">A simple system that turns every satisfied diner into a public Google review, catches unhappy feedback before it goes public, and keeps your team on top of your reputation across both Silverstar restaurants.</p>
+    <div class="cover-figs">
+      <div class="f"><div class="n red">2.3&#47;5</div><small>Billy G, current public rating</small></div>
+      <div class="f"><div class="n red">3.0&#47;5</div><small>Cafe Vigour, from 34 reviews</small></div>
+      <div class="f"><div class="n gold">R599</div><small>per venue / month, all in</small></div>
+    </div>
+    <div class="meta">
+      <div><span class="k">Prepared for</span><span class="v">Charlotte Kgatshe &middot; Tsogo Sun</span></div>
+      <div><span class="k">Venues</span><span class="v">Billy G &middot; Cafe Vigour</span></div>
+      <div><span class="k">From</span><span class="v">Jacques Groenewald &middot; ReviewTap</span></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">The opportunity</div>
+    <h2>Two great restaurants, quietly under-rated online.</h2>
+    <p style="max-width:660px">The food and service at Silverstar bring people back. The online rating does not yet tell that story. On public review platforms today, both venues sit well below the experience you actually deliver, and that gap costs you diners who choose where to eat based on the star rating they see first.</p>
+    <div class="grid g3" style="margin-top:34px">
+      <div class="card"><div class="stat red">2.3&#47;5</div><div class="stat-label">Billy G, ranked #51 of 51 restaurants in the area on Tripadvisor</div></div>
+      <div class="card"><div class="stat red">34</div><div class="stat-label">Total public reviews for Cafe Vigour, a fraction of your monthly covers</div></div>
+      <div class="card"><div class="stat teal">9 in 10</div><div class="stat-label">Diners read reviews before choosing a restaurant, and most never scroll past the rating</div></div>
+    </div>
+    <p class="note">The issue is not the guest experience. It is that today only the unhappy minority is motivated to post, while your many happy diners leave without ever being asked. ReviewTap flips that.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Why the rating lags</div>
+    <h2>The happy majority stays silent.</h2>
+    <div class="grid g2" style="margin-top:26px">
+      <div class="card"><h3>Unhappy guests post, happy guests leave</h3><p>The one table that had a slow starter writes a one-star review that night. The forty tables that loved it never think to. Over time the public average drifts below reality.</p></div>
+      <div class="card"><h3>No easy way to actually leave a review</h3><p>Asking a guest to find you on Google, search, scroll and type is too much friction. Almost nobody does it, even when they had a great time.</p></div>
+      <div class="card"><h3>Problems go public before you hear them</h3><p>By the time a complaint appears on Google, it is too late to fix. You never got the chance to make it right at the table.</p></div>
+      <div class="card"><h3>No single view of both venues</h3><p>Reviews land across Google and Tripadvisor with no alerts, no replies, and no reporting. Reputation is left to chance.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">How ReviewTap works</div>
+    <h2>Tap the phone. Leave the review. Done.</h2>
+    <p style="max-width:660px">A branded ReviewTap stand sits on each table or at the pay point. When a guest has had a great meal, one tap or scan takes them straight to your Google review page for that venue. No app, no searching, no typing.</p>
+    <div class="flow" style="margin-top:30px">
+      <div class="step"><div class="num">1</div><div><h3>Guest taps or scans</h3><p>The stand uses NFC and a QR code, so it works on every phone. One touch opens your Google review page instantly.</p></div></div>
+      <div class="step"><div class="num">2</div><div><h3>Happy guests go to Google</h3><p>Delighted diners are guided straight to a public five-star review, exactly where new customers will see it.</p></div></div>
+      <div class="step"><div class="num">3</div><div><h3>Unhappy feedback stays private</h3><p>An optional smart step routes anyone less than thrilled to a private message that reaches your team first, so you fix it at the table instead of on Google.</p></div></div>
+      <div class="step"><div class="num">4</div><div><h3>Your team stays in the loop</h3><p>Every new review triggers a WhatsApp alert, an AI-assisted reply, and a monthly report, so both venues are managed, not left to chance.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">ReviewTap Pro</div>
+    <h2>The stand collects. The system does the rest.</h2>
+    <p style="max-width:660px">The stands are the hardware. ReviewTap Pro is the software that runs quietly behind them, one plan per venue, so your reputation is actively managed rather than just monitored.</p>
+    <ul class="clean teal" style="margin-top:26px">
+      <li><strong>AI-assisted review replies</strong> so every review gets a professional, on-brand response, with your team approving or auto-posting.</li>
+      <li><strong>Instant WhatsApp alerts</strong> the moment a new review comes in, so nothing slips through.</li>
+      <li><strong>Smart feedback routing</strong> that sends happy guests to Google and unhappy guests privately to your team.</li>
+      <li><strong>A monthly reputation report</strong> for each venue, showing new reviews, rating movement and response rate.</li>
+      <li><strong>Review request campaigns</strong> and an embeddable reviews widget for your websites.</li>
+      <li><strong>Quarterly card and stand top-ups</strong> so replacements are covered as tables turn over.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Why it matters</div>
+    <h2>Reviews are the new front door.</h2>
+    <div class="grid g3" style="margin-top:26px">
+      <div class="card"><h3>Higher local ranking</h3><p>More recent five-star reviews lift you in Google Maps and local search, exactly where hungry visitors near Silverstar are looking right now.</p></div>
+      <div class="card"><h3>More walk-in covers</h3><p>A higher star rating converts more of the people already searching into diners who choose your table over a competitor's.</p></div>
+      <div class="card"><h3>Ready for AI search</h3><p>Tools like ChatGPT and Google now read reviews to decide which restaurants to recommend. Strong, fresh reviews make you the answer.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Investment</div>
+    <h2>Simple, and priced per venue.</h2>
+    <div class="card" style="margin-top:24px">
+      <div class="prow">
+        <div class="d">Custom branded NFC + QR stands <span class="tag-tbc">Qty TBC</span><small>Printed with your venue branding, programmed and ready to use. Quantity confirmed per venue on our call. Group volume pricing applies across both restaurants.</small></div>
+        <div class="amt">R649 each, once-off</div>
+      </div>
+      <div class="prow">
+        <div class="d">ReviewTap Pro &middot; Billy G<small>Full software system: AI replies, WhatsApp alerts, smart routing, monthly report, campaigns and widget.</small></div>
+        <div class="amt">R599 / month</div>
+      </div>
+      <div class="prow">
+        <div class="d">ReviewTap Pro &middot; Cafe Vigour<small>Same system, run independently for the second venue with its own Google listing and reporting.</small></div>
+        <div class="amt">R599 / month</div>
+      </div>
+      <div class="prow">
+        <div class="d">WhatsApp review campaigns <small>Optional add-on to send review requests from the venue's own WhatsApp number.</small></div>
+        <div class="amt">+R349 / month</div>
+      </div>
+    </div>
+    <div class="guarantee"><strong>30-day money-back guarantee.</strong> If ReviewTap does not lift your review flow in the first month, you get your money back. The stands are yours to keep.</div>
+    <p class="note">No long-term contract. Cancel the monthly plan any time. Stands are a once-off purchase with no ongoing hardware cost. Final quantities and a consolidated group quote are confirmed on our call.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Getting live</div>
+    <h2>Ready in 7 to 10 business days.</h2>
+    <div class="flow" style="margin-top:26px">
+      <div class="step"><div class="num">1</div><div><h3>Confirm venues and quantities</h3><p>A short call to lock the number of stands per restaurant and confirm each venue's Google listing.</p></div></div>
+      <div class="step"><div class="num">2</div><div><h3>We brand and build</h3><p>Your stands are printed with your branding and programmed, and ReviewTap Pro is set up for each venue. Typically 7 to 10 business days.</p></div></div>
+      <div class="step"><div class="num">3</div><div><h3>Deliver and go live</h3><p>Stands arrive ready to use. Your team gets a quick walkthrough, alerts switch on, and the reviews start coming in.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section style="border-bottom:none">
+  <div class="wrap">
+    <blockquote class="quote">"Silverstar already delivers the experience. ReviewTap makes sure the whole of Johannesburg can see it."</blockquote>
+    <p style="margin-top:22px;max-width:620px">The best next step is a short call to confirm the two venues, agree quantities, and put a consolidated group quote in front of you and Sean. From there, we can look at rolling the same system out across the wider Tsogo Sun group.</p>
+    <a class="cta" href="mailto:support@reviewtap.co.za?subject=ReviewTap%20for%20Silverstar%20-%20next%20steps">Book the call</a>
+    <div class="contact">
+      <div><span class="k">Contact</span><span class="v">Jacques Groenewald</span></div>
+      <div><span class="k">Email</span><span class="v">support@reviewtap.co.za</span></div>
+      <div><span class="k">Web</span><span class="v">reviewtap.co.za</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="footer wrap">
+  <div>ReviewTap &middot; South Africa's NFC and QR review platform &middot; Prepared for Tsogo Sun, July 2026</div>
+  <div class="src">Public rating figures cited from Tripadvisor listings for Billy G and Vigour &amp; Verve at Silverstar, July 2026. Ratings shown are indicative of the public-review gap and are confirmed live on our call.</div>
+</div>
+
+</body>
+</html>
