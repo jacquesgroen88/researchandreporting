@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pixsan: Your Automation List, Reviewed</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#19325B;--navy-deep:#0f2140;--cyan:#31C3FF;--blue:#77D7FF;
+    --off:#F5F5F5;--ink:#1c2b45;--muted:#5b6b85;--line:#e4e9f2;
+    --green:#1f9d67;--amber:#e0932f;--red:#c2542f;
+    --radius:16px;--shadow-sm:0 6px 20px rgba(25,50,91,.08);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Montserrat',system-ui,sans-serif;color:var(--ink);background:var(--off);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:960px;margin:0 auto;padding:0 24px}
+  h1,h2,h3,h4{line-height:1.15;color:var(--navy);font-weight:800;letter-spacing:-.01em}
+  p{color:var(--muted)}
+  strong{color:var(--ink)}
+
+  .hero{background:radial-gradient(1000px 420px at 82% -10%, rgba(49,195,255,.28), transparent 60%),linear-gradient(160deg,var(--navy),var(--navy-deep));color:#fff;padding:52px 0 58px}
+  .brandbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:40px}
+  .wordmark{font-weight:900;font-size:24px;color:#fff}.wordmark span{color:var(--cyan)}
+  .brandbar .meta{font-size:12px;color:var(--blue);text-align:right}
+  .tag{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--navy-deep);background:var(--cyan);padding:5px 12px;border-radius:999px;margin-bottom:16px}
+  .hero h1{color:#fff;font-size:38px;font-weight:900;max-width:24ch;margin-bottom:14px}
+  .hero p{color:#dbe9fb;font-size:17px;max-width:70ch}
+
+  section{padding:44px 0}
+  .section-label{font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);margin-bottom:12px}
+  h2{font-size:25px;margin-bottom:14px}
+  .lead{font-size:16px;max-width:72ch;margin-bottom:8px}
+
+  .tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:22px}
+  .tile{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow-sm);text-align:center}
+  .tile .n{font-size:34px;font-weight:900;color:var(--navy);line-height:1}
+  .tile .l{font-size:12px;color:var(--muted);margin-top:6px;font-weight:600}
+  .tile.g .n{color:var(--green)}.tile.a .n{color:var(--amber)}.tile.r .n{color:var(--red)}
+
+  .read{background:var(--navy);color:#fff;border-radius:var(--radius);padding:26px 30px;margin-top:18px}
+  .read h3{color:#fff;font-size:19px;margin-bottom:10px}
+  .read p{color:#dbe9fb;font-size:15px;max-width:76ch}
+  .read p+p{margin-top:10px}
+  .read b{color:var(--cyan)}
+
+  .chain{background:#fff;border:1px solid var(--cyan);border-radius:var(--radius);padding:24px 26px;margin-top:18px;box-shadow:0 12px 34px rgba(49,195,255,.14)}
+  .chain h3{font-size:18px;margin-bottom:6px}
+  .steps{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;align-items:center}
+  .step{background:#eef4fb;border:1px solid var(--line);border-radius:999px;padding:7px 14px;font-size:13px;font-weight:700;color:var(--navy)}
+  .arrow{color:var(--cyan);font-weight:900}
+
+  table{width:100%;border-collapse:collapse;background:#fff;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm);margin-top:14px;font-size:14px}
+  th{background:var(--navy);color:#fff;text-align:left;padding:12px 16px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;font-weight:800}
+  td{padding:13px 16px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--muted)}
+  tr:last-child td{border-bottom:none}
+  td.task{color:var(--ink);font-weight:600;width:31%}
+  td.v{width:16%;font-weight:700}
+  .yes{color:var(--green)}.part{color:var(--amber)}.no{color:var(--red)}
+
+  .honest{background:#fdf3e7;border-left:4px solid var(--amber);border-radius:12px;padding:20px 24px;margin-top:16px}
+  .honest h4{font-size:16px;margin-bottom:7px;color:var(--navy)}
+  .honest p{font-size:14.5px;color:var(--ink)}
+  .honest+.honest{margin-top:12px}
+
+  .callout{background:#eef8f1;border-left:4px solid var(--green);border-radius:12px;padding:20px 24px;margin-top:18px;font-size:15px;color:var(--ink)}
+  .callout b{color:var(--green)}
+
+  .next{background:var(--navy-deep);border-radius:var(--radius);padding:28px 30px;margin-top:18px;color:#e7f0fb}
+  .next h3{color:#fff;font-size:19px;margin-bottom:10px}
+  .next p{color:#dbe9fb;font-size:15px}
+  .next b{color:var(--cyan)}
+
+  footer{background:var(--navy-deep);color:#8fa6c7;text-align:center;padding:24px;font-size:12px;margin-top:44px}
+  @media(max-width:820px){.hero h1{font-size:28px}h2{font-size:21px}.tiles{grid-template-columns:1fr 1fr}
+    table{display:block;overflow-x:auto;white-space:nowrap}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="brandbar"><div class="wordmark">PIX<span>SAN</span></div><div class="meta">Automation Feasibility<br>23 July 2026</div></div>
+    <div class="tag">Prepared for Sam Agia</div>
+    <h1>Your automation list, reviewed line by line</h1>
+    <p>You asked for a straight answer on each item: can it do this, how hard is it to build, and what does it actually save. That is what this is. Where the answer is a clean yes, I have said so. Where there is a catch, I have said that too, because the catches are the part worth knowing before you spend anything.</p>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <div class="section-label">The short version</div>
+    <h2>21 tasks on your list</h2>
+    <div class="tiles">
+      <div class="tile g"><div class="n">10</div><div class="l">Full yes, you review the output</div></div>
+      <div class="tile a"><div class="n">9</div><div class="l">Yes, with a human step or platform limit</div></div>
+      <div class="tile r"><div class="n">2</div><div class="l">Need an honest caveat</div></div>
+      <div class="tile"><div class="n">1</div><div class="l">Foundation that unlocks the rest</div></div>
+    </div>
+
+    <div class="read">
+      <h3>The one thing I would change about your list</h3>
+      <p>You have <b>Brand Brain creation</b> written as item two on two separate lists. It is not item two. It is <b>the foundation everything else runs on</b>, and it should be built first.</p>
+      <p>Once a client's Brand Brain exists, the keyword research is sharper because it knows the positioning, the content sounds like that client instead of like AI, the metadata matches the actual offer, and the monthly reporting can explain <i>why</i> a number moved instead of just reporting that it did. Build it once per client and every other item on your list gets faster and better. Skip it and you get generic output, which is exactly the "average results" problem you are trying to get away from.</p>
+    </div>
+
+    <div class="chain">
+      <h3>Your biggest single win: the website build is one pipeline, not six tasks</h3>
+      <p>Items two through seven of New Website Builds are the same chain. Right now your team runs each step by hand and carries the output to the next one. It runs end to end instead, and you review at the finish.</p>
+      <div class="steps">
+        <span class="step">Brand Brain</span><span class="arrow">&rsaquo;</span>
+        <span class="step">Keyword research</span><span class="arrow">&rsaquo;</span>
+        <span class="step">Nav + IA structure</span><span class="arrow">&rsaquo;</span>
+        <span class="step">Page content + URLs</span><span class="arrow">&rsaquo;</span>
+        <span class="step">Metadata</span><span class="arrow">&rsaquo;</span>
+        <span class="step">Live via RankMath API</span>
+      </div>
+      <p style="margin-top:14px">Worth noting: the <strong>SEO spreadsheet is an artifact of doing this by hand</strong>. It exists so a human can carry metadata from research into the site. When the last step writes to RankMath directly, the spreadsheet becomes optional. You told me that spreadsheet is two to four hours per site, plus about an hour to implement it.</p>
+    </div>
+  </div>
+</section>
+
+<section style="background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+  <div class="wrap">
+    <div class="section-label">Item by item</div>
+    <h2>New website builds</h2>
+    <table>
+      <tr><th>Task</th><th>Can it</th><th>How, and what to know</th></tr>
+      <tr><td class="task">Client onboarding</td><td class="v part">Partly, by design</td><td>It handles intake capture, account provisioning and the handoff docs to your fulfillment partners. You said you like the personal touch on onboarding, so the conversation stays yours. The admin around it does not need to be.</td></tr>
+      <tr><td class="task">Brand Brain creation</td><td class="v yes">Yes</td><td>Interviews you, ingests the client's existing site and materials, produces a structured brief every other skill reads from. Build this first.</td></tr>
+      <tr><td class="task">Keyword research</td><td class="v yes">Yes</td><td>Pulls volume and competition data from Google, then clusters by search intent and priority rather than handing you a flat list.</td></tr>
+      <tr><td class="task">Menu and navigation structure</td><td class="v yes">Yes</td><td>Built from the keyword clusters plus the site's stated goals, so the structure follows real demand.</td></tr>
+      <tr><td class="task">Page content and recommended URLs</td><td class="v yes">Yes</td><td>Drafted from the Brand Brain and keyword map, URL slugs included. You edit before publish, which you would want to anyway.</td></tr>
+      <tr><td class="task">SEO spreadsheet, metadata</td><td class="v yes">Yes</td><td>Full yes, and see the note above. Once metadata writes straight to the site, you may not want the spreadsheet at all.</td></tr>
+      <tr><td class="task">RankMath metadata setup</td><td class="v yes">Yes</td><td>Straight through the RankMath REST API you found on our call. Titles, descriptions, schema and redirects written directly, no manual entry.</td></tr>
+    </table>
+
+    <h2 style="margin-top:34px">SEO clients</h2>
+    <table>
+      <tr><th>Task</th><th>Can it</th><th>How, and what to know</th></tr>
+      <tr><td class="task">Client onboarding</td><td class="v part">Partly, by design</td><td>Same as above. Admin automated, relationship stays human.</td></tr>
+      <tr><td class="task">Brand Brain creation</td><td class="v yes">Yes</td><td>Same engine, and just as foundational here.</td></tr>
+      <tr><td class="task">Keyword research</td><td class="v yes">Yes</td><td>Same engine.</td></tr>
+      <tr><td class="task">Initial optimizations on WordPress, Wix, Squarespace</td><td class="v part">Split</td><td><strong>Identifying</strong> what needs fixing is a full yes on all three. <strong>Implementing</strong> it automatically depends on the platform. See the straight answers below, this is the one place your stack matters.</td></tr>
+      <tr><td class="task">Monthly blog content</td><td class="v yes">Yes</td><td>Written from the Brand Brain against keyword gaps, published straight into WordPress. You do an edit pass.</td></tr>
+      <tr><td class="task">Monthly GA and GSC analysis</td><td class="v yes">Yes</td><td>Pulls both, tracks impressions, clicks, keyword trends and volume, and writes the opportunity read. This is the piece where it explains seasonality and why a number moved, which is what you said your clients actually pay for. Competitor data needs a source, either your list or a paid feed.</td></tr>
+      <tr><td class="task">Quarterly program changes</td><td class="v part">Partly</td><td>Deciding what to change is automated. Making the change follows the same platform split as above.</td></tr>
+    </table>
+
+    <h2 style="margin-top:34px">Ads clients</h2>
+    <table>
+      <tr><th>Task</th><th>Can it</th><th>How, and what to know</th></tr>
+      <tr><td class="task">Set up new ad programs</td><td class="v part">Yes, and it sharpens over time</td><td>Campaigns, ad groups and responsive search ads can be built through the Google Ads API. The mechanical build is solved on day one. The strategic judgement about which combination fits which goal improves as the system learns your accounts.</td></tr>
+      <tr><td class="task">Ad tracking and tagging, implemented on sites</td><td class="v part">Partly</td><td>Creating conversion actions and pulling the tags is a yes. Placing them on the site is a yes on WordPress and through Google Tag Manager, manual on the more closed platforms.</td></tr>
+      <tr><td class="task">Monitor and optimize campaigns</td><td class="v yes">Monitoring yes</td><td>Monitoring is a full yes, on a cadence set by spend. For optimization, budget shifts, bid changes and negative keywords can run automatically. Structural changes come to you as a recommendation first. On your question about matching your current resource: this is built to make him faster, not to replace his experience on day one.</td></tr>
+      <tr><td class="task">Beat the current fulfillment partner</td><td class="v no">Not a task</td><td>This is an outcome, not something I can automate. See the straight answers below. I would rather tell you that now than sell it to you.</td></tr>
+    </table>
+
+    <h2 style="margin-top:34px">Business development</h2>
+    <table>
+      <tr><th>Task</th><th>Can it</th><th>How, and what to know</th></tr>
+      <tr><td class="task">Pixsan ad campaigns, low cost long tail</td><td class="v yes">Yes</td><td>The same keyword and campaign engine, pointed at your own business instead of a client's. Long tail discovery is exactly what the clustering is good at.</td></tr>
+      <tr><td class="task">Funnel pages that convert in GHL</td><td class="v part">Partly</td><td>Offer, structure and copy are a yes. Building the page inside GHL is limited by their API, so in practice that means working from templates or a manual build. The thinking is automated, the last click may not be.</td></tr>
+      <tr><td class="task">GHL lead magnets and AI scheduling discovery calls</td><td class="v yes">Yes</td><td>Proven ground. I run this exact pattern on a live client where the AI handles the conversation and books straight into the calendar.</td></tr>
+    </table>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-label">No sales spin</div>
+    <h2>Straight answers on the two catches</h2>
+    <p class="lead">These are the parts I would want to know if I were the one spending the money.</p>
+
+    <div class="honest">
+      <h4>1. Wix and Squarespace will not update themselves the way WordPress will</h4>
+      <p>WordPress with RankMath is a clean story, because RankMath exposes a proper API and the system can write titles, descriptions, schema and redirects directly. <strong>Wix is partial</strong>, its SEO interfaces are limited and vary by plan, so it needs checking site by site. <strong>Squarespace has no meaningful way to write page level SEO from the outside</strong>, so there the system gives you the finished recommendations and a person still pastes them in. Analysis and recommendations work everywhere. Automatic implementation is a WordPress strength. If most of your SEO book sits on WordPress, this barely costs you anything. If a lot of it sits on Squarespace, you should know that before you sign, not after.</p>
+    </div>
+
+    <div class="honest">
+      <h4>2. I cannot promise it beats your fulfillment partner</h4>
+      <p>That is a result, and results depend on the client's market, budget and site as much as on the work. What I can promise is the things that usually produce better results: analysis that takes minutes instead of hours, so you act on opportunities while they are still live, consistency across every account instead of whatever attention each one happened to get, and far more iterations per month than a partner delivering an average service will ever run. If your partner is genuinely mediocre, that combination normally wins. I am not going to put a number on it before I have seen the accounts.</p>
+    </div>
+
+    <div class="callout"><b>Why I am flagging these:</b> you are a systems person, so you would find both of these in week two anyway. Better you hear them from me now, while you can still decide, than discover them after you have paid.</div>
+  </div>
+</section>
+
+<section style="background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+  <div class="wrap">
+    <div class="section-label">What it means</div>
+    <h2>Against your own numbers</h2>
+    <p class="lead">Using the figures you gave me on the call, across eight active clients, with you and Samantha doing the work.</p>
+    <table>
+      <tr><th>Work</th><th>Today, your numbers</th><th>After</th></tr>
+      <tr><td class="task">Monthly reporting</td><td>1 to 2 hours per client, every month</td><td>Generated with the insight layer written. You verify before it goes client facing.</td></tr>
+      <tr><td class="task">Client onboarding</td><td>3 to 5 hours per client</td><td>The admin half goes. The conversation stays yours.</td></tr>
+      <tr><td class="task">SEO build per site</td><td>2 to 4 hours for the spreadsheet, about 1 hour to implement</td><td>The whole chain runs end to end. You review the output instead of producing it.</td></tr>
+    </table>
+    <div class="callout" style="margin-top:18px"><b>The part that compounds:</b> every one of these is per client. Today each new client you sign adds the same manual load. Once these are built, the next client adds almost none of it. That is the difference between growing your book and growing your headcount.</div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-label">Where to start</div>
+    <h2>What I would build first</h2>
+    <div class="next">
+      <h3>Session one, in priority order</h3>
+      <p><b>1. Brand Brain.</b> Nothing else is as good without it.</p>
+      <p><b>2. The website build chain.</b> Your biggest single time saver, and the one that proves the concept fastest because you can watch it run end to end.</p>
+      <p><b>3. The monthly reporting engine.</b> Highest recurring hours across eight clients, and it kills the screenshot and slide deck routine you described.</p>
+      <p style="margin-top:14px">The ads work I would build after those, once the system has read your accounts for a few weeks and has something to reason from. Your business development items are the natural next wave once your client delivery is running.</p>
+      <p style="margin-top:14px">Nothing about the arrangement has changed. Half to start, half at the end of next month, and if it does not do what I have said here, you do not pay the second half.</p>
+    </div>
+  </div>
+</section>
+
+<footer>Prepared by JCE Media for Pixsan Solutions · 23 July 2026</footer>
+
+</body>
+</html>
