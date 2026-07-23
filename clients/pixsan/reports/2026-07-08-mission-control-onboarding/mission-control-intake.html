@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pixsan Mission Control — Intake (Soul &amp; Goal Files)</title>
+<title>Pixsan Mission Control — Intake Form</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -11,195 +11,385 @@
   :root{
     --navy:#19325B;--navy-deep:#0f2140;--cyan:#31C3FF;--blue:#77D7FF;
     --off:#F5F5F5;--ink:#1c2b45;--muted:#5b6b85;--line:#e4e9f2;
+    --green:#1f9d67;
     --radius:16px;--shadow-sm:0 6px 20px rgba(25,50,91,.08);
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:'Montserrat',system-ui,sans-serif;color:var(--ink);background:var(--off);line-height:1.6;-webkit-font-smoothing:antialiased}
-  .wrap{max-width:900px;margin:0 auto;padding:0 24px}
+  .wrap{max-width:840px;margin:0 auto;padding:0 24px}
   h1,h2,h3{line-height:1.15;color:var(--navy);font-weight:800;letter-spacing:-.01em}
   p{color:var(--muted)}
   strong{color:var(--ink)}
 
-  .hero{background:radial-gradient(1000px 420px at 82% -10%, rgba(49,195,255,.28), transparent 60%),linear-gradient(160deg,var(--navy),var(--navy-deep));color:#fff;padding:56px 0 64px;position:relative;overflow:hidden}
-  .brandbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:44px}
+  .hero{background:radial-gradient(1000px 420px at 82% -10%, rgba(49,195,255,.28), transparent 60%),linear-gradient(160deg,var(--navy),var(--navy-deep));color:#fff;padding:50px 0 56px;position:relative;overflow:hidden}
+  .brandbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:38px}
   .wordmark{font-weight:900;font-size:24px;color:#fff}.wordmark span{color:var(--cyan)}
   .brandbar .meta{font-size:12px;color:var(--blue);text-align:right}
-  .eyebrow{font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--cyan);margin-bottom:16px}
-  .hero h1{color:#fff;font-size:40px;font-weight:900;max-width:20ch;margin-bottom:16px}
-  .hero p{color:#dbe9fb;font-size:17px;max-width:62ch}
+  .eyebrow{font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--cyan);margin-bottom:14px}
+  .hero h1{color:#fff;font-size:38px;font-weight:900;max-width:20ch;margin-bottom:14px}
+  .hero p{color:#dbe9fb;font-size:16.5px;max-width:64ch}
 
-  section{padding:48px 0}
-  .section-label{font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);margin-bottom:12px}
-  h2{font-size:26px;margin-bottom:14px}
-  .intro{font-size:16px;max-width:66ch}
+  /* sticky save bar */
+  .savebar{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .savebar .in{max-width:840px;margin:0 auto;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .savebar .status{font-size:12.5px;color:var(--muted);font-weight:600}
+  .savebar .status b{color:var(--green)}
+  .savebar .bar{flex:1;height:6px;background:var(--line);border-radius:999px;overflow:hidden;max-width:260px}
+  .savebar .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--navy),var(--cyan));transition:width .3s}
+  .savebar .pct{font-size:12.5px;font-weight:800;color:var(--navy);min-width:38px;text-align:right}
 
-  .two{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:26px}
-  .scard{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:26px 28px;box-shadow:var(--shadow-sm)}
-  .scard .k{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--cyan);margin-bottom:10px}
-  .scard h3{font-size:19px;margin-bottom:8px}
-  .scard p{font-size:14.5px}
-  .scard .file{margin-top:14px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;color:var(--navy);background:#eef4fb;border:1px solid var(--line);border-radius:8px;padding:5px 10px;display:inline-block}
+  section{padding:34px 0}
+  .altbox{background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-sm);margin-top:26px;overflow:hidden}
+  .altbox summary{list-style:none;cursor:pointer;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;font-weight:700;color:var(--navy);font-size:15px}
+  .altbox summary::-webkit-details-marker{display:none}
+  .altbox summary .chev{color:var(--cyan);font-weight:800;transition:transform .2s}
+  .altbox[open] summary .chev{transform:rotate(90deg)}
+  .altbody{padding:0 24px 22px;border-top:1px solid var(--line)}
+  .altbody p{font-size:14px;margin:14px 0}
+  .promptbox{background:var(--navy-deep);border-radius:12px;overflow:hidden}
+  .promptbox .pbar{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-bottom:1px solid rgba(255,255,255,.1)}
+  .promptbox .pbar span{color:var(--blue);font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+  .promptbox pre{margin:0;padding:18px;overflow-x:auto;color:#dbe9fb;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;line-height:1.65;white-space:pre-wrap}
 
-  .path{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:22px}
-  .pcard{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:24px 26px;box-shadow:var(--shadow-sm)}
-  .pcard.reco{border:1px solid var(--cyan);box-shadow:0 12px 34px rgba(49,195,255,.16)}
-  .pcard .badge{display:inline-block;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--navy-deep);background:var(--cyan);padding:3px 10px;border-radius:999px;margin-bottom:10px}
-  .pcard .badge.alt{background:var(--blue);color:var(--navy)}
-  .pcard h3{font-size:18px;margin-bottom:8px}
-  .pcard p{font-size:14px}
+  .grp{background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-sm);margin-top:20px;overflow:hidden}
+  .grp-head{display:flex;align-items:center;gap:14px;padding:20px 24px;border-bottom:1px solid var(--line);background:#fbfcfe}
+  .grp-head .n{flex:0 0 38px;width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;color:#fff;background:linear-gradient(135deg,var(--navy),var(--cyan))}
+  .grp-head h3{font-size:17px}
+  .grp-head .sub{font-size:12px;color:var(--muted);font-weight:500;margin-top:1px}
+  .grp-body{padding:8px 24px 22px}
 
-  .promptbox{background:var(--navy-deep);border-radius:var(--radius);margin-top:20px;overflow:hidden;box-shadow:0 14px 40px rgba(15,33,64,.28)}
-  .promptbox .bar{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid rgba(255,255,255,.1)}
-  .promptbox .bar span{color:var(--blue);font-size:12.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
-  .copybtn{background:var(--cyan);color:var(--navy-deep);border:none;font-family:inherit;font-weight:800;font-size:12.5px;padding:8px 16px;border-radius:999px;cursor:pointer}
-  .copybtn:active{transform:translateY(1px)}
-  .promptbox pre{margin:0;padding:22px 22px 26px;overflow-x:auto;color:#dbe9fb;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;line-height:1.7;white-space:pre-wrap}
+  .fld{padding:14px 0;border-bottom:1px solid var(--line)}
+  .fld:last-child{border-bottom:none}
+  .fld label{display:block;font-size:14px;font-weight:700;color:var(--navy);margin-bottom:6px}
+  .fld .hint{font-size:12.5px;color:var(--muted);font-weight:400;margin:-3px 0 8px}
+  input[type=text],textarea{width:100%;font-family:inherit;font-size:14.5px;color:var(--ink);background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:11px 13px;transition:border-color .15s,box-shadow .15s}
+  input[type=text]:focus,textarea:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 3px rgba(49,195,255,.14)}
+  textarea{resize:vertical;min-height:70px;line-height:1.55}
+  ::placeholder{color:#9fb0c8}
 
-  .work{background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-sm);margin-top:18px;overflow:hidden}
-  .work-head{padding:18px 24px;border-bottom:1px solid var(--line);background:#fbfcfe}
-  .work-head h3{font-size:17px}
-  .work-head .sub{font-size:12.5px;color:var(--muted);font-weight:500;margin-top:2px}
-  .qs{padding:8px 24px 20px}
-  .qblock{padding:16px 0;border-bottom:1px solid var(--line)}
-  .qblock:last-child{border-bottom:none}
-  .qblock h4{color:var(--navy);font-size:15px;font-weight:700;margin-bottom:8px;display:flex;gap:9px;align-items:center}
-  .qblock h4 .dot{flex:0 0 8px;width:8px;height:8px;border-radius:50%;background:var(--cyan)}
-  .qblock ul{margin:0;padding-left:26px}
-  .qblock li{color:var(--muted);font-size:14px;margin:5px 0}
-  .qblock li b{color:var(--ink)}
+  .repeat{border:1px dashed var(--line);border-radius:12px;padding:14px 16px 6px;margin:12px 0;background:#fbfcfe;position:relative}
+  .repeat .rm{position:absolute;top:10px;right:12px;background:none;border:none;color:#c05353;font-weight:800;font-size:12px;cursor:pointer;font-family:inherit}
+  .repeat .rf{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .repeat .rf .full{grid-column:1/-1}
+  .repeat .rf label{display:block;font-size:12px;font-weight:700;color:var(--navy);margin-bottom:4px}
+  .addbtn{background:#eef4fb;color:var(--navy);border:1.5px solid var(--line);font-family:inherit;font-weight:700;font-size:13.5px;padding:10px 16px;border-radius:10px;cursor:pointer;margin-top:6px}
+  .addbtn:hover{border-color:var(--cyan)}
 
-  .note{background:var(--navy);color:#fff;border-radius:var(--radius);padding:24px 30px;margin-top:24px}
-  .note p{color:#dbe9fb;font-size:14.5px;max-width:70ch}.note b{color:var(--cyan)}
+  .generate{background:var(--navy);color:#fff;border-radius:var(--radius);padding:30px;margin-top:30px;text-align:center}
+  .generate h2{color:#fff;font-size:22px;margin-bottom:8px}
+  .generate p{color:#dbe9fb;font-size:14px;max-width:52ch;margin:0 auto 18px}
+  .genbtn{background:var(--cyan);color:var(--navy-deep);border:none;font-family:inherit;font-weight:800;font-size:16px;padding:15px 34px;border-radius:999px;cursor:pointer;box-shadow:0 10px 26px rgba(49,195,255,.3)}
+  .genbtn:active{transform:translateY(1px)}
+  .clearbtn{display:inline-block;margin-top:14px;background:none;border:none;color:var(--blue);font-family:inherit;font-size:12.5px;cursor:pointer;text-decoration:underline}
 
-  footer{background:var(--navy-deep);color:#8fa6c7;text-align:center;padding:26px 24px;font-size:12px}
-  @media(max-width:760px){.hero h1{font-size:30px}h2{font-size:22px}.two,.path{grid-template-columns:1fr}}
+  .out{background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-sm);margin-top:18px;overflow:hidden}
+  .out-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 22px;border-bottom:1px solid var(--line);background:#fbfcfe;flex-wrap:wrap}
+  .out-head h3{font-size:16px;font-family:ui-monospace,Menlo,Consolas,monospace}
+  .out-head .btns{display:flex;gap:8px}
+  .obtn{background:var(--navy);color:#fff;border:none;font-family:inherit;font-weight:700;font-size:12.5px;padding:8px 14px;border-radius:8px;cursor:pointer}
+  .obtn.alt{background:#eef4fb;color:var(--navy);border:1px solid var(--line)}
+  .obtn:active{transform:translateY(1px)}
+  .out pre{margin:0;padding:18px 22px;max-height:340px;overflow:auto;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;line-height:1.6;color:var(--ink);white-space:pre-wrap}
+
+  .sendnote{background:#eef8f1;border-left:4px solid var(--green);border-radius:12px;padding:18px 22px;margin-top:20px;font-size:14.5px;color:var(--ink)}
+  .sendnote b{color:var(--green)}
+  .sendnote a{color:var(--navy);font-weight:700}
+
+  footer{background:var(--navy-deep);color:#8fa6c7;text-align:center;padding:24px;font-size:12px}
+  #outputs{display:none}
+  @media(max-width:640px){.hero h1{font-size:28px}.repeat .rf{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 
 <header class="hero">
   <div class="wrap">
-    <div class="brandbar"><div class="wordmark">PIX<span>SAN</span></div><div class="meta">Mission Control Onboarding<br>Intake</div></div>
+    <div class="brandbar"><div class="wordmark">PIX<span>SAN</span></div><div class="meta">Mission Control Onboarding<br>Intake Form</div></div>
     <div class="eyebrow">Prepared for Sam Agia, Pixsan Solutions</div>
     <h1>Give your Mission Control its memory</h1>
-    <p>Your command center is only as sharp as what it knows about Pixsan. This step captures that in two files: who Pixsan is, and where it is going. It takes about 30 minutes, and it is the single thing that makes the AI feel like it actually works for you.</p>
+    <p>Fill this in and it builds the two files your command center runs on — who Pixsan is, and where it's going. About 25 minutes. Your answers save automatically as you type, so you can stop and come back any time.</p>
   </div>
 </header>
 
+<div class="savebar">
+  <div class="in">
+    <div class="status" id="status">Autosave on</div>
+    <div class="bar"><i id="progbar"></i></div>
+    <div class="pct" id="progpct">0%</div>
+  </div>
+</div>
+
 <section>
   <div class="wrap">
-    <div class="section-label">What we are collecting</div>
-    <h2>Two files: the soul and the goals</h2>
-    <p class="intro">Everything the AI does, every report it writes, every answer it gives, is grounded in these two files. You only build them once, and we refine them over time.</p>
-    <div class="two">
-      <div class="scard">
-        <div class="k">File 1</div>
-        <h3>The Soul</h3>
-        <p>Who Pixsan is. Your mission, your positioning, how you sound, your team, your clients, the tools you run on, and how you like to work. This is the AI's understanding of your world.</p>
-        <div class="file">pixsan-soul.md</div>
-      </div>
-      <div class="scard">
-        <div class="k">File 2</div>
-        <h3>The Goals</h3>
-        <p>Where Pixsan is going. Your revenue targets, your north star, what winning looks like this quarter, and the priorities everything should be measured against.</p>
-        <div class="file">pixsan-goals.md</div>
-      </div>
-    </div>
-  </div>
-</section>
 
-<section style="background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
-  <div class="wrap">
-    <div class="section-label">Two ways to do it</div>
-    <h2>Pick whichever suits you</h2>
-    <div class="path">
-      <div class="pcard reco">
-        <div class="badge">Recommended</div>
-        <h3>Let the AI interview you</h3>
-        <p>Paste the prompt below into Claude or ChatGPT. It asks you questions a few at a time, digs in where it needs to, and produces both finished files for you. Easiest and fastest.</p>
-      </div>
-      <div class="pcard">
-        <div class="badge alt">Or</div>
-        <h3>Fill in the worksheet</h3>
-        <p>Prefer to write it yourself? Answer the prompts in the worksheet further down and send me your notes. I will shape them into the two files.</p>
-      </div>
-    </div>
+    <details class="altbox">
+      <summary><span>Prefer to be interviewed instead of typing? Open this</span><span class="chev">›</span></summary>
+      <div class="altbody">
+        <p>Paste the prompt below into Claude or ChatGPT and it will interview you a few questions at a time, then hand you both finished files. Either path gets to the same place — use whichever you prefer.</p>
+        <div class="promptbox">
+          <div class="pbar"><span>Copy into Claude or ChatGPT</span><button class="obtn" style="font-size:11.5px;padding:6px 12px" onclick="copyText(document.getElementById('aiprompt').innerText,this)">Copy prompt</button></div>
+          <pre id="aiprompt">You are helping me build "Mission Control," an internal operating system for my digital marketing agency, Pixsan Solutions. I am Sam Agia, the founder.
 
-    <div class="promptbox">
-      <div class="bar"><span>Copy this into Claude or ChatGPT</span><button class="copybtn" onclick="copyPrompt()">Copy prompt</button></div>
-      <pre id="prompt">You are helping me build "Mission Control," an internal operating system for my digital marketing agency, Pixsan Solutions. I am Sam Agia, the founder.
-
-Your job in this conversation is to interview me and then produce two markdown files that will become the memory of my Mission Control:
-
+Your job is to interview me and then produce two markdown files that become the memory of my Mission Control:
 1) pixsan-soul.md  — who Pixsan is
 2) pixsan-goals.md — where Pixsan is going
 
-Interview me ONE section at a time. Ask 2–4 questions per section, wait for my answers, ask a sharp follow-up if an answer is thin or vague, then move on. Keep it conversational and quick. Do not lecture me. When we have covered every section, generate both files as clean, well-structured markdown I can copy out.
+Interview me ONE section at a time. Ask 2 to 4 questions per section, wait for my answers, ask a sharp follow-up if an answer is thin, then move on. Keep it conversational. When every section is covered, output both files as clean markdown.
 
-Work through these sections in order:
+Sections in order:
+A. IDENTITY — Pixsan in one line, what you do for clients, what makes you different, the origin story.
+B. POSITIONING & VOICE — ideal client, how you want to sound, how you never want to sound, phrases or values you live by.
+C. TEAM — each person, their role, what they own, and what work should route to them.
+D. CLIENTS — for each active client: name, industry, what you do, main contact, status, what a win looks like.
+E. TOOLS & OPERATIONS — platforms you run on, what a normal week looks like, what reports or check-ins happen and how often.
+F. GOALS & NORTH STAR — the one number that matters most now, revenue targets (month/quarter/year), what winning looks like in 12 months.
+G. PRIORITIES & CONSTRAINTS — top 3 priorities this quarter, what's getting in the way, anything the system should always watch, protect, or never do.
 
-A. IDENTITY — What is Pixsan in one line? What do you actually do for clients? What makes you different? What is the story of how and why you started it?
+Output pixsan-soul.md (A to E) and pixsan-goals.md (F to G) as two separate labeled code blocks, then ask if anything needs adjusting. Start now with Section A.</pre>
+        </div>
+      </div>
+    </details>
 
-B. POSITIONING & VOICE — Who is your ideal client? How do you want to sound (words like: honest, plain-English, premium, friendly)? What do you never want to sound like? Any phrases or values you live by?
-
-C. TEAM — Who is on the team, their names and roles, and who owns what? Who should the system route different kinds of work to?
-
-D. CLIENTS — For each active client: name, industry, what you do for them, main contact, current status, and what a win looks like for them. (Go client by client.)
-
-E. TOOLS & OPERATIONS — What platforms do you run on (CRM, ads, email, docs)? What does a normal week look like? What reports or check-ins happen, and how often?
-
-F. GOALS & NORTH STAR — What is the one number or outcome that matters most right now? Revenue targets (month/quarter/year)? Growth goals? What does winning look like 12 months out?
-
-G. PRIORITIES & CONSTRAINTS — What are the top 3 priorities this quarter? What is getting in the way? Anything the system should always watch, protect, or never do?
-
-When finished, output pixsan-soul.md (sections A–E) and pixsan-goals.md (sections F–G) as two separate, clearly-labeled code blocks. Then ask me if anything needs adjusting.
-
-Start now with a one-line intro and Section A.</pre>
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="wrap">
-    <div class="section-label">Manual option</div>
-    <h2>The worksheet</h2>
-    <p class="intro">If you would rather write it out, jot answers to these and send them over. Bullet points are perfectly fine.</p>
-
-    <div class="work">
-      <div class="work-head"><h3>Soul &mdash; who Pixsan is</h3><div class="sub">Goes into pixsan-soul.md</div></div>
-      <div class="qs">
-        <div class="qblock"><h4><span class="dot"></span>Identity</h4><ul><li>Pixsan in <b>one line</b></li><li>What you actually <b>do for clients</b></li><li>What makes you <b>different</b></li><li>The short <b>origin story</b></li></ul></div>
-        <div class="qblock"><h4><span class="dot"></span>Positioning &amp; voice</h4><ul><li>Your <b>ideal client</b></li><li>How you want to <b>sound</b>, and how you <b>never</b> want to sound</li><li>Phrases or <b>values</b> you live by</li></ul></div>
-        <div class="qblock"><h4><span class="dot"></span>Team</h4><ul><li>Each person: <b>name, role, what they own</b></li><li>Who different kinds of work should <b>route to</b></li></ul></div>
-        <div class="qblock"><h4><span class="dot"></span>Clients (one block each)</h4><ul><li><b>Name, industry, what you do</b> for them</li><li><b>Main contact</b> and current <b>status</b></li><li>What a <b>win</b> looks like for them</li></ul></div>
-        <div class="qblock"><h4><span class="dot"></span>Tools &amp; operations</h4><ul><li>Platforms you run on (<b>CRM, ads, email, docs</b>)</li><li>What a <b>normal week</b> looks like</li><li>What <b>reports or check-ins</b> happen, and how often</li></ul></div>
+    <!-- ============ SOUL ============ -->
+    <div class="grp">
+      <div class="grp-head"><div class="n">A</div><div><h3>Identity</h3><div class="sub">Goes into pixsan-soul.md</div></div></div>
+      <div class="grp-body">
+        <div class="fld"><label>Pixsan in one line</label><div class="hint">The single sentence you'd give a stranger.</div><input type="text" data-f="id_oneline" placeholder="e.g. We build owned marketing systems for advanced-materials manufacturers."></div>
+        <div class="fld"><label>What you actually do for clients</label><textarea data-f="id_do" placeholder="Websites, SEO, cold outbound, CRM automation, reporting..."></textarea></div>
+        <div class="fld"><label>What makes you different</label><textarea data-f="id_diff" placeholder="Systems-first, niche expertise, done-for-you, retention..."></textarea></div>
+        <div class="fld"><label>The short origin story</label><textarea data-f="id_story" placeholder="How and why Pixsan started."></textarea></div>
       </div>
     </div>
 
-    <div class="work">
-      <div class="work-head"><h3>Goals &mdash; where Pixsan is going</h3><div class="sub">Goes into pixsan-goals.md</div></div>
-      <div class="qs">
-        <div class="qblock"><h4><span class="dot"></span>North star</h4><ul><li>The <b>one number or outcome</b> that matters most right now</li><li><b>Revenue targets</b> (month / quarter / year)</li><li>What <b>winning looks like</b> 12 months out</li></ul></div>
-        <div class="qblock"><h4><span class="dot"></span>Priorities &amp; constraints</h4><ul><li>Top <b>3 priorities</b> this quarter</li><li>What is <b>getting in the way</b></li><li>Anything the system should always <b>watch, protect, or never do</b></li></ul></div>
+    <div class="grp">
+      <div class="grp-head"><div class="n">B</div><div><h3>Positioning &amp; Voice</h3><div class="sub">How the system should sound as you</div></div></div>
+      <div class="grp-body">
+        <div class="fld"><label>Your ideal client</label><textarea data-f="pv_ideal" placeholder="Industry, size, the kind of buyer you want more of."></textarea></div>
+        <div class="fld"><label>How you want to sound</label><div class="hint">A few words: honest, plain-English, premium, calm, technical...</div><input type="text" data-f="pv_sound" placeholder="Honest, plain-English, confident, no hype"></div>
+        <div class="fld"><label>How you never want to sound</label><input type="text" data-f="pv_never" placeholder="Salesy, jargon-heavy, pushy, generic"></div>
+        <div class="fld"><label>Phrases or values you live by</label><textarea data-f="pv_values" placeholder="Anything the system should echo back."></textarea></div>
       </div>
     </div>
 
-    <div class="note">
-      <p><b>That is it.</b> Bring the two files (or your worksheet notes) to the go-live call, along with the account access on the onboarding checklist, and we switch the whole thing on together.</p>
+    <div class="grp">
+      <div class="grp-head"><div class="n">C</div><div><h3>Team</h3><div class="sub">Who owns what, and what work routes to them</div></div></div>
+      <div class="grp-body">
+        <div id="team"></div>
+        <button class="addbtn" type="button" onclick="addTeam()">+ Add team member</button>
+      </div>
     </div>
+
+    <div class="grp">
+      <div class="grp-head"><div class="n">D</div><div><h3>Clients</h3><div class="sub">One block per active client</div></div></div>
+      <div class="grp-body">
+        <div id="clients"></div>
+        <button class="addbtn" type="button" onclick="addClient()">+ Add client</button>
+      </div>
+    </div>
+
+    <div class="grp">
+      <div class="grp-head"><div class="n">E</div><div><h3>Tools &amp; Operations</h3><div class="sub">What you run on and how the week flows</div></div></div>
+      <div class="grp-body">
+        <div class="fld"><label>Platforms you run on</label><div class="hint">CRM, ads, email, docs, anything core.</div><textarea data-f="to_tools" placeholder="GoHighLevel, Meta Ads, Google Ads, Klaviyo, Google Workspace, Zapier..."></textarea></div>
+        <div class="fld"><label>What a normal week looks like</label><textarea data-f="to_week" placeholder="The recurring rhythm of the agency."></textarea></div>
+        <div class="fld"><label>Reports &amp; check-ins, and how often</label><textarea data-f="to_reports" placeholder="Client reports monthly, internal standups weekly..."></textarea></div>
+      </div>
+    </div>
+
+    <!-- ============ GOALS ============ -->
+    <div class="grp">
+      <div class="grp-head"><div class="n">F</div><div><h3>Goals &amp; North Star</h3><div class="sub">Goes into pixsan-goals.md</div></div></div>
+      <div class="grp-body">
+        <div class="fld"><label>The one number or outcome that matters most right now</label><input type="text" data-f="gl_northstar" placeholder="e.g. Get to $50k/mo recurring."></div>
+        <div class="fld"><label>Revenue targets</label><div class="hint">Month, quarter, year — whatever you track to.</div><textarea data-f="gl_targets" placeholder="This month: ...  This quarter: ...  This year: ..."></textarea></div>
+        <div class="fld"><label>What winning looks like 12 months out</label><textarea data-f="gl_win" placeholder="The picture of success a year from now."></textarea></div>
+      </div>
+    </div>
+
+    <div class="grp">
+      <div class="grp-head"><div class="n">G</div><div><h3>Priorities &amp; Constraints</h3><div class="sub">What to push, and what to protect</div></div></div>
+      <div class="grp-body">
+        <div class="fld"><label>Top 3 priorities this quarter</label><div class="hint">One per line.</div><textarea data-f="pc_priorities" placeholder="1. ...&#10;2. ...&#10;3. ..."></textarea></div>
+        <div class="fld"><label>What's getting in the way</label><textarea data-f="pc_blockers" placeholder="The bottlenecks and constraints."></textarea></div>
+        <div class="fld"><label>Anything the system should always watch, protect, or never do</label><textarea data-f="pc_guardrails" placeholder="e.g. Never expose confidential client program details. Always flag when a client goes quiet."></textarea></div>
+      </div>
+    </div>
+
+    <div class="generate">
+      <h2>Build my two files</h2>
+      <p>When you're done, generate the files below. You can copy each or download them, then send both to Jacques.</p>
+      <button class="genbtn" type="button" onclick="generate()">Generate files</button>
+      <br><button class="clearbtn" type="button" onclick="clearAll()">Clear the form and start over</button>
+    </div>
+
+    <div id="outputs">
+      <div class="out">
+        <div class="out-head">
+          <h3>pixsan-soul.md</h3>
+          <div class="btns">
+            <button class="obtn alt" onclick="copyText(document.getElementById('soulOut').innerText,this)">Copy</button>
+            <button class="obtn" onclick="download('pixsan-soul.md',document.getElementById('soulOut').innerText)">Download</button>
+          </div>
+        </div>
+        <pre id="soulOut"></pre>
+      </div>
+      <div class="out">
+        <div class="out-head">
+          <h3>pixsan-goals.md</h3>
+          <div class="btns">
+            <button class="obtn alt" onclick="copyText(document.getElementById('goalsOut').innerText,this)">Copy</button>
+            <button class="obtn" onclick="download('pixsan-goals.md',document.getElementById('goalsOut').innerText)">Download</button>
+          </div>
+        </div>
+        <pre id="goalsOut"></pre>
+      </div>
+      <div class="sendnote">
+        <b>Last step.</b> Send both files to <a href="mailto:jacques@jcemedia.com?subject=Pixsan%20Mission%20Control%20Intake">jacques@jcemedia.com</a> (or bring them to the go-live call) and complete the account-access checklist. That's everything I need to build your Mission Control.
+      </div>
+    </div>
+
   </div>
 </section>
 
-<footer>Prepared by JCE Media for Pixsan Solutions &middot; Mission Control Onboarding &middot; Intake</footer>
+<footer>Prepared by JCE Media for Pixsan Solutions &middot; Mission Control Onboarding &middot; Intake Form</footer>
 
 <script>
-function copyPrompt(){
-  var t=document.getElementById('prompt').innerText;
-  var b=document.querySelector('.copybtn');
-  navigator.clipboard.writeText(t).then(function(){
-    var o=b.innerText;b.innerText='Copied ✓';setTimeout(function(){b.innerText=o;},1800);
-  });
+var KEY='pixsan_mc_intake_v1';
+
+/* ---------- dynamic rows ---------- */
+function teamRow(d){d=d||{};return '<div class="repeat" data-rep="team">'
+  +'<button class="rm" type="button" onclick="this.parentNode.remove();save()">Remove</button>'
+  +'<div class="rf">'
+  +'<div><label>Name</label><input type="text" data-rf="name" value="'+esc(d.name)+'" placeholder="Full name"></div>'
+  +'<div><label>Role</label><input type="text" data-rf="role" value="'+esc(d.role)+'" placeholder="e.g. Founder"></div>'
+  +'<div class="full"><label>What they own</label><input type="text" data-rf="owns" value="'+esc(d.owns)+'" placeholder="Their domain of responsibility"></div>'
+  +'<div class="full"><label>Work that should route to them</label><input type="text" data-rf="route" value="'+esc(d.route)+'" placeholder="What the system should hand this person"></div>'
+  +'</div></div>';}
+
+function clientRow(d){d=d||{};return '<div class="repeat" data-rep="client">'
+  +'<button class="rm" type="button" onclick="this.parentNode.remove();save()">Remove</button>'
+  +'<div class="rf">'
+  +'<div><label>Client name</label><input type="text" data-rf="name" value="'+esc(d.name)+'" placeholder="Client"></div>'
+  +'<div><label>Industry</label><input type="text" data-rf="industry" value="'+esc(d.industry)+'" placeholder="Industry"></div>'
+  +'<div class="full"><label>What you do for them</label><input type="text" data-rf="do" value="'+esc(d.do)+'" placeholder="Services delivered"></div>'
+  +'<div><label>Main contact</label><input type="text" data-rf="contact" value="'+esc(d.contact)+'" placeholder="Name / role"></div>'
+  +'<div><label>Status</label><input type="text" data-rf="status" value="'+esc(d.status)+'" placeholder="e.g. Active, at risk"></div>'
+  +'<div class="full"><label>What a win looks like for them</label><input type="text" data-rf="win" value="'+esc(d.win)+'" placeholder="Their definition of success"></div>'
+  +'</div></div>';}
+
+function addTeam(d){document.getElementById('team').insertAdjacentHTML('beforeend',teamRow(d));wire();save();}
+function addClient(d){document.getElementById('clients').insertAdjacentHTML('beforeend',clientRow(d));wire();save();}
+function esc(s){return (s||'').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
+
+/* ---------- state ---------- */
+function serialize(){
+  var o={fields:{},team:[],clients:[]};
+  document.querySelectorAll('[data-f]').forEach(function(el){o.fields[el.getAttribute('data-f')]=el.value;});
+  document.querySelectorAll('[data-rep="team"]').forEach(function(r){var t={};r.querySelectorAll('[data-rf]').forEach(function(i){t[i.getAttribute('data-rf')]=i.value;});o.team.push(t);});
+  document.querySelectorAll('[data-rep="client"]').forEach(function(r){var t={};r.querySelectorAll('[data-rf]').forEach(function(i){t[i.getAttribute('data-rf')]=i.value;});o.clients.push(t);});
+  return o;
 }
+function restore(){
+  var raw=localStorage.getItem(KEY);if(!raw)return false;
+  try{var o=JSON.parse(raw);}catch(e){return false;}
+  if(o.fields)document.querySelectorAll('[data-f]').forEach(function(el){var k=el.getAttribute('data-f');if(o.fields[k]!=null)el.value=o.fields[k];});
+  (o.team||[]).forEach(function(t){addTeam(t);});
+  (o.clients||[]).forEach(function(c){addClient(c);});
+  return true;
+}
+var saveT;
+function save(){clearTimeout(saveT);saveT=setTimeout(function(){
+  localStorage.setItem(KEY,JSON.stringify(serialize()));
+  flash();progress();
+},250);}
+function flash(){var s=document.getElementById('status');s.innerHTML='Saved <b>&#10003;</b>';setTimeout(function(){s.textContent='Autosave on';},1400);}
+function wire(){document.querySelectorAll('[data-f],[data-rf]').forEach(function(el){if(!el._w){el._w=1;el.addEventListener('input',save);}});}
+
+/* ---------- progress ---------- */
+function progress(){
+  var o=serialize(),done=0,total=0,core=Object.keys(o.fields);
+  total=core.length+2; // +2 for having at least one team and one client
+  core.forEach(function(k){if((o.fields[k]||'').trim())done++;});
+  if(o.team.some(function(t){return (t.name||'').trim();}))done++;
+  if(o.clients.some(function(c){return (c.name||'').trim();}))done++;
+  var pct=Math.round(done/total*100);if(pct>100)pct=100;
+  document.getElementById('progbar').style.width=pct+'%';
+  document.getElementById('progpct').textContent=pct+'%';
+}
+
+/* ---------- generate ---------- */
+function line(label,val){val=(val||'').trim();return val?('**'+label+':** '+val+'\n\n'):'';}
+function block(label,val){val=(val||'').trim();return val?('**'+label+'**\n\n'+val+'\n\n'):'';}
+function generate(){
+  var o=serialize();
+  /* SOUL */
+  var s='# Pixsan — Soul\n\n*Who Pixsan is. This gives Mission Control its understanding of your world.*\n\n';
+  s+='## Identity\n\n';
+  s+=line('In one line',o.fields.id_oneline);
+  s+=block('What we do for clients',o.fields.id_do);
+  s+=block('What makes us different',o.fields.id_diff);
+  s+=block('Origin story',o.fields.id_story);
+  s+='## Positioning & Voice\n\n';
+  s+=block('Ideal client',o.fields.pv_ideal);
+  s+=line('How we want to sound',o.fields.pv_sound);
+  s+=line('How we never want to sound',o.fields.pv_never);
+  s+=block('Phrases and values we live by',o.fields.pv_values);
+  s+='## Team\n\n';
+  o.team.forEach(function(t){if((t.name||'').trim()){
+    s+='### '+t.name.trim()+(t.role?(' — '+t.role.trim()):'')+'\n\n';
+    if((t.owns||'').trim())s+='- Owns: '+t.owns.trim()+'\n';
+    if((t.route||'').trim())s+='- Route to them: '+t.route.trim()+'\n';
+    s+='\n';
+  }});
+  if(!o.team.some(function(t){return (t.name||'').trim();}))s+='_None added yet._\n\n';
+  s+='## Clients\n\n';
+  o.clients.forEach(function(c){if((c.name||'').trim()){
+    s+='### '+c.name.trim()+(c.industry?(' — '+c.industry.trim()):'')+'\n\n';
+    if((c.do||'').trim())s+='- What we do: '+c.do.trim()+'\n';
+    if((c.contact||'').trim())s+='- Main contact: '+c.contact.trim()+'\n';
+    if((c.status||'').trim())s+='- Status: '+c.status.trim()+'\n';
+    if((c.win||'').trim())s+='- What a win looks like: '+c.win.trim()+'\n';
+    s+='\n';
+  }});
+  if(!o.clients.some(function(c){return (c.name||'').trim();}))s+='_None added yet._\n\n';
+  s+='## Tools & Operations\n\n';
+  s+=block('Platforms we run on',o.fields.to_tools);
+  s+=block('A normal week',o.fields.to_week);
+  s+=block('Reports and check-ins',o.fields.to_reports);
+
+  /* GOALS */
+  var g='# Pixsan — Goals\n\n*Where Pixsan is going. Everything the system does is measured against this.*\n\n';
+  g+='## North Star\n\n';
+  g+=line('The one number or outcome that matters most right now',o.fields.gl_northstar);
+  g+=block('Revenue targets',o.fields.gl_targets);
+  g+=block('What winning looks like in 12 months',o.fields.gl_win);
+  g+='## Priorities & Constraints\n\n';
+  var pr=(o.fields.pc_priorities||'').trim();
+  if(pr){
+    g+='**Top priorities this quarter**\n\n';
+    pr.split('\n').forEach(function(l){l=l.replace(/^\s*\d+[\.\)]\s*/,'').replace(/^\s*[-*]\s*/,'').trim();if(l)g+='1. '+l+'\n';});
+    g+='\n';
+  }
+  g+=block("What's getting in the way",o.fields.pc_blockers);
+  g+=block('Always watch, protect, or never do',o.fields.pc_guardrails);
+
+  document.getElementById('soulOut').textContent=s.trim()+'\n';
+  document.getElementById('goalsOut').textContent=g.trim()+'\n';
+  document.getElementById('outputs').style.display='block';
+  document.getElementById('outputs').scrollIntoView({behavior:'smooth'});
+}
+
+/* ---------- utils ---------- */
+function copyText(t,btn){navigator.clipboard.writeText(t).then(function(){if(btn){var o=btn.innerText;btn.innerText='Copied ✓';setTimeout(function(){btn.innerText=o;},1500);}});}
+function download(name,text){var b=new Blob([text],{type:'text/markdown'});var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href);},1000);}
+function clearAll(){if(confirm('Clear everything and start over? This cannot be undone.')){localStorage.removeItem(KEY);location.reload();}}
+
+/* ---------- init ---------- */
+(function(){
+  var had=restore();
+  if(!had){addTeam({name:'Sam Agia',role:'Founder'});addClient();}
+  wire();progress();
+})();
 </script>
 </body>
 </html>
