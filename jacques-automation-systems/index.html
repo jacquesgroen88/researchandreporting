@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jacques Groenewald · Automation & CRM Systems</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0d14; --bg2:#0e121c; --card:#131826; --card2:#161c2c;
+    --line:#232b3d; --line2:#2c374d;
+    --ink:#f2f5fb; --muted:#9aa6bd; --faint:#69748c;
+    --amber:#f6c453; --amber-soft:rgba(246,196,83,.12); --amber-line:rgba(246,196,83,.35);
+    --teal:#4fd1c5;
+    --disp:'Space Grotesk',system-ui,sans-serif; --body:'Inter',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.55;
+    -webkit-font-smoothing:antialiased;letter-spacing:-.01em}
+  .wrap{max-width:1020px;margin:0 auto;padding:0 26px}
+  .disp{font-family:var(--disp)}
+
+  /* HERO */
+  .hero{position:relative;overflow:hidden;
+    background:
+      radial-gradient(900px 420px at 82% -8%, rgba(246,196,83,.14), transparent 60%),
+      radial-gradient(700px 380px at 6% 0%, rgba(79,209,197,.08), transparent 55%),
+      linear-gradient(180deg,#0c1019,#0a0d14);
+    border-bottom:1px solid var(--line)}
+  .hero .wrap{padding-top:64px;padding-bottom:52px}
+  .eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:12px;font-weight:600;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--amber);
+    background:var(--amber-soft);border:1px solid var(--amber-line);
+    padding:7px 14px;border-radius:100px;margin-bottom:26px}
+  .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--amber);
+    box-shadow:0 0 10px var(--amber)}
+  h1{font-family:var(--disp);font-size:clamp(34px,5.4vw,56px);line-height:1.04;
+    font-weight:600;letter-spacing:-.03em;margin-bottom:20px}
+  h1 .grad{background:linear-gradient(90deg,#fff 20%,var(--amber));
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .lede{font-size:clamp(16px,2vw,19px);color:var(--muted);max-width:640px;line-height:1.6}
+  .lede b{color:var(--ink);font-weight:600}
+  .hero-cta{margin-top:32px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .btn{display:inline-flex;align-items:center;gap:9px;font-family:var(--disp);font-weight:600;
+    font-size:15px;text-decoration:none;padding:13px 24px;border-radius:11px;transition:.18s}
+  .btn-primary{background:var(--amber);color:#141007}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(246,196,83,.28)}
+  .btn-ghost{color:var(--ink);border:1px solid var(--line2)}
+  .btn-ghost:hover{border-color:var(--amber-line);color:var(--amber)}
+
+  /* STAT BAR */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;
+    background:var(--line);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .stat{background:var(--bg2);padding:26px 24px}
+  .stat b{font-family:var(--disp);display:block;font-size:30px;font-weight:600;
+    color:var(--ink);letter-spacing:-.02em;line-height:1}
+  .stat b .u{color:var(--amber);font-size:20px}
+  .stat span{display:block;margin-top:9px;font-size:12.5px;color:var(--muted);line-height:1.4}
+
+  section{padding:60px 0}
+  .kick{font-family:var(--disp);font-size:12.5px;font-weight:600;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--amber);margin-bottom:14px}
+  h2{font-family:var(--disp);font-size:clamp(24px,3.2vw,32px);font-weight:600;
+    letter-spacing:-.025em;line-height:1.15;margin-bottom:16px}
+  .sub{color:var(--muted);max-width:660px;font-size:16px}
+
+  /* OPERATOR PANEL */
+  .operator{background:linear-gradient(180deg,var(--card),var(--bg2));
+    border:1px solid var(--line);border-radius:20px;padding:38px 40px;
+    display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
+  .operator .big{font-family:var(--disp);font-size:clamp(21px,2.6vw,26px);
+    font-weight:500;line-height:1.35;letter-spacing:-.02em}
+  .operator .big em{font-style:normal;color:var(--amber)}
+  .operator p{color:var(--muted);margin-top:16px;font-size:15px}
+  .owned{display:flex;flex-direction:column;gap:12px}
+  .own{display:flex;gap:14px;align-items:flex-start;background:var(--card2);
+    border:1px solid var(--line);border-radius:13px;padding:15px 17px}
+  .own .ic{flex:0 0 40px;height:40px;border-radius:10px;background:var(--amber-soft);
+    border:1px solid var(--amber-line);display:grid;place-items:center;font-size:19px}
+  .own h4{font-family:var(--disp);font-size:15px;font-weight:600;margin-bottom:2px}
+  .own span{font-size:13px;color:var(--muted)}
+
+  /* BUILDS */
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:34px}
+  .build{background:var(--card);border:1px solid var(--line);border-radius:16px;
+    padding:24px 24px 22px;transition:.2s;position:relative}
+  .build:hover{border-color:var(--amber-line);transform:translateY(-3px);
+    box-shadow:0 16px 40px rgba(0,0,0,.35)}
+  .build .tag{font-family:var(--disp);font-size:11px;font-weight:600;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--teal)}
+  .build h3{font-family:var(--disp);font-size:18px;font-weight:600;margin:8px 0 10px;
+    letter-spacing:-.02em}
+  .build p{font-size:14px;color:var(--muted);line-height:1.6}
+  .build .res{margin-top:16px;padding-top:15px;border-top:1px solid var(--line);
+    display:flex;align-items:center;gap:10px;font-family:var(--disp);font-weight:500;
+    font-size:13.5px;color:var(--ink)}
+  .build .res .ar{color:var(--amber);font-weight:700}
+
+  /* CAPABILITIES */
+  .caps{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:34px}
+  .cap{background:var(--bg2);border:1px solid var(--line);border-radius:15px;padding:22px 20px}
+  .cap h4{font-family:var(--disp);font-size:14px;font-weight:600;color:var(--amber);
+    margin-bottom:14px;letter-spacing:.02em}
+  .cap ul{list-style:none;display:flex;flex-direction:column;gap:9px}
+  .cap li{font-size:13.5px;color:var(--muted);padding-left:18px;position:relative;line-height:1.4}
+  .cap li::before{content:"";position:absolute;left:0;top:8px;width:6px;height:6px;
+    border-radius:2px;background:var(--amber);opacity:.7}
+
+  /* CLOSE */
+  .close{background:
+      radial-gradient(700px 300px at 50% 120%, rgba(246,196,83,.16), transparent 60%),
+      linear-gradient(180deg,var(--bg2),var(--card));
+    border:1px solid var(--line);border-radius:22px;padding:52px 40px;text-align:center;
+    margin-bottom:64px}
+  .close h2{margin-bottom:12px}
+  .close p{color:var(--muted);max-width:520px;margin:0 auto 28px;font-size:16px}
+  footer{border-top:1px solid var(--line);padding:26px 0;color:var(--faint);font-size:13px;
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+  footer b{color:var(--muted);font-weight:600}
+
+  @media(max-width:820px){
+    .stats{grid-template-columns:1fr 1fr}
+    .operator{grid-template-columns:1fr;gap:26px;padding:30px 26px}
+    .grid{grid-template-columns:1fr}
+    .caps{grid-template-columns:1fr 1fr}
+  }
+  @media(max-width:520px){.caps{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+  <header class="hero">
+    <div class="wrap">
+      <span class="eyebrow"><span class="dot"></span>Automation &amp; CRM Systems Architect</span>
+      <h1>I build the systems that run<br><span class="grad">a business without the owner in it.</span></h1>
+      <p class="lede">Eleven years turning manual, leaky operations into automated engines that capture, follow up and convert leads on their own. <b>I don't just build these systems for clients, I run three of my own companies on them.</b></p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="#work">See the work</a>
+        <a class="btn btn-ghost" href="#contact">Book a 15 minute call</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="stats">
+    <div class="stat"><b>11<span class="u"> yrs</span></b><span>Building automation &amp; CRM systems</span></div>
+    <div class="stat"><b>3</b><span>Of my own companies run on these systems</span></div>
+    <div class="stat"><b>Skype<span class="u"> + MSN</span></b><span>Ran digital portfolios at enterprise scale</span></div>
+    <div class="stat"><b>Multi<span class="u">-industry</span></b><span>Franchise, travel, hospitality, home services, ecommerce</span></div>
+  </div>
+
+  <section>
+    <div class="wrap">
+      <div class="operator">
+        <div>
+          <div class="kick">Why this matters to you</div>
+          <div class="big">Most people you'll hire have <em>set up</em> GoHighLevel. I <em>run my livelihood</em> on it.</div>
+          <p>A SaaS product, an ecommerce brand and a marketing agency, all operating on the same automation, CRM and paid acquisition stack I would build for you. I have already made the expensive mistakes on my own money, so your build starts where mine is now, not at the beginning.</p>
+        </div>
+        <div class="owned">
+          <div class="own"><div class="ic">🛰️</div><div><h4>ReviewTap</h4><span>NFC review platform: SaaS + hardware, built on a white-label CRM I run end to end</span></div></div>
+          <div class="own"><div class="ic">🛍️</div><div><h4>MyForeverBaby</h4><span>Ecommerce brand, paid acquisition wired straight into the CRM and store</span></div></div>
+          <div class="own"><div class="ic">📈</div><div><h4>JCE Media</h4><span>Marketing agency delivering these exact systems to client businesses</span></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="work" style="padding-top:14px">
+    <div class="wrap">
+      <div class="kick">Selected builds</div>
+      <h2>Systems I have designed, built and shipped</h2>
+      <p class="sub">Real builds across CRM, automation, AI and paid acquisition. Client names withheld out of respect for their privacy, walkthroughs available on a call.</p>
+
+      <div class="grid">
+
+        <div class="build">
+          <span class="tag">Multi-location franchise</span>
+          <h3>Multi-Location Nurture Engine</h3>
+          <p>A 22 step automated email and SMS nurture running across six franchise locations from a single sub-account, routed by tags so every lead gets their own location's follow up with zero manual sorting.</p>
+          <div class="res"><span class="ar">&rarr;</span> One system, six locations, no lead left cold.</div>
+        </div>
+
+        <div class="build">
+          <span class="tag">White-label SaaS product</span>
+          <h3>Review Collection Platform</h3>
+          <p>A full CRM build behind a branded product: NFC and QR review capture, sentiment gating that sends happy customers to Google and unhappy ones to a private channel with an instant staff alert, plus automated social posting through the platform API.</p>
+          <div class="res"><span class="ar">&rarr;</span> A reusable engine cloned across multiple clients.</div>
+        </div>
+
+        <div class="build">
+          <span class="tag">Travel &amp; lead-gen</span>
+          <h3>AI WhatsApp Booking Assistant</h3>
+          <p>A WhatsApp assistant that captures and qualifies enquiries around the clock, generates quotes through a custom tool, and pushes every lead into a CRM pipeline with automatic follow up and live stage tracking.</p>
+          <div class="res"><span class="ar">&rarr;</span> Leads captured and worked 24 hours a day.</div>
+        </div>
+
+        <div class="build">
+          <span class="tag">Ecommerce, my own brand</span>
+          <h3>Paid Acquisition to Store System</h3>
+          <p>Meta and Google campaigns wired into the store and CRM so spend is tracked to revenue, not vanity metrics. My best performing ad has held above a 3x return on ad spend, proven on my own money before I recommend anything to you.</p>
+          <div class="res"><span class="ar">&rarr;</span> Every dollar of spend traced to a sale.</div>
+        </div>
+
+        <div class="build">
+          <span class="tag">Local service business</span>
+          <h3>Speed-to-Lead &amp; Missed-Call Text-Back</h3>
+          <p>The system I install most: every new lead triggers an instant SMS and email inside 60 seconds and a missed call fires an automatic text back, so no enquiry ever sits waiting while it goes cold and calls the competitor.</p>
+          <div class="res"><span class="ar">&rarr;</span> Reply in under a minute, every time, automatically.</div>
+        </div>
+
+        <div class="build">
+          <span class="tag">Audit &amp; rescue</span>
+          <h3>CRM Cleanup &amp; Reporting Rebuild</h3>
+          <p>Taking over a messy, underused account, untangling the automations, rebuilding pipelines and reporting so the owner can finally see where leads come from and where they drop, and trust the numbers they act on.</p>
+          <div class="res"><span class="ar">&rarr;</span> A CRM the owner actually uses.</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:14px">
+    <div class="wrap">
+      <div class="kick">Capabilities</div>
+      <h2>The full stack I build on</h2>
+      <div class="caps">
+        <div class="cap">
+          <h4>CRM &amp; Automation</h4>
+          <ul>
+            <li>GoHighLevel builds</li>
+            <li>Workflows &amp; triggers</li>
+            <li>Reusable snapshots</li>
+            <li>Pipelines &amp; stages</li>
+            <li>Calendars &amp; booking</li>
+            <li>A2P &amp; deliverability</li>
+          </ul>
+        </div>
+        <div class="cap">
+          <h4>Lead &amp; Revenue</h4>
+          <ul>
+            <li>Speed-to-lead</li>
+            <li>Missed-call text-back</li>
+            <li>Database reactivation</li>
+            <li>Email &amp; SMS nurture</li>
+            <li>SaaS-mode setup</li>
+            <li>Reporting dashboards</li>
+          </ul>
+        </div>
+        <div class="cap">
+          <h4>Paid Acquisition</h4>
+          <ul>
+            <li>Meta ads (FB &amp; IG)</li>
+            <li>Google Ads &amp; search</li>
+            <li>Conversion tracking</li>
+            <li>Retargeting</li>
+            <li>Landing pages &amp; funnels</li>
+            <li>Creative &amp; copy</li>
+          </ul>
+        </div>
+        <div class="cap">
+          <h4>AI &amp; Integrations</h4>
+          <ul>
+            <li>AI booking bots</li>
+            <li>WhatsApp automation</li>
+            <li>Make &amp; Zapier</li>
+            <li>Custom API &amp; webhooks</li>
+            <li>Supabase &amp; databases</li>
+            <li>Custom internal tools</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" style="padding-top:14px">
+    <div class="wrap">
+      <div class="close">
+        <div class="kick" style="justify-content:center">Let's talk</div>
+        <h2>Book a 15 minute call and I'll map your first system live</h2>
+        <p>Send me your funnel or booking page and I'll show you exactly what's leaking leads right now, before you spend a cent.</p>
+        <a class="btn btn-primary" href="#" style="font-size:16px;padding:15px 30px">Book a call</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap" style="display:flex;justify-content:space-between;width:100%;flex-wrap:wrap;gap:8px">
+      <span><b>Jacques Groenewald</b> · Automation &amp; CRM Systems</span>
+      <span>11 years building systems that run on their own</span>
+    </div>
+  </footer>
+
+</body>
+</html>
