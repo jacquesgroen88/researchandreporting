@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Onboarding Questionnaire | JCE Media</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --brand:#1a2c50;--brand-deep:#0f1d38;--accent:#2f7cf6;--accent-2:#6fa8ff;
+    --off:#eef2f9;--ink:#1a2540;--muted:#5a6b8a;--line:#dfe6f2;
+    --green:#1f9d67;--radius:16px;--shadow:0 10px 30px rgba(26,44,80,.10);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Montserrat',system-ui,sans-serif;color:var(--ink);background:var(--off);line-height:1.55;-webkit-font-smoothing:antialiased;padding-bottom:40px}
+  .wrap{max-width:680px;margin:0 auto;padding:0 16px}
+  a{color:var(--accent)}
+
+  /* progress */
+  .top{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .top .wrap{display:flex;align-items:center;gap:12px;padding:12px 16px}
+  .wordmark{font-weight:900;font-size:16px;color:var(--brand);white-space:nowrap}.wordmark span{color:var(--accent)}
+  .bar{flex:1;height:8px;background:#e3e9f4;border-radius:999px;overflow:hidden}
+  .bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),#1f5fd0);border-radius:999px;transition:width .35s}
+  .pct{font-size:12px;font-weight:800;color:var(--brand);min-width:34px;text-align:right}
+
+  .hero{background:radial-gradient(700px 300px at 90% -30%, rgba(47,124,246,.35), transparent 60%),linear-gradient(160deg,var(--brand),var(--brand-deep));color:#fff;padding:34px 0 38px;margin-bottom:20px}
+  .hero h1{font-size:26px;font-weight:900;color:#fff;margin-bottom:8px;letter-spacing:-.01em}
+  .hero p{color:#d3e1fb;font-size:15px}
+  .hero .chiprow{margin-top:16px;display:flex;gap:8px;flex-wrap:wrap}
+  .hero .mini{font-size:12px;font-weight:700;color:#fff;background:rgba(255,255,255,.15);padding:6px 12px;border-radius:999px}
+
+  .sec{margin-bottom:14px}
+  .sec-h{display:flex;align-items:center;gap:10px;margin:26px 4px 8px}
+  .sec-h .dot{width:26px;height:26px;border-radius:8px;background:var(--accent);color:#fff;font-weight:900;font-size:13px;display:flex;align-items:center;justify-content:center}
+  .sec-h h2{font-size:15px;color:var(--brand);font-weight:800;letter-spacing:.02em}
+
+  .q{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:18px;margin-bottom:12px;box-shadow:var(--shadow)}
+  .q .lab{font-weight:700;color:var(--brand);font-size:15px;margin-bottom:3px}
+  .q .hint{font-size:12.5px;color:var(--muted);margin-bottom:10px}
+  .q.filled{border-color:#bfe0cd;box-shadow:0 10px 30px rgba(31,157,103,.10)}
+  .q.filled .lab:after{content:" ✓";color:var(--green);font-weight:900}
+
+  input[type=text],input[type=number],textarea{width:100%;font-family:inherit;font-size:15px;color:var(--ink);background:#fbfcfe;border:1.5px solid var(--line);border-radius:11px;padding:12px 13px;transition:border .15s,background .15s}
+  input:focus,textarea:focus{outline:none;border-color:var(--accent);background:#fff}
+  textarea{resize:vertical;min-height:64px}
+  .dual{display:grid;grid-template-columns:1fr;gap:10px}
+  .dual .fieldlab{font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px;display:block}
+  .rand{position:relative}.rand:before{content:"R";position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-weight:800;font-size:14px}
+  .rand input{padding-left:26px}
+
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{font-size:13px;font-weight:700;color:var(--brand);background:#eef4ff;border:1.5px solid var(--line);padding:8px 13px;border-radius:999px;cursor:pointer;user-select:none;transition:all .12s}
+  .chip:hover{border-color:var(--accent-2)}
+  .chip.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+  .submit{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow);margin-top:24px;text-align:center}
+  .submit h3{font-size:19px;color:var(--brand);margin-bottom:6px}
+  .submit p{font-size:13.5px;color:var(--muted);margin-bottom:16px}
+  .btns{display:grid;grid-template-columns:1fr;gap:10px}
+  .btn{font-family:inherit;font-weight:800;font-size:15px;border:none;border-radius:12px;padding:15px 18px;cursor:pointer;transition:transform .1s,box-shadow .15s;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+  .btn:active{transform:translateY(1px)}
+  .btn-primary{background:var(--accent);color:#fff;box-shadow:0 10px 24px rgba(47,124,246,.30)}
+  .btn-wa{background:#25d366;color:#fff}
+  .btn-mail{background:#fff;color:var(--brand);border:1.5px solid var(--line)}
+  .saved{font-size:12px;color:var(--green);font-weight:700;margin-top:14px;opacity:0;transition:opacity .3s}
+  .saved.on{opacity:1}
+  .copied{font-size:13px;color:var(--green);font-weight:800;margin-top:10px;min-height:18px}
+  .foot{text-align:center;font-size:12px;color:var(--muted);margin-top:24px}
+  @media(max-width:520px){.hero h1{font-size:22px}}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="wrap">
+    <div class="wordmark">JCE<span>Media</span></div>
+    <div class="bar"><i id="barfill"></i></div>
+    <div class="pct" id="pct">0%</div>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="wrap">
+    <h1>Let's get to know your business</h1>
+    <p>A few quick questions before our call, for Good &amp; Proper and The Acreage. Rough answers are perfect, and it all saves as you go.</p>
+    <div class="chiprow">
+      <span class="mini">⏱ About 10 minutes</span>
+      <span class="mini">💾 Saves automatically</span>
+      <span class="mini">✍️ Nothing is required</span>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- A -->
+  <div class="sec-h"><div class="dot">A</div><h2>The businesses at a glance</h2></div>
+  <div class="q" data-q>
+    <div class="lab">In one line each, what do they do?</div>
+    <div class="hint">As you'd describe it to a stranger at a dinner.</div>
+    <div class="dual">
+      <div><span class="fieldlab">Good &amp; Proper</span><input type="text" data-f id="a1a" placeholder="We..."></div>
+      <div><span class="fieldlab">The Acreage</span><input type="text" data-f id="a1b" placeholder="We..."></div>
+    </div>
+  </div>
+  <div class="q" data-q>
+    <div class="lab">Which is the priority for the next 3 months?</div>
+    <div class="chips" data-chips="a2single">
+      <span class="chip" data-val="Good & Proper">Good &amp; Proper</span>
+      <span class="chip" data-val="The Acreage">The Acreage</span>
+      <span class="chip" data-val="Both equally">Both equally</span>
+    </div>
+    <input type="text" data-f id="a2why" placeholder="Why? (optional)" style="margin-top:10px">
+  </div>
+
+  <!-- B -->
+  <div class="sec-h"><div class="dot">B</div><h2>Your customers</h2></div>
+  <div class="q" data-q>
+    <div class="lab">Who is your ideal client?</div>
+    <div class="hint">Corporates, events companies, wedding couples, private functions, restaurant regulars. Be specific.</div>
+    <textarea data-f id="b3" placeholder="Our best clients are..."></textarea>
+  </div>
+  <div class="q" data-q>
+    <div class="lab">Who do you NOT want?</div>
+    <div class="hint">The enquiries that waste your time.</div>
+    <input type="text" data-f id="b4" placeholder="The ones who...">
+  </div>
+  <div class="q" data-q>
+    <div class="lab">Why do your best clients choose you over the alternatives?</div>
+    <input type="text" data-f id="b5" placeholder="Because...">
+  </div>
+
+  <!-- C -->
+  <div class="sec-h"><div class="dot">C</div><h2>How you want to sound &amp; look</h2></div>
+  <div class="q" data-q>
+    <div class="lab">Tap the words that feel like your brand</div>
+    <div class="hint">Pick a few, or add your own below.</div>
+    <div class="chips" data-chips="c6multi">
+      <span class="chip" data-val="Premium">Premium</span>
+      <span class="chip" data-val="Warm">Warm</span>
+      <span class="chip" data-val="Effortless">Effortless</span>
+      <span class="chip" data-val="Elegant">Elegant</span>
+      <span class="chip" data-val="Bold">Bold</span>
+      <span class="chip" data-val="Fun">Fun</span>
+      <span class="chip" data-val="Rustic">Rustic</span>
+      <span class="chip" data-val="Modern">Modern</span>
+      <span class="chip" data-val="Luxurious">Luxurious</span>
+      <span class="chip" data-val="No-nonsense">No-nonsense</span>
+      <span class="chip" data-val="High-energy">High-energy</span>
+      <span class="chip" data-val="Calm">Calm</span>
+    </div>
+    <input type="text" data-f id="c6add" placeholder="Add your own words (optional)" style="margin-top:10px">
+  </div>
+  <div class="q" data-q>
+    <div class="lab">Any words or tone you love, and any you can't stand?</div>
+    <input type="text" data-f id="c7" placeholder="Love: ...  Hate: ...">
+  </div>
+  <div class="q" data-q>
+    <div class="lab">2 or 3 brands or venues whose look you admire</div>
+    <div class="hint">And a word on why, if you can.</div>
+    <input type="text" data-f id="c8" placeholder="e.g. ...">
+  </div>
+
+  <!-- D -->
+  <div class="sec-h"><div class="dot">D</div><h2>The numbers</h2></div>
+  <div class="q" data-q>
+    <div class="lab">Average value of a booking</div>
+    <div class="hint">Roughly. A ballpark is fine.</div>
+    <div class="dual">
+      <div><span class="fieldlab">Acreage — a function</span><div class="rand"><input type="text" data-f id="d9a" placeholder="0"></div></div>
+      <div><span class="fieldlab">Acreage — a restaurant visit</span><div class="rand"><input type="text" data-f id="d9b" placeholder="0"></div></div>
+      <div><span class="fieldlab">Good &amp; Proper — a typical job</span><div class="rand"><input type="text" data-f id="d9c" placeholder="0"></div></div>
+    </div>
+  </div>
+  <div class="q" data-q>
+    <div class="lab">Enquiries per week, and how many turn into paid work?</div>
+    <div class="dual">
+      <div><span class="fieldlab">Good &amp; Proper</span><input type="text" data-f id="d10a" placeholder="e.g. 10 enquiries, ~3 book"></div>
+      <div><span class="fieldlab">The Acreage</span><input type="text" data-f id="d10b" placeholder="e.g. 8 enquiries, ~2 book"></div>
+    </div>
+  </div>
+  <div class="q" data-q>
+    <div class="lab">Google Ads spend, and do you know what it brings back?</div>
+    <input type="text" data-f id="d11" placeholder="e.g. R10k/mo on Good & Proper, return unclear">
+  </div>
+  <div class="q" data-q>
+    <div class="lab">Google reviews today, and are you asking for them?</div>
+    <div class="dual">
+      <div><span class="fieldlab">Rough review counts</span><input type="text" data-f id="d12a" placeholder="e.g. Acreage 68, G&P a handful"></div>
+    </div>
+    <div class="chips" data-chips="d12single" style="margin-top:10px">
+      <span class="chip" data-val="Yes, we ask">We ask for reviews</span>
+      <span class="chip" data-val="No, we don't ask">We don't ask</span>
+    </div>
+  </div>
+
+  <!-- E -->
+  <div class="sec-h"><div class="dot">E</div><h2>How things run today</h2></div>
+  <div class="q" data-q>
+    <div class="lab">Walk us through a booking at The Acreage, start to finish</div>
+    <div class="hint">Where it lands, who handles it, what tools, how fast a reply goes out.</div>
+    <textarea data-f id="e13" placeholder="An enquiry comes in on... then..."></textarea>
+  </div>
+  <div class="q" data-q>
+    <div class="lab">The most repetitive emails you answer for Good &amp; Proper?</div>
+    <div class="hint">The ones you could almost answer in your sleep.</div>
+    <input type="text" data-f id="e14" placeholder="People always ask about...">
+  </div>
+  <div class="q" data-q>
+    <div class="lab">What eats the most of your time each week?</div>
+    <div class="hint">The thing you'd love to never touch again.</div>
+    <input type="text" data-f id="e15" placeholder="Honestly, it's...">
+  </div>
+
+  <!-- F -->
+  <div class="sec-h"><div class="dot">F</div><h2>Where you want to be</h2></div>
+  <div class="q" data-q>
+    <div class="lab">In 3 months, if this worked, what has changed?</div>
+    <div class="hint">Be concrete. More bookings, more foot traffic, hours back, a revenue number.</div>
+    <textarea data-f id="f16" placeholder="In three months..."></textarea>
+  </div>
+  <div class="q" data-q>
+    <div class="lab">If we could only fix ONE thing first, what should it be?</div>
+    <input type="text" data-f id="f17" placeholder="Fix...">
+  </div>
+
+  <!-- SUBMIT -->
+  <div class="submit">
+    <h3>That's everything 🎉</h3>
+    <p>Send your answers back to Jacques in one tap. Whichever is easiest for you.</p>
+    <div class="btns">
+      <button class="btn btn-primary" id="copyBtn">📋 Copy my answers</button>
+      <a class="btn btn-wa" id="waBtn" target="_blank" rel="noopener">💬 Send on WhatsApp</a>
+      <a class="btn btn-mail" id="mailBtn">✉️ Send by email</a>
+    </div>
+    <div class="copied" id="copied"></div>
+    <div class="saved" id="saved">Progress saved on this device</div>
+  </div>
+
+  <div class="foot">JCE Media · Good &amp; Proper Food Trucks + The Acreage · Your answers stay on your device until you send them.</div>
+</div>
+
+<script>
+(function(){
+  var WA="27795124292", MAIL="jacques@jcemedia.com", KEY="acreage_onboarding_v1";
+  var singles={}, multis={};
+
+  // restore
+  var saved={};
+  try{ saved=JSON.parse(localStorage.getItem(KEY)||"{}"); }catch(e){}
+
+  // text fields
+  var fields=[].slice.call(document.querySelectorAll('[data-f]'));
+  fields.forEach(function(el){
+    if(saved[el.id]!==undefined) el.value=saved[el.id];
+    el.addEventListener('input', function(){ persist(); refresh(); });
+  });
+
+  // chip groups
+  [].slice.call(document.querySelectorAll('[data-chips]')).forEach(function(group){
+    var name=group.getAttribute('data-chips');
+    var multi=/multi/.test(name);
+    var sel = saved['chip_'+name] || (multi?[]:"");
+    if(multi) multis[name]=sel; else singles[name]=sel;
+    [].slice.call(group.querySelectorAll('.chip')).forEach(function(ch){
+      var v=ch.getAttribute('data-val');
+      if(multi){ if(sel.indexOf(v)>-1) ch.classList.add('on'); }
+      else { if(sel===v) ch.classList.add('on'); }
+      ch.addEventListener('click', function(){
+        if(multi){
+          var arr=multis[name];
+          var i=arr.indexOf(v);
+          if(i>-1){ arr.splice(i,1); ch.classList.remove('on'); }
+          else { arr.push(v); ch.classList.add('on'); }
+        } else {
+          [].slice.call(group.querySelectorAll('.chip')).forEach(function(c){c.classList.remove('on');});
+          if(singles[name]===v){ singles[name]=""; }
+          else { singles[name]=v; ch.classList.add('on'); }
+        }
+        persist(); refresh();
+      });
+    });
+  });
+
+  function persist(){
+    var data={};
+    fields.forEach(function(el){ data[el.id]=el.value; });
+    for(var s in singles) data['chip_'+s]=singles[s];
+    for(var m in multis) data['chip_'+m]=multis[m];
+    try{ localStorage.setItem(KEY, JSON.stringify(data)); }catch(e){}
+    var s=document.getElementById('saved'); s.classList.add('on'); clearTimeout(persist._t); persist._t=setTimeout(function(){s.classList.remove('on');},1200);
+  }
+
+  function isFilled(q){
+    var f=q.querySelector('[data-f]');
+    var any=false;
+    [].slice.call(q.querySelectorAll('[data-f]')).forEach(function(el){ if((el.value||'').trim()) any=true; });
+    var cg=q.querySelector('[data-chips]');
+    if(cg){ var n=cg.getAttribute('data-chips'); if(/multi/.test(n)){ if((multis[n]||[]).length) any=true; } else { if(singles[n]) any=true; } }
+    return any;
+  }
+
+  function refresh(){
+    var qs=[].slice.call(document.querySelectorAll('[data-q]'));
+    var done=0;
+    qs.forEach(function(q){ if(isFilled(q)){ q.classList.add('filled'); done++; } else q.classList.remove('filled'); });
+    var pct=Math.round(done/qs.length*100);
+    document.getElementById('barfill').style.width=pct+'%';
+    document.getElementById('pct').textContent=pct+'%';
+    updateLinks();
+  }
+
+  function assemble(){
+    function g(id){ var el=document.getElementById(id); return el?(el.value||'').trim():''; }
+    function cm(n){ return (multis[n]||[]).join(', '); }
+    function cs(n){ return singles[n]||''; }
+    var L=[];
+    L.push("ONBOARDING — Good & Proper + The Acreage");
+    L.push("");
+    L.push("A. THE BUSINESSES");
+    L.push("· Good & Proper: "+g('a1a'));
+    L.push("· The Acreage: "+g('a1b'));
+    L.push("· Priority: "+cs('a2single')+(g('a2why')?(" — "+g('a2why')):""));
+    L.push("");
+    L.push("B. CUSTOMERS");
+    L.push("· Ideal client: "+g('b3'));
+    L.push("· Not wanted: "+g('b4'));
+    L.push("· Why they choose us: "+g('b5'));
+    L.push("");
+    L.push("C. VOICE & LOOK");
+    L.push("· Brand words: "+cm('c6multi')+(g('c6add')?(", "+g('c6add')):""));
+    L.push("· Love/hate: "+g('c7'));
+    L.push("· Admired brands: "+g('c8'));
+    L.push("");
+    L.push("D. NUMBERS");
+    L.push("· Avg function (Acreage): R"+g('d9a')+" | Avg restaurant: R"+g('d9b')+" | Avg G&P job: R"+g('d9c'));
+    L.push("· Enquiries/wk G&P: "+g('d10a'));
+    L.push("· Enquiries/wk Acreage: "+g('d10b'));
+    L.push("· Ad spend & return: "+g('d11'));
+    L.push("· Reviews: "+g('d12a')+" | "+cs('d12single'));
+    L.push("");
+    L.push("E. HOW THINGS RUN");
+    L.push("· Acreage booking flow: "+g('e13'));
+    L.push("· Repetitive G&P emails: "+g('e14'));
+    L.push("· Biggest time drain: "+g('e15'));
+    L.push("");
+    L.push("F. GOALS");
+    L.push("· 3-month success: "+g('f16'));
+    L.push("· Fix first: "+g('f17'));
+    return L.join("\n");
+  }
+
+  function updateLinks(){
+    var body=assemble();
+    document.getElementById('waBtn').href="https://wa.me/"+WA+"?text="+encodeURIComponent(body);
+    document.getElementById('mailBtn').href="mailto:"+MAIL+"?subject="+encodeURIComponent("Onboarding answers — The Acreage")+"&body="+encodeURIComponent(body);
+  }
+
+  document.getElementById('copyBtn').addEventListener('click', function(){
+    var txt=assemble();
+    var done=function(){ var c=document.getElementById('copied'); c.textContent="Copied. Now paste it into your reply to Jacques ✓"; };
+    if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(done,fallback); }
+    else fallback();
+    function fallback(){ var ta=document.createElement('textarea'); ta.value=txt; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); done(); }
+  });
+
+  refresh();
+})();
+</script>
+</body>
+</html>
