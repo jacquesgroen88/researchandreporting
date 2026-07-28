@@ -70,9 +70,17 @@
 
   /* SPECIALS */
   .specials-inner{display:grid;grid-template-columns:.92fr 1.08fr;gap:4.5rem;align-items:center}
-  .specials-media{position:relative}
-  .specials-media img{border-radius:var(--radius);box-shadow:var(--shadow);width:100%;height:520px;object-fit:cover}
-  .specials-media .tag{position:absolute;top:20px;left:-14px;background:var(--sage-deep);color:var(--paper);font-family:'Cormorant Garamond',serif;font-size:1.15rem;padding:.5rem 1.3rem;border-radius:8px;box-shadow:var(--shadow-sm)}
+  .carousel{position:relative;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);aspect-ratio:1/1;background:var(--sage-deeper)}
+  .carousel .track{display:flex;height:100%;transition:transform .55s var(--ease)}
+  .carousel .track img{min-width:100%;width:100%;height:100%;object-fit:cover}
+  .carousel .nav{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.88);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-sm);transition:background .2s,transform .2s;z-index:3}
+  .carousel .nav:hover{background:#fff;transform:translateY(-50%) scale(1.08)}
+  .carousel .nav svg{width:20px;height:20px;stroke:var(--ink);fill:none;stroke-width:2}
+  .carousel .prev{left:14px}.carousel .next{right:14px}
+  .carousel .dots{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:.5rem;z-index:3}
+  .carousel .dots button{width:9px;height:9px;border-radius:50%;border:none;background:rgba(255,255,255,.55);cursor:pointer;padding:0;transition:.25s var(--ease)}
+  .carousel .dots button.active{background:#fff;width:26px;border-radius:100px}
+  .carousel .tag{position:absolute;top:16px;left:16px;z-index:3;background:var(--sage-deep);color:var(--paper);font-family:'Cormorant Garamond',serif;font-size:1.1rem;padding:.4rem 1.1rem;border-radius:8px;box-shadow:var(--shadow-sm)}
   .spec-list{display:grid;gap:.2rem;margin-top:.5rem}
   .spec{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;padding:1.05rem 0;border-bottom:1px dashed var(--line)}
   .spec .day{font-family:'Cormorant Garamond',serif;font-size:1.18rem;color:var(--ink);min-width:110px}
@@ -178,7 +186,7 @@
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-bg"><img src="assets/img/deck.jpg" alt="The garden deck under the trees at Dot Com Café"></div>
+  <div class="hero-bg"><img src="assets/img/social/new-0.webp" alt="Dot Com Café's flower-canopy garden patio"></div>
   <div class="wrap hero-content">
     <span class="tag">Berea &middot; East London</span>
     <h1>Good food &amp; <em>friendly faces</em>,<br>under the trees.</h1>
@@ -215,7 +223,7 @@
       <a href="#offerings" class="btn btn-ghost" style="margin-top:.7rem">See what's on offer</a>
     </div>
     <div class="about-media reveal">
-      <img class="m1" src="assets/img/deck.jpg" alt="Outdoor deck seating beneath the trees">
+      <img class="m1" src="assets/img/social/new-5.webp" alt="Diners under the flower canopy at Dot Com Café">
       <img class="m2" src="assets/img/garden.jpg" alt="Garden water feature">
       <div class="about-badge">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M12 21s-7-4.4-7-10a7 7 0 0 1 14 0c0 5.6-7 10-7 10Z"/><circle cx="12" cy="11" r="2.5"/></svg>
@@ -308,21 +316,30 @@
 <section id="specials" class="alt">
   <div class="wrap specials-inner">
     <div class="specials-media reveal">
-      <img src="assets/img/meal.jpg" alt="Pizza and burger meal">
-      <span class="tag">2 for R99</span>
+      <div class="carousel" id="specCarousel">
+        <div class="track">
+          <img src="assets/img/social/spec-2.jpg" alt="Tuesday special — two Spaghetti Bolognese for R119">
+          <img src="assets/img/social/spec-3.jpg" alt="Wednesday special — BBQ chicken wings and ribs for R119">
+          <img src="assets/img/social/spec-1.jpg" alt="Friday special — two sirloin steaks with egg for R119">
+          <img src="assets/img/social/spec-4.jpg" alt="Saturday special — two 500g BBQ ribs for R119">
+        </div>
+        <span class="tag">2 for R119</span>
+        <button class="nav prev" aria-label="Previous special"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button>
+        <button class="nav next" aria-label="Next special"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>
+        <div class="dots"></div>
+      </div>
     </div>
     <div class="reveal">
-      <div class="eyebrow">What's on this week</div>
-      <h2 style="font-size:clamp(2.1rem,4.2vw,2.9rem);margin:.8rem 0 1.4rem">Two-for specials, every night</h2>
-      <p style="color:var(--ink-soft);margin-bottom:1.4rem">Sit-down specials from 5pm &mdash; bring a friend, split the bill, keep it easy. Deals rotate through the year, so here's the kind of thing to expect.</p>
+      <div class="eyebrow">What's on this month</div>
+      <h2 style="font-size:clamp(2.1rem,4.2vw,2.9rem);margin:.8rem 0 1.4rem">Two-for specials, five till late</h2>
+      <p style="color:var(--ink-soft);margin-bottom:1.4rem">Sit-down specials from 5pm &mdash; bring a friend, split the bill, keep it easy. Here's what's on this month.</p>
       <div class="spec-list">
-        <div class="spec"><span class="day">Tuesday</span><span class="desc">2 &times; Chicken Schnitzels &amp; Chips</span><span class="price">R99</span></div>
-        <div class="spec"><span class="day">Wednesday</span><span class="desc">Chicken &amp; Rib Basket &mdash; wings, ribs &amp; chips</span><span class="price">R99</span></div>
-        <div class="spec"><span class="day">Thursday</span><span class="desc">2 &times; Large Classic Pizzas</span><span class="price">R99</span></div>
-        <div class="spec"><span class="day">Friday</span><span class="desc">2 &times; Beer-Battered Hake &amp; Chips</span><span class="price">R99</span></div>
-        <div class="spec"><span class="day">Saturday</span><span class="desc">2 &times; Steak &amp; Chips</span><span class="price">R99</span></div>
+        <div class="spec"><span class="day">Tuesday</span><span class="desc">2 &times; Spaghetti Bolognese</span><span class="price">R119</span></div>
+        <div class="spec"><span class="day">Wednesday</span><span class="desc">BBQ Chicken Wings &amp; Ribs with Chips &times;2</span><span class="price">R119</span></div>
+        <div class="spec"><span class="day">Friday</span><span class="desc">2 &times; 200g Sirloin Steak, Egg &amp; Chips</span><span class="price">R119</span></div>
+        <div class="spec"><span class="day">Saturday</span><span class="desc">2 &times; 500g BBQ Ribs &amp; Chips</span><span class="price">R119</span></div>
       </div>
-      <p class="spec-note">Specials rotate monthly and are available from 5pm, sit-down only. Bookings essential &mdash; T&amp;Cs apply. WhatsApp us to confirm tonight's deal.</p>
+      <p class="spec-note">Plus buy-one-get-one-free on selected wines &amp; cocktails, 18:00&ndash;20:00. Available from 5pm, sit-down only &mdash; bookings essential. Specials rotate monthly; T&amp;Cs apply.</p>
       <a href="https://wa.me/27828424589" class="btn btn-primary" style="margin-top:1.3rem">Reserve your table</a>
     </div>
   </div>
@@ -337,14 +354,14 @@
       <p>Leafy decks, a trickling water feature, the glow of the pizza oven and a lawn made for four-legged friends.</p>
     </div>
     <div class="gal-grid reveal">
-      <figure class="g-feature"><img src="assets/img/deck.jpg" alt="Deck seating under the trees"><figcaption>The garden deck</figcaption></figure>
-      <figure><img src="assets/img/dog-zone.jpg" alt="Dog-friendly zone"><figcaption>Dog-friendly zone</figcaption></figure>
-      <figure><img src="assets/img/coffee.jpg" alt="Coffee"><figcaption>Fresh coffee</figcaption></figure>
-      <figure class="g-wide"><img src="assets/img/pizza-oven.png" alt="Wood-fired pizza oven"><figcaption>The wood fire</figcaption></figure>
-      <figure><img src="assets/img/garden.jpg" alt="Water feature"><figcaption>Water features</figcaption></figure>
-      <figure><img src="assets/img/cake-2.png" alt="Homemade cake"><figcaption>Homemade cakes</figcaption></figure>
-      <figure><img src="assets/img/iced-tea.jpg" alt="Homemade iced tea"><figcaption>Homemade iced tea</figcaption></figure>
-      <figure><img src="assets/img/meal.jpg" alt="Pizza and burger"><figcaption>Straight from the kitchen</figcaption></figure>
+      <figure class="g-feature"><img src="assets/img/social/new-1.webp" alt="The bar under the flower canopy"><figcaption>The bar under the flowers</figcaption></figure>
+      <figure><img src="assets/img/social/new-4.webp" alt="Beer-battered hake and chips"><figcaption>Beer-battered hake</figcaption></figure>
+      <figure><img src="assets/img/social/new-6.webp" alt="Black Crown gin and tonic"><figcaption>Signature G&amp;Ts</figcaption></figure>
+      <figure class="g-wide"><img src="assets/img/social/new-5.webp" alt="Guests dining under the flower canopy"><figcaption>Under the flowers</figcaption></figure>
+      <figure><img src="assets/img/social/new-2.webp" alt="Koi pond feature"><figcaption>Our koi pond</figcaption></figure>
+      <figure><img src="assets/img/social/new-3.webp" alt="Penguin waffles with cream and coffee"><figcaption>Sweet treats</figcaption></figure>
+      <figure><img src="assets/img/pizza-oven.png" alt="Wood-fired pizza oven"><figcaption>The wood fire</figcaption></figure>
+      <figure><img src="assets/img/garden.jpg" alt="Garden water feature"><figcaption>Water features</figcaption></figure>
     </div>
   </div>
 </section>
@@ -437,6 +454,23 @@
   const tgl=document.getElementById('mtoggle'),lnk=document.getElementById('navlinks');
   tgl.addEventListener('click',()=>{const o=lnk.classList.toggle('open');tgl.setAttribute('aria-expanded',o)});
   lnk.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{lnk.classList.remove('open');tgl.setAttribute('aria-expanded',false)}));
+
+  // Specials carousel
+  (function(){
+    const c=document.getElementById('specCarousel'); if(!c) return;
+    const track=c.querySelector('.track'), slides=track.children, dotsWrap=c.querySelector('.dots');
+    let i=0, timer;
+    for(let n=0;n<slides.length;n++){const b=document.createElement('button');b.setAttribute('aria-label','Go to special '+(n+1));b.addEventListener('click',()=>{go(n);reset()});dotsWrap.appendChild(b);}
+    const dots=dotsWrap.children;
+    function go(n){i=(n+slides.length)%slides.length;track.style.transform='translateX(-'+(i*100)+'%)';for(let d=0;d<dots.length;d++)dots[d].classList.toggle('active',d===i);}
+    function next(){go(i+1)} function prev(){go(i-1)}
+    function reset(){clearInterval(timer);timer=setInterval(next,4500);}
+    c.querySelector('.next').addEventListener('click',()=>{next();reset()});
+    c.querySelector('.prev').addEventListener('click',()=>{prev();reset()});
+    c.addEventListener('mouseenter',()=>clearInterval(timer));
+    c.addEventListener('mouseleave',reset);
+    go(0); reset();
+  })();
 </script>
 </body>
 </html>
