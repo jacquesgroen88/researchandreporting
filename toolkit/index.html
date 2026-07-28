@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Small Business AI Toolkit</title>
+<meta name="description" content="The exact prompts and tools I use to run my businesses. Free. Copy, paste, done.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#faf9f5;--card:#ffffff;--ink:#1f1e1c;--muted:#6d6c64;--line:#e9e6db;
+    --clay:#c9603f;--clay-soft:#f3e6df;--cream:#f0eee6;--radius:16px;
+    --shadow:0 10px 34px rgba(60,45,35,.08);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Inter',system-ui,sans-serif;background:var(--paper);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  .wrap{max-width:920px;margin:0 auto;padding:0 22px}
+  h1,h2,h3{letter-spacing:-.02em;line-height:1.12}
+  .muted{color:var(--muted)}
+
+  /* hero */
+  .hero{background:radial-gradient(1000px 500px at 78% -10%, rgba(201,96,63,.14), transparent 60%);padding:70px 0 54px;border-bottom:1px solid var(--line)}
+  .kick{display:inline-flex;align-items:center;gap:9px;font-size:12.5px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--clay);margin-bottom:20px}
+  .kick .sun{width:16px;height:16px}
+  .hero h1{font-size:clamp(38px,6vw,64px);font-weight:900;max-width:16ch;margin-bottom:18px}
+  .hero p{font-size:19px;color:var(--muted);max-width:56ch;margin-bottom:30px}
+  .hero p b{color:var(--ink);font-weight:700}
+
+  /* email form */
+  .capture{display:flex;gap:10px;flex-wrap:wrap;max-width:520px}
+  .capture input{flex:1;min-width:220px;height:54px;border:1.5px solid #ded9cc;border-radius:12px;padding:0 18px;font:500 16px 'Inter';background:#fff;color:var(--ink)}
+  .capture input:focus{outline:none;border-color:var(--clay)}
+  .capture button{height:54px;padding:0 26px;border:none;border-radius:12px;background:var(--clay);color:#fff;font:800 16px 'Inter';cursor:pointer;box-shadow:0 8px 20px rgba(201,96,63,.28);transition:transform .1s}
+  .capture button:active{transform:translateY(1px)}
+  .cap-note{font-size:13.5px;color:var(--muted);margin-top:12px}
+  .cap-note b{color:var(--ink)}
+
+  /* sections */
+  section{padding:52px 0}
+  .sec-label{font-size:12.5px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--clay);margin-bottom:10px}
+  h2{font-size:30px;font-weight:800;margin-bottom:8px}
+  .sec-lead{font-size:16.5px;color:var(--muted);max-width:64ch;margin-bottom:26px}
+
+  .group{margin-bottom:34px}
+  .group h3{font-size:14px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+  .prompt{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 18px 16px;margin-bottom:12px;box-shadow:var(--shadow);position:relative}
+  .prompt p{font-size:16.5px;color:var(--ink);padding-right:96px}
+  .prompt .ph{color:var(--clay);font-weight:600}
+  .copy{position:absolute;top:14px;right:14px;height:34px;padding:0 14px;border:1px solid #e2ddd0;border-radius:9px;background:#fbfaf6;color:#7a6a5f;font:700 13px 'Inter';cursor:pointer;transition:.15s}
+  .copy:hover{border-color:var(--clay);color:var(--clay)}
+  .copy.done{background:var(--clay);color:#fff;border-color:var(--clay)}
+
+  /* tools */
+  .tools{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .tool{display:flex;gap:15px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:var(--shadow)}
+  .tool .tn{font-weight:800;font-size:18px}
+  .tool .td{font-size:14.5px;color:var(--muted);margin-top:3px}
+  .tool .turl{font-size:13px;color:var(--clay);font-weight:700;margin-top:8px;text-decoration:none}
+  .tdot{flex:0 0 auto;width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-weight:900;color:#fff;font-size:18px}
+
+  /* closing */
+  .close{background:linear-gradient(160deg,#211f1c,#141311);color:#fff;border-radius:22px;padding:44px;text-align:center;margin:20px 0 8px}
+  .close h2{color:#fff;font-size:30px;margin-bottom:10px}
+  .close p{color:#c9c6bd;max-width:52ch;margin:0 auto 24px}
+  .close .capture{margin:0 auto}
+  .close input{background:#2a2724;border-color:#3a3630;color:#fff}
+  footer{padding:40px 0 60px;text-align:center;color:var(--muted);font-size:13.5px}
+  footer b{color:var(--ink)}
+
+  @media(max-width:640px){.tools{grid-template-columns:1fr}.prompt p{padding-right:0;margin-top:34px}.copy{top:14px}}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="wrap">
+    <div class="kick"><svg class="sun" viewBox="0 0 100 100"><path fill="#c9603f" d="M50 6c3 22 5 32 8 35s13 5 35 8c-22 3-32 5-35 8s-5 13-8 35c-3-22-5-32-8-35s-13-5-35-8c22-3 32-5 35-8s5-13 8-35Z"/></svg>The Small Business AI Toolkit</div>
+    <h1>The prompts and tools I use to run my businesses.</h1>
+    <p>Free. No fluff, no theory. The exact prompts I paste into AI every week to write content, win back customers, handle reviews and kill the busywork. <b>Copy, paste, done.</b></p>
+    <form class="capture" name="toolkit" method="POST" action="/toolkit/thanks/" data-netlify="true" netlify-honeypot="bot-field">
+      <input type="hidden" name="form-name" value="toolkit">
+      <p style="display:none"><label>Skip: <input name="bot-field"></label></p>
+      <input type="email" name="email" placeholder="your@email.com" required>
+      <button type="submit">Send me the pack</button>
+    </form>
+    <div class="cap-note">Get the pack as a PDF plus <b>new prompts every month</b>. No spam, unsubscribe anytime.</div>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <div class="sec-label">The prompt pack</div>
+    <h2>18 prompts that do your busywork</h2>
+    <p class="sec-lead">Swap anything in <span class="ph">[brackets]</span> for your own details. These are written to give you something usable on the first try, not a starting point you have to fix.</p>
+
+    <div class="group">
+      <h3>Marketing &amp; Content</h3>
+      <div class="prompt"><button class="copy">Copy</button><p>Write 2 weeks of Instagram captions for my <span class="ph">[business]</span>. Each one needs a hook, one value point, and a clear call to action.</p></div>
+      <div class="prompt"><button class="copy">Copy</button><p>Turn this into 5 social posts, one email, and 3 short-video hooks: <span class="ph">[paste your blog post or idea]</span>.</p></div>
+      <div class="prompt"><button class="copy">Copy</button><p>Write 5 scroll-stopping ad headlines for <span class="ph">[product or offer]</span> aimed at <span class="ph">[customer]</span>. Make them specific, not clever.</p></div>
+      <div class="prompt"><button class="copy">Copy</button><p>Give me a month of content ideas for my <span class="ph">[business]</span>, mixing education, proof, and offers. One line each.</p></div>
+    </div>
+
+    <div class="group">
+      <h3>Customers &amp; Retention</h3>
+      <div class="prompt"><button class="copy">Copy</button><p>Draft a win-back email to customers who have not bought in 90 days. Warm, not salesy, with one clear reason to come back.</p></div>
+      <div class="prompt"><button class="copy">Copy</button><p>Write a friendly text reminding <span class="ph">[customer type]</span> about <span class="ph">[appointment or reorder]</span>. Keep it under 160 characters.</p></div>
+      <div class="prompt"><button class="copy">Copy</button><p>Give me a 3-message follow-up sequence to turn a first-time buyer into a repeat customer for my <span class="ph">[business]</span>.</p></div>
+    </div>
+
+    <div class="group">
+      <h3>Admin &amp; Operations</h3>
+      <div class="prompt"><button class="copy">Copy</button><p>Turn this brain-dump of tasks into a prioritised plan for the week, grouped by impact and effort: <span class="ph">[paste tasks]</span>.</p></div>
+      <div class="prompt"><button class="copy">Copy</button><p>Summarise this email thread into decisions made, who owes what, and my single next action: <span class="ph">[paste]</span>.</p></div>
+      <div class="prompt"><button class="copy">Copy</button><p>Write a simple step-by-step SOP for <span class="ph">[recurring task]</span> so I can hand it to someone else and it still gets done right.</p></div>
+      <div class="prompt"><button class="copy">Copy</button><p>Read this supplier quote and list the questions I should ask before I sign: <span class="ph">[paste]</span>.</p></div>
+    </div>
+
+    <div class="group">
+      <h3>Reviews &amp; Reputation</h3>
+      <div class="prompt"><button class="copy">Copy</button><p>Reply to this 1-star Google review. Stay calm, take responsibility, and invite them back: <span class="ph">[paste review]</span>.</p></div>
+      <div class="prompt"><button class="copy">Copy</button><p>Write a short message asking my last 10 happy customers for a Google review, with a direct link and no guilt trip.</p></div>
+      <div class="prompt"><button class="copy">Copy</button><p>Rewrite this reply so it thanks a happy reviewer and gently opens the door to a referral: <span class="ph">[paste]</span>.</p></div>
+    </div>
+
+    <div class="group">
+      <h3>Sales &amp; Money</h3>
+      <div class="prompt"><button class="copy">Copy</button><p>Give me 5 upsell ideas for my <span class="ph">[business]</span> and the exact words to offer each one at the counter.</p></div>
+      <div class="prompt"><button class="copy">Copy</button><p>Rewrite my pricing so the middle option is the obvious choice. Here are my 3 packages: <span class="ph">[paste]</span>.</p></div>
+      <div class="prompt"><button class="copy">Copy</button><p>Write a short, confident follow-up for a lead who went quiet after I sent a price. No desperation.</p></div>
+      <div class="prompt"><button class="copy">Copy</button><p>Look at last month's sales and tell me the 3 numbers I should watch every week and why: <span class="ph">[paste]</span>.</p></div>
+    </div>
+  </div>
+</section>
+
+<section style="background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+  <div class="wrap">
+    <div class="sec-label">The tool stack</div>
+    <h2>The 5 tools behind all of it</h2>
+    <p class="sec-lead">You do not need 40 AI tools. You need these 5, wired to do real work.</p>
+    <div class="tools">
+      <div class="tool"><div class="tdot" style="background:#c9603f">C</div><div><div class="tn">Claude</div><div class="td">Thinking, writing and building. The one I run my businesses from.</div><a class="turl" href="https://claude.ai" target="_blank" rel="noopener">claude.ai</a></div></div>
+      <div class="tool"><div class="tdot" style="background:#1f8a99">P</div><div><div class="tn">Perplexity</div><div class="td">Research with sources you can actually trust.</div><a class="turl" href="https://perplexity.ai" target="_blank" rel="noopener">perplexity.ai</a></div></div>
+      <div class="tool"><div class="tdot" style="background:#111">E</div><div><div class="tn">ElevenLabs</div><div class="td">Studio-grade AI voiceover, in your own voice.</div><a class="turl" href="https://elevenlabs.io" target="_blank" rel="noopener">elevenlabs.io</a></div></div>
+      <div class="tool"><div class="tdot" style="background:#4c6ef5">G</div><div><div class="tn">Gamma</div><div class="td">Decks, one-pagers and simple sites in minutes.</div><a class="turl" href="https://gamma.app" target="_blank" rel="noopener">gamma.app</a></div></div>
+      <div class="tool"><div class="tdot" style="background:#e0447a">N</div><div><div class="tn">n8n</div><div class="td">Wire your tools together so the busywork runs itself.</div><a class="turl" href="https://n8n.io" target="_blank" rel="noopener">n8n.io</a></div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="close">
+      <h2>Want the next batch?</h2>
+      <p>I add new prompts and tools every month as I use them across my own businesses. Drop your email and I will send the whole pack plus whatever I find next.</p>
+      <form class="capture" name="toolkit" method="POST" action="/toolkit/thanks/" data-netlify="true" netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="toolkit">
+        <p style="display:none"><label>Skip: <input name="bot-field"></label></p>
+        <input type="email" name="email" placeholder="your@email.com" required>
+        <button type="submit">Send me the pack</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">Built by <b>Jacques Groenewald</b>. I run real businesses on this stack and share what works. <br>Follow for more AI and business.</div>
+</footer>
+
+<script>
+  document.querySelectorAll('.copy').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const text = btn.parentElement.querySelector('p').innerText.trim();
+      navigator.clipboard.writeText(text).then(() => {
+        btn.textContent = 'Copied';
+        btn.classList.add('done');
+        setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('done'); }, 1500);
+      });
+    });
+  });
+</script>
+</body>
+</html>
