@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Seven Figure Blueprint | JCE Media</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+  :root{
+    --bg:#f5f8fe;--card:#ffffff;--ink:#101a2e;--muted:#5b6b86;--line:#e7edf8;
+    --blue:#2f6bf6;--indigo:#6366f1;--violet:#8b5cf6;--cyan:#1fc7e6;--coral:#ff6a45;--amber:#ffb020;
+    --grad:linear-gradient(135deg,#2f6bf6 0%,#6366f1 52%,#8b5cf6 100%);
+    --grad-warm:linear-gradient(135deg,#ff6a45,#ffb020);
+    --radius:20px;--shadow:0 12px 34px rgba(38,66,120,.10);--shadow-sm:0 6px 18px rgba(38,66,120,.07);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6;-webkit-font-smoothing:antialiased;padding-bottom:60px}
+  .wrap{max-width:720px;margin:0 auto;padding:0 18px}
+  h1,h2,h3,h4{font-family:'Space Grotesk','Inter',sans-serif;line-height:1.15;font-weight:700;letter-spacing:-.01em;color:var(--ink)}
+  p{color:var(--muted)}
+  strong{color:var(--ink);font-weight:600}
+  a{color:var(--blue);text-decoration:none}
+
+  /* HERO — vibrant gradient */
+  .hero{background:var(--grad);color:#fff;padding:34px 0 42px;border-radius:0 0 28px 28px;position:relative;overflow:hidden}
+  .hero:before{content:"";position:absolute;top:-60px;right:-40px;width:220px;height:220px;background:radial-gradient(circle,rgba(255,255,255,.25),transparent 70%)}
+  .hero .wrap{position:relative}
+  .brandbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:26px}
+  .brandbar img{height:30px;filter:brightness(0) invert(1)}
+  .brandbar .r{font-size:12px;color:rgba(255,255,255,.8);font-weight:500}
+  .tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#fff;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);padding:6px 13px;border-radius:999px;margin-bottom:16px}
+  .hero h1{color:#fff;font-size:33px;max-width:18ch;margin-bottom:12px}
+  .hero p.sub{color:rgba(255,255,255,.92);font-size:16px;max-width:52ch}
+  .hero .for{margin-top:20px;font-size:13.5px;color:rgba(255,255,255,.82)}
+  .hero .for b{color:#fff}
+
+  section{padding:34px 0 4px}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);margin-bottom:10px;font-family:'Space Grotesk',sans-serif}
+  .eyebrow .ic{font-size:15px}
+  h2{font-size:26px;margin-bottom:10px}
+  .lead{font-size:16px;color:var(--muted);margin-bottom:6px}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px;margin-top:16px;box-shadow:var(--shadow-sm)}
+  .card h3{font-size:18px;margin-bottom:10px}
+  .card p{font-size:14.5px}
+
+  /* timeline phases */
+  .timeline{margin-top:20px;position:relative;padding-left:8px}
+  .step{position:relative;display:grid;grid-template-columns:52px 1fr;gap:16px;padding-bottom:18px}
+  .step:not(:last-child):before{content:"";position:absolute;left:25px;top:52px;bottom:-2px;width:2px;background:linear-gradient(var(--indigo),rgba(99,102,241,.15))}
+  .step .n{width:52px;height:52px;border-radius:16px;background:var(--grad);color:#fff;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:19px;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 18px rgba(99,102,241,.35)}
+  .step .body{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:15px 18px;box-shadow:var(--shadow-sm)}
+  .step h4{font-size:16px;margin-bottom:3px}
+  .step p{font-size:14px}
+
+  ul.clean{list-style:none;margin:12px 0 0}
+  ul.clean li{position:relative;padding-left:30px;margin-bottom:11px;color:var(--ink);font-size:14.5px}
+  ul.clean li:before{content:"✓";position:absolute;left:0;top:0;width:20px;height:20px;border-radius:6px;background:rgba(47,107,246,.12);color:var(--blue);font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center}
+  ul.clean li b{color:var(--ink)}
+
+  .grid2{display:grid;grid-template-columns:1fr;gap:14px;margin-top:16px}
+
+  .stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px;box-shadow:var(--shadow-sm)}
+  .stat .k{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .stat .v{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;margin-top:3px;background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+
+  /* promise — warm */
+  .promise{margin-top:18px;border-radius:var(--radius);padding:24px;background:linear-gradient(135deg,#fff6f2,#fff9ef);border:1px solid #ffe3d4;box-shadow:var(--shadow-sm)}
+  .promise h3{background:var(--grad-warm);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;display:inline-block;margin-bottom:8px}
+
+  .invest{background:var(--grad);color:#fff;border-radius:var(--radius);padding:24px 26px;margin-top:18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;box-shadow:0 14px 34px rgba(99,102,241,.30)}
+  .invest .l{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.85);font-weight:700}
+  .invest .sm{font-size:14px;color:rgba(255,255,255,.9)}
+  .invest .big{font-family:'Space Grotesk',sans-serif;font-size:34px;font-weight:700;color:#fff}
+
+  .callout{background:#eef4ff;border:1px solid #d6e4ff;border-radius:16px;padding:16px 18px;margin-top:16px;font-size:14px;color:var(--ink)}
+  .callout b{color:var(--blue)}
+  .est{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#a86a00;background:#fff2d8;border:1px solid #ffe1a6;padding:2px 8px;border-radius:999px;vertical-align:middle;margin-left:6px}
+
+  .svc{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 22px;margin-top:14px;display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;box-shadow:var(--shadow-sm);border-left:4px solid var(--blue)}
+  .svc h4{font-size:17px;margin-bottom:4px}
+  .svc p{font-size:13.5px;color:var(--muted)}
+  .svc .price{text-align:right;white-space:nowrap;font-family:'Space Grotesk',sans-serif}
+  .svc .price .now{font-size:23px;font-weight:700;color:var(--ink)}
+  .svc .price .per{font-size:12.5px;color:var(--muted);display:block;margin-top:2px}
+  .pill{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--blue);background:rgba(47,107,246,.1);padding:3px 10px;border-radius:999px;margin-top:9px}
+
+  table.price{width:100%;border-collapse:collapse;margin-top:14px;font-size:14px;background:var(--card);border-radius:14px;overflow:hidden;box-shadow:var(--shadow-sm)}
+  table.price th,table.price td{text-align:left;padding:13px 12px;border-bottom:1px solid var(--line)}
+  table.price th{font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700;background:#f2f6fe}
+  table.price td:last-child,table.price th:last-child{text-align:right;font-weight:700;color:var(--ink);white-space:nowrap;font-family:'Space Grotesk',sans-serif}
+  table.price tr:last-child td{border-bottom:none;background:#f7faff}
+  .rowlab b{color:var(--ink)}.rowlab span{display:block;font-size:12px;color:var(--muted);font-weight:400}
+
+  .cta{display:block;text-align:center;background:var(--grad-warm);color:#fff;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:17px;padding:17px 24px;border-radius:999px;margin-top:24px;box-shadow:0 12px 28px rgba(255,106,69,.35)}
+  .cta:hover{opacity:.95}
+
+  footer{margin-top:40px;text-align:center;padding-top:24px;border-top:1px solid var(--line)}
+  footer img{height:24px;opacity:.85}
+  footer p{font-size:12px;color:var(--muted);margin-top:10px}
+
+  @media(min-width:620px){.grid2{grid-template-columns:1fr 1fr}}
+  @media(max-width:520px){.hero h1{font-size:27px}h2{font-size:22px}.invest{flex-direction:column;align-items:flex-start}.svc{flex-direction:column}.svc .price{text-align:left}.stats{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="wrap">
+    <div class="brandbar">
+      <img src="https://jcemedia.com/assets/case-studies/jcemedialogomain.png" alt="JCE Media">
+      <span class="r">Onboarding Pack</span>
+    </div>
+    <span class="tag">The Seven Figure Blueprint</span>
+    <h1>Two businesses, built to scale.</h1>
+    <p class="sub">Everything for our kickoff, in one place: what the Blueprint is, what I'll need from you, the investment, and how we start. Ten minutes and you'll know exactly how the next two weeks run.</p>
+    <div class="for">Prepared for <b>Jade Mann</b> · Good &amp; Proper Food Trucks + The Acreage · 28 July 2026</div>
+  </div>
+</div>
+
+<!-- OFFER -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow"><span class="ic">✦</span> The offer</div>
+    <h2>The Seven Figure Blueprint</h2>
+    <p class="lead">A short, intensive strategy process that turns two good businesses running on manual effort into two businesses built to scale. We do this <strong>first</strong>, on purpose. Pushing traffic to a website that doesn't convert, or automating a broken process, only makes the problem faster. The Blueprint fixes the foundation so everything we build on top of it compounds.</p>
+
+    <div class="card">
+      <h3>What it is, and what it isn't</h3>
+      <p><strong>It is</strong> a paid strategy intensive that produces the actual operating plan for both businesses: who you serve, how you sound, what we build, in what order, and what it should return. <strong>It is not</strong> a sales call or a document that ends up in a drawer. It's the thinking every future rand of build and ad spend depends on, done properly once.</p>
+    </div>
+
+    <div class="card">
+      <h3>Everything included</h3>
+      <ul class="clean">
+        <li><b>Onboarding questionnaire</b> to map both businesses before we speak</li>
+        <li><b>Two strategy calls</b>: a kickoff and a full presentation of the finished Blueprint, both transcribed</li>
+        <li><b>A full diagnostic of both businesses</b> with the gaps and leaks costed</li>
+        <li><b>The written Blueprint</b>: your three-month roadmap with priorities and metrics</li>
+        <li><b>A brand voice and visual language guide</b> for each business</li>
+        <li><b>Creative direction and a first look at your new website</b></li>
+        <li><b>A prioritised systems rollout plan</b>: booking automation, review engine, AI email assistant</li>
+      </ul>
+    </div>
+
+    <div class="timeline">
+      <div class="step"><div class="n">1</div><div class="body"><h4>Deep dive &amp; data</h4><p>You complete the questionnaire, then we run a 45 to 60 minute onboarding call, fully transcribed so nothing gets lost.</p></div></div>
+      <div class="step"><div class="n">2</div><div class="body"><h4>Diagnosis</h4><p>We map both businesses end to end, find the gaps and leaks, and attach real numbers to each one.</p></div></div>
+      <div class="step"><div class="n">3</div><div class="body"><h4>We build the Blueprint</h4><p>Your target audience, brand voice and visual language, the systems rollout in priority order, and the creative direction for your new website.</p></div></div>
+      <div class="step"><div class="n">4</div><div class="body"><h4>The presentation call</h4><p>We present the finished Blueprint back to you, walk through every decision, and align on priorities together. You see it explained, not just emailed.</p></div></div>
+      <div class="step"><div class="n">5</div><div class="body"><h4>Rollout</h4><p>You leave with the full scope and a phased plan, so we build it for you or you run pieces yourself.</p></div></div>
+    </div>
+
+    <div class="promise">
+      <h3>The promise</h3>
+      <p style="color:#7a4a33;font-size:14.5px">By the end you should have <strong style="color:#8a3d1f">no open strategic questions left</strong>. You've already invested more than once in website work that missed, because design started before strategy did. The Blueprint is the part that makes every build after it land. It's a once-off, not a retainer, and most of what it saves in wasted spend and redone work pays it back inside the first few months.</p>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><div class="k">Duration</div><div class="v">~2 weeks</div></div>
+      <div class="stat"><div class="k">Covers</div><div class="v">Both</div></div>
+      <div class="stat"><div class="k">Strategy calls</div><div class="v">Two</div></div>
+      <div class="stat"><div class="k">Investment</div><div class="v">R10,000</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT WE NEED -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow"><span class="ic">◷</span> Before we start</div>
+    <h2>What we'll need from you</h2>
+    <p class="lead">A few accesses and materials let us hit the ground running on Thursday.</p>
+    <div class="grid2">
+      <div class="card">
+        <h3>Access</h3>
+        <ul class="clean">
+          <li><b>Google Ads</b> — add jacques@jcemedia.com as a user</li>
+          <li><b>Image library</b> — the Dropbox with venue and food photos</li>
+          <li><b>Good &amp; Proper emails</b> — a sample, to train the AI email assistant</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Materials &amp; prep</h3>
+        <ul class="clean">
+          <li><b>Any brand assets</b> — logos, fonts, colours, guidelines</li>
+          <li><b>The questionnaire</b>, completed before our call</li>
+          <li><b>Video on</b> for the onboarding call</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow"><span class="ic">◆</span> Pricing</div>
+    <h2>Investment</h2>
+    <p class="lead">Clear and separated, so you always know what's a one-off, what's ongoing, and what's a tool cost versus our work.</p>
+
+    <div class="invest">
+      <div><div class="l">The Seven Figure Blueprint</div><div class="sm" style="margin-top:2px">Once-off strategy foundation for both businesses</div></div>
+      <div class="big">R10,000</div>
+    </div>
+
+    <div class="callout"><b>What the Blueprint does and doesn't include.</b> It includes the full strategy, brand direction, and the creative direction and first look for your new website. It does <b>not</b> include the website build itself, ad management, or the systems build. Those are optional next steps below, quoted properly once the Blueprint defines their scope.</div>
+
+    <h3 style="margin-top:28px;font-size:19px">Optional next steps, after the Blueprint</h3>
+    <p style="font-size:14px;color:var(--muted);margin-top:4px">Only if you choose to proceed. Blueprint clients get preferential pricing.</p>
+
+    <div class="svc">
+      <div>
+        <h4>Website design &amp; build</h4>
+        <p>A new website that finally reflects the quality of the venue, built off the direction set in the Blueprint. You own it and can update it yourself.</p>
+        <span class="pill">Blueprint clients only</span>
+      </div>
+      <div class="price"><span class="now">R7,000</span><span class="per">roughly half our standard build</span></div>
+    </div>
+
+    <div class="svc">
+      <div>
+        <h4>Ad management</h4>
+        <p>We take over the Google Ads for one account, so every rand is measured and pointed at the right customer. Includes a <strong>free audit of your Good &amp; Proper food-truck ads</strong>, so you can see where that spend goes at no charge.</p>
+        <span class="pill">One account · free food-truck audit</span>
+      </div>
+      <div class="price"><span class="now">R3,499</span><span class="per">per month · one account</span></div>
+    </div>
+
+    <div class="svc">
+      <div>
+        <h4>Systems build &amp; management</h4>
+        <p>Booking automation, the review engine and the AI email assistant, built and run for you. Scoped from your Blueprint roadmap.</p>
+      </div>
+      <div class="price"><span class="now" style="font-size:15px;color:var(--muted)">Quoted from your roadmap</span></div>
+    </div>
+
+    <h3 style="margin-top:28px;font-size:19px">Estimated monthly running costs <span class="est">Estimate</span></h3>
+    <p style="font-size:14px;color:var(--muted);margin-top:4px">The third-party tools the systems run on, separate from JCE Media's fees. Ranges until your volumes are confirmed at onboarding.</p>
+    <table class="price">
+      <tr><th>Running cost</th><th>Est. / month</th></tr>
+      <tr><td class="rowlab"><b>Reviewtap System</b><span>CRM, automations, review engine, booking</span></td><td>from R399</td></tr>
+      <tr><td class="rowlab"><b>WhatsApp automation</b><span>AI booking bot &amp; conversations</span></td><td>~R3,000</td></tr>
+      <tr><td class="rowlab"><b>AI processing</b><span>Booking assistant + email employee</span></td><td>R300–R700</td></tr>
+      <tr><td class="rowlab"><b>Website hosting &amp; domain</b><span>Fast, secure, you own it</span></td><td>R150–R300</td></tr>
+      <tr><td class="rowlab"><b>Estimated total</b><span>Confirmed at onboarding</span></td><td>~R3,850–R4,400</td></tr>
+    </table>
+    <p style="font-size:13px;color:var(--muted);margin-top:12px">Google Ads spend is separate and stays yours to control.</p>
+  </div>
+</section>
+
+<!-- HOW WE START -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow"><span class="ic">→</span> The next step</div>
+    <h2>How we start</h2>
+    <p class="lead">Simple and low-risk. A deposit secures your kickoff, and the balance is only due once your finished Blueprint is presented back to you.</p>
+
+    <div class="timeline">
+      <div class="step"><div class="n">1</div><div class="body"><h4>Say yes</h4><p>Reply to confirm, or give me the word on our call, and I hold your kickoff slot.</p></div></div>
+      <div class="step"><div class="n">2</div><div class="body"><h4>Secure your start</h4><p>I send your invoice from JCE Systems Group. A 60% deposit confirms the booking.</p></div></div>
+      <div class="step"><div class="n">3</div><div class="body"><h4>We kick off</h4><p>You complete the questionnaire, we run the onboarding call, and the work begins.</p></div></div>
+      <div class="step"><div class="n">4</div><div class="body"><h4>Present &amp; complete</h4><p>We present your finished Blueprint back to you. The remaining 40% is settled on completion.</p></div></div>
+    </div>
+
+    <div class="invest">
+      <div><div class="l">Payment</div><div class="sm" style="margin-top:2px">Invoiced by JCE Systems Group · R10,000 once-off</div></div>
+      <div style="text-align:right"><div class="big">R6,000 <span style="font-size:13px;font-weight:600;color:rgba(255,255,255,.85)">deposit</span></div><div class="sm" style="margin-top:4px">then R4,000 on completion</div></div>
+    </div>
+    <div class="callout"><b>Your Thursday slot.</b> We take a limited number of Blueprints each month so each gets full focus. Settling your deposit this week holds Thursday and puts your new website direction in front of you by end of next week.</div>
+
+    <a href="Acreage-Onboarding-Questionnaire.html" class="cta">Start with the questionnaire →</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <img src="https://jcemedia.com/assets/case-studies/jcemedialogomain.png" alt="JCE Media">
+    <p>Prepared by Jacques Groenewald for Good &amp; Proper Food Trucks and The Acreage · 28 July 2026 · jacques@jcemedia.com</p>
+  </div>
+</footer>
+
+</body>
+</html>
