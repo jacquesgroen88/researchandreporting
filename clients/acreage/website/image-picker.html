@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Acreage — Photo Picker | JCE Media</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--cream:#f6f1e8;--ink:#242620;--forest:#333f33;--gold:#b0894f;--line:#e4dccc;--muted:#7a7768}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',sans-serif;background:#14160f;color:var(--cream);-webkit-font-smoothing:antialiased}
+  .head{text-align:center;padding:40px 22px 26px}
+  .head h1{font-family:'Fraunces',serif;font-weight:400;font-size:30px;color:#fff;margin-bottom:8px}
+  .head p{color:rgba(246,241,232,.7);font-size:14px;max-width:640px;margin:0 auto}
+  .head .hint{margin-top:14px;display:inline-block;font-size:12.5px;color:#14160f;background:var(--gold);padding:8px 16px;border-radius:999px;font-weight:600}
+  h2{font-family:'Fraunces',serif;font-weight:400;color:var(--gold);font-size:22px;letter-spacing:.02em}
+  .cat{max-width:1300px;margin:0 auto;padding:14px 20px 40px}
+  .catbar{display:flex;align-items:baseline;gap:12px;border-bottom:1px solid rgba(255,255,255,.1);padding:26px 0 12px;margin-bottom:18px}
+  .catbar span{font-size:12.5px;color:rgba(246,241,232,.5)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+  .cell{position:relative;border-radius:4px;overflow:hidden;background:#20241a;aspect-ratio:4/3}
+  .cell img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s}
+  .cell:hover img{transform:scale(1.05)}
+  .cell .num{position:absolute;top:8px;left:8px;background:rgba(20,22,15,.82);color:#fff;font-family:'Fraunces',serif;font-size:15px;font-weight:500;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:1px solid var(--gold)}
+  .foot{text-align:center;padding:34px 20px 60px;color:rgba(246,241,232,.55);font-size:13px}
+</style>
+</head>
+<body>
+<div class="head">
+  <h1>The Acreage &middot; Pick your photos</h1>
+  <p>Every usable photo from the brand shoot, grouped by type. The wide green "Venue" shots are the golf-course ones, the dining, food, interior and detail shots below give a warmer, more restaurant-and-events feel.</p>
+  <div class="hint">Reply with the numbers you like for the hero (and any for the gallery)</div>
+</div>
+<div class="cat" id="app"></div>
+<div class="foot">Website by JCE Media &middot; Tell Jacques the numbers and he'll build the hero around them.</div>
+
+<script>
+var BASE="https://theacreage.launchweb.co.za/wp-content/uploads/2026/03/";
+var groups=[
+  {name:"Dining &amp; atmosphere", note:"people, tables, the restaurant in use — the least golf-course of the set", imgs:[
+    "The-Acreage-Brand-Shoot_Bibi-Collective-9.jpg","The-Acreage-Brand-Shoot_Bibi-Collective-15.jpg","The-Acreage-Brand-Shoot_Bibi-Collective-16.jpg","The-Acreage-Brand-Shoot_Bibi-Collective-20.jpg","The-Acreage-Brand-Shoot_Bibi-Collective-38.jpg","The-Acreage-Brand-Shoot_Bibi-Collective-40.jpg","The-Acreage-Brand-Shoot_Bibi-Collective-2.jpg","Outside.png","Inside.png"
+  ]},
+  {name:"Food &amp; drinks", note:"appetising close-ups, great for warmth and a restaurant feel", imgs:[
+    "The-Acreage-Brand-Shoot_Breakfast_Bibi-Collective-11.jpg","The-Acreage-Brand-Shoot_Breakfast_Bibi-Collective-12.jpg","The-Acreage-Brand-Shoot_Breakfast_Bibi-Collective-31.jpg","The-Acreage-Brand-Shoot_Lunch_Bibi-Collective-15.jpg","The-Acreage-Brand-Shoot_Lunch_Bibi-Collective-19.jpg","The-Acreage-Brand-Shoot_Lunch_Bibi-Collective-71.jpg","The-Acreage-Brand-Shoot_Lunch_Bibi-Collective-78.jpg","The-Acreage-Brand-Shoot_Lunch_Bibi-Collective-81.jpg","The-Acreage-Brand-Shoot_Deserts_Bibi-Collective-7.jpg","Drinks.png"
+  ]},
+  {name:"Curated feature shots", note:"the images the venue itself chose to represent each highlight", imgs:[
+    "Home-Image-Stylish.png","Home-Image-Expansive-Space.png","Home-Image-Expansive-Space-1.png","Home-Image-Seating.png","Home-Image-Lunch.png","Home-Image-Breakfast.png","Home-Image-Pet-Friendly.png","Home-Image-Trusted-Network.png","Home-Image-Ample-Parking.png"
+  ]},
+  {name:"Venue &amp; grounds", note:"the wide estate shots — the ones that read as a golf course, included so you can compare", imgs:[
+    "The-Acreage-Brand-Shoot_Venue_Bibi-Collective-1.jpg","The-Acreage-Brand-Shoot_Venue_Bibi-Collective-5.jpg","The-Acreage-Brand-Shoot_Venue_Bibi-Collective-7.jpg","The-Acreage-Brand-Shoot_Venue_Bibi-Collective-8.jpg","The-Acreage-Brand-Shoot_Venue_Bibi-Collective-10.jpg","The-Acreage-Brand-Shoot_Venue_Bibi-Collective-13.jpg","The-Acreage-Brand-Shoot_Venue_Bibi-Collective-16.jpg","The-Acreage-Brand-Shoot_Venue_Bibi-Collective-17.jpg","The-Acreage-Brand-Shoot_Venue_Bibi-Collective-28.jpg","The-Acreage-Brand-Shoot_Venue_Bibi-Collective-30.jpg","The-Acreage-Brand-Shoot_Venue_Bibi-Collective-33.jpg","The-Acreage-Brand-Shoot_Venue_Bibi-Collective-37.jpg","The-Acreage-Brand-Shoot_Venue_Bibi-Collective-40.jpg","The-Acreage-Brand-Shoot_Venue_Bibi-Collective-42.jpg","The-Acreage-Brand-Shoot_Venue_Bibi-Collective-45.jpg","The-Acreage-Brand-Shoot_Venue_Bibi-Collective-54.jpg","The-Acreage-Brand-Shoot_Venue_Bibi-Collective-55.jpg","The-Acreage-Brand-Shoot_Venue_Bibi-Collective-57.jpg","The-Acreage-Brand-Shoot_Venue_Bibi-Collective-58.jpg","The-Acreage-Brand-Shoot_Venue_Bibi-Collective-63.jpg","The-Acreage-Brand-Shoot_Venue_Bibi-Collective-64.jpg","The-Acreage-Brand-Shoot_Venue_Bibi-Collective-65.jpg","The-Acreage-Brand-Shoot_Venue_Bibi-Collective-78.jpg","The-Acreage-Brand-Shoot_Venue_Bibi-Collective-80.jpg","The-Acreage-Brand-Shoot_Venue_Bibi-Collective-82.jpg","The-Acreage-Brand-Shoot_Venue_Bibi-Collective-83.jpg","The-Acreage-Brand-Shoot_Venue_Bibi-Collective-87.jpg","The-Acreage-Brand-Shoot_Venue_Bibi-Collective-95.jpg","The-Acreage-Brand-Shoot_Venue_Bibi-Collective-98.jpg","The-Acreage-Brand-Shoot_Venue_Bibi-Collective-100.jpg","The-Acreage-Brand-Shoot_Venue_Bibi-Collective-112.jpg","The-Acreage-Brand-Shoot_Venue_Bibi-Collective-116.jpg","The-Acreage-Brand-Shoot_Venue_Bibi-Collective-118.jpg","The-Acreage-Brand-Shoot_Venue_Bibi-Collective-120.jpg","The-Acreage-Brand-Shoot_Venue_Bibi-Collective-121.jpg","The-Acreage-Brand-Shoot_Venue_Bibi-Collective-122.jpg","The-Acreage-Brand-Shoot_Venue_Bibi-Collective-125.jpg","The-Acreage-Brand-Shoot_Venue_Bibi-Collective-126.jpg","The-Acreage-Brand-Shoot_Venue_Bibi-Collective-132.jpg","The-Acreage-Brand-Shoot_Venue_Bibi-Collective-134.jpg","The-Acreage-Brand-Shoot_Venue_Bibi-Collective-139.jpg","The-Acreage-Brand-Shoot_Venue_Bibi-Collective-141.jpg","The-Acreage-Brand-Shoot_Venue_Bibi-Collective-144.jpg","The-Acreage-Brand-Shoot_Venue_Bibi-Collective-148.jpg","The-Acreage-Brand-Shoot_Venue_Bibi-Collective-149.jpg","The-Acreage-Brand-Shoot_Venue_Bibi-Collective-152.jpg","The-Acreage-Brand-Shoot_Venue_Bibi-Collective-157.jpg"
+  ]}
+];
+var n=0, html="";
+groups.forEach(function(g){
+  html+='<div class="catbar"><h2>'+g.name+'</h2><span>'+g.note+'</span></div><div class="grid">';
+  g.imgs.forEach(function(f){
+    n++;
+    html+='<div class="cell"><span class="num">'+n+'</span><img loading="lazy" src="'+BASE+f+'" alt="'+n+'"></div>';
+  });
+  html+='</div>';
+});
+document.getElementById('app').innerHTML=html;
+</script>
+</body>
+</html>
