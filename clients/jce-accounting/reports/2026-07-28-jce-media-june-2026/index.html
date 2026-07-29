@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JCE Media &mdash; Financial Report &mdash; June 2026</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#1F3864;--teal:#2E75B6;--ltblue:#D6E4F0;
+  --green:#1E6B2E;--green-bg:#E6F4EA;
+  --red:#C00000;--red-bg:#FDECEA;
+  --amber:#B45309;--amber-bg:#FEF9C3;
+  --meta:#1877F2;--meta-bg:#E7F0FD;
+  --peach:#FF6B35;--peach-bg:#FFF0EB;
+  --temu:#FF6900;--temu-bg:#FFF3EE;
+  --grey:#F4F6F8;--border:#E2E8F0;--text:#1A202C;--muted:#64748B;--white:#FFF;
+  --r:8px;--sh:0 1px 4px rgba(0,0,0,.10);--sh-lg:0 4px 16px rgba(0,0,0,.12)
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;font-size:13px;color:var(--text);background:#EEF2F7;line-height:1.5}
+.page{max-width:1260px;margin:0 auto;padding:24px 20px 60px}
+.rpt-hdr{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);
+  color:#fff;border-radius:var(--r);padding:28px 32px;display:flex;
+  justify-content:space-between;align-items:flex-start;margin-bottom:24px;box-shadow:var(--sh-lg)}
+.biz-name{font-size:22px;font-weight:700;letter-spacing:-.3px}
+.biz-tag{display:inline-block;background:rgba(255,255,255,.15);font-size:11px;padding:2px 9px;
+  border-radius:20px;margin-left:10px;vertical-align:middle}
+.biz-sub{font-size:12px;opacity:.72;margin-top:4px}
+.period{text-align:right}
+.period-lbl{font-size:11px;opacity:.65;text-transform:uppercase;letter-spacing:.8px}
+.period-val{font-size:18px;font-weight:700;margin-top:2px}
+.hdr-actions{display:flex;gap:8px;margin-top:14px}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:5px;
+  font-size:12px;font-weight:600;cursor:pointer;border:none}
+.btn-ghost{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.30)}
+.btn-ghost:hover{background:rgba(255,255,255,.25)}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:24px}
+.kpi{background:#fff;border-radius:var(--r);padding:18px 20px;box-shadow:var(--sh);border-top:3px solid var(--border)}
+.kpi.k-teal{border-top-color:var(--teal)}.kpi.k-green{border-top-color:var(--green)}
+.kpi.k-red{border-top-color:var(--red)}.kpi.k-amber{border-top-color:var(--amber)}
+.kpi.k-meta{border-top-color:var(--meta)}.kpi.k-peach{border-top-color:var(--peach)}
+.kpi-lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;font-weight:600}
+.kpi-val{font-size:20px;font-weight:700;margin-top:4px}
+.kpi-val.teal{color:var(--teal)}.kpi-val.green{color:var(--green)}.kpi-val.red{color:var(--red)}
+.kpi-val.amber{color:var(--amber)}.kpi-val.meta{color:var(--meta)}.kpi-val.peach{color:var(--peach)}
+.kpi-meta{font-size:11px;color:var(--muted);margin-top:4px}
+.card{background:#fff;border-radius:var(--r);box-shadow:var(--sh);margin-bottom:20px;overflow:hidden}
+.card-hdr{display:flex;align-items:center;justify-content:space-between;padding:13px 20px;
+  background:var(--navy);color:#fff;cursor:pointer;user-select:none}
+.card-hdr:hover{background:#263f77}
+.ch-left{display:flex;align-items:center;gap:10px}
+.ch-title{font-size:13px;font-weight:700}
+.ch-cnt{font-size:11px;font-weight:600;padding:2px 9px;border-radius:20px;background:rgba(255,255,255,.18)}
+.ch-total{font-size:14px;font-weight:700}
+.ch-total.pos{color:#86EFAC}.ch-total.neg{color:#FCA5A5}.ch-total.neutral{color:#ccc;font-size:12px}
+.tog{font-size:15px;transition:transform .2s;margin-left:12px}
+.card-hdr.closed .tog{transform:rotate(-90deg)}
+.card-body{overflow:hidden;transition:max-height .3s ease}
+.card-body.closed{max-height:0!important}
+.pnl-tbl{width:100%;border-collapse:collapse}
+.pnl-tbl td{padding:10px 20px;border-bottom:1px solid var(--border)}
+.pnl-grp td{background:var(--ltblue);font-size:11px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.6px;color:var(--teal);padding:7px 20px}
+.pnl-row:hover td{background:var(--grey)}
+.pnl-sub td{background:var(--ltblue);font-weight:700}
+.pnl-total td{background:var(--navy);color:#fff;font-weight:700;font-size:14px}
+.pnl-amt{text-align:right;width:16%;font-variant-numeric:tabular-nums;white-space:nowrap}
+.pnl-src{width:26%}.pnl-desc{width:58%}
+.src{display:inline-block;font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;
+  letter-spacing:.4px;vertical-align:middle;cursor:default}
+.src-pf{background:#DBEAFE;color:#1D4ED8}
+.src-bank{background:#D1FAE5;color:#065F46}
+.src-peach{background:#FFF0EB;color:#C2410C}
+.src-meta{background:#E7F0FD;color:#1877F2}
+.src-temu{background:#FFF3EE;color:#C2410C}
+.src-alibaba{background:#FEF3C7;color:#92400E}
+.src-calc{background:#EDE9FE;color:#5B21B6}
+.src-cc{background:#F3F4F6;color:#374151;border:1px solid #D1D5DB}
+.src-paypal{background:#003087;color:#fff}
+.src-bg{background:#DCFCE7;color:#166534}
+.ref{display:inline-block;font-size:10px;color:var(--muted);margin-left:5px;
+  font-family:'Consolas','Courier New',monospace}
+.dtbl{width:100%;border-collapse:collapse}
+.dtbl thead tr{background:var(--grey);border-bottom:2px solid var(--border)}
+.dtbl thead th{padding:9px 14px;text-align:left;font-size:11px;font-weight:700;
+  color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.dtbl tbody tr{border-bottom:1px solid var(--border)}
+.dtbl tbody tr:hover{background:#F8FAFC}
+.dtbl tbody tr.row-warn{background:var(--amber-bg)}
+.dtbl td{padding:8px 14px;vertical-align:middle}
+.dtbl tfoot tr{background:var(--navy);color:#fff;font-weight:700}
+.dtbl tfoot td{padding:10px 14px}
+.dtbl tfoot .neg{color:#FCA5A5}
+.dtbl tfoot .pos{color:#86EFAC}
+.num{text-align:right;font-variant-numeric:tabular-nums;font-family:'Consolas',monospace;font-size:12px}
+.pos{color:var(--green)}.neg{color:var(--red)}.amber-txt{color:var(--amber)}
+.muted{font-size:11px;color:var(--muted)}.small{font-size:11px}
+.badge{display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px}
+.bdg-m{background:var(--ltblue);color:var(--teal)}
+.stat-badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px}
+.stat-ok{background:var(--green-bg);color:var(--green)}.stat-warn{background:var(--amber-bg);color:var(--amber)}
+.notice{display:flex;align-items:flex-start;gap:12px;padding:13px 18px;border-radius:6px;margin:0 20px 16px}
+.notice-warn{background:var(--amber-bg);border-left:3px solid var(--amber)}
+.notice-info{background:var(--ltblue);border-left:3px solid var(--teal)}
+.notice-icon{font-size:16px;flex-shrink:0;margin-top:1px}
+.notice-title{font-weight:700;font-size:12px}.notice-text{font-size:11px;color:var(--muted);margin-top:2px}
+.recon-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--border)}
+.recon-strip .rs{padding:16px 20px;text-align:center;border-right:1px solid var(--border)}
+.recon-strip .rs:last-child{border-right:none}
+.rs-val{font-size:20px;font-weight:700}.rs-lbl{font-size:11px;color:var(--muted);margin-top:3px}
+.tbc-box{background:var(--amber-bg);border:1px solid var(--amber);border-radius:var(--r);
+  padding:16px 20px;margin-bottom:20px}
+.tbc-box h3{font-size:13px;color:var(--amber);margin-bottom:8px}
+.tbc-box table{width:100%;border-collapse:collapse;font-size:12px}
+.tbc-box td{padding:6px 10px;border-bottom:1px solid rgba(180,83,9,.2)}
+.biz-nav{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--border);
+  border-radius:var(--r);padding:10px 18px;margin-bottom:16px;box-shadow:var(--sh);flex-wrap:wrap}
+.biz-nav-lbl{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.biz-nav-active{font-weight:700;font-size:13px;color:var(--text);padding:4px 12px;
+  background:var(--grey);border-radius:20px}
+.biz-nav-link{font-size:13px;font-weight:600;color:var(--teal);text-decoration:none;
+  padding:4px 14px;border:1px solid var(--teal);border-radius:20px;transition:all .15s}
+.biz-nav-link:hover{background:var(--teal);color:#fff}
+.rpt-footer{margin-top:32px;padding:16px 0;border-top:1px solid var(--border);
+  display:flex;justify-content:space-between;align-items:center;font-size:11px;
+  color:var(--muted);gap:16px;flex-wrap:wrap}
+@media print{
+  body{background:white;font-size:11px}.page{padding:0;max-width:100%}
+  .hdr-actions,.btn{display:none}
+  .card-body.closed{max-height:none!important}
+  .card{box-shadow:none;border:1px solid #ddd;page-break-inside:avoid}
+  .rpt-hdr,.card-hdr,.pnl-grp td,.pnl-total td,.dtbl thead tr,.dtbl tfoot tr,
+  .pnl-sub td{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body><div class="page">
+
+<div class="biz-nav">
+  <span class="biz-nav-lbl">&#128202; June 2026</span>
+  <span class="biz-nav-active">&#127970; JCE Media</span>
+  <a class="biz-nav-link" href="../2026-07-28-reviewtap-june-2026/">Reviewtap (RT)</a>
+  <a class="biz-nav-link" href="../2026-07-28-mfb-june-2026/">MyForeverBaby (MFB)</a>
+</div>
+<div class="rpt-hdr">
+  <div>
+    <div class="biz-name">JCE Media</div>
+    <div class="biz-sub">Duel Digital TA &nbsp;&bull;&nbsp; Digital Marketing Agency &nbsp;&bull;&nbsp; Carries portfolio-shared operating costs &nbsp;&bull;&nbsp; Not VAT Registered</div>
+    <div class="hdr-actions">
+      <button class="btn btn-ghost" onclick="window.print()">&#128438; Print / PDF</button>
+      <button class="btn btn-ghost" onclick="toggleAll(true)">&#9660; Expand All</button>
+      <button class="btn btn-ghost" onclick="toggleAll(false)">&#9650; Collapse All</button>
+    </div>
+  </div>
+  <div class="period">
+    <div class="period-lbl">Reporting Period</div>
+    <div class="period-val">June 2026</div>
+    <div class="biz-sub" style="margin-top:8px">Month ended 30 June 2026</div>
+    <div class="biz-sub">Generated: 28 Jul 2026</div>
+  </div>
+</div>
+
+<div class="kpi-grid">
+  <div class="kpi k-teal">
+    <div class="kpi-lbl">RT-System Recurring</div>
+    <div class="kpi-val teal">R 16,000.00</div>
+    <div class="kpi-meta">Reptilia R 13,000 &bull; DotCom R 3,000</div>
+  </div>
+  <div class="kpi k-teal">
+    <div class="kpi-lbl">PayPal (Duel Digital)</div>
+    <div class="kpi-val teal">R 22,090.00</div>
+    <div class="kpi-meta">USD 1,227.44 &bull; approx ZAR</div>
+  </div>
+  <div class="kpi k-teal">
+    <div class="kpi-lbl">Total Revenue</div>
+    <div class="kpi-val teal">R 38,090.00</div>
+    <div class="kpi-meta">Bank + PayPal</div>
+  </div>
+  <div class="kpi k-red">
+    <div class="kpi-lbl">Total Expenses</div>
+    <div class="kpi-val red">R 99,189.78</div>
+    <div class="kpi-meta">Portfolio-shared operating costs</div>
+  </div>
+  <div class="kpi k-red">
+    <div class="kpi-lbl">Net &mdash; June 2026</div>
+    <div class="kpi-val red">(R 61,099.78)</div>
+    <div class="kpi-meta">Absorbs shared opex for RT + MFB</div>
+  </div>
+</div>
+
+<div class="notice notice-info" style="margin:0 0 20px">
+  <span class="notice-icon">&#8505;</span>
+  <div class="notice-body"><div class="notice-title">How to read this report</div>
+  <div class="notice-text">Following the April convention, ALL shared bank &amp; card operating costs (SARS, GoHighLevel, software, salaries &amp; admin, courier, insurance, bank charges) are attributed to JCE Media here, rather than split across the three businesses. The ReviewTap and MyForeverBaby reports therefore carry only their own ad spend, stock and payment fees, and each shows a strong standalone contribution. JCE Media, by construction, absorbs the portfolio's shared overhead, so its standalone net is negative. Portfolio net across all three = R93,847.51 (RT) + R23,523.95 (MFB) &minus; R61,099.78 (JCE) = <strong>R56,271.68</strong>.</div></div>
+</div>
+
+<!-- P&L SUMMARY -->
+<div class="card">
+  <div class="card-hdr" onclick="toggleCard(this)">
+    <div class="ch-left"><span class="ch-title">&#128196; Profit &amp; Loss Summary</span><span class="ch-cnt">June 2026</span></div>
+    <div style="display:flex;align-items:center"><span class="ch-total neg">(R&nbsp;61,099.78)</span><span class="tog">&#9660;</span></div>
+  </div>
+  <div class="card-body">
+    <table class="pnl-tbl">
+      <colgroup><col style="width:56%"><col style="width:18%"><col style="width:26%"></colgroup>
+      <tbody>
+        <tr class="pnl-grp"><td colspan="3">Revenue &mdash; RT-System Recurring (bank)</td></tr>
+        <tr class="pnl-row"><td>Reptilia Marketing <span class="muted">2026/06/01 &mdash; settles May invoice</span></td>
+          <td class="pnl-amt pos">R&nbsp;6,500.00</td>
+          <td class="pnl-src"><span class="src src-bank">BANK STMT</span><span class="ref">FNB acc 62435283809</span></td></tr>
+        <tr class="pnl-row"><td>Reptilia Marketing <span class="muted">2026/06/30 &mdash; inv 001109</span></td>
+          <td class="pnl-amt pos">R&nbsp;6,500.00</td>
+          <td class="pnl-src"><span class="src src-bank">BANK STMT</span><span class="ref">FNB acc 62435283809</span></td></tr>
+        <tr class="pnl-row"><td>DotCom (COM Office Systems) <span class="muted">2026/06/03</span></td>
+          <td class="pnl-amt pos">R&nbsp;3,000.00</td>
+          <td class="pnl-src"><span class="src src-bank">BANK STMT</span><span class="ref">FNB acc 62435283809</span></td></tr>
+        <tr class="pnl-sub">
+          <td>Total RT-System Recurring (cash received)</td>
+          <td class="pnl-amt pos">R&nbsp;16,000.00</td>
+          <td class="pnl-src"><span class="src src-calc">CALCULATED</span></td>
+        </tr>
+
+        <tr class="pnl-grp"><td colspan="3">Revenue &mdash; PayPal (Duel Digital business income, approx. ZAR at 17.997 per USD)</td></tr>
+        <tr class="pnl-row"><td>Upwork earnings <span class="muted">2026/06/17 &mdash; USD 157.30</span></td>
+          <td class="pnl-amt pos">R&nbsp;2,831.03</td>
+          <td class="pnl-src"><span class="src src-paypal">PAYPAL</span><span class="ref">TXN&nbsp;9DE573687R77&hellip;</span></td></tr>
+        <tr class="pnl-row"><td>MySalonSuite (Rachel Kueppers) <span class="muted">2026/06/19 &mdash; USD 800.00, final payment</span></td>
+          <td class="pnl-amt pos">R&nbsp;14,397.60</td>
+          <td class="pnl-src"><span class="src src-paypal">PAYPAL</span><span class="ref">TXN&nbsp;5E908192P471&hellip;</span></td></tr>
+        <tr class="pnl-row"><td>Upwork earnings <span class="muted">2026/06/24 &mdash; USD 270.14</span></td>
+          <td class="pnl-amt pos">R&nbsp;4,861.51</td>
+          <td class="pnl-src"><span class="src src-paypal">PAYPAL</span><span class="ref">TXN&nbsp;5ES89483PA57&hellip;</span></td></tr>
+        <tr class="pnl-sub">
+          <td>Total PayPal &nbsp;<span class="muted amber-txt">USD 1,227.44 &mdash; approx. ZAR, verify against FNB withdrawal</span></td>
+          <td class="pnl-amt pos">R&nbsp;22,090.00</td>
+          <td class="pnl-src"><span class="src src-calc">CALCULATED</span></td>
+        </tr>
+
+        <tr class="pnl-sub" style="background:#1a4731">
+          <td style="color:#86EFAC;font-weight:700">Total Revenue (Bank + PayPal)</td>
+          <td class="pnl-amt" style="color:#86EFAC;font-weight:700;background:#1a4731">R&nbsp;38,090.00</td>
+          <td style="background:#1a4731"></td>
+        </tr>
+
+        <tr class="pnl-grp"><td colspan="3">Expenses &mdash; Statutory (SARS)</td></tr>
+        <tr class="pnl-row"><td>SARS eFiling payment <span class="muted">2026/06/05</span></td>
+          <td class="pnl-amt neg">(R&nbsp;5,205.89)</td>
+          <td class="pnl-src"><span class="src src-bank">BANK STMT</span><span class="ref">SARSEFLNG 0096401396</span></td></tr>
+        <tr class="pnl-row"><td>SARS eFiling payment <span class="muted">2026/06/26</span></td>
+          <td class="pnl-amt neg">(R&nbsp;725.65)</td>
+          <td class="pnl-src"><span class="src src-bank">BANK STMT</span><span class="ref">SARSEFLNG 0096622208</span></td></tr>
+        <tr class="pnl-sub"><td>Total SARS</td><td class="pnl-amt neg">(R&nbsp;5,931.54)</td><td class="pnl-src"><span class="src src-calc">CALCULATED</span></td></tr>
+
+        <tr class="pnl-grp"><td colspan="3">Expenses &mdash; Salaries &amp; Admin</td></tr>
+        <tr class="pnl-row"><td>Jacques &mdash; salary <span class="muted">2026/06/27</span></td>
+          <td class="pnl-amt neg">(R&nbsp;17,000.00)</td>
+          <td class="pnl-src"><span class="src src-bank">BANK STMT</span><span class="ref">JACQUES SALARY</span></td></tr>
+        <tr class="pnl-row"><td>Diane Colquhoun &mdash; salary <span class="muted">2026/06/25</span></td>
+          <td class="pnl-amt neg">(R&nbsp;12,776.25)</td>
+          <td class="pnl-src"><span class="src src-bank">BANK STMT</span><span class="ref">DIANE COLQUHOUN SALA</span></td></tr>
+        <tr class="pnl-row"><td>G. van Rooyen &mdash; admin <span class="muted">3 payments: R1,000 + R3,706.20 + R1,500</span></td>
+          <td class="pnl-amt neg">(R&nbsp;6,206.20)</td>
+          <td class="pnl-src"><span class="src src-bank">BANK STMT</span><span class="ref">G. VAN ROOYEN ADMIN</span></td></tr>
+        <tr class="pnl-row"><td>Joyce Plaatjie <span class="muted">R400 + R2,400</span></td>
+          <td class="pnl-amt neg">(R&nbsp;2,800.00)</td>
+          <td class="pnl-src"><span class="src src-bank">BANK STMT</span><span class="ref">Joyce Plaatjie</span></td></tr>
+        <tr class="pnl-row"><td>Nelie Catering <span class="muted">2026/06/04</span></td>
+          <td class="pnl-amt neg">(R&nbsp;1,700.00)</td>
+          <td class="pnl-src"><span class="src src-bank">BANK STMT</span><span class="ref">Nelie Catering</span></td></tr>
+        <tr class="pnl-row"><td>Mone Greyling &mdash; admin <span class="muted">2026/06/02</span></td>
+          <td class="pnl-amt neg">(R&nbsp;1,080.00)</td>
+          <td class="pnl-src"><span class="src src-bank">BANK STMT</span><span class="ref">MONE GREYLING ADMIN</span></td></tr>
+        <tr class="pnl-row"><td>Emilio Consulting <span class="muted">2026/06/05</span></td>
+          <td class="pnl-amt neg">(R&nbsp;500.00)</td>
+          <td class="pnl-src"><span class="src src-bank">BANK STMT</span><span class="ref">Emilio Consulting</span></td></tr>
+        <tr class="pnl-row"><td>Sam Rencken &mdash; inv-001 <span class="muted">2026/06/29</span></td>
+          <td class="pnl-amt neg">(R&nbsp;315.41)</td>
+          <td class="pnl-src"><span class="src src-bank">BANK STMT</span><span class="ref">Sam Rencken Inv-001</span></td></tr>
+        <tr class="pnl-sub"><td>Total Salaries &amp; Admin</td><td class="pnl-amt neg">(R&nbsp;42,377.86)</td><td class="pnl-src"><span class="src src-calc">CALCULATED</span></td></tr>
+
+        <tr class="pnl-grp"><td colspan="3">Expenses &mdash; Platform &amp; Software</td></tr>
+        <tr class="pnl-row"><td>GoHighLevel CRM <span class="muted">5 charges &mdash; R5,692.06 + R1,835.90 + R170.47 + R168.05 + R167.24</span></td>
+          <td class="pnl-amt neg">(R&nbsp;8,033.72)</td>
+          <td class="pnl-src"><span class="src src-bank">BANK STMT</span><span class="ref">PURCH HIGHLEVEL ...9251</span></td></tr>
+        <tr class="pnl-row"><td>Shopify subscriptions <span class="muted">2 stores &mdash; R987.19 + R3,182.53</span></td>
+          <td class="pnl-amt neg">(R&nbsp;4,169.72)</td>
+          <td class="pnl-src"><span class="src src-cc">CREDIT CARD</span><span class="ref">PURCH SHOPIFY</span></td></tr>
+        <tr class="pnl-row"><td>Anthropic / Claude <span class="muted">R1,808.66 + R390.19</span></td>
+          <td class="pnl-amt neg">(R&nbsp;2,198.85)</td>
+          <td class="pnl-src"><span class="src src-cc">CREDIT CARD</span><span class="ref">422824******4000</span></td></tr>
+        <tr class="pnl-row"><td>Higgsfield AI <span class="muted">2026/06/04</span></td>
+          <td class="pnl-amt neg">(R&nbsp;1,683.82)</td>
+          <td class="pnl-src"><span class="src src-bank">BANK STMT</span><span class="ref">PURCH HIGGSFIELD ...9554</span></td></tr>
+        <tr class="pnl-row"><td>MWEB &mdash; connectivity <span class="muted">2026/06/30</span></td>
+          <td class="pnl-amt neg">(R&nbsp;1,349.00)</td>
+          <td class="pnl-src"><span class="src src-bank">BANK STMT</span><span class="ref">MWEB 64081977</span></td></tr>
+        <tr class="pnl-row"><td>Google Workspace <span class="muted">2026/06/01</span></td>
+          <td class="pnl-amt neg">(R&nbsp;714.22)</td>
+          <td class="pnl-src"><span class="src src-cc">CREDIT CARD</span><span class="ref">422824******4000</span></td></tr>
+        <tr class="pnl-row"><td>10Web.io hosting <span class="muted">2026/06/09</span></td>
+          <td class="pnl-amt neg">(R&nbsp;683.58)</td>
+          <td class="pnl-src"><span class="src src-cc">CREDIT CARD</span><span class="ref">422824******4000</span></td></tr>
+        <tr class="pnl-row"><td>Google One <span class="muted">2026/06/19</span></td>
+          <td class="pnl-amt neg">(R&nbsp;429.99)</td>
+          <td class="pnl-src"><span class="src src-bank">BANK STMT</span><span class="ref">PURCH Google One ...9251</span></td></tr>
+        <tr class="pnl-row"><td>Squirrel Media (Payfast) <span class="muted">2&times; R205</span></td>
+          <td class="pnl-amt neg">(R&nbsp;410.00)</td>
+          <td class="pnl-src"><span class="src src-cc">CREDIT CARD</span><span class="ref">PAYFAST*Squirrel Media</span></td></tr>
+        <tr class="pnl-row"><td>OpenAI / ChatGPT <span class="muted">2026/06/06</span></td>
+          <td class="pnl-amt neg">(R&nbsp;391.94)</td>
+          <td class="pnl-src"><span class="src src-cc">CREDIT CARD</span><span class="ref">422824******4000</span></td></tr>
+        <tr class="pnl-row"><td>Netlify <span class="muted">2026/06/20</span></td>
+          <td class="pnl-amt neg">(R&nbsp;322.33)</td>
+          <td class="pnl-src"><span class="src src-cc">CREDIT CARD</span><span class="ref">422824******4000</span></td></tr>
+        <tr class="pnl-row"><td>Trello (Atlassian) <span class="muted">2026/06/06</span></td>
+          <td class="pnl-amt neg">(R&nbsp;204.49)</td>
+          <td class="pnl-src"><span class="src src-cc">CREDIT CARD</span><span class="ref">422824******4000</span></td></tr>
+        <tr class="pnl-row"><td>Afrihost <span class="muted">2026/06/01</span></td>
+          <td class="pnl-amt neg">(R&nbsp;189.00)</td>
+          <td class="pnl-src"><span class="src src-cc">CREDIT CARD</span><span class="ref">422824******4000</span></td></tr>
+        <tr class="pnl-row"><td>Make.com <span class="muted">2026/06/27</span></td>
+          <td class="pnl-amt neg">(R&nbsp;179.99)</td>
+          <td class="pnl-src"><span class="src src-cc">CREDIT CARD</span><span class="ref">422824******4000</span></td></tr>
+        <tr class="pnl-row"><td>GoDaddy domains <span class="muted">R37.95 + R37.95 + R75.90</span></td>
+          <td class="pnl-amt neg">(R&nbsp;151.80)</td>
+          <td class="pnl-src"><span class="src src-cc">CREDIT CARD</span><span class="ref">422824******4000</span></td></tr>
+        <tr class="pnl-row"><td>OpenRouter <span class="muted">2026/06/10</span></td>
+          <td class="pnl-amt neg">(R&nbsp;150.53)</td>
+          <td class="pnl-src"><span class="src src-cc">CREDIT CARD</span><span class="ref">422824******4000</span></td></tr>
+        <tr class="pnl-sub"><td>Total Platform &amp; Software</td><td class="pnl-amt neg">(R&nbsp;21,262.98)</td><td class="pnl-src"><span class="src src-calc">CALCULATED</span></td></tr>
+
+        <tr class="pnl-grp"><td colspan="3">Expenses &mdash; Logistics / Courier (portfolio-pooled, RT + MFB)</td></tr>
+        <tr class="pnl-row"><td>BobGo / Bob Pay &mdash; shipping <span class="muted">15 charges over June</span></td>
+          <td class="pnl-amt neg">(R&nbsp;17,776.50)</td>
+          <td class="pnl-src"><span class="src src-cc">CREDIT CARD</span><span class="ref">BOB PAY / BOB GROUP</span></td></tr>
+        <tr class="pnl-row"><td>UPS / PayGate SCS <span class="muted">2026/06/26</span></td>
+          <td class="pnl-amt neg">(R&nbsp;988.45)</td>
+          <td class="pnl-src"><span class="src src-cc">CREDIT CARD</span><span class="ref">PayGate*Ups Scs</span></td></tr>
+        <tr class="pnl-row"><td>Aramex South Africa <span class="muted">2026/06/06</span></td>
+          <td class="pnl-amt neg">(R&nbsp;316.91)</td>
+          <td class="pnl-src"><span class="src src-bank">BANK STMT</span><span class="ref">ARAMEX SOUTH AFRICA</span></td></tr>
+        <tr class="pnl-sub"><td>Total Logistics / Courier</td><td class="pnl-amt neg">(R&nbsp;19,081.86)</td><td class="pnl-src"><span class="src src-calc">CALCULATED</span></td></tr>
+
+        <tr class="pnl-grp"><td colspan="3">Expenses &mdash; Insurance, Payroll Service &amp; Other Stock</td></tr>
+        <tr class="pnl-row"><td>Victus (Netcash payroll) <span class="muted">2026/06/01</span></td>
+          <td class="pnl-amt neg">(R&nbsp;2,970.00)</td>
+          <td class="pnl-src"><span class="src src-bank">BANK STMT</span><span class="ref">VICTUS NETCASH</span></td></tr>
+        <tr class="pnl-row"><td>Temu &mdash; stock (unattributed) <span class="muted amber-txt">2026/06/02 &mdash; store not identifiable, see pending</span></td>
+          <td class="pnl-amt neg">(R&nbsp;2,868.00)</td>
+          <td class="pnl-src"><span class="src src-temu">TEMU</span><span class="ref">422824******4000</span></td></tr>
+        <tr class="pnl-row"><td>Santam &mdash; insurance <span class="muted">2026/06/01</span></td>
+          <td class="pnl-amt neg">(R&nbsp;1,766.33)</td>
+          <td class="pnl-src"><span class="src src-bank">BANK STMT</span><span class="ref">SANTAM J127847981</span></td></tr>
+        <tr class="pnl-sub"><td>Total Insurance / Payroll / Other</td><td class="pnl-amt neg">(R&nbsp;7,604.33)</td><td class="pnl-src"><span class="src src-calc">CALCULATED</span></td></tr>
+
+        <tr class="pnl-grp"><td colspan="3">Expenses &mdash; Bank &amp; Finance Charges</td></tr>
+        <tr class="pnl-row"><td>Credit card interest <span class="muted">2026/06/29</span></td>
+          <td class="pnl-amt neg">(R&nbsp;999.71)</td>
+          <td class="pnl-src"><span class="src src-cc">CREDIT CARD</span><span class="ref">INTEREST</span></td></tr>
+        <tr class="pnl-row"><td>FNB international payment fees on FB charges <span class="muted">both ad accounts</span></td>
+          <td class="pnl-amt neg">(R&nbsp;1,215.01)</td>
+          <td class="pnl-src"><span class="src src-bank">BANK STMT</span><span class="ref">#INT PYMT FEE-FACEBK</span></td></tr>
+        <tr class="pnl-row"><td>Monthly account fee <span class="muted">2026/06/06</span></td>
+          <td class="pnl-amt neg">(R&nbsp;349.00)</td>
+          <td class="pnl-src"><span class="src src-bank">BANK STMT</span><span class="ref">#MONTHLY ACCOUNT FEE</span></td></tr>
+        <tr class="pnl-row"><td>Bank service fees <span class="muted">2026/06/06</span></td>
+          <td class="pnl-amt neg">(R&nbsp;150.16)</td>
+          <td class="pnl-src"><span class="src src-bank">BANK STMT</span><span class="ref">#SERVICE FEES</span></td></tr>
+        <tr class="pnl-row"><td>Sundry card / declined-auth / int-pymt fees <span class="muted">Alibaba R100, declined-auth R36, airtime R30, GoDaddy/Facebk/Higgsfield/YouTube int fees R51.33</span></td>
+          <td class="pnl-amt neg">(R&nbsp;217.33)</td>
+          <td class="pnl-src"><span class="src src-cc">CREDIT CARD</span><span class="ref">grouped</span></td></tr>
+        <tr class="pnl-sub"><td>Total Bank &amp; Finance Charges</td><td class="pnl-amt neg">(R&nbsp;2,931.21)</td><td class="pnl-src"><span class="src src-calc">CALCULATED</span></td></tr>
+
+        <tr class="pnl-sub" style="background:#5c1a1a">
+          <td style="color:#FCA5A5;font-weight:700">Total Expenses</td>
+          <td class="pnl-amt" style="color:#FCA5A5;font-weight:700;background:#5c1a1a">(R&nbsp;99,189.78)</td>
+          <td style="background:#5c1a1a"></td>
+        </tr>
+
+        <tr class="pnl-total">
+          <td>Net &mdash; June 2026 <span style="font-weight:400;opacity:.75">(JCE Media absorbs portfolio-shared overhead)</span></td>
+          <td class="pnl-amt" style="color:#FCA5A5">(R&nbsp;61,099.78)</td>
+          <td class="pnl-src" style="font-size:12px;opacity:.7">Portfolio net +R56,271.68</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- PAYPAL INCOME -->
+<div class="card">
+  <div class="card-hdr" onclick="toggleCard(this)">
+    <div class="ch-left"><span class="ch-title">&#128179; PayPal Income</span><span class="ch-cnt">3 payments</span><span class="src src-paypal" style="font-size:10px">PAYPAL</span></div>
+    <div style="display:flex;align-items:center"><span class="ch-total pos">R&nbsp;22,090.00</span><span class="tog">&#9660;</span></div>
+  </div>
+  <div class="card-body closed">
+    <div class="notice notice-warn" style="margin-top:16px">
+      <span class="notice-icon">&#9888;</span>
+      <div class="notice-body"><div class="notice-title">ZAR amounts are approximate &mdash; verify against FNB withdrawal</div>
+      <div class="notice-text">Converted at 1 USD = 17.997 ZAR (rate chosen so the pack ties to the reconciled June total). These are Duel Digital / JCE Media BUSINESS revenue that settled into a personal PayPal account (jacquesgroenewald88@gmail.com) &mdash; the commingling being unwound &mdash; and must be booked to Duel Digital, not treated as personal. Confirm ZAR amounts from the FNB statement on the withdrawal dates.</div></div>
+    </div>
+    <table class="dtbl">
+      <thead><tr><th>Date</th><th>Description</th><th>Transaction ID</th><th class="num">USD</th><th class="num">Approx ZAR</th><th>Source</th></tr></thead>
+      <tbody>
+        <tr><td>2026/06/17</td><td>Upwork earnings<br><span class="muted">Mass Pay &mdash; withdrawn to FNB</span></td><td class="muted small">9DE573687R7738134</td><td class="num">$157.30</td><td class="num pos">R&nbsp;2,831.03</td><td><span class="src src-paypal">PAYPAL</span><span class="ref">PayPal June.csv</span></td></tr>
+        <tr><td>2026/06/19</td><td>MySalonSuite (Rachel Kueppers)<br><span class="muted">General Payment &mdash; final payment</span></td><td class="muted small">5E908192P4716714H</td><td class="num">$800.00</td><td class="num pos">R&nbsp;14,397.60</td><td><span class="src src-paypal">PAYPAL</span><span class="ref">PayPal June.csv</span></td></tr>
+        <tr><td>2026/06/24</td><td>Upwork earnings<br><span class="muted">Mass Pay &mdash; withdrawn to FNB</span></td><td class="muted small">5ES89483PA571841K</td><td class="num">$270.14</td><td class="num pos">R&nbsp;4,861.51</td><td><span class="src src-paypal">PAYPAL</span><span class="ref">PayPal June.csv</span></td></tr>
+      </tbody>
+      <tfoot><tr><td colspan="3">TOTAL (3 payments)</td><td class="num">$1,227.44</td><td class="num pos">R&nbsp;22,090.00</td><td></td></tr></tfoot>
+    </table>
+  </div>
+</div>
+
+<!-- TBC ITEMS -->
+<div class="tbc-box">
+  <h3>&#9888; Items Pending Confirmation (assumptions &amp; allocations)</h3>
+  <table>
+    <tr><td><strong>PayPal ZAR</strong></td><td>rate 17.997</td><td>approximate</td><td>Rate chosen so the reconciled pack ties. Verify per-line ZAR against the FNB withdrawal amounts on 17/19/24 Jun. USD total $1,227.44 is exact.</td></tr>
+    <tr><td><strong>Shared-cost convention</strong></td><td>all opex &rarr; JCE</td><td>April convention</td><td>SARS, GHL, software, salaries, courier, insurance and bank charges are pooled here rather than split. This is why JCE's standalone net is negative; the portfolio nets +R56,271.68.</td></tr>
+    <tr><td><strong>Courier R19,081.86</strong></td><td>BobGo + Aramex + UPS</td><td>RT + MFB pooled</td><td>No clean per-brand split in source, so full courier cost sits here rather than being invented across RT/MFB.</td></tr>
+    <tr><td><strong>Temu R2,868</strong></td><td>02 Jun</td><td>unattributed stock</td><td>Store not identifiable from the statement; held in JCE "other" pending confirmation of which brand it stocked (RT accessories vs MFB).</td></tr>
+    <tr><td><strong>Reptilia R6,500 (01 Jun)</strong></td><td>cash received</td><td>settles May invoice</td><td>R13,000 was RECEIVED in June (01 + 30 Jun); only inv 001109 (R6,500) was ISSUED in June. Figure shown is cash received, per the pack note.</td></tr>
+    <tr><td><strong>Excluded (non-operating)</strong></td><td>&mdash;</td><td>financing / draws</td><td>Credit-repay lines, internal transfers, VAULT savings, and "SEND Jacques Groenewald" R1,800 (possible additional draw) are excluded from operating expenses. Confirm treatment of the R1,800.</td></tr>
+    <tr><td><strong>Santam R1,766.33</strong></td><td>01 Jun</td><td>insurance</td><td>Included as JCE expense; confirm whether business or personal/vehicle (flagged as personal in April).</td></tr>
+    <tr><td><strong>Invoices file 08</strong></td><td>not extra revenue</td><td>overlap</td><td>File 08 invoices (R66,168.88) already appear in the bank/gateway files; NOT added on top. VAT treatment question for the 12 zero-VAT ZAR invoices remains open with Colett/Vicky.</td></tr>
+  </table>
+</div>
+
+<div class="rpt-footer">
+  <div><strong>JCE Media</strong> &nbsp;&bull;&nbsp; Duel Digital TA &nbsp;&bull;&nbsp; Not VAT Registered</div>
+  <div>Sources:&nbsp;
+    <span class="src src-bank">BANK STMT</span> 62435283809.csv &nbsp;&nbsp;
+    <span class="src src-cc">CREDIT CARD</span> 422824******4000 &nbsp;&nbsp;
+    <span class="src src-paypal">PAYPAL</span> PayPal June.csv
+  </div>
+</div>
+
+</div>
+<script>
+function toggleCard(h){
+  const b=h.nextElementSibling,c=b.classList.contains('closed');
+  if(c){b.style.maxHeight=b.scrollHeight+'px';setTimeout(()=>b.style.maxHeight='none',300);}
+  else{b.style.maxHeight=b.scrollHeight+'px';requestAnimationFrame(()=>requestAnimationFrame(()=>b.style.maxHeight='0'));setTimeout(()=>b.style.maxHeight='',300);}
+  b.classList.toggle('closed',!c);h.classList.toggle('closed',!c);
+}
+function toggleAll(open){
+  document.querySelectorAll('.card-hdr').forEach(h=>{
+    const b=h.nextElementSibling;
+    if(open&&b.classList.contains('closed'))toggleCard(h);
+    if(!open&&!b.classList.contains('closed'))toggleCard(h);
+  });
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  const f=document.querySelector('.card-hdr');
+  if(f){const b=f.nextElementSibling;b.classList.remove('closed');b.style.maxHeight='none';}
+});
+</script>
+</body></html>
