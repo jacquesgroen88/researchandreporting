@@ -493,7 +493,7 @@
     </div>
 
     <div class="fwrap reveal d2">
-      <div class="ferror" id="ferror" role="alert">Something went wrong sending that. Please email <a href="mailto:events@acreagevenue.co.za">events@acreagevenue.co.za</a> or call +27 66 272 6862 and we will pick it up straight away.</div>
+      <div class="ferror" id="ferror" role="alert">We could not send that automatically, so we have opened your email app with the details already filled in. Just press send. If nothing opened, email <a href="mailto:events@acreagevenue.co.za">events@acreagevenue.co.za</a> or call <a href="tel:+27662726862">+27 66 272 6862</a>.</div>
 
       <form id="enquiryForm" name="acreage-enquiry" method="POST" data-netlify="true" netlify-honeypot="company-website">
         <input type="hidden" name="form-name" value="acreage-enquiry">
@@ -628,21 +628,39 @@
     },{threshold:0}).observe(target);
   })();
 
-  /* Enquiry submit. Posts to Netlify Forms in the background so the visitor
-     stays on the page and sees the confirmation immediately. On failure we
-     surface the phone and email rather than swallowing the enquiry. */
+  /* Enquiry submit.
+     Primary path posts to Netlify Forms so the visitor never leaves the page.
+     That requires form detection to be switched on for the site; until it is,
+     the POST 404s. Rather than lose the enquiry we fall back to opening the
+     visitor's mail client with every answer already filled in, and tell them
+     that is what happened. When Forms is enabled the fallback simply stops
+     being reached. Either way an enquiry is never silently dropped. */
   (function(){
     var form=document.getElementById('enquiryForm');
     if(!form) return;
     var btn=document.getElementById('fbtn'),
         thanks=document.getElementById('thanks'),
-        err=document.getElementById('ferror');
+        err=document.getElementById('ferror'),
+        LABELS={name:'Name',email:'Email',phone:'Phone',event_type:'Event type',
+                preferred_date:'Preferred date',guests:'Guests',message:'Notes'};
+
+    function mailtoFallback(fd){
+      var lines=[];
+      Object.keys(LABELS).forEach(function(k){
+        var v=(fd.get(k)||'').trim();
+        if(v) lines.push(LABELS[k]+': '+v);
+      });
+      var subject='Event enquiry from '+(fd.get('name')||'the website');
+      return 'mailto:events@acreagevenue.co.za?subject='+encodeURIComponent(subject)+
+             '&body='+encodeURIComponent(lines.join('\n'));
+    }
 
     form.addEventListener('submit',function(ev){
       ev.preventDefault();
       err.classList.remove('show');
       if(!form.reportValidity()) return;
 
+      var fd=new FormData(form);
       btn.disabled=true;
       var original=btn.textContent;
       btn.textContent='Sending...';
@@ -650,7 +668,7 @@
       fetch('/',{
         method:'POST',
         headers:{'Content-Type':'application/x-www-form-urlencoded'},
-        body:new URLSearchParams(new FormData(form)).toString()
+        body:new URLSearchParams(fd).toString()
       }).then(function(r){
         if(!r.ok) throw new Error('HTTP '+r.status);
         form.style.display='none';
@@ -661,6 +679,7 @@
         btn.disabled=false;
         btn.textContent=original;
         err.scrollIntoView({behavior:'smooth',block:'center'});
+        window.location.href=mailtoFallback(fd);
       });
     });
   })();
