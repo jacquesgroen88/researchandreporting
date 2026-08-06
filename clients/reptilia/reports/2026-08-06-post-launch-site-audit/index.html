@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Reptilia Post-Launch Audit: Build Actions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=PT+Sans:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --coral:#ED6744; --coral-dark:#d4522f; --coral-soft:#fdf0ec;
+  --ink:#12161a; --muted:#5f6b76; --line:#e8ecf1; --bg:#f6f8fa; --card:#fff;
+  --red:#c8372a; --amber:#b26a00; --green:#1f7a4d; --slate:#4a5b6d;
+  --shadow:0 4px 16px rgba(20,35,55,.07);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.62 "PT Sans",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:Montserrat,system-ui,sans-serif;margin:0;line-height:1.22}
+a{color:var(--coral-dark)}
+.wrap{max-width:940px;margin:0 auto;padding:0 20px}
+
+/* header */
+header.top{background:linear-gradient(135deg,#1b2229,#2c3742);color:#fff;padding:52px 0 44px}
+header.top .kicker{font-family:Montserrat;font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:11px;color:var(--coral);margin-bottom:14px}
+header.top h1{font-size:38px;font-weight:800;letter-spacing:-.02em}
+header.top .sub{color:#b9c4cf;margin-top:12px;font-size:17px;max-width:640px}
+.meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+.meta span{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:6px 14px;font-size:13px;color:#dbe3ea}
+.internal{background:var(--coral);border-color:var(--coral);color:#fff;font-weight:700}
+
+/* verdict */
+.verdict{background:var(--card);border-radius:14px;box-shadow:var(--shadow);padding:30px 32px;margin:-30px 0 34px;border-left:5px solid var(--green)}
+.verdict h2{font-size:21px;margin-bottom:10px}
+.verdict p{margin:0 0 12px;color:var(--slate)}
+.verdict p:last-child{margin-bottom:0}
+
+section{margin:44px 0}
+h2.sec{font-size:13px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding-bottom:11px;border-bottom:2px solid var(--line);margin-bottom:22px}
+
+/* action cards */
+.act{background:var(--card);border-radius:12px;box-shadow:var(--shadow);margin-bottom:16px;overflow:hidden;border-left:5px solid var(--line)}
+.act.p0{border-left-color:var(--red)}
+.act.p1{border-left-color:var(--amber)}
+.act.p2{border-left-color:var(--slate)}
+.act-h{padding:20px 24px 0;display:flex;gap:14px;align-items:flex-start}
+.num{flex:0 0 34px;height:34px;border-radius:9px;background:var(--coral-soft);color:var(--coral-dark);font-family:Montserrat;font-weight:800;font-size:15px;display:flex;align-items:center;justify-content:center}
+.act.p0 .num{background:#fbeae8;color:var(--red)}
+.act-h h3{font-size:18px;font-weight:700;flex:1}
+.act-b{padding:12px 24px 22px 72px}
+.act-b p{margin:0 0 12px;color:var(--slate)}
+.act-b p:last-child{margin-bottom:0}
+.tags{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0 0}
+.tag{font-family:Montserrat;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:4px 10px;border-radius:5px;background:#eef2f6;color:var(--slate)}
+.tag.you{background:#e7f4ec;color:var(--green)}
+.tag.willem{background:#fdf0ec;color:var(--coral-dark)}
+.tag.host{background:#eef1fb;color:#4a55a8}
+.tag.blocked{background:#fbeae8;color:var(--red)}
+.tag.now{background:#fff3e0;color:var(--amber)}
+.ev{background:#f7f9fb;border:1px solid var(--line);border-radius:8px;padding:13px 16px;margin-top:13px;font-size:14.5px;color:var(--slate)}
+.ev strong{font-family:Montserrat;font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px}
+code{background:#eef2f6;padding:2px 6px;border-radius:4px;font-size:13.5px;font-family:ui-monospace,Menlo,Consolas,monospace}
+
+/* fixed table */
+table{width:100%;border-collapse:collapse;background:var(--card);border-radius:12px;overflow:hidden;box-shadow:var(--shadow);font-size:15px}
+th{background:#eef2f6;font-family:Montserrat;font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:left;padding:12px 16px}
+td{padding:12px 16px;border-top:1px solid var(--line);color:var(--slate);vertical-align:top}
+td.ok{color:var(--green);font-weight:700;white-space:nowrap}
+td.part{color:var(--amber);font-weight:700;white-space:nowrap}
+td.num-c{text-align:right;font-variant-numeric:tabular-nums;font-weight:700;color:var(--ink)}
+
+/* stat row */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:20px}
+.stat{background:var(--card);border-radius:12px;box-shadow:var(--shadow);padding:20px}
+.stat .v{font-family:Montserrat;font-size:29px;font-weight:800;letter-spacing:-.02em}
+.stat .v.bad{color:var(--red)} .stat .v.warn{color:var(--amber)} .stat .v.good{color:var(--green)}
+.stat .l{font-size:13.5px;color:var(--muted);margin-top:3px}
+
+.qbox{background:var(--coral-soft);border:1px solid #f6d5ca;border-radius:12px;padding:24px 28px}
+.qbox ol{margin:0;padding-left:20px}
+.qbox li{margin-bottom:11px;color:var(--slate)}
+.qbox li:last-child{margin-bottom:0}
+.qbox li strong{color:var(--ink)}
+
+.caveat{background:#fffdf5;border:1px solid #f0e4c0;border-radius:12px;padding:22px 26px}
+.caveat ul{margin:0;padding-left:20px}
+.caveat li{margin-bottom:9px;color:var(--slate)}
+.caveat li:last-child{margin-bottom:0}
+
+footer{background:#1b2229;color:#8d9aa6;padding:30px 0;margin-top:56px;font-size:14px}
+footer a{color:var(--coral)}
+@media(max-width:640px){
+  header.top h1{font-size:28px}
+  .act-b{padding-left:24px}
+  .verdict{padding:24px}
+  table{font-size:14px} th,td{padding:10px 12px}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="kicker">Reptilia · Post-Launch Site Audit</div>
+    <h1>What to fix, in what order</h1>
+    <div class="sub">Site went live 5 August. Audited 6 August against the live production store. This is the build list, ordered by what you can start today versus what is waiting on Willem.</div>
+    <div class="meta">
+      <span class="internal">Internal · Diane</span>
+      <span>reptilia.co.za</span>
+      <span>926 products</span>
+      <span>Front end + public Store API only</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="verdict">
+    <h2>Launch worked</h2>
+    <p>Both blockers from the July staging audit are dead. PayFast is live and charging, the production domain resolves, and the redirects are correct. Mobile carousel clipping is fixed, amphibians are gone, and stock levels now display. Zero console errors, zero broken images, no mixed content. That is a real result and it is worth saying out loud before the list below.</p>
+    <p>Three things need attention now, and only one of them is a big job.</p>
+  </div>
+
+  <section>
+    <h2 class="sec">Do this week · nothing here is blocked</h2>
+
+    <div class="act p0">
+      <div class="act-h"><div class="num">1</div><h3>Take the staging site down</h3></div>
+      <div class="act-b">
+        <p>The old 10Web staging site is still live, still public, and still serving a complete copy of all 926 products. It canonicals to itself and publishes its own sitemap, so Google can index both stores and split the ranking signal between them. This is the single fastest thing on this list to fix.</p>
+        <p>While you are in there: production is serving a placeholder robots.txt, the commented example template, with no sitemap line. Staging has the correct one. They are the wrong way round.</p>
+        <div class="ev"><strong>Evidence</strong><code>square-horse.10web.cloud</code> returns 200 with <code>X-WP-Total: 926</code>, no <code>noindex</code>, no <code>X-Robots-Tag</code>, canonical set to itself. Production <code>/robots.txt</code> contains only a bare <code>Disallow:</code> and no <code>Sitemap:</code> line, though <code>/wp-sitemap.xml</code> does exist and works.</div>
+        <div class="tags"><span class="tag you">Diane</span><span class="tag now">This week</span><span class="tag">~30 min</span></div>
+      </div>
+    </div>
+
+    <div class="act p0">
+      <div class="act-h"><div class="num">2</div><h3>Install analytics. The site is currently measuring nothing</h3></div>
+      <div class="act-b">
+        <p>There is no GA4, no Tag Manager, no Meta pixel and no conversion tracking anywhere on the site. Every visitor since launch is invisible: no traffic baseline, no idea where anyone came from, no funnel, no cart-abandon signal. When Willem asks how launch went, there is currently no answer.</p>
+        <p>This is the cheapest fix on the list and the most expensive one to leave, because the data we do not collect this week is gone permanently.</p>
+        <div class="ev"><strong>Evidence</strong>Checked in the live rendered page: <code>gtag</code>, <code>dataLayer</code>, <code>fbq</code> and <code>ga</code> are all undefined. The only script host on the page is <code>reptilia.co.za</code> itself.</div>
+        <div class="tags"><span class="tag you">Diane</span><span class="tag now">This week</span><span class="tag">~half a day</span></div>
+      </div>
+    </div>
+
+    <div class="act p1">
+      <div class="act-h"><div class="num">3</div><h3>Fix the Contact Us page</h3></div>
+      <div class="act-b">
+        <p>Four separate problems on one page, and it is the page that turns a browser into a lead:</p>
+        <p><strong>No enquiry form.</strong> The only form on the page is the theme search box. The sole contact route is a mailto link. Because Reptilia is on the Reviewtap System, that means no lead capture into the CRM from the store's own contact page.<br>
+        <strong>The map renders as an empty box.</strong> The iframe ships with an empty <code>src</code> and the lazy-loader never swaps in the real Google Maps URL, even after scrolling it into view. Two other lazy elements are stuck the same way.<br>
+        <strong>Friday is missing from the opening hours.</strong> The page lists Monday to Thursday, Saturday and Sunday. A shopper cannot tell if the store opens on a Friday.<br>
+        <strong>The contact address is a Gmail account</strong>, not an @reptilia.co.za address, on a business that now owns the domain.</p>
+        <div class="tags"><span class="tag you">Diane</span><span class="tag willem">Confirm hours + email with Willem</span><span class="tag now">This week</span></div>
+      </div>
+    </div>
+
+    <div class="act p1">
+      <div class="act-h"><div class="num">4</div><h3>Shipping: R160 flat on everything, no free-shipping threshold</h3></div>
+      <div class="act-b">
+        <p>Tested at both ends of the range. A R35 cart quotes R160 shipping, which is 457% of the item value. A R7,035 cart also quotes R160. Local pickup at R0.00 exists but is not the selected default, on a store with a physical Vanderbijlpark shopfront where a good share of buyers would collect.</p>
+        <p>We have watched this exact pattern kill a checkout before. A fixed courier fee that dwarfs small baskets is one of the most reliable ways to lose an order.</p>
+        <div class="ev"><strong>Suggested</strong>Free shipping over roughly R750 to R1,000, value or weight banded rates below that, and consider making local pickup the default. Needs Willem to confirm real courier costs first.</div>
+        <div class="tags"><span class="tag you">Diane</span><span class="tag willem">Needs courier costs</span></div>
+      </div>
+    </div>
+
+    <div class="act p1">
+      <div class="act-h"><div class="num">5</div><h3>Metadata and sharing basics</h3></div>
+      <div class="act-b">
+        <p>The homepage has <strong>no meta description</strong>, <strong>no favicon</strong> at all, and <strong>no Open Graph or Twitter tags</strong>. That last one matters most here: every time someone shares the store on WhatsApp or Facebook it renders as a bare link with no image and no title. For a South African retail business where WhatsApp sharing is the main organic spread, that is a real loss and a quick win.</p>
+        <p>Two smaller items on the same pass: there are two H1s on the homepage, and the page title carries no geography. Nothing on the site targets "reptile shop Vanderbijlpark" style intent.</p>
+        <div class="tags"><span class="tag you">Diane</span><span class="tag">~2 hours</span></div>
+      </div>
+    </div>
+
+    <div class="act p1">
+      <div class="act-h"><div class="num">6</div><h3>Two housekeeping items</h3></div>
+      <div class="act-b">
+        <p><strong>Two competing shop pages are both live and indexable.</strong> <code>/shop-all-now/</code> at 149KB with no H1, and <code>/shop-all/</code> at 180KB with an H1. Pick one and 301 the other. This was in the July audit too.</p>
+        <p><strong>The users sitemap is public.</strong> <code>/wp-sitemap-users-1.xml</code> exposes <code>/author/dianec/</code>, which publishes a valid WordPress username for brute-force targeting and puts your name on the client's store. Disable the users sitemap.</p>
+        <div class="tags"><span class="tag you">Diane</span><span class="tag">~30 min</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="sec">Needs Willem before anything happens</h2>
+
+    <div class="act p0">
+      <div class="act-h"><div class="num">7</div><h3>Live animals are freely orderable, and this is the one to raise first</h3></div>
+      <div class="act-b">
+        <p>All 132 livestock products are purchasable right now, with a combined shelf value of about R199,620. I verified it end to end: adding a R7,000 ball python to a guest cart returns a R7,195 total with a R160 flat courier rate selected by default and PayFast ready to charge the card.</p>
+        <p>71 of the 132 have no description at all. The R7,000 python page is one image, a price, a quantity box and an Add to cart button. Only 2 of the 132 mention a permit, collection or transport condition anywhere.</p>
+        <p>Willem asked for livestock removal back in his 30 June feedback. It is now not just still listed, it is fully transactable on a live domain with a live payment gateway. Whatever the commercial intention was, a flat courier rate applied to a live snake is the wrong default, and this is a decision only he can make.</p>
+        <div class="ev"><strong>The options to put to him</strong>Enquiry only, collection in store only, or fully orderable with a permit notice and a livestock-specific shipping class. Any of the three is defensible. Leaving it as it is, is not.</div>
+        <div class="tags"><span class="tag willem">Willem decides</span><span class="tag blocked">Blocking</span><span class="tag now">This week</span></div>
+      </div>
+    </div>
+
+    <div class="act p1">
+      <div class="act-h"><div class="num">8</div><h3>No returns or refunds policy is published</h3></div>
+      <div class="act-b">
+        <p>Shipping policy, terms and privacy pages all exist and load. Returns and refunds both 404. South African online sales fall under the ECT Act and the Consumer Protection Act, which give buyers a seven-day cooling-off right on distance sales. A store selling live animals with no published returns position is carrying avoidable risk.</p>
+        <p>Ask Willem what the in-store policy actually is, and whether it differs for livestock versus dry goods, then publish it.</p>
+        <div class="tags"><span class="tag willem">Willem decides</span></div>
+      </div>
+    </div>
+
+    <div class="act p2">
+      <div class="act-h"><div class="num">9</div><h3>The whole catalogue clean-up is still blocked on the POS question</h3></div>
+      <div class="act-b">
+        <p>This is the same blocker from 30 June and it has still not been answered: <strong>is the catalogue driven by a POS export or a one-off CSV, and will a re-import overwrite manual edits?</strong> Until we know, nobody should hand-fix 299 descriptions.</p>
+        <p>The counts below are diagnosis, not a work order. Do not start on them yet.</p>
+        <div class="tags"><span class="tag willem">Willem decides</span><span class="tag blocked">Do not start</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="sec">What launch actually fixed</h2>
+    <table>
+      <tr><th>July staging finding</th><th style="width:130px">Status</th><th>Detail</th></tr>
+      <tr><td>No payment methods at all</td><td class="ok">Fixed</td><td>Cart API returns PayFast</td></tr>
+      <tr><td>No production domain</td><td class="ok">Fixed</td><td>Live, with http and www both redirecting correctly</td></tr>
+      <tr><td>Mobile carousels clipping content</td><td class="ok">Fixed</td><td>At 375px: zero overflow, zero clipped elements</td></tr>
+      <tr><td>Amphibians still listed</td><td class="ok">Fixed</td><td>None found</td></tr>
+      <tr><td>Homepage tiles mixed cat and dog</td><td class="ok">Fixed</td><td>Five tiles, all reptile relevant</td></tr>
+      <tr><td>Stock never managed</td><td class="part">Partly</td><td>779 products now show stock text, but nothing is ever marked sold out</td></tr>
+      <tr><td>R15 flat shipping nationwide</td><td class="part">Changed</td><td>Now R160, which brings its own problem. See item 4</td></tr>
+    </table>
+    <p style="color:var(--muted);font-size:14.5px;margin-top:14px">Catalogue also shrank from 1,001 to 926 products. Missing images dropped from 93 to 22, and duplicate-name groups from 27 to 17.</p>
+  </section>
+
+  <section>
+    <h2 class="sec">Catalogue counts · reference only, do not action yet</h2>
+    <div class="stats">
+      <div class="stat"><div class="v bad">299</div><div class="l">No description at all (32.3%)</div></div>
+      <div class="stat"><div class="v warn">102</div><div class="l">POS stock codes in the product name</div></div>
+      <div class="stat"><div class="v warn">22</div><div class="l">No image</div></div>
+      <div class="stat"><div class="v warn">17</div><div class="l">Duplicate-name groups (45 products)</div></div>
+      <div class="stat"><div class="v warn">100</div><div class="l">Categories, 7 of them duplicate names</div></div>
+      <div class="stat"><div class="v bad">0</div><div class="l">Products ever marked out of stock</div></div>
+    </div>
+    <table>
+      <tr><th>Issue</th><th style="width:90px">Count</th><th>Notes</th></tr>
+      <tr><td>Broken variable products at R0.00 with zero variations</td><td class="num-c">2</td><td>montego-classic-kitten and juava-adult-dog. Same two flagged in July, still live</td></tr>
+      <tr><td>Raw POS stock codes in customer-facing names</td><td class="num-c">102</td><td>"Artificial Vines with Flowers 1241388", "Pet Toy 616442". One of them is on the homepage</td></tr>
+      <tr><td>Duplicate-name groups</td><td class="num-c">17</td><td>Bird Toy x6, Dog Toy x5, Cat Toy x5, all at different prices. Same root cause as the line above</td></tr>
+      <tr><td>Products with no SKU</td><td class="num-c">4</td><td></td></tr>
+      <tr><td>Products with no category</td><td class="num-c">3</td><td>Unreachable by browsing</td></tr>
+      <tr><td>Delivery charges sold as products</td><td class="num-c">1</td><td>"Postage/Delivery Den Publ" at R100.00, buyable</td></tr>
+    </table>
+    <p style="color:var(--muted);font-size:14.5px;margin-top:16px"><strong>Category structure.</strong> Willem's de-duplication requests from 22 July are largely not done. Seven duplicate category names. The collision slugs persist, with <code>Accessories</code> living at <code>/accessories-2/</code> and holding 486 products, more than half the catalogue behind one door. <code>Reptile Enclosure Accessories</code> and <code>Reptile Accessories</code> have their slugs crossed over. Geckos and Lizards exist as splits, but there is still no Snakes category.</p>
+  </section>
+
+  <section>
+    <h2 class="sec">Speed</h2>
+    <p style="color:var(--slate)">Server response is slow across the board. Homepage 2.70s, shop 2.54s, category pages 2.78s, contact 2.17s. Google's guidance is under 0.8s.</p>
+    <p style="color:var(--slate)">Worth being precise about where this sits. The 10Web optimizer plugin is still installed and its headers confirm it is serving these pages from cache, but hosting has moved to plain Apache on PHP 8.1. So the cache is doing its job and the response is <em>still</em> 2.5s, which points at the server rather than the theme or the plugin. That is a conversation with the current host, not with 10Web.</p>
+    <div class="tags"><span class="tag host">Current host</span><span class="tag">Not urgent, but raise it</span></div>
+  </section>
+
+  <section>
+    <h2 class="sec">Questions to put to Willem</h2>
+    <div class="qbox">
+      <ol>
+        <li><strong>Should live animals be orderable online at all?</strong> If yes, on what terms: collection only, permit confirmation, deposit? This gates the biggest item on the list.</li>
+        <li><strong>Is the catalogue POS driven or a one-off CSV?</strong> Still unanswered since 30 June. The entire clean-up waits on this.</li>
+        <li><strong>What is the actual returns policy</strong>, and does it differ for livestock versus dry goods?</li>
+        <li><strong>Is the store VAT registered?</strong> Cart totals return R0.00 tax on a R7,195 basket. If Reptilia is registered, tax is not configured in WooCommerce.</li>
+        <li><strong>Is Friday a trading day?</strong> It is missing from the published hours.</li>
+        <li><strong>Should the contact email move to @reptilia.co.za</strong> now the domain is live?</li>
+      </ol>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="sec">What I could not check</h2>
+    <div class="caveat">
+      <ul>
+        <li><strong>No order was placed.</strong> The payment finding is read from the cart API, not from a completed PayFast transaction. Someone should put through one real low-value test order and confirm the money lands and the order email fires.</li>
+        <li><strong>Admin side.</strong> I only had the public front end and Store API. Analytics could in theory be configured in WP admin but not firing. Worth confirming from inside.</li>
+        <li><strong>Whether staging is actually indexed</strong> in Google, as opposed to merely crawlable and duplicated. Check Search Console for both properties.</li>
+        <li><strong>Whether the missing images and descriptions are an import artefact</strong> or genuine gaps. That is the POS question again.</li>
+        <li><strong>Whether R160 is deliberate courier pricing</strong> or another placeholder like the old R15 was.</li>
+      </ul>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <div class="wrap">
+    Reptilia post-launch audit · 6 August 2026 · internal build document, not for client circulation<br>
+    Prepared by JCE Media · production front end and public Store API only
+  </div>
+</footer>
+
+</body>
+</html>
