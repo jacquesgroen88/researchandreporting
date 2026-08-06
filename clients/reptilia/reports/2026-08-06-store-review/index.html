@@ -12,7 +12,7 @@
 :root{
   --coral:#ED6744; --coral-dark:#c94c2b; --coral-soft:#fdf1ed;
   --ink:#12161a; --muted:#5f6b76; --line:#e8ecf1; --bg:#f7f9fb; --card:#fff;
-  --green:#1f7a4d; --shadow:0 4px 18px rgba(20,35,55,.08);
+  --green:#1f7a4d; --red:#c8372a; --shadow:0 4px 18px rgba(20,35,55,.08);
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.68 "PT Sans",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
@@ -22,12 +22,17 @@ h1,h2,h3{font-family:Montserrat,system-ui,sans-serif;margin:0;line-height:1.24}
 header.top{background:linear-gradient(135deg,var(--coral),#e04f2c);color:#fff;padding:58px 0 48px;text-align:center}
 header.top .kicker{font-family:Montserrat;font-weight:700;letter-spacing:.16em;text-transform:uppercase;font-size:11px;opacity:.85;margin-bottom:15px}
 header.top h1{font-size:40px;font-weight:800;letter-spacing:-.02em}
-header.top .sub{margin:16px auto 0;font-size:18px;max-width:560px;opacity:.95}
+header.top .sub{margin:16px auto 0;font-size:18px;max-width:580px;opacity:.95}
 
-.live{background:var(--card);border-radius:14px;box-shadow:var(--shadow);padding:32px 34px;margin:-32px 0 40px;border-top:4px solid var(--green)}
+.live{background:var(--card);border-radius:14px;box-shadow:var(--shadow);padding:32px 34px;margin:-32px 0 26px;border-top:4px solid var(--green)}
 .live h2{font-size:22px;margin-bottom:12px;color:var(--green)}
 .live p{margin:0 0 14px;color:#3d4a57}
 .live p:last-child{margin-bottom:0}
+
+.thanks{background:#eef6f1;border:1px solid #cfe6da;border-radius:13px;padding:24px 28px;margin-bottom:38px}
+.thanks h3{font-size:18px;color:var(--green);margin-bottom:10px}
+.thanks p{margin:0 0 12px;color:#3d4a57}
+.thanks p:last-child{margin-bottom:0}
 
 section{margin:40px 0}
 h2.sec{font-size:12px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);padding-bottom:12px;border-bottom:2px solid var(--line);margin-bottom:24px}
@@ -45,13 +50,19 @@ h2.sec{font-size:12px;font-weight:800;letter-spacing:.15em;text-transform:upperc
 .opts ul{margin:0;padding-left:19px}
 .opts li{margin-bottom:7px;color:#3d4a57}
 .opts li:last-child{margin-bottom:0}
-.urgent{display:inline-block;background:#fbeae8;color:#c8372a;font-family:Montserrat;font-size:10.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;padding:4px 11px;border-radius:5px;margin-left:10px;vertical-align:middle}
+.urgent{display:inline-block;background:#fbeae8;color:var(--red);font-family:Montserrat;font-size:10.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;padding:4px 11px;border-radius:5px;margin-left:10px;vertical-align:middle}
 
-.quick{background:var(--card);border-radius:13px;box-shadow:var(--shadow);padding:26px 30px}
-.quick ul{margin:0;padding-left:20px}
-.quick li{margin-bottom:13px;color:#3d4a57}
-.quick li:last-child{margin-bottom:0}
-.quick li strong{color:var(--ink)}
+.tbl-wrap{overflow-x:auto;margin-top:15px}
+table{width:100%;border-collapse:collapse;font-size:15.5px;background:#fbfcfd;border-radius:9px;overflow:hidden}
+th{background:#eef2f6;font-family:Montserrat;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);text-align:left;padding:11px 15px}
+td{padding:11px 15px;border-top:1px solid var(--line);color:#3d4a57}
+td.n{text-align:right;font-variant-numeric:tabular-nums;font-weight:700;color:var(--ink);white-space:nowrap}
+td.z{color:var(--red);font-weight:700;text-align:center}
+
+.big{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
+.big div{background:#fbfcfd;border:1px solid var(--line);border-radius:10px;padding:18px;text-align:center}
+.big .v{font-family:Montserrat;font-size:27px;font-weight:800;color:var(--coral-dark)}
+.big .l{font-size:13px;color:var(--muted);margin-top:3px;line-height:1.4}
 
 .next{background:#eef4f9;border-radius:13px;padding:26px 30px;border-left:4px solid var(--coral)}
 .next p{margin:0;color:#3d4a57}
@@ -61,6 +72,7 @@ footer{background:#1b2229;color:#8d9aa6;padding:32px 0;margin-top:56px;font-size
   header.top h1{font-size:29px}
   .q-b{padding-left:28px}
   .live{padding:24px}
+  .big{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -70,7 +82,7 @@ footer{background:#1b2229;color:#8d9aa6;padding:32px 0;margin-top:56px;font-size
   <div class="wrap">
     <div class="kicker">Reptilia Online Store</div>
     <h1>Your store is live</h1>
-    <div class="sub">A few decisions now need to come from you before we go further. Six questions, most of them quick.</div>
+    <div class="sub">Your price list answered most of what we were going to ask. Here is what it told us, and the five things we still need from you.</div>
   </div>
 </header>
 
@@ -78,75 +90,125 @@ footer{background:#1b2229;color:#8d9aa6;padding:32px 0;margin-top:56px;font-size
 
   <div class="live">
     <h2>Where things stand</h2>
-    <p>reptilia.co.za is live and taking orders. Card payments through PayFast are working, the site is running clean with no errors, and it displays properly on phones. All 926 products are up, and stock levels are showing on the product pages.</p>
-    <p>We are working through a technical punch list on our side in the background, so nothing below is something you need to action yourself. These are the calls that only you can make, because they depend on how the business actually runs.</p>
+    <p>reptilia.co.za is live and taking orders. Card payments through PayFast are working, the site runs clean with no errors, and it displays properly on phones.</p>
+    <p>We are working through a technical punch list on our side in the background, so most of what needs doing is ours to do. What follows are the calls that only you can make, because they depend on how the business actually runs.</p>
+  </div>
+
+  <div class="thanks">
+    <h3>The price list you sent was exactly what we needed</h3>
+    <p>We went through the 2 August export line by line and cross-checked all 4,069 rows against what is currently on the website. It answered three of the questions we were about to ask you, and it turned up several things we could not have found any other way.</p>
+    <p>If nothing else comes out of this document: <strong>please keep sending that file.</strong> It is the single most useful thing we have had on this project.</p>
   </div>
 
   <section>
-    <h2 class="sec">The one that matters most</h2>
+    <h2 class="sec">What your price list told us</h2>
 
     <div class="q">
-      <div class="q-h"><div class="q-n">1</div><h3>How should live animals be sold online?<span class="urgent">This week</span></h3></div>
+      <div class="q-h"><div class="q-n">A</div><h3>Only about a third of your products are actually on the website</h3></div>
       <div class="q-b">
-        <p>Right now all 132 live animals on the site can be bought online by anyone, paid for by card, with a R160 courier fee applied automatically. We tested it: a R7,000 ball python goes through to payment like any other product.</p>
-        <p>We do not think that is what you intended, and you did ask us back in June to look at removing livestock. Before we change anything we want your call, because there are good arguments for more than one approach and it depends on how you actually want to handle these sales.</p>
-        <div class="opts">
-          <div class="lbl">Options, any of these work</div>
-          <ul>
-            <li><strong>Enquiry only.</strong> Animals stay visible with photos and prices, but the button becomes "Enquire" and the enquiry lands with you to handle personally.</li>
-            <li><strong>Collection in store only.</strong> Buyable online, but no courier option. The customer pays and collects from Vanderbijlpark.</li>
-            <li><strong>Fully orderable</strong>, with a permit and transport notice on each animal and a separate livestock delivery rate that reflects what live transport actually costs.</li>
-          </ul>
+        <p>Your price list marks which products belong online. We counted them.</p>
+        <div class="big">
+          <div><div class="v">2,912</div><div class="l">products your list says belong online</div></div>
+          <div><div class="v">926</div><div class="l">actually on the site today</div></div>
+          <div><div class="v">2,176</div><div class="l">not loaded yet</div></div>
         </div>
-        <p style="margin-top:16px">Related to this: 71 of the 132 animals have no description at all on their page. A R7,000 python is currently just a photo, a price and a buy button. Whichever route you pick, those pages need words.</p>
+        <p style="margin-top:18px">This was the single biggest surprise. We had been treating the website as a full catalogue that needed tidying. It is closer to a third of a catalogue.</p>
+        <p>The biggest gaps are Reptile Livestock (346 missing), Dog Accessories (182) and Reptile Accessories (115). A lot of it is stock you have on the shelf right now, like aquarium heaters and filter pumps.</p>
+        <p>This also explains what you flagged in your video about small animals. You were right that rabbits, hamsters and guinea pigs were missing. So is most of the rest of the shop.</p>
+      </div>
+    </div>
+
+    <div class="q">
+      <div class="q-h"><div class="q-n">B</div><h3>Some animals can be bought online that your system says are gone<span class="urgent">Fixing now</span></h3></div>
+      <div class="q-b">
+        <p>Your price list carries a stock-on-hand figure. The website does not use it yet, so nothing on the site ever shows as sold out. We found products that can be paid for right now with zero stock against them:</p>
+        <div class="tbl-wrap">
+        <table>
+          <tr><th>Product</th><th>Price on site</th><th>Your stock</th></tr>
+          <tr><td>Leopard Fire Axantic Pinstripe Hatchling Female</td><td class="n">R4,250.00</td><td class="z">0</td></tr>
+          <tr><td>Super Fire POS Sugar Male Ball Python</td><td class="n">R2,500.00</td><td class="z">0</td></tr>
+          <tr><td>Banana Spider Ball Python Hatchling</td><td class="n">R1,950.00</td><td class="z">0</td></tr>
+          <tr><td>Bearded Dragon Special Morph 1-2 Months</td><td class="n">R1,150.00</td><td class="z">0</td></tr>
+        </table>
+        </div>
+        <p style="margin-top:16px">We are taking these down straight away, you do not need to do anything. But it is worth knowing that until stock is properly linked, this can happen again. Connecting your stock figures to the website is now near the top of our list.</p>
+      </div>
+    </div>
+
+    <div class="q">
+      <div class="q-h"><div class="q-n">C</div><h3>A few things are online that your list says should not be</h3></div>
+      <div class="q-b">
+        <p>Your price list marks certain products as not for the website. Eleven of them are on the site anyway, including the most expensive item in the whole shop: the <strong>Fiji Banded Iguana Male at R14,495</strong>, along with a Red Iguana at R4,495 and a breeding cage set at R4,800.</p>
+        <p>We are removing those. Again, nothing needed from you, we are just telling you it happened so you know the website was showing things it should not have been.</p>
       </div>
     </div>
   </section>
 
   <section>
-    <h2 class="sec">Questions we need answered to finish the build</h2>
+    <h2 class="sec">What we need from you</h2>
 
     <div class="q">
-      <div class="q-h"><div class="q-n">2</div><h3>Where does the product list actually come from?</h3></div>
+      <div class="q-h"><div class="q-n">1</div><h3>How should live animals be sold online?<span class="urgent">This week</span></h3></div>
       <div class="q-b">
-        <p>This is the one blocking the biggest chunk of remaining work. Around 299 products have no description, 22 have no photo, and roughly 100 have raw stock codes showing in the product name where a proper name should be, things like "Pet Toy 616442".</p>
-        <p>We can fix all of it. What we need to know first is <strong>whether the products come out of your POS system on an ongoing basis, or whether they were loaded once from a spreadsheet.</strong> If the POS pushes updates, anything we type by hand gets wiped the next time it syncs, and we would be doing the work twice.</p>
-        <p>Once you confirm this, the whole catalogue clean-up and the category tidy-up you walked us through in July can start properly.</p>
-      </div>
-    </div>
-
-    <div class="q">
-      <div class="q-h"><div class="q-n">3</div><h3>What is your returns policy?</h3></div>
-      <div class="q-b">
-        <p>The site has shipping, terms and privacy pages, but nothing published on returns or refunds. South African law gives online buyers a seven day cooling off right on distance sales, so this needs to be on the site.</p>
-        <p>Tell us what you already do in store, and whether it works differently for live animals versus dry goods, and we will write it up and publish it.</p>
-      </div>
-    </div>
-
-    <div class="q">
-      <div class="q-h"><div class="q-n">4</div><h3>What does delivery actually cost you?</h3></div>
-      <div class="q-b">
-        <p>Everything currently ships at a flat R160, whether it is a R35 pack of artificial vines or a R7,000 order. On small orders that fee is bigger than the product, which is one of the most common reasons people abandon a basket.</p>
-        <p>Give us your real courier costs and we will set up sensible rates: free delivery over a certain order value, banded rates below that, and collection in store made more visible for local customers.</p>
-      </div>
-    </div>
-
-    <div class="q">
-      <div class="q-h"><div class="q-n">5</div><h3>Is Reptilia VAT registered?</h3></div>
-      <div class="q-b">
-        <p>The store is currently charging no VAT on any order. If Reptilia is registered, that needs configuring before this runs much longer. If not, no action needed, we just want it confirmed rather than assumed.</p>
-      </div>
-    </div>
-
-    <div class="q">
-      <div class="q-h"><div class="q-n">6</div><h3>Two quick ones</h3></div>
-      <div class="q-b">
-        <div class="quick" style="box-shadow:none;padding:0;background:none">
+        <p>This is the big one and it has not changed. Right now every live animal on the site can be bought online by anyone, paid for by card, with a R160 courier fee applied automatically. We tested it: a R7,000 ball python goes through to payment like any other product.</p>
+        <p>We do not think that is what you intended, and you did ask us back in June to look at removing livestock. Before we change anything we want your call, because there is more than one sensible answer.</p>
+        <div class="opts">
+          <div class="lbl">Options, any of these work</div>
           <ul>
-            <li><strong>Are you open on Fridays?</strong> The contact page lists Monday to Thursday, then Saturday and Sunday. Friday is missing, so a customer cannot tell whether you are trading.</li>
-            <li><strong>Do you want a proper Reptilia email address?</strong> The site currently lists a Gmail address. Now that you own reptilia.co.za we can set up something like info@reptilia.co.za, which reads better to a customer spending R7,000.</li>
+            <li><strong>Enquiry only.</strong> Animals stay visible with photos and prices, but the button becomes "Enquire" and it comes to you to handle personally.</li>
+            <li><strong>Collection in store only.</strong> Buyable online, but no courier option. The customer pays and collects from Vanderbijlpark.</li>
+            <li><strong>Fully orderable</strong>, with a permit and transport notice on each animal and a separate livestock delivery rate that reflects what live transport actually costs.</li>
           </ul>
         </div>
+      </div>
+    </div>
+
+    <div class="q">
+      <div class="q-h"><div class="q-n">2</div><h3>Is Reptilia VAT registered?<span class="urgent">This week</span></h3></div>
+      <div class="q-b">
+        <p>We are asking because of something on your own price list. The header carries a tax number, <strong>4620299232</strong>, and the list is titled <strong>"Price List - Inclusive Price"</strong>, which reads as prices that already include VAT.</p>
+        <p>The website is currently charging <strong>no VAT at all</strong> on any order. If that number is a live VAT registration, then every order taken since launch has been recorded as if there were no VAT in the price, when there is.</p>
+        <p>That is an accounting question rather than a website one, so we would rather you and your bookkeeper confirm it than us guess. If you are registered, we will configure it properly. If that number is an income tax reference rather than a VAT number, then nothing needs doing and we will stop worrying about it.</p>
+      </div>
+    </div>
+
+    <div class="q">
+      <div class="q-h"><div class="q-n">3</div><h3>Are the website prices wrong?</h3></div>
+      <div class="q-b">
+        <p>We compared the 750 products we could match. In 39 of them the website price is lower than your price list. Not one is higher.</p>
+        <div class="tbl-wrap">
+        <table>
+          <tr><th>Product</th><th>On the site</th><th>Your list</th></tr>
+          <tr><td>Small Animal Cage</td><td class="n">R530.00</td><td class="n">R2,850.00</td></tr>
+          <tr><td>Optimizor Complete Adult</td><td class="n">R230.00</td><td class="n">R520.00</td></tr>
+          <tr><td>Tangerine Leopard Gecko</td><td class="n">R595.00</td><td class="n">R745.00</td></tr>
+          <tr><td>Bob Martin Fly Rep Spray 200ml</td><td class="n">R95.00</td><td class="n">R205.00</td></tr>
+        </table>
+        </div>
+        <p style="margin-top:16px">Because they all lean the same way, our guess is the site was built from an older price list and you have put prices up since. But we would rather ask than assume, because if that is right then <strong>you are currently selling some items online below shelf price.</strong></p>
+        <p>The Small Animal Cage is the one to look at first. R530 against R2,850 is a big enough gap that it might be two different products sharing a code rather than a pricing error.</p>
+      </div>
+    </div>
+
+    <div class="q">
+      <div class="q-h"><div class="q-n">4</div><h3>How often can you send that price list, and what system is it from?</h3></div>
+      <div class="q-b">
+        <p>Two practical questions that decide how we build the rest.</p>
+        <p><strong>How often can you send it?</strong> If it is something you can print weekly or monthly, we will build the website to take it properly, so stock levels and prices update in one go instead of by hand. If it is a once-off, we will approach it differently.</p>
+        <p><strong>What system does it come out of?</strong> If your POS can connect directly to the website, stock and prices could update automatically and neither of us would have to think about it again. Even just the name of the software would let us check.</p>
+      </div>
+    </div>
+
+    <div class="q">
+      <div class="q-h"><div class="q-n">5</div><h3>Some page content, and one quick question</h3></div>
+      <div class="q-b">
+        <p>Several pages on the site are still showing placeholder text because we do not have the wording from you. We need:</p>
+        <p><strong>Your returns policy.</strong> What you already do in store, and whether it works differently for live animals versus dry goods. South African law gives online buyers a seven day cooling off right, so this one does need to be published.<br>
+        <strong>Shipping terms</strong>, once you have told us your courier costs.<br>
+        <strong>A short About Us</strong>, a few paragraphs on the shop in your own words.<br>
+        <strong>Care sheets</strong>, if you have any written already. This is the kind of content that brings people to a reptile shop's website from Google, so it is worth doing properly at some point even if not right now.</p>
+        <p>And the quick one: <strong>are you open on Fridays?</strong> The contact page lists Monday to Thursday, then Saturday and Sunday. Friday is missing, so a customer cannot tell whether you are trading.</p>
+        <p style="color:var(--muted);font-size:15.5px">One thing we no longer need to ask: your price list shows <strong>info@reptilia.co.za</strong> already exists, so we will switch the site over from the Gmail address.</p>
       </div>
     </div>
   </section>
@@ -154,7 +216,7 @@ footer{background:#1b2229;color:#8d9aa6;padding:32px 0;margin-top:56px;font-size
   <section>
     <h2 class="sec">What happens next</h2>
     <div class="next">
-      <p>Question 1 is the one we would like to settle this week, because the store is live and selling while it stays open. Question 2 unlocks the rest of the catalogue work. The other four can come whenever suits you. A voice note on WhatsApp is perfectly fine, no need to write anything up.</p>
+      <p>Questions 1 and 2 are the ones we would like to settle this week, because the store is live and selling while they stay open. The other three can come whenever suits you. A voice note on WhatsApp is perfectly fine, no need to write anything up. In the meantime we are removing the sold-out animals and the products your list says should not be online.</p>
     </div>
   </section>
 
@@ -162,7 +224,8 @@ footer{background:#1b2229;color:#8d9aa6;padding:32px 0;margin-top:56px;font-size
 
 <footer>
   <div class="wrap">
-    Reptilia store review · 6 August 2026 · prepared by JCE Media
+    Reptilia store review · 6 August 2026 · prepared by JCE Media<br>
+    Based on the live store and your price list dated 2 August 2026
   </div>
 </footer>
 

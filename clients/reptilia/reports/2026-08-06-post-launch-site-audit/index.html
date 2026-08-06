@@ -12,7 +12,7 @@
 :root{
   --coral:#ED6744; --coral-dark:#d4522f; --coral-soft:#fdf0ec;
   --ink:#12161a; --muted:#5f6b76; --line:#e8ecf1; --bg:#f6f8fa; --card:#fff;
-  --red:#c8372a; --amber:#b26a00; --green:#1f7a4d; --slate:#4a5b6d;
+  --red:#c8372a; --amber:#b26a00; --green:#1f7a4d; --slate:#4a5b6d; --violet:#5b4bb8;
   --shadow:0 4px 16px rgba(20,35,55,.07);
 }
 *{box-sizing:border-box}
@@ -21,32 +21,37 @@ h1,h2,h3,h4{font-family:Montserrat,system-ui,sans-serif;margin:0;line-height:1.2
 a{color:var(--coral-dark)}
 .wrap{max-width:940px;margin:0 auto;padding:0 20px}
 
-/* header */
 header.top{background:linear-gradient(135deg,#1b2229,#2c3742);color:#fff;padding:52px 0 44px}
 header.top .kicker{font-family:Montserrat;font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:11px;color:var(--coral);margin-bottom:14px}
 header.top h1{font-size:38px;font-weight:800;letter-spacing:-.02em}
-header.top .sub{color:#b9c4cf;margin-top:12px;font-size:17px;max-width:640px}
+header.top .sub{color:#b9c4cf;margin-top:12px;font-size:17px;max-width:660px}
 .meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
 .meta span{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:6px 14px;font-size:13px;color:#dbe3ea}
 .internal{background:var(--coral);border-color:var(--coral);color:#fff;font-weight:700}
 
-/* verdict */
-.verdict{background:var(--card);border-radius:14px;box-shadow:var(--shadow);padding:30px 32px;margin:-30px 0 34px;border-left:5px solid var(--green)}
+.verdict{background:var(--card);border-radius:14px;box-shadow:var(--shadow);padding:30px 32px;margin:-30px 0 26px;border-left:5px solid var(--green)}
 .verdict h2{font-size:21px;margin-bottom:10px}
 .verdict p{margin:0 0 12px;color:var(--slate)}
 .verdict p:last-child{margin-bottom:0}
 
+.correction{background:#fffaf3;border:1px solid #f0d9b8;border-left:5px solid var(--amber);border-radius:12px;padding:24px 28px;margin-bottom:34px}
+.correction h3{font-size:17px;color:var(--amber);margin-bottom:10px}
+.correction p{margin:0 0 11px;color:var(--slate)}
+.correction p:last-child{margin-bottom:0}
+
 section{margin:44px 0}
 h2.sec{font-size:13px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding-bottom:11px;border-bottom:2px solid var(--line);margin-bottom:22px}
+h2.sec.hot{color:var(--red);border-bottom-color:#f3c9c3}
 
-/* action cards */
 .act{background:var(--card);border-radius:12px;box-shadow:var(--shadow);margin-bottom:16px;overflow:hidden;border-left:5px solid var(--line)}
 .act.p0{border-left-color:var(--red)}
 .act.p1{border-left-color:var(--amber)}
 .act.p2{border-left-color:var(--slate)}
+.act.new{border-left-color:var(--violet)}
 .act-h{padding:20px 24px 0;display:flex;gap:14px;align-items:flex-start}
 .num{flex:0 0 34px;height:34px;border-radius:9px;background:var(--coral-soft);color:var(--coral-dark);font-family:Montserrat;font-weight:800;font-size:15px;display:flex;align-items:center;justify-content:center}
 .act.p0 .num{background:#fbeae8;color:var(--red)}
+.act.new .num{background:#eeecfa;color:var(--violet)}
 .act-h h3{font-size:18px;font-weight:700;flex:1}
 .act-b{padding:12px 24px 22px 72px}
 .act-b p{margin:0 0 12px;color:var(--slate)}
@@ -58,23 +63,24 @@ h2.sec{font-size:13px;font-weight:800;letter-spacing:.14em;text-transform:upperc
 .tag.host{background:#eef1fb;color:#4a55a8}
 .tag.blocked{background:#fbeae8;color:var(--red)}
 .tag.now{background:#fff3e0;color:var(--amber)}
+.tag.newf{background:#eeecfa;color:var(--violet)}
 .ev{background:#f7f9fb;border:1px solid var(--line);border-radius:8px;padding:13px 16px;margin-top:13px;font-size:14.5px;color:var(--slate)}
 .ev strong{font-family:Montserrat;font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px}
 code{background:#eef2f6;padding:2px 6px;border-radius:4px;font-size:13.5px;font-family:ui-monospace,Menlo,Consolas,monospace}
 
-/* fixed table */
+.tbl-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse;background:var(--card);border-radius:12px;overflow:hidden;box-shadow:var(--shadow);font-size:15px}
 th{background:#eef2f6;font-family:Montserrat;font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:left;padding:12px 16px}
 td{padding:12px 16px;border-top:1px solid var(--line);color:var(--slate);vertical-align:top}
 td.ok{color:var(--green);font-weight:700;white-space:nowrap}
 td.part{color:var(--amber);font-weight:700;white-space:nowrap}
-td.num-c{text-align:right;font-variant-numeric:tabular-nums;font-weight:700;color:var(--ink)}
+td.bad{color:var(--red);font-weight:700;white-space:nowrap}
+td.num-c{text-align:right;font-variant-numeric:tabular-nums;font-weight:700;color:var(--ink);white-space:nowrap}
 
-/* stat row */
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:20px}
 .stat{background:var(--card);border-radius:12px;box-shadow:var(--shadow);padding:20px}
 .stat .v{font-family:Montserrat;font-size:29px;font-weight:800;letter-spacing:-.02em}
-.stat .v.bad{color:var(--red)} .stat .v.warn{color:var(--amber)} .stat .v.good{color:var(--green)}
+.stat .v.bad{color:var(--red)} .stat .v.warn{color:var(--amber)} .stat .v.good{color:var(--green)} .stat .v.vio{color:var(--violet)}
 .stat .l{font-size:13.5px;color:var(--muted);margin-top:3px}
 
 .qbox{background:var(--coral-soft);border:1px solid #f6d5ca;border-radius:12px;padding:24px 28px}
@@ -102,14 +108,14 @@ footer a{color:var(--coral)}
 
 <header class="top">
   <div class="wrap">
-    <div class="kicker">Reptilia · Post-Launch Site Audit</div>
+    <div class="kicker">Reptilia · Post-Launch Site Audit · updated 6 Aug</div>
     <h1>What to fix, in what order</h1>
-    <div class="sub">Site went live 5 August. Audited 6 August against the live production store. This is the build list, ordered by what you can start today versus what is waiting on Willem.</div>
+    <div class="sub">Site went live 5 August. Audited 6 August against the live production store, then re-cut after Willem's POS export landed and changed several conclusions.</div>
     <div class="meta">
       <span class="internal">Internal · Diane</span>
       <span>reptilia.co.za</span>
-      <span>926 products</span>
-      <span>Front end + public Store API only</span>
+      <span>926 products live</span>
+      <span>2,912 intended</span>
     </div>
   </div>
 </header>
@@ -117,148 +123,286 @@ footer a{color:var(--coral)}
 <div class="wrap">
 
   <div class="verdict">
-    <h2>Launch worked</h2>
-    <p>Both blockers from the July staging audit are dead. PayFast is live and charging, the production domain resolves, and the redirects are correct. Mobile carousel clipping is fixed, amphibians are gone, and stock levels now display. Zero console errors, zero broken images, no mixed content. That is a real result and it is worth saying out loud before the list below.</p>
-    <p>Three things need attention now, and only one of them is a big job.</p>
+    <h2>Launch worked, and the catalogue picture just changed</h2>
+    <p>Both blockers from the July staging audit are dead. PayFast is live and charging, the production domain resolves, and the redirects are correct. Mobile carousel clipping is fixed, amphibians are gone. No console errors, no broken images. That is a real result.</p>
+    <p>Since the first version of this page, two things landed that change the plan. Willem's POS export answered the data-source question that has been blocking the catalogue work since June, and it revealed the store is <strong>32% loaded rather than messy</strong>. And a closer look at the content pages found something the first pass missed. Both are below.</p>
+  </div>
+
+  <div class="correction">
+    <h3>Correction to the first version of this page</h3>
+    <p>The first cut said the shipping, terms and privacy pages "all exist and load", and flagged only returns as missing. <strong>That was wrong.</strong> I checked HTTP status codes rather than rendered content, and a 200 is not the same as a page with words on it.</p>
+    <p>Every one of those pages returns 200 and contains nothing but <em>"Pardon our dust! We're working on something amazing, check back soon!"</em> The returns policy also exists, at <code>/refund-and-return-policy/</code> rather than the slug I first tested. See item 3.</p>
   </div>
 
   <section>
-    <h2 class="sec">Do this week · nothing here is blocked</h2>
+    <h2 class="sec hot">Do this week · nothing here is blocked</h2>
 
     <div class="act p0">
-      <div class="act-h"><div class="num">1</div><h3>Take the staging site down</h3></div>
+      <div class="act-h"><div class="num">1</div><h3>Take down the sold-out livestock today</h3></div>
       <div class="act-b">
-        <p>The old 10Web staging site is still live, still public, and still serving a complete copy of all 926 products. It canonicals to itself and publishes its own sitemap, so Google can index both stores and split the ranking signal between them. This is the single fastest thing on this list to fix.</p>
+        <p>Cross-referencing the POS export against the live site found <strong>25 products that are buyable right now with zero stock on hand in the POS</strong>. For live animals, stock on hand of zero means the animal is gone.</p>
+        <div class="tbl-wrap">
+        <table>
+          <tr><th>Product</th><th>Site price</th><th>POS stock</th></tr>
+          <tr><td>Leopard Fire Axantic Pinstripe Hatchling Female</td><td class="num-c">R4,250.00</td><td class="bad">0</td></tr>
+          <tr><td>Super Fire POS Sugar Male Ball Python</td><td class="num-c">R2,500.00</td><td class="bad">0</td></tr>
+          <tr><td>Banana Spider Ball Python Hatchling</td><td class="num-c">R1,950.00</td><td class="bad">0</td></tr>
+          <tr><td>Bearded Dragon Special Morph 1-2 Months</td><td class="num-c">R1,150.00</td><td class="bad">0</td></tr>
+          <tr><td>Bold Leopard Gecko</td><td class="num-c">R695.00</td><td class="bad">0</td></tr>
+        </table>
+        </div>
+        <p style="margin-top:14px">Someone can pay R4,250 today for a snake that is not there. That is a refund, an apology and a bad review in one transaction. This is the cheapest fix on the page and the highest immediate risk.</p>
+        <p>Only 25 show because only 750 of the 926 products matched cleanly. Across the full intended catalogue the real number is much higher: <strong>1,481 of the 2,912 website-flagged products in the POS are at zero stock.</strong></p>
+        <div class="tags"><span class="tag you">Diane</span><span class="tag now">Today</span><span class="tag newf">From the POS export</span></div>
+      </div>
+    </div>
+
+    <div class="act p0">
+      <div class="act-h"><div class="num">2</div><h3>There is a second checkout page, live and in the sitemap</h3></div>
+      <div class="act-b">
+        <p><code>/checkout-builder-backup/</code> returns 200, is titled <strong>"Checkout"</strong>, canonicals to itself, has no noindex, and <strong>is listed in the sitemap we are handing to Google</strong>. It is a leftover backup of the checkout builder page that was never unpublished.</p>
+        <p>A duplicate checkout page competing with the real one in search results is bad on its own. A customer landing on a backup checkout is worse. It also breaks the snapshot tooling: any REST read of it in edit context returns a 500 and takes down the batch it lands in.</p>
+        <p><code>/coming-soon/</code> is also still published and in the sitemap, on a store that launched.</p>
+        <div class="ev"><strong>Evidence</strong>Sitemap <code>/wp-sitemap-posts-page-1.xml</code> lists both <code>/checkout-builder-backup/</code> and <code>/coming-soon/</code> alongside the real <code>/checkout/</code>.</div>
+        <div class="tags"><span class="tag you">Diane</span><span class="tag now">This week</span><span class="tag">~15 min</span></div>
+      </div>
+    </div>
+
+    <div class="act p0">
+      <div class="act-h"><div class="num">3</div><h3>Every content page is a "Pardon our dust" placeholder</h3></div>
+      <div class="act-b">
+        <p>Seven pages are published, linked and in the sitemap, and every one of them contains roughly 30 words of placeholder text and nothing else.</p>
+        <div class="tbl-wrap">
+        <table>
+          <tr><th>Page</th><th>Status</th><th>Real content</th></tr>
+          <tr><td><code>/payment-complete/</code></td><td>200</td><td class="bad">Placeholder</td></tr>
+          <tr><td><code>/shipping-policy/</code></td><td>200</td><td class="bad">Placeholder</td></tr>
+          <tr><td><code>/refund-and-return-policy/</code></td><td>200</td><td class="bad">Placeholder</td></tr>
+          <tr><td><code>/terms-and-conditions/</code></td><td>200</td><td class="bad">Placeholder</td></tr>
+          <tr><td><code>/privacy-policy/</code></td><td>200</td><td class="bad">Placeholder</td></tr>
+          <tr><td><code>/about-us/</code></td><td>200</td><td class="bad">Placeholder</td></tr>
+          <tr><td><code>/care-sheets-resources/</code></td><td>200</td><td class="bad">Placeholder</td></tr>
+        </table>
+        </div>
+        <p style="margin-top:14px"><strong><code>/payment-complete/</code> is the one to check first.</strong> If that is where PayFast returns a customer after a successful payment, then someone who has just spent R7,000 is being told the site is working on something amazing. Worth confirming in the PayFast settings straight away.</p>
+        <p>The homepage also carries a "Care Resources" heading pointing at a placeholder, so the gap is visible from the front page. And this makes the legal position worse than the first cut said: it is not that returns are unpublished, it is that shipping, returns, terms and privacy are all published but empty, which reads as compliant while providing nothing.</p>
+        <div class="tags"><span class="tag you">Diane</span><span class="tag willem">Content from Willem</span><span class="tag now">This week</span></div>
+      </div>
+    </div>
+
+    <div class="act p0">
+      <div class="act-h"><div class="num">4</div><h3>Take the staging site down</h3></div>
+      <div class="act-b">
+        <p>The old 10Web staging site is still live, still public, and still serving a complete copy of all 926 products. It canonicals to itself and publishes its own sitemap, so Google can index both stores and split the ranking signal.</p>
         <p>While you are in there: production is serving a placeholder robots.txt, the commented example template, with no sitemap line. Staging has the correct one. They are the wrong way round.</p>
-        <div class="ev"><strong>Evidence</strong><code>square-horse.10web.cloud</code> returns 200 with <code>X-WP-Total: 926</code>, no <code>noindex</code>, no <code>X-Robots-Tag</code>, canonical set to itself. Production <code>/robots.txt</code> contains only a bare <code>Disallow:</code> and no <code>Sitemap:</code> line, though <code>/wp-sitemap.xml</code> does exist and works.</div>
+        <div class="ev"><strong>Evidence</strong><code>square-horse.10web.cloud</code> returns 200 with <code>X-WP-Total: 926</code>, no <code>noindex</code>, no <code>X-Robots-Tag</code>, canonical set to itself.</div>
         <div class="tags"><span class="tag you">Diane</span><span class="tag now">This week</span><span class="tag">~30 min</span></div>
       </div>
     </div>
 
     <div class="act p0">
-      <div class="act-h"><div class="num">2</div><h3>Install analytics. The site is currently measuring nothing</h3></div>
+      <div class="act-h"><div class="num">5</div><h3>Install analytics. The site is measuring nothing</h3></div>
       <div class="act-b">
-        <p>There is no GA4, no Tag Manager, no Meta pixel and no conversion tracking anywhere on the site. Every visitor since launch is invisible: no traffic baseline, no idea where anyone came from, no funnel, no cart-abandon signal. When Willem asks how launch went, there is currently no answer.</p>
-        <p>This is the cheapest fix on the list and the most expensive one to leave, because the data we do not collect this week is gone permanently.</p>
-        <div class="ev"><strong>Evidence</strong>Checked in the live rendered page: <code>gtag</code>, <code>dataLayer</code>, <code>fbq</code> and <code>ga</code> are all undefined. The only script host on the page is <code>reptilia.co.za</code> itself.</div>
+        <p>No GA4, no Tag Manager, no Meta pixel, no conversion tracking. Every visitor since launch is invisible: no baseline, no source attribution, no funnel, no cart-abandon signal. When Willem asks how launch went, there is no answer.</p>
+        <p>Cheapest fix here, most expensive to leave, because the data we do not collect this week is gone permanently.</p>
+        <div class="ev"><strong>Evidence</strong>In the live rendered page, <code>gtag</code>, <code>dataLayer</code>, <code>fbq</code> and <code>ga</code> are all undefined. The only script host is <code>reptilia.co.za</code> itself.</div>
         <div class="tags"><span class="tag you">Diane</span><span class="tag now">This week</span><span class="tag">~half a day</span></div>
       </div>
     </div>
 
     <div class="act p1">
-      <div class="act-h"><div class="num">3</div><h3>Fix the Contact Us page</h3></div>
+      <div class="act-h"><div class="num">6</div><h3>Remove the 11 products the POS says should never be online</h3></div>
       <div class="act-b">
-        <p>Four separate problems on one page, and it is the page that turns a browser into a lead:</p>
-        <p><strong>No enquiry form.</strong> The only form on the page is the theme search box. The sole contact route is a mailto link. Because Reptilia is on the Reviewtap System, that means no lead capture into the CRM from the store's own contact page.<br>
-        <strong>The map renders as an empty box.</strong> The iframe ships with an empty <code>src</code> and the lazy-loader never swaps in the real Google Maps URL, even after scrolling it into view. Two other lazy elements are stuck the same way.<br>
-        <strong>Friday is missing from the opening hours.</strong> The page lists Monday to Thursday, Saturday and Sunday. A shopper cannot tell if the store opens on a Friday.<br>
-        <strong>The contact address is a Gmail account</strong>, not an @reptilia.co.za address, on a business that now owns the domain.</p>
-        <div class="tags"><span class="tag you">Diane</span><span class="tag willem">Confirm hours + email with Willem</span><span class="tag now">This week</span></div>
+        <p>The POS marks products <code>Non Website Related</code> or <code>Not Linked</code>. Eleven of them are live on the site anyway, including the most expensive item in the whole store.</p>
+        <div class="tbl-wrap">
+        <table>
+          <tr><th>Product</th><th>POS flag</th><th>Price</th></tr>
+          <tr><td>Fiji Banded Iguana Male</td><td>Non Website Related</td><td class="num-c">R14,495.00</td></tr>
+          <tr><td>Display/Breeding Cage set of 6</td><td>Not Linked</td><td class="num-c">R4,800.00</td></tr>
+          <tr><td>Red Iguana 8-10 Months</td><td>Non Website Related</td><td class="num-c">R4,495.00</td></tr>
+          <tr><td>leon spider 15</td><td>Not Linked</td><td class="num-c">R2,000.00</td></tr>
+          <tr><td>sf 2200f uv pomp</td><td>Not Linked</td><td class="num-c">R1,299.99</td></tr>
+          <tr><td>Terrarium 300x350x450mm</td><td>Non Website Related</td><td class="num-c">R770.00</td></tr>
+          <tr><td>Small Animal Cage</td><td>Non Website Related</td><td class="num-c">R530.00</td></tr>
+          <tr><td>Water Dispenser 0.5W 200L/H 2L</td><td>Non Website Related</td><td class="num-c">R295.00</td></tr>
+          <tr><td>Parrot Food</td><td>Not Linked</td><td class="num-c">R270.00</td></tr>
+          <tr><td>Volcano W3 Mini bowl</td><td>Not Linked</td><td class="num-c">R15.00</td></tr>
+          <tr><td>Hi Quality Mielies 1kg</td><td>Not Linked</td><td class="num-c">R10.00</td></tr>
+        </table>
+        </div>
+        <p style="margin-top:14px">Separately, 13 rows in the POS have "NOT FOR SALE" written into the description, mostly breeding stock, which is exactly what Willem asked to have removed.</p>
+        <div class="tags"><span class="tag you">Diane</span><span class="tag newf">From the POS export</span></div>
       </div>
     </div>
 
     <div class="act p1">
-      <div class="act-h"><div class="num">4</div><h3>Shipping: R160 flat on everything, no free-shipping threshold</h3></div>
+      <div class="act-h"><div class="num">7</div><h3>Fix the Contact Us page</h3></div>
       <div class="act-b">
-        <p>Tested at both ends of the range. A R35 cart quotes R160 shipping, which is 457% of the item value. A R7,035 cart also quotes R160. Local pickup at R0.00 exists but is not the selected default, on a store with a physical Vanderbijlpark shopfront where a good share of buyers would collect.</p>
+        <p><strong>No enquiry form.</strong> The only form on the page is the theme search box, so there is no lead capture into the CRM from the store's own contact page.<br>
+        <strong>The map renders as an empty box.</strong> The iframe ships with an empty <code>src</code> and the lazy-loader never swaps in the Google Maps URL, even after scrolling it into view.<br>
+        <strong>Friday is missing from the opening hours.</strong> Monday to Thursday, Saturday and Sunday are listed. Friday is not.<br>
+        <strong>The email is a Gmail address.</strong> No need to ask Willem about this one: his POS export has <code>info@reptilia.co.za</code> in the header, so the branded address already exists. Just use it.</p>
+        <div class="tags"><span class="tag you">Diane</span><span class="tag now">This week</span></div>
+      </div>
+    </div>
+
+    <div class="act p1">
+      <div class="act-h"><div class="num">8</div><h3>Shipping: R160 flat on everything, no free-shipping threshold</h3></div>
+      <div class="act-b">
+        <p>A R35 cart quotes R160 shipping, which is 457% of the item value. A R7,035 cart also quotes R160. Local pickup at R0.00 exists but is not the selected default, on a store with a physical Vanderbijlpark shopfront where plenty of buyers would collect.</p>
         <p>We have watched this exact pattern kill a checkout before. A fixed courier fee that dwarfs small baskets is one of the most reliable ways to lose an order.</p>
-        <div class="ev"><strong>Suggested</strong>Free shipping over roughly R750 to R1,000, value or weight banded rates below that, and consider making local pickup the default. Needs Willem to confirm real courier costs first.</div>
+        <div class="ev"><strong>Suggested</strong>Free shipping over roughly R750 to R1,000, value or weight banded rates below that, local pickup made the visible default. Needs Willem's real courier costs first.</div>
         <div class="tags"><span class="tag you">Diane</span><span class="tag willem">Needs courier costs</span></div>
       </div>
     </div>
 
     <div class="act p1">
-      <div class="act-h"><div class="num">5</div><h3>Metadata and sharing basics</h3></div>
+      <div class="act-h"><div class="num">9</div><h3>Metadata, sharing and housekeeping</h3></div>
       <div class="act-b">
-        <p>The homepage has <strong>no meta description</strong>, <strong>no favicon</strong> at all, and <strong>no Open Graph or Twitter tags</strong>. That last one matters most here: every time someone shares the store on WhatsApp or Facebook it renders as a bare link with no image and no title. For a South African retail business where WhatsApp sharing is the main organic spread, that is a real loss and a quick win.</p>
-        <p>Two smaller items on the same pass: there are two H1s on the homepage, and the page title carries no geography. Nothing on the site targets "reptile shop Vanderbijlpark" style intent.</p>
+        <p>The homepage has <strong>no meta description</strong>, <strong>no favicon</strong>, and <strong>no Open Graph or Twitter tags</strong>. That last one matters most: every WhatsApp and Facebook share renders as a bare link with no image or title, and for a South African retail business WhatsApp sharing is the main organic spread.</p>
+        <p>Two H1s on the homepage, and the title carries no geography, so nothing targets "reptile shop Vanderbijlpark" intent.</p>
+        <p><strong>Two competing shop pages</strong> are both live and indexable: <code>/shop-all-now/</code> at 149KB with no H1, and <code>/shop-all/</code> at 180KB with one. Pick one, 301 the other.</p>
+        <p><strong>The users sitemap is public</strong> and exposes <code>/author/dianec/</code>, publishing a valid WordPress username for brute-force targeting. Disable it.</p>
         <div class="tags"><span class="tag you">Diane</span><span class="tag">~2 hours</span></div>
-      </div>
-    </div>
-
-    <div class="act p1">
-      <div class="act-h"><div class="num">6</div><h3>Two housekeeping items</h3></div>
-      <div class="act-b">
-        <p><strong>Two competing shop pages are both live and indexable.</strong> <code>/shop-all-now/</code> at 149KB with no H1, and <code>/shop-all/</code> at 180KB with an H1. Pick one and 301 the other. This was in the July audit too.</p>
-        <p><strong>The users sitemap is public.</strong> <code>/wp-sitemap-users-1.xml</code> exposes <code>/author/dianec/</code>, which publishes a valid WordPress username for brute-force targeting and puts your name on the client's store. Disable the users sitemap.</p>
-        <div class="tags"><span class="tag you">Diane</span><span class="tag">~30 min</span></div>
       </div>
     </div>
   </section>
 
   <section>
-    <h2 class="sec">Needs Willem before anything happens</h2>
+    <h2 class="sec">The POS export changes the catalogue plan</h2>
 
-    <div class="act p0">
-      <div class="act-h"><div class="num">7</div><h3>Live animals are freely orderable, and this is the one to raise first</h3></div>
+    <div class="act new">
+      <div class="act-h"><div class="num">10</div><h3>The blocker is answered: it is a manual POS export, not a live sync</h3></div>
       <div class="act-b">
-        <p>All 132 livestock products are purchasable right now, with a combined shelf value of about R199,620. I verified it end to end: adding a R7,000 ball python to a guest cart returns a R7,195 total with a R160 flat courier rate selected by default and PayFast ready to charge the card.</p>
-        <p>71 of the 132 have no description at all. The R7,000 python page is one image, a price, a quantity box and an Add to cart button. Only 2 of the 132 mention a permit, collection or transport condition anywhere.</p>
-        <p>Willem asked for livestock removal back in his 30 June feedback. It is now not just still listed, it is fully transactable on a live domain with a live payment gateway. Whatever the commercial intention was, a flat courier rate applied to a live snake is the wrong default, and this is a decision only he can make.</p>
-        <div class="ev"><strong>The options to put to him</strong>Enquiry only, collection in store only, or fully orderable with a permit notice and a livestock-specific shipping class. Any of the three is defensible. Leaving it as it is, is not.</div>
-        <div class="tags"><span class="tag willem">Willem decides</span><span class="tag blocked">Blocking</span><span class="tag now">This week</span></div>
+        <p>Willem's file is a legacy Excel <code>.xls</code>, not a CSV, <strong>printed by hand on 2 August at 07:50 by "Anemarie"</strong>. A person pressing print, not an automated feed.</p>
+        <p>So nothing on the site is being silently overwritten. The risk is different from what we assumed: a wholesale re-import wiping manual work. That is an engineering problem with a known fix, not an open question.</p>
+        <div class="ev"><strong>The import rule</strong>Match on <strong>Product Code</strong>. Write <strong>Category, SOH and Price only</strong>. Never touch descriptions, images or SEO fields. Read product codes as <strong>text</strong>. Exclude <code>Non Website Related</code> and <code>Not Linked</code>.</div>
+        <p style="margin-top:14px">Full breakdown in <strong>2026-08-06-POS-Export-Analysis.md</strong> in the client folder.</p>
+        <div class="tags"><span class="tag newf">Blocker cleared</span></div>
       </div>
     </div>
 
-    <div class="act p1">
-      <div class="act-h"><div class="num">8</div><h3>No returns or refunds policy is published</h3></div>
+    <div class="act new">
+      <div class="act-h"><div class="num">11</div><h3>The store is 32% loaded, not messy</h3></div>
       <div class="act-b">
-        <p>Shipping policy, terms and privacy pages all exist and load. Returns and refunds both 404. South African online sales fall under the ECT Act and the Consumer Protection Act, which give buyers a seven-day cooling-off right on distance sales. A store selling live animals with no published returns position is carrying avoidable risk.</p>
-        <p>Ask Willem what the in-store policy actually is, and whether it differs for livestock versus dry goods, then publish it.</p>
-        <div class="tags"><span class="tag willem">Willem decides</span></div>
+        <div class="stats" style="margin-bottom:16px">
+          <div class="stat"><div class="v vio">2,912</div><div class="l">Products the POS flags for the website</div></div>
+          <div class="stat"><div class="v warn">926</div><div class="l">Actually live on the site</div></div>
+          <div class="stat"><div class="v bad">2,176</div><div class="l">Missing (75%)</div></div>
+        </div>
+        <p>This reframes everything. We have been treating the catalogue as a messy full store that needs cleaning. It is a <strong>partial store</strong>, and the missing three quarters is the real story.</p>
+        <div class="tbl-wrap">
+        <table>
+          <tr><th>Category</th><th>Missing</th></tr>
+          <tr><td>Reptile Livestock</td><td class="num-c">346</td></tr>
+          <tr><td>Dog Accessories</td><td class="num-c">182</td></tr>
+          <tr><td>Reptile Accessories</td><td class="num-c">115</td></tr>
+          <tr><td>Breeding</td><td class="num-c">100</td></tr>
+          <tr><td>Small Animal Accessories</td><td class="num-c">100</td></tr>
+          <tr><td>Reptile Hides</td><td class="num-c">92</td></tr>
+          <tr><td>Artificial Plants</td><td class="num-c">89</td></tr>
+          <tr><td>Reptile Bowls</td><td class="num-c">79</td></tr>
+        </table>
+        </div>
+        <p style="margin-top:14px">Plenty of the missing items are in stock right now: Aquarium Filter Pump (7 on hand), Aquarium Heater 100w (7), Aquarium Heater 300W (6), Albino Jungle Leopard Gecko (1, R695).</p>
+        <p>This confirms Willem's video-18 complaint that small animal livestock was missing rabbits, hamsters and guinea pigs. He was right, and the same is true across most of the store. The <code>Breeding</code> category should probably stay missing, since he asked for breeding stock off.</p>
+        <div class="tags"><span class="tag newf">From the POS export</span><span class="tag blocked">Load after the import is trustworthy</span></div>
+      </div>
+    </div>
+
+    <div class="act new">
+      <div class="act-h"><div class="num">12</div><h3>Prices have drifted, and always in the same direction</h3></div>
+      <div class="act-b">
+        <p>Of 750 matched products, <strong>39 have a price mismatch, and in all 39 the site is cheaper than the POS. Not one is dearer.</strong></p>
+        <div class="tbl-wrap">
+        <table>
+          <tr><th>Product</th><th>Site</th><th>POS</th><th>Gap</th></tr>
+          <tr><td>Small Animal Cage</td><td class="num-c">R530.00</td><td class="num-c">R2,850.00</td><td class="num-c" style="color:var(--red)">-R2,320.00</td></tr>
+          <tr><td>Optimizor Complete Adult</td><td class="num-c">R230.00</td><td class="num-c">R520.00</td><td class="num-c" style="color:var(--red)">-R290.00</td></tr>
+          <tr><td>Tangerine Leopard Gecko</td><td class="num-c">R595.00</td><td class="num-c">R745.00</td><td class="num-c" style="color:var(--red)">-R150.00</td></tr>
+          <tr><td>Bob Martin Fly Rep Spray 200ml</td><td class="num-c">R95.00</td><td class="num-c">R205.00</td><td class="num-c" style="color:var(--red)">-R110.00</td></tr>
+          <tr><td>Komodo Tortoise Food</td><td class="num-c">R69.00</td><td class="num-c">R175.00</td><td class="num-c" style="color:var(--red)">-R106.00</td></tr>
+        </table>
+        </div>
+        <p style="margin-top:14px">One-directional drift like this reads as the site being loaded from an older export with a price increase since. The alternative is deliberate online discounting, but the amounts are irregular (R16, R21, R71, R106) which is not what a pricing strategy looks like.</p>
+        <p><strong>The store may be selling below shelf price.</strong> Start with the Small Animal Cage: R530 against R2,850 is either a R2,320 loss per unit or two different products sharing a code.</p>
+        <div class="tags"><span class="tag willem">Willem confirms</span><span class="tag newf">From the POS export</span></div>
+      </div>
+    </div>
+
+    <div class="act new">
+      <div class="act-h"><div class="num">13</div><h3>A pipeline bug that will recur on every import</h3></div>
+      <div class="act-b">
+        <p>Five live products have SKUs corrupted into scientific notation: <code>6.93575E+12</code> (Infrared Thermometer), <code>6.00969E+12</code> (Montego Classic Kitten), <code>6.0611E+11</code> (JUAVA Adult Dog), <code>6.00951E+12</code> (Daro Hamster Tonic), <code>6.00107E+12</code> (Bobtail Gravy).</p>
+        <p><strong>The POS export itself is clean.</strong> Zero scientific-notation codes in the source file. So the corruption happened in the import pipeline, almost certainly by opening the file in Excel and letting it reformat 13-digit barcodes before saving.</p>
+        <p>This is also the root cause of the two broken R0.00 zero-variation products flagged in both audits. Their barcodes were destroyed, so they matched nothing. Fix the process, not the two products, or it happens again next time.</p>
+        <div class="tags"><span class="tag you">Diane</span><span class="tag newf">Root cause found</span></div>
+      </div>
+    </div>
+
+    <div class="act new">
+      <div class="act-h"><div class="num">14</div><h3>Good news: the category restructure is smaller than we thought</h3></div>
+      <div class="act-b">
+        <p>76 categories in the POS against 100 on the site. Several things Willem asked for in his July videos <strong>already exist correctly in the POS</strong> and were lost on the way in.</p>
+        <div class="tbl-wrap">
+        <table>
+          <tr><th>Willem asked for</th><th>POS status</th></tr>
+          <tr><td>UVB base lamps separated from sun lamps</td><td class="ok">Already separate (30 and 27)</td></tr>
+          <tr><td>Heating blankets under their own heading</td><td class="ok">Already exists (5)</td></tr>
+          <tr><td>Moon lamps grouped</td><td class="ok">Already exists (8)</td></tr>
+          <tr><td>Basking lamps grouped</td><td class="ok">Already exists (7)</td></tr>
+          <tr><td>Vents de-duplicated</td><td class="ok">Single Vents (9)</td></tr>
+        </table>
+        </div>
+        <p style="margin-top:14px">So the restructure is largely a matter of importing his category column faithfully rather than designing a new tree. Much smaller job than the first audit implied.</p>
+        <p>A few POS categories need a decision before import: <code>Casino</code> (57), <code>Zooperdoos</code> (50), <code>Breeding</code> (101), <code>Frog's</code> (6, and Willem wants amphibians off), <code>Services</code> (7), <code>Softdrinks</code> (1).</p>
+        <div class="tags"><span class="tag newf">From the POS export</span></div>
       </div>
     </div>
 
     <div class="act p2">
-      <div class="act-h"><div class="num">9</div><h3>The whole catalogue clean-up is still blocked on the POS question</h3></div>
+      <div class="act-h"><div class="num">15</div><h3>Duplicate names are inherited. Do not merge them</h3></div>
       <div class="act-b">
-        <p>This is the same blocker from 30 June and it has still not been answered: <strong>is the catalogue driven by a POS export or a one-off CSV, and will a re-import overwrite manual edits?</strong> Until we know, nobody should hand-fix 299 descriptions.</p>
-        <p>The counts below are diagnosis, not a work order. Do not start on them yet.</p>
-        <div class="tags"><span class="tag willem">Willem decides</span><span class="tag blocked">Do not start</span></div>
+        <p>The site has 17 duplicate-name groups. <strong>The POS has 47.</strong> These are genuinely different products sharing a description:</p>
+        <div class="ev"><strong>Example</strong><code>Bird Toy</code> x4 with codes BT001R, BT003R, BT007R, BT014 at R49, R49, R49 and R58.<br><code>Pet Soft Toy</code> x4 at R90, R110, R75 and R65.</div>
+        <p style="margin-top:13px">Merging them would destroy real SKUs. The fix is to build the product name from Description plus a distinguishing attribute, or have Willem's team make the POS descriptions unique. This is also the root of the "102 products with stock codes in the name": whoever built the import appended the code to force uniqueness, which was the right instinct in the wrong place.</p>
+        <div class="tags"><span class="tag newf">Root cause found</span></div>
       </div>
     </div>
   </section>
 
   <section>
     <h2 class="sec">What launch actually fixed</h2>
+    <div class="tbl-wrap">
     <table>
-      <tr><th>July staging finding</th><th style="width:130px">Status</th><th>Detail</th></tr>
+      <tr><th>July staging finding</th><th style="width:120px">Status</th><th>Detail</th></tr>
       <tr><td>No payment methods at all</td><td class="ok">Fixed</td><td>Cart API returns PayFast</td></tr>
-      <tr><td>No production domain</td><td class="ok">Fixed</td><td>Live, with http and www both redirecting correctly</td></tr>
+      <tr><td>No production domain</td><td class="ok">Fixed</td><td>Live, http and www both redirecting correctly</td></tr>
       <tr><td>Mobile carousels clipping content</td><td class="ok">Fixed</td><td>At 375px: zero overflow, zero clipped elements</td></tr>
-      <tr><td>Amphibians still listed</td><td class="ok">Fixed</td><td>None found</td></tr>
+      <tr><td>Amphibians still listed</td><td class="ok">Fixed</td><td>None found on the site</td></tr>
       <tr><td>Homepage tiles mixed cat and dog</td><td class="ok">Fixed</td><td>Five tiles, all reptile relevant</td></tr>
-      <tr><td>Stock never managed</td><td class="part">Partly</td><td>779 products now show stock text, but nothing is ever marked sold out</td></tr>
-      <tr><td>R15 flat shipping nationwide</td><td class="part">Changed</td><td>Now R160, which brings its own problem. See item 4</td></tr>
+      <tr><td>Stock never managed</td><td class="part">Partly</td><td>779 products show stock text, but nothing is ever marked sold out</td></tr>
+      <tr><td>R15 flat shipping nationwide</td><td class="part">Changed</td><td>Now R160, which brings its own problem. See item 8</td></tr>
     </table>
-    <p style="color:var(--muted);font-size:14.5px;margin-top:14px">Catalogue also shrank from 1,001 to 926 products. Missing images dropped from 93 to 22, and duplicate-name groups from 27 to 17.</p>
+    </div>
   </section>
 
   <section>
-    <h2 class="sec">Catalogue counts · reference only, do not action yet</h2>
+    <h2 class="sec">Catalogue counts · reference</h2>
     <div class="stats">
-      <div class="stat"><div class="v bad">299</div><div class="l">No description at all (32.3%)</div></div>
-      <div class="stat"><div class="v warn">102</div><div class="l">POS stock codes in the product name</div></div>
+      <div class="stat"><div class="v bad">299</div><div class="l">No description (of the 926 live)</div></div>
+      <div class="stat"><div class="v warn">102</div><div class="l">POS stock codes in the name</div></div>
       <div class="stat"><div class="v warn">22</div><div class="l">No image</div></div>
-      <div class="stat"><div class="v warn">17</div><div class="l">Duplicate-name groups (45 products)</div></div>
-      <div class="stat"><div class="v warn">100</div><div class="l">Categories, 7 of them duplicate names</div></div>
-      <div class="stat"><div class="v bad">0</div><div class="l">Products ever marked out of stock</div></div>
+      <div class="stat"><div class="v warn">17</div><div class="l">Duplicate-name groups</div></div>
+      <div class="stat"><div class="v bad">1,481</div><div class="l">POS website items at zero stock</div></div>
+      <div class="stat"><div class="v bad">0</div><div class="l">Site products marked out of stock</div></div>
     </div>
-    <table>
-      <tr><th>Issue</th><th style="width:90px">Count</th><th>Notes</th></tr>
-      <tr><td>Broken variable products at R0.00 with zero variations</td><td class="num-c">2</td><td>montego-classic-kitten and juava-adult-dog. Same two flagged in July, still live</td></tr>
-      <tr><td>Raw POS stock codes in customer-facing names</td><td class="num-c">102</td><td>"Artificial Vines with Flowers 1241388", "Pet Toy 616442". One of them is on the homepage</td></tr>
-      <tr><td>Duplicate-name groups</td><td class="num-c">17</td><td>Bird Toy x6, Dog Toy x5, Cat Toy x5, all at different prices. Same root cause as the line above</td></tr>
-      <tr><td>Products with no SKU</td><td class="num-c">4</td><td></td></tr>
-      <tr><td>Products with no category</td><td class="num-c">3</td><td>Unreachable by browsing</td></tr>
-      <tr><td>Delivery charges sold as products</td><td class="num-c">1</td><td>"Postage/Delivery Den Publ" at R100.00, buyable</td></tr>
-    </table>
-    <p style="color:var(--muted);font-size:14.5px;margin-top:16px"><strong>Category structure.</strong> Willem's de-duplication requests from 22 July are largely not done. Seven duplicate category names. The collision slugs persist, with <code>Accessories</code> living at <code>/accessories-2/</code> and holding 486 products, more than half the catalogue behind one door. <code>Reptile Enclosure Accessories</code> and <code>Reptile Accessories</code> have their slugs crossed over. Geckos and Lizards exist as splits, but there is still no Snakes category.</p>
+    <p style="color:var(--muted);font-size:14.5px">Descriptions cannot be imported: <strong>the POS has no description field at all.</strong> They have to be written. 299 gaps today, growing to roughly 2,500 once the full catalogue is loaded. That is a content project, not an import task, and it is worth scoping separately with Willem.</p>
   </section>
 
   <section>
     <h2 class="sec">Speed</h2>
-    <p style="color:var(--slate)">Server response is slow across the board. Homepage 2.70s, shop 2.54s, category pages 2.78s, contact 2.17s. Google's guidance is under 0.8s.</p>
+    <p style="color:var(--slate)">Homepage 2.70s, shop 2.54s, category pages 2.78s, contact 2.17s. Google's guidance is under 0.8s.</p>
     <p style="color:var(--slate)">Worth being precise about where this sits. The 10Web optimizer plugin is still installed and its headers confirm it is serving these pages from cache, but hosting has moved to plain Apache on PHP 8.1. So the cache is doing its job and the response is <em>still</em> 2.5s, which points at the server rather than the theme or the plugin. That is a conversation with the current host, not with 10Web.</p>
     <div class="tags"><span class="tag host">Current host</span><span class="tag">Not urgent, but raise it</span></div>
   </section>
@@ -267,12 +411,14 @@ footer a{color:var(--coral)}
     <h2 class="sec">Questions to put to Willem</h2>
     <div class="qbox">
       <ol>
-        <li><strong>Should live animals be orderable online at all?</strong> If yes, on what terms: collection only, permit confirmation, deposit? This gates the biggest item on the list.</li>
-        <li><strong>Is the catalogue POS driven or a one-off CSV?</strong> Still unanswered since 30 June. The entire clean-up waits on this.</li>
-        <li><strong>What is the actual returns policy</strong>, and does it differ for livestock versus dry goods?</li>
-        <li><strong>Is the store VAT registered?</strong> Cart totals return R0.00 tax on a R7,195 basket. If Reptilia is registered, tax is not configured in WooCommerce.</li>
-        <li><strong>Is Friday a trading day?</strong> It is missing from the published hours.</li>
-        <li><strong>Should the contact email move to @reptilia.co.za</strong> now the domain is live?</li>
+        <li><strong>Should live animals be orderable online at all?</strong> Collection only, permit confirmation, deposit? This is still the biggest single decision.</li>
+        <li><strong>Is that a VAT number on his price list?</strong> The export header shows Tax Number 4620299232, which is SA VAT format, and says "Price List - Inclusive Price". The site charges R0.00 tax on a R7,195 basket. If he is registered, every order since launch is mis-recorded.</li>
+        <li><strong>Are the site prices wrong or deliberately discounted?</strong> Start with Small Animal Cage, R530 on the site against R2,850 in the POS.</li>
+        <li><strong>How often does he send this export?</strong> This decides whether we build a one-off load or a repeatable process.</li>
+        <li><strong>What POS system is it, and does it have an API?</strong> An API would remove the Excel corruption problem permanently.</li>
+        <li><strong>What is the actual returns policy</strong>, and does it differ for livestock versus dry goods? Plus the content for shipping, terms, privacy and about.</li>
+        <li><strong>Are Casino and Zooperdoos brands or store sections?</strong> They read like brands, but guessing puts 107 products in the wrong place.</li>
+        <li><strong>Is Friday a trading day?</strong> Missing from the published hours.</li>
       </ol>
     </div>
   </section>
@@ -281,11 +427,11 @@ footer a{color:var(--coral)}
     <h2 class="sec">What I could not check</h2>
     <div class="caveat">
       <ul>
-        <li><strong>No order was placed.</strong> The payment finding is read from the cart API, not from a completed PayFast transaction. Someone should put through one real low-value test order and confirm the money lands and the order email fires.</li>
-        <li><strong>Admin side.</strong> I only had the public front end and Store API. Analytics could in theory be configured in WP admin but not firing. Worth confirming from inside.</li>
-        <li><strong>Whether staging is actually indexed</strong> in Google, as opposed to merely crawlable and duplicated. Check Search Console for both properties.</li>
-        <li><strong>Whether the missing images and descriptions are an import artefact</strong> or genuine gaps. That is the POS question again.</li>
-        <li><strong>Whether R160 is deliberate courier pricing</strong> or another placeholder like the old R15 was.</li>
+        <li><strong>No order was placed.</strong> The payment finding is read from the cart API, not a completed PayFast transaction. Someone should put through one real low-value test order and confirm the money lands, the order email fires, and <em>where the customer lands afterwards</em>, given <code>/payment-complete/</code> is a placeholder.</li>
+        <li><strong>Admin side.</strong> Public front end and Store API only. Analytics could in theory be configured but not firing. Worth confirming from inside.</li>
+        <li><strong>Whether staging is actually indexed</strong> in Google, as opposed to crawlable and duplicated. Check Search Console for both properties.</li>
+        <li><strong>Whether R160 is deliberate courier pricing</strong> or another placeholder like the old R15.</li>
+        <li><strong>Which stock figure is authoritative for livestock</strong>, given animals sell in store and online off the same count.</li>
       </ul>
     </div>
   </section>
@@ -294,8 +440,8 @@ footer a{color:var(--coral)}
 
 <footer>
   <div class="wrap">
-    Reptilia post-launch audit · 6 August 2026 · internal build document, not for client circulation<br>
-    Prepared by JCE Media · production front end and public Store API only
+    Reptilia post-launch audit · 6 August 2026, updated after the POS export · internal build document, not for client circulation<br>
+    Prepared by JCE Media · production front end, public Store API, and Willem's POS export dated 2 August
   </div>
 </footer>
 
