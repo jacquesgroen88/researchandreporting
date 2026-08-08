@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ReviewTap Seven Figure Blueprint | Review Workspace</title>
+<style>
+  :root{
+    --bg:#0d1017; --panel:#131722; --panel2:#182032; --line:#243049; --text:#e9edf5; --muted:#8fa0bd;
+    --orange:#ff6b2c; --green:#2dd4a0; --blue:#4da3ff; --amber:#ffb020; --red:#ff5c6c; --purple:#b17aff;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;height:100vh;display:flex;flex-direction:column;overflow:hidden;}
+  header{display:flex;align-items:center;gap:14px;padding:10px 18px;background:var(--panel);border-bottom:1px solid var(--line);flex:none;}
+  header .logo{font-weight:800;font-size:15px;letter-spacing:.5px;}
+  header .logo span{color:var(--orange);}
+  header .crumb{color:var(--muted);font-size:13px;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  header button, header a.btn{background:var(--panel2);border:1px solid var(--line);color:var(--text);border-radius:8px;padding:6px 12px;font-size:12.5px;cursor:pointer;text-decoration:none;white-space:nowrap;}
+  header button:hover, header a.btn:hover{border-color:var(--orange);}
+  header .export{border-color:var(--green);color:var(--green);font-weight:700;}
+  .main{display:flex;flex:1;min-height:0;}
+  /* SIDEBAR */
+  nav{width:295px;flex:none;background:var(--panel);border-right:1px solid var(--line);overflow-y:auto;padding:12px 0 30px;}
+  nav .grp{padding:14px 16px 4px;font-size:10.5px;font-weight:800;letter-spacing:1.6px;color:var(--muted);text-transform:uppercase;}
+  nav .doc{display:flex;align-items:center;gap:8px;padding:7px 10px 7px 16px;cursor:pointer;font-size:13px;border-left:3px solid transparent;}
+  nav .doc:hover{background:var(--panel2);}
+  nav .doc.active{background:var(--panel2);border-left-color:var(--orange);}
+  nav .doc .st{flex:none;width:20px;height:20px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;cursor:pointer;background:var(--bg);border:1px solid var(--line);}
+  nav .doc .t{flex:1;line-height:1.25;}
+  nav .doc .t small{display:block;color:var(--muted);font-size:10.5px;}
+  nav .doc .nb{flex:none;background:rgba(255,176,32,.15);color:var(--amber);border-radius:10px;font-size:10.5px;font-weight:800;padding:1px 7px;display:none;}
+  nav .doc .nb.on{display:inline-block;}
+  /* VIEWER */
+  .view{flex:1;min-width:0;display:flex;flex-direction:column;background:#0a0d13;}
+  iframe{flex:1;border:0;width:100%;background:#fff0;}
+  .mdhost{flex:1;overflow-y:auto;padding:34px 44px;display:none;}
+  .mdhost .md{max-width:860px;margin:0 auto;}
+  .md h1{font-size:26px;margin:18px 0 12px;} .md h2{font-size:20px;margin:26px 0 10px;color:var(--orange);} .md h3{font-size:16px;margin:20px 0 8px;}
+  .md p{margin:9px 0;font-size:14.5px;line-height:1.6;}
+  .md ul,.md ol{margin:8px 0 8px 24px;} .md li{font-size:14.5px;margin:4px 0;line-height:1.55;}
+  .md code{background:var(--panel2);border:1px solid var(--line);border-radius:4px;padding:1px 6px;font-size:13px;font-family:Consolas,monospace;}
+  .md table{border-collapse:collapse;margin:12px 0;width:100%;font-size:13.5px;}
+  .md th{background:var(--panel2);text-align:left;padding:8px 10px;border:1px solid var(--line);font-size:12px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);}
+  .md td{padding:8px 10px;border:1px solid var(--line);vertical-align:top;line-height:1.5;}
+  .md blockquote{border-left:3px solid var(--amber);padding:6px 14px;margin:10px 0;color:var(--muted);background:rgba(255,176,32,.05);}
+  .md hr{border:0;border-top:1px solid var(--line);margin:20px 0;}
+  .md a{color:var(--blue);}
+  .md del{color:var(--red);}
+  .md strong{color:#fff;}
+  /* FEEDBACK PANEL */
+  aside{width:330px;flex:none;background:var(--panel);border-left:1px solid var(--line);display:flex;flex-direction:column;min-height:0;}
+  aside .fh{padding:12px 16px;border-bottom:1px solid var(--line);font-weight:800;font-size:13px;display:flex;justify-content:space-between;align-items:center;}
+  aside .fh span{color:var(--amber);}
+  aside .fh small{color:var(--muted);font-weight:400;}
+  .notes{flex:1;overflow-y:auto;padding:10px 14px;}
+  .note{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:9px 12px;margin-bottom:9px;font-size:13px;position:relative;}
+  .note .when{font-size:10.5px;color:var(--muted);margin-bottom:3px;}
+  .note .del{position:absolute;top:6px;right:8px;color:var(--muted);cursor:pointer;font-size:12px;}
+  .note .del:hover{color:var(--red);}
+  .note .body{white-space:pre-wrap;line-height:1.45;}
+  .empty{color:var(--muted);font-size:12.5px;text-align:center;padding:24px 10px;}
+  .composer{border-top:1px solid var(--line);padding:12px 14px;}
+  .composer textarea{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:10px;color:var(--text);font-family:inherit;font-size:13px;padding:10px 12px;resize:vertical;min-height:74px;}
+  .composer textarea:focus{outline:none;border-color:var(--orange);}
+  .composer .row{display:flex;gap:8px;margin-top:8px;}
+  .composer button{flex:1;background:var(--orange);border:0;color:#fff;font-weight:800;border-radius:8px;padding:8px;cursor:pointer;font-size:13px;}
+  .composer .hint{font-size:11px;color:var(--muted);margin-top:7px;line-height:1.4;}
+  .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--green);color:#0a1628;font-weight:800;font-size:13px;border-radius:10px;padding:10px 20px;display:none;z-index:99;}
+  @media(max-width:1100px){aside{width:280px;} nav{width:250px;}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">SEVEN FIGURE BLUEPRINT <span>WIKI</span></div>
+  <div class="crumb" id="crumb">Pick a document</div>
+  <button id="prevB" title="Previous document">&larr; Prev</button>
+  <button id="nextB" title="Next document">Next &rarr;</button>
+  <a class="btn" id="openTab" href="#" target="_blank">Open in tab &nearr;</a>
+  <button class="export" id="exportB" title="Copies all feedback as markdown + downloads a file">Export feedback</button>
+</header>
+
+<div class="main">
+  <nav id="nav"></nav>
+  <div class="view">
+    <iframe id="frame" style="display:none"></iframe>
+    <div class="mdhost" id="mdhost"><div class="md" id="mdout"></div></div>
+  </div>
+  <aside>
+    <div class="fh">Feedback <span id="fcount"></span> <small id="fdoc"></small></div>
+    <div class="notes" id="notes"><div class="empty">No notes on this document yet.</div></div>
+    <div class="composer">
+      <textarea id="noteIn" placeholder="Type feedback on the open document. Be specific: section, what to change, why."></textarea>
+      <div class="row"><button id="addB">Add note (Ctrl+Enter)</button></div>
+      <div class="hint">Notes save locally per document. Status squares in the sidebar cycle: not reviewed &rarr; ✔ approved &rarr; ✎ needs changes. When you're done, hit <b>Export feedback</b> and paste the result to Claude to apply everything.</div>
+    </div>
+  </aside>
+</div>
+
+<div class="toast" id="toast">Copied to clipboard + downloaded</div>
+
+<script>
+const DOCS = [
+    {g:"Diagnosis", t:"00 Executive Summary", d:"The one-page read: the diagnosis, the four moves, the money, and what happens in the first 30 days.", p:"00-executive-summary.html"},
+    {g:"Diagnosis", t:"01 Where the Business Stands", d:"Live Shopify, Google and Meta data. The order-size distribution nobody had looked at, and the franchise signal it exposed.", p:"01-where-the-business-stands.html"},
+    {g:"Diagnosis", t:"02 The Leak Map", d:"Eleven costed leaks ranked by rand recovered per hour of effort. The list the project plan is built from.", p:"02-the-leak-map.html"},
+    {g:"Market & ICP", t:"03 Market and Competitor Research", d:"The two-tier market, every competitor mapped, the reseller models worth copying, and the position nobody holds.", p:"03-market-and-competitor-research.html"},
+    {g:"Market & ICP", t:"04 The ICPs", d:"Six buyer profiles plus two channel profiles, each anchored to businesses that have already bought. Unit maths, buying committee, triggers, pitch, objections, where to find them.", p:"04-the-icps.html"},
+    {g:"Market & ICP", t:"05 Offer Architecture and Pricing", d:"The volume ladder, the Branded Fleet package, the reseller tier, and the bulk shipping threshold. Live list prices and true margins.", p:"05-offer-architecture-and-pricing.html"},
+    {g:"Market & ICP", t:"06 Messaging and Positioning", d:"The position, the narrative, the proof stack, voice rules, per-ICP messaging, and the three claims that have to be removed.", p:"06-messaging-and-positioning.html"},
+    {g:"Channels", t:"07 SEO Strategy", d:"Two keyword universes mapped to a site architecture that does not exist yet, in build order, with technical work and a six-month sequence.", p:"07-seo-strategy.html"},
+    {g:"Channels", t:"08 AI Visibility", d:"First on ChatGPT, invisible on Perplexity. The entity collision behind it and the fix, in order.", p:"08-ai-visibility.html"},
+    {g:"Channels", t:"09 Paid Channels", d:"Budget reallocation from the 1.2x channel to the 7x channel, the search rebuild, Meta's new job, and the float rule.", p:"09-paid-channels.html"},
+    {g:"Channels", t:"10 Outbound and Partnerships", d:"Four motions, the named target list, the sequences and messages, the reseller programme, and the weekly rhythm.", p:"10-outbound-and-partnerships.html"},
+    {g:"Channels", t:"11 Communities", d:"Associations, Hostex, the online groups, and how to enter each one without being thrown out.", p:"11-communities.html"},
+    {g:"Content & Assets", t:"12 Content and Social", d:"Six pillars, platform roles, the LinkedIn play, and the path from a post to a bulk enquiry.", p:"12-content-and-social.html"},
+    {g:"Content & Assets", t:"13 The 90-Day Content Calendar", d:"Thirteen dated weeks from 10 August to 6 November, every asset named, with the cut order decided in advance.", p:"13-content-calendar.html"},
+    {g:"Content & Assets", t:"14 Asset Reuse Audit", d:"Every existing asset classified reuse, recut or rebuild. Roughly 70% of what the plan needs already exists.", p:"14-asset-reuse-audit.html"},
+    {g:"Execution", t:"15 The Project Plan", d:"Six workstreams over twelve months, first ninety days broken to the task, with dependencies, owners, cost and decision gates.", p:"15-the-project-plan.html"},
+    {g:"Execution", t:"16 The Money Model", d:"Three cases with every assumption stated, the monthly ramp, contribution not just revenue, and what it does to the sale price.", p:"16-the-money-model.html"},
+    {g:"Execution", t:"17 Measurement and Dashboard", d:"The four numbers that matter, the tracking fixes needed first, the four dashboard tiers and the review rhythm.", p:"17-measurement-and-dashboard.html"},
+    {g:"Execution", t:"18 Risks and Decisions", d:"Thirteen risks, eight open decisions each with a recommendation, the decisions already locked, and what would make this plan wrong.", p:"18-risks-and-decisions.html"}
+  ];
+const LS_NOTES="wk_sfb_notes", LS_STATUS="wk_sfb_status", LS_LAST="wk_sfb_last";
+const store=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
+const load=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}};
+let notes=load(LS_NOTES,{}), status=load(LS_STATUS,{}), cur=load(LS_LAST,0);
+if(cur<0||cur>=DOCS.length)cur=0;
+const STICONS=["","✔","✎"], STCOL=["", "var(--green)", "var(--amber)"];
+
+const nav=document.getElementById('nav');
+function buildNav(){
+  nav.innerHTML=""; let lastG="";
+  DOCS.forEach((doc,i)=>{
+    if(doc.g!==lastG){lastG=doc.g;const g=document.createElement('div');g.className='grp';g.textContent=doc.g;nav.appendChild(g);}
+    const el=document.createElement('div'); el.className='doc'+(i===cur?' active':''); el.dataset.i=i;
+    const st=status[doc.p]||0;
+    el.innerHTML=`<span class="st" title="Cycle review status" style="color:${STCOL[st]};border-color:${st?STCOL[st]:'var(--line)'}">${STICONS[st]}</span>
+      <span class="t">${doc.t}<small>${doc.d}</small></span>
+      <span class="nb ${notes[doc.p]&&notes[doc.p].length?'on':''}">${(notes[doc.p]||[]).length}</span>`;
+    el.querySelector('.st').addEventListener('click',e=>{e.stopPropagation();status[doc.p]=((status[doc.p]||0)+1)%3;store(LS_STATUS,status);buildNav();});
+    el.addEventListener('click',()=>open(i));
+    nav.appendChild(el);
+  });
+}
+
+const frame=document.getElementById('frame'), mdhost=document.getElementById('mdhost'), mdout=document.getElementById('mdout');
+function open(i){
+  cur=i; store(LS_LAST,i); const doc=DOCS[i];
+  document.getElementById('crumb').textContent=doc.g+" / "+doc.t+"  ("+doc.p+")";
+  document.getElementById('openTab').href=doc.p;
+  document.getElementById('fdoc').textContent=doc.t;
+  if(doc.md){frame.style.display='none';mdhost.style.display='block';mdout.innerHTML='<p style="color:var(--muted)">loading...</p>';
+    fetch(doc.p).then(r=>{if(!r.ok)throw 0;return r.text()}).then(t=>{mdout.innerHTML=renderMD(t);})
+    .catch(()=>{mdout.innerHTML='<p style="color:var(--red)">Could not load. Open this wiki via the local server: http://localhost:4500/Reviewtap/Seven-Figure-Blueprint/WIKI.html</p>';});
+  }else{mdhost.style.display='none';frame.style.display='block';frame.src=doc.p;}
+  renderNotes(); buildNav();
+}
+
+/* minimal markdown renderer: headings, hr, blockquote, lists, tables, bold, italics, code, links, strikethrough */
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function inline(s){
+  s=esc(s);
+  s=s.replace(/`([^`]+)`/g,'<code>$1</code>');
+  s=s.replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>');
+  s=s.replace(/~~([^~]+)~~/g,'<del>$1</del>');
+  s=s.replace(/\[\[([^\]]+)\]\]/g,'<em>$1</em>');
+  s=s.replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" target="_blank">$1</a>');
+  s=s.replace(/(^|[\s(])\*([^*\s][^*]*)\*(?=[\s).,;:!?]|$)/g,'$1<em>$2</em>');
+  return s;
+}
+function renderMD(src){
+  const lines=src.replace(/\r/g,'').split('\n'); let out=[],i=0,inFront=false;
+  if(lines[0]==='---'){inFront=true;i=1;while(i<lines.length&&lines[i]!=='---')i++;i++;}
+  while(i<lines.length){
+    let L=lines[i];
+    if(/^\s*$/.test(L)){i++;continue;}
+    if(/^---+\s*$/.test(L)){out.push('<hr>');i++;continue;}
+    let h=L.match(/^(#{1,4})\s+(.*)/);
+    if(h){out.push(`<h${h[1].length}>${inline(h[2])}</h${h[1].length}>`);i++;continue;}
+    if(/^>/.test(L)){let b=[];while(i<lines.length&&/^>/.test(lines[i])){b.push(inline(lines[i].replace(/^>\s?/,'')));i++;}out.push('<blockquote><p>'+b.join('<br>')+'</p></blockquote>');continue;}
+    if(/^\|/.test(L)){
+      let rows=[];while(i<lines.length&&/^\|/.test(lines[i])){rows.push(lines[i]);i++;}
+      let cells=r=>r.replace(/^\||\|$/g,'').split('|').map(c=>c.trim());
+      let head=cells(rows[0]), bodyRows=rows.slice(/^\s*\|[\s\-|:]+\|\s*$/.test(rows[1]||'')?2:1);
+      let t='<table><thead><tr>'+head.map(c=>'<th>'+inline(c)+'</th>').join('')+'</tr></thead><tbody>';
+      bodyRows.forEach(r=>{t+='<tr>'+cells(r).map(c=>'<td>'+inline(c)+'</td>').join('')+'</tr>';});
+      out.push(t+'</tbody></table>');continue;
+    }
+    if(/^\s*([-*]|\d+\.)\s+/.test(L)){
+      let ordered=/^\s*\d+\./.test(L), items=[];
+      while(i<lines.length&&/^\s*([-*]|\d+\.)\s+/.test(lines[i])){
+        let item=lines[i].replace(/^\s*([-*]|\d+\.)\s+/,'');i++;
+        while(i<lines.length&&/^\s{2,}\S/.test(lines[i])&&!/^\s*([-*]|\d+\.)\s+/.test(lines[i])){item+=' '+lines[i].trim();i++;}
+        items.push('<li>'+inline(item)+'</li>');
+      }
+      out.push((ordered?'<ol>':'<ul>')+items.join('')+(ordered?'</ol>':'</ul>'));continue;
+    }
+    let para=[L];i++;
+    while(i<lines.length&&!/^\s*$/.test(lines[i])&&!/^(#{1,4}\s|\||>|---|\s*([-*]|\d+\.)\s)/.test(lines[i])){para.push(lines[i]);i++;}
+    out.push('<p>'+inline(para.join(' '))+'</p>');
+  }
+  return out.join('\n');
+}
+
+/* notes */
+const notesEl=document.getElementById('notes');
+function renderNotes(){
+  const doc=DOCS[cur], list=notes[doc.p]||[];
+  document.getElementById('fcount').textContent=list.length?('('+list.length+')'):'';
+  if(!list.length){notesEl.innerHTML='<div class="empty">No notes on this document yet.</div>';return;}
+  notesEl.innerHTML=list.map((n,j)=>`<div class="note"><div class="when">${n.when}</div><span class="del" data-j="${j}" title="Delete">&#10005;</span><div class="body">${esc(n.text)}</div></div>`).join('');
+  notesEl.querySelectorAll('.del').forEach(d=>d.addEventListener('click',()=>{list.splice(+d.dataset.j,1);notes[DOCS[cur].p]=list;store(LS_NOTES,notes);renderNotes();buildNav();}));
+}
+function addNote(){
+  const ta=document.getElementById('noteIn'); const v=ta.value.trim(); if(!v)return;
+  const doc=DOCS[cur]; (notes[doc.p]=notes[doc.p]||[]).push({when:new Date().toLocaleString('en-ZA',{dateStyle:'short',timeStyle:'short'}),text:v});
+  store(LS_NOTES,notes); ta.value=''; renderNotes(); buildNav();
+}
+document.getElementById('addB').addEventListener('click',addNote);
+document.getElementById('noteIn').addEventListener('keydown',e=>{if(e.ctrlKey&&e.key==='Enter')addNote();});
+
+/* export */
+document.getElementById('exportB').addEventListener('click',()=>{
+  const stName=["not reviewed","APPROVED","NEEDS CHANGES"];
+  let md="# ReviewTap Seven Figure Blueprint: Jacques feedback export\n_"+new Date().toLocaleString('en-ZA')+"_\n\n";
+  DOCS.forEach(doc=>{
+    const st=status[doc.p]||0, list=notes[doc.p]||[];
+    if(!st&&!list.length)return;
+    md+=`## ${doc.t} (\`${doc.p}\`): ${stName[st]}\n`;
+    list.forEach(n=>{md+=`- [${n.when}] ${n.text}\n`;});
+    md+="\n";
+  });
+  if(md.split('\n').length<5)md+="_No statuses set or notes captured yet._\n";
+  navigator.clipboard&&navigator.clipboard.writeText(md).catch(()=>{});
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([md],{type:'text/markdown'}));a.download='sfb-feedback-'+Date.now()+'.md';a.click();
+  const t=document.getElementById('toast');t.style.display='block';setTimeout(()=>t.style.display='none',2500);
+});
+
+document.getElementById('prevB').addEventListener('click',()=>open((cur-1+DOCS.length)%DOCS.length));
+document.getElementById('nextB').addEventListener('click',()=>open((cur+1)%DOCS.length));
+
+buildNav(); open(cur);
+</script>
+</body>
+</html>
