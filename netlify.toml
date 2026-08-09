@@ -5,7 +5,12 @@
 [[headers]]
   for = "/*"
   [headers.values]
-    X-Frame-Options                = "DENY"
+    # SAMEORIGIN, not DENY: the Blueprint's WIKI.html review workspace renders
+    # each document in an iframe, and DENY made the site refuse to frame its own
+    # pages (sidebar loaded, reading pane blank). SAMEORIGIN still blocks every
+    # third-party site from embedding these reports, which is the protection that
+    # actually matters here. Changed 2026-08-09.
+    X-Frame-Options                = "SAMEORIGIN"
     X-Content-Type-Options         = "nosniff"
     X-XSS-Protection               = "1; mode=block"
     Referrer-Policy                = "strict-origin-when-cross-origin"
