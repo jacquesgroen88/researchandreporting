@@ -196,5 +196,209 @@
 <tr><td>SEO</td><td>Month 6</td><td>Pages ranking and organic revenue measurable?</td><td>Expected to be slow. Judge months 1 to 3 on pages shipped, not revenue.</td></tr>
 </tbody></table></div>
 
-<div class="foot">ReviewTap Seven Figure Blueprint · 15 The Project Plan · JCE Media · 8 August 2026</div>
+<div class="foot">ReviewTap Seven Figure Blueprint · 15 The Project Plan · JCE Media · 8 August 2026 · progress tracking added 10 August</div>
+
+<!-- ===================== PROGRESS TRACKING =====================
+  Injected layer. Does not alter the task tables above — it finds any row whose
+  first cell is a task number (0.1, 1.12, 3.4 ...) and adds a tick box to it.
+  That means new tasks and new phases are picked up automatically.
+
+  Two kinds of tick:
+    AUTO   — read from live systems, locked, cannot be ticked by hand.
+             Refreshed by /blueprint-progress (see Skills/blueprint-progress/SKILL.md).
+    MANUAL — you tick it. Stored in this browser.
+
+  Auto status is embedded inline rather than fetched, because fetch() fails under
+  file:// and these docs are read both locally and from jcereports.
+============================================================== -->
+
+<script id="bp-auto" type="application/json">
+{
+  "checked_at": "2026-08-10T09:15+02:00",
+  "note": "Auto items are verified against Shopify, Google Ads, Meta and the live storefront.",
+  "tasks": {
+    "0.1":  { "state": "partial",    "label": "2 of 3 restocked", "evidence": "Smart card variants 30 each, review card 50, custom stand still 10" },
+    "0.2":  { "state": "superseded", "label": "Better fix in place", "evidence": "Negatives scoped to non-brand ad groups; new SBC campaign has clean ad groups" },
+    "0.3":  { "state": "superseded", "label": "Became 0.12", "evidence": "Escalated from a call to a finished written proposal" },
+    "0.5":  { "state": "done",       "label": "Live at R1,000", "evidence": "Delivery profile: free domestic shipping, threshold R1,000" },
+    "0.6":  { "state": "done",       "label": "Ladder published", "evidence": "reviewtap.co.za/pages/volume-pricing returns 200" },
+    "0.8":  { "state": "withdrawn",  "label": "Was an arithmetic artifact", "evidence": "6-day spend divided by a 30-day budget; real delivery 83%" },
+    "0.10": { "state": "done",       "label": "Dashboard built", "evidence": "Group rating dashboard, live data, repointable" },
+    "0.11": { "state": "open",       "label": "Tag still recording zero", "evidence": "R273.82 on live Brand Search 4-10 Aug, 0 conversions, 14 store orders" },
+    "0.13": { "state": "open",       "label": "15 unfulfilled, R13,252", "evidence": "#1863 (28 Jul) to #1883 (9 Aug), oldest 13 days" },
+    "0.14": { "state": "open",       "label": "10 units, White at -1", "evidence": "Custom Branded Stand: White -1, Black 11" },
+    "1.1":  { "state": "done",       "label": "Both pages live", "evidence": "/pages/bulk and /pages/volume-pricing return 200 with FAQ schema" },
+    "1.3":  { "state": "done",       "label": "Fleet page live", "evidence": "/pages/branded-fleet returns 200 with Service + FAQ schema" },
+    "1.12": { "state": "done",       "label": "Schema correct", "evidence": "/pages/about live; sameAs uses review_tap, not reviewtapsa" },
+    "1.17": { "state": "done",       "label": "Guide live", "evidence": "/pages/how-google-review-cards-work returns 200" },
+    "2.2":  { "state": "done",       "label": "QR page live", "evidence": "/pages/google-review-qr-codes returns 200 with HowTo schema" },
+    "2.5":  { "state": "done",       "label": "Built and tested", "evidence": "Group rating dashboard, sorting and filters verified" }
+  }
+}
+</script>
+
+<style>
+.bp-panel{background:var(--card,#fff);border:1px solid var(--line,#e2e6ef);border-radius:13px;
+  padding:18px 20px;margin:22px 0 26px}
+.bp-panel h3{margin:0 0 4px;font-size:16px}
+.bp-sub{font-size:12.5px;color:var(--muted,#6b7a99);margin:0 0 14px}
+.bp-phase{display:grid;grid-template-columns:132px 1fr 74px;gap:11px;align-items:center;
+  padding:5px 0;font-size:13.5px}
+.bp-phase-n{color:var(--muted,#6b7a99)}
+.bp-track{background:rgba(120,140,180,.16);border-radius:5px;height:9px;overflow:hidden}
+.bp-fill{height:100%;border-radius:5px;background:linear-gradient(90deg,#2f6bf6,#7c3aed);transition:width .3s}
+.bp-count{text-align:right;font-variant-numeric:tabular-nums;font-size:12.5px}
+.bp-blockers{margin-top:13px;padding-top:12px;border-top:1px solid var(--line,#e2e6ef);font-size:13px}
+.bp-blockers b{color:#d92d20}
+.bp-actions{margin-top:13px;display:flex;gap:8px;flex-wrap:wrap}
+.bp-btn{background:transparent;border:1px solid var(--line,#e2e6ef);border-radius:7px;padding:6px 11px;
+  font-size:12.5px;cursor:pointer;font-family:inherit;color:inherit}
+.bp-btn:hover{border-color:#2f6bf6;color:#2f6bf6}
+td.bp-cell{width:30px;text-align:center;vertical-align:middle;padding-right:0}
+.bp-box{width:17px;height:17px;cursor:pointer;accent-color:#2f6bf6}
+.bp-box[disabled]{cursor:not-allowed;opacity:.85}
+.bp-tag{display:inline-block;margin-left:7px;padding:1px 7px;border-radius:20px;font-size:10.5px;
+  font-weight:700;letter-spacing:.02em;vertical-align:middle;white-space:nowrap}
+.bp-auto{background:rgba(47,107,246,.13);color:#2f6bf6}
+.bp-off{background:rgba(120,140,180,.16);color:#6b7a99}
+.bp-open{background:rgba(217,45,32,.12);color:#d92d20}
+tr.bp-done td:not(.bp-cell){opacity:.55}
+tr.bp-dead td:not(.bp-cell){opacity:.4;text-decoration:line-through}
+tr.bp-dead td.bp-cell{text-decoration:none}
+</style>
+
+<script>
+(function(){
+  var AUTO = {}, META = {};
+  try { var raw = JSON.parse(document.getElementById('bp-auto').textContent);
+        AUTO = raw.tasks || {}; META = raw; } catch(e){}
+
+  var KEY = 'bp-progress-15';
+  var manual = {};
+  try { manual = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch(e){}
+
+  var DEAD = {superseded:1, withdrawn:1};
+  var rows = [];
+
+  // Find every task row: first cell is a task number like 0.1 or 1.12
+  document.querySelectorAll('table tbody tr').forEach(function(tr){
+    var c = tr.querySelector('td');
+    if (!c) return;
+    var id = (c.textContent || '').trim();
+    if (!/^\d+\.\d+$/.test(id)) return;
+
+    var a = AUTO[id] || null;
+    var state = a ? a.state : null;
+    var isAuto = !!a && state !== 'open';
+    var done = isAuto ? (state === 'done') : !!manual[id];
+
+    var cell = document.createElement('td');
+    cell.className = 'bp-cell';
+    var box = document.createElement('input');
+    box.type = 'checkbox'; box.className = 'bp-box'; box.checked = done;
+    if (a) { box.disabled = true; box.title = (a.label || state) + ' — ' + (a.evidence || ''); }
+    else   { box.title = 'Tick when done'; }
+    cell.appendChild(box);
+    tr.insertBefore(cell, tr.firstChild);
+
+    // badge on the task cell
+    var target = tr.children[2];
+    if (target && a) {
+      var tag = document.createElement('span');
+      var notDone = (state === 'open' || state === 'partial');
+      tag.className = 'bp-tag ' + (DEAD[state] ? 'bp-off' : notDone ? 'bp-open' : 'bp-auto');
+      tag.textContent = DEAD[state] ? (state === 'withdrawn' ? 'withdrawn' : 'superseded')
+                       : state === 'partial' ? 'auto · partial'
+                       : state === 'open' ? 'auto · not done' : 'auto · done';
+      if (a.label) tag.title = a.label + ' — ' + (a.evidence || '');
+      target.appendChild(tag);
+    }
+
+    if (DEAD[state]) tr.className += ' bp-dead';
+    else if (done)   tr.className += ' bp-done';
+
+    var rec = {id:id, tr:tr, box:box, auto:!!a, state:state, dead:!!DEAD[state], done:done};
+    rows.push(rec);
+
+    if (!a) box.addEventListener('change', function(){
+      manual[id] = box.checked;
+      if (!box.checked) delete manual[id];
+      localStorage.setItem(KEY, JSON.stringify(manual));
+      rec.done = box.checked;
+      tr.className = tr.className.replace(/\s*bp-done/,'') + (box.checked ? ' bp-done' : '');
+      render();
+    });
+  });
+
+  // Group by phase = integer part of the task id
+  function phases(){
+    var g = {};
+    rows.forEach(function(r){
+      if (r.dead) return;               // superseded/withdrawn are out of the denominator
+      var p = r.id.split('.')[0];
+      (g[p] = g[p] || {done:0, total:0, open:[]});
+      g[p].total++;
+      if (r.done) g[p].done++; else g[p].open.push(r);
+    });
+    return g;
+  }
+
+  var panel = document.createElement('div');
+  panel.className = 'bp-panel';
+  var head = document.querySelector('.doc-head');
+  if (head && head.parentNode) head.parentNode.insertBefore(panel, head.nextSibling);
+
+  function render(){
+    var g = phases(), names = Object.keys(g).sort();
+    var html = '<h3>Progress</h3><p class="bp-sub">Blue ticks are read from live systems and refresh when '
+      + '<code>/blueprint-progress</code> runs. Grey boxes are yours to tick. Superseded and withdrawn tasks are excluded.'
+      + (META.checked_at ? ' Last checked ' + META.checked_at.slice(0,10) + '.' : '') + '</p>';
+
+    names.forEach(function(p){
+      var d = g[p], pct = d.total ? Math.round(d.done / d.total * 100) : 0;
+      html += '<div class="bp-phase"><span class="bp-phase-n">Phase ' + p + '</span>'
+           +  '<span class="bp-track"><span class="bp-fill" style="width:' + pct + '%"></span></span>'
+           +  '<span class="bp-count">' + d.done + ' of ' + d.total + '</span></div>';
+    });
+
+    // blockers = auto items known to be not done
+    var blocked = rows.filter(function(r){ return r.auto && (r.state === 'open' || r.state === 'partial'); });
+    if (blocked.length){
+      html += '<div class="bp-blockers"><b>Verified blockers:</b> ' + blocked.map(function(r){
+        return r.id + ' — ' + ((AUTO[r.id] || {}).label || 'open');
+      }).join(' · ') + '</div>';
+    }
+
+    html += '<div class="bp-actions">'
+         +  '<button class="bp-btn" id="bp-copy">Copy progress for Claude</button>'
+         +  '<button class="bp-btn" id="bp-reset">Clear my ticks</button></div>';
+    panel.innerHTML = html;
+
+    panel.querySelector('#bp-copy').onclick = function(){
+      var g2 = phases(), out = ['# Blueprint progress — doc 15', ''];
+      Object.keys(g2).sort().forEach(function(p){
+        out.push('## Phase ' + p + ' — ' + g2[p].done + ' of ' + g2[p].total);
+        rows.filter(function(r){ return r.id.split('.')[0] === p && !r.dead; }).forEach(function(r){
+          var lbl = (r.tr.children[2] ? r.tr.children[2].textContent : '').replace(/\s+/g,' ').trim().slice(0,90);
+          out.push('- [' + (r.done ? 'x' : ' ') + '] ' + r.id + ' ' + lbl + (r.auto ? '  _(auto)_' : ''));
+        });
+        out.push('');
+      });
+      var txt = out.join('\n');
+      navigator.clipboard.writeText(txt).then(function(){
+        var b = panel.querySelector('#bp-copy'); b.textContent = 'Copied — paste it to Claude';
+        setTimeout(function(){ b.textContent = 'Copy progress for Claude'; }, 2600);
+      }, function(){ window.prompt('Copy this:', txt); });
+    };
+    panel.querySelector('#bp-reset').onclick = function(){
+      if (!confirm('Clear your manual ticks? Auto items are unaffected.')) return;
+      manual = {}; localStorage.removeItem(KEY);
+      rows.forEach(function(r){ if (!r.auto){ r.box.checked = false; r.done = false;
+        r.tr.className = r.tr.className.replace(/\s*bp-done/,''); } });
+      render();
+    };
+  }
+  render();
+})();
+</script>
 </div></body></html>
