@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MyForeverBaby &mdash; Financial Report &mdash; July 2026</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#1F3864;--teal:#2E75B6;--ltblue:#D6E4F0;
+  --green:#1E6B2E;--green-bg:#E6F4EA;
+  --red:#C00000;--red-bg:#FDECEA;
+  --amber:#B45309;--amber-bg:#FEF9C3;
+  --meta:#1877F2;--meta-bg:#E7F0FD;
+  --peach:#FF6B35;--peach-bg:#FFF0EB;
+  --temu:#FF6900;--temu-bg:#FFF3EE;
+  --grey:#F4F6F8;--border:#E2E8F0;--text:#1A202C;--muted:#64748B;--white:#FFF;
+  --r:8px;--sh:0 1px 4px rgba(0,0,0,.10);--sh-lg:0 4px 16px rgba(0,0,0,.12)
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;font-size:13px;color:var(--text);background:#EEF2F7;line-height:1.5}
+.page{max-width:1260px;margin:0 auto;padding:24px 20px 60px}
+.rpt-hdr{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);
+  color:#fff;border-radius:var(--r);padding:28px 32px;display:flex;
+  justify-content:space-between;align-items:flex-start;margin-bottom:24px;box-shadow:var(--sh-lg)}
+.biz-name{font-size:22px;font-weight:700;letter-spacing:-.3px}
+.biz-tag{display:inline-block;background:rgba(255,255,255,.15);font-size:11px;padding:2px 9px;
+  border-radius:20px;margin-left:10px;vertical-align:middle}
+.biz-sub{font-size:12px;opacity:.72;margin-top:4px}
+.period{text-align:right}
+.period-lbl{font-size:11px;opacity:.65;text-transform:uppercase;letter-spacing:.8px}
+.period-val{font-size:18px;font-weight:700;margin-top:2px}
+.hdr-actions{display:flex;gap:8px;margin-top:14px}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:5px;
+  font-size:12px;font-weight:600;cursor:pointer;border:none}
+.btn-ghost{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.30)}
+.btn-ghost:hover{background:rgba(255,255,255,.25)}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:24px}
+.kpi{background:#fff;border-radius:var(--r);padding:18px 20px;box-shadow:var(--sh);border-top:3px solid var(--border)}
+.kpi.k-teal{border-top-color:var(--teal)}.kpi.k-green{border-top-color:var(--green)}
+.kpi.k-red{border-top-color:var(--red)}.kpi.k-amber{border-top-color:var(--amber)}
+.kpi.k-meta{border-top-color:var(--meta)}.kpi.k-peach{border-top-color:var(--peach)}
+.kpi-lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;font-weight:600}
+.kpi-val{font-size:20px;font-weight:700;margin-top:4px}
+.kpi-val.teal{color:var(--teal)}.kpi-val.green{color:var(--green)}.kpi-val.red{color:var(--red)}
+.kpi-val.amber{color:var(--amber)}.kpi-val.meta{color:var(--meta)}.kpi-val.peach{color:var(--peach)}
+.kpi-meta{font-size:11px;color:var(--muted);margin-top:4px}
+.card{background:#fff;border-radius:var(--r);box-shadow:var(--sh);margin-bottom:20px;overflow:hidden}
+.card-hdr{display:flex;align-items:center;justify-content:space-between;padding:13px 20px;
+  background:var(--navy);color:#fff;cursor:pointer;user-select:none}
+.card-hdr:hover{background:#263f77}
+.ch-left{display:flex;align-items:center;gap:10px}
+.ch-title{font-size:13px;font-weight:700}
+.ch-cnt{font-size:11px;font-weight:600;padding:2px 9px;border-radius:20px;background:rgba(255,255,255,.18)}
+.ch-total{font-size:14px;font-weight:700}
+.ch-total.pos{color:#86EFAC}.ch-total.neg{color:#FCA5A5}.ch-total.neutral{color:#ccc;font-size:12px}
+.tog{font-size:15px;transition:transform .2s;margin-left:12px}
+.card-hdr.closed .tog{transform:rotate(-90deg)}
+.card-body{overflow:hidden;transition:max-height .3s ease}
+.card-body.closed{max-height:0!important}
+.pnl-tbl{width:100%;border-collapse:collapse}
+.pnl-tbl td{padding:10px 20px;border-bottom:1px solid var(--border)}
+.pnl-grp td{background:var(--ltblue);font-size:11px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.6px;color:var(--teal);padding:7px 20px}
+.pnl-row:hover td{background:var(--grey)}
+.pnl-sub td{background:var(--ltblue);font-weight:700}
+.pnl-total td{background:var(--navy);color:#fff;font-weight:700;font-size:14px}
+.pnl-amt{text-align:right;width:16%;font-variant-numeric:tabular-nums;white-space:nowrap}
+.pnl-src{width:26%}.pnl-desc{width:58%}
+.src{display:inline-block;font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;
+  letter-spacing:.4px;vertical-align:middle;cursor:default}
+.src-pf{background:#DBEAFE;color:#1D4ED8}
+.src-bank{background:#D1FAE5;color:#065F46}
+.src-peach{background:#FFF0EB;color:#C2410C}
+.src-meta{background:#E7F0FD;color:#1877F2}
+.src-temu{background:#FFF3EE;color:#C2410C}
+.src-alibaba{background:#FEF3C7;color:#92400E}
+.src-calc{background:#EDE9FE;color:#5B21B6}
+.src-cc{background:#F3F4F6;color:#374151;border:1px solid #D1D5DB}
+.src-paypal{background:#003087;color:#fff}
+.src-bg{background:#DCFCE7;color:#166534}
+.ref{display:inline-block;font-size:10px;color:var(--muted);margin-left:5px;
+  font-family:'Consolas','Courier New',monospace}
+.dtbl{width:100%;border-collapse:collapse}
+.dtbl thead tr{background:var(--grey);border-bottom:2px solid var(--border)}
+.dtbl thead th{padding:9px 14px;text-align:left;font-size:11px;font-weight:700;
+  color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.dtbl tbody tr{border-bottom:1px solid var(--border)}
+.dtbl tbody tr:hover{background:#F8FAFC}
+.dtbl tbody tr.row-warn{background:var(--amber-bg)}
+.dtbl td{padding:8px 14px;vertical-align:middle}
+.dtbl tfoot tr{background:var(--navy);color:#fff;font-weight:700}
+.dtbl tfoot td{padding:10px 14px}
+.dtbl tfoot .neg{color:#FCA5A5}
+.dtbl tfoot .pos{color:#86EFAC}
+.num{text-align:right;font-variant-numeric:tabular-nums;font-family:'Consolas',monospace;font-size:12px}
+.pos{color:var(--green)}.neg{color:var(--red)}.amber-txt{color:var(--amber)}
+.muted{font-size:11px;color:var(--muted)}.small{font-size:11px}
+.badge{display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px}
+.bdg-m{background:var(--ltblue);color:var(--teal)}
+.stat-badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px}
+.stat-ok{background:var(--green-bg);color:var(--green)}.stat-warn{background:var(--amber-bg);color:var(--amber)}
+.notice{display:flex;align-items:flex-start;gap:12px;padding:13px 18px;border-radius:6px;margin:0 20px 16px}
+.notice-warn{background:var(--amber-bg);border-left:3px solid var(--amber)}
+.notice-info{background:var(--ltblue);border-left:3px solid var(--teal)}
+.notice-icon{font-size:16px;flex-shrink:0;margin-top:1px}
+.notice-title{font-weight:700;font-size:12px}.notice-text{font-size:11px;color:var(--muted);margin-top:2px}
+.recon-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--border)}
+.recon-strip .rs{padding:16px 20px;text-align:center;border-right:1px solid var(--border)}
+.recon-strip .rs:last-child{border-right:none}
+.rs-val{font-size:20px;font-weight:700}.rs-lbl{font-size:11px;color:var(--muted);margin-top:3px}
+.tbc-box{background:var(--amber-bg);border:1px solid var(--amber);border-radius:var(--r);
+  padding:16px 20px;margin-bottom:20px}
+.tbc-box h3{font-size:13px;color:var(--amber);margin-bottom:8px}
+.tbc-box table{width:100%;border-collapse:collapse;font-size:12px}
+.tbc-box td{padding:6px 10px;border-bottom:1px solid rgba(180,83,9,.2)}
+.biz-nav{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--border);
+  border-radius:var(--r);padding:10px 18px;margin-bottom:16px;box-shadow:var(--sh);flex-wrap:wrap}
+.biz-nav-lbl{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.biz-nav-active{font-weight:700;font-size:13px;color:var(--text);padding:4px 12px;
+  background:var(--grey);border-radius:20px}
+.biz-nav-link{font-size:13px;font-weight:600;color:var(--teal);text-decoration:none;
+  padding:4px 14px;border:1px solid var(--teal);border-radius:20px;transition:all .15s}
+.biz-nav-link:hover{background:var(--teal);color:#fff}
+.rpt-footer{margin-top:32px;padding:16px 0;border-top:1px solid var(--border);
+  display:flex;justify-content:space-between;align-items:center;font-size:11px;
+  color:var(--muted);gap:16px;flex-wrap:wrap}
+@media print{
+  body{background:white;font-size:11px}.page{padding:0;max-width:100%}
+  .hdr-actions,.btn{display:none}
+  .card-body.closed{max-height:none!important}
+  .card{box-shadow:none;border:1px solid #ddd;page-break-inside:avoid}
+  .rpt-hdr,.card-hdr,.pnl-grp td,.pnl-total td,.dtbl thead tr,.dtbl tfoot tr,
+  .pnl-sub td{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body><div class="page">
+
+<div class="biz-nav">
+  <span class="biz-nav-lbl">&#128202; July 2026</span>
+  <a class="biz-nav-link" href="../2026-08-13-reviewtap-july-2026/">&#129302; Reviewtap (RT)</a>
+  <span class="biz-nav-active">MyForeverBaby (MFB)</span>
+  <a class="biz-nav-link" href="../2026-08-13-jce-media-july-2026/">JCE Media</a>
+</div>
+<div class="rpt-hdr">
+  <div>
+    <div class="biz-name">MyForeverBaby <span class="biz-tag">MFB</span></div>
+    <div class="biz-sub">Duel Digital TA &nbsp;&bull;&nbsp; Premium Reborn Dolls, eCommerce ZAR</div>
+    <div class="hdr-actions">
+      <button class="btn btn-ghost" onclick="window.print()">&#128438; Print / PDF</button>
+      <button class="btn btn-ghost" onclick="toggleAll(true)">&#9660; Expand All</button>
+      <button class="btn btn-ghost" onclick="toggleAll(false)">&#9650; Collapse All</button>
+    </div>
+  </div>
+  <div class="period">
+    <div class="period-lbl">Reporting Period</div>
+    <div class="period-val">July 2026</div>
+    <div class="biz-sub" style="margin-top:8px">Month ended 31 July 2026</div>
+    <div class="biz-sub">Generated: 13 Aug 2026</div>
+  </div>
+</div>
+<div class="kpi-grid">
+  <div class="kpi k-teal">
+    <div class="kpi-lbl">Payfast Shopify Sales</div>
+    <div class="kpi-val teal">R 63,369.00</div>
+    <div class="kpi-meta">29 orders &bull; AOV R 2,185</div>
+  </div>
+  <div class="kpi k-teal">
+    <div class="kpi-lbl">Net After Gateway Fees</div>
+    <div class="kpi-val teal">R 61,091.98</div>
+    <div class="kpi-meta">Effective fee rate 3.59%</div>
+  </div>
+  <div class="kpi k-meta">
+    <div class="kpi-lbl">Meta Ads</div>
+    <div class="kpi-val meta">R 21,027.62</div>
+    <div class="kpi-meta">Incl VAT R 2,742.73 &bull; per Meta invoice</div>
+  </div>
+  <div class="kpi k-amber">
+    <div class="kpi-lbl">Stock &amp; Packaging</div>
+    <div class="kpi-val amber">R 28,683.91</div>
+    <div class="kpi-meta">5 payments from the cheque account</div>
+  </div>
+  <div class="kpi k-amber">
+    <div class="kpi-lbl">Temu Stock</div>
+    <div class="kpi-val amber">R 1,355.00</div>
+    <div class="kpi-meta">2026/07/31, on the credit card</div>
+  </div>
+  <div class="kpi k-red">
+    <div class="kpi-lbl">Courier (Bob Go MYF007)</div>
+    <div class="kpi-val red">R 2,251.96</div>
+    <div class="kpi-meta">Net of 22 reversals &bull; VAT R 462.76</div>
+  </div>
+  <div class="kpi k-red">
+    <div class="kpi-lbl">Payment Fees</div>
+    <div class="kpi-val red">R 2,521.69</div>
+    <div class="kpi-meta">Gateway R 2,277.02 + payout R 244.67</div>
+  </div>
+  <div class="kpi k-green">
+    <div class="kpi-lbl">Net Contribution</div>
+    <div class="kpi-val green">R 7,528.82</div>
+    <div class="kpi-meta">Margin 11.9% &bull; before shared opex (see JCE)</div>
+  </div>
+</div>
+<div class="card">
+  <div class="card-hdr" onclick="toggleCard(this)">
+    <div class="ch-left"><span class="ch-title">&#128196; Profit &amp; Loss Summary</span><span class="ch-cnt">July 2026</span></div>
+    <div style="display:flex;align-items:center"><span class="ch-total pos">R&nbsp;7,528.82</span><span class="tog">&#9660;</span></div>
+  </div>
+  <div class="card-body">
+    <table class="pnl-tbl">
+      <colgroup><col style="width:58%"><col style="width:16%"><col style="width:26%"></colgroup>
+      <tbody>
+        <tr class="pnl-grp"><td colspan="3">Revenue &mdash; Payfast (Shopify store)</td></tr>
+        <tr class="pnl-row"><td>Gross Shopify sales <span class='muted'>29 orders, 1 to 30 July</span></td><td class="pnl-amt pos">R&nbsp;63,369.00</td><td class="pnl-src"><span class="src src-pf">PF</span><span class="ref">MFB Payfast July.csv</span></td></tr>
+        <tr class="pnl-row"><td><span class='muted'>Cross-check: ties exactly to Shopify total_sales of R 63,369 for 29 orders</span></td><td class="pnl-amt muted">&mdash;</td><td class="pnl-src"><span class="src src-calc">CALC</span><span class="ref">zero returns, zero discounts</span></td></tr>
+        <tr class="pnl-grp"><td colspan="3">Revenue by funding type</td></tr>
+        <tr class="pnl-row"><td>Credit Card <span class='muted'>13 orders</span></td><td class="pnl-amt pos">R&nbsp;36,160.00</td><td class="pnl-src"><span class="src src-pf">PF</span><span class="ref">MFB Payfast July.csv</span></td></tr>
+        <tr class="pnl-row"><td>ApplePay <span class='muted'>9 orders</span></td><td class="pnl-amt pos">R&nbsp;15,335.00</td><td class="pnl-src"><span class="src src-pf">PF</span><span class="ref">MFB Payfast July.csv</span></td></tr>
+        <tr class="pnl-row"><td>Auto EFT <span class='muted'>3 orders</span></td><td class="pnl-amt pos">R&nbsp;5,170.00</td><td class="pnl-src"><span class="src src-pf">PF</span><span class="ref">MFB Payfast July.csv</span></td></tr>
+        <tr class="pnl-row"><td>GooglePay <span class='muted'>1 order</span></td><td class="pnl-amt pos">R&nbsp;3,177.00</td><td class="pnl-src"><span class="src src-pf">PF</span><span class="ref">MFB Payfast July.csv</span></td></tr>
+        <tr class="pnl-row"><td>Open Banking <span class='muted'>2 orders</span></td><td class="pnl-amt pos">R&nbsp;2,813.00</td><td class="pnl-src"><span class="src src-pf">PF</span><span class="ref">MFB Payfast July.csv</span></td></tr>
+        <tr class="pnl-row"><td>SamsungPay <span class='muted'>1 order</span></td><td class="pnl-amt pos">R&nbsp;714.00</td><td class="pnl-src"><span class="src src-pf">PF</span><span class="ref">MFB Payfast July.csv</span></td></tr>
+        <tr class="pnl-sub"><td>Gross sales</td><td class="pnl-amt pos">R&nbsp;63,369.00</td><td></td></tr>
+        <tr class="pnl-total"><td>TOTAL REVENUE</td><td class="pnl-amt pos">R&nbsp;63,369.00</td><td></td></tr>
+        <tr class="pnl-grp"><td colspan="3">Direct costs</td></tr>
+        <tr class="pnl-row"><td>Meta advertising <span class='muted'>9 charges, account 1619203665436037</span></td><td class="pnl-amt neg">R&nbsp;-21,027.62</td><td class="pnl-src"><span class="src src-meta">META</span><span class="ref">invoice summary</span></td></tr>
+        <tr class="pnl-row"><td>Stock and packaging <span class='muted'>1 Jul R12,025 &bull; 15 Jul R8,581 &bull; 29 Jul R4,687 &bull; 6 Jul R1,891 &bull; 21 Jul R1,500</span></td><td class="pnl-amt neg">R&nbsp;-28,683.91</td><td class="pnl-src"><span class="src src-bank">BANK</span><span class="ref">62435283809</span></td></tr>
+        <tr class="pnl-row"><td>Temu stock <span class='muted'>2026/07/31</span></td><td class="pnl-amt neg">R&nbsp;-1,355.00</td><td class="pnl-src"><span class="src src-cc">CC</span><span class="ref">PO-184-2188283865</span></td></tr>
+        <tr class="pnl-row"><td>Courier, Bob Go MYF007 <span class='muted'>net of 22 charge reversals</span></td><td class="pnl-amt neg">R&nbsp;-2,251.96</td><td class="pnl-src"><span class="src src-bg">BG</span><span class="ref">MYF007 billing</span></td></tr>
+        <tr class="pnl-row"><td>Payfast gateway fees <span class='muted'>29 collections, 3.59% effective</span></td><td class="pnl-amt neg">R&nbsp;-2,277.02</td><td class="pnl-src"><span class="src src-pf">PF</span><span class="ref">MFB Payfast July.csv</span></td></tr>
+        <tr class="pnl-row"><td>Payfast payout fees <span class='muted'>19 payouts, incl 2 immediate</span></td><td class="pnl-amt neg">R&nbsp;-244.67</td><td class="pnl-src"><span class="src src-pf">PF</span><span class="ref">MFB Payfast July.csv</span></td></tr>
+        <tr class="pnl-sub"><td>Total direct costs</td><td class="pnl-amt neg">R&nbsp;-55,840.18</td><td></td></tr>
+        <tr class="pnl-total"><td>NET CONTRIBUTION</td><td class="pnl-amt pos">R&nbsp;7,528.82</td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="card">
+  <div class="card-hdr" onclick="toggleCard(this)">
+    <div class="ch-left"><span class="ch-title">&#128179; Payfast settlement</span><span class="ch-cnt">19 payouts</span></div>
+    <div style="display:flex;align-items:center"><span class="ch-total pos">R&nbsp;63,379.55</span><span class="tog">&#9660;</span></div>
+  </div>
+  <div class="card-body">
+    <div class="notice notice-info">
+      <div class="notice-icon">&#8505;</div>
+      <div><div class="notice-title">Payfast settles straight into the Duel Digital cheque account</div><div class="notice-text">Unlike Peach, every Payfast payout lands in account 62435283809 and is visible in the bank statement. 19 payouts in the export total R 63,379.55; a further R 2,001.05 paid out on 31 July falls outside the export window, giving R 65,380.60 of MFB Payfast credits in the bank for the month.</div></div>
+    </div>    <table class="pnl-tbl">
+      <colgroup><col style="width:58%"><col style="width:16%"><col style="width:26%"></colgroup>
+      <tbody>
+        <tr class="pnl-grp"><td colspan="3">Reconciliation to the bank</td></tr>
+        <tr class="pnl-row"><td>Payouts inside the export <span class='muted'>1 to 30 July, 19 payouts</span></td><td class="pnl-amt pos">R&nbsp;63,379.55</td><td class="pnl-src"><span class="src src-pf">PF</span><span class="ref">MFB Payfast July.csv</span></td></tr>
+        <tr class="pnl-row"><td>Payout on 31 July, outside the export window</td><td class="pnl-amt pos">R&nbsp;2,001.05</td><td class="pnl-src"><span class="src src-bank">BANK</span><span class="ref">PAYFAST 5056799</span></td></tr>
+        <tr class="pnl-sub"><td>MyForeverBaby Payfast credits in the bank</td><td class="pnl-amt pos">R&nbsp;65,380.60</td><td></td></tr>
+        <tr class="pnl-row"><td>ReviewTap Payfast credits in the bank</td><td class="pnl-amt pos">R&nbsp;7,102.12</td><td class="pnl-src"><span class="src src-pf">PF</span><span class="ref">RT Payfast July.csv</span></td></tr>
+        <tr class="pnl-total"><td>TOTAL PAYFAST CREDITS ON THE STATEMENT</td><td class="pnl-amt pos">R&nbsp;72,482.72</td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="card">
+  <div class="card-hdr" onclick="toggleCard(this)">
+    <div class="ch-left"><span class="ch-title">&#128200; Meta advertising detail</span><span class="ch-cnt">9 charges</span></div>
+    <div style="display:flex;align-items:center"><span class="ch-total neg">R&nbsp;-21,027.62</span><span class="tog">&#9660;</span></div>
+  </div>
+  <div class="card-body">
+    <div class="notice notice-warn">
+      <div class="notice-icon">&#9888;</div>
+      <div><div class="notice-title">Four partial charges on 30 July</div><div class="notice-text">R 592.62, R 592.63, R 395.08 and R 225.76 were each taken on 30 July after a larger amount could not be charged in full. Expect more receipt lines than usual for the same spend.</div></div>
+    </div>    <table class="pnl-tbl">
+      <colgroup><col style="width:58%"><col style="width:16%"><col style="width:26%"></colgroup>
+      <tbody>
+        <tr class="pnl-grp"><td colspan="3">Per the Meta invoice summary, account 1619203665436037</td></tr>
+        <tr class="pnl-row"><td>Total billed for July, VAT inclusive</td><td class="pnl-amt neg">R&nbsp;21,027.62</td><td class="pnl-src"><span class="src src-meta">META</span><span class="ref">01/07 - 01/08</span></td></tr>
+        <tr class="pnl-row"><td>VAT at 15% included above <span class='muted'>Meta Platforms Ireland, VAT reg IE9692928F</span></td><td class="pnl-amt pos">R&nbsp;2,742.73</td><td class="pnl-src"><span class="src src-meta">META</span><span class="ref">input VAT</span></td></tr>
+        <tr class="pnl-row"><td>Net of VAT</td><td class="pnl-amt neg">R&nbsp;18,284.89</td><td class="pnl-src"><span class="src src-calc">CALC</span><span class="ref">derived</span></td></tr>
+        <tr class="pnl-grp"><td colspan="3">Largest charges</td></tr>
+        <tr class="pnl-row"><td>03/07, 11/07, 19/07 <span class='muted'>3 charges at R 5,009.40</span></td><td class="pnl-amt neg">R&nbsp;15,028.20</td><td class="pnl-src"><span class="src src-meta">META</span><span class="ref">invoice summary</span></td></tr>
+        <tr class="pnl-row"><td>26/07</td><td class="pnl-amt neg">R&nbsp;3,999.80</td><td class="pnl-src"><span class="src src-meta">META</span><span class="ref">invoice summary</span></td></tr>
+        <tr class="pnl-row"><td>28/07 and 30/07 <span class='muted'>5 partial charges</span></td><td class="pnl-amt neg">R&nbsp;1,999.62</td><td class="pnl-src"><span class="src src-meta">META</span><span class="ref">invoice summary</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="card">
+  <div class="card-hdr" onclick="toggleCard(this)">
+    <div class="ch-left"><span class="ch-title">&#128666; Courier &mdash; Bob Go MYF007</span><span class="ch-cnt">67 lines</span></div>
+    <div style="display:flex;align-items:center"><span class="ch-total neg">R&nbsp;-2,251.96</span><span class="tog">&#9660;</span></div>
+  </div>
+  <div class="card-body">
+    <table class="pnl-tbl">
+      <colgroup><col style="width:58%"><col style="width:16%"><col style="width:26%"></colgroup>
+      <tbody>
+        <tr class="pnl-grp"><td colspan="3">July activity</td></tr>
+        <tr class="pnl-row"><td>Shipping charges, VAT inclusive <span class='muted'>39 charges</span></td><td class="pnl-amt neg">R&nbsp;-4,929.87</td><td class="pnl-src"><span class="src src-bg">BG</span><span class="ref">MYF007</span></td></tr>
+        <tr class="pnl-row"><td>Shipping charge reversals <span class='muted'>22 reversals</span></td><td class="pnl-amt pos">R&nbsp;2,677.91</td><td class="pnl-src"><span class="src src-bg">BG</span><span class="ref">MYF007</span></td></tr>
+        <tr class="pnl-sub"><td>Net courier cost</td><td class="pnl-amt neg">R&nbsp;-2,251.96</td><td></td></tr>
+        <tr class="pnl-row"><td>Input VAT inside the net cost</td><td class="pnl-amt pos">R&nbsp;462.76</td><td class="pnl-src"><span class="src src-bg">BG</span><span class="ref">15%</span></td></tr>
+        <tr class="pnl-row"><td>Cash paid to Bob Go in July</td><td class="pnl-amt neg">R&nbsp;-4,450.00</td><td class="pnl-src"><span class="src src-bank">BANK</span><span class="ref">cheque + card</span></td></tr>
+        <tr class="pnl-row"><td>Interaccount adjustment <span class='muted'>admin debit against REV019, nets to nil</span></td><td class="pnl-amt neg">R&nbsp;-1,296.02</td><td class="pnl-src"><span class="src src-bg">BG</span><span class="ref">2026/07/29</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="rpt-footer">
+  <div><strong>MyForeverBaby</strong> &nbsp;&bull;&nbsp; Duel Digital TA</div>
+  <div>Sources:&nbsp;
+    <span class="src src-pf">PAYFAST</span> MFB Payfast July.csv &nbsp;&nbsp;
+    <span class="src src-bank">BANK STMT</span> 62435283809 (Jul only) &nbsp;&nbsp;
+    <span class="src src-meta">META</span> account 1619203665436037 &nbsp;&nbsp;
+    <span class="src src-bg">BOB GO</span> MYF007 billing &nbsp;&nbsp;
+    <span class="src src-temu">TEMU</span> PO-184-21882838651513809 &nbsp;&nbsp;
+    <span class="src src-cc">CREDIT CARD</span> 422824******4000
+  </div>
+</div>
+
+</div>
+<script>
+function toggleCard(h){
+  const b=h.nextElementSibling,c=b.classList.contains('closed');
+  if(c){b.style.maxHeight=b.scrollHeight+'px';setTimeout(()=>b.style.maxHeight='none',300);}
+  else{b.style.maxHeight=b.scrollHeight+'px';requestAnimationFrame(()=>requestAnimationFrame(()=>b.style.maxHeight='0'));setTimeout(()=>b.style.maxHeight='',300);}
+  b.classList.toggle('closed',!c);h.classList.toggle('closed',!c);
+}
+function toggleAll(open){
+  document.querySelectorAll('.card-hdr').forEach(h=>{
+    const b=h.nextElementSibling;
+    if(open&&b.classList.contains('closed'))toggleCard(h);
+    if(!open&&!b.classList.contains('closed'))toggleCard(h);
+  });
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  const f=document.querySelector('.card-hdr');
+  if(f){const b=f.nextElementSibling;b.classList.remove('closed');b.style.maxHeight='none';}
+});
+</script>
+</body></html>
