@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RedirHub — Digital Marketing &amp; Conversion Audit | JCE Media</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#0f172a;color:#e2e8f0;line-height:1.6;-webkit-font-smoothing:antialiased}
+.container{max-width:1100px;margin:0 auto;padding:0 24px}
+a{color:#4a9eff}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#0f172a 0%,#1a3a5c 100%);padding:72px 0 60px;text-align:center;border-bottom:1px solid rgba(255,255,255,.08)}
+.hero-logo{height:52px;margin:0 auto 28px;display:block}
+.hero-kicker{display:inline-block;background:rgba(232,80,42,.15);border:1px solid rgba(232,80,42,.45);color:#e8502a;font-size:11px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;padding:5px 14px;border-radius:4px;margin-bottom:18px}
+.hero h1{font-size:clamp(28px,5vw,46px);font-weight:800;color:#fff;margin-bottom:12px;letter-spacing:-.5px}
+.hero-sub{font-size:16px;color:#94a3b8;max-width:640px;margin:0 auto 12px}
+.hero-meta{font-size:12.5px;color:#64748b;margin-top:14px;letter-spacing:.3px}
+.score-grid{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-top:44px}
+.score-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:26px 26px;text-align:center;min-width:158px;flex:0 1 158px}
+.score-number{font-size:52px;font-weight:900;line-height:1}
+.score-number.good{color:#22c55e}.score-number.mid{color:#f0a500}.score-number.bad{color:#e8502a}
+.score-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#94a3b8;margin-top:8px}
+.overall{margin-top:34px;display:inline-block;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:18px 34px}
+.overall span{display:block}
+.overall .n{font-size:36px;font-weight:900;color:#f0a500;line-height:1}
+.overall .l{font-size:11px;letter-spacing:1.4px;text-transform:uppercase;color:#94a3b8;margin-top:6px}
+
+/* SECTIONS */
+.section{padding:66px 0}
+.section-alt{background:rgba(255,255,255,.02)}
+.section-tag{display:inline-block;background:rgba(240,165,0,.15);border:1px solid rgba(240,165,0,.4);color:#f0a500;font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;padding:4px 12px;border-radius:4px;margin-bottom:16px}
+.section h2{font-size:clamp(23px,4vw,34px);font-weight:800;color:#fff;margin-bottom:12px;letter-spacing:-.3px}
+.section h3{font-size:17px;font-weight:800;color:#fff;margin:34px 0 14px}
+.section-intro{font-size:15.5px;color:#94a3b8;max-width:720px;margin-bottom:36px}
+
+/* HEADLINE CALLOUT */
+.callout{background:linear-gradient(135deg,rgba(232,80,42,.14),rgba(232,80,42,.04));border:1px solid rgba(232,80,42,.4);border-left:4px solid #e8502a;border-radius:12px;padding:26px 28px;margin:28px 0}
+.callout .ct{font-size:12px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:#e8502a;margin-bottom:10px}
+.callout h4{font-size:19px;color:#fff;font-weight:800;margin-bottom:10px}
+.callout p{font-size:14.5px;color:#cbd5e1;margin-bottom:10px}
+.callout p:last-child{margin-bottom:0}
+.callout code{background:rgba(0,0,0,.4);padding:2px 7px;border-radius:4px;font-size:12.5px;color:#f0a500;font-family:ui-monospace,Consolas,monospace}
+
+.callout.pos{background:linear-gradient(135deg,rgba(34,197,94,.12),rgba(34,197,94,.03));border-color:rgba(34,197,94,.4);border-left-color:#22c55e}
+.callout.pos .ct{color:#22c55e}
+
+/* FACT GRID */
+.fact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:8px}
+.fact{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:18px 20px}
+.fact dt{font-size:10.5px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:#f0a500;margin-bottom:6px}
+.fact dd{font-size:14px;color:#e2e8f0}
+
+/* FINDINGS */
+.findings-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:20px}
+.finding-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:24px}
+.finding-card.critical{border-left:3px solid #e8502a}
+.finding-card.warning{border-left:3px solid #f0a500}
+.finding-card.good{border-left:3px solid #22c55e}
+.sev{display:inline-block;font-size:10px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;padding:2px 8px;border-radius:3px;margin-bottom:10px}
+.sev.critical{background:rgba(232,80,42,.18);color:#e8502a}
+.sev.warning{background:rgba(240,165,0,.18);color:#f0a500}
+.sev.good{background:rgba(34,197,94,.18);color:#22c55e}
+.finding-title{font-size:14.5px;font-weight:700;color:#fff;margin-bottom:8px}
+.finding-body{font-size:13.5px;color:#94a3b8;line-height:1.65}
+.finding-body code{background:rgba(0,0,0,.35);padding:1px 6px;border-radius:3px;font-size:12px;color:#cbd5e1;font-family:ui-monospace,Consolas,monospace}
+.finding-fix{margin-top:12px;padding:10px 14px;background:rgba(240,165,0,.08);border-radius:8px;font-size:13px;color:#f0a500;line-height:1.55}
+.finding-fix::before{content:"Fix: ";font-weight:700}
+
+/* TABLES */
+table{width:100%;border-collapse:collapse;margin-top:20px;font-size:13.8px}
+th{text-align:left;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1.1px;color:#94a3b8;padding:12px 14px;border-bottom:1px solid rgba(255,255,255,.1);background:rgba(26,58,92,.4)}
+td{padding:13px 14px;border-bottom:1px solid rgba(255,255,255,.05);color:#e2e8f0;vertical-align:top}
+tbody tr:hover{background:rgba(255,255,255,.02)}
+.score-pill{display:inline-block;padding:2px 10px;border-radius:20px;font-size:12px;font-weight:800;white-space:nowrap}
+.score-pill.high{background:rgba(34,197,94,.15);color:#22c55e}
+.score-pill.mid{background:rgba(240,165,0,.15);color:#f0a500}
+.score-pill.low{background:rgba(232,80,42,.15);color:#e8502a}
+.table-wrap{overflow-x:auto}
+tfoot td{font-weight:800;color:#fff;background:rgba(255,255,255,.04);border-bottom:none}
+
+/* ADS */
+.campaign-block{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:26px;margin-bottom:22px}
+.campaign-name{font-size:18px;font-weight:800;color:#fff;margin-bottom:4px}
+.campaign-meta{font-size:12px;color:#f0a500;font-weight:700;letter-spacing:.8px;text-transform:uppercase;margin-bottom:14px}
+.campaign-goal{font-size:14px;color:#94a3b8;margin-bottom:16px}
+.ad-copy-block{background:rgba(26,58,92,.45);border-radius:8px;padding:16px 20px;margin-top:16px;border:1px solid rgba(255,255,255,.06)}
+.ad-headline{font-size:17px;font-weight:700;color:#4a9eff;margin-bottom:2px}
+.ad-url{font-size:13px;color:#22c55e;margin-bottom:6px}
+.ad-desc{font-size:13.5px;color:#cbd5e1}
+
+/* PLAN */
+.plan-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:20px;margin-top:24px}
+.plan-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:24px}
+.plan-badge{display:inline-block;background:#e8502a;color:#fff;font-size:11px;font-weight:800;padding:3px 10px;border-radius:4px;letter-spacing:.6px;margin-bottom:14px}
+.plan-badge.days60{background:#f0a500;color:#0f172a}
+.plan-badge.days90{background:#1a3a5c;border:1px solid rgba(255,255,255,.2);color:#fff}
+.plan-items{list-style:none}
+.plan-items li{font-size:13.5px;color:#94a3b8;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.05);line-height:1.55}
+.plan-items li:last-child{border-bottom:none}
+.plan-items strong{color:#e2e8f0;font-weight:700}
+
+/* FOOTER */
+.footer{background:#0b1220;padding:48px 0;border-top:1px solid rgba(255,255,255,.08);text-align:center}
+.footer p{font-size:13px;color:#64748b;margin-bottom:6px}
+.footer strong{color:#e2e8f0}
+
+.note{font-size:12.5px;color:#64748b;margin-top:18px;font-style:italic}
+ul.tight{margin:12px 0 0 20px}
+ul.tight li{font-size:14px;color:#94a3b8;padding:5px 0}
+ul.tight strong{color:#e2e8f0}
+@media(max-width:640px){.score-card{flex:1 1 138px;min-width:138px;padding:20px 14px}.score-number{font-size:42px}}
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="container">
+    <img src="./logo-dark.png" alt="RedirHub" class="hero-logo">
+    <div class="hero-kicker">Independent Audit — Prepared by JCE Media</div>
+    <h1>RedirHub Digital &amp; Conversion Audit</h1>
+    <p class="hero-sub">A full-stack review of redirhub.com — website and conversion architecture, analytics, technical SEO, social presence and paid-media readiness. Every finding below was verified live against the site on the audit date.</p>
+    <p class="hero-meta">Audit date: 13 August 2026 &nbsp;·&nbsp; Domain: www.redirhub.com &nbsp;·&nbsp; Stack: Next.js on Vercel + Sanity CMS</p>
+
+    <div class="score-grid">
+      <div class="score-card"><div class="score-number good">72</div><div class="score-label">Website Quality</div></div>
+      <div class="score-card"><div class="score-number bad">30</div><div class="score-label">Analytics</div></div>
+      <div class="score-card"><div class="score-number mid">68</div><div class="score-label">SEO</div></div>
+      <div class="score-card"><div class="score-number mid">54</div><div class="score-label">Social Media</div></div>
+      <div class="score-card"><div class="score-number bad">38</div><div class="score-label">Ads Readiness</div></div>
+    </div>
+
+    <div class="overall">
+      <span class="n">52<span style="font-size:20px;color:#64748b">/100</span></span>
+      <span class="l">Weighted Digital Health Score</span>
+    </div>
+  </div>
+</header>
+
+<!-- ============ THE HEADLINE ============ -->
+<section class="section">
+  <div class="container">
+    <div class="section-tag">Executive Summary</div>
+    <h2>A genuinely good product with a broken commercial front door</h2>
+    <p class="section-intro">RedirHub has built something rare: an infrastructure product that is fast, technically honest, and better documented than most companies ten times its size. The engineering is not the problem. The problem is that almost none of that quality is wired to a revenue mechanism. The site is built to acquire self-serve free users and nothing else, and the one page that sells the high-value plans terminates in a dead end.</p>
+
+    <div class="callout">
+      <div class="ct">Critical — the single most expensive finding</div>
+      <h4>The Enterprise "Book a demo" call-to-action leads nowhere</h4>
+      <p>The <code>/enterprise</code> page carries two prominent "Book a demo" buttons. Both link to <code>/enterprise#book-demo</code>. That anchor resolves to a real section, 1,111 pixels tall, headed <em>"Book a demo with RedirHub"</em>.</p>
+      <p>That section contains a heading and one paragraph. It contains <strong>zero form fields, zero booking widget, zero calendar embed, zero email link and zero buttons.</strong> The only interactive element inside it is a "#" permalink anchor pointing back at itself. There is no form anywhere on the enterprise page, and no Calendly, Cal.com, HubSpot or Chili Piper embed anywhere on the site.</p>
+      <p>The footer's "Request a demo" and "Talk to sales" links both resolve to the same <code>/enterprise</code> page. <code>/demo</code>, <code>/request-a-demo</code>, <code>/book-demo</code> and <code>/contact-sales</code> all return 404.</p>
+      <p>This is the page selling SSO at $200/month, dedicated clusters at $300/month and plans up to 50,000 hostnames. Every enterprise visitor who does the thing the page asks them to do arrives at a wall. On roughly 20,000 monthly visits, even a 0.5% enterprise-intent rate is around 100 buyers a month walking into a dead end.</p>
+    </div>
+
+    <div class="callout pos">
+      <div class="ct">Credit where it is due</div>
+      <h4>The technical foundation is genuinely strong</h4>
+      <p>Time-to-first-byte measured at <strong>152–181ms</strong> across repeated runs, served pre-rendered from Vercel's edge with a cache HIT. 51 of 58 homepage images are lazy-loaded. The apex domain 301s to www in a single clean hop — served by RedirHub's own edge (<code>X-Powered-By: RedirHub</code>), which is real dogfooding and worth saying out loud in the marketing.</p>
+      <p>Eight fully translated language versions (de, es, fr, it, pt, ja, zh, ko) with correct reciprocal hreflang and per-locale canonicals. A 169-URL sitemap, a well-built 22-page competitor comparison cluster, and a complete <code>llms.txt</code> — 17KB of structured, AI-crawler-ready product and content mapping, with robots.txt explicitly welcoming GPTBot, ClaudeBot and PerplexityBot. Fewer than 5% of SaaS companies have shipped that. It is a real competitive asset that the rest of the site does not yet capitalise on.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ COMPANY OVERVIEW ============ -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-tag">Section 1</div>
+    <h2>Company Overview</h2>
+    <p class="section-intro">Compiled from the live site, sitemap, public company records and third-party software directories.</p>
+
+    <dl class="fact-grid">
+      <div class="fact"><dt>Trading name</dt><dd>RedirHub</dd></div>
+      <div class="fact"><dt>Category</dt><dd>URL redirect &amp; link-management infrastructure (B2B SaaS)</dd></div>
+      <div class="fact"><dt>Positioning</dt><dd>"The infrastructure behind every click"</dd></div>
+      <div class="fact"><dt>Core promise</dt><dd>Point your domain — SSL, edge routing and redirects handled</dd></div>
+      <div class="fact"><dt>Stack</dt><dd>Next.js (App Router) on Vercel, Sanity CMS, Tailwind, Inter</dd></div>
+      <div class="fact"><dt>Brand colours</dt><dd>#1c6db6 primary blue · #20a795 teal · #e59426 orange</dd></div>
+      <div class="fact"><dt>Scale claims</dt><dd>1M+ domains redirected daily · 500K+ hostnames · 100M+ requests/24h · 10+ PoPs</dd></div>
+      <div class="fact"><dt>Performance claims</dt><dd>90ms average latency · 99.99% uptime (homepage)</dd></div>
+      <div class="fact"><dt>Pricing</dt><dd>Free plan forever · paid from ~$3/mo · add-ons $100–$300/mo · Enterprise to 50,000 hostnames</dd></div>
+      <div class="fact"><dt>Named logos</dt><dd>Duende, Whirlpool, Ally, Serb, Expiredomain</dd></div>
+      <div class="fact"><dt>Public reviews</dt><dd>4.7/5 from 18 total (15 Trustpilot, 3 G2)</dd></div>
+      <div class="fact"><dt>Estimated traffic</dt><dd>~20.3K visits/mo · 38.2% bounce · 3.62 pages/visit · 21s average duration</dd></div>
+      <div class="fact"><dt>Team size</dt><dd>2–10 (per LinkedIn)</dd></div>
+      <div class="fact"><dt>Content library</dt><dd>~100 blog posts, 22 comparison pages, 6 social redirect pages, full API docs</dd></div>
+    </dl>
+
+    <div class="callout" style="border-left-color:#f0a500;border-color:rgba(240,165,0,.4);background:linear-gradient(135deg,rgba(240,165,0,.12),rgba(240,165,0,.03))">
+      <div class="ct" style="color:#f0a500">Identity inconsistency</div>
+      <h4>Three different answers to "where is this company?"</h4>
+      <p>The website discloses no legal entity name, no company registration number, no registered address and no phone number anywhere — including on <code>/legal</code>. There is no <code>/about</code>, <code>/contact</code>, <code>/company</code>, <code>/team</code> or <code>/careers</code> page; all five return 404. The only contact routes on the entire site are two footer mailto links: <code>service@redirhub.com</code> and <code>abuse@redirhub.com</code>.</p>
+      <p>Meanwhile LinkedIn lists the company in New York, US. UK Companies House carries a REDIRHUB LTD registration. Third-party directories variously report the UK and China. For a vendor asking enterprises to route production traffic through its edge and sign a DPA, that ambiguity is a procurement blocker — not a branding nicety.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WEBSITE AUDIT ============ -->
+<section class="section">
+  <div class="container">
+    <div class="section-tag">Section 2</div>
+    <h2>Website Audit</h2>
+    <p class="section-intro">Verified live at 1280×720 desktop and 375×812 mobile.</p>
+
+    <div class="findings-grid">
+      <div class="finding-card critical">
+        <span class="sev critical">Critical</span>
+        <div class="finding-title">38 clickable elements above the fold</div>
+        <div class="finding-body">At 1280×720, 38 links and buttons are visible before any scroll — the entire mega-menu expands into the initial viewport, dumping 20+ navigation destinations ahead of the headline. On mobile the same DOM order means a screen reader hears every menu item before it reaches "Point your domain."</div>
+        <div class="finding-fix">Collapse the mega-menu to hover/click-only. Target 5–7 above-fold clickables: logo, 4 nav items, one primary CTA, one secondary.</div>
+      </div>
+
+      <div class="finding-card critical">
+        <span class="sev critical">Critical</span>
+        <div class="finding-title">Zero forms on the entire site</div>
+        <div class="finding-body">There is not one <code>&lt;form&gt;</code> element on the homepage or the enterprise page. No lead capture, no demo request, no newsletter signup, no "talk to us". The only conversion path is self-serve signup. Every visitor who is not ready to create an account today is lost with no way to be followed up.</div>
+        <div class="finding-fix">Add a 4-field enterprise form (name, work email, company, hostname volume) inside the existing <code>#book-demo</code> section, plus a calendar embed. This is a half-day of work against the highest-value traffic on the site.</div>
+      </div>
+
+      <div class="finding-card critical">
+        <span class="sev critical">Critical</span>
+        <div class="finding-title">Contradictory SLA claims on the same page</div>
+        <div class="finding-body">The <code>/enterprise</code> page displays a stat block reading <strong>"100% — SLA"</strong>. Further down, the same page's FAQ states it "does not quote... a guaranteed SLA percentage — for contractual security and uptime terms, talk to the RedirHub team." The homepage separately promises <strong>99.99% uptime</strong>. Three different commitments, two of them on one page.</div>
+        <div class="finding-fix">Pick one number, publish it everywhere, and back it with a linked SLA document. A 100% SLA claim you then disclaim is worse than no claim — it reads as either sloppy or evasive to exactly the technical buyer you want.</div>
+      </div>
+
+      <div class="finding-card warning">
+        <span class="sev warning">Warning</span>
+        <div class="finding-title">15 competing call-to-action labels</div>
+        <div class="finding-body">The homepage runs "Start for Free" (×5), "Get Started For Free" (×4), "Sign Up" (×2), "Create Redirect - it's FREE", "Shorten URL - it's FREE", "Check Redirect - it's FREE", "Create Redirects", "Request a demo" and more. Nine distinct phrasings of the same action.</div>
+        <div class="finding-fix">Standardise on one primary label sitewide ("Start free — no card"), one secondary ("See pricing"), and one enterprise ("Book a demo"). Kill the rest.</div>
+      </div>
+
+      <div class="finding-card warning">
+        <span class="sev warning">Warning</span>
+        <div class="finding-title">Big-brand logos with nothing behind them</div>
+        <div class="finding-body">Whirlpool and Ally appear in the logo bar under "Trusted by teams managing redirects at scale". There is no case study, no quote, no named contact, and no link behind any logo. Sophisticated buyers discount unsupported logo bars, and enterprises of that size typically require written consent for logo use.</div>
+        <div class="finding-fix">Convert one logo into a 400-word case study with a real number ("migrated 3,200 URLs in one weekend, zero ranking loss"). One proven story outperforms five unexplained logos.</div>
+      </div>
+
+      <div class="finding-card warning">
+        <span class="sev warning">Warning</span>
+        <div class="finding-title">54% of mobile tap targets are undersized</div>
+        <div class="finding-body">At 375px, 56 of 104 interactive elements measure under the 44px minimum touch height — including the three hero tool tabs ("Free Redirect", "Shorten URL", "Check Redirect") at 42px and several inline links at 20–22px.</div>
+        <div class="finding-fix">Set a global <code>min-height:44px</code> on all interactive elements below the <code>md</code> breakpoint. Roughly one CSS rule.</div>
+      </div>
+
+      <div class="finding-card warning">
+        <span class="sev warning">Warning</span>
+        <div class="finding-title">No cookie consent despite serving eight EU/international locales</div>
+        <div class="finding-body">GA4 (<code>G-0DJ9DF2528</code>) fires unconditionally on load. No consent management platform is present — no OneTrust, Cookiebot, Osano, Termly or Klaro. The site publishes a Cookie Policy and serves fully translated German, Spanish, French, Italian and Portuguese versions, which means EU visitors are being tracked without a lawful consent gate.</div>
+        <div class="finding-fix">Install a consent banner with Google Consent Mode v2 before scaling any EU traffic acquisition. This is a compliance exposure, not just a UX item.</div>
+      </div>
+
+      <div class="finding-card good">
+        <span class="sev good">Strong</span>
+        <div class="finding-title">Page performance is excellent</div>
+        <div class="finding-body">TTFB 152–181ms across three runs from a South African edge, DNS 8ms, TLS handshake 83ms, full document in under 210ms. Pre-rendered with <code>X-Vercel-Cache: HIT</code>. No render-blocking third-party scripts. 51 of 58 images lazy-loaded, HSTS set to two years.</div>
+        <div class="finding-fix">Only gap: 6 images ship without explicit width/height, a minor CLS risk. Add dimensions and this category is effectively perfect.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CRO AUDIT ============ -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-tag">Section 3</div>
+    <h2>Conversion Rate Optimisation Audit</h2>
+    <p class="section-intro">Scored against JCE Media's eight-point CRO framework. Each point is scored out of 10 and verified against the live site.</p>
+
+    <div class="table-wrap">
+    <table>
+      <thead><tr><th style="width:190px">Point</th><th style="width:80px">Score</th><th>Key finding</th></tr></thead>
+      <tbody>
+        <tr><td><strong>1. Five-Second Test</strong></td><td><span class="score-pill mid">6/10</span></td><td>"Point your domain. We handle the redirects." is a clear promise and lands above the fold. It is undercut by 38 competing clickables in the same viewport and by an H1 that reads as a sentence fragment on its own.</td></tr>
+        <tr><td><strong>2. CTA Audit</strong></td><td><span class="score-pill low">5/10</span></td><td>Nine different phrasings of one action, and the highest-value CTA on the site ("Book a demo") resolves to a section with no booking mechanism.</td></tr>
+        <tr><td><strong>3. Trust Signals</strong></td><td><span class="score-pill low">4/10</span></td><td>18 total public reviews. Unsupported enterprise logos. No case studies. No SOC 2, ISO 27001 or GDPR badging on the enterprise page — despite a DPA and subprocessor list existing on <code>/legal</code>. No company entity, address or phone anywhere.</td></tr>
+        <tr><td><strong>4. Contact Friction</strong></td><td><span class="score-pill low">2/10</span></td><td>Zero forms sitewide. No contact page. No phone. No live chat. Two footer mailto links are the entire human-contact surface of the business.</td></tr>
+        <tr><td><strong>5. Mobile Experience</strong></td><td><span class="score-pill mid">6/10</span></td><td>No horizontal scroll, H1 at 32px sits comfortably above the fold, body text legible. Held back by 56 undersized tap targets and mega-menu content preceding the headline in DOM order.</td></tr>
+        <tr><td><strong>6. Page Speed</strong></td><td><span class="score-pill high">9/10</span></td><td>Sub-200ms TTFB, edge-cached, lazy-loaded, no third-party bloat. Best-in-category. Only 6 images lack explicit dimensions.</td></tr>
+        <tr><td><strong>7. Value Proposition</strong></td><td><span class="score-pill mid">7/10</span></td><td>Specific, differentiated numbers (90ms, 500K hostnames, 10+ PoPs, "4× faster than Bitly") — genuinely strong. Damaged by the 100% / 99.99% / "we don't quote an SLA" contradiction.</td></tr>
+        <tr><td><strong>8. User Journey</strong></td><td><span class="score-pill low">4/10</span></td><td>Self-serve signup is excellent: three free tools usable from the hero with no account. Enterprise journey dead-ends. Reaching a human requires scrolling to the footer and finding a mailto.</td></tr>
+      </tbody>
+      <tfoot><tr><td>Overall CRO Score</td><td><span class="score-pill mid">54/100</span></td><td>43 of 80 points</td></tr></tfoot>
+    </table>
+    </div>
+
+    <h3>The three CRO fixes that matter most</h3>
+    <ul class="tight">
+      <li><strong>Put a form in the <code>#book-demo</code> section.</strong> Four fields and a calendar embed. This is the highest-value half-day of work available anywhere on the site — it converts the entire enterprise funnel from zero to functional.</li>
+      <li><strong>Resolve the SLA contradiction and publish one number.</strong> Then add the compliance proof that already exists on <code>/legal</code> (DPA, subprocessors, security policy) directly onto <code>/enterprise</code>, where the buying decision is actually made.</li>
+      <li><strong>Cut the above-fold clickables from 38 to 7 and standardise the CTA to one label.</strong> The offer is strong; it is currently competing with itself for attention.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ ANALYTICS ============ -->
+<section class="section">
+  <div class="container">
+    <div class="section-tag">Section 4</div>
+    <h2>Analytics &amp; Tracking Audit</h2>
+    <p class="section-intro">Full script-layer scan of the rendered document.</p>
+
+    <div class="table-wrap">
+    <table>
+      <thead><tr><th style="width:250px">Tool</th><th style="width:110px">Status</th><th>Detail &amp; consequence</th></tr></thead>
+      <tbody>
+        <tr><td>Google Analytics 4</td><td><span class="score-pill high">Present</span></td><td>Property <code>G-0DJ9DF2528</code>, loading correctly. This is the only measurement on the entire site.</td></tr>
+        <tr><td>Google Tag Manager</td><td><span class="score-pill low">Missing</span></td><td>No GTM container. Every future tag requires a developer and a deploy, which is why the stack has stayed at one tool.</td></tr>
+        <tr><td>Google Ads conversion tag</td><td><span class="score-pill low">Missing</span></td><td>No <code>AW-</code> tag found. Google Ads cannot be run to a measurable conversion today.</td></tr>
+        <tr><td>Meta Pixel</td><td><span class="score-pill low">Missing</span></td><td>No <code>fbq</code>. No retargeting audience is being built from ~20K monthly visits.</td></tr>
+        <tr><td>LinkedIn Insight Tag</td><td><span class="score-pill low">Missing</span></td><td>The most obvious paid channel for a B2B infrastructure product, and no audience is accumulating.</td></tr>
+        <tr><td>Reddit / X pixels</td><td><span class="score-pill low">Missing</span></td><td>Relevant given the developer audience; no coverage.</td></tr>
+        <tr><td>Microsoft Clarity / Hotjar</td><td><span class="score-pill low">Missing</span></td><td>No session recording or heatmap. Nobody has watched a user hit the <code>#book-demo</code> dead end — which is likely why it still exists.</td></tr>
+        <tr><td>Search Console verification</td><td><span class="score-pill mid">Unconfirmed</span></td><td>No <code>google-site-verification</code> meta tag in the HTML. Verification may be held via DNS, which cannot be checked externally. Worth confirming internally.</td></tr>
+        <tr><td>Consent management</td><td><span class="score-pill low">Missing</span></td><td>No CMP of any kind, while serving 8 translated locales including 5 EU languages.</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <p class="note">Scored 30/100. GA4 alone tells you how many people arrived. It does not tell you which acquisition source produced a paying account, it builds no remarketing audience, and it cannot feed a bid algorithm. Every growth decision at RedirHub is currently being made on session counts.</p>
+  </div>
+</section>
+
+<!-- ============ SEO ============ -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-tag">Section 5</div>
+    <h2>SEO Audit</h2>
+    <p class="section-intro">Technical crawl of the sitemap, head markup, schema layer and internal architecture.</p>
+
+    <div class="callout">
+      <div class="ct">The irony finding</div>
+      <h4>A redirect-management company shipping a sitemap full of redirects and duplicates</h4>
+      <p>The 169-URL sitemap contains <strong>three URLs that 301 to somewhere else</strong> (<code>/redirect-pizza-vs-redirhub</code>, <code>/urllo-vs-redirhub</code>, <code>/blog/how-to-preserve-utm-parameters-redirects</code>), <strong><code>/enterprise</code> listed twice</strong>, and <strong>zero <code>&lt;lastmod&gt;</code> values</strong> on any entry. Every URL instead carries <code>changefreq</code> and <code>priority</code>, both of which Google has publicly ignored for years. The sitemap is therefore transmitting no freshness signal at all across ~100 blog posts.</p>
+      <p>This will be the first thing any technical prospect checks. It is also a two-hour fix.</p>
+    </div>
+
+    <div class="findings-grid">
+      <div class="finding-card critical">
+        <span class="sev critical">Critical</span>
+        <div class="finding-title">A live duplicate of the homepage is in the sitemap</div>
+        <div class="finding-body"><code>/homepage</code> returns 200, self-canonicalises to itself, carries the identical title tag, and is listed in the sitemap. It holds ~457 words against the real homepage's ~1,152. Google is being handed two competing versions of the most important page on the domain.</div>
+        <div class="finding-fix">301 <code>/homepage</code> to <code>/</code> and remove it from the sitemap. Ten minutes.</div>
+      </div>
+
+      <div class="finding-card critical">
+        <span class="sev critical">Critical</span>
+        <div class="finding-title">Four pairs of self-cannibalising comparison pages</div>
+        <div class="finding-body">Each pair returns 200, self-canonicalises, and sits in the sitemap — so both compete for the same query:<br>
+        · <code>/blog/bitly-vs-redirhub</code> vs <code>/compare/redirhub-vs-bitly</code><br>
+        · <code>/blog/cloudflare-vs-redirhub</code> vs <code>/compare/redirhub-vs-cloudflare</code><br>
+        · <code>/blog/redirhub-vs-godaddy</code> vs <code>/compare/redirhub-vs-godaddy</code><br>
+        · <code>/blog/301-vs-302-redirect-2026</code> vs <code>/blog/a-guide-to-301-vs-302-redirects-for-seo</code><br>
+        These are the highest commercial-intent queries in the entire category, and the site is splitting its own authority across two URLs on every one of them.</div>
+        <div class="finding-fix">Keep the <code>/compare/</code> version in every case (better schema, better titles, cleaner structure). 301 the blog duplicate into it and consolidate the internal links.</div>
+      </div>
+
+      <div class="finding-card critical">
+        <span class="sev critical">Critical</span>
+        <div class="finding-title">Eight translated locales, none in the sitemap</div>
+        <div class="finding-body">The de, es, fr, it, pt, ja, zh and ko versions are fully translated, correctly canonicalised and correctly hreflang-linked — genuinely well built. Not one of the 169 sitemap URLs is a non-English page. A substantial international content investment is being under-crawled for no reason.</div>
+        <div class="finding-fix">Generate per-locale sitemaps with <code>xhtml:link</code> hreflang annotations and reference them from a sitemap index.</div>
+      </div>
+
+      <div class="finding-card warning">
+        <span class="sev warning">Warning</span>
+        <div class="finding-title">Homepage heading hierarchy is inverted</div>
+        <div class="finding-body">"Point your domain." is marked up as an <code>&lt;h2&gt;</code> and appears <em>before</em> the <code>&lt;h1&gt;</code> in the DOM. The H1 is therefore the orphan fragment "We handle the redirects." The page then runs 14 H2s and <strong>zero H3s</strong> — every section subhead, including all six FAQ questions, is a top-level H2.</div>
+        <div class="finding-fix">Make the full sentence one H1, demote section subheads to H3 under their parent H2. Improves both ranking clarity and screen-reader navigation.</div>
+      </div>
+
+      <div class="finding-card warning">
+        <span class="sev warning">Warning</span>
+        <div class="finding-title">The homepage has the weakest schema on the site</div>
+        <div class="finding-body">The homepage carries a single <code>FAQPage</code> block and nothing else. No <code>Organization</code>, no <code>SoftwareApplication</code>, no <code>WebSite</code>. Meanwhile <code>/compare/redirhub-vs-bitly</code> correctly ships FAQPage + BreadcrumbList + SoftwareApplication. The comparison pages are better marked up than the homepage.</div>
+        <div class="finding-fix">Add Organization (with logo, sameAs socials and legal entity) and SoftwareApplication with offers to the homepage. Extend BreadcrumbList sitewide.</div>
+      </div>
+
+      <div class="finding-card warning">
+        <span class="sev warning">Warning</span>
+        <div class="finding-title">A 4.7-star rating with no AggregateRating markup</div>
+        <div class="finding-body"><code>/reviews</code> displays "4.7 out of 5" across 18 reviews from Trustpilot and G2, and even transparently publishes two negative reviews with responses — which is good practice. The page carries <strong>zero JSON-LD</strong>. No star rating can appear in search results, and no AI answer engine can cite the number.</div>
+        <div class="finding-fix">Add AggregateRating + Review schema to <code>/reviews</code>. Then get the review count above 18 — that is the real constraint.</div>
+      </div>
+
+      <div class="finding-card warning">
+        <span class="sev warning">Warning</span>
+        <div class="finding-title">Duplicate H1 on blog articles</div>
+        <div class="finding-body"><code>/blog/301-vs-302-redirect-2026</code> renders the identical H1 twice in the same document. If this is a template-level issue it affects the full ~100-post library.</div>
+        <div class="finding-fix">Audit the blog template. One H1 per document.</div>
+      </div>
+
+      <div class="finding-card warning">
+        <span class="sev warning">Warning</span>
+        <div class="finding-title">No RSS feed on a 100-post blog</div>
+        <div class="finding-body"><code>/rss.xml</code>, <code>/feed.xml</code> and <code>/blog/rss.xml</code> all return 404. For a developer-audience publication, an RSS feed is a passive distribution channel into newsletters, aggregators and dev-tool roundups. It is currently absent.</div>
+        <div class="finding-fix">Ship an RSS feed from Sanity and submit it to the relevant developer aggregators.</div>
+      </div>
+
+      <div class="finding-card good">
+        <span class="sev good">Strong</span>
+        <div class="finding-title">llms.txt and AI-crawler readiness</div>
+        <div class="finding-body">A complete 17KB <code>llms.txt</code> maps every feature, solution, product and content cluster with descriptions. robots.txt explicitly allows GPTBot, ChatGPT-User, Google-Extended, ClaudeBot, anthropic-ai and PerplexityBot. Combined with a public MCP server, RedirHub is meaningfully more discoverable to AI answer engines than almost any competitor in this category.</div>
+        <div class="finding-fix">This is a marketing asset, not just a technical one. Nothing on the site currently tells a buyer it exists — make "the redirect platform your AI agent can actually use" a front-page position.</div>
+      </div>
+
+      <div class="finding-card good">
+        <span class="sev good">Strong</span>
+        <div class="finding-title">Redirect hygiene and image alt coverage</div>
+        <div class="finding-body">Apex to www resolves in exactly one 301 hop with no chain, served by RedirHub's own edge. All 38 homepage images carry populated, descriptive alt attributes — zero missing, zero empty. Meta descriptions, OG tags and Twitter cards are complete and keyword-appropriate.</div>
+        <div class="finding-fix">No fix required. Use the single-hop apex redirect as a proof point in the marketing copy.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SOCIAL ============ -->
+<section class="section">
+  <div class="container">
+    <div class="section-tag">Section 6</div>
+    <h2>Social Media Audit</h2>
+
+    <div class="table-wrap">
+    <table>
+      <thead><tr><th style="width:150px">Platform</th><th style="width:110px">Status</th><th>Assessment</th></tr></thead>
+      <tbody>
+        <tr><td>LinkedIn</td><td><span class="score-pill mid">Active</span></td><td><code>/company/redirhub</code> — <strong>89 followers</strong>, listed 2–10 employees, New York. Posting consistently, most recent within days, and the content is genuinely good (dynamic QR codes, migrations, MCP/AI agent use cases). The problem is pure distribution: excellent content reaching 89 people.</td></tr>
+        <tr><td>X / Twitter</td><td><span class="score-pill mid">Present</span></td><td>Linked from the footer. Underused for a developer-tool audience where X is the primary discovery channel.</td></tr>
+        <tr><td>Facebook</td><td><span class="score-pill mid">Present</span></td><td>Linked in the footer. Low strategic value for this audience — maintain, do not invest.</td></tr>
+        <tr><td>YouTube</td><td><span class="score-pill low">Thin</span></td><td>Channel exists at <code>@redirhub</code>. Almost no presence. "Migrate 3,000 URLs in 4 minutes" screen recordings would be the single highest-leverage asset for this product.</td></tr>
+        <tr><td>Instagram</td><td><span class="score-pill low">None</span></td><td>Correctly skipped. No recommendation to start.</td></tr>
+        <tr><td>Developer channels</td><td><span class="score-pill low">Gap</span></td><td>No visible presence on Hacker News, r/webdev, r/SEO, Indie Hackers or Product Hunt — where this product's buyers actually congregate, and where the MCP server story would land hardest.</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <p class="note">Scored 54/100. Profiles exist and LinkedIn is actively maintained, which is more than most. The score is capped by reach: 89 LinkedIn followers means the content engine is running with the amplifier switched off.</p>
+  </div>
+</section>
+
+<!-- ============ COMPETITORS ============ -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-tag">Section 7</div>
+    <h2>Competitor Landscape</h2>
+    <p class="section-intro">RedirHub already maintains 22 comparison pages, so the competitive set is well understood internally. The gaps below are about where each rival is beating them commercially, not technically.</p>
+
+    <div class="table-wrap">
+    <table>
+      <thead><tr><th>Competitor</th><th>Their strength</th><th>Their weakness</th><th>RedirHub's opening</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Bitly</strong></td><td>Category-defining brand, enormous domain authority, enterprise sales motion</td><td>Expensive, aggressive plan limits, widely resented pricing changes</td><td>Own the "Bitly pricing 2026" and "Bitly free alternative" queries — pages already exist, they just need consolidation and links</td></tr>
+        <tr><td><strong>redirect.pizza</strong></td><td>Sharp positioning, clean brand, strong EU/SEO credibility</td><td>Narrower feature set, less global edge coverage</td><td>Compete on PoP count, latency and the free tier — all measurable and all favourable</td></tr>
+        <tr><td><strong>urllo (EasyRedir)</strong></td><td>Established team/enterprise positioning, credible enterprise proof</td><td>Higher price point, less developer-native</td><td>API + MCP + free tier is a genuinely different product story; urllo has no AI-agent answer</td></tr>
+        <tr><td><strong>Cloudflare Rules</strong></td><td>Free at the edge, enormous trust, already in the stack</td><td>Requires DNS on Cloudflare, painful at scale, no redirect-specific UX or analytics</td><td>"Redirects without moving your DNS" is a strong wedge and is currently underplayed</td></tr>
+        <tr><td><strong>Rebrandly / Short.io / Dub</strong></td><td>Strong branded-link and marketer positioning, better community presence</td><td>Link-shortening first, infrastructure second</td><td>RedirHub is the infrastructure play. Stop competing on shortening; own domain-scale redirect infrastructure</td></tr>
+        <tr><td><strong>Self-hosted (nginx / .htaccess)</strong></td><td>Free, fully controlled, familiar to every sysadmin</td><td>Certificate management at scale is genuinely miserable, especially with 45-day certs</td><td>The strongest wedge available. The 45-day certificate content already written is the right spear — it needs paid distribution behind it</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <p class="note">Structural observation: RedirHub is out-executing most of this set on content volume and technical quality, and losing on brand reach and commercial infrastructure. The gap is not the product.</p>
+  </div>
+</section>
+
+<!-- ============ ADS ============ -->
+<section class="section">
+  <div class="container">
+    <div class="section-tag">Section 8</div>
+    <h2>Google Ads Strategy</h2>
+    <p class="section-intro">Prerequisite before any spend: install GTM, a Google Ads conversion tag, and define signup plus demo-request as conversion actions. Running traffic today would be unmeasurable.</p>
+
+    <div class="campaign-block">
+      <div class="campaign-name">Campaign 1 — Brand Protection</div>
+      <div class="campaign-meta">15% of budget · Exact + phrase match · Target impression share bidding</div>
+      <p class="campaign-goal">Competitors in this category actively bid on rival brand terms — RedirHub's own comparison pages prove they understand the tactic. Defending the brand term is the cheapest conversion available and stops rivals intercepting bottom-funnel intent.</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Keyword</th><th>Match</th><th>Intent</th></tr></thead>
+        <tbody>
+          <tr><td>redirhub</td><td>Exact</td><td>Direct navigational</td></tr>
+          <tr><td>redirhub pricing / redirhub login</td><td>Phrase</td><td>Existing + evaluating</td></tr>
+          <tr><td>redir hub / redirect hub</td><td>Phrase</td><td>Misspell capture</td></tr>
+          <tr><td>redirhub review / redirhub alternative</td><td>Phrase</td><td>Late-stage evaluation</td></tr>
+        </tbody>
+      </table></div>
+      <div class="ad-copy-block">
+        <div class="ad-headline">RedirHub Official — Start Free, No Card</div>
+        <div class="ad-url">www.redirhub.com</div>
+        <div class="ad-desc">100K requests/month free. Automatic HTTPS on every domain. 90ms global redirects across 10+ edge locations. Create your first redirect in under 60 seconds.</div>
+      </div>
+    </div>
+
+    <div class="campaign-block">
+      <div class="campaign-name">Campaign 2 — Core Problem Keywords</div>
+      <div class="campaign-meta">55% of budget · Phrase + exact · Maximise conversions after 30 conversions logged</div>
+      <p class="campaign-goal">Capture the technical buyer at the moment the problem bites — a migration is scheduled, a domain needs pointing, or a certificate renewal has failed. Each ad group routes to the matching existing landing page; no new pages required.</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Ad group</th><th>Sample keywords</th><th>Landing page</th></tr></thead>
+        <tbody>
+          <tr><td>Domain redirect</td><td>redirect domain to another site, domain forwarding service, redirect domain without hosting</td><td>/url-redirect-service</td></tr>
+          <tr><td>301 redirects</td><td>301 redirect service, bulk 301 redirects, how to do a 301 redirect</td><td>/301-redirect-service</td></tr>
+          <tr><td>Website migration</td><td>website migration redirects, bulk url redirect tool, preserve seo after migration</td><td>/website-migrations</td></tr>
+          <tr><td>SSL at scale</td><td>ssl for redirect domains, manage ssl multiple domains, 45 day certificate management</td><td>/security</td></tr>
+          <tr><td>Domain parking</td><td>domain parking without ads, park domain redirect, monetise idle domains</td><td>/domain-parking</td></tr>
+          <tr><td>Branded links</td><td>branded short links, custom domain short url, white label link shortener</td><td>/branded-links</td></tr>
+        </tbody>
+      </table></div>
+      <div class="ad-copy-block">
+        <div class="ad-headline">Bulk 301 Redirects — SSL Handled Automatically</div>
+        <div class="ad-url">www.redirhub.com/301-redirect-service</div>
+        <div class="ad-desc">Import a CSV, point your domain, done. Certificates issued and renewed automatically. 90ms average latency across 10+ global edge locations. Free tier, no card required.</div>
+      </div>
+    </div>
+
+    <div class="campaign-block">
+      <div class="campaign-name">Campaign 3 — Competitor Conquest</div>
+      <div class="campaign-meta">30% of budget · Phrase match · Manual CPC until CPA is proven</div>
+      <p class="campaign-goal">This is RedirHub's unfair advantage: 22 purpose-built comparison landing pages already exist and rank. Almost no company running conquest campaigns has that inventory sitting ready. Pointing paid traffic at pages that already convert organic visitors is the fastest path to a measurable CPA — <em>after</em> the duplicate blog versions are consolidated, so the paid and organic versions stop competing.</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Keyword theme</th><th>Landing page</th><th>Angle</th></tr></thead>
+        <tbody>
+          <tr><td>bitly alternative, bitly pricing, bitly too expensive</td><td>/compare/redirhub-vs-bitly</td><td>Price and generous free tier</td></tr>
+          <tr><td>redirect pizza alternative</td><td>/compare/redirhub-vs-redirectpizza</td><td>Edge coverage and latency</td></tr>
+          <tr><td>easyredir alternative, urllo alternative</td><td>/compare/redirhub-vs-urllo</td><td>API, MCP and developer experience</td></tr>
+          <tr><td>cloudflare redirect rules limit</td><td>/compare/redirhub-vs-cloudflare</td><td>No DNS migration required</td></tr>
+          <tr><td>nginx redirect management, htaccess redirect at scale</td><td>/compare/redirhub-vs-nginx</td><td>Certificate pain at 45-day renewals</td></tr>
+        </tbody>
+      </table></div>
+      <div class="ad-copy-block">
+        <div class="ad-headline">Bitly Alternative — 100K Requests Free, No Ads</div>
+        <div class="ad-url">www.redirhub.com/compare/redirhub-vs-bitly</div>
+        <div class="ad-desc">Branded links, custom domains and automatic HTTPS from $3/month. Up to 4× faster redirects. Full side-by-side comparison inside.</div>
+      </div>
+    </div>
+
+    <p class="note">Recommended pilot: $1,500–$2,500/month for 60 days. Campaign 1 will produce the cheapest conversions immediately; Campaign 3 will produce the most learning. Do not launch any of it until conversion tracking exists — currently the account would be flying blind.</p>
+  </div>
+</section>
+
+<!-- ============ LANDING PAGE ============ -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-tag">Section 9</div>
+    <h2>Landing Page Strategy</h2>
+    <p class="section-intro">RedirHub does not need more landing pages. It has roughly 40 commercial pages already. It needs the existing ones to convert.</p>
+
+    <h3>Fix the pages that exist before building new ones</h3>
+    <ul class="tight">
+      <li><strong>/enterprise</strong> — the highest-value page on the domain and currently the weakest. Needs a working demo form, one consistent SLA figure, the compliance documents surfaced from <code>/legal</code>, and one real case study. This page alone justifies the engagement.</li>
+      <li><strong>/pricing</strong> — a G2 reviewer has already said publicly that the pricing page "could be a bit clearer." The hostname slider is clever but the plan-to-price relationship is not legible at a glance. Add a three-column plan summary above the comparison matrix.</li>
+      <li><strong>The 22 comparison pages</strong> — strong pages carrying real ranking potential. Consolidate the four duplicates, add a consistent sticky CTA, and add one migration proof point to each.</li>
+      <li><strong>/reviews</strong> — add AggregateRating schema, then drive review volume. 18 reviews is the ceiling on this page's usefulness, not the design.</li>
+    </ul>
+
+    <h3>The one genuinely new page worth building</h3>
+    <ul class="tight">
+      <li><strong>A migration-service landing page with a booked calendar.</strong> Free website migrations are already offered and already promoted in <code>llms.txt</code>, but there is no page where a buyer can hand over the job. "Send us your URL list, we will map and validate it, you go live Monday" converts a self-serve tool into a service relationship — and a service relationship is what turns a $10/month account into a $300/month one.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ ACTION PLAN ============ -->
+<section class="section">
+  <div class="container">
+    <div class="section-tag">Section 10</div>
+    <h2>Priority Action Plan</h2>
+    <p class="section-intro">Ordered by return on effort. Everything in Quick Wins is achievable inside one working week.</p>
+
+    <div class="plan-grid">
+      <div class="plan-card">
+        <span class="plan-badge">Quick Wins — Week 1</span>
+        <ul class="plan-items">
+          <li><strong>Put a form in <code>#book-demo</code>.</strong> Four fields plus a calendar embed. Highest-value half-day available.</li>
+          <li><strong>301 <code>/homepage</code> to <code>/</code></strong> and drop it from the sitemap.</li>
+          <li><strong>Resolve the SLA contradiction.</strong> One number, published everywhere, backed by a linked document.</li>
+          <li><strong>Install GTM</strong> and add the Google Ads conversion tag, Meta Pixel and LinkedIn Insight Tag.</li>
+          <li><strong>Add <code>lastmod</code></strong> to every sitemap entry; remove the three redirecting URLs and the duplicate <code>/enterprise</code>.</li>
+          <li><strong>Fix the H1.</strong> Full sentence as one H1, section subheads demoted to H3.</li>
+          <li><strong>Global 44px minimum</strong> on mobile tap targets.</li>
+        </ul>
+      </div>
+
+      <div class="plan-card">
+        <span class="plan-badge days60">Days 30–60</span>
+        <ul class="plan-items">
+          <li><strong>Consolidate the four cannibalising page pairs.</strong> Keep <code>/compare/</code>, 301 the blog duplicates in.</li>
+          <li><strong>Add Organization + SoftwareApplication schema</strong> to the homepage; AggregateRating to <code>/reviews</code>.</li>
+          <li><strong>Publish company identity.</strong> Legal entity, registration number, registered address, plus a real <code>/contact</code> page.</li>
+          <li><strong>Surface compliance on <code>/enterprise</code>.</strong> The DPA, subprocessor list and security policy already exist on <code>/legal</code> — move the proof to where the decision is made.</li>
+          <li><strong>Install a consent management platform</strong> with Consent Mode v2 before scaling EU traffic.</li>
+          <li><strong>Ship one real case study</strong> from an existing logo, with a number in it.</li>
+          <li><strong>Add Microsoft Clarity</strong> and watch 50 sessions on <code>/enterprise</code>.</li>
+        </ul>
+      </div>
+
+      <div class="plan-card">
+        <span class="plan-badge days90">Days 60–90</span>
+        <ul class="plan-items">
+          <li><strong>Launch the three-campaign Google Ads pilot</strong> at $1,500–$2,500/month, once tracking is proven.</li>
+          <li><strong>Ship locale sitemaps</strong> with hreflang annotations and a sitemap index.</li>
+          <li><strong>Build the migration-service page</strong> with a booked calendar.</li>
+          <li><strong>Make the AI-agent story the front-page position.</strong> MCP server, llms.txt and AI-crawler access are a real moat that no visitor is currently told about.</li>
+          <li><strong>Fix the distribution problem.</strong> 89 LinkedIn followers against ~100 published articles is the largest single waste in the business. Add RSS, a founder-led LinkedIn cadence, and a developer-community presence.</li>
+          <li><strong>Drive review volume</strong> past 50 on G2 and Trustpilot with an in-app prompt at the successful-migration moment.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout pos" style="margin-top:36px">
+      <div class="ct">The one-line version</div>
+      <h4>Nothing here requires rebuilding the product</h4>
+      <p>RedirHub's engineering, performance, content depth and AI readiness are already ahead of most of the competitive set. The revenue gap is entirely in the commercial layer: a demo form that does not exist, a measurement stack with one tool in it, a duplicate-content problem that splits its own authority, and a distribution channel reaching 89 people. Every item on this list is a configuration or copy change, not an engineering project.</p>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <p><strong>Prepared by JCE Media</strong> · Digital marketing, conversion and growth</p>
+    <p>jacques@jcemedia.com · jcemedia.com</p>
+    <p style="margin-top:14px;font-size:12px">Audit conducted 13 August 2026 against the live site. All findings independently verified — response headers, rendered DOM, sitemap, schema layer and script stack. Traffic estimates are third-party (Similarweb) and directional only.</p>
+  </div>
+</footer>
+
+</body>
+</html>
