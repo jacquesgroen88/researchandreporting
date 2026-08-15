@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Onboarding Questionnaire | The Acreage + Good &amp; Proper | JCE Media</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+  :root{
+    --bg:#f5f8fe;--card:#ffffff;--ink:#101a2e;--muted:#5b6b86;--line:#e7edf8;
+    --blue:#2f6bf6;--indigo:#6366f1;--violet:#8b5cf6;--green:#1f9d67;--cyan:#1fc7e6;--coral:#ff6a45;
+    --grad:linear-gradient(135deg,#2f6bf6 0%,#6366f1 52%,#8b5cf6 100%);
+    --grad-warm:linear-gradient(135deg,#ff6a45,#ffb020);
+    --shadow-sm:0 6px 18px rgba(38,66,120,.07);--radius:18px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);background:var(--bg);line-height:1.55;-webkit-font-smoothing:antialiased;padding-bottom:44px}
+  .wrap{max-width:700px;margin:0 auto;padding:0 18px}
+  a{color:var(--blue)}
+  h1,h2,h3{font-family:'Space Grotesk','Inter',sans-serif;font-weight:700;color:var(--ink)}
+
+  /* sticky progress */
+  .progress{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .progress .row{display:flex;align-items:center;gap:12px;max-width:700px;margin:0 auto;padding:11px 18px}
+  .progress .lbl{font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;color:var(--blue);white-space:nowrap}
+  .bar{flex:1;height:9px;background:#e7edf8;border-radius:999px;overflow:hidden}
+  .bar>i{display:block;height:100%;width:0;background:var(--grad);border-radius:999px;transition:width .35s}
+  .pct{font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;color:var(--ink);min-width:34px;text-align:right}
+
+  /* hero */
+  .hero{background:var(--grad);color:#fff;padding:28px 0 34px;border-radius:0 0 26px 26px;position:relative;overflow:hidden;margin-bottom:8px}
+  .hero:before{content:"";position:absolute;top:-70px;right:-40px;width:210px;height:210px;background:radial-gradient(circle,rgba(255,255,255,.22),transparent 70%)}
+  .hero .wrap{position:relative}
+  .hero img{height:24px;filter:brightness(0) invert(1);margin-bottom:16px;display:block}
+  .hero h1{color:#fff;font-size:25px;margin-bottom:8px}
+  .hero p{color:rgba(255,255,255,.93);font-size:14.5px}
+  .hero .chiprow{margin-top:15px;display:flex;gap:8px;flex-wrap:wrap}
+  .hero .mini{font-size:12px;font-weight:600;color:#fff;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.28);padding:6px 12px;border-radius:999px}
+
+  /* intro note */
+  .note{background:#eef4ff;border:1px solid #d6e4ff;border-radius:var(--radius);padding:18px 20px;margin-top:16px}
+  .note h3{font-size:15.5px;margin-bottom:7px}
+  .note p{font-size:13.8px;color:#46587a}
+  .note p + p{margin-top:8px}
+
+  /* priority toggle */
+  .ptoggle{display:flex;align-items:center;gap:11px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 16px;margin-top:14px;box-shadow:var(--shadow-sm);cursor:pointer;user-select:none}
+  .ptoggle .sw{width:44px;height:25px;border-radius:999px;background:#dbe4f5;position:relative;transition:background .18s;flex:none}
+  .ptoggle .sw:after{content:"";position:absolute;top:3px;left:3px;width:19px;height:19px;border-radius:50%;background:#fff;box-shadow:0 2px 5px rgba(0,0,0,.18);transition:transform .18s}
+  .ptoggle.on .sw{background:var(--blue)}
+  .ptoggle.on .sw:after{transform:translateX(19px)}
+  .ptoggle .tx{font-size:14px;font-weight:600;color:var(--ink)}
+  .ptoggle .tx span{display:block;font-weight:400;font-size:12.5px;color:var(--muted);margin-top:2px}
+
+  .sec-h{display:flex;align-items:center;gap:11px;margin:28px 2px 10px}
+  .sec-h .dot{width:30px;height:30px;border-radius:9px;background:var(--grad);color:#fff;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 14px rgba(99,102,241,.3);flex:none}
+  .sec-h h2{font-size:16px;color:var(--ink);font-weight:700}
+  .sec-note{font-size:13px;color:var(--muted);margin:0 2px 12px;padding-left:41px}
+
+  /* known box */
+  .known{background:#f7faff;border:1px solid var(--line);border-left:3px solid var(--cyan);border-radius:11px;padding:11px 14px;margin-bottom:11px;font-size:13.2px;color:var(--ink)}
+  .known b{color:#0b7d92;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;display:block;margin-bottom:3px;font-family:'Space Grotesk',sans-serif}
+
+  .q{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px;margin-bottom:12px;box-shadow:var(--shadow-sm);position:relative}
+  .q .lab{font-weight:600;color:var(--ink);font-size:15px;margin-bottom:3px;padding-right:52px}
+  .q .hint{font-size:12.5px;color:var(--muted);margin-bottom:10px}
+  .q.filled{border-color:#bfe3cf;box-shadow:0 8px 20px rgba(31,157,103,.10)}
+  .q.filled .lab:after{content:" ✓";color:var(--green);font-weight:800}
+  .q .star{position:absolute;top:16px;right:16px;font-size:9.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:#a86a00;background:#fff2d8;border:1px solid #ffe1a6;padding:3px 8px;border-radius:999px;font-family:'Space Grotesk',sans-serif}
+  body.ponly .q:not([data-p]){display:none}
+  body.ponly .sec-h.empty,body.ponly .sec-note.empty,body.ponly .known.empty{display:none}
+
+  input[type=text],input[type=number],textarea{width:100%;font-family:inherit;font-size:15px;color:var(--ink);background:#fff;border:1.5px solid var(--line);border-radius:11px;padding:12px 13px;transition:border .15s,box-shadow .15s}
+  input::placeholder,textarea::placeholder{color:#9aa7bd}
+  input:focus,textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(47,107,246,.12)}
+  textarea{resize:vertical;min-height:64px}
+  .dual{display:grid;grid-template-columns:1fr;gap:10px}
+  .dual .fieldlab{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px;display:block}
+  .rand{position:relative}.rand:before{content:"R";position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-weight:700;font-size:14px}
+  .rand input{padding-left:26px}
+
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{font-size:13px;font-weight:600;color:var(--ink);background:#eef3fc;border:1.5px solid var(--line);padding:8px 13px;border-radius:999px;cursor:pointer;user-select:none;transition:all .12s}
+  .chip:hover{border-color:var(--blue)}
+  .chip.on{background:var(--blue);color:#fff;border-color:var(--blue);box-shadow:0 6px 14px rgba(47,107,246,.28)}
+
+  .submit{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px;margin-top:24px;text-align:center;box-shadow:var(--shadow-sm)}
+  .submit h3{font-size:19px;color:var(--ink);margin-bottom:6px}
+  .submit p{font-size:13.5px;color:var(--muted);margin-bottom:16px}
+  .btns{display:grid;grid-template-columns:1fr;gap:10px}
+  .btn{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;border:none;border-radius:999px;padding:15px 18px;cursor:pointer;transition:transform .1s;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+  .btn:active{transform:translateY(1px)}
+  .btn-primary{background:var(--grad-warm);color:#fff;box-shadow:0 10px 24px rgba(255,106,69,.32)}
+  .btn-wa{background:#25d366;color:#fff}
+  .btn-mail{background:#fff;color:var(--blue);border:1.5px solid var(--line)}
+  .saved{font-size:12px;color:var(--green);font-weight:600;margin-top:14px;opacity:0;transition:opacity .3s}
+  .saved.on{opacity:1}
+  .copied{font-size:13px;color:var(--green);font-weight:700;margin-top:10px;min-height:18px}
+  .foot{text-align:center;font-size:12px;color:var(--muted);margin-top:24px;line-height:1.7}
+  @media(max-width:520px){.hero h1{font-size:22px}}
+</style>
+</head>
+<body>
+
+<div class="progress">
+  <div class="row">
+    <span class="lbl">Your progress</span>
+    <div class="bar"><i id="barfill"></i></div>
+    <div class="pct" id="pct">0%</div>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="wrap">
+    <img src="https://jcemedia.com/assets/case-studies/jcemedialogomain.png" alt="JCE Media">
+    <h1>The six things we cannot see from the outside</h1>
+    <p>We have already done everything that could be checked without you — that was the Diagnostic. This asks only for what is genuinely not visible from a browser. Rough answers are perfect, and everything saves as you go.</p>
+    <div class="chiprow">
+      <span class="mini">⏱ 6 questions in 5 min, or all of it in ~15</span>
+      <span class="mini">💾 Saves automatically</span>
+      <span class="mini">✍️ Nothing is required</span>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="note">
+    <h3>Why this is shorter than you expect</h3>
+    <p>We are not going to ask you how many Google reviews you have, what your rating is, what your competitors are rated, or what your website says. We counted all of that ourselves on 13 August, and it is in the Diagnostic.</p>
+    <p>What follows is the honest gap list: <strong>every question below replaces an assumption we were forced to make</strong>. The ones marked <em>Key</em> are the six that unlock the most, and there is a switch below to show only those if today is a bad day.</p>
+  </div>
+
+  <div class="ptoggle" id="ptoggle">
+    <div class="sw"></div>
+    <div class="tx">Show me only the six that matter<span>The five-minute version. Everything else can wait for the call.</span></div>
+  </div>
+
+  <!-- ============ A ============ -->
+  <div class="sec-h" data-sec="A"><div class="dot">A</div><h2>The numbers that size everything</h2></div>
+  <div class="sec-note" data-sec="A">Every leak in the Diagnostic was sized against these and we had none of them. This section is the single biggest unlock.</div>
+
+  <div class="known" data-sec="A"><b>What we already know</b>You are 4.7 from 68 reviews, roughly 3 a month since January, against Accolades at 4.4 from 1,478. We do not need any of that from you.</div>
+
+  <div class="q" data-q data-p data-sec="A">
+    <div class="star">Key</div>
+    <div class="lab">Roughly how many enquiries do you get a month, and through which channels?</div>
+    <div class="hint">A guess is fine. Phone, Facebook, email, walk-in, referral — however they actually arrive.</div>
+    <div class="dual">
+      <div><span class="fieldlab">The Acreage</span><input type="text" data-f id="a1a" placeholder="e.g. ~20/mo: 8 phone, 7 Facebook, 5 word of mouth"></div>
+      <div><span class="fieldlab">Good &amp; Proper</span><input type="text" data-f id="a1b" placeholder="e.g. ~15/mo, mostly the website form"></div>
+    </div>
+  </div>
+
+  <div class="q" data-q data-p data-sec="A">
+    <div class="star">Key</div>
+    <div class="lab">Of those enquiries, how many actually book — and how long does it take?</div>
+    <div class="hint">This one decides the whole plan. If enquiries are few but convert well, we push on reach. If they arrive and die, more traffic would make things worse.</div>
+    <div class="dual">
+      <div><span class="fieldlab">The Acreage — how many book</span><input type="text" data-f id="a2a" placeholder="e.g. about 1 in 5"></div>
+      <div><span class="fieldlab">Good &amp; Proper — how many book</span><input type="text" data-f id="a2b" placeholder="e.g. about 1 in 3"></div>
+      <div><span class="fieldlab">Typical time from first contact to confirmed</span><input type="text" data-f id="a2c" placeholder="e.g. 2-3 weeks for corporate, months for weddings"></div>
+    </div>
+  </div>
+
+  <div class="q" data-q data-p data-sec="A">
+    <div class="star">Key</div>
+    <div class="lab">What is an average booking worth?</div>
+    <div class="hint">The Diagnostic showed the same arithmetic at R30k, R60k and R100k because we had to. Your figure removes two of those columns.</div>
+    <div class="dual">
+      <div><span class="fieldlab">Acreage — average function</span><div class="rand"><input type="text" data-f id="a3a" placeholder="0"></div></div>
+      <div><span class="fieldlab">Acreage — biggest function you have done</span><div class="rand"><input type="text" data-f id="a3b" placeholder="0"></div></div>
+      <div><span class="fieldlab">Acreage — average restaurant spend per head</span><div class="rand"><input type="text" data-f id="a3c" placeholder="0"></div></div>
+      <div><span class="fieldlab">Good &amp; Proper — average job</span><div class="rand"><input type="text" data-f id="a3d" placeholder="0"></div></div>
+    </div>
+  </div>
+
+  <div class="q" data-q data-sec="A">
+    <div class="lab">How many people are usually involved in deciding?</div>
+    <div class="hint">We assumed a venue is rarely chosen by one person, which is why the plan puts so much weight on a forwardable pack. Tell us if that is wrong.</div>
+    <input type="text" data-f id="a4" placeholder="e.g. weddings = bride + mother, corporate = coordinator + finance">
+  </div>
+
+  <!-- ============ B ============ -->
+  <div class="sec-h" data-sec="B"><div class="dot">B</div><h2>The calendar</h2></div>
+  <div class="sec-note" data-sec="B">Finding 5 was the largest line in the Diagnostic and the only one we could not put a number on at all, because a venue's calendar is invisible from outside.</div>
+
+  <div class="q" data-q data-p data-sec="B">
+    <div class="star">Key</div>
+    <div class="lab">How full is the calendar, honestly?</div>
+    <div class="hint">Functions per month across a year, and how many Saturdays in your busy season are already gone. This is the number that turns Finding 5 from a mechanism into rands.</div>
+    <textarea data-f id="b5" placeholder="e.g. 4-6 functions a month, but Nov/Dec Saturdays are booked out by August and Jan-Mar is nearly empty"></textarea>
+  </div>
+
+  <div class="q" data-q data-sec="B">
+    <div class="lab">Which months are your best, and which are dead?</div>
+    <div class="hint">We inferred October to December from Good &amp; Proper's guest minimums and your December review spike. Correct us if that is wrong.</div>
+    <div class="dual">
+      <div><span class="fieldlab">Busiest</span><input type="text" data-f id="b6a" placeholder="e.g. Oct, Nov, Dec"></div>
+      <div><span class="fieldlab">Quietest</span><input type="text" data-f id="b6b" placeholder="e.g. Jan, Feb, Jun"></div>
+    </div>
+  </div>
+
+  <div class="q" data-q data-sec="B">
+    <div class="lab">What does a Saturday in November cost versus a Tuesday in February?</div>
+    <div class="hint">If the answer is "the same", that is not a problem to hide — it is exactly the finding, and it is the most common answer venues give.</div>
+    <input type="text" data-f id="b7" placeholder="Honestly: ...">
+  </div>
+
+  <div class="q" data-q data-sec="B">
+    <div class="lab">Is there a minimum spend, a lead time, or a deposit policy for the venue?</div>
+    <div class="hint">We could not find any of the three published anywhere. That may be because they are not published, or because they do not exist yet.</div>
+    <input type="text" data-f id="b8" placeholder="e.g. 50% deposit, no published minimum, usually 2 months notice">
+  </div>
+
+  <div class="q" data-q data-sec="B">
+    <div class="lab">What currently happens Monday to Thursday?</div>
+    <div class="hint">The midweek corporate product in the roadmap is designed for whatever the honest answer is here.</div>
+    <input type="text" data-f id="b9" placeholder="e.g. restaurant only, occasional small meeting">
+  </div>
+
+  <!-- ============ C ============ -->
+  <div class="sec-h" data-sec="C"><div class="dot">C</div><h2>The two businesses together</h2></div>
+  <div class="sec-note" data-sec="C">Finding 4. Both numbers below are countable from your own records in an afternoon and neither exists anywhere we can reach.</div>
+
+  <div class="known" data-sec="C"><b>What we already know</b>Neither business mentions the other anywhere online. Good &amp; Proper starts at 80 guests (150 in Oct-Dec) and does not cater weddings. The Acreage takes functions from 50.</div>
+
+  <div class="q" data-q data-p data-sec="C">
+    <div class="star">Key</div>
+    <div class="lab">Last year, how often did the two miss each other?</div>
+    <div class="hint">Rough counts are fine. These two numbers are very likely the cheapest money in the whole Blueprint, because in both cases you already had the customer.</div>
+    <div class="dual">
+      <div><span class="fieldlab">Functions at The Acreage NOT catered by Good &amp; Proper</span><input type="text" data-f id="c10a" placeholder="e.g. most of them / about 30"></div>
+      <div><span class="fieldlab">Good &amp; Proper events at a venue that was NOT yours</span><input type="text" data-f id="c10b" placeholder="e.g. nearly all / about 60"></div>
+    </div>
+  </div>
+
+  <div class="q" data-q data-sec="C">
+    <div class="lab">What happens now to a Good &amp; Proper enquiry under 80 guests?</div>
+    <div class="hint">And roughly how many of those come in a month?</div>
+    <input type="text" data-f id="c11" placeholder="e.g. we decline politely, maybe 5 a month">
+  </div>
+
+  <div class="q" data-q data-sec="C">
+    <div class="lab">Why does Good &amp; Proper not cater weddings?</div>
+    <div class="hint">Capability, capacity, margin, or preference? The answer changes how the two businesses should be connected, and there is no wrong one.</div>
+    <input type="text" data-f id="c12" placeholder="Because...">
+  </div>
+
+  <div class="q" data-q data-sec="C">
+    <div class="lab">Do you want them to stay separate brands, or move closer together?</div>
+    <div class="chips" data-chips="c13single">
+      <span class="chip" data-val="Keep clearly separate">Keep clearly separate</span>
+      <span class="chip" data-val="Visibly linked, still separate">Visibly linked, still separate</span>
+      <span class="chip" data-val="Move toward one group brand">Move toward one group brand</span>
+      <span class="chip" data-val="Not sure">Not sure</span>
+    </div>
+  </div>
+
+  <!-- ============ D ============ -->
+  <div class="sec-h" data-sec="D"><div class="dot">D</div><h2>How an enquiry actually runs today</h2></div>
+  <div class="sec-note" data-sec="D">Describe what really happens, not what is supposed to happen. The gap between those two is usually where the money is.</div>
+
+  <div class="q" data-q data-sec="D">
+    <div class="lab">Walk us through one enquiry, start to finish</div>
+    <div class="hint">Where it lands, who sees it, what happens next, what tool it lives in, and roughly how fast the first reply goes out on a normal week.</div>
+    <textarea data-f id="d14" placeholder="It comes in on... then... then..."></textarea>
+  </div>
+
+  <div class="q" data-q data-sec="D">
+    <div class="lab">Who follows up on a quote that goes quiet, and when?</div>
+    <div class="hint">If the honest answer is "nobody, usually", say that. In most venues it is the single biggest recoverable number and it never shows up in any report.</div>
+    <input type="text" data-f id="d15" placeholder="Usually...">
+  </div>
+
+  <div class="q" data-q data-sec="D">
+    <div class="lab">Is anything about enquiries written down anywhere today?</div>
+    <div class="chips" data-chips="d16single">
+      <span class="chip" data-val="Nothing formal">Nothing formal</span>
+      <span class="chip" data-val="A spreadsheet">A spreadsheet</span>
+      <span class="chip" data-val="A diary or notebook">A diary or notebook</span>
+      <span class="chip" data-val="A CRM or system">A CRM or system</span>
+    </div>
+    <input type="text" data-f id="d16b" placeholder="Which one, and who keeps it? (optional)" style="margin-top:10px">
+  </div>
+
+  <div class="q" data-q data-sec="D">
+    <div class="lab">Who could own the enquiry count from 1 September?</div>
+    <div class="hint">A named person, not "the team". Every measurement in the roadmap reads from this, and unowned counting stops within a fortnight.</div>
+    <input type="text" data-f id="d17" placeholder="Name, and roughly how much time they have for it">
+  </div>
+
+  <!-- ============ E ============ -->
+  <div class="sec-h" data-sec="E"><div class="dot">E</div><h2>Good &amp; Proper specifics</h2></div>
+  <div class="sec-note" data-sec="E">Roughly R10,000 a month is being spent on Google Ads and we have not been able to see a single figure from it.</div>
+
+  <div class="q" data-q data-sec="E">
+    <div class="lab">What is the single price per head, and what does it include?</div>
+    <div class="hint">Published on your site as a model but never as a figure. The bundled venue-plus-catering quote — the one thing no competitor in Midrand can match — cannot be built without it.</div>
+    <div class="dual">
+      <div><span class="fieldlab">Typical price per head</span><div class="rand"><input type="text" data-f id="e18a" placeholder="0"></div></div>
+      <div><span class="fieldlab">What that includes</span><input type="text" data-f id="e18b" placeholder="e.g. food, staff, setup, strike, bar extra"></div>
+    </div>
+  </div>
+
+  <div class="q" data-q data-sec="E">
+    <div class="lab">The Google Ads: who runs it, where does it send people, and what does a lead cost?</div>
+    <div class="hint">Any of the three helps. If the answer to the last one is "no idea", that is the most useful answer you can give us.</div>
+    <textarea data-f id="e19" placeholder="Managed by... it points at... we think a lead costs..."></textarea>
+  </div>
+
+  <div class="q" data-q data-sec="E">
+    <div class="lab">Of the 100 to 150 vendors, how many are genuinely active?</div>
+    <div class="hint">The network size is a headline claim on your site. We want to know the real working number before we repeat it anywhere.</div>
+    <input type="text" data-f id="e20" placeholder="e.g. about 30 we use regularly">
+  </div>
+
+  <div class="q" data-q data-sec="E">
+    <div class="lab">Which emails do you answer over and over?</div>
+    <div class="hint">The ones you could write in your sleep. This is what the AI email assistant would draft first.</div>
+    <textarea data-f id="e21" placeholder="People always ask about..."></textarea>
+  </div>
+
+  <!-- ============ F ============ -->
+  <div class="sec-h" data-sec="F"><div class="dot">F</div><h2>Capacity and constraints</h2></div>
+  <div class="sec-note" data-sec="F">The whole plan assumes more enquiries would be a good thing. That is worth checking rather than assuming.</div>
+
+  <div class="q" data-q data-sec="F">
+    <div class="lab">If we doubled your enquiries next month, what would break first?</div>
+    <div class="hint">Kitchen, staff, parking, you personally, or nothing? If the honest answer is that you could not service them, the plan changes shape entirely and we would rather know now.</div>
+    <textarea data-f id="f22" placeholder="Honestly, the first thing that would break is..."></textarea>
+  </div>
+
+  <div class="q" data-q data-sec="F">
+    <div class="lab">What is the most functions you can run really well in a month?</div>
+    <input type="text" data-f id="f23" placeholder="e.g. 8, and past that the quality drops">
+  </div>
+
+  <div class="q" data-q data-sec="F">
+    <div class="lab">Is there anything you will not do, whatever the numbers say?</div>
+    <div class="hint">Types of event you refuse, a price you will not go below, days you keep clear. Useful to know before we recommend something you would never agree to.</div>
+    <input type="text" data-f id="f24" placeholder="We won't...">
+  </div>
+
+  <div class="q" data-q data-sec="F">
+    <div class="lab">In three months, what has to have changed for this to have been worth it?</div>
+    <div class="hint">Be concrete. A number of bookings, a number of hours back, a rand figure.</div>
+    <textarea data-f id="f25" placeholder="In three months..."></textarea>
+  </div>
+
+  <!-- ============ G ============ -->
+  <div class="sec-h" data-sec="G"><div class="dot">G</div><h2>How you want to sound and look</h2></div>
+  <div class="sec-note" data-sec="G">We drafted The Acreage's voice from your own reviewers' words. This is your chance to overrule it.</div>
+
+  <div class="known" data-sec="G"><b>What we already know</b>Your reviewers name your staff — Queen, Prince, Andrew — and describe blankets, the racecourse view and "a get-away from the city buzz". We have taken that as the voice.</div>
+
+  <div class="q" data-q data-sec="G">
+    <div class="lab">Tap the words that feel like The Acreage</div>
+    <div class="chips" data-chips="g26multi">
+      <span class="chip" data-val="Warm">Warm</span>
+      <span class="chip" data-val="Premium">Premium</span>
+      <span class="chip" data-val="Effortless">Effortless</span>
+      <span class="chip" data-val="Elegant">Elegant</span>
+      <span class="chip" data-val="Relaxed">Relaxed</span>
+      <span class="chip" data-val="Rustic">Rustic</span>
+      <span class="chip" data-val="Modern">Modern</span>
+      <span class="chip" data-val="Country">Country</span>
+      <span class="chip" data-val="No-nonsense">No-nonsense</span>
+      <span class="chip" data-val="Calm">Calm</span>
+    </div>
+    <input type="text" data-f id="g26add" placeholder="Add your own (optional)" style="margin-top:10px">
+  </div>
+
+  <div class="q" data-q data-sec="G">
+    <div class="lab">Any words or tone you cannot stand?</div>
+    <div class="hint">We have already put "premier", "nestled" and "your special day" on the avoid list. Anything else?</div>
+    <input type="text" data-f id="g27" placeholder="Please never say...">
+  </div>
+
+  <div class="q" data-q data-sec="G">
+    <div class="lab">Two or three venues or brands whose look you admire</div>
+    <div class="hint">And a word on why, if you can. You mentioned you are particular about design, so this genuinely helps.</div>
+    <input type="text" data-f id="g28" placeholder="e.g. ...">
+  </div>
+
+  <div class="q" data-q data-sec="G">
+    <div class="lab">Which website direction is closer?</div>
+    <div class="hint">The two concepts are linked in Part 4 of the Blueprint. Warm = forest and cream, softer. Editorial = big type, photography-led.</div>
+    <div class="chips" data-chips="g29single">
+      <span class="chip" data-val="The warm direction">The warm one</span>
+      <span class="chip" data-val="The editorial direction">The editorial one</span>
+      <span class="chip" data-val="Somewhere between">Somewhere between</span>
+      <span class="chip" data-val="Neither">Neither, honestly</span>
+    </div>
+    <input type="text" data-f id="g29b" placeholder="What you would change (optional)" style="margin-top:10px">
+  </div>
+
+  <!-- ============ H ============ -->
+  <div class="sec-h" data-sec="H"><div class="dot">H</div><h2>Photography</h2></div>
+  <div class="sec-note" data-sec="H">Your entire image library contains no people. You are selling occasions, and every picture of the occasion is a picture of nobody having it.</div>
+
+  <div class="q" data-q data-sec="H">
+    <div class="lab">Do you have photos with actual guests in them?</div>
+    <div class="hint">Anywhere — a phone, a photographer's gallery, a shared folder. The three you sent on 6 August immediately became the strongest images in both website concepts.</div>
+    <input type="text" data-f id="h30" placeholder="e.g. the photographer from the December wedding has a full gallery">
+  </div>
+
+  <div class="q" data-q data-sec="H">
+    <div class="lab">Would you commission a shoot?</div>
+    <div class="chips" data-chips="h31single">
+      <span class="chip" data-val="Yes, budget exists">Yes, there is budget</span>
+      <span class="chip" data-val="Maybe, depends on cost">Maybe, depends on cost</span>
+      <span class="chip" data-val="Not right now">Not right now</span>
+    </div>
+    <input type="text" data-f id="h31b" placeholder="Anything else about photography (optional)" style="margin-top:10px">
+  </div>
+
+  <!-- ============ I ============ -->
+  <div class="sec-h" data-sec="I"><div class="dot">I</div><h2>Access and materials</h2></div>
+  <div class="sec-note" data-sec="I">Tap anything you can arrange before Wednesday. Nothing here is urgent enough to hold up the call, but each one removes a blind spot.</div>
+
+  <div class="q" data-q data-p data-sec="I">
+    <div class="star">Key</div>
+    <div class="lab">The domain question, which is the one that unblocks everything</div>
+    <div class="hint">Your web address currently shows a hosting placeholder and a certificate warning. One call to your host answers it: does the site need re-pointing, or is there nothing left to point at? Who hosts it, and do you have the login?</div>
+    <textarea data-f id="i32" placeholder="Our host is... / I'll ask them / I have no idea who hosts it"></textarea>
+  </div>
+
+  <div class="q" data-q data-sec="I">
+    <div class="lab">What can you send or grant?</div>
+    <div class="hint">Tap what is realistic. Nothing here is required.</div>
+    <div class="chips" data-chips="i33multi">
+      <span class="chip" data-val="Google Ads access">Google Ads access</span>
+      <span class="chip" data-val="Google Business Profile access (Acreage)">Google profile — Acreage</span>
+      <span class="chip" data-val="Google Business Profile access (G&P)">Google profile — G&amp;P</span>
+      <span class="chip" data-val="Image library / Dropbox">Image library</span>
+      <span class="chip" data-val="Sample G&P enquiry emails">Sample G&amp;P emails</span>
+      <span class="chip" data-val="Logo files (vector + white)">Logo files</span>
+      <span class="chip" data-val="G&P brand pack">G&amp;P brand pack</span>
+      <span class="chip" data-val="Website hosting login">Hosting login</span>
+      <span class="chip" data-val="Menus and function packs">Menus / packs</span>
+      <span class="chip" data-val="Capacity numbers per space">Capacity per space</span>
+    </div>
+  </div>
+
+  <div class="q" data-q data-sec="I">
+    <div class="lab">Anything we have not asked that we should have?</div>
+    <div class="hint">Including anything in the Diagnostic you think we got wrong. That is genuinely useful, not awkward.</div>
+    <textarea data-f id="i34" placeholder="One thing you should know..."></textarea>
+  </div>
+
+  <div class="submit">
+    <h3>That's everything 🎉</h3>
+    <p>Send your answers back in one tap, whichever is easiest. Anything you skipped, we will pick up on the call.</p>
+    <div class="btns">
+      <button class="btn btn-primary" id="copyBtn">📋 Copy my answers</button>
+      <a class="btn btn-wa" id="waBtn" target="_blank" rel="noopener">💬 Send on WhatsApp</a>
+      <a class="btn btn-mail" id="mailBtn">✉️ Send by email</a>
+    </div>
+    <div class="copied" id="copied"></div>
+    <div class="saved" id="saved">Progress saved on this device</div>
+  </div>
+
+  <div class="foot">
+    JCE Media · The Acreage + Good &amp; Proper Food Trucks · Onboarding, version 2 · 15 August 2026<br>
+    Built from the gaps named in Part 1: The Diagnostic. Your answers stay on your device until you send them.
+  </div>
+</div>
+
+<script>
+(function(){
+  var WA="27795124292", MAIL="jacques@jcemedia.com", KEY="acreage_onboarding_v2";
+  var singles={}, multis={};
+  var saved={};
+  try{ saved=JSON.parse(localStorage.getItem(KEY)||"{}"); }catch(e){}
+
+  var fields=[].slice.call(document.querySelectorAll('[data-f]'));
+  fields.forEach(function(el){
+    if(saved[el.id]!==undefined) el.value=saved[el.id];
+    el.addEventListener('input', function(){ persist(); refresh(); });
+  });
+
+  [].slice.call(document.querySelectorAll('[data-chips]')).forEach(function(group){
+    var name=group.getAttribute('data-chips');
+    var multi=/multi/.test(name);
+    var sel = saved['chip_'+name];
+    if(multi){ if(!(sel instanceof Array)) sel=[]; }
+    else { if(typeof sel!=="string") sel=""; }
+    if(multi) multis[name]=sel; else singles[name]=sel;
+    [].slice.call(group.querySelectorAll('.chip')).forEach(function(ch){
+      var v=ch.getAttribute('data-val');
+      if(multi){ if(sel.indexOf(v)>-1) ch.classList.add('on'); }
+      else { if(sel===v) ch.classList.add('on'); }
+      ch.addEventListener('click', function(){
+        if(multi){
+          var arr=multis[name]; var i=arr.indexOf(v);
+          if(i>-1){ arr.splice(i,1); ch.classList.remove('on'); }
+          else { arr.push(v); ch.classList.add('on'); }
+        } else {
+          [].slice.call(group.querySelectorAll('.chip')).forEach(function(c){c.classList.remove('on');});
+          if(singles[name]===v){ singles[name]=""; }
+          else { singles[name]=v; ch.classList.add('on'); }
+        }
+        persist(); refresh();
+      });
+    });
+  });
+
+  /* priority-only toggle */
+  var tg=document.getElementById('ptoggle');
+  if(saved['_ponly']){ tg.classList.add('on'); document.body.classList.add('ponly'); }
+  tg.addEventListener('click', function(){
+    var on=tg.classList.toggle('on');
+    document.body.classList.toggle('ponly', on);
+    persist(); syncSections();
+  });
+
+  /* hide section headers that have no visible questions in priority mode */
+  function syncSections(){
+    var ponly=document.body.classList.contains('ponly');
+    var secs={};
+    [].slice.call(document.querySelectorAll('[data-sec]')).forEach(function(el){
+      var s=el.getAttribute('data-sec');
+      if(!secs[s]) secs[s]={heads:[],hasP:false};
+      if(el.hasAttribute('data-q')){ if(el.hasAttribute('data-p')) secs[s].hasP=true; }
+      else secs[s].heads.push(el);
+    });
+    for(var s in secs){
+      secs[s].heads.forEach(function(h){
+        h.classList.toggle('empty', ponly && !secs[s].hasP);
+      });
+    }
+  }
+
+  function persist(){
+    var data={};
+    fields.forEach(function(el){ data[el.id]=el.value; });
+    for(var s in singles) data['chip_'+s]=singles[s];
+    for(var m in multis) data['chip_'+m]=multis[m];
+    data['_ponly']=document.body.classList.contains('ponly');
+    try{ localStorage.setItem(KEY, JSON.stringify(data)); }catch(e){}
+    var el=document.getElementById('saved'); el.classList.add('on'); clearTimeout(persist._t); persist._t=setTimeout(function(){el.classList.remove('on');},1200);
+  }
+
+  function isFilled(q){
+    var any=false;
+    [].slice.call(q.querySelectorAll('[data-f]')).forEach(function(el){ if((el.value||'').trim()) any=true; });
+    var cg=q.querySelector('[data-chips]');
+    if(cg){ var n=cg.getAttribute('data-chips'); if(/multi/.test(n)){ if((multis[n]||[]).length) any=true; } else { if(singles[n]) any=true; } }
+    return any;
+  }
+
+  function refresh(){
+    var qs=[].slice.call(document.querySelectorAll('[data-q]'));
+    var done=0;
+    qs.forEach(function(q){ if(isFilled(q)){ q.classList.add('filled'); done++; } else q.classList.remove('filled'); });
+    var pct=Math.round(done/qs.length*100);
+    document.getElementById('barfill').style.width=pct+'%';
+    document.getElementById('pct').textContent=pct+'%';
+    updateLinks();
+  }
+
+  function assemble(){
+    function g(id){ var el=document.getElementById(id); return el?(el.value||'').trim():''; }
+    function cm(n){ return (multis[n]||[]).join(', '); }
+    function cs(n){ return singles[n]||''; }
+    var L=[];
+    L.push("ONBOARDING v2 — The Acreage + Good & Proper");
+    L.push("(answers to the gaps named in the Diagnostic)");
+
+    /* Sections are buffered and only written out if they contain at least one
+       answer, so a partly-completed form still sends a clean, readable reply
+       instead of a run of empty headings. */
+    var buf=[], head="";
+    function sec(title){ flush(); head=title; buf=[]; }
+    function line(_,label,val){ if(val && String(val).trim()) buf.push("· "+label+": "+String(val).trim()); }
+    function flush(){ if(head && buf.length){ L.push(""); L.push(head); L.push.apply(L,buf); } head=""; buf=[]; }
+
+    sec("A. THE NUMBERS");
+    line(L,"Enquiries/mo — Acreage",g('a1a'));
+    line(L,"Enquiries/mo — G&P",g('a1b'));
+    line(L,"Conversion — Acreage",g('a2a'));
+    line(L,"Conversion — G&P",g('a2b'));
+    line(L,"Time to close",g('a2c'));
+    line(L,"Avg function",g('a3a')?("R"+g('a3a')):"");
+    line(L,"Biggest function",g('a3b')?("R"+g('a3b')):"");
+    line(L,"Avg restaurant spend",g('a3c')?("R"+g('a3c')):"");
+    line(L,"Avg G&P job",g('a3d')?("R"+g('a3d')):"");
+    line(L,"Decision-makers",g('a4'));
+    sec("B. THE CALENDAR");
+    line(L,"Utilisation",g('b5'));
+    line(L,"Busiest months",g('b6a'));
+    line(L,"Quietest months",g('b6b'));
+    line(L,"Saturday Nov vs Tuesday Feb",g('b7'));
+    line(L,"Minimum / lead time / deposit",g('b8'));
+    line(L,"Mon-Thu today",g('b9'));
+    sec("C. THE TWO BUSINESSES");
+    line(L,"Functions without G&P catering",g('c10a'));
+    line(L,"G&P events at another venue",g('c10b'));
+    line(L,"Sub-80 enquiries today",g('c11'));
+    line(L,"Why no weddings",g('c12'));
+    line(L,"Brand relationship",cs('c13single'));
+    sec("D. HOW AN ENQUIRY RUNS");
+    line(L,"The flow",g('d14'));
+    line(L,"Quote follow-up",g('d15'));
+    line(L,"Recorded today",cs('d16single')+(g('d16b')?(" — "+g('d16b')):""));
+    line(L,"Owner of the count",g('d17'));
+    sec("E. GOOD & PROPER");
+    line(L,"Price per head",g('e18a')?("R"+g('e18a')):"");
+    line(L,"What it includes",g('e18b'));
+    line(L,"Google Ads",g('e19'));
+    line(L,"Active vendors",g('e20'));
+    line(L,"Repetitive emails",g('e21'));
+    sec("F. CAPACITY");
+    line(L,"What breaks first",g('f22'));
+    line(L,"Max functions/mo",g('f23'));
+    line(L,"Will not do",g('f24'));
+    line(L,"3-month success",g('f25'));
+    sec("G. VOICE & LOOK");
+    line(L,"Brand words",cm('g26multi')+(g('g26add')?(", "+g('g26add')):""));
+    line(L,"Words to avoid",g('g27'));
+    line(L,"Admired brands",g('g28'));
+    line(L,"Website direction",cs('g29single')+(g('g29b')?(" — "+g('g29b')):""));
+    sec("H. PHOTOGRAPHY");
+    line(L,"Photos with people",g('h30'));
+    line(L,"Shoot",cs('h31single')+(g('h31b')?(" — "+g('h31b')):""));
+    sec("I. ACCESS");
+    line(L,"Domain / hosting",g('i32'));
+    line(L,"Can provide",cm('i33multi'));
+    line(L,"Anything else",g('i34'));
+    flush();
+
+    return L.join("\n");
+  }
+
+  function updateLinks(){
+    var body=assemble();
+    document.getElementById('waBtn').href="https://wa.me/"+WA+"?text="+encodeURIComponent(body);
+    document.getElementById('mailBtn').href="mailto:"+MAIL+"?subject="+encodeURIComponent("Onboarding answers — The Acreage + Good & Proper")+"&body="+encodeURIComponent(body);
+  }
+
+  document.getElementById('copyBtn').addEventListener('click', function(){
+    var txt=assemble();
+    var done=function(){ document.getElementById('copied').textContent="Copied. Now paste it into your reply to Jacques ✓"; };
+    if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(done,fallback); }
+    else fallback();
+    function fallback(){ var ta=document.createElement('textarea'); ta.value=txt; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); done(); }
+  });
+
+  syncSections();
+  refresh();
+})();
+</script>
+</body>
+</html>
