@@ -142,12 +142,7 @@
 </head>
 <body>
 
-<!-- Netlify form detection.
-     Netlify parses the DEPLOYED HTML at build time looking for a form with
-     data-netlify. It must exist in the static source, which is why this is a
-     real (hidden) form rather than something built in JS. Every field we submit
-     must appear here or Netlify drops it silently. Submissions are sent by
-     fetch/sendBeacon from the script below, which is why form-name is hidden. -->
+<!-- Submission form definition. Must be present in the served HTML. -->
 <form name="acreage-onboarding" data-netlify="true" netlify-honeypot="bot-field" hidden>
   <input type="hidden" name="form-name" value="acreage-onboarding">
   <input type="text" name="bot-field">
@@ -172,7 +167,7 @@
     <h1>The six things we cannot see from the outside</h1>
     <p>We have already done everything that could be checked without you — that was the Diagnostic. This asks only for what is genuinely not visible from a browser. Rough answers are perfect, and everything saves as you go.</p>
     <div class="chiprow">
-      <span class="mini">⏱ 6 questions in 5 min, or all of it in ~15</span>
+      <span class="mini">⏱ 6 key questions in 5 min, or all of it in ~20</span>
       <span class="mini">💾 Saves as you go</span>
       <span class="mini">🔗 Stop and resume on any device</span>
       <span class="mini">✍️ Nothing is required</span>
@@ -475,16 +470,105 @@
   </div>
 
   <!-- ============ H ============ -->
-  <div class="sec-h" data-sec="H"><div class="dot">H</div><h2>Photography</h2></div>
-  <div class="sec-note" data-sec="H">Your entire image library contains no people. You are selling occasions, and every picture of the occasion is a picture of nobody having it.</div>
+  <div class="sec-h" data-sec="H"><div class="dot">H</div><h2>Your website</h2></div>
+  <div class="sec-note" data-sec="H">There is currently no page anywhere that says what a function costs, what it includes, or how to book one. These answers are what that page is built from.</div>
+
+  <div class="known" data-sec="H"><b>What we already know</b>Your web address returns a hosting placeholder and a certificate warning, your Google listing points at Facebook, and Facebook points back at Google. Two concepts are already built for you to react to.</div>
 
   <div class="q" data-q data-sec="H">
+    <div class="lab">Capacity of each space, seated and standing</div>
+    <div class="hint">The first thing an event planner looks for, and it is not published anywhere. Rough numbers per area: the lawn, the restaurant, any indoor room, the terrace.</div>
+    <textarea data-f id="h35" placeholder="e.g. Lawn 300 seated / 500 standing, Restaurant 80 seated, Terrace 40..."></textarea>
+  </div>
+
+  <div class="q" data-q data-sec="H">
+    <div class="lab">What does a standard function actually include?</div>
+    <div class="hint">Tables, chairs, linen, staff, sound, parking, cleanup. What is in the price and what is always extra.</div>
+    <textarea data-f id="h36" placeholder="Included: ...  Always extra: ..."></textarea>
+  </div>
+
+  <div class="q" data-q data-sec="H">
+    <div class="lab">Would you publish a price, and what would it be?</div>
+    <div class="hint">A range is enough. We think this is the highest-impact change on the page, but some venues refuse on principle and that is a fair call. "Enquire for pricing" reads as expensive to people who can afford you.</div>
+    <div class="chips" data-chips="h37single">
+      <span class="chip" data-val="Yes, publish a from-price">Yes, a from-price</span>
+      <span class="chip" data-val="Yes, publish a range">Yes, a range</span>
+      <span class="chip" data-val="Minimum spend only">Minimum spend only</span>
+      <span class="chip" data-val="No, prefer not to publish">No, rather not</span>
+    </div>
+    <div class="dual" style="margin-top:10px">
+      <div><span class="fieldlab">The figure or range</span><input type="text" data-f id="h37b" placeholder="e.g. from R450 per head, or R25k-R80k per function"></div>
+    </div>
+  </div>
+
+  <div class="q" data-q data-sec="H">
+    <div class="lab">Which occasions matter most, in order?</div>
+    <div class="hint">This decides what the page leads with. Tap them, and say the order if you can.</div>
+    <div class="chips" data-chips="h38multi">
+      <span class="chip" data-val="Weddings">Weddings</span>
+      <span class="chip" data-val="Year-end / corporate functions">Year-end functions</span>
+      <span class="chip" data-val="Corporate days & conferences">Corporate days</span>
+      <span class="chip" data-val="Birthdays & private parties">Birthdays</span>
+      <span class="chip" data-val="Markets & public events">Markets</span>
+      <span class="chip" data-val="Restaurant covers">Restaurant covers</span>
+      <span class="chip" data-val="Funerals & memorials">Memorials</span>
+    </div>
+    <input type="text" data-f id="h38b" placeholder="The order, if there is one (optional)" style="margin-top:10px">
+  </div>
+
+  <div class="q" data-q data-sec="H">
+    <div class="lab">What should someone be able to do in the first ten seconds?</div>
+    <div class="hint">One main thing. Everything else on the page gets arranged around it.</div>
+    <div class="chips" data-chips="h39single">
+      <span class="chip" data-val="See the place">See the place</span>
+      <span class="chip" data-val="Find capacity and price">Find capacity and price</span>
+      <span class="chip" data-val="Check if a date is open">Check a date</span>
+      <span class="chip" data-val="Send an enquiry">Send an enquiry</span>
+      <span class="chip" data-val="Download something to forward">Download the pack</span>
+      <span class="chip" data-val="Book a viewing">Book a viewing</span>
+    </div>
+  </div>
+
+  <div class="q" data-q data-sec="H">
+    <div class="lab">What reply time will you actually hold, on a bad week?</div>
+    <div class="hint">It goes on the form and in the automatic reply, so pick one you can keep rather than one that sounds good.</div>
+    <div class="chips" data-chips="h40single">
+      <span class="chip" data-val="Within an hour, business hours">Within an hour</span>
+      <span class="chip" data-val="Same business day">Same day</span>
+      <span class="chip" data-val="Within 24 hours">Within 24 hours</span>
+      <span class="chip" data-val="Within 48 hours">Within 48 hours</span>
+    </div>
+  </div>
+
+  <div class="q" data-q data-sec="H">
+    <div class="lab">Is there anything from the old site worth keeping?</div>
+    <div class="hint">Copy, a menu, a gallery, an FAQ, a floor plan. And if you know where it still lives, a link or a file is gold.</div>
+    <textarea data-f id="h41" placeholder="e.g. the old function pack PDF is in Dropbox, the menu is current..."></textarea>
+  </div>
+
+  <div class="q" data-q data-sec="H">
+    <div class="lab">What do people always ask before they book?</div>
+    <div class="hint">These become the FAQ, and answering them on the page removes them from your inbox.</div>
+    <textarea data-f id="h42" placeholder="Parking, wet weather, corkage, decor, noise cut-off, accommodation nearby..."></textarea>
+  </div>
+
+  <div class="q" data-q data-sec="H">
+    <div class="lab">Who signs off on the website?</div>
+    <div class="hint">Just you, or does someone else need to approve it? Worth knowing before we build rather than after.</div>
+    <input type="text" data-f id="h43" placeholder="e.g. just me / me and my partner">
+  </div>
+
+  <!-- ============ I ============ -->
+  <div class="sec-h" data-sec="I"><div class="dot">I</div><h2>Photography</h2></div>
+  <div class="sec-note" data-sec="I">Your entire image library contains no people. You are selling occasions, and every picture of the occasion is a picture of nobody having it.</div>
+
+  <div class="q" data-q data-sec="I">
     <div class="lab">Do you have photos with actual guests in them?</div>
     <div class="hint">Anywhere — a phone, a photographer's gallery, a shared folder. The three you sent on 6 August immediately became the strongest images in both website concepts.</div>
     <input type="text" data-f id="h30" placeholder="e.g. the photographer from the December wedding has a full gallery">
   </div>
 
-  <div class="q" data-q data-sec="H">
+  <div class="q" data-q data-sec="I">
     <div class="lab">Would you commission a shoot?</div>
     <div class="chips" data-chips="h31single">
       <span class="chip" data-val="Yes, budget exists">Yes, there is budget</span>
@@ -494,18 +578,82 @@
     <input type="text" data-f id="h31b" placeholder="Anything else about photography (optional)" style="margin-top:10px">
   </div>
 
-  <!-- ============ I ============ -->
-  <div class="sec-h" data-sec="I"><div class="dot">I</div><h2>Access and materials</h2></div>
-  <div class="sec-note" data-sec="I">Tap anything you can arrange before Wednesday. Nothing here is urgent enough to hold up the call, but each one removes a blind spot.</div>
+  <div class="q" data-q data-sec="I">
+    <div class="lab">Paste any links to photos here</div>
+    <div class="hint">Dropbox, Google Drive, WeTransfer, a photographer's gallery, a shared album. Paste as many as you have, one per line. Do not worry about tidying them first.</div>
+    <textarea data-f id="i44" placeholder="https://..."></textarea>
+  </div>
 
-  <div class="q" data-q data-p data-sec="I">
+  <div class="q" data-q data-sec="I">
+    <div class="lab">Who took them, and may we use them?</div>
+    <div class="hint">Photographers usually hold the copyright unless it was bought out. Their name and email is enough for us to ask on your behalf if you would rather not.</div>
+    <div class="dual">
+      <div><span class="fieldlab">Photographer name and contact</span><input type="text" data-f id="i45a" placeholder="e.g. Bibi Collective, hello@..."></div>
+    </div>
+    <div class="chips" data-chips="i45single" style="margin-top:10px">
+      <span class="chip" data-val="We own them outright">We own them outright</span>
+      <span class="chip" data-val="We may use them, credit required">Ours to use, with credit</span>
+      <span class="chip" data-val="Need to ask the photographer">Need to ask them</span>
+      <span class="chip" data-val="Not sure">Not sure</span>
+    </div>
+  </div>
+
+  <div class="q" data-q data-sec="I">
+    <div class="lab">May we use what is already on your Facebook and Instagram?</div>
+    <div class="hint">Including guest photos and anything you have been tagged in. Some of your strongest material is already public there, including the reel we cut the hero video from.</div>
+    <div class="chips" data-chips="i46single">
+      <span class="chip" data-val="Yes, use anything on our pages">Yes, anything on our pages</span>
+      <span class="chip" data-val="Yes, but ask first">Yes, but check with me</span>
+      <span class="chip" data-val="No">No</span>
+    </div>
+  </div>
+
+  <div class="q" data-q data-sec="I">
+    <div class="lab">Is there any video?</div>
+    <div class="hint">Drone footage, a venue walkthrough, phone clips of a full function. Even rough footage is worth more than a still of an empty room.</div>
+    <input type="text" data-f id="i47" placeholder="e.g. a videographer did a reel in March, link is...">
+  </div>
+
+  <!-- ============ J ============ -->
+  <div class="sec-h" data-sec="J"><div class="dot">J</div><h2>Background</h2></div>
+  <div class="sec-note" data-sec="J">Four questions that stop us recommending something you have already tried, already ruled out, or cannot fund.</div>
+
+  <div class="q" data-q data-sec="J">
+    <div class="lab">What have you already tried that did not work?</div>
+    <div class="hint">Agencies, websites, ad spend, a booking system, a marketing person. What it cost and where it went wrong. This is the most useful question on the page and the least comfortable, so a blunt answer is the best kind.</div>
+    <textarea data-f id="j49" placeholder="We paid for... and what happened was..."></textarea>
+  </div>
+
+  <div class="q" data-q data-sec="J">
+    <div class="lab">Who do you actually lose bookings to?</div>
+    <div class="hint">We compared you against 25 Midrand venues from Google, which tells us who ranks, not who beats you. If someone keeps taking the enquiries you wanted, name them.</div>
+    <input type="text" data-f id="j50" placeholder="e.g. we lose the big corporates to...">
+  </div>
+
+  <div class="q" data-q data-sec="J">
+    <div class="lab">Who else has to agree to a decision?</div>
+    <div class="hint">The plan asks you to decide five things. If a partner, a landlord or the racecourse has a say in any of them, better to know now.</div>
+    <input type="text" data-f id="j51" placeholder="e.g. just me / my business partner on anything over R20k">
+  </div>
+
+  <div class="q" data-q data-sec="J">
+    <div class="lab">Roughly what is available to spend over the next three months?</div>
+    <div class="hint">Across the website, photography and any advertising. A range is fine, and "nothing beyond what we already spend" is a completely valid answer that changes what we recommend rather than whether we help.</div>
+    <input type="text" data-f id="j52" placeholder="e.g. R20k-R30k total, plus the existing ad spend">
+  </div>
+
+  <!-- ============ K ============ -->
+  <div class="sec-h" data-sec="K"><div class="dot">K</div><h2>Access and materials</h2></div>
+  <div class="sec-note" data-sec="K">Tap anything you can arrange before Wednesday. Nothing here is urgent enough to hold up the call, but each one removes a blind spot.</div>
+
+  <div class="q" data-q data-p data-sec="K">
     <div class="star">Key</div>
     <div class="lab">The domain question, which is the one that unblocks everything</div>
     <div class="hint">Your web address currently shows a hosting placeholder and a certificate warning. One call to your host answers it: does the site need re-pointing, or is there nothing left to point at? Who hosts it, and do you have the login?</div>
     <textarea data-f id="i32" placeholder="Our host is... / I'll ask them / I have no idea who hosts it"></textarea>
   </div>
 
-  <div class="q" data-q data-sec="I">
+  <div class="q" data-q data-sec="K">
     <div class="lab">What can you send or grant?</div>
     <div class="hint">Tap what is realistic. Nothing here is required.</div>
     <div class="chips" data-chips="i33multi">
@@ -522,7 +670,17 @@
     </div>
   </div>
 
-  <div class="q" data-q data-sec="I">
+  <div class="q" data-q data-sec="K">
+    <div class="lab">Can you actually edit your Google listing?</div>
+    <div class="hint">The first two things in the plan are a category change and a correction to your hours, both free and both twenty minutes. They only work if someone here can log in. If it was set up by a person who has since left, that is a recovery process worth starting now rather than in September.</div>
+    <div class="chips" data-chips="j48single">
+      <span class="chip" data-val="Yes, we have the login">Yes, we can log in</span>
+      <span class="chip" data-val="Someone here has it">Someone here has it</span>
+      <span class="chip" data-val="No, or not sure who owns it">No, or not sure</span>
+    </div>
+  </div>
+
+  <div class="q" data-q data-sec="K">
     <div class="lab">Anything we have not asked that we should have?</div>
     <div class="hint">Including anything in the Diagnostic you think we got wrong. That is genuinely useful, not awkward.</div>
     <textarea data-f id="i34" placeholder="One thing you should know..."></textarea>
@@ -577,10 +735,7 @@
   var singles={}, multis={};
   var saved={};
 
-  /* ---- 1. Is this browser actually able to save anything? -------------------
-     Private browsing and locked-down storage settings make localStorage throw or
-     silently no-op. Detect it up front and say so, rather than promising
-     "saves automatically" in the header and quietly losing everything. */
+  /* storage availability check */
   var storageOK=false;
   try{
     localStorage.setItem('__t','1'); localStorage.removeItem('__t'); storageOK=true;
@@ -589,7 +744,7 @@
     try{ saved=JSON.parse(localStorage.getItem(KEY)||"{}"); }catch(e){ saved={}; }
   }
 
-  /* ---- 2. base64url + optional deflate, for the resume link ---------------- */
+  /* base64url + deflate helpers */
   function b64u(bytes){var s='';for(var i=0;i<bytes.length;i++)s+=String.fromCharCode(bytes[i]);return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');}
   function ub64u(str){str=String(str).replace(/-/g,'+').replace(/_/g,'/');while(str.length%4)str+='=';var bin=atob(str);var a=new Uint8Array(bin.length);for(var i=0;i<bin.length;i++)a[i]=bin.charCodeAt(i);return a;}
 
@@ -615,14 +770,14 @@
     return Promise.resolve(null);
   }
 
-  /* ---- 3. Restore from a resume link, if one was opened -------------------- */
+  /* restore from a resume link */
   var restoredFromLink=false;
   var m=(location.hash||'').match(/[#&]d=([^&]+)/);
   if(m){
     var pending=decodeState(m[1]);
     pending.then(function(obj){
       if(!obj) return;
-      /* only overwrite what the link actually carries, then rehydrate the page */
+      /* apply the link payload */
       saved=obj; restoredFromLink=true;
       hydrate(); persist(); refresh();
       toast('Your answers were restored ✓');
@@ -632,9 +787,7 @@
   var fields=[].slice.call(document.querySelectorAll('[data-f]'));
   var groups=[].slice.call(document.querySelectorAll('[data-chips]'));
 
-  /* hydrate() writes `saved` onto the page. Split out from the event binding
-     below so that opening a resume link can repopulate everything without
-     stacking a second set of listeners on every field. */
+  /* write saved state onto the page */
   function hydrate(){
     fields.forEach(function(el){ el.value = (saved[el.id]!==undefined) ? saved[el.id] : ''; });
     groups.forEach(function(group){
@@ -752,9 +905,7 @@
     document.getElementById('barfill').style.width=pct+'%';
     document.getElementById('pct').textContent=pct+'%';
 
-    /* The sticky bar exists for one failure mode: a form filled in completely
-       and then never sent. It appears the moment there is anything worth
-       sending and stays reachable without scrolling. */
+    /* send bar state */
     var bar=document.getElementById('sendbar');
     bar.classList.toggle('on', done>0);
     document.getElementById('sendcnt').innerHTML =
@@ -773,9 +924,7 @@
     L.push("ONBOARDING v2 — The Acreage + Good & Proper");
     L.push("(answers to the gaps named in the Diagnostic)");
 
-    /* Sections are buffered and only written out if they contain at least one
-       answer, so a partly-completed form still sends a clean, readable reply
-       instead of a run of empty headings. */
+    /* only output sections that contain answers */
     var buf=[], head="";
     function sec(title){ flush(); head=title; buf=[]; }
     function line(_,label,val){ if(val && String(val).trim()) buf.push("· "+label+": "+String(val).trim()); }
@@ -826,11 +975,34 @@
     line(L,"Words to avoid",g('g27'));
     line(L,"Admired brands",g('g28'));
     line(L,"Website direction",cs('g29single')+(g('g29b')?(" — "+g('g29b')):""));
-    sec("H. PHOTOGRAPHY");
+    sec("H. YOUR WEBSITE");
+    line(L,"Capacity per space",g('h35'));
+    line(L,"What a function includes",g('h36'));
+    line(L,"Publish a price?",cs('h37single')+(g('h37b')?(" — "+g('h37b')):""));
+    line(L,"Occasions that matter most",cm('h38multi')+(g('h38b')?(" — order: "+g('h38b')):""));
+    line(L,"First ten seconds",cs('h39single'));
+    line(L,"Reply time they will hold",cs('h40single'));
+    line(L,"Worth keeping from the old site",g('h41'));
+    line(L,"Always asked before booking",g('h42'));
+    line(L,"Signs off on the website",g('h43'));
+
+    sec("I. PHOTOGRAPHY");
     line(L,"Photos with people",g('h30'));
     line(L,"Shoot",cs('h31single')+(g('h31b')?(" — "+g('h31b')):""));
-    sec("I. ACCESS");
+    line(L,"PHOTO LINKS",g('i44'));
+    line(L,"Photographer",g('i45a'));
+    line(L,"Usage rights",cs('i45single'));
+    line(L,"Facebook / Instagram use",cs('i46single'));
+    line(L,"Video",g('i47'));
+
+    sec("J. BACKGROUND");
+    line(L,"Already tried, did not work",g('j49'));
+    line(L,"Who they lose to",g('j50'));
+    line(L,"Other approvers",g('j51'));
+    line(L,"Budget next 3 months",g('j52'));
+    sec("K. ACCESS");
     line(L,"Domain / hosting",g('i32'));
+    line(L,"Can edit Google listing",cs('j48single'));
     line(L,"Can provide",cm('i33multi'));
     line(L,"Anything else",g('i34'));
     flush();
@@ -852,11 +1024,7 @@
     function fallback(){ var ta=document.createElement('textarea'); ta.value=txt; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); done(); }
   });
 
-  /* ---- resume link ---------------------------------------------------------
-     Everything she has typed is packed into the URL fragment. A fragment is
-     never sent to the server, so her answers stay client-side exactly as they
-     do in localStorage — but the link survives a different device, a cleared
-     cache, and Safari's 7-day eviction of site storage. */
+  /* resume link: state is packed into the URL fragment */
   function buildResumeLink(){
     return encodeState(snapshot()).then(function(payload){
       return location.href.split('#')[0]+'#d='+payload;
@@ -898,14 +1066,7 @@
     s.scrollIntoView({behavior:'smooth', block:'center'});
   });
 
-  /* ---- submitting to Netlify Forms ----------------------------------------
-     Two kinds of submission land in the same form:
-       final  — she tapped Send.
-       draft  — a background snapshot when she leaves the page with unsent
-                answers, so a form filled in and forgotten is not lost. This is
-                disclosed in the copy; it is not silent.
-     If Netlify form detection is not enabled the POST 404s, so every failure
-     path surfaces the manual options rather than showing a false success. */
+  /* form submission */
   var ENDPOINT = location.pathname;
   var cachedResume='';
   function refreshResume(){
@@ -931,8 +1092,7 @@
     }).toString();
   }
 
-  /* Build the resume link fresh rather than trusting the debounced cache — if
-     she types and taps Send immediately, the cache has not caught up yet. */
+  /* build the link inline so it is always current */
   function postForm(kind){
     return buildResumeLink().then(function(url){
       cachedResume=url;
@@ -968,7 +1128,7 @@
       stateEl.className='sendstate ok';
       stateEl.textContent='Sent to Jacques ✓ He has '+answeredCount()+' of '+totalCount()+' answers. You can keep adding and send again.';
       toast('Sent to Jacques ✓');
-      refresh(); /* so the sticky bar reflects that it has been sent */
+      refresh(); /* refresh send bar */
     }, function(){
       btn.disabled=false;
       stateEl.className='sendstate err';
@@ -979,7 +1139,7 @@
     });
   });
 
-  /* background draft, throttled and only when something changed */
+  /* periodic snapshot, throttled */
   var lastDraftBody='', lastDraftAt=0, DRAFT_GAP=120000;
   function maybeDraft(){
     if(answeredCount()===0) return;
