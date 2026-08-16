@@ -44,14 +44,6 @@
   .note p{font-size:13.8px;color:#46587a}
   .note p + p{margin-top:8px}
 
-  /* priority toggle */
-  .ptoggle{display:flex;align-items:center;gap:11px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 16px;margin-top:14px;box-shadow:var(--shadow-sm);cursor:pointer;user-select:none}
-  .ptoggle .sw{width:44px;height:25px;border-radius:999px;background:#dbe4f5;position:relative;transition:background .18s;flex:none}
-  .ptoggle .sw:after{content:"";position:absolute;top:3px;left:3px;width:19px;height:19px;border-radius:50%;background:#fff;box-shadow:0 2px 5px rgba(0,0,0,.18);transition:transform .18s}
-  .ptoggle.on .sw{background:var(--blue)}
-  .ptoggle.on .sw:after{transform:translateX(19px)}
-  .ptoggle .tx{font-size:14px;font-weight:600;color:var(--ink)}
-  .ptoggle .tx span{display:block;font-weight:400;font-size:12.5px;color:var(--muted);margin-top:2px}
 
   .sec-h{display:flex;align-items:center;gap:11px;margin:28px 2px 10px}
   .sec-h .dot{width:30px;height:30px;border-radius:9px;background:var(--grad);color:#fff;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 14px rgba(99,102,241,.3);flex:none}
@@ -67,9 +59,6 @@
   .q .hint{font-size:12.5px;color:var(--muted);margin-bottom:10px}
   .q.filled{border-color:#bfe3cf;box-shadow:0 8px 20px rgba(31,157,103,.10)}
   .q.filled .lab:after{content:" ✓";color:var(--green);font-weight:800}
-  .q .star{position:absolute;top:16px;right:16px;font-size:9.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:#a86a00;background:#fff2d8;border:1px solid #ffe1a6;padding:3px 8px;border-radius:999px;font-family:'Space Grotesk',sans-serif}
-  body.ponly .q:not([data-p]){display:none}
-  body.ponly .sec-h.empty,body.ponly .sec-note.empty,body.ponly .known.empty{display:none}
 
   input[type=text],input[type=number],textarea{width:100%;font-family:inherit;font-size:15px;color:var(--ink);background:#fff;border:1.5px solid var(--line);border-radius:11px;padding:12px 13px;transition:border .15s,box-shadow .15s}
   input::placeholder,textarea::placeholder{color:#9aa7bd}
@@ -167,7 +156,7 @@
     <h1>The six things we cannot see from the outside</h1>
     <p>We have already done everything that could be checked without you — that was the Diagnostic. This asks only for what is genuinely not visible from a browser. Rough answers are perfect, and everything saves as you go.</p>
     <div class="chiprow">
-      <span class="mini">⏱ 6 key questions in 5 min, or all of it in ~20</span>
+      <span class="mini">⏱ About 20 minutes, in as many sittings as you like</span>
       <span class="mini">💾 Saves as you go</span>
       <span class="mini">🔗 Stop and resume on any device</span>
       <span class="mini">✍️ Nothing is required</span>
@@ -180,7 +169,7 @@
   <div class="note">
     <h3>Why this is shorter than you expect</h3>
     <p>We are not going to ask you how many Google reviews you have, what your rating is, what your competitors are rated, or what your website says. We counted all of that ourselves on 13 August, and it is in the Diagnostic.</p>
-    <p>What follows is the honest gap list: <strong>every question below replaces an assumption we were forced to make</strong>. The ones marked <em>Key</em> are the six that unlock the most, and there is a switch below to show only those if today is a bad day.</p>
+    <p>What follows is the honest gap list: <strong>every question below replaces an assumption we were forced to make</strong>. Skip anything you cannot answer — a blank is far more useful to us than a guess, and we will pick it up on the call.</p>
     <p style="margin-top:9px;font-size:12.8px">So nothing gets lost, a draft of whatever you have answered is sent through when you close the page. Nothing is treated as final until you tap <strong>Send to Jacques</strong> at the bottom, and you can send again as many times as you like.</p>
   </div>
 
@@ -188,12 +177,6 @@
     <b>⚠ This browser is not saving your progress</b>
     <p>You are probably in private browsing, or storage is switched off. Your answers will disappear when you close this tab. Use <strong>Keep my place</strong> below to get a link that carries your answers with it, or just send what you have before you close.</p>
   </div>
-
-  <div class="ptoggle" id="ptoggle">
-    <div class="sw"></div>
-    <div class="tx">Show me only the six that matter<span>The five-minute version. Everything else can wait for the call.</span></div>
-  </div>
-
   <div class="keep">
     <b>Keep my place</b>
     <p id="keepline">Answers save on this device as you go. To carry them to another device, or to be safe, get a link that holds your answers inside it and send it to yourself.</p>
@@ -206,8 +189,11 @@
 
   <div class="q" style="margin-top:14px">
     <div class="lab">Who is filling this in?</div>
-    <div class="hint">So we know who to thank, and who to ask if something needs a follow-up. Different people can do different sections.</div>
-    <input type="text" data-f id="a0who" placeholder="Your name">
+    <div class="hint">So we know who to thank, and who to come back to if an answer needs a follow-up. Different people can do different sections.</div>
+    <div class="dual">
+      <div><span class="fieldlab">Name</span><input type="text" data-f id="a0who" placeholder="Your name"></div>
+      <div><span class="fieldlab">Best email or number for follow-ups</span><input type="text" data-f id="a0contact" placeholder="Optional"></div>
+    </div>
   </div>
 
   <!-- ============ A ============ -->
@@ -216,8 +202,7 @@
 
   <div class="known" data-sec="A"><b>What we already know</b>You are 4.7 from 68 reviews, roughly 3 a month since January, against Accolades at 4.4 from 1,478. We do not need any of that from you.</div>
 
-  <div class="q" data-q data-p data-sec="A">
-    <div class="star">Key</div>
+  <div class="q" data-q data-sec="A">
     <div class="lab">Roughly how many enquiries do you get a month, and through which channels?</div>
     <div class="hint">A guess is fine. Phone, Facebook, email, walk-in, referral — however they actually arrive.</div>
     <div class="dual">
@@ -226,8 +211,7 @@
     </div>
   </div>
 
-  <div class="q" data-q data-p data-sec="A">
-    <div class="star">Key</div>
+  <div class="q" data-q data-sec="A">
     <div class="lab">Of those enquiries, how many actually book — and how long does it take?</div>
     <div class="hint">This one decides the whole plan. If enquiries are few but convert well, we push on reach. If they arrive and die, more traffic would make things worse.</div>
     <div class="dual">
@@ -237,8 +221,7 @@
     </div>
   </div>
 
-  <div class="q" data-q data-p data-sec="A">
-    <div class="star">Key</div>
+  <div class="q" data-q data-sec="A">
     <div class="lab">What is an average booking worth?</div>
     <div class="hint">The Diagnostic showed the same arithmetic at R30k, R60k and R100k because we had to. Your figure removes two of those columns.</div>
     <div class="dual">
@@ -259,8 +242,7 @@
   <div class="sec-h" data-sec="B"><div class="dot">B</div><h2>The calendar</h2></div>
   <div class="sec-note" data-sec="B">Finding 5 was the largest line in the Diagnostic and the only one we could not put a number on at all, because a venue's calendar is invisible from outside.</div>
 
-  <div class="q" data-q data-p data-sec="B">
-    <div class="star">Key</div>
+  <div class="q" data-q data-sec="B">
     <div class="lab">How full is the calendar, honestly?</div>
     <div class="hint">Functions per month across a year, and how many Saturdays in your busy season are already gone. This is the number that turns Finding 5 from a mechanism into rands.</div>
     <textarea data-f id="b5" placeholder="e.g. 4-6 functions a month, but Nov/Dec Saturdays are booked out by August and Jan-Mar is nearly empty"></textarea>
@@ -299,8 +281,7 @@
 
   <div class="known" data-sec="C"><b>What we already know</b>Neither business mentions the other anywhere online. Good &amp; Proper starts at 80 guests (150 in Oct-Dec) and does not cater weddings. The Acreage takes functions from 50.</div>
 
-  <div class="q" data-q data-p data-sec="C">
-    <div class="star">Key</div>
+  <div class="q" data-q data-sec="C">
     <div class="lab">Last year, how often did the two miss each other?</div>
     <div class="hint">Rough counts are fine. These two numbers are very likely the cheapest money in the whole Blueprint, because in both cases you already had the customer.</div>
     <div class="dual">
@@ -359,6 +340,18 @@
   </div>
 
   <div class="q" data-q data-sec="D">
+    <div class="lab">Is the review stand still out and being used?</div>
+    <div class="hint">You bought one in November and December produced 13 reviews, then it stopped in January. Restarting it is the cheapest thing in the whole plan, but only if it is still there and someone still asks.</div>
+    <div class="chips" data-chips="d53single">
+      <span class="chip" data-val="Yes, still out and used">Still out and used</span>
+      <span class="chip" data-val="Still there but nobody uses it">There, but nobody uses it</span>
+      <span class="chip" data-val="Packed away somewhere">Packed away</span>
+      <span class="chip" data-val="No idea where it is">No idea where it is</span>
+    </div>
+    <input type="text" data-f id="d53b" placeholder="What stopped it, if you know (optional)" style="margin-top:10px">
+  </div>
+
+  <div class="q" data-q data-sec="D">
     <div class="lab">Who could own the enquiry count from 1 September?</div>
     <div class="hint">A named person, not "the team". Every measurement in the roadmap reads from this, and unowned counting stops within a fortnight.</div>
     <input type="text" data-f id="d17" placeholder="Name, and roughly how much time they have for it">
@@ -384,6 +377,17 @@
   </div>
 
   <div class="q" data-q data-sec="E">
+    <div class="lab">Is that ad spend free to change, or locked in?</div>
+    <div class="hint">The plan assumes we can redirect or pause it once there is somewhere better to send the traffic. If it sits on an agency contract with a notice period, that is a conversation rather than a switch.</div>
+    <div class="chips" data-chips="e54single">
+      <span class="chip" data-val="Free to change any time">Free to change</span>
+      <span class="chip" data-val="On a contract with notice">On a contract</span>
+      <span class="chip" data-val="Not sure">Not sure</span>
+    </div>
+    <input type="text" data-f id="e54b" placeholder="Who with, and what notice (optional)" style="margin-top:10px">
+  </div>
+
+  <div class="q" data-q data-sec="E">
     <div class="lab">Of the 100 to 150 vendors, how many are genuinely active?</div>
     <div class="hint">The network size is a headline claim on your site. We want to know the real working number before we repeat it anywhere.</div>
     <input type="text" data-f id="e20" placeholder="e.g. about 30 we use regularly">
@@ -393,6 +397,9 @@
     <div class="lab">Which emails do you answer over and over?</div>
     <div class="hint">The ones you could write in your sleep. This is what the AI email assistant would draft first.</div>
     <textarea data-f id="e21" placeholder="People always ask about..."></textarea>
+    <div class="dual" style="margin-top:10px">
+      <div><span class="fieldlab">Roughly how many a week</span><input type="text" data-f id="e21b" placeholder="e.g. about 15"></div>
+    </div>
   </div>
 
   <!-- ============ F ============ -->
@@ -446,6 +453,12 @@
   </div>
 
   <div class="q" data-q data-sec="G">
+    <div class="lab">What do function clients thank you for afterwards?</div>
+    <div class="hint">We built your brand voice from your 68 Google reviews, but those are almost all restaurant visits. If function organisers say something different in their thank-you messages, that is the voice we should be using for the half of the business that carries the revenue.</div>
+    <textarea data-f id="g55" placeholder="They usually say..."></textarea>
+  </div>
+
+  <div class="q" data-q data-sec="G">
     <div class="lab">Any words or tone you cannot stand?</div>
     <div class="hint">We have already put "premier", "nestled" and "your special day" on the avoid list. Anything else?</div>
     <input type="text" data-f id="g27" placeholder="Please never say...">
@@ -474,6 +487,15 @@
   <div class="sec-note" data-sec="H">There is currently no page anywhere that says what a function costs, what it includes, or how to book one. These answers are what that page is built from.</div>
 
   <div class="known" data-sec="H"><b>What we already know</b>Your web address returns a hosting placeholder and a certificate warning, your Google listing points at Facebook, and Facebook points back at Google. Two concepts are already built for you to react to.</div>
+
+  <div class="q" data-q data-sec="H">
+    <div class="lab">What are your real trading hours?</div>
+    <div class="hint">Google currently says closed Monday, 07:00 to 15:30 otherwise. Your Facebook page says the kitchen closes at 17:00 and you stay open later for functions. We are about to correct this and we do not know which is right. Restaurant hours and function hours separately, if they differ.</div>
+    <div class="dual">
+      <div><span class="fieldlab">Restaurant</span><input type="text" data-f id="h53a" placeholder="e.g. Tue-Sun 07:00-17:00, closed Monday"></div>
+      <div><span class="fieldlab">Functions</span><input type="text" data-f id="h53b" placeholder="e.g. any day, until midnight by arrangement"></div>
+    </div>
+  </div>
 
   <div class="q" data-q data-sec="H">
     <div class="lab">Capacity of each space, seated and standing</div>
@@ -556,6 +578,17 @@
     <div class="lab">Who signs off on the website?</div>
     <div class="hint">Just you, or does someone else need to approve it? Worth knowing before we build rather than after.</div>
     <input type="text" data-f id="h43" placeholder="e.g. just me / me and my partner">
+  </div>
+
+  <div class="q" data-q data-sec="H">
+    <div class="lab">Is anything else likely to need building?</div>
+    <div class="hint">We have assumed one site covering both the venue and the restaurant, and that Good &amp; Proper's existing site stays as it is. Tap anything that is wrong.</div>
+    <div class="chips" data-chips="h54multi">
+      <span class="chip" data-val="Restaurant needs online table bookings">Restaurant table bookings</span>
+      <span class="chip" data-val="Good &amp; Proper site needs rebuilding too">G&amp;P site needs work too</span>
+      <span class="chip" data-val="Separate site for the restaurant">Separate restaurant site</span>
+      <span class="chip" data-val="No, one venue site is right">No, one site is right</span>
+    </div>
   </div>
 
   <!-- ============ I ============ -->
@@ -642,12 +675,17 @@
     <input type="text" data-f id="j52" placeholder="e.g. R20k-R30k total, plus the existing ad spend">
   </div>
 
+  <div class="q" data-q data-sec="J">
+    <div class="lab">Is anything changing in the next twelve months?</div>
+    <div class="hint">A lease coming up, a renovation, a change of ownership, a key person leaving, the racecourse arrangement. Your position rests on being on that racecourse, so if any of it is moving we should build the plan around that rather than find out in November.</div>
+    <textarea data-f id="j56" placeholder="Nothing / actually, yes..."></textarea>
+  </div>
+
   <!-- ============ K ============ -->
   <div class="sec-h" data-sec="K"><div class="dot">K</div><h2>Access and materials</h2></div>
   <div class="sec-note" data-sec="K">Tap anything you can arrange before Wednesday. Nothing here is urgent enough to hold up the call, but each one removes a blind spot.</div>
 
-  <div class="q" data-q data-p data-sec="K">
-    <div class="star">Key</div>
+  <div class="q" data-q data-sec="K">
     <div class="lab">The domain question, which is the one that unblocks everything</div>
     <div class="hint">Your web address currently shows a hosting placeholder and a certificate warning. One call to your host answers it: does the site need re-pointing, or is there nothing left to point at? Who hosts it, and do you have the login?</div>
     <textarea data-f id="i32" placeholder="Our host is... / I'll ask them / I have no idea who hosts it"></textarea>
@@ -803,10 +841,6 @@
         ch.classList.toggle('on', on);
       });
     });
-    var wantP=!!saved['_ponly'];
-    document.getElementById('ptoggle').classList.toggle('on', wantP);
-    document.body.classList.toggle('ponly', wantP);
-    syncSections();
   }
 
   fields.forEach(function(el){
@@ -835,37 +869,11 @@
     });
   });
 
-  /* priority-only toggle (initial state is applied by hydrate) */
-  var tg=document.getElementById('ptoggle');
-  tg.addEventListener('click', function(){
-    var on=tg.classList.toggle('on');
-    document.body.classList.toggle('ponly', on);
-    persist(); syncSections();
-  });
-
-  /* hide section headers that have no visible questions in priority mode */
-  function syncSections(){
-    var ponly=document.body.classList.contains('ponly');
-    var secs={};
-    [].slice.call(document.querySelectorAll('[data-sec]')).forEach(function(el){
-      var s=el.getAttribute('data-sec');
-      if(!secs[s]) secs[s]={heads:[],hasP:false};
-      if(el.hasAttribute('data-q')){ if(el.hasAttribute('data-p')) secs[s].hasP=true; }
-      else secs[s].heads.push(el);
-    });
-    for(var s in secs){
-      secs[s].heads.forEach(function(h){
-        h.classList.toggle('empty', ponly && !secs[s].hasP);
-      });
-    }
-  }
-
   function snapshot(){
     var data={};
     fields.forEach(function(el){ if((el.value||'').trim()) data[el.id]=el.value; });
     for(var s in singles){ if(singles[s]) data['chip_'+s]=singles[s]; }
     for(var m in multis){ if((multis[m]||[]).length) data['chip_'+m]=multis[m]; }
-    data['_ponly']=document.body.classList.contains('ponly');
     return data;
   }
 
@@ -923,6 +931,7 @@
     var L=[];
     L.push("ONBOARDING v2 — The Acreage + Good & Proper");
     L.push("(answers to the gaps named in the Diagnostic)");
+    if(g('a0who')) L.push("From: "+g('a0who')+(g('a0contact')?(" · "+g('a0contact')):""));
 
     /* only output sections that contain answers */
     var buf=[], head="";
@@ -958,13 +967,15 @@
     line(L,"The flow",g('d14'));
     line(L,"Quote follow-up",g('d15'));
     line(L,"Recorded today",cs('d16single')+(g('d16b')?(" — "+g('d16b')):""));
+    line(L,"Review stand status",cs('d53single')+(g('d53b')?(" — "+g('d53b')):""));
     line(L,"Owner of the count",g('d17'));
     sec("E. GOOD & PROPER");
     line(L,"Price per head",g('e18a')?("R"+g('e18a')):"");
     line(L,"What it includes",g('e18b'));
     line(L,"Google Ads",g('e19'));
     line(L,"Active vendors",g('e20'));
-    line(L,"Repetitive emails",g('e21'));
+    line(L,"Ad spend locked?",cs('e54single')+(g('e54b')?(" — "+g('e54b')):""));
+    line(L,"Repetitive emails",g('e21')+(g('e21b')?(" [~"+g('e21b')+"/wk]"):""));
     sec("F. CAPACITY");
     line(L,"What breaks first",g('f22'));
     line(L,"Max functions/mo",g('f23'));
@@ -972,10 +983,13 @@
     line(L,"3-month success",g('f25'));
     sec("G. VOICE & LOOK");
     line(L,"Brand words",cm('g26multi')+(g('g26add')?(", "+g('g26add')):""));
+    line(L,"What function clients thank them for",g('g55'));
     line(L,"Words to avoid",g('g27'));
     line(L,"Admired brands",g('g28'));
     line(L,"Website direction",cs('g29single')+(g('g29b')?(" — "+g('g29b')):""));
     sec("H. YOUR WEBSITE");
+    line(L,"REAL trading hours — restaurant",g('h53a'));
+    line(L,"REAL trading hours — functions",g('h53b'));
     line(L,"Capacity per space",g('h35'));
     line(L,"What a function includes",g('h36'));
     line(L,"Publish a price?",cs('h37single')+(g('h37b')?(" — "+g('h37b')):""));
@@ -985,6 +999,7 @@
     line(L,"Worth keeping from the old site",g('h41'));
     line(L,"Always asked before booking",g('h42'));
     line(L,"Signs off on the website",g('h43'));
+    line(L,"Other builds needed",cm('h54multi'));
 
     sec("I. PHOTOGRAPHY");
     line(L,"Photos with people",g('h30'));
@@ -1000,6 +1015,7 @@
     line(L,"Who they lose to",g('j50'));
     line(L,"Other approvers",g('j51'));
     line(L,"Budget next 3 months",g('j52'));
+    line(L,"Changing in next 12 months",g('j56'));
     sec("K. ACCESS");
     line(L,"Domain / hosting",g('i32'));
     line(L,"Can edit Google listing",cs('j48single'));
