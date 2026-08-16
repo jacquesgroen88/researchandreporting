@@ -114,6 +114,16 @@
   .kbtn:hover{border-color:var(--blue)}
   .kmsg{font-size:12.5px;color:var(--green);font-weight:600;margin-top:9px;min-height:16px}
 
+  /* send state + fallback */
+  .sendstate{font-size:13.5px;font-weight:600;margin-top:12px;min-height:18px;line-height:1.5}
+  .sendstate.ok{color:var(--green)}
+  .sendstate.err{color:var(--coral)}
+  .sendstate.busy{color:var(--muted)}
+  .fallback{margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
+  .fallback p{font-size:12.8px;color:var(--muted);margin-bottom:11px}
+  .fallback.raised{background:#fff6f2;border:1px solid #ffd0bd;border-radius:14px;padding:16px;margin-top:16px}
+  .fallback.raised p{color:#8a3a1e;font-weight:600;font-size:13.4px}
+
   /* restored toast */
   .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:88px;background:var(--ink);color:#fff;font-size:13.5px;font-weight:600;padding:11px 18px;border-radius:999px;z-index:60;box-shadow:0 10px 26px rgba(16,26,46,.34);opacity:0;pointer-events:none;transition:opacity .3s}
   .toast.on{opacity:1}
@@ -131,6 +141,22 @@
 </style>
 </head>
 <body>
+
+<!-- Netlify form detection.
+     Netlify parses the DEPLOYED HTML at build time looking for a form with
+     data-netlify. It must exist in the static source, which is why this is a
+     real (hidden) form rather than something built in JS. Every field we submit
+     must appear here or Netlify drops it silently. Submissions are sent by
+     fetch/sendBeacon from the script below, which is why form-name is hidden. -->
+<form name="acreage-onboarding" data-netlify="true" netlify-honeypot="bot-field" hidden>
+  <input type="hidden" name="form-name" value="acreage-onboarding">
+  <input type="text" name="bot-field">
+  <input type="text" name="submission">
+  <input type="text" name="who">
+  <input type="text" name="progress">
+  <textarea name="answers"></textarea>
+  <input type="text" name="resume">
+</form>
 
 <div class="progress">
   <div class="row">
@@ -160,6 +186,7 @@
     <h3>Why this is shorter than you expect</h3>
     <p>We are not going to ask you how many Google reviews you have, what your rating is, what your competitors are rated, or what your website says. We counted all of that ourselves on 13 August, and it is in the Diagnostic.</p>
     <p>What follows is the honest gap list: <strong>every question below replaces an assumption we were forced to make</strong>. The ones marked <em>Key</em> are the six that unlock the most, and there is a switch below to show only those if today is a bad day.</p>
+    <p style="margin-top:9px;font-size:12.8px">So nothing gets lost, a draft of whatever you have answered is sent through when you close the page. Nothing is treated as final until you tap <strong>Send to Jacques</strong> at the bottom, and you can send again as many times as you like.</p>
   </div>
 
   <div class="alert" id="storagewarn">
@@ -180,6 +207,12 @@
       <a class="kbtn" id="linkMailBtn">✉️ Email it to myself</a>
     </div>
     <div class="kmsg" id="kmsg"></div>
+  </div>
+
+  <div class="q" style="margin-top:14px">
+    <div class="lab">Who is filling this in?</div>
+    <div class="hint">So we know who to thank, and who to ask if something needs a follow-up. Different people can do different sections.</div>
+    <input type="text" data-f id="a0who" placeholder="Your name">
   </div>
 
   <!-- ============ A ============ -->
@@ -497,11 +530,19 @@
 
   <div class="submit">
     <h3>That's everything 🎉</h3>
-    <p>Send your answers back in one tap, whichever is easiest. Anything you skipped, we will pick up on the call.</p>
+    <p>One tap and it goes straight to Jacques. Anything you skipped, we will pick up on the call.</p>
     <div class="btns">
-      <button class="btn btn-primary" id="copyBtn">📋 Copy my answers</button>
-      <a class="btn btn-wa" id="waBtn" target="_blank" rel="noopener">💬 Send on WhatsApp</a>
-      <a class="btn btn-mail" id="mailBtn">✉️ Send by email</a>
+      <button class="btn btn-primary" id="submitBtn">✅ Send to Jacques</button>
+    </div>
+    <div class="sendstate" id="sendstate"></div>
+
+    <div class="fallback" id="fallback">
+      <p id="fallbackLead">Or send it yourself, whichever is easiest.</p>
+      <div class="btns">
+        <button class="btn btn-mail" id="copyBtn">📋 Copy my answers</button>
+        <a class="btn btn-wa" id="waBtn" target="_blank" rel="noopener">💬 Send on WhatsApp</a>
+        <a class="btn btn-mail" id="mailBtn">✉️ Send by email</a>
+      </div>
     </div>
     <div class="copied" id="copied"></div>
     <div class="saved" id="saved">Progress saved on this device</div>
@@ -517,7 +558,7 @@
 
   <div class="foot">
     JCE Media · The Acreage + Good &amp; Proper Food Trucks · Onboarding, version 2 · 15 August 2026<br>
-    Built from the gaps named in Part 1: The Diagnostic. Your answers stay on your device until you send them.
+    Built from the gaps named in Part 1: The Diagnostic. Answers are kept on your device, and a draft is sent through when you close the page so nothing is lost. Only you decide when it is finished.
   </div>
 </div>
 
@@ -684,6 +725,7 @@
     el.textContent = storageOK ? 'Progress saved on this device' : 'Not saved — this browser is blocking storage';
     el.style.color = storageOK ? '' : 'var(--coral)';
     el.classList.add('on'); clearTimeout(persist._t); persist._t=setTimeout(function(){el.classList.remove('on');},1400);
+    refreshResume();
   }
 
   function showStorageWarning(){ document.getElementById('storagewarn').classList.add('on'); }
@@ -717,7 +759,7 @@
     bar.classList.toggle('on', done>0);
     document.getElementById('sendcnt').innerHTML =
       done+' of '+qs.length+' answered<span>'+
-      (storageOK?'Nothing is sent until you tap send':'Not saved on this device — send or copy your link')+
+      (sentOnce?'Sent. Tap again to update it':(storageOK?'Tap send when you are done':'Not saved on this device — send or copy your link'))+
       '</span>';
 
     updateLinks();
@@ -855,6 +897,107 @@
     var s=document.querySelector('.submit');
     s.scrollIntoView({behavior:'smooth', block:'center'});
   });
+
+  /* ---- submitting to Netlify Forms ----------------------------------------
+     Two kinds of submission land in the same form:
+       final  — she tapped Send.
+       draft  — a background snapshot when she leaves the page with unsent
+                answers, so a form filled in and forgotten is not lost. This is
+                disclosed in the copy; it is not silent.
+     If Netlify form detection is not enabled the POST 404s, so every failure
+     path surfaces the manual options rather than showing a false success. */
+  var ENDPOINT = location.pathname;
+  var cachedResume='';
+  function refreshResume(){
+    clearTimeout(refreshResume._t);
+    refreshResume._t=setTimeout(function(){
+      buildResumeLink().then(function(u){ cachedResume=u; });
+    },400);
+  }
+
+  function answeredCount(){ return document.querySelectorAll('[data-q].filled').length; }
+  function totalCount(){ return document.querySelectorAll('[data-q]').length; }
+
+  function formBody(kind){
+    var who=(document.getElementById('a0who')||{}).value||'';
+    return new URLSearchParams({
+      'form-name':'acreage-onboarding',
+      'bot-field':'',
+      'submission':kind,
+      'who': who.trim() || '(name not given)',
+      'progress': answeredCount()+' of '+totalCount()+' answered',
+      'answers': assemble(),
+      'resume': cachedResume
+    }).toString();
+  }
+
+  /* Build the resume link fresh rather than trusting the debounced cache — if
+     she types and taps Send immediately, the cache has not caught up yet. */
+  function postForm(kind){
+    return buildResumeLink().then(function(url){
+      cachedResume=url;
+      return fetch(ENDPOINT,{
+        method:'POST',
+        headers:{'Content-Type':'application/x-www-form-urlencoded'},
+        body: formBody(kind)
+      });
+    }).then(function(r){
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      return true;
+    });
+  }
+
+  var sentOnce=false;
+  var stateEl=document.getElementById('sendstate');
+  var fallbackEl=document.getElementById('fallback');
+  var fallbackLead=document.getElementById('fallbackLead');
+
+  document.getElementById('submitBtn').addEventListener('click', function(){
+    var btn=this;
+    if(answeredCount()===0){
+      stateEl.className='sendstate err';
+      stateEl.textContent='Nothing to send yet — answer at least one question first.';
+      return;
+    }
+    btn.disabled=true;
+    stateEl.className='sendstate busy';
+    stateEl.textContent='Sending…';
+    postForm('final').then(function(){
+      sentOnce=true; lastDraftBody=formBody('draft');
+      btn.disabled=false;
+      stateEl.className='sendstate ok';
+      stateEl.textContent='Sent to Jacques ✓ He has '+answeredCount()+' of '+totalCount()+' answers. You can keep adding and send again.';
+      toast('Sent to Jacques ✓');
+    }, function(){
+      btn.disabled=false;
+      stateEl.className='sendstate err';
+      stateEl.textContent='That did not go through. Please use one of the options below instead — they always work.';
+      fallbackEl.classList.add('raised');
+      fallbackLead.textContent='Send it this way instead:';
+      fallbackEl.scrollIntoView({behavior:'smooth', block:'center'});
+    });
+  });
+
+  /* background draft, throttled and only when something changed */
+  var lastDraftBody='', lastDraftAt=0, DRAFT_GAP=120000;
+  function maybeDraft(){
+    if(answeredCount()===0) return;
+    var body=formBody('draft');
+    var now=Date.now();
+    if(body===lastDraftBody) return;
+    if(now-lastDraftAt < DRAFT_GAP) return;
+    lastDraftBody=body; lastDraftAt=now;
+    try{
+      var blob=new Blob([body],{type:'application/x-www-form-urlencoded'});
+      if(!(navigator.sendBeacon && navigator.sendBeacon(ENDPOINT, blob))){
+        postForm('draft').catch(function(){});
+      }
+    }catch(e){}
+  }
+  document.addEventListener('visibilitychange', function(){
+    if(document.visibilityState==='hidden') maybeDraft();
+  });
+  window.addEventListener('pagehide', maybeDraft);
 
   if(!storageOK) showStorageWarning();
 
