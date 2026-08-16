@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>The site plan — Reptilia Growth Blueprint</title>
+<link rel="stylesheet" href="_style.css">
+</head>
+<body>
+<div class="wrap">
+
+<div class="doc-head">
+  <span class="eyebrow">Document 07</span>
+  <h1>The site plan</h1>
+  <p class="lede">How to improve reptilia.co.za, ordered by revenue rather than by how broken things
+  look. Twelve items. None of them is a redesign.</p>
+  <div class="meta">Builds on the 13 August technical audit rather than repeating it · Live-site
+  state as at 15 August 2026, after the search fixes shipped on 14 August</div>
+</div>
+
+<h2>Where the site stands today</h2>
+
+<p>The 13 August audit scored the store <strong>4.6 out of 10</strong> across twelve dimensions. Its
+one-line summary is still the right one: <em>a structurally sound store with a serious findability
+problem and an unrepaired migration.</em> Payments work, the checkout is clean, the variable product
+structure is correct, images are nearly complete and the refund rate is near zero. The problem is
+that customers cannot find things.</p>
+
+<div class="tw">
+<table>
+<thead><tr><th>Dimension</th><th class="num">Score</th><th>Status since the audit</th></tr></thead>
+<tbody>
+<tr><td>Findability and navigation</td><td class="num">2</td><td><span class="pill p-warn">Partly fixed</span> Mobile search icon, a <code>/search/</code> page and product-scoped header search all shipped 14 Aug. Category navigation and filters are still missing.</td></tr>
+<tr><td>Trust and social proof</td><td class="num">2</td><td><span class="pill p-bad">Unchanged</span> Reviews still disabled store-wide</td></tr>
+<tr><td>Product content</td><td class="num">3</td><td><span class="pill p-warn">Alt text fixed</span> 957 images given alt text 13 Aug. Descriptions still effectively absent</td></tr>
+<tr><td>Performance</td><td class="num">3</td><td><span class="pill p-bad">Unchanged</span> 3.21s to first byte on the homepage</td></tr>
+<tr><td>Merchandising and AOV</td><td class="num">3</td><td><span class="pill p-bad">Unchanged</span> Zero cross-sells, zero coupons, zero bundles</td></tr>
+<tr><td>Retention and lifecycle</td><td class="num">3</td><td><span class="pill p-bad">Unchanged</span> Nothing built</td></tr>
+<tr><td>Catalogue completeness</td><td class="num">4</td><td><span class="pill p-bad">Unchanged</span> 929 live against ~2,912 intended</td></tr>
+<tr><td>SEO and technical</td><td class="num">4</td><td><span class="pill p-bad">Unchanged</span> 1,591 404s, no Product schema</td></tr>
+<tr><td>Mobile experience</td><td class="num">4</td><td><span class="pill p-warn">Improved</span> Mobile search now exists</td></tr>
+<tr><td>Shipping and fulfilment</td><td class="num">5</td><td>Unchanged. See <a href="09-merchandising-and-aov.html">document 09</a> before changing it</td></tr>
+<tr><td>Analytics and measurement</td><td class="num">5</td><td><span class="pill p-bad">Blocked</span> Installed and firing, JCE cannot see it</td></tr>
+<tr><td>Checkout and payments</td><td class="num">7</td><td>Best dimension. PayFast only is the one gap</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2>The twelve items, in revenue order</h2>
+
+<h3>1. Publish the redirect map <span class="pill p-bad">P0</span></h3>
+<div class="card">
+  <p><strong>Worth R18,005 a year. Half a day, after one hour of checking.</strong></p>
+  <p>1,591 hard 404s from the 5 August rebuild, carrying 29.8% of the last twelve months of line
+  revenue. A 1,705-row map already exists at <code>findings/redirect-map.csv</code>: 589 rows high
+  confidence, 800 needing a human eye, 313 with no match that fall back to the shop page.</p>
+  <p><strong>Do not apply it blind.</strong> The automatic matcher sent
+  <code>/product/frozen-rats/</code> to frozen mice and <code>/product/green-iguana-hatchling/</code>
+  to a red iguana. The top 150 rows carry R387,202 of lifetime value and need about an hour of
+  eyeballing first. Load the reviewed map into a redirect plugin rather than raw <code>.htaccess</code>,
+  so it is manageable and reversible. There is currently no redirect plugin installed.</p>
+</div>
+
+<h3>2. Turn product reviews on <span class="pill p-bad">P0</span></h3>
+<div class="card">
+  <p><strong>Worth R5,763 a year, and more than that in trust. One setting plus an email.</strong></p>
+  <p><code>woocommerce_enable_reviews</code> is set to <code>no</code>. Zero reviews exist on a store
+  that sells live animals at up to R14,495 to strangers, against competitors showing 920+ reviews
+  and per-product star ratings.</p>
+  <p>Turn it on, then send a review request three days after delivery. Seed it first: Reptilia has a
+  <strong>4.6 Google rating</strong> and five years of customers, so ask the top 50 lapsed customers
+  for a review in the same email that asks them to come back. Two jobs, one send.</p>
+</div>
+
+<h3>3. Write the livestock pages <span class="pill p-bad">P0</span></h3>
+<div class="card">
+  <p><strong>Worth R27,390 a year. Content, not code. Start tomorrow.</strong></p>
+  <p>133 animals listed, 98 have never sold a unit, R178,945 of shelf value on those 98, 72 with a
+  completely blank description and <strong>not one mentioning a permit</strong>.</p>
+  <p>Every livestock page needs, as a fixed template:</p>
+  <ul>
+    <li><strong>Sex, age and morph</strong> — the three things a keeper asks first</li>
+    <li><strong>Current feeding</strong> — what it eats now, how often, when it last ate</li>
+    <li><strong>Temperament and handling</strong> — beginner-suitable or not, stated plainly</li>
+    <li><strong>Adult size and lifespan</strong> — the two things buyers regret not knowing</li>
+    <li><strong>Permit position</strong> — required or not, and who arranges it</li>
+    <li><strong>Delivery or collection terms</strong> — stated on the page, not discovered at checkout</li>
+    <li><strong>Three photographs</strong> of the actual animal, not a stock image</li>
+    <li><strong>"Everything this animal needs"</strong> — the attach block from <a href="09-merchandising-and-aov.html">document 09</a></li>
+  </ul>
+  <p>Do the <strong>top 40 by price</strong> first. At roughly a day per ten animals including
+  photography, that is four working days spread across a month.</p>
+</div>
+
+<h3>4. Fix search properly <span class="pill p-bad">P0</span></h3>
+<div class="card">
+  <p><strong>Unsizable without analytics, and almost certainly the biggest of all. Half a day.</strong></p>
+  <p>Three entry points now exist after the 14 August work and all route to the product template. The
+  underlying engine is still WordPress core search, which does not read categories:</p>
+  <div class="tw">
+  <table>
+  <thead><tr><th>A shopper types</th><th class="num">Products that match</th><th class="num">Search returns</th></tr></thead>
+  <tbody>
+  <tr class="hi"><td>lizard</td><td class="num">7</td><td class="num"><span class="pill p-bad">0</span></td></tr>
+  <tr><td>snake</td><td class="num">75</td><td class="num">10</td></tr>
+  <tr><td>cats</td><td class="num">94</td><td class="num"><span class="pill p-bad">0</span></td></tr>
+  <tr><td>cat food</td><td class="num">many</td><td class="num"><span class="pill p-bad">0</span></td></tr>
+  <tr><td>bird</td><td class="num">64</td><td class="num">22</td></tr>
+  <tr><td>spider</td><td class="num">43</td><td class="num">13</td></tr>
+  </tbody>
+  </table>
+  </div>
+  <p>A customer who owns a bearded dragon and types "lizard" is told the shop has nothing. Install
+  <strong>Relevanssi</strong> (free), which indexes categories and tags, handles plurals and partial
+  words, and turns "lizard" from 0 into 7 and "snake" from 10 into 75. It rewrites how every query
+  resolves, so it is red lane — <strong>staging clone first</strong>, and not on the same day as any
+  other search change.</p>
+</div>
+
+<h3>5. Put categories in the navigation <span class="pill p-warn">P1</span></h3>
+<div class="card">
+  <p>The main menu has five links and <strong>not one of them is a product category</strong>. "Shop"
+  is a 7,698-pixel wall of category tiles rather than products. There is no sort by price, no price
+  filter and no attribute filter anywhere. 53 of 149 categories are empty, so drilling down can end
+  in nothing, and two competing food category trees run in parallel.</p>
+  <p>Minimum viable fix: a dropdown with the eight categories that actually earn —
+  <strong>Live Feed, Frozen Feed, Reptile Cages, Substrates, Heating &amp; Lighting, Livestock,
+  Small Animals, Accessories</strong> — then price sort and a price filter on category pages. Delete
+  or hide the 53 empty categories and merge the duplicate food trees.</p>
+</div>
+
+<h3>6. Page caching <span class="pill p-warn">P1</span></h3>
+<div class="card">
+  <p>Homepage median time to first byte is <strong>3.21 seconds</strong>, ranging 2.24 to 4.37 on
+  identical requests. A healthy store is under 800ms. <strong>93% of that is server wait</strong> —
+  10Web Booster is doing good work on the front end and the server underneath is undoing it. No page
+  caching, no CDN, a single 1,875 KB aggregated CSS file (13 times the size of the HTML it styles),
+  four Google font families, and PHP 8.1 which is past active support.</p>
+  <p>Page caching alone does most of it. Half a day.</p>
+</div>
+
+<h3>7. Add Product schema <span class="pill p-warn">P1</span></h3>
+<div class="card">
+  <p>Product pages carry no Product structured data, so Google sees no price and no availability.
+  That means no rich results in search, and no route to Google Shopping without building a separate
+  feed. Yoast free does not add it for WooCommerce; the WooCommerce SEO add-on or a schema plugin
+  does. While in there: <code>robots.txt</code> is a default placeholder with no sitemap line, the
+  homepage has no meta description and two empty H1 tags, and <code>/returns-policy/</code> 404s
+  because the real page is <code>/refund-and-return-policy/</code>.</p>
+</div>
+
+<h3>8. Show shipping and stock on the product page <span class="pill p-warn">P1</span></h3>
+<div class="card">
+  <p>Shipping cost appears nowhere until checkout, so R160 is a surprise on a store whose median
+  order is R532. Add a single line — <strong>"R160 delivery nationwide, 2 to 3 working days. Free
+  collection in Vanderbijlpark."</strong> — to every product page.</p>
+  <p>More seriously: <strong>1,481 website-flagged products have zero stock on hand and the site
+  marks nothing as sold out.</strong> Customers are ordering things that are not there. That is a
+  refund and a lost customer, and it is a plausible contributor to the retention decay in
+  <a href="01-where-the-business-stands.html">document 01</a>.</p>
+</div>
+
+<h3>9. Build the Product-Code import <span class="pill p-warn">P1</span></h3>
+<div class="card">
+  <p>929 products live against roughly 2,912 the shop actually sells. Fixing this by hand is the
+  wrong move because a future wholesale re-import would wipe the work. Build it once, keyed on
+  <strong>Product Code</strong>, writing <strong>Category, stock on hand and price only</strong>,
+  never touching descriptions, images or SEO fields, reading codes as <strong>text</strong> (Excel
+  has already corrupted five barcodes into scientific notation), and excluding rows flagged
+  <code>Non Website Related</code> or <code>Not Linked</code>.</p>
+  <p>Two things to check in the same pass: <strong>11 products flagged not-for-website are live</strong>
+  including a R14,495 Fiji Banded Iguana, and <strong>39 products are priced below the POS
+  price</strong>, in every case with the site cheaper — a Small Animal Cage at R530 against R2,850.</p>
+</div>
+
+<h3>10. Add EFT as a payment method <span class="pill p-warn">P1</span></h3>
+<div class="card">
+  <p>PayFast is the only method; bank transfer, EFT and cash on delivery are all disabled. A
+  meaningful share of South African shoppers prefer direct EFT and currently have no option but to
+  abandon. 107 email addresses reached the order stage and never bought anything, ever. This is a
+  WooCommerce setting, but it touches the payment path, so it is red lane.</p>
+</div>
+
+<h3>11. Put the shop on the website <span class="pill p-info">P2</span></h3>
+<div class="card">
+  <p>Reptilia has traded from Vanderbijlpark since <strong>December 2006</strong>, holds a
+  <strong>4.6 Google rating</strong>, runs a reptile exhibition and a free public petting zoo, and
+  builds custom cages to order. <strong>None of this appears anywhere on reptilia.co.za.</strong></p>
+  <p>Customers who have collected in store order 2.89 times against 1.55 for everyone else. Whatever
+  happens in that building converts people, and the website is the one place it is invisible. An
+  About page with real photographs, the year, the rating and the staff. Plus the custom cage service,
+  which is currently mentioned only in third-party directory listings.</p>
+</div>
+
+<h3>12. Fix the product photography standard <span class="pill p-info">P2</span></h3>
+<div class="card">
+  <p>The grid is correct — five columns of uniform 241x241 tiles. The <em>source images</em> are not:
+  sampled natural dimensions from one row ran 300x225, 300x300, 272x300, 300x287, 253x300, 300x224
+  and <strong>108x298</strong>. The tall narrow one renders as a sliver with white either side, which
+  is why the results look uneven when the grid is fine. This is photographic, not CSS: consistent
+  square aspect ratio on a consistent background. 94.4% of products also have exactly one photo,
+  which is thin for a R2,950 animal.</p>
+</div>
+
+<h2>What NOT to do</h2>
+
+<div class="callout bad">
+  <span class="label">Three tempting things that would waste the quarter</span>
+  <ul>
+    <li><strong>A redesign.</strong> Nothing in the money model requires one. The store's problem is
+    that products cannot be found and customers are not brought back, and a new theme fixes neither.
+    The site was rebuilt ten days ago; rebuilding it again would break the same links twice.</li>
+    <li><strong>Advertising.</strong> Spending money to send traffic to 1,591 dead URLs, a search that
+    returns nothing for "lizard", and a homepage that takes 3.2 seconds is paying to fill a bucket
+    with holes in it. Fix items 1 to 6, then revisit.</li>
+    <li><strong>The free-shipping threshold.</strong> It was the fourth recommendation in the August
+    audit and, modelled properly, it loses money at every level tested. See
+    <a href="09-merchandising-and-aov.html">document 09</a>.</li>
+  </ul>
+</div>
+
+<h2>Working rules for anyone touching this site</h2>
+
+<ul>
+  <li><strong>Snapshot before every change.</strong> The pipeline at <code>site/tools/wp.mjs</code>
+  pulls the full site state to JSON and commits it, because an Elementor site lives in the database,
+  not in files. The snapshot you did not take is the one you needed.</li>
+  <li><strong>Green lane goes to live; red lane goes to staging first.</strong> Copy, images, meta and
+  analytics are green. Cart, checkout, shipping, plugins, layout and categories are red. Reptilia
+  takes real money through PayFast, and a broken checkout is lost revenue, not a cosmetic bug.</li>
+  <li><strong>Simulate a user interaction before trusting any layout measurement.</strong> 10Web
+  Booster delays JavaScript until first interaction, so an automated browser measures the pre-JS
+  layout. This already caused one wrong "the mobile header is broken" diagnosis and one unnecessary
+  revert.</li>
+  <li><strong>One change at a time on live.</strong> The search plugin and the header search change
+  must not ship on the same day.</li>
+</ul>
+
+<div class="docnav">
+  <a href="06-market-and-competitors.html">← Market and competitors</a>
+  <a href="08-the-retention-engine.html">Next: The retention engine →</a>
+</div>
+
+<div class="foot">Reptilia Growth Blueprint · Document 07 · JCE Media · 15 August 2026</div>
+
+</div>
+</body>
+</html>

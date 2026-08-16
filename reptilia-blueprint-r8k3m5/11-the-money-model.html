@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>The money model — Reptilia Growth Blueprint</title>
+<link rel="stylesheet" href="_style.css">
+</head>
+<body>
+<div class="wrap">
+
+<div class="doc-head">
+  <span class="eyebrow">Document 11</span>
+  <h1>The money model</h1>
+  <p class="lede">Every assumption behind every number in this blueprint, written down so you can
+  disagree with it. Where a judgement was needed it was set low on purpose, so the total is a floor.</p>
+  <div class="meta">Reproducible: <code>node site/tools/audit-money-model.mjs</code> ·
+  Output at <code>audit-2026-08-13/findings/commercial/money-model.json</code></div>
+</div>
+
+<h2>The baseline</h2>
+
+<p>Everything is sized against the <strong>trailing twelve months</strong>, 13 August 2025 to 13
+August 2026, not against the five-year lifetime. Lifetime figures flatter the model, because the
+store has grown, and the question is what happens next year rather than what happened in 2022.</p>
+
+<div class="stats">
+  <div class="stat"><div class="n">272</div><div class="k">Paid orders in the last twelve months</div></div>
+  <div class="stat"><div class="n">R192,099</div><div class="k">Revenue in the last twelve months</div></div>
+  <div class="stat"><div class="n">R706</div><div class="k">Average order value</div></div>
+  <div class="stat"><div class="n">R40,800</div><div class="k">Of that was shipping</div></div>
+</div>
+
+<h2>The nine lines</h2>
+
+<div class="tw">
+<table>
+<thead><tr><th>#</th><th>Leak</th><th class="num">Low</th><th class="num">Working</th><th class="num">High</th><th>Type</th></tr></thead>
+<tbody>
+<tr class="hi"><td>1</td><td>Lapsed customers</td><td class="num">R15,844</td><td class="num">R31,688</td><td class="num">R59,415</td><td>One-time, then recurring lower</td></tr>
+<tr class="hi"><td>2</td><td>Livestock pages</td><td class="num">R14,608</td><td class="num">R27,390</td><td class="num">R45,649</td><td>Recurring</td></tr>
+<tr><td>3</td><td>Dead URLs</td><td class="num">R11,253</td><td class="num">R18,005</td><td class="num">R24,756</td><td>Recurring</td></tr>
+<tr><td>4</td><td>Retention decay</td><td class="num">R6,458</td><td class="num">R12,916</td><td class="num">R19,375</td><td><strong>Recurring and compounding</strong></td></tr>
+<tr><td>5</td><td>Catalogue gap</td><td class="num">R5,724</td><td class="num">R11,449</td><td class="num">R22,897</td><td>Recurring</td></tr>
+<tr><td>6</td><td>No reviews</td><td class="num">R1,921</td><td class="num">R5,763</td><td class="num">R11,526</td><td>Compounding</td></tr>
+<tr><td>7</td><td>No cross-sell</td><td class="num">R2,025</td><td class="num">R4,433</td><td class="num">R6,650</td><td>Recurring</td></tr>
+<tr><td>8</td><td>Failed checkouts</td><td class="num">R742</td><td class="num">R1,483</td><td class="num">R2,966</td><td>Recurring</td></tr>
+<tr><td>9</td><td>Shipping threshold</td><td class="num">R0</td><td class="num">R0</td><td class="num">R0</td><td><span class="pill p-warn">Rejected</span></td></tr>
+<tr class="hi"><td></td><td><strong>Total</strong></td><td class="num"><strong>R58,575</strong></td><td class="num"><strong>R113,126</strong></td><td class="num"><strong>R193,235</strong></td><td><strong>0.30x / 0.59x / 1.01x TTM</strong></td></tr>
+</tbody>
+</table>
+</div>
+
+<h2>Line by line</h2>
+
+<h3>1. Lapsed customers — R31,688</h3>
+<div class="card">
+  <p><strong>Population:</strong> 443 customers, last order more than 92 days ago, lifetime spend
+  R300 or more. Combined historic revenue R644,466. Sum of their individual average order values:
+  <strong>R396,102</strong>.</p>
+  <p><strong>Arithmetic:</strong> R396,102 × 8% = R31,688. Low case 4%, high case 15%.</p>
+  <p><strong>Why 8%:</strong> published reactivation rates for a warm ecommerce list run 5% to 20%.
+  8% sits at the low end because this list has <em>never</em> been mailed, consent is thin, and 207
+  of the 443 have been gone more than two years.</p>
+  <p><strong>Weakness:</strong> this is largely one-time. Repeating the campaign next year against
+  the same list yields much less. It becomes an annuity only once the reorder reminder stops people
+  reaching the lapsed list in the first place.</p>
+</div>
+
+<h3>2. Livestock pages — R27,390</h3>
+<div class="card">
+  <p><strong>Population:</strong> 133 live animals listed, 98 never sold a single unit, R178,945 of
+  shelf value across those 98, average price <strong>R1,826</strong>.</p>
+  <p><strong>Arithmetic:</strong> 15 × R1,826 = R27,390. Low case 8 animals, high case 25.</p>
+  <p><strong>Why 15:</strong> roughly 15% of the never-sold stock moving in a year, once the pages
+  carry sex, age, morph, feeding history, permit position, transport terms and three photographs.
+  Livestock demand is proven — 190 orders at an AOV of R1,213 — so this is unlocking existing demand,
+  not creating it.</p>
+  <p><strong>Weakness:</strong> assumes the animals listed are actually available. Given that 1,481
+  website-flagged products show zero stock on hand, some of the 98 may be listings for animals that
+  are long gone. <strong>This line needs a stock check before it is banked.</strong></p>
+</div>
+
+<h3>3. Dead URLs — R18,005</h3>
+<div class="card">
+  <p><strong>Measurement:</strong> every line item in the last twelve months was tested against the
+  live catalogue by product ID and by name. <strong>R45,012 — 29.8% of TTM line revenue — came
+  through products with no reachable URL today.</strong></p>
+  <p><strong>Arithmetic:</strong> R45,012 × 40% = R18,005. Low case 25%, high case 55%.</p>
+  <p><strong>Why 40%:</strong> a redirect recovers the customer who arrived on a broken link and would
+  otherwise leave. It does not recover people who would have found the product through search or
+  navigation anyway, and it should not recover products that were discontinued deliberately.</p>
+  <p><strong>What was NOT used:</strong> the observed post-launch drop of R589/day to R364/day. That
+  is a 38% fall which annualises to about R82,000 — but it rests on seven days and six orders, which
+  is far too small to carry a number. It is quoted as direction only.</p>
+</div>
+
+<h3>4. Retention decay — R12,916</h3>
+<div class="card">
+  <p><strong>Measurement:</strong> 90-day repeat rate by acquisition cohort, on an identical window,
+  counting only customers with 90+ days of history.</p>
+  <div class="tw">
+  <table>
+  <thead><tr><th>Cohort</th><th class="num">2021</th><th class="num">2022</th><th class="num">2023</th><th class="num">2024</th><th class="num">2025</th><th class="num">2026</th></tr></thead>
+  <tbody>
+  <tr><td>Mature customers</td><td class="num">23</td><td class="num">75</td><td class="num">88</td><td class="num">112</td><td class="num">161</td><td class="num">65</td></tr>
+  <tr class="hi"><td>Repeat within 90 days</td><td class="num">34.8%</td><td class="num"><strong>38.7%</strong></td><td class="num">23.9%</td><td class="num">14.3%</td><td class="num">16.8%</td><td class="num"><strong>12.3%</strong></td></tr>
+  <tr><td>90-day revenue each</td><td class="num">R1,059</td><td class="num">R1,249</td><td class="num">R994</td><td class="num">R1,003</td><td class="num">R964</td><td class="num">R784</td></tr>
+  </tbody>
+  </table>
+  </div>
+  <p><strong>Arithmetic:</strong> 140 new customers a year × (38.7% − 12.3%) × 50% recovery × R700 per
+  recovered order = R12,916. Low case 25% recovery, high case 75%.</p>
+  <p><strong>Why 140:</strong> 2025 produced 161 new customers and 2026 is on pace for about 190.
+  140 is deliberately below both.</p>
+  <p><strong>Why this line is the most understated in the model:</strong> it prices <strong>one extra
+  order</strong> per recovered customer. A recovered Feeder orders every 30 days at R589 to R700 —
+  worth R7,000 or more over a year, not R700. Priced at true lifetime value this line dwarfs
+  everything else in the document. It is stated at one order so the total does not depend on a
+  compounding assumption.</p>
+</div>
+
+<h3>5. Catalogue gap — R11,449</h3>
+<div class="card">
+  <p><strong>Arithmetic:</strong> 467 dead URLs carry R572,432 of lifetime revenue across roughly five
+  years, so about R114,486 a year of historic run rate. Taken at <strong>10%</strong> = R11,449. Low
+  case 5%, high case 20%.</p>
+  <p><strong>Why so low:</strong> this overlaps line 3 heavily and is discounted to a quarter weight
+  to avoid double counting. Only products with a proven sales history are included at all.</p>
+  <p><strong>Not in this number:</strong> the 39 products priced <em>below</em> their POS price, site
+  cheaper in every case (a Small Animal Cage at R530 against R2,850). That is a live margin leak of
+  unknown size, excluded because cost data is not available.</p>
+</div>
+
+<h3>6. Reviews — R5,763 <span class="pill p-warn">softest line</span></h3>
+<div class="card">
+  <p><strong>Arithmetic:</strong> R192,099 × 3% relative conversion lift = R5,763. Low case 1%, high
+  case 6%.</p>
+  <p><strong>Why it is the softest:</strong> without GA4 access there is no conversion rate to lift,
+  so this is an industry-shaped estimate rather than a measurement. It is included because the
+  qualitative case is overwhelming — competitors show 920+ reviews, Reptilia sells live animals at up
+  to R14,495 with no social proof at all — but the number should be treated as illustrative.</p>
+</div>
+
+<h3>7. Cross-sell and attach — R4,433</h3>
+<div class="card">
+  <p><strong>Trailing twelve months:</strong> 152 feed orders (27.0% ice pack attach), 33 cage orders
+  (57.6% accessory attach), 45 livestock orders (28.9% attach any equipment).</p>
+  <p><strong>Arithmetic:</strong> ice pack attach to 40% at R25 each, plus cage attach +15 points at
+  R250, plus livestock attach +15 points at R400. Low case +8 points, high +22.</p>
+  <p><strong>Why it looks small:</strong> the TTM order counts are low, so the arithmetic is small.
+  The five-year attach picture is worse than the TTM one (13.6% ice pack lifetime against 27% now),
+  which means attach is <em>already improving on its own</em> — the prompt just makes it deliberate.</p>
+</div>
+
+<h3>8. Failed checkouts — R1,483</h3>
+<div class="card">
+  <p><strong>Arithmetic:</strong> 21 cancelled or failed orders in the last twelve months × 10%
+  recovery × R706 = R1,483.</p>
+  <p><strong>Why so small:</strong> because the problem largely fixed itself. The failure rate ran
+  17% to 24% from 2023 to 2025 and is 5.4% in 2026. Lifetime the number is much larger — 181 orders
+  worth R124,632, with 107 email addresses that never converted at all.</p>
+  <p><strong>The finding is worth more than the money:</strong> a 23.8% to 5.4% drop is a large,
+  valuable, unexplained improvement. It should be identified and written down so a future change does
+  not silently undo it.</p>
+</div>
+
+<h3>9. Shipping threshold — R0, modelled and rejected</h3>
+<div class="card">
+  <div class="tw">
+  <table>
+  <thead><tr><th>Threshold</th><th class="num">Already above</th><th class="num">Shipping forgone</th><th class="num">Near-miss</th><th class="num">Avg shortfall</th><th class="num">Goods gained</th><th class="num">Net</th></tr></thead>
+  <tbody>
+  <tr><td>R500</td><td class="num">135</td><td class="num">R27,600</td><td class="num">85</td><td class="num">R119</td><td class="num">R5,052</td><td class="num">−R22,548</td></tr>
+  <tr><td>R750</td><td class="num">89</td><td class="num">R19,840</td><td class="num">78</td><td class="num">R204</td><td class="num">R7,942</td><td class="num">−R11,898</td></tr>
+  <tr><td>R1,000</td><td class="num">51</td><td class="num">R13,680</td><td class="num">73</td><td class="num">R247</td><td class="num">R9,001</td><td class="num">−R4,679</td></tr>
+  </tbody>
+  </table>
+  </div>
+  <p><strong>Assumption:</strong> 50% of near-miss orders top up to clear the threshold. Even at that
+  generous rate every level is negative, because the shipping given away on orders that already clear
+  the bar exceeds the uplift.</p>
+  <p><strong>What would change it:</strong> gross profit rather than revenue. If R160 does not cover
+  Reptilia's courier cost, the forgone revenue is matched by forgone cost. That number is not in the
+  data. Carried at zero pending one answer from Willem.</p>
+  <p><strong>This corrects recommendation 4 of the 13 August ecommerce scorecard</strong>, which
+  proposed a threshold at about R750 without modelling the giveaway.</p>
+</div>
+
+<h2>What is deliberately excluded</h2>
+
+<div class="callout warn">
+  <span class="label">Six things not in the total</span>
+  <ul>
+    <li><strong>Traffic and conversion rate.</strong> GA4 and GTM are firing but under an account JCE
+    cannot access. We can measure what buyers did, not how many arrived and left. <em>Almost
+    certainly the largest number missing from this document.</em></li>
+    <li><strong>Site speed.</strong> 3.21 seconds to first byte against a healthy sub-800ms. Real
+    conversion cost, unsizable without analytics.</li>
+    <li><strong>Search and navigation.</strong> Scored 2/10 and known to be the biggest conversion
+    blocker. "lizard" returns zero results on a reptile shop. Unsizable without traffic data.</li>
+    <li><strong>Margin.</strong> Everything here is revenue. Cost of goods is not in WooCommerce, so
+    nothing has been converted to profit.</li>
+    <li><strong>Paid advertising.</strong> No channel is running, and building demand before fixing
+    the shop would be paying to send people to 404s.</li>
+    <li><strong>The physical shop.</strong> Twenty years, a 4.6 Google rating, an exhibition and a
+    petting zoo. Real assets, no way to size them from order data.</li>
+  </ul>
+</div>
+
+<h2>How to argue with this model</h2>
+
+<p>Four places it could reasonably be wrong, listed so they can be checked rather than defended:</p>
+
+<ol>
+  <li><strong>The 8% reactivation rate.</strong> If the list is colder than assumed, line 1 halves.
+  It is also the largest line, so this is the single biggest sensitivity. It is testable within two
+  weeks by mailing the 75-person 6-to-12-month band and measuring.</li>
+  <li><strong>The 98 never-sold animals may not exist.</strong> If half those listings are for animals
+  already sold in the shop, line 2 halves. One stock check answers it.</li>
+  <li><strong>The 40% redirect recovery rate.</strong> Some of the 1,591 dead URLs were deliberately
+  removed products that should stay dead. Willem's answer to decision 3 in
+  <a href="10-the-90-day-plan.html">document 10</a> settles this.</li>
+  <li><strong>The cohort decline may be a market effect, not a Reptilia effect.</strong> If South
+  African reptile keeping has simply become more competitive, some of line 4 is unrecoverable.
+  Nothing in the data can separate these, and the fix — building a retention engine — is worth doing
+  under either explanation.</li>
+</ol>
+
+<h2>Reproducing all of it</h2>
+
+<p>Nothing in this blueprint was typed by hand. Every figure comes from one of three scripts run
+against the 13 August WooCommerce pull:</p>
+
+<div class="tw">
+<table>
+<thead><tr><th>Script</th><th>Produces</th></tr></thead>
+<tbody>
+<tr><td><code>site/tools/audit-commercial.mjs</code></td><td>Top products, categories, customers, cohorts, baskets, co-purchase, dead stock, catalogue economics</td></tr>
+<tr><td><code>site/tools/audit-commercial-deep.mjs</code></td><td>Customer ledger, LTV by frequency and acquisition group, segments, time-to-second-order, win-back pool, geography, description reality, livestock audit</td></tr>
+<tr><td><code>site/tools/audit-money-model.mjs</code></td><td>This document</td></tr>
+</tbody>
+</table>
+</div>
+
+<p>Output lands in <code>audit-2026-08-13/findings/commercial/</code>. Re-running them against a
+fresh pull regenerates every number here, which is how the four retention measures in
+<a href="08-the-retention-engine.html">document 08</a> get tracked month to month — <strong>without
+needing the analytics access that is still blocked.</strong></p>
+
+<div class="docnav">
+  <a href="10-the-90-day-plan.html">← The 90-day plan</a>
+  <a href="index.html">Back to the index →</a>
+</div>
+
+<div class="foot">Reptilia Growth Blueprint · Document 11 · JCE Media · 15 August 2026</div>
+
+</div>
+</body>
+</html>
