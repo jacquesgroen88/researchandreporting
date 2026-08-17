@@ -1,0 +1,122 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>The Measurement Rebuild | RedirHub Seven Figure Blueprint</title>
+<link rel="stylesheet" href="_style.css"></head><body><div class="wrap">
+
+<div class="doc-head">
+  <span class="eyebrow">12 · Execution</span>
+  <h1>The measurement rebuild</h1>
+  <p class="lede">The company can see how many people arrive and how many sign up. It cannot see where they came from, whether they trialled, whether anyone cancelled, or what a customer is worth. Three small engineering changes fix most of it, and one of them has to happen in a specific order or the first clean dataset will be quietly wrong.</p>
+  <div class="meta">Verified in the ClickHouse schema, the backend source, and the admin resource · 14 to 15 August 2026</div>
+</div>
+
+<h2>Fault one: the attribution field is not broken, it is meaningless</h2>
+
+<p>This is the most consequential technical finding in the Blueprint.</p>
+
+<div class="tw"><table>
+<thead><tr><th>Source</th><th>Definition</th></tr></thead>
+<tbody>
+<tr><td><code>schema.sql</code> 520 to 540</td><td><code>landing_page SimpleAggregateFunction(max, String)</code></td></tr>
+<tr><td><code>schema.sql</code> 543 to 569</td><td><code>if(event = 'pageview', landing_page, '') AS landing_page FROM logs.events</code></td></tr>
+<tr><td>Table name</td><td><code>logs.funnel_first_touch</code></td></tr>
+</tbody></table></div>
+
+<p>Per footprint, <code>landing_page</code> resolves to the <strong>lexicographic maximum</strong> of every page in the session. Not the first page. Not the last page. The one that sorts highest alphabetically. The table name asserts first touch and the implementation does something else entirely.</p>
+
+<div class="finding">
+  <span class="label">What this does to every number anyone has read</span>
+  <h3>The table is inversely measuring session depth</h3>
+  <p>Page paths sort alphabetically, so a session's recorded landing page is simply the latest-alphabetical page it touched. <code>/pricing</code> (p) absorbs <strong>every session that also touched anything in the a to o range</strong>, which is most of the site: the blog, docs, compare, changelog, enterprise, free-redirect-service, domain-parking, branded-links, mcp and the homepage. Meanwhile <code>/free-redirect-service</code> (f) survives only when the session touched nothing after "f", which overwhelmingly means single-page bounces.</p>
+  <p>So high-sorting pages accumulate deep, engaged, multi-page sessions and low-sorting pages are left holding shallow ones. The 29.3% against 5.5% gap is <strong>alphabet plus session depth</strong>. It is not a property of either page, and the pricing message test recommended by two prior reports has no valid baseline.</p>
+</div>
+
+<h3>A second, separate hole</h3>
+<p>The <code>(empty)</code> bucket of 3,198 visitors is not merely unattributed. An empty string sorts <em>lowest</em>, so a session lands there only if <strong>no pageview event carried a landing page at all</strong>. That is a complete instrumentation failure across roughly a quarter of all traffic, and it is a different problem from the aggregation bug.</p>
+
+<h3>The fix</h3>
+<ul>
+<li>Emit <strong>two distinct fields</strong>: <code>first_landing_page</code> via <code>argMin(landing_page, timestamp)</code> and <code>last_page_before_conversion</code> via <code>argMax(...)</code>.</li>
+<li>Persist <strong>first-touch and last-touch source, campaign ID, referrer, locale and landing page</strong> through signup and organisation creation, not just into the pageview stream.</li>
+<li>Find and fix whatever causes 3,198 sessions to record no landing page.</li>
+<li><strong>Rename the table.</strong> A table called <code>funnel_first_touch</code> that does not contain first touch will mislead the next person as reliably as it misled the last two reports.</li>
+</ul>
+
+<h2>Fault two: churn cannot be measured at all</h2>
+
+<div class="callout bad">
+  <span class="label">No history exists</span>
+  <p>The admin resource exposes <strong>current plan rows only</strong>. There is no append-only plan-change or cancellation history. Monthly churn, downgrades, net revenue retention and cohort curves cannot be reconstructed now, and cannot be reconstructed later for the period before the fix. <strong>Every week without this is retention history permanently lost.</strong></p>
+</div>
+
+<p>With roughly half of revenue concentrated in three accounts, this is the single most dangerous gap in the business. A silent cancellation would not be recorded, not be alerted, and not be visible in any report. Build the event log described in <strong>10 Lifecycle and Retention</strong> first, ahead of the attribution work, because attribution can be backfilled from raw logs and retention history cannot.</p>
+
+<h2>Fault three: the trial event is not firing</h2>
+
+<p>Four tracked trials against 329 signups and 261 activations, on a product advertising a 14-day trial on every plan. The event is emitted through <code>TrackEventService::track()</code> and gated in <code>SubscriptionObserver</code> on a transition into a trial state with a once-only guard. The funnel materialised view counts <code>trial_started</code> only on an exact event match.</p>
+
+<p>Three candidate causes, none yet isolated: trial creation bypassing the observer entirely, eligibility gates rejecting most users, or the queued job failing silently. Reconcile the subscription table against emitted events to find out. Treat this as broken instrumentation rather than an ambiguous definition. It is also the source of the impossible 175% trial-to-paid figure that both prior reports correctly refused to use.</p>
+
+<h2>Fault four: no canonical MRR</h2>
+
+<p>Nine plan identifiers, 36 rows priced at zero, organisations holding multiple rows, and annual and monthly prices mixed in the same column. No single number exists for monthly recurring revenue anywhere in the business. This is why an internal brief reported 69 active plan rows when the live figure is 128, and why every revenue figure in this Blueprint is stated as an estimate with its assembly method shown.</p>
+
+<h2>The order this must happen in</h2>
+
+<div class="callout warn">
+  <span class="label">Consolidate pages before repairing attribution</span>
+  <p>Four pairs of comparison pages and a duplicate homepage currently return 200 with self-referencing canonicals. If attribution is repaired while they still exist, <strong>the first clean landing-page dataset arrives already split across duplicate URLs</strong>. The affected comparison pages will under-report by roughly half, on exactly the highest commercial-intent queries in the category, and the first month of trustworthy data will be confidently wrong. Consolidate first. It is one day of work and it protects everything measured afterwards.</p>
+</div>
+
+<div class="tw"><table>
+<thead><tr><th class="num">Order</th><th>Change</th><th class="num">Effort</th><th>Unblocks</th></tr></thead>
+<tbody>
+<tr><td class="num">1</td><td>Subscription event log</td><td class="num">Small eng</td><td>Churn, NRR, cohorts, concentration reporting. Loses value every week it waits.</td></tr>
+<tr><td class="num">2</td><td>Consolidate 4 comparison pairs, 301 <code>/homepage</code></td><td class="num">1 day</td><td>Clean URL space for everything downstream</td></tr>
+<tr><td class="num">3</td><td>Canonical MRR definition and zero-row classification</td><td class="num">1 day</td><td>Every revenue number in the business</td></tr>
+<tr><td class="num">4</td><td>Google Tag Manager plus consent platform with Consent Mode v2</td><td class="num">2 to 3 days</td><td>Any future tag without a deploy; EU compliance cover for collecting more</td></tr>
+<tr><td class="num">5</td><td>Split <code>landing_page</code> into first and last touch; rename the table</td><td class="num">Small eng</td><td>Every channel and page decision</td></tr>
+<tr><td class="num">6</td><td>Persist campaign ID through signup, activation and payment</td><td class="num">Medium</td><td>Campaign-level return; the precondition for paid spend</td></tr>
+<tr><td class="num">7</td><td>Fix the trial event</td><td class="num">Small</td><td>Visibility into the stage where the funnel actually breaks</td></tr>
+<tr><td class="num">8</td><td>Fix the 3,198 sessions recording no landing page</td><td class="num">Small</td><td>A quarter of all traffic</td></tr>
+</tbody></table></div>
+
+<h2>The dashboard, once this works</h2>
+
+<div class="two">
+<div class="card">
+<h3>Weekly</h3>
+<ul>
+<li>Enterprise opportunities: created, advanced, closed</li>
+<li>New MRR, expansion MRR, churned MRR</li>
+<li>Signups and activations by first-touch source</li>
+<li>Search Console clicks by comparison cluster</li>
+</ul>
+</div>
+<div class="card">
+<h3>Monthly</h3>
+<ul>
+<li>Canonical MRR and account count by tier</li>
+<li>Net revenue retention</li>
+<li>Top five accounts as a share of MRR</li>
+<li>Review count and average</li>
+<li>AI answer-engine visibility check</li>
+</ul>
+</div>
+</div>
+
+<h2>What can be measured today, before any of this lands</h2>
+
+<p>Not everything is blocked. These are reliable right now and should be the interim scorecard:</p>
+
+<ul>
+<li><strong>Total signups and activations.</strong> The aggregate is trustworthy; only the source attribution is not. A before-and-after read on a major change is defensible if it is the only major change in the period.</li>
+<li><strong>Search Console.</strong> Fully independent of ClickHouse. Impressions, clicks and position per page, which is the entire measurement surface for <strong>07</strong>.</li>
+<li><strong>Review count and average.</strong> Directly countable.</li>
+<li><strong>Enterprise opportunities and closes.</strong> Once a pipeline exists, this is counted by hand and is the most important number in the plan.</li>
+<li><strong>Branded search volume.</strong> The cleanest available proxy for whether the positioning is landing.</li>
+</ul>
+
+<div class="foot">RedirHub Seven Figure Blueprint · 12 The Measurement Rebuild · JCE Media · 15 August 2026</div>
+</div></body></html>

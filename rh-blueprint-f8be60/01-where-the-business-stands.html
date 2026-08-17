@@ -1,0 +1,175 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Where the Business Stands | RedirHub Seven Figure Blueprint</title>
+<link rel="stylesheet" href="_style.css"></head><body><div class="wrap">
+
+<div class="doc-head">
+  <span class="eyebrow">01 · Diagnosis</span>
+  <h1>Where the business stands</h1>
+  <p class="lede">Every number here comes from a live read: the production admin resource, the ClickHouse funnel across four instances, the Mailcoach API, Baserow, public DNS, and direct inspection of the site. Where a number cannot be defended, it is marked unknown rather than estimated.</p>
+  <div class="meta">Live reads taken 13 to 15 August 2026 · Figures marked estimated are assembled by hand because no canonical source exists</div>
+</div>
+
+<h2>The funnel</h2>
+
+<div class="tw"><table>
+<thead><tr><th>Stage</th><th class="num">30 days</th><th class="num">Rate</th><th>Read</th></tr></thead>
+<tbody>
+<tr><td>Visitors</td><td class="num">12,777</td><td class="num">–</td><td>Across all four ClickHouse instances, coverage complete</td></tr>
+<tr><td>Signups</td><td class="num">329</td><td class="num">2.6%</td><td>Reliable in total. Source attribution is not.</td></tr>
+<tr><td>Activations</td><td class="num">261</td><td class="num">79.3%</td><td>The strongest number in the business</td></tr>
+<tr><td>Tracked trials</td><td class="num">4</td><td class="num">1.2%</td><td><span class="pill p-bad">Broken</span> Against a product advertising a 14-day trial on every plan</td></tr>
+<tr><td>Paid events</td><td class="num">7</td><td class="num">2.1% of signups</td><td>Real, but not attributable to any campaign or channel</td></tr>
+</tbody></table></div>
+
+<p>Activation is not the bottleneck and has never been the bottleneck. People who sign up succeed at using the product. The break is entirely between activation and payment, and it is a break the current instrumentation cannot see into.</p>
+
+<div class="callout bad">
+  <span class="label">The trial number is not a finding, it is a fault</span>
+  <p>Four tracked trials against 261 activations is not a low trial rate. The event is gated in <code>SubscriptionObserver</code> on a transition into trial state with a once-only guard, and it is evidently not firing for most trial journeys. Any conclusion drawn from the trial stage today is drawn from noise. It also produces the 175% trial-to-paid figure that both prior reports correctly refused to use.</p>
+</div>
+
+<h2>The customer base</h2>
+
+<div class="stats">
+  <div class="stat"><div class="n">10,533</div><div class="k">Registered users</div></div>
+  <div class="stat"><div class="n">10,552</div><div class="k">Organisations</div></div>
+  <div class="stat"><div class="n">128</div><div class="k">Active plan rows</div></div>
+  <div class="stat"><div class="n">~92</div><div class="k">Rows with a price above zero</div></div>
+  <div class="stat"><div class="n">0.87%</div><div class="k">Registered users who pay</div></div>
+  <div class="stat"><div class="n">Unknown</div><div class="k">Churn, in any form</div></div>
+</div>
+
+<div class="tw"><table>
+<thead><tr><th>Plan</th><th class="num">Active rows</th><th>Displayed price</th><th>Reading</th></tr></thead>
+<tbody>
+<tr><td><code>redirect-basic</code></td><td class="num">50</td><td>$10/mo, some annual</td><td>The volume tier. About $500/mo in total.</td></tr>
+<tr><td><code>redirect-as-1</code></td><td class="num">17</td><td>$0/mo</td><td>Internal, comped or legacy</td></tr>
+<tr><td><code>redirect-pro</code></td><td class="num">15</td><td>$30 to $105/mo</td><td>The genuine mid-tier</td></tr>
+<tr><td><code>redirect-as-3</code></td><td class="num">10</td><td>$0/mo</td><td>Internal, comped or legacy</td></tr>
+<tr><td><code>redirect-free</code></td><td class="num">9</td><td>$0/yr</td><td>Free</td></tr>
+<tr><td><code>redirect-plus</code></td><td class="num">9</td><td>$90/mo</td><td>Strong tier, thin population</td></tr>
+<tr><td><code>redirect-regular</code></td><td class="num">5</td><td>$25/mo</td><td>Legacy naming, overlaps basic and pro</td></tr>
+<tr><td><code>redirect-business</code></td><td class="num">4</td><td>$260/mo</td><td>Where the account value starts to matter</td></tr>
+<tr class="hi"><td><strong>Other named plans</strong></td><td class="num">7+</td><td><strong>includes $599, $1,000 and $2,000/mo</strong></td><td><strong>Roughly half of all revenue sits here</strong></td></tr>
+</tbody></table></div>
+
+<div class="finding">
+  <span class="label">The distribution is the strategy</span>
+  <h3>Three rows produce more than a hundred others</h3>
+  <p>$2,000 + $1,000 + $599 = <strong>$3,599 a month from three plan rows</strong>. The fifty <code>redirect-basic</code> accounts together produce about <strong>$500</strong>. One enterprise account is worth roughly the entire volume tier. Nothing in the current marketing, product onboarding or content strategy reflects that.</p>
+</div>
+
+<h2>Nine plan names for what is really three products</h2>
+
+<p>There are at least nine distinct plan identifiers in production, several of them overlapping or legacy: <code>redirect-basic</code>, <code>redirect-regular</code>, <code>redirect-pro</code>, <code>redirect-plus</code>, <code>redirect-business</code>, <code>redirect-free</code>, <code>redirect-as-1</code>, <code>redirect-as-3</code>, plus custom enterprise rows. <code>redirect-basic</code> at $10 and <code>redirect-regular</code> at $25 are not obviously different products. Thirty-six of the 128 rows are priced at zero.</p>
+
+<p>This matters beyond tidiness. Plan sprawl makes MRR uncomputable, makes cohort analysis impossible, and makes any pricing change a migration project. It is addressed in <strong>05 Offer Architecture and Pricing</strong>.</p>
+
+<h2>Traffic and the pages that receive it</h2>
+
+<div class="tw"><table>
+<thead><tr><th>Landing dimension</th><th class="num">Visitors</th><th class="num">Signups</th><th class="num">Rate</th></tr></thead>
+<tbody>
+<tr><td><code>pricing</code></td><td class="num">527</td><td class="num">155</td><td class="num">29.3%</td></tr>
+<tr><td><code>(empty)</code></td><td class="num">3,198</td><td class="num">78</td><td class="num">2.4%</td></tr>
+<tr><td><code>free-redirect-service</code></td><td class="num">605</td><td class="num">33</td><td class="num">5.5%</td></tr>
+<tr><td><code>website-migrations</code></td><td class="num">74</td><td class="num">3</td><td class="num">4.1%</td></tr>
+<tr><td>All other dimensions</td><td class="num">3,373</td><td class="num">60</td><td class="num">1.8%</td></tr>
+<tr class="hi"><td><strong>Total</strong></td><td class="num"><strong>12,777</strong></td><td class="num"><strong>329</strong></td><td class="num"><strong>2.6%</strong></td></tr>
+</tbody></table></div>
+
+<div class="callout bad">
+  <span class="label">Do not act on this table</span>
+  <p>The <code>landing_page</code> column is defined as <code>SimpleAggregateFunction(max, String)</code> over every pageview in a session, so it stores the <strong>alphabetically highest page the visitor touched</strong>. Not the first. Not the last. <code>/pricing</code> therefore absorbs almost every session that also visited anything sorting before it, which is most of the site, while <code>/free-redirect-service</code> retains mainly single-page bounces. The 29.3% against 5.5% gap is alphabet and session depth. It is not a property of either page. Full detail in <strong>12 The Measurement Rebuild</strong>.</p>
+</div>
+
+<p>One thing in the table is reliable. The <code>(empty)</code> bucket of 3,198 visitors is not merely unattributed: because an empty string sorts lowest, a session lands there only if <strong>no pageview recorded a landing page at all</strong>. That is a complete instrumentation hole across a quarter of all traffic.</p>
+
+<h2>What the product does well</h2>
+
+<div class="two">
+<div class="card">
+<h3>Performance</h3>
+<p>Time to first byte measured at <strong>152 to 181 milliseconds</strong> across repeated runs from a South African edge, served pre-rendered from Vercel with a cache hit. DNS 8ms, TLS 83ms. 51 of 58 homepage images lazy-loaded. HSTS set to two years.</p>
+</div>
+<div class="card">
+<h3>Redirect hygiene</h3>
+<p>The apex domain resolves to www in exactly one 301 hop with no chain, served by RedirHub's own edge (<code>X-Powered-By: RedirHub</code>). The company runs its own product in production. That is a proof point worth using in the marketing and it currently appears nowhere.</p>
+</div>
+<div class="card">
+<h3>International</h3>
+<p>Eight fully translated locales (de, es, fr, it, pt, ja, zh, ko) with correct reciprocal hreflang and per-locale canonicals. Genuinely well built. Not one of them appears in the sitemap.</p>
+</div>
+<div class="card">
+<h3>AI readiness</h3>
+<p>A complete 17KB <code>llms.txt</code> mapping every feature and content cluster, a live MCP server, and robots.txt explicitly allowing GPTBot, ChatGPT-User, Google-Extended, ClaudeBot, anthropic-ai and PerplexityBot. Very few companies of this size have shipped any of it.</p>
+</div>
+</div>
+
+<h2>The owned audience</h2>
+
+<div class="tw"><table>
+<thead><tr><th>Measure</th><th class="num">Value</th><th>Reading</th></tr></thead>
+<tbody>
+<tr><td>Total subscriber records</td><td class="num">24,593</td><td>22,188 active, 2,405 unsubscribed</td></tr>
+<tr><td>Lifetime unsubscribe rate</td><td class="num">9.8%</td><td>High</td></tr>
+<tr><td>Records with a <code>source</code></td><td class="num">0</td><td><span class="pill p-bad">Not instrumented</span> Origin is unknown for every single subscriber</td></tr>
+<tr><td>Active with <code>newsletter = 0</code></td><td class="num">2,864</td><td><span class="pill p-bad">Consent risk</span> On the active list, apparently without opting in</td></tr>
+<tr><td>Created before 2026</td><td class="num">16,405</td><td>The list is much older than the current user base</td></tr>
+<tr><td>Subscribers above registered users</td><td class="num">~11,650</td><td>The website has no signup form of any kind. Origin unexplained.</td></tr>
+</tbody></table></div>
+
+<h3>Send performance falls as list size rises</h3>
+
+<div class="tw"><table>
+<thead><tr><th>Date</th><th>Campaign</th><th class="num">Recipients</th><th class="num">Open</th></tr></thead>
+<tbody>
+<tr><td>2026-03-18</td><td>100 links on your free plan</td><td class="num">982</td><td class="num">35.6%</td></tr>
+<tr><td>2026-05-24</td><td>RedirHub isn't the same product</td><td class="num">1,136</td><td class="num">34.8%</td></tr>
+<tr><td>2026-04-01</td><td>PH Product Launch</td><td class="num">18,629</td><td class="num">15.6%</td></tr>
+<tr><td>2026-05-25</td><td>Your redirects, your rules</td><td class="num">8,466</td><td class="num">14.6%</td></tr>
+<tr><td>2026-06-06</td><td>Why teams are switching</td><td class="num">8,061</td><td class="num">4.5%</td></tr>
+<tr class="hi"><td>2026-06-09</td><td>MCP Newsletter</td><td class="num">21,534</td><td class="num"><strong>4.1%</strong></td></tr>
+</tbody></table></div>
+
+<p>A 4.1% open rate on a 21,534-person send is not a copy problem. Typical business software sits between 20% and 40%. The apex SPF record reads <code>v=spf1 include:zeptomail.net include:spf.zoho.com -all</code> with DMARC set to <code>p=reject</code>, authorising only ZeptoMail and Zoho and hard-failing everything else. Mailcoach is verified on the domain but is not in that record. Whether that is a problem depends entirely on whether Mailcoach relays through ZeptoMail, which is not currently known. Detail in <strong>10 Lifecycle and Retention</strong>.</p>
+
+<h2>Outbound as it exists today</h2>
+
+<div class="tw"><table>
+<thead><tr><th>Measure</th><th class="num">Value</th><th>Reading</th></tr></thead>
+<tbody>
+<tr><td>Leads marked outreach-started</td><td class="num">478</td><td>464 Instantly, 13 Coldmail, 1 anomalous</td></tr>
+<tr><td>Rows with an actual email address</td><td class="num">52</td><td>You cannot email the other 412</td></tr>
+<tr><td>CRM opportunities</td><td class="num">3</td><td>All marked Attempted, none Responded</td></tr>
+</tbody></table></div>
+
+<p>This is not a channel with unknown return. It is a channel that largely did not run. 478 is a vanity number describing rows in a table, not messages sent.</p>
+
+<h2>Proof and reputation</h2>
+
+<p><strong>18 public reviews at 4.7 out of 5</strong>, fifteen on Trustpilot and three on G2. The rating is good and the volume caps everything it could support. The reviews page displays the figure and carries <strong>no JSON-LD at all</strong>, so no star rating can appear in search results and no AI answer engine can cite it. The homepage logo bar shows Duende, Whirlpool, Ally, Serb and Expiredomain with no case study, quote or link behind any of them.</p>
+
+<h2>The commercial gap in one place</h2>
+
+<div class="callout bad">
+  <span class="label">What the website offers an enterprise buyer</span>
+  <p>Capture exists on exactly two pages, <code>/enterprise</code> and <code>/scalable-enterprise-solutions</code>, both via Typeform. Everywhere else there is none: no lead form on the homepage or pricing page, and no <code>/about</code>, <code>/contact</code>, <code>/company</code>, <code>/team</code> or <code>/careers</code> page, all five returning 404. No registered address or company number is published. The entity is disclosed but inconsistently: the <strong>Terms of Service</strong> name "RedirHub LLC, a New Mexico limited liability company" while the <strong>Privacy Policy</strong> says "RedirHub is a trade name of RedirHub Inc." Two different legal persons in two binding documents, with LinkedIn listing New York and UK Companies House carrying a REDIRHUB LTD registration on top.</p>
+</div>
+
+<h2>Sources</h2>
+<ul class="src">
+<li>Funnel, landing pages, coverage: infra MCP <code>query_overall_conversion</code> and <code>query_landing_page_performance</code>, 30-day window, four ClickHouse instances, complete</li>
+<li>Plans and users: production admin <code>OrganizationPlanResource</code> (tab=active, pages 1 to 2), <code>UserResource</code>, <code>OrganizationResource</code></li>
+<li>Attribution semantics: <code>schema.sql</code> lines 520 to 569; <code>TrackingLogger.php</code> lines 120 to 137; <code>funnel-analytics.ts</code> lines 45 to 68</li>
+<li>Trial event: <code>TrackEventService.php</code>, <code>SubscriptionObserver.php</code></li>
+<li>Email: Mailcoach REST API, campaigns and email-lists endpoints, subscriber pages 1 to 25</li>
+<li>Outreach: Baserow tables 128, 894 and 875</li>
+<li>DNS: apex TXT, <code>_dmarc</code> TXT and MX resolved via public DNS-over-HTTPS, 14 August 2026</li>
+<li>Site: direct inspection of rendered DOM, response headers, sitemap, schema layer and script stack, 13 August 2026</li>
+</ul>
+
+<div class="foot">RedirHub Seven Figure Blueprint · 01 Where the Business Stands · JCE Media · 15 August 2026</div>
+</div></body></html>

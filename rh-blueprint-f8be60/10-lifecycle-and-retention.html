@@ -1,0 +1,117 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Lifecycle and Retention | RedirHub Seven Figure Blueprint</title>
+<link rel="stylesheet" href="_style.css"></head><body><div class="wrap">
+
+<div class="doc-head">
+  <span class="eyebrow">10 · Channels</span>
+  <h1>Lifecycle and retention</h1>
+  <p class="lede">RedirHub owns a 22,188-person email list and cannot use it. Not because of strategy, but because nobody knows where the subscribers came from, 2,864 of them appear not to have opted in, and open rates collapse to 4.1% on large sends against a DNS configuration that hard-fails unauthorised senders. Meanwhile churn on the paying base cannot be measured at all.</p>
+  <div class="meta">Based on the Mailcoach API, the production plan resource, and public DNS · 14 to 15 August 2026</div>
+</div>
+
+<h2>Part one: retention, which nobody can see</h2>
+
+<div class="callout bad">
+  <span class="label">The structural gap</span>
+  <p>There is <strong>no append-only subscription event log</strong>. The admin resource exposes current plan rows only, with no cancellation, downgrade or plan-change history. Monthly churn, net revenue retention and cohort curves cannot be reconstructed, now or retrospectively. <strong>Every week that passes is retention history permanently lost.</strong></p>
+</div>
+
+<p>This matters more here than at most companies. Roughly half of subscription revenue sits in three accounts. Losing one is a larger event than a quarter of acquisition work, and nothing in the current stack would record it having happened, let alone alert anyone.</p>
+
+<h3>What to build, in order</h3>
+
+<ol>
+<li><strong>An append-only subscription event table.</strong> Every plan create, upgrade, downgrade, cancel, expire and reactivation, with a timestamp, the organisation, the plan and the price at the moment of the change. This is a small engineering task and it is the highest-priority item in the entire data stack.</li>
+<li><strong>A canonical MRR definition.</strong> One organisation, one MRR figure, annual prices normalised to monthly, zero-priced rows classified as free, comped, internal or lapsed. Today no such number exists anywhere in the business.</li>
+<li><strong>A concentration report.</strong> Top five accounts as a share of MRR, refreshed monthly. If the top three really are half the book, that is the single most important number nobody currently sees.</li>
+<li><strong>An at-risk signal.</strong> For a redirect platform, usage decline is visible in the product before it shows up in billing: hostnames removed, request volume falling, a certificate allowed to lapse. Watch it on the accounts that matter.</li>
+</ol>
+
+<h3>The retention motion that follows</h3>
+
+<p>Once the data exists, the highest-value retention work is not automated email. It is a <strong>quarterly conversation with each of the top ten accounts</strong>, owned by a named person. At this account count that is a calendar entry, not a customer success function, and it is the cheapest possible insurance on half the revenue.</p>
+
+<h2>Part two: the email list, which cannot be used yet</h2>
+
+<div class="tw"><table>
+<thead><tr><th>Measure</th><th class="num">Value</th><th>Reading</th></tr></thead>
+<tbody>
+<tr><td>Total subscriber records</td><td class="num">24,593</td><td>22,188 active, 2,405 unsubscribed</td></tr>
+<tr><td>Lifetime unsubscribe rate</td><td class="num">9.8%</td><td>High</td></tr>
+<tr><td>Records carrying a <code>source</code></td><td class="num">0</td><td><span class="pill p-bad">Origin not instrumented for any subscriber</span></td></tr>
+<tr><td>Active with <code>newsletter = 0</code></td><td class="num">2,864</td><td><span class="pill p-bad">On the active list, apparently without opting in</span></td></tr>
+<tr><td>Created before 2026</td><td class="num">16,405</td><td>The list substantially predates the current user base</td></tr>
+<tr><td>Subscribers above registered users</td><td class="num">~11,650</td><td>The website has no signup form of any kind. Origin unexplained.</td></tr>
+</tbody></table></div>
+
+<h3>The open-rate pattern</h3>
+
+<div class="tw"><table>
+<thead><tr><th>Date</th><th>Campaign</th><th class="num">Recipients</th><th class="num">Open</th><th class="num">Click</th></tr></thead>
+<tbody>
+<tr><td>2026-03-18</td><td>100 links on your free plan</td><td class="num">982</td><td class="num">35.6%</td><td class="num">2.6%</td></tr>
+<tr><td>2026-05-24</td><td>RedirHub isn't the same product</td><td class="num">1,136</td><td class="num">34.8%</td><td class="num">2.1%</td></tr>
+<tr><td>2026-06-01</td><td>Referral link expires June 30</td><td class="num">1,074</td><td class="num">10.5%</td><td class="num">4.1%</td></tr>
+<tr><td>2026-04-01</td><td>PH Product Launch</td><td class="num">18,629</td><td class="num">15.6%</td><td class="num">1.4%</td></tr>
+<tr><td>2026-05-25</td><td>Your redirects, your rules</td><td class="num">8,466</td><td class="num">14.6%</td><td class="num">1.4%</td></tr>
+<tr><td>2026-06-06</td><td>Why teams are switching</td><td class="num">8,061</td><td class="num">4.5%</td><td class="num">1.4%</td></tr>
+<tr class="hi"><td>2026-06-09</td><td>MCP Newsletter</td><td class="num">21,534</td><td class="num"><strong>4.1%</strong></td><td class="num">1.3%</td></tr>
+</tbody></table></div>
+
+<p>Small sends to recent, engaged segments open at 35%. Large sends to the full list open at 4%. That is not a content pattern. That is a list-quality or deliverability pattern, and it needs diagnosing before another campaign goes out.</p>
+
+<h3>The DNS position</h3>
+
+<div class="tw"><table>
+<thead><tr><th>Record</th><th>Value</th></tr></thead>
+<tbody>
+<tr><td>Apex SPF</td><td><code>v=spf1 include:zeptomail.net include:spf.zoho.com -all</code></td></tr>
+<tr><td>DMARC</td><td><code>v=DMARC1; p=reject; rua=...glockapps.com, dmarc-reports@redirhub.com, dmarc_agg@vali.email; fo=1;</code></td></tr>
+<tr><td>MX</td><td><code>mx.zoho.com</code>, <code>mx2</code>, <code>mx3</code></td></tr>
+<tr><td>Mailcoach</td><td><code>mailcoach-verification=</code> present on the apex, <strong>not listed in SPF</strong></td></tr>
+</tbody></table></div>
+
+<div class="callout warn">
+  <span class="label">The unresolved question</span>
+  <p>This is the strictest possible posture: SPF hard-fail plus DMARC <code>p=reject</code>, authorising <strong>only ZeptoMail and Zoho</strong>. Mailcoach is verified on the domain but absent from the SPF record. That is fine <em>if</em> Mailcoach relays through ZeptoMail. If it sends over any other path, every bulk message hard-fails and is rejected outright, which would explain 4.1% precisely.</p>
+  <p><strong>Two checks settle it, and neither needs the Zoho API</strong> (which exposes attachment metadata but cannot download the DMARC XML): read <code>MAIL_MAILER</code> and <code>MAIL_HOST</code> on the Mailcoach instance or the sending-domain configuration in the Mailcoach Cloud interface, and <strong>log in to GlockApps directly</strong>, where aggregate reports are already being delivered and appear never to have been read.</p>
+</div>
+
+<div class="callout bad">
+  <span class="label">Why this is a product risk, not a marketing risk</span>
+  <p>RedirHub is an infrastructure vendor. Sender reputation damage from bulk sending degrades <strong>transactional</strong> mail on the same domain: password resets, certificate-expiry alerts, monitoring notifications. Those are reliability failures that customers experience as the product breaking.</p>
+</div>
+
+<h2>The consent position</h2>
+
+<p>Zero of 24,593 subscriber records carry a source. There is no consent-origin event anywhere, so the roughly 11,650 subscribers above the registered-user count cannot be classified as opted-in, imported or acquired. Separately, <strong>2,864 active subscribers carry <code>newsletter = 0</code></strong>, meaning they sit on the active list while apparently not having opted into the newsletter. Five EU locales are served, and there is no consent management platform on the site.</p>
+
+<p>The recommendation is not to delete the list. It is to <strong>establish provenance before using it</strong>:</p>
+
+<ol>
+<li>Reconstruct origin where possible from <code>extra_attributes.landing</code> (present on 15,595 active records) and <code>referrer</code> (17,604), plus registration records where the user exists in the product.</li>
+<li>Suppress the 2,864 <code>newsletter = 0</code> records from marketing sends until an opt-in can be evidenced.</li>
+<li>Instrument <code>source</code> and a consent timestamp on every new subscriber from now on. This is a small change that prevents the same problem recurring.</li>
+<li>Re-permission the segment that cannot be evidenced, rather than mailing it. A re-permission campaign to a cold segment is also the cleanest way to restore list health.</li>
+</ol>
+
+<h2>The lifecycle programme, once unblocked</h2>
+
+<p>In priority order, and none of it starts before deliverability and consent are settled:</p>
+
+<div class="tw"><table>
+<thead><tr><th>Sequence</th><th>Audience</th><th>Goal</th><th>Why it ranks here</th></tr></thead>
+<tbody>
+<tr><td><strong>Activated but never paid</strong></td><td>Users with a live redirect on a free plan</td><td>First paid conversion</td><td>261 activations a month and 7 paid events. This is the largest addressable gap in the funnel.</td></tr>
+<tr><td><strong>Approaching a plan limit</strong></td><td>Free and Starter accounts nearing hostname or request limits</td><td>Upgrade at the moment of need</td><td>Triggered by real usage, so it is relevant rather than promotional</td></tr>
+<tr><td><strong>Dormant with prior usage</strong></td><td>Accounts with hosts or historic traffic and no recent activity</td><td>Reactivation</td><td>Behaviour-segmented, unlike the broad newsletter</td></tr>
+<tr><td><strong>Expansion</strong></td><td>Business-tier accounts</td><td>SSO, nameservers, dedicated cluster</td><td>Add-ons are already priced and almost invisible</td></tr>
+<tr><td><strong>Migration moment</strong></td><td>Accounts that just completed a bulk import</td><td>Ask for a review</td><td>The single best moment to move the review count off 18</td></tr>
+</tbody></table></div>
+
+<p class="src">Note the last row. The review-volume problem in <strong>02 The Leak Map</strong> and the lifecycle programme solve each other: the successful-migration moment is both the highest-satisfaction point in the product and the easiest trigger to automate.</p>
+
+<div class="foot">RedirHub Seven Figure Blueprint · 10 Lifecycle and Retention · JCE Media · 15 August 2026</div>
+</div></body></html>

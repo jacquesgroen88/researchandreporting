@@ -1,0 +1,98 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Offer Architecture and Pricing | RedirHub Seven Figure Blueprint</title>
+<link rel="stylesheet" href="_style.css"></head><body><div class="wrap">
+
+<div class="doc-head">
+  <span class="eyebrow">05 · Market and Buyer</span>
+  <h1>Offer architecture and pricing</h1>
+  <p class="lede">Nine plan identifiers, thirty-six rows priced at zero, no canonical MRR, and an enterprise tier with no published anchor. The pricing page is not the problem. The plan estate behind it is.</p>
+  <div class="meta">Live plan data from the production admin resource · 15 August 2026</div>
+</div>
+
+<h2>What exists today</h2>
+
+<div class="tw"><table>
+<thead><tr><th>Plan identifier</th><th class="num">Rows</th><th>Price</th><th>Assessment</th></tr></thead>
+<tbody>
+<tr><td><code>redirect-free</code></td><td class="num">9</td><td>$0/yr</td><td>Keep</td></tr>
+<tr><td><code>redirect-as-1</code></td><td class="num">17</td><td>$0/mo</td><td><span class="pill p-warn">Unclear</span> Internal, comped or legacy</td></tr>
+<tr><td><code>redirect-as-3</code></td><td class="num">10</td><td>$0/mo</td><td><span class="pill p-warn">Unclear</span> Internal, comped or legacy</td></tr>
+<tr><td><code>redirect-basic</code></td><td class="num">50</td><td>$10/mo</td><td>The volume tier</td></tr>
+<tr><td><code>redirect-regular</code></td><td class="num">5</td><td>$25/mo</td><td><span class="pill p-bad">Redundant</span> Not meaningfully distinct from basic or pro</td></tr>
+<tr><td><code>redirect-pro</code></td><td class="num">15</td><td>$30 to $105/mo</td><td>Real tier, wide price spread</td></tr>
+<tr><td><code>redirect-plus</code></td><td class="num">9</td><td>$90/mo</td><td><span class="pill p-bad">Redundant</span> Overlaps pro</td></tr>
+<tr><td><code>redirect-business</code></td><td class="num">4</td><td>$260/mo</td><td>Where value starts to matter</td></tr>
+<tr class="hi"><td><strong>Custom / enterprise rows</strong></td><td class="num">7+</td><td><strong>$599, $1,000, $2,000/mo</strong></td><td><strong>Roughly half the revenue</strong></td></tr>
+</tbody></table></div>
+
+<h3>Add-ons, already priced</h3>
+<p><strong>SSO $200/mo · Custom nameservers $100/mo · Dedicated cluster $300/mo.</strong> These are well designed and correctly priced: they attach to exactly the buyer who can pay, and they are the natural expansion path for profile 2. They are also almost invisible, buried below a hostname slider on a page a G2 reviewer has publicly said "could be a bit clearer".</p>
+
+<div class="callout bad">
+  <span class="label">The structural problem</span>
+  <p>Nine identifiers for what is really three products, with <strong>36 of 128 rows priced at zero</strong> and several organisations holding more than one row. The consequences are not cosmetic. MRR cannot be computed. Cohort analysis is impossible. Any price change becomes a migration project. And nobody can answer "what is an average account worth" without doing it by hand, which is why the previous internal brief reported 69 active rows when the live figure is 128.</p>
+</div>
+
+<h2>The proposed architecture</h2>
+
+<p>Three self-serve tiers, one enterprise tier, one partner tier. Named for the buyer, not for the internals.</p>
+
+<div class="tw"><table>
+<thead><tr><th>Tier</th><th>Buyer</th><th class="num">Price</th><th>Anchor feature</th><th>Maps from</th></tr></thead>
+<tbody>
+<tr><td><strong>Free</strong></td><td>Trial, side projects, developers</td><td class="num">$0</td><td>5 hostnames, 100k requests, automatic HTTPS, full API and MCP</td><td><code>redirect-free</code></td></tr>
+<tr><td><strong>Starter</strong></td><td>One business, a handful of domains</td><td class="num">$12/mo</td><td>25 hostnames, wildcards, branded links</td><td><code>redirect-basic</code>, <code>redirect-regular</code></td></tr>
+<tr><td><strong>Team</strong></td><td>Agencies, multi-domain operators</td><td class="num">$99/mo</td><td>250 hostnames, team roles, bulk operations, detailed analytics</td><td><code>redirect-pro</code>, <code>redirect-plus</code></td></tr>
+<tr><td><strong>Business</strong></td><td>Enterprise web and IT teams</td><td class="num">$299/mo</td><td>2,500 hostnames, audit logs, raw log export, priority support</td><td><code>redirect-business</code></td></tr>
+<tr class="hi"><td><strong>Enterprise</strong></td><td>Portfolio operators, large estates</td><td class="num"><strong>From $699/mo</strong></td><td>Unlimited scale, SSO, custom nameservers, dedicated cluster, signed DPA, contractual SLA</td><td>Custom rows</td></tr>
+<tr><td><strong>Partner</strong></td><td>Agencies reselling</td><td class="num">Margin-based</td><td>Client sub-accounts, white-label option, consolidated billing</td><td><span class="pill p-bad">Does not exist</span></td></tr>
+</tbody></table></div>
+
+<h2>Four pricing decisions</h2>
+
+<div class="tl">
+  <div class="tl-item" data-n="1">
+    <h3>Publish an enterprise anchor: from $699 a month</h3>
+    <p>The May prospect was quoted <strong>$699 a month or $6,990 a year</strong>. That number already exists, was already deemed sayable to a customer, and is currently hidden behind Talk to sales. Publishing it does three things: it qualifies out the tyre-kickers before they consume time, it anchors the negotiation upward rather than downward, and it lets a procurement team build a budget line without a call. The annual figure also embeds a two-months-free discount, which is a clean reason to prefer annual.</p>
+  </div>
+  <div class="tl-item" data-n="2">
+    <h3>Collapse nine identifiers into five, and resolve the zero rows</h3>
+    <p>Thirty-six rows at $0 need classifying: genuinely free, comped, internal, or lapsed and should be closed. Until that is done nobody knows how many customers RedirHub has. This is a prerequisite for the money model, not a tidy-up.</p>
+  </div>
+  <div class="tl-item" data-n="3">
+    <h3>Build the partner tier</h3>
+    <p>Marginal cost per hostname is close to zero. Agencies already appear across the paid base, already manage domains they do not own, and the team-management feature set they need already ships. A partner tier turns a customer into a channel, and every peer that scaled in this category did it this way. Consolidated billing and client sub-accounts are the whole product.</p>
+  </div>
+  <div class="tl-item" data-n="4">
+    <h3>Charge for migration, or use it deliberately as the land</h3>
+    <p>Free migrations are already offered and promoted in <code>llms.txt</code>, but there is no page where a buyer can hand over the job. Either make it a paid onboarding service at the Business and Enterprise tiers, or keep it free and treat it explicitly as the land motion. What it cannot be is an unadvertised favour, which is what it is now.</p>
+  </div>
+</div>
+
+<h2>Fixing the pricing page</h2>
+
+<p>A public G2 reviewer has already said the pricing page "could be a bit clearer". The hostname slider is a good idea that has become the whole interface. Three changes:</p>
+
+<ul>
+<li><strong>A three-column plan summary above the comparison matrix.</strong> Name, price, who it is for, one anchor feature, one call to action. The slider stays underneath for people who want to model their own volume.</li>
+<li><strong>Surface the add-ons as an expansion path</strong>, not a footnote. SSO, nameservers and dedicated cluster are the bridge from Business to Enterprise.</li>
+<li><strong>Put the enterprise anchor price on the page</strong> with a working way to start a conversation, which currently does not exist anywhere on the site.</li>
+</ul>
+
+<div class="callout warn">
+  <span class="label">Do not A/B test this yet</span>
+  <p>The pricing page currently appears to convert at 29.3% because <code>landing_page</code> stores the alphabetically highest page in a session, so <code>/pricing</code> absorbs nearly every multi-page session. There is <strong>no valid baseline to test against</strong> until the attribution fix in <strong>12</strong> lands. Fix the legibility problems above because they are self-evidently right, not because a test told you to. Save the message testing for when the measurement is real.</p>
+</div>
+
+<h2>What not to change</h2>
+
+<ul>
+<li><strong>The free tier stays generous.</strong> 100,000 requests and 5 hostnames is a genuine differentiator against Bitly, it is repeatedly praised in the reviews, and it costs almost nothing to serve.</li>
+<li><strong>API and MCP stay on every plan including free.</strong> That is the distribution wedge. Gating it would close the cheapest route into the accounts that pay.</li>
+<li><strong>No price rise on the existing base</strong> until churn can be measured. Raising prices while blind to cancellations is how a concentrated book gets quietly destroyed.</li>
+</ul>
+
+<div class="foot">RedirHub Seven Figure Blueprint · 05 Offer Architecture and Pricing · JCE Media · 15 August 2026</div>
+</div></body></html>

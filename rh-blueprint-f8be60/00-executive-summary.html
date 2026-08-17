@@ -1,0 +1,113 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Executive Summary | RedirHub Seven Figure Blueprint</title>
+<link rel="stylesheet" href="_style.css"></head><body><div class="wrap">
+
+<div class="doc-head">
+  <span class="eyebrow">00 · Executive Summary</span>
+  <h1>Ten thousand users, ninety-two customers, and three accounts that pay for everything</h1>
+  <p class="lede">RedirHub does not have a traffic problem or a product problem. It has a monetisation problem that looks like a marketing problem. Seven figures is reached by moving up-market to the accounts that already pay, not by adding free signups to a base of ten thousand that mostly never will.</p>
+  <div class="meta">Prepared by JCE Media for RedirHub · 15 August 2026 · Built on live ClickHouse funnel data, the production admin resource, the Mailcoach API, Baserow, DNS records and the live site</div>
+</div>
+
+<h2>The diagnosis in one paragraph</h2>
+
+<p>RedirHub runs genuinely good infrastructure. Time to first byte measures between 152 and 181 milliseconds from a South African edge, the apex domain redirects in a single clean hop served by its own network, and it ships a complete <code>llms.txt</code> plus a live MCP server that almost no competitor in the category has. On top of that sits an acquisition funnel that converts 79% of signups into activated users. And then it stops. Of 10,533 registered users, roughly <strong>92 pay for anything</strong>. Three plan rows produce about half of all subscription revenue. Enterprise enquiries are captured, through a Typeform on the enterprise page and another on the scalable-solutions page, and then owned by nobody: a $6,990 annual quote was invoiced in June and no one in the business can currently say whether it was paid.</p>
+
+<div class="finding">
+  <span class="label">The core finding</span>
+  <h3>Three accounts are roughly half the revenue</h3>
+  <p>Three visible plan rows at <strong>$2,000, $1,000 and $599 a month</strong> total $3,599 and plausibly represent around <strong>half of all subscription revenue</strong>. Fifty accounts at $10 a month together produce $500, roughly a seventh of what those three do. Every system in the business, the content, the free tier, the onboarding, the newsletter, is pointed at the fifty. Nothing is pointed at the three.</p>
+</div>
+
+<h2>Where the business actually stands</h2>
+
+<div class="stats">
+  <div class="stat"><div class="n">128</div><div class="k">Active plan rows, around 92 of them paying</div></div>
+  <div class="stat"><div class="n">~$7k</div><div class="k">Estimated MRR, roughly $84k ARR</div></div>
+  <div class="stat"><div class="n">0.87%</div><div class="k">Registered users who pay anything</div></div>
+  <div class="stat"><div class="n">7</div><div class="k">Paid events in the last 30 days</div></div>
+  <div class="stat"><div class="n">79.3%</div><div class="k">Signup to activation, the funnel's one strong number</div></div>
+  <div class="stat"><div class="n">22,188</div><div class="k">Email subscribers, none with a recorded source</div></div>
+</div>
+
+<p>There is no canonical MRR figure anywhere in the business. The estimate above is assembled by hand from the plan resource, mixing monthly and annual rows across organisations that hold more than one. That absence is itself a finding: <strong>a subscription business that cannot state its own MRR cannot manage it</strong>, and the same gap makes churn impossible to measure at all.</p>
+
+<h2>The four moves</h2>
+
+<div class="tl">
+  <div class="tl-item" data-n="1">
+    <h3>Put a pipeline behind the enterprise enquiries already arriving</h3>
+    <p>Capture exists. The <code>/enterprise</code> page's Book a demo buttons scroll to a <code>#book-demo</code> section holding a live Typeform, and <code>/scalable-enterprise-solutions</code> carries a second one. What does not exist is anything behind them. A 1,000-hostname prospect was quoted <strong>$6,990 a year</strong> and invoiced in June with no recorded outcome, and two further evaluations took calls in June and July. <strong>None are in the CRM</strong>, which holds three opportunities all marked Attempted. No owner, no next step, no recorded result. This is the single largest unbuilt thing in the company.</p>
+  </div>
+  <div class="tl-item" data-n="2">
+    <h3>Point the content engine at the buyer who pays</h3>
+    <p>The 22 comparison pages split cleanly into an infrastructure cluster (nginx, htaccess, Cloudflare, AWS, Vercel, Netlify, WordPress, redirection.io) and a shortener cluster (Bitly, TinyURL, Rebrandly, Short.io, Dub). The first maps to the accounts paying hundreds of dollars a month. The second maps to the free tier. Both are currently treated identically, and four of them are competing against duplicate versions of themselves. The <strong>45-day certificate change</strong> is a forced-migration event aimed squarely at the first group, and the content for it already exists unpromoted.</p>
+  </div>
+  <div class="tl-item" data-n="3">
+    <h3>Make the numbers real before spending against them</h3>
+    <p>The <code>landing_page</code> field stores the <strong>alphabetically highest page</strong> in a session, not the first or the last. The table is called <code>funnel_first_touch</code>. In practice <code>/pricing</code> absorbs nearly every session that also touched a page starting a to o, which is why it appears to convert at 29% while the free tool shows 5%. There is no subscription event history, so churn cannot be measured. The trial event fires four times against 329 signups. Three small engineering fixes turn a blind business into a measurable one.</p>
+  </div>
+  <div class="tl-item" data-n="4">
+    <h3>Sell the moat nobody knows exists</h3>
+    <p>A live MCP server, a complete <code>llms.txt</code>, and a robots.txt explicitly welcoming GPTBot, ClaudeBot and PerplexityBot. An AI agent can generate a landing page but cannot point a domain at it. RedirHub closes that gap today and no competitor in the category has an answer. Nothing on the website tells a single visitor this exists.</p>
+  </div>
+</div>
+
+<h2>What seven figures actually requires</h2>
+
+<p>Modelled in full in <strong>14 The Money Model</strong>. One million dollars of ARR is $83,333 of MRR, against roughly $7,000 today. The shape of the answer matters more than the total:</p>
+
+<div class="tw"><table>
+<thead><tr><th>Tier</th><th class="num">Accounts now</th><th class="num">Accounts at month 24</th><th class="num">Avg $/mo</th><th class="num">MRR at month 24</th></tr></thead>
+<tbody>
+<tr><td><strong>Enterprise</strong> ($599 and above)</td><td class="num">3</td><td class="num">45</td><td class="num">$1,200</td><td class="num">$54,000</td></tr>
+<tr><td><strong>Growth</strong> ($90 to $260)</td><td class="num">~30</td><td class="num">180</td><td class="num">$140</td><td class="num">$25,200</td></tr>
+<tr><td><strong>Entry</strong> ($10 to $30)</td><td class="num">~55</td><td class="num">400</td><td class="num">$18</td><td class="num">$7,200</td></tr>
+<tr class="hi"><td><strong>Total</strong></td><td class="num"><strong>~88</strong></td><td class="num"><strong>625</strong></td><td class="num"></td><td class="num"><strong>$86,400/mo · $1.04m ARR</strong></td></tr>
+</tbody></table></div>
+
+<div class="callout">
+  <span class="label">Read the table this way</span>
+  <p>The enterprise tier is <strong>7% of the accounts and 63% of the revenue</strong>. Forty-five enterprise accounts is the plan. Four hundred entry accounts is a rounding error that happens on its own. Any version of this plan that spends its energy on the bottom row does not reach seven figures, and it is the row every current system is built to serve.</p>
+</div>
+
+<h2>What has to be true</h2>
+
+<p>Forty-five enterprise accounts by month 24 means roughly <strong>1.75 net adds a month</strong>. A single six-month mailbox search surfaced four enterprise-shaped opportunities arriving with no capture mechanism, no outbound and a broken demo path, which is about 0.67 a month landing by accident. Reaching 1.75 requires roughly tripling opportunity flow and building a close process that currently does not exist. That is demanding. It is not fantasy, and the first tripling is mostly a matter of catching what already arrives.</p>
+
+<h2>The first thirty days</h2>
+
+<div class="tw"><table>
+<thead><tr><th>Week</th><th>Move</th><th>Why now</th></tr></thead>
+<tbody>
+<tr><td>Week 1</td><td>Chase the $6,990 invoice to a yes or a no. Get the two live evaluations into a CRM with an owner and a next step.</td><td>Real money already quoted, currently tracked by nobody</td></tr>
+<tr><td>Week 1</td><td>Point the footer's "Request a demo" and "Talk to sales" links at the form anchor, not the bare page</td><td>Minutes. Both currently land above the form with no indication it exists.</td></tr>
+<tr><td>Week 2</td><td>Add a subscription event log</td><td>Every week without it is retention history permanently lost</td></tr>
+<tr><td>Week 2</td><td>Fix the <code>landing_page</code> materialised view. Split first touch from last page before signup.</td><td>Until this lands, no channel decision is valid</td></tr>
+<tr><td>Week 3</td><td>Consolidate the four duplicate comparison pairs and 301 <code>/homepage</code></td><td>Must precede the attribution repair or the first clean dataset is pre-split</td></tr>
+<tr><td>Week 3</td><td>Read the DMARC reports at GlockApps. Confirm the Mailcoach send path.</td><td>Gates any use of the 22,188-person list, and may be affecting transactional mail</td></tr>
+<tr><td>Week 4</td><td>Publish the certificate-deadline pillar and rebuild the eight infrastructure comparison pages</td><td>The wedge aimed at the tier that carries the model</td></tr>
+</tbody></table></div>
+
+<h2>What we are deliberately not doing</h2>
+
+<ul>
+<li><strong>Not running paid acquisition yet.</strong> There is no conversion tag, no tag manager, and no valid attribution. Spending now buys traffic and learns nothing.</li>
+<li><strong>Not emailing the 22,188 list.</strong> Not one subscriber record carries a source, 2,864 active subscribers are flagged as not having opted into the newsletter, and open rates fall to 4.1% on large sends. Consent and deliverability get answered first.</li>
+<li><strong>Not chasing free signups.</strong> The funnel already converts 79% of signups to activation and it has produced 92 paying accounts from 10,533 users. More of the same input produces more of the same output.</li>
+<li><strong>Not competing on link shortening.</strong> Bitly, Rebrandly, Dub and Short.io own that conversation and it monetises badly here. The infrastructure position is defensible and the shortener position is not.</li>
+</ul>
+
+<h2>How to read the rest of this Blueprint</h2>
+
+<div class="two">
+<div class="card"><h3>Diagnosis</h3><p><strong>01</strong> Where the business stands · <strong>02</strong> The leak map. The numbers, and what each gap costs.</p></div>
+<div class="card"><h3>Market and buyer</h3><p><strong>03</strong> Market and competitors · <strong>04</strong> The buyers · <strong>05</strong> Offer and pricing · <strong>06</strong> Messaging.</p></div>
+<div class="card"><h3>Channels</h3><p><strong>07</strong> Infrastructure SEO · <strong>08</strong> AI visibility and MCP · <strong>09</strong> The enterprise motion · <strong>10</strong> Lifecycle and retention · <strong>11</strong> Communities.</p></div>
+<div class="card"><h3>Execution</h3><p><strong>12</strong> The measurement rebuild · <strong>13</strong> Project plan · <strong>14</strong> Money model · <strong>15</strong> Risks and decisions.</p></div>
+</div>
+
+<div class="foot">RedirHub Seven Figure Blueprint · Prepared by Jacques Groenewald, JCE Media · 15 August 2026 · Confidential</div>
+</div></body></html>

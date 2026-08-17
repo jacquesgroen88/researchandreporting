@@ -1,0 +1,83 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>The Leak Map | RedirHub Seven Figure Blueprint</title>
+<link rel="stylesheet" href="_style.css"></head><body><div class="wrap">
+
+<div class="doc-head">
+  <span class="eyebrow">02 · Diagnosis</span>
+  <h1>The leak map</h1>
+  <p class="lede">Nineteen identified leaks, each with what it costs, what it takes to close, and how confident the costing is. Ranked by return per hour of effort. This is the list the project plan is built from.</p>
+  <div class="meta">Costs are stated as bands, not point estimates. Where a figure cannot be defended it is marked unquantified rather than guessed.</div>
+</div>
+
+<h2>How to read the ranking</h2>
+
+<p>Three things determine order: the size of the loss, the hours to close it, and whether closing it unblocks other work. A cheap fix that unblocks four other fixes outranks an expensive fix worth more in isolation. Two leaks in this list are worth more than the rest combined, and both are measured in hours rather than weeks.</p>
+
+<div class="callout bad">
+  <span class="label">The costing rule used throughout</span>
+  <p>One enterprise account at the observed tier averages roughly <strong>$1,200 a month, or $14,400 a year</strong>. Fifty accounts on the $10 plan together produce $500 a month. Anywhere a leak plausibly costs one enterprise account, it costs more than the entire volume tier produces. That is the arithmetic that drives this ordering.</p>
+</div>
+
+<h2>The ranked leak map</h2>
+
+<div class="tw"><table>
+<thead><tr><th style="width:26px">#</th><th>Leak</th><th class="num">Annual cost band</th><th class="num">Effort</th><th>Confidence</th></tr></thead>
+<tbody>
+<tr class="hi"><td>1</td><td><strong>The $6,990 quote is unresolved.</strong> Quoted 16 May for ~1,000 hostnames, invoice details sent 2 to 9 June, payment status unknown to anyone.</td><td class="num">$6,990</td><td class="num">1 hour</td><td><span class="pill p-good">Verified</span></td></tr>
+<tr class="hi"><td>2</td><td><strong>Nothing sits behind the enterprise form.</strong> Typeform capture works on <code>/enterprise</code> and <code>/scalable-enterprise-solutions</code>, but submissions have no owner, no pipeline stage and no recorded outcome. Enquiries also arrive by email into a shared support mailbox.</td><td class="num">$14,000 to $43,000</td><td class="num">Half a day</td><td><span class="pill p-good">Verified</span></td></tr>
+<tr><td>3</td><td><strong>Live enterprise evaluations are tracked in a shared mailbox.</strong> Two evaluations with calls in June and July. CRM holds three opportunities, all Attempted, none of these.</td><td class="num">$14,000 to $29,000</td><td class="num">Half a day</td><td><span class="pill p-good">Verified</span></td></tr>
+<tr><td>4</td><td><strong>No subscription event log.</strong> No cancellation, downgrade or plan-change history exists. Churn cannot be measured now or retrospectively. With half of revenue in three accounts, one silent departure is not noticed.</td><td class="num">$14,000+ and rising</td><td class="num">Small eng</td><td><span class="pill p-good">Verified</span></td></tr>
+<tr><td>5</td><td><strong><code>landing_page</code> stores the alphabetical maximum.</strong> Not first touch, not last touch. Every channel and page conclusion drawn from it is invalid, which blocks all paid spend.</td><td class="num">Blocks the paid channel entirely</td><td class="num">Small eng</td><td><span class="pill p-good">Verified in code</span></td></tr>
+<tr><td>6</td><td><strong>Email authentication unconfirmed.</strong> SPF authorises only ZeptoMail and Zoho with a hard fail, DMARC is <code>p=reject</code>, Mailcoach is not in the record. Opens drop to 4.1% on the largest send. If misconfigured this also degrades transactional mail.</td><td class="num">22,188-person audience unusable; product risk</td><td class="num">1 hour to diagnose</td><td><span class="pill p-warn">Needs one check</span></td></tr>
+<tr><td>7</td><td><strong>SLA claims contradict each other.</strong> <code>/enterprise</code> shows 100% SLA, the same page's FAQ says no percentage is quoted, the homepage says 99.99%. The 1,000-hostname prospect asked for 100% specifically.</td><td class="num">Legal exposure, unquantified</td><td class="num">1 hour + a decision</td><td><span class="pill p-good">Verified</span></td></tr>
+<tr><td>8</td><td><strong>Four cannibalising comparison pairs plus a duplicate homepage.</strong> Both members of each pair return 200, self-canonicalise and sit in the sitemap, on the highest commercial-intent queries in the category. <code>/homepage</code> duplicates <code>/</code> with the same title tag.</td><td class="num">Splits organic authority on the money keywords</td><td class="num">1 day</td><td><span class="pill p-good">Verified</span></td></tr>
+<tr><td>9</td><td><strong>The legal documents name two different entities.</strong> Terms of Service: "RedirHub LLC, a New Mexico limited liability company". Privacy Policy: "RedirHub is a trade name of RedirHub Inc." No registered address or company number published. <code>/about</code>, <code>/contact</code>, <code>/company</code>, <code>/team</code>, <code>/careers</code> all 404.</td><td class="num">Procurement blocker on every enterprise deal</td><td class="num">Half a day</td><td><span class="pill p-good">Verified</span></td></tr>
+<tr><td>10</td><td><strong>Trial event fires 4 times against 329 signups.</strong> Gated in <code>SubscriptionObserver</code> and evidently not firing for most trial journeys. Produces the impossible 175% trial-to-paid figure.</td><td class="num">Funnel blind at the paying stage</td><td class="num">Small eng</td><td><span class="pill p-good">Verified in code</span></td></tr>
+<tr><td>11</td><td><strong>Subscriber consent is unevidenced.</strong> Zero of 24,593 records carry a source. 2,864 active subscribers are flagged <code>newsletter = 0</code>. Five EU locales are served.</td><td class="num">Regulatory exposure, unquantified</td><td class="num">Audit + policy</td><td><span class="pill p-good">Verified</span></td></tr>
+<tr><td>12</td><td><strong>No consent management platform.</strong> GA4 fires unconditionally across eight locales including five EU languages. Repairing attribution means collecting more, not less.</td><td class="num">Compliance, and gates the attribution work</td><td class="num">2 to 3 days</td><td><span class="pill p-good">Verified</span></td></tr>
+<tr><td>13</td><td><strong>The MCP and AI-agent capability is unsold.</strong> Live MCP server, complete <code>llms.txt</code>, AI crawlers explicitly welcomed. Nothing on the site mentions any of it.</td><td class="num">The only uncontested differentiator, unused</td><td class="num">1 day</td><td><span class="pill p-good">Verified</span></td></tr>
+<tr><td>14</td><td><strong>Eighteen reviews.</strong> 4.7 out of 5 across Trustpilot and G2. The rating is fine; the volume caps every trust argument the site can make.</td><td class="num">Conversion drag across the funnel</td><td class="num">Ongoing</td><td><span class="pill p-good">Verified</span></td></tr>
+<tr><td>15</td><td><strong>No <code>AggregateRating</code> schema on <code>/reviews</code>.</strong> The page displays 4.7 out of 5 and carries zero JSON-LD, so no star rating can surface in search and no AI answer can cite it.</td><td class="num">Free visibility forgone</td><td class="num">1 hour</td><td><span class="pill p-good">Verified</span></td></tr>
+<tr><td>16</td><td><strong>Enterprise logos with nothing behind them.</strong> Whirlpool and Ally in the logo bar. No case study, quote, named contact or link. Sophisticated buyers discount unsupported logo bars.</td><td class="num">Enterprise credibility gap</td><td class="num">1 day</td><td><span class="pill p-good">Verified</span></td></tr>
+<tr><td>17</td><td><strong>Eight translated locales absent from the sitemap.</strong> de, es, fr, it, pt, ja, zh, ko are properly built with correct hreflang and canonicals. None of the 169 sitemap URLs is non-English.</td><td class="num">A completed content investment under-crawled</td><td class="num">Small</td><td><span class="pill p-good">Verified</span></td></tr>
+<tr><td>18</td><td><strong>The homepage carries the weakest schema on the site.</strong> One <code>FAQPage</code> block and nothing else. No <code>Organization</code>, no <code>SoftwareApplication</code>. The comparison pages are better marked up than the homepage.</td><td class="num">Entity and AI visibility</td><td class="num">1 hour</td><td><span class="pill p-good">Verified</span></td></tr>
+<tr><td>19</td><td><strong>Security headers stop at HSTS.</strong> No CSP, X-Frame-Options, X-Content-Type-Options, Referrer-Policy or Permissions-Policy, at a company selling security and compliance.</td><td class="num">Fails vendor security review</td><td class="num">Small</td><td><span class="pill p-good">Verified</span></td></tr>
+</tbody></table></div>
+
+<h2>The two that matter most</h2>
+
+<div class="finding">
+  <span class="label">Leaks 1 to 3, taken together</span>
+  <h3>Enquiries are captured and then owned by nobody</h3>
+  <p>Demand arrives and is caught. A 1,000-hostname prospect was quoted <strong>$6,990 a year</strong> and invoiced in June. Two more evaluations took calls in June and July. Some of it came through the Typeform, some into <code>service@redirhub.com</code> alongside SEO pitches and abuse notices. <strong>None of it reached the CRM</strong>, which holds three opportunities all marked Attempted. Nobody owns the follow-up and nobody can say what happened to any of them.</p>
+  <p>Closing this is <strong>one hour to chase an invoice and half a day to set up a pipeline</strong>. It is the cheapest and highest-value work available anywhere in the business, and it requires no engineering at all.</p>
+</div>
+
+<h2>Sequencing: two leaks must be closed in order</h2>
+
+<div class="callout warn">
+  <span class="label">Leak 8 before leak 5</span>
+  <p>Fixing attribution while duplicate pages still exist produces a clean dataset that is <strong>already split across duplicate URLs</strong>. The affected comparison pages would under-report their true contribution by roughly half, on exactly the highest commercial-intent queries in the category, and the first month of trustworthy data would be quietly wrong. <strong>Consolidate the pages first, then repair the measurement.</strong> This is the single most common way a measurement project produces confident nonsense.</p>
+</div>
+
+<h2>What this list is not</h2>
+
+<p>There is no leak on this list called "not enough traffic" and none called "the product needs work". Twelve thousand visitors a month convert to 329 signups and 261 activations, and the activation rate of 79.3% is genuinely strong. The infrastructure is fast, correct and self-hosted on its own product. <strong>Every leak here sits between an activated user and a paid account, or between a buyer and a human being.</strong> That is the whole diagnosis.</p>
+
+<h2>Estimated recoverable value</h2>
+
+<div class="tw"><table>
+<thead><tr><th>Group</th><th>Leaks</th><th class="num">First-year effect</th></tr></thead>
+<tbody>
+<tr><td>Enterprise capture and pipeline</td><td>1, 2, 3, 7, 9, 16</td><td class="num">$40,000 to $90,000 of new ARR</td></tr>
+<tr><td>Measurement and retention</td><td>4, 5, 10, 12</td><td class="num">Unblocks paid; protects existing base</td></tr>
+<tr><td>Organic and visibility</td><td>8, 13, 15, 17, 18</td><td class="num">$15,000 to $35,000 of new ARR</td></tr>
+<tr><td>Owned audience</td><td>6, 11, 14</td><td class="num">Unlocks a 22,188-person list currently unusable</td></tr>
+</tbody></table></div>
+
+<p class="src">Bands assume the enterprise tier averages $1,200 a month and that between three and six additional enterprise accounts are won in year one against a current inbound rate of roughly 0.67 opportunities a month. Modelled properly in <strong>14 The Money Model</strong>.</p>
+
+<div class="foot">RedirHub Seven Figure Blueprint · 02 The Leak Map · JCE Media · 15 August 2026</div>
+</div></body></html>

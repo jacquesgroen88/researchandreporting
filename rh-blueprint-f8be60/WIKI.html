@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>RedirHub Seven Figure Blueprint | Review Workspace</title>
+<style>
+  :root{
+    --bg:#0b1017; --panel:#111823; --panel2:#16202f; --line:#22304a; --text:#e9edf5; --muted:#8ba0bd;
+    --accent:#3b9ae1; --green:#2dd4a0; --blue:#4da3ff; --amber:#ffb020; --red:#ff5c6c; --purple:#b17aff;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;height:100vh;display:flex;flex-direction:column;overflow:hidden;}
+  header{display:flex;align-items:center;gap:14px;padding:10px 18px;background:var(--panel);border-bottom:1px solid var(--line);flex:none;}
+  header .logo{font-weight:800;font-size:15px;letter-spacing:.5px;}
+  header .logo span{color:var(--accent);}
+  header .crumb{color:var(--muted);font-size:13px;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  header button, header a.btn{background:var(--panel2);border:1px solid var(--line);color:var(--text);border-radius:8px;padding:6px 12px;font-size:12.5px;cursor:pointer;text-decoration:none;white-space:nowrap;}
+  header button:hover, header a.btn:hover{border-color:var(--accent);}
+  header .export{border-color:var(--green);color:var(--green);font-weight:700;}
+  .main{display:flex;flex:1;min-height:0;}
+  /* SIDEBAR */
+  nav{width:300px;flex:none;background:var(--panel);border-right:1px solid var(--line);overflow-y:auto;padding:12px 0 30px;}
+  nav .grp{padding:14px 16px 4px;font-size:10.5px;font-weight:800;letter-spacing:1.6px;color:var(--muted);text-transform:uppercase;}
+  nav .doc{display:flex;align-items:center;gap:8px;padding:7px 10px 7px 16px;cursor:pointer;font-size:13px;border-left:3px solid transparent;}
+  nav .doc:hover{background:var(--panel2);}
+  nav .doc.active{background:var(--panel2);border-left-color:var(--accent);}
+  nav .doc .st{flex:none;width:20px;height:20px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;cursor:pointer;background:var(--bg);border:1px solid var(--line);}
+  nav .doc .t{flex:1;line-height:1.25;}
+  nav .doc .t small{display:block;color:var(--muted);font-size:10.5px;}
+  nav .doc .nb{flex:none;background:rgba(255,176,32,.15);color:var(--amber);border-radius:10px;font-size:10.5px;font-weight:800;padding:1px 7px;display:none;}
+  nav .doc .nb.on{display:inline-block;}
+  /* VIEWER */
+  .view{flex:1;min-width:0;display:flex;flex-direction:column;background:#080c12;}
+  iframe{flex:1;border:0;width:100%;background:#fff0;}
+  .mdhost{flex:1;overflow-y:auto;padding:34px 44px;display:none;}
+  .mdhost .md{max-width:860px;margin:0 auto;}
+  .md h1{font-size:26px;margin:18px 0 12px;} .md h2{font-size:20px;margin:26px 0 10px;color:var(--accent);} .md h3{font-size:16px;margin:20px 0 8px;}
+  .md p{margin:9px 0;font-size:14.5px;line-height:1.6;}
+  .md ul,.md ol{margin:8px 0 8px 24px;} .md li{font-size:14.5px;margin:4px 0;line-height:1.55;}
+  .md code{background:var(--panel2);border:1px solid var(--line);border-radius:4px;padding:1px 6px;font-size:13px;font-family:Consolas,monospace;}
+  .md table{border-collapse:collapse;margin:12px 0;width:100%;font-size:13.5px;}
+  .md th{background:var(--panel2);text-align:left;padding:8px 10px;border:1px solid var(--line);font-size:12px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);}
+  .md td{padding:8px 10px;border:1px solid var(--line);vertical-align:top;line-height:1.5;}
+  .md blockquote{border-left:3px solid var(--amber);padding:6px 14px;margin:10px 0;color:var(--muted);background:rgba(255,176,32,.05);}
+  .md hr{border:0;border-top:1px solid var(--line);margin:20px 0;}
+  .md a{color:var(--blue);}
+  .md del{color:var(--red);}
+  .md strong{color:#fff;}
+  /* FEEDBACK PANEL */
+  aside{width:330px;flex:none;background:var(--panel);border-left:1px solid var(--line);display:flex;flex-direction:column;min-height:0;}
+  aside .fh{padding:12px 16px;border-bottom:1px solid var(--line);font-weight:800;font-size:13px;display:flex;justify-content:space-between;align-items:center;}
+  aside .fh span{color:var(--amber);}
+  aside .fh small{color:var(--muted);font-weight:400;}
+  .notes{flex:1;overflow-y:auto;padding:10px 14px;}
+  .note{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:9px 12px;margin-bottom:9px;font-size:13px;position:relative;}
+  .note .when{font-size:10.5px;color:var(--muted);margin-bottom:3px;}
+  .note .del{position:absolute;top:6px;right:8px;color:var(--muted);cursor:pointer;font-size:12px;}
+  .note .del:hover{color:var(--red);}
+  .note .body{white-space:pre-wrap;line-height:1.45;}
+  .empty{color:var(--muted);font-size:12.5px;text-align:center;padding:24px 10px;}
+  .composer{border-top:1px solid var(--line);padding:12px 14px;}
+  .composer textarea{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:10px;color:var(--text);font-family:inherit;font-size:13px;padding:10px 12px;resize:vertical;min-height:74px;}
+  .composer textarea:focus{outline:none;border-color:var(--accent);}
+  .composer .row{display:flex;gap:8px;margin-top:8px;}
+  .composer button{flex:1;background:var(--accent);border:0;color:#fff;font-weight:800;border-radius:8px;padding:8px;cursor:pointer;font-size:13px;}
+  .composer .hint{font-size:11px;color:var(--muted);margin-top:7px;line-height:1.4;}
+  .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--green);color:#08131f;font-weight:800;font-size:13px;border-radius:10px;padding:10px 20px;display:none;z-index:99;}
+  @media(max-width:1100px){aside{width:280px;} nav{width:250px;}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">REDIRHUB SEVEN FIGURE BLUEPRINT <span>WIKI</span></div>
+  <div class="crumb" id="crumb">Pick a document</div>
+  <button id="prevB" title="Previous document">&larr; Prev</button>
+  <button id="nextB" title="Next document">Next &rarr;</button>
+  <a class="btn" id="openTab" href="#" target="_blank">Open in tab &nearr;</a>
+  <button class="export" id="exportB" title="Copies all feedback as markdown + downloads a file">Export feedback</button>
+</header>
+
+<div class="main">
+  <nav id="nav"></nav>
+  <div class="view">
+    <iframe id="frame" style="display:none"></iframe>
+    <div class="mdhost" id="mdhost"><div class="md" id="mdout"></div></div>
+  </div>
+  <aside>
+    <div class="fh">Feedback <span id="fcount"></span> <small id="fdoc"></small></div>
+    <div class="notes" id="notes"><div class="empty">No notes on this document yet.</div></div>
+    <div class="composer">
+      <textarea id="noteIn" placeholder="Type feedback on the open document. Be specific: section, what to change, why."></textarea>
+      <div class="row"><button id="addB">Add note (Ctrl+Enter)</button></div>
+      <div class="hint">Notes save locally per document. Status squares in the sidebar cycle: not reviewed &rarr; ✔ approved &rarr; ✎ needs changes. When you're done, hit <b>Export feedback</b> and paste the result to Claude to apply everything.</div>
+    </div>
+  </aside>
+</div>
+
+<div class="toast" id="toast">Copied to clipboard + downloaded</div>
+
+<script>
+const DOCS = [
+    {g:"Diagnosis", t:"00 Executive Summary", d:"Ten thousand users, ninety-two customers, three accounts that pay for everything. The four moves and the first thirty days.", p:"00-executive-summary.html"},
+    {g:"Diagnosis", t:"01 Where the Business Stands", d:"Every live number: funnel, plans, traffic, email, outreach, proof. The plan distribution showing three rows outproducing a hundred others.", p:"01-where-the-business-stands.html"},
+    {g:"Diagnosis", t:"02 The Leak Map", d:"Nineteen costed leaks ranked by return per hour of effort. Two are worth more than the rest combined and both are measured in hours.", p:"02-the-leak-map.html"},
+    {g:"Market & Buyer", t:"03 Market and Competitors", d:"Link shortening and redirect infrastructure are two markets wearing one category name. The competitor map, the certificate wedge, and the position nobody holds.", p:"03-market-and-competitors.html"},
+    {g:"Market & Buyer", t:"04 The Buyers", d:"Five profiles ranked by revenue density, each anchored to a plan row or a mailbox thread. Unit maths, triggers, buying committee, pitch, objections.", p:"04-the-buyers.html"},
+    {g:"Market & Buyer", t:"05 Offer Architecture and Pricing", d:"Nine plan identifiers for three products, thirty-six rows priced at zero, the enterprise anchor, and the partner tier that does not exist.", p:"05-offer-architecture-and-pricing.html"},
+    {g:"Market & Buyer", t:"06 Messaging and Positioning", d:"The position, the narrative in order, the proof stack, per-buyer messaging, and three claims that must be fixed before selling harder.", p:"06-messaging-and-positioning.html"},
+    {g:"Channels", t:"07 The Infrastructure SEO Play", d:"The comparison cluster split by buyer value, four pairs of self-competing pages, the sitemap faults, and the certificate deadline campaign.", p:"07-the-infrastructure-seo-play.html"},
+    {g:"Channels", t:"08 AI Visibility and MCP", d:"A live MCP server, a complete llms.txt, every AI crawler welcomed, and not one mention on the website. The only uncontested differentiator.", p:"08-ai-visibility-and-mcp.html"},
+    {g:"Channels", t:"09 The Enterprise Motion", d:"The largest unbuilt thing in the company. Capture works, and nothing sits behind it. A $6,990 quote nobody tracked, and where the next forty-five accounts come from.", p:"09-the-enterprise-motion.html"},
+    {g:"Channels", t:"10 Lifecycle and Retention", d:"Churn that cannot be measured, a 22,188-person list with no recorded source, and a deliverability question that may be affecting transactional mail.", p:"10-lifecycle-and-retention.html"},
+    {g:"Channels", t:"11 Communities and Distribution", d:"A hundred articles published into a vacuum. Five communities that matter and how to enter each without being thrown out.", p:"11-communities-and-distribution.html"},
+    {g:"Execution", t:"12 The Measurement Rebuild", d:"The attribution field stores the alphabetically highest page in a session. Four faults, the fixes, and the order they must happen in.", p:"12-the-measurement-rebuild.html"},
+    {g:"Execution", t:"13 The Project Plan", d:"Six workstreams, ninety days broken to the task, six decision gates, and an honest note on what five hours a week can actually carry.", p:"13-the-project-plan.html"},
+    {g:"Execution", t:"14 The Money Model", d:"Three cases with every assumption stated, the enterprise ramp quarter by quarter, and the sensitivity table that ends the free-signup argument.", p:"14-the-money-model.html"},
+    {g:"Execution", t:"15 Risks and Decisions", d:"Twelve risks, nine open decisions each with a recommendation, and an honest account of what would make this plan wrong.", p:"15-risks-and-decisions.html"}
+  ];
+/* Namespaced keys so notes never collide with the other blueprints served from the same origin on port 4500 */
+const LS_NOTES="wk_rh_sfb_notes", LS_STATUS="wk_rh_sfb_status", LS_LAST="wk_rh_sfb_last";
+const store=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
+const load=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}};
+let notes=load(LS_NOTES,{}), status=load(LS_STATUS,{}), cur=load(LS_LAST,0);
+if(cur<0||cur>=DOCS.length)cur=0;
+const STICONS=["","✔","✎"], STCOL=["", "var(--green)", "var(--amber)"];
+
+const nav=document.getElementById('nav');
+function buildNav(){
+  nav.innerHTML=""; let lastG="";
+  DOCS.forEach((doc,i)=>{
+    if(doc.g!==lastG){lastG=doc.g;const g=document.createElement('div');g.className='grp';g.textContent=doc.g;nav.appendChild(g);}
+    const el=document.createElement('div'); el.className='doc'+(i===cur?' active':''); el.dataset.i=i;
+    const st=status[doc.p]||0;
+    el.innerHTML=`<span class="st" title="Cycle review status" style="color:${STCOL[st]};border-color:${st?STCOL[st]:'var(--line)'}">${STICONS[st]}</span>
+      <span class="t">${doc.t}<small>${doc.d}</small></span>
+      <span class="nb ${notes[doc.p]&&notes[doc.p].length?'on':''}">${(notes[doc.p]||[]).length}</span>`;
+    el.querySelector('.st').addEventListener('click',e=>{e.stopPropagation();status[doc.p]=((status[doc.p]||0)+1)%3;store(LS_STATUS,status);buildNav();});
+    el.addEventListener('click',()=>open(i));
+    nav.appendChild(el);
+  });
+}
+
+const frame=document.getElementById('frame'), mdhost=document.getElementById('mdhost'), mdout=document.getElementById('mdout');
+function open(i){
+  cur=i; store(LS_LAST,i); const doc=DOCS[i];
+  document.getElementById('crumb').textContent=doc.g+" / "+doc.t+"  ("+doc.p+")";
+  document.getElementById('openTab').href=doc.p;
+  document.getElementById('fdoc').textContent=doc.t;
+  if(doc.md){frame.style.display='none';mdhost.style.display='block';mdout.innerHTML='<p style="color:var(--muted)">loading...</p>';
+    fetch(doc.p).then(r=>{if(!r.ok)throw 0;return r.text()}).then(t=>{mdout.innerHTML=renderMD(t);})
+    .catch(()=>{mdout.innerHTML='<p style="color:var(--red)">Could not load. Open this wiki via the local server: http://localhost:4500/JCE%20Media/clients/RedirHub/Seven-Figure-Blueprint/WIKI.html</p>';});
+  }else{mdhost.style.display='none';frame.style.display='block';frame.src=doc.p;}
+  renderNotes(); buildNav();
+}
+
+/* minimal markdown renderer: headings, hr, blockquote, lists, tables, bold, italics, code, links, strikethrough */
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function inline(s){
+  s=esc(s);
+  s=s.replace(/`([^`]+)`/g,'<code>$1</code>');
+  s=s.replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>');
+  s=s.replace(/~~([^~]+)~~/g,'<del>$1</del>');
+  s=s.replace(/\[\[([^\]]+)\]\]/g,'<em>$1</em>');
+  s=s.replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" target="_blank">$1</a>');
+  s=s.replace(/(^|[\s(])\*([^*\s][^*]*)\*(?=[\s).,;:!?]|$)/g,'$1<em>$2</em>');
+  return s;
+}
+function renderMD(src){
+  const lines=src.replace(/\r/g,'').split('\n'); let out=[],i=0;
+  if(lines[0]==='---'){i=1;while(i<lines.length&&lines[i]!=='---')i++;i++;}
+  while(i<lines.length){
+    let L=lines[i];
+    if(/^\s*$/.test(L)){i++;continue;}
+    if(/^---+\s*$/.test(L)){out.push('<hr>');i++;continue;}
+    let h=L.match(/^(#{1,4})\s+(.*)/);
+    if(h){out.push(`<h${h[1].length}>${inline(h[2])}</h${h[1].length}>`);i++;continue;}
+    if(/^>/.test(L)){let b=[];while(i<lines.length&&/^>/.test(lines[i])){b.push(inline(lines[i].replace(/^>\s?/,'')));i++;}out.push('<blockquote><p>'+b.join('<br>')+'</p></blockquote>');continue;}
+    if(/^\|/.test(L)){
+      let rows=[];while(i<lines.length&&/^\|/.test(lines[i])){rows.push(lines[i]);i++;}
+      let cells=r=>r.replace(/^\||\|$/g,'').split('|').map(c=>c.trim());
+      let head=cells(rows[0]), bodyRows=rows.slice(/^\s*\|[\s\-|:]+\|\s*$/.test(rows[1]||'')?2:1);
+      let t='<table><thead><tr>'+head.map(c=>'<th>'+inline(c)+'</th>').join('')+'</tr></thead><tbody>';
+      bodyRows.forEach(r=>{t+='<tr>'+cells(r).map(c=>'<td>'+inline(c)+'</td>').join('')+'</tr>';});
+      out.push(t+'</tbody></table>');continue;
+    }
+    if(/^\s*([-*]|\d+\.)\s+/.test(L)){
+      let ordered=/^\s*\d+\./.test(L), items=[];
+      while(i<lines.length&&/^\s*([-*]|\d+\.)\s+/.test(lines[i])){
+        let item=lines[i].replace(/^\s*([-*]|\d+\.)\s+/,'');i++;
+        while(i<lines.length&&/^\s{2,}\S/.test(lines[i])&&!/^\s*([-*]|\d+\.)\s+/.test(lines[i])){item+=' '+lines[i].trim();i++;}
+        items.push('<li>'+inline(item)+'</li>');
+      }
+      out.push((ordered?'<ol>':'<ul>')+items.join('')+(ordered?'</ol>':'</ul>'));continue;
+    }
+    let para=[L];i++;
+    while(i<lines.length&&!/^\s*$/.test(lines[i])&&!/^(#{1,4}\s|\||>|---|\s*([-*]|\d+\.)\s)/.test(lines[i])){para.push(lines[i]);i++;}
+    out.push('<p>'+inline(para.join(' '))+'</p>');
+  }
+  return out.join('\n');
+}
+
+/* notes */
+const notesEl=document.getElementById('notes');
+function renderNotes(){
+  const doc=DOCS[cur], list=notes[doc.p]||[];
+  document.getElementById('fcount').textContent=list.length?('('+list.length+')'):'';
+  if(!list.length){notesEl.innerHTML='<div class="empty">No notes on this document yet.</div>';return;}
+  notesEl.innerHTML=list.map((n,j)=>`<div class="note"><div class="when">${n.when}</div><span class="del" data-j="${j}" title="Delete">&#10005;</span><div class="body">${esc(n.text)}</div></div>`).join('');
+  notesEl.querySelectorAll('.del').forEach(d=>d.addEventListener('click',()=>{list.splice(+d.dataset.j,1);notes[DOCS[cur].p]=list;store(LS_NOTES,notes);renderNotes();buildNav();}));
+}
+function addNote(){
+  const ta=document.getElementById('noteIn'); const v=ta.value.trim(); if(!v)return;
+  const doc=DOCS[cur]; (notes[doc.p]=notes[doc.p]||[]).push({when:new Date().toLocaleString('en-ZA',{dateStyle:'short',timeStyle:'short'}),text:v});
+  store(LS_NOTES,notes); ta.value=''; renderNotes(); buildNav();
+}
+document.getElementById('addB').addEventListener('click',addNote);
+document.getElementById('noteIn').addEventListener('keydown',e=>{if(e.ctrlKey&&e.key==='Enter')addNote();});
+
+/* export */
+document.getElementById('exportB').addEventListener('click',()=>{
+  const stName=["not reviewed","APPROVED","NEEDS CHANGES"];
+  let md="# RedirHub Seven Figure Blueprint: feedback export\n_"+new Date().toLocaleString('en-ZA')+"_\n\n";
+  DOCS.forEach(doc=>{
+    const st=status[doc.p]||0, list=notes[doc.p]||[];
+    if(!st&&!list.length)return;
+    md+=`## ${doc.t} (\`${doc.p}\`): ${stName[st]}\n`;
+    list.forEach(n=>{md+=`- [${n.when}] ${n.text}\n`;});
+    md+="\n";
+  });
+  if(md.split('\n').length<5)md+="_No statuses set or notes captured yet._\n";
+  navigator.clipboard&&navigator.clipboard.writeText(md).catch(()=>{});
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([md],{type:'text/markdown'}));a.download='redirhub-sfb-feedback-'+Date.now()+'.md';a.click();
+  const t=document.getElementById('toast');t.style.display='block';setTimeout(()=>t.style.display='none',2500);
+});
+
+document.getElementById('prevB').addEventListener('click',()=>open((cur-1+DOCS.length)%DOCS.length));
+document.getElementById('nextB').addEventListener('click',()=>open((cur+1)%DOCS.length));
+
+buildNav(); open(cur);
+</script>
+</body>
+</html>
