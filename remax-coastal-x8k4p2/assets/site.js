@@ -814,16 +814,42 @@
         <div class="t-name">${t.name}</div><div class="t-role">${t.role}</div>
         <div class="t-office">${t.office}</div></a>`).join('');
 
+    /* Offices. ?office=Knysna focuses one branch: it is pulled to the top,
+       highlighted, and the page intro names it. Reached from the Contact
+       dropdown in the header. */
     const og = $('#offices-grid');
-    if (og) og.innerHTML = OFFICES.map(o => `<article class="o-card rv">
-      <div class="o-town">${o.town}</div>
-      <div class="o-rate"><span class="o-stars">${stars(o.rating)}</span> ${o.rating.toFixed(1)}
-        <span style="color:var(--mute-2);font-weight:500">(${o.reviews} Google reviews)</span></div>
-      <p class="o-addr">${o.addr}</p>
-      <div class="o-acts">
-        <a class="btn btn-ghost btn-sm" href="tel:${o.tel}">${o.phone}</a>
-        <a class="btn btn-ghost btn-sm" href="${o.map}" target="_blank" rel="noopener">Directions</a>
-      </div></article>`).join('');
+    if (og) {
+      const wanted = (new URLSearchParams(location.search).get('office') || '').trim().toLowerCase();
+      const match = OFFICES.find(o => o.town.toLowerCase() === wanted);
+      const list = match ? [match, ...OFFICES.filter(o => o !== match)] : OFFICES;
+
+      og.innerHTML = list.map(o => {
+        const on = match && o === match;
+        return `<article class="o-card rv${on ? ' is-focus' : ''}" id="office-${o.town.toLowerCase().replace(/[^a-z]+/g,'-')}">
+        ${on ? '<span class="o-flag">The office you asked for</span>' : ''}
+        <div class="o-town">${o.town}</div>
+        <div class="o-rate"><span class="o-stars">${stars(o.rating)}</span> ${o.rating.toFixed(1)}
+          <span style="color:var(--mute-2);font-weight:500">(${o.reviews} Google reviews)</span></div>
+        <p class="o-addr">${o.addr}</p>
+        <div class="o-acts">
+          <a class="btn ${on ? 'btn-blue' : 'btn-ghost'} btn-sm" href="tel:${o.tel}">${o.phone}</a>
+          <a class="btn btn-ghost btn-sm" href="${o.map}" target="_blank" rel="noopener">Directions</a>
+          <a class="btn btn-wa btn-sm" target="_blank" rel="noopener"
+             href="https://wa.me/${CONFIG.WHATSAPP}?text=${encodeURIComponent('Hi, I would like to speak to the ' + o.town + ' office.')}">WhatsApp</a>
+        </div></article>`; }).join('');
+
+      if (match) {
+        const h = $('#c-head'); if (h) h.textContent = 'Talk to our ' + match.town + ' office';
+        const p = $('#c-sub');
+        if (p) p.textContent = match.addr + '. Message us on WhatsApp for the fastest answer, phone the '
+          + 'office directly, or send the form and we will come back to you.';
+        const t = $('#c-tel'); if (t) { t.href = 'tel:' + match.tel; t.textContent = match.phone; }
+        const f = $('#c-office'); if (f) f.value = match.town;
+        // header number should match the branch you are looking at
+        const ht = $('.hdr .tel');
+        if (ht) { ht.href = 'tel:' + match.tel; ht.textContent = match.phone; }
+      }
+    }
 
     const ag = $('#areas');
     if (ag) ag.innerHTML = AREAS.map(a => `<a class="area rv" href="properties.html">

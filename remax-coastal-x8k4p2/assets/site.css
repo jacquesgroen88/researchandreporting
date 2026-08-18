@@ -529,3 +529,52 @@ p{color:var(--ink-2)}
     transition-duration:.001ms!important;scroll-behavior:auto!important}
   .hero-bg img{animation:none;transform:none}
 }
+
+/* ---------- contact dropdown ------------------------------------------------
+   Opens on hover and on keyboard focus, so it is not mouse-only. A padding
+   bridge keeps it open while the pointer travels from the trigger to the menu. */
+.navdrop{position:relative;display:flex;align-items:center}
+.navdrop .drop-t{display:inline-flex;align-items:center;gap:6px;font-size:14.5px;font-weight:600;
+  color:#fff;opacity:.92;transition:opacity .2s,color .2s;position:relative}
+.hdr.solid .navdrop .drop-t{color:var(--ink-2)}
+.navdrop .drop-t:hover{opacity:1}
+.hdr.solid .navdrop .drop-t:hover{color:var(--blue)}
+.navdrop .drop-t.on::after{content:'';position:absolute;left:0;right:16px;bottom:-7px;height:2px;
+  background:var(--red);border-radius:2px}
+.chev{width:11px;height:7px;flex:0 0 auto;transition:transform .22s var(--ease)}
+.navdrop:hover .chev,.navdrop:focus-within .chev{transform:rotate(180deg)}
+
+.drop-m{position:absolute;top:100%;left:50%;transform:translate(-50%,8px);min-width:236px;
+  background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh-lg);
+  padding:8px;margin-top:14px;opacity:0;visibility:hidden;pointer-events:none;
+  transition:opacity .2s var(--ease),transform .2s var(--ease),visibility .2s;z-index:70}
+/* bridge the gap between trigger and menu so the pointer does not fall through */
+.drop-m::before{content:'';position:absolute;top:-16px;left:0;right:0;height:16px}
+.drop-m::after{content:'';position:absolute;top:-7px;left:50%;margin-left:-7px;width:13px;height:13px;
+  background:#fff;border-left:1px solid var(--line);border-top:1px solid var(--line);transform:rotate(45deg)}
+.navdrop:hover .drop-m,.navdrop:focus-within .drop-m{opacity:1;visibility:visible;pointer-events:auto;
+  transform:translate(-50%,0)}
+.drop-h{display:block;font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--mute-2);padding:8px 12px 6px}
+.drop-m a{display:block;padding:10px 12px;border-radius:9px;font-size:14.5px;font-weight:600;
+  color:var(--ink);transition:background .15s,color .15s;position:relative;white-space:nowrap}
+.drop-m a:hover,.drop-m a:focus-visible{background:var(--blue-xl);color:var(--blue)}
+.drop-m a.drop-all{margin-top:6px;padding-top:12px;border-top:1px solid var(--line-2);border-radius:0 0 9px 9px;
+  font-size:13.5px;font-weight:600;color:var(--mute)}
+.drop-m a.drop-all:hover{color:var(--red);background:transparent}
+
+/* mobile: branches sit indented under Contact rather than in a menu */
+.mnav-sub{display:flex;flex-direction:column;align-items:center;gap:2px;margin-top:2px;
+  padding-top:10px;border-top:1px solid rgba(255,255,255,.14);width:min(280px,72vw)}
+.mnav-sub a{font-family:Inter,sans-serif;font-size:16px;font-weight:500;color:#B9C7DF;padding:7px}
+.mnav-sub a:hover{color:#fff}
+
+/* focused branch card, when arrived via ?office= from the Contact dropdown */
+.o-card.is-focus{border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-xl),var(--sh-lg);position:relative}
+.o-flag{display:inline-block;background:var(--blue);color:#fff;font-size:10.5px;font-weight:700;
+  letter-spacing:.09em;text-transform:uppercase;padding:4px 10px;border-radius:999px;margin-bottom:10px}
+.o-acts{display:flex;gap:9px;flex-wrap:wrap;margin-top:18px}
+
+/* the mobile menu now carries branch links too, so on short screens it must
+   scroll rather than push items off where they cannot be reached */
+.mnav{overflow-y:auto;justify-content:flex-start;padding-top:clamp(70px,14vh,120px);padding-bottom:40px}
