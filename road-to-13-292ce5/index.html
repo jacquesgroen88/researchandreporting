@@ -1,0 +1,1614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mission: Road to 13</title>
+<style>
+  :root{
+    --bg:#080b11; --panel:#121826; --solid2:#192031; --line:#26314c;
+    --orange:#ff6b1a; --orange2:#ffa04d; --blue:#29b6ff; --green:#35d07f;
+    --red:#ff4d5e; --purple:#a97bff; --gold:#ffc93c;
+    --text:#e9eefa; --muted:#8996b2;
+    --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:1.62;
+       -webkit-font-smoothing:antialiased;padding-bottom:50px;overflow-x:hidden}
+  .wrap{max-width:940px;margin:0 auto;padding:0 16px}
+  svg{display:block;max-width:100%}
+
+  header{position:relative;overflow:hidden;border-bottom:1px solid var(--line);
+         padding:30px 0 26px;
+         background:radial-gradient(900px 300px at 12% -20%,rgba(255,107,26,.22),transparent 60%),
+                    radial-gradient(700px 280px at 88% 0%,rgba(41,182,255,.16),transparent 62%),
+                    #080b11}
+  .kicker{color:var(--orange);font-size:11px;font-weight:900;letter-spacing:.24em;
+          text-transform:uppercase;margin-bottom:8px}
+  h1{font-size:clamp(32px,7vw,56px);font-weight:900;letter-spacing:-.035em;line-height:.98}
+  h1 span{background:linear-gradient(100deg,var(--orange),var(--gold));
+          -webkit-background-clip:text;background-clip:text;color:transparent}
+  .tagline{color:var(--muted);margin-top:10px;font-size:15px;max-width:560px}
+  .hero-cd{display:flex;gap:20px;align-items:center;flex-wrap:wrap;margin-top:22px;
+           background:rgba(18,24,38,.72);border:1px solid var(--line);
+           border-radius:16px;padding:18px 20px}
+  .hero-cd .ring{position:relative;flex:0 0 auto}
+  .hero-cd .ring b{position:absolute;inset:0;display:flex;flex-direction:column;
+                   align-items:center;justify-content:center;font-size:23px;font-weight:900;
+                   color:var(--blue);line-height:1}
+  .hero-cd .ring b i{font-style:normal;font-size:8px;color:var(--muted);
+                     letter-spacing:.14em;font-weight:800;margin-top:2px}
+  .cdmain{flex:1;min-width:190px}
+  .cdmain .n{font-size:clamp(34px,8vw,50px);font-weight:900;line-height:1;
+             color:#fff;letter-spacing:-.03em}
+  .cdmain .l{font-size:12px;color:var(--muted);text-transform:uppercase;
+             letter-spacing:.14em;font-weight:800;margin-top:4px}
+  .cdmain .d{font-size:13px;color:var(--orange);font-weight:700;margin-top:7px}
+
+  nav{position:sticky;top:0;z-index:60;background:rgba(8,11,17,.95);
+      backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .tabs{display:flex;max-width:940px;margin:0 auto;padding:0 6px}
+  .tab{flex:1;background:none;border:none;border-bottom:3px solid transparent;
+       color:var(--muted);font-family:var(--font);font-size:11.5px;font-weight:900;
+       letter-spacing:.1em;text-transform:uppercase;padding:15px 3px;cursor:pointer;
+       transition:.15s;white-space:nowrap}
+  .tab:hover{color:var(--text)}
+  .tab.on{color:var(--orange);border-bottom-color:var(--orange)}
+  .page{display:none;padding-top:24px;animation:fade .25s ease}
+  .page.on{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;
+        padding:24px;margin-bottom:16px}
+  .card.hot{border-color:rgba(255,107,26,.45);
+    background:linear-gradient(175deg,rgba(255,107,26,.09),var(--panel) 55%)}
+  .card.cool{border-color:rgba(41,182,255,.4);
+    background:linear-gradient(175deg,rgba(41,182,255,.09),var(--panel) 55%)}
+  .card.warn{border-color:rgba(255,77,94,.45);
+    background:linear-gradient(175deg,rgba(255,77,94,.09),var(--panel) 55%)}
+  .card.win{border-color:rgba(53,208,127,.45);
+    background:linear-gradient(175deg,rgba(53,208,127,.1),var(--panel) 55%)}
+  h2{font-size:21px;font-weight:900;letter-spacing:-.02em;margin-bottom:3px;
+     display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  h2 .n{font-size:12px;font-weight:900;color:var(--orange);background:rgba(255,107,26,.14);
+        border:1px solid rgba(255,107,26,.35);border-radius:7px;padding:3px 8px;
+        letter-spacing:.08em;flex:0 0 auto}
+  h3{font-size:15px;font-weight:900;margin:22px 0 9px;color:var(--blue);letter-spacing:.02em}
+  h3:first-child{margin-top:0}
+  .lead{color:var(--muted);font-size:14px;margin-bottom:16px}
+  p{margin-bottom:13px;font-size:15px}
+  strong{color:#fff;font-weight:800}
+  em{color:var(--orange);font-style:normal;font-weight:800}
+  ul{margin:0 0 13px 20px}li{margin-bottom:8px;font-size:15px}
+  .big{font-size:18px;font-weight:800;line-height:1.5;color:#fff;
+       border-left:3px solid var(--orange);padding-left:15px;margin:18px 0}
+  .big.b{border-color:var(--blue)} .big.r{border-color:var(--red)}
+  .big.g{border-color:var(--green)}
+  .note{font-size:13px;color:var(--muted);font-style:italic;margin-top:12px;
+        border-top:1px dashed var(--line);padding-top:11px}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(122px,1fr));gap:10px;margin:16px 0}
+  .stat{background:var(--solid2);border:1px solid var(--line);border-radius:12px;
+        padding:15px 10px;text-align:center}
+  .stat b{display:block;font-size:24px;font-weight:900;color:var(--orange);line-height:1.1}
+  .stat b.b{color:var(--blue)} .stat b.g{color:var(--green)} .stat b.p{color:var(--purple)}
+  .stat b.r{color:var(--red)} .stat b.sm{font-size:16px}
+  .stat span{font-size:10px;color:var(--muted);text-transform:uppercase;
+             letter-spacing:.1em;font-weight:800;display:block;margin-top:4px}
+
+  .cmp{margin:16px 0}
+  .cmp-row{margin-bottom:14px}
+  .cmp-top{display:flex;justify-content:space-between;gap:10px;font-size:13px;
+           font-weight:800;margin-bottom:6px}
+  .cmp-top span:last-child{color:var(--muted);font-weight:700;flex:0 0 auto}
+  .cmp-bar{height:24px;background:var(--solid2);border-radius:7px;overflow:hidden;
+           border:1px solid var(--line)}
+  .cmp-bar i{display:block;height:100%;border-radius:6px}
+  .cmp-bar i.o{background:linear-gradient(90deg,var(--orange),var(--orange2))}
+  .cmp-bar i.r{background:linear-gradient(90deg,#8b2230,var(--red))}
+  .cmp-bar i.g{background:linear-gradient(90deg,#1c7a4d,var(--green))}
+  .cmp-bar i.n{background:linear-gradient(90deg,#3d4763,#5a6685)}
+
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+  @media(max-width:620px){.split{grid-template-columns:1fr}}
+  .sp{border:1px solid var(--line);border-radius:13px;padding:16px}
+  .sp.good{border-color:rgba(53,208,127,.45);background:rgba(53,208,127,.07)}
+  .sp.bad{border-color:rgba(255,77,94,.4);background:rgba(255,77,94,.07)}
+  .sp h4{font-size:14px;font-weight:900;margin-bottom:4px}
+  .sp.good h4{color:var(--green)} .sp.bad h4{color:var(--red)}
+  .sp .vs{font-size:12px;color:var(--muted);margin-bottom:10px}
+  .sp p{font-size:13.5px;margin:0}
+
+  /* ROADMAP
+     Each stage is its own panel. The connector is drawn per stage (marker bottom to next
+     marker top) rather than as one line behind everything, so it can never cross a marker.
+     Markers must stay OPAQUE: the state tints are layered as a background-IMAGE over an
+     opaque background-COLOR, because a translucent background-color lets the line show
+     straight through the number. */
+  .rm{position:relative;margin:22px 0 6px;padding-left:54px}
+  .st{position:relative;margin-bottom:18px;background:var(--solid2);
+    border:1px solid var(--line);border-radius:13px;padding:16px 18px}
+  .st:last-child{margin-bottom:0}
+  .st:before{content:attr(data-n);position:absolute;left:-54px;top:14px;
+    width:36px;height:36px;border-radius:11px;
+    background-color:var(--bg);background-repeat:no-repeat;
+    border:2px solid var(--line);color:var(--muted);
+    display:flex;align-items:center;justify-content:center;
+    font-size:13px;font-weight:900;z-index:2}
+  .st:after{content:'';position:absolute;left:-37.5px;top:50px;bottom:-32px;
+    width:3px;border-radius:2px;background:var(--line);z-index:1}
+  .st:last-child:after{display:none}
+
+  .st.done{border-color:rgba(53,208,127,.35)}
+  .st.done:before{border-color:var(--green);color:var(--green);
+    background-image:linear-gradient(rgba(53,208,127,.2),rgba(53,208,127,.2))}
+  .st.done:after{background:var(--green);opacity:.5}
+
+  .st.now{border-color:rgba(255,107,26,.5);
+    background:linear-gradient(175deg,rgba(255,107,26,.1),var(--solid2) 62%)}
+  .st.now:before{border-color:var(--orange);color:var(--orange);
+    background-image:linear-gradient(rgba(255,107,26,.24),rgba(255,107,26,.24));
+    box-shadow:0 0 0 5px rgba(255,107,26,.14)}
+  .st.now:after{background:var(--orange);opacity:.55}
+
+  .st.next:before{border-color:var(--blue);color:var(--blue);
+    background-image:linear-gradient(rgba(41,182,255,.18),rgba(41,182,255,.18))}
+  .st.next:after{background:var(--blue);opacity:.4}
+
+  .st.far:before{border-color:var(--purple);color:var(--purple);
+    background-image:linear-gradient(rgba(169,123,255,.18),rgba(169,123,255,.18))}
+  .st.far:after{background:var(--purple);opacity:.32}
+
+  .st-tag{font-size:10px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;
+    margin-bottom:4px;color:var(--muted)}
+  .st.done .st-tag{color:var(--green)} .st.now .st-tag{color:var(--orange)}
+  .st.next .st-tag{color:var(--blue)} .st.far .st-tag{color:var(--purple)}
+  .st-h{font-size:17.5px;font-weight:900;margin-bottom:2px;letter-spacing:-.01em}
+  .st ul{margin:10px 0 0 17px}
+  .st li{font-size:14px;line-height:1.55;margin-bottom:7px;color:var(--muted)}
+  .st li:last-child{margin-bottom:0}
+  .st li b{color:var(--text);font-weight:800}
+  @media(max-width:520px){
+    .rm{padding-left:42px}
+    .st{padding:14px 15px}
+    .st:before{left:-42px;top:12px;width:30px;height:30px;font-size:12px;border-radius:9px}
+    .st:after{left:-28.5px;top:42px;bottom:-30px}
+  }
+
+  .week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin:16px 0 8px}
+  .day{background:var(--solid2);border:1px solid var(--line);border-radius:10px;
+       padding:11px 5px;text-align:center;min-height:104px}
+  .day b{display:block;font-size:11px;font-weight:900;letter-spacing:.1em;
+         color:var(--muted);margin-bottom:8px}
+  .day span{display:block;font-size:11px;line-height:1.35;color:var(--text)}
+  .day .pill{display:inline-block;font-size:9px;font-weight:900;letter-spacing:.06em;
+    padding:3px 6px;border-radius:5px;margin-bottom:6px;text-transform:uppercase}
+  .day.train{border-color:rgba(255,107,26,.5)}
+  .day.train .pill{background:rgba(255,107,26,.2);color:var(--orange)}
+  .day.play{border-color:rgba(41,182,255,.45)}
+  .day.play .pill{background:rgba(41,182,255,.18);color:var(--blue)}
+  .day.rest{border-color:rgba(53,208,127,.45)}
+  .day.rest .pill{background:rgba(53,208,127,.16);color:var(--green)}
+  @media(max-width:640px){.week{grid-template-columns:repeat(2,1fr)}.day{min-height:auto}}
+
+  .ladr{margin:16px 0}
+  .lr{display:flex;align-items:center;gap:12px;padding:9px 13px;border-radius:9px;
+      margin-bottom:5px;background:var(--solid2);border:1px solid var(--line)}
+  .lr .nm{flex:1;font-size:14px;font-weight:800}
+  .lr .dot{width:11px;height:11px;border-radius:50%;flex:0 0 auto}
+  .lr .tag{font-size:10px;letter-spacing:.1em;font-weight:900;flex:0 0 auto}
+  .lr.here{border-color:var(--orange);background:rgba(255,107,26,.14);
+           box-shadow:0 0 20px rgba(255,107,26,.2)}
+  .lr.here .tag{color:var(--orange)}
+  .lr.tgt{border-color:rgba(41,182,255,.5)} .lr.tgt .tag{color:var(--blue)}
+  .lr.tgt2{border-color:rgba(169,123,255,.5)} .lr.tgt2 .tag{color:var(--purple)}
+
+  .ses{display:flex;gap:22px;align-items:center;flex-wrap:wrap;margin:8px 0 18px}
+  .ring-wrap{position:relative;flex:0 0 auto}
+  .ring-wrap .lbl{position:absolute;inset:0;display:flex;flex-direction:column;
+    align-items:center;justify-content:center}
+  .ring-wrap .lbl .t{font-size:32px;font-weight:900;font-variant-numeric:tabular-nums;
+    line-height:1;color:var(--orange)}
+  .ring-wrap .lbl .s{font-size:10px;font-weight:900;letter-spacing:.14em;
+    color:var(--muted);text-transform:uppercase;margin-top:5px}
+  .ses-side{flex:1;min-width:200px}
+
+  .blocks{display:grid;gap:9px;margin:14px 0}
+  .blk{display:flex;align-items:center;gap:13px;background:var(--solid2);
+       border:1px solid var(--line);border-radius:12px;padding:13px 15px;
+       cursor:pointer;transition:.15s;text-align:left;width:100%;
+       font-family:var(--font);color:var(--text)}
+  .blk:hover{border-color:var(--blue)}
+  .blk.run{border-color:var(--orange);background:rgba(255,107,26,.12)}
+  .blk.done{border-color:var(--green);background:rgba(53,208,127,.1);opacity:.72}
+  .blk-t{font-size:20px;font-weight:900;font-variant-numeric:tabular-nums;
+         min-width:66px;color:var(--blue)}
+  .blk.run .blk-t{color:var(--orange)} .blk.done .blk-t{color:var(--green)}
+  .blk-n{flex:1}
+  .blk-n b{display:block;font-size:14px;font-weight:800}
+  .blk-n span{font-size:12.5px;color:var(--muted)}
+  .blk-x{font-size:20px;font-weight:900;color:var(--green);opacity:0}
+  .blk.done .blk-x{opacity:1}
+
+  .bar{height:10px;background:var(--solid2);border-radius:99px;overflow:hidden;margin:10px 0 6px}
+  .bar i{display:block;height:100%;border-radius:99px;transition:width .5s;
+         background:linear-gradient(90deg,var(--orange),var(--orange2))}
+  .bar.b i{background:linear-gradient(90deg,var(--blue),#8ddcff)}
+  .bar.g i{background:linear-gradient(90deg,var(--green),#7fe9b4)}
+  .cd-lbl{font-size:11px;color:var(--muted);text-transform:uppercase;
+          letter-spacing:.11em;font-weight:800}
+
+  input[type=text],select{background:var(--solid2);border:1px solid var(--line);
+    color:var(--text);border-radius:10px;padding:11px 13px;font-family:var(--font);
+    font-size:15px;width:100%}
+  input:focus,select:focus{outline:none;border-color:var(--blue)}
+  .row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+  .row>*{flex:1;min-width:130px}
+  button.btn{background:linear-gradient(100deg,var(--orange),#ff8b3d);border:none;
+    color:#0b0e14;font-family:var(--font);font-weight:900;font-size:14px;
+    padding:12px 20px;border-radius:10px;cursor:pointer;transition:.15s;flex:0 0 auto}
+  button.btn:hover{filter:brightness(1.12)}
+  button.btn.ghost{background:none;border:1px solid var(--line);color:var(--muted)}
+  button.btn.ghost:hover{color:var(--text);border-color:var(--muted)}
+  button.btn.blue{background:linear-gradient(100deg,var(--blue),#6bcdff)}
+
+  .chk{display:flex;align-items:center;gap:13px;background:var(--solid2);
+       border:1px solid var(--line);border-radius:11px;padding:13px 15px;margin-bottom:8px;
+       cursor:pointer;transition:.15s;width:100%;font-family:var(--font);
+       color:var(--text);text-align:left}
+  .chk:hover{border-color:var(--blue)}
+  .chk.on{border-color:var(--green);background:rgba(53,208,127,.1)}
+  .box{width:24px;height:24px;border:2px solid var(--line);border-radius:7px;
+       flex:0 0 auto;display:flex;align-items:center;justify-content:center;
+       font-weight:900;color:transparent;font-size:14px}
+  .chk.on .box{border-color:var(--green);background:var(--green);color:#0b0e14}
+  .chk-n{flex:1}
+  .chk-n b{display:block;font-size:14.5px;font-weight:800}
+  .chk-n span{font-size:12.5px;color:var(--muted)}
+
+  .acc{border:1px solid var(--line);border-radius:11px;margin-bottom:9px;overflow:hidden}
+  .acc>.hd{width:100%;background:var(--solid2);border:none;color:var(--text);
+    font-family:var(--font);font-size:14px;font-weight:900;padding:14px 16px;
+    cursor:pointer;text-align:left;display:flex;justify-content:space-between;
+    align-items:center;gap:10px}
+  .acc>.hd .cnt{color:var(--muted);font-weight:700;font-size:12px}
+  .acc .bd{display:none;padding:6px 14px 14px}
+  .acc.open .bd{display:block}
+  .skill{border-left:2px solid var(--line);padding:10px 0 10px 14px;margin-bottom:4px}
+  .skill b{display:block;font-size:14px;font-weight:800;margin-bottom:3px}
+  .skill p{font-size:13px;color:var(--muted);margin-bottom:6px}
+  .skill .how{font-size:13px;color:var(--blue);font-weight:700;margin-bottom:8px}
+  .skill button{background:none;border:1px solid var(--line);color:var(--muted);
+    font-family:var(--font);font-size:11px;font-weight:900;letter-spacing:.08em;
+    padding:6px 11px;border-radius:7px;cursor:pointer;text-transform:uppercase}
+  .skill button:hover{color:var(--orange);border-color:var(--orange)}
+
+  /* MAP CARDS */
+  .map{background:var(--solid2);border:1px solid var(--line);border-radius:12px;
+       padding:15px;margin-bottom:10px}
+  .map .mh{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;
+    flex-wrap:wrap;margin-bottom:6px}
+  .map .mn{font-size:15px;font-weight:900}
+  .map .live{font-size:10px;font-weight:900;letter-spacing:.08em;color:var(--green);
+    background:rgba(53,208,127,.14);border:1px solid rgba(53,208,127,.4);
+    border-radius:6px;padding:3px 8px;white-space:nowrap}
+  .map .code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:17px;
+    font-weight:800;color:var(--orange);letter-spacing:.04em;
+    background:rgba(255,107,26,.1);border:1px dashed rgba(255,107,26,.4);
+    border-radius:8px;padding:8px 12px;margin:8px 0;display:inline-block;
+    -webkit-user-select:all;user-select:all}
+  .map .use{font-size:13px;color:var(--muted)}
+  .map .use b{color:var(--blue)}
+
+  /* SELF ASSESS */
+  .sa{margin-bottom:14px;border:1px solid var(--line);border-radius:12px;
+    background:var(--solid2);padding:15px}
+  .sa .sah{display:flex;justify-content:space-between;align-items:center;gap:10px;
+    margin-bottom:4px}
+  .sa .san{font-size:15px;font-weight:900}
+  .sa .sav{font-size:13px;font-weight:900;color:var(--orange)}
+  .sa .sat{font-size:12.5px;color:var(--muted);margin-bottom:10px}
+  .dots{display:flex;gap:6px;flex-wrap:wrap}
+  .dots button{flex:1;min-width:52px;background:var(--panel);border:1px solid var(--line);
+    color:var(--muted);font-family:var(--font);font-size:11px;font-weight:900;
+    padding:9px 4px;border-radius:8px;cursor:pointer;transition:.15s}
+  .dots button:hover{border-color:var(--blue);color:var(--text)}
+  .dots button.on{background:linear-gradient(100deg,var(--orange),#ff8b3d);
+    border-color:var(--orange);color:#0b0e14}
+
+  .steps{counter-reset:s;list-style:none;margin:14px 0 0}
+  .steps li{counter-increment:s;position:relative;padding-left:44px;margin-bottom:14px;
+    font-size:14.5px}
+  .steps li:before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;
+    background:rgba(41,182,255,.14);border:1px solid rgba(41,182,255,.45);border-radius:9px;
+    color:var(--blue);font-weight:900;font-size:14px;display:flex;
+    align-items:center;justify-content:center}
+  .steps li b{display:block;color:#fff}
+
+  .rule{display:flex;gap:14px;align-items:flex-start;background:var(--solid2);
+        border:1px solid var(--line);border-radius:11px;padding:14px;margin-bottom:9px}
+  .rule i{font-style:normal;font-weight:900;color:var(--orange);font-size:19px;
+          min-width:26px;text-align:center}
+  .rule div b{display:block;font-size:14.5px;color:#fff;margin-bottom:2px}
+  .rule div span{font-size:13.5px;color:var(--muted)}
+
+  .log{list-style:none;margin:12px 0 0}
+  .log li{display:flex;justify-content:space-between;gap:10px;padding:11px 14px;
+    background:var(--solid2);border:1px solid var(--line);border-radius:10px;
+    margin-bottom:7px;font-size:14px}
+  .log li span{color:var(--muted);flex:0 0 auto}
+
+  .weeks{display:flex;gap:5px;align-items:flex-end;height:86px;margin:14px 0 4px}
+  .weeks div{flex:1;background:var(--solid2);border-radius:5px 5px 0 0;min-height:4px;
+    transition:.4s}
+  .weeks div.has{background:linear-gradient(180deg,var(--orange),#7a2f00)}
+  .wklbl{display:flex;gap:5px;font-size:9.5px;color:var(--muted);text-align:center}
+  .wklbl div{flex:1}
+
+  footer{text-align:center;color:var(--muted);font-size:13px;padding:34px 16px 10px;
+    border-top:1px solid var(--line);margin-top:28px}
+  @media(max-width:560px){.tab{font-size:9.5px;letter-spacing:.02em;padding:14px 1px}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="kicker">Operation</div>
+    <h1>Road to <span>13</span></h1>
+    <div class="tagline">824 hours played. 14,100 kills. Best season of your life happening
+      right now. Here is how we turn that into something real.</div>
+    <div class="hero-cd">
+      <div class="ring">
+        <svg width="96" height="96" viewBox="0 0 96 96">
+          <circle cx="48" cy="48" r="41" fill="none" stroke="#1a2233" stroke-width="8"/>
+          <circle id="cdRing" cx="48" cy="48" r="41" fill="none" stroke="#29b6ff"
+                  stroke-width="8" stroke-linecap="round"
+                  stroke-dasharray="257.6" stroke-dashoffset="257.6"
+                  transform="rotate(-90 48 48)"/>
+        </svg>
+        <b id="cdPct">0%<i>THERE</i></b>
+      </div>
+      <div class="cdmain">
+        <div class="n" id="cdNum">--</div>
+        <div class="l">days until you turn 13</div>
+        <div class="d" id="cdDate">17 June 2028</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<nav><div class="tabs">
+  <button class="tab on" data-p="mission">Mission</button>
+  <button class="tab" data-p="you">Stats</button>
+  <button class="tab" data-p="road">Roadmap</button>
+  <button class="tab" data-p="comp">Compete</button>
+  <button class="tab" data-p="train">Train</button>
+  <button class="tab" data-p="track">Track</button>
+</div></nav>
+
+<div class="wrap">
+
+<!-- ==================== MISSION ==================== -->
+<div class="page on" id="mission">
+
+  <div class="card win">
+    <h2><span class="n">00</span>You changed the plan</h2>
+    <p class="lead">Read this first. It matters more than the rest.</p>
+    <p>Version 1 of this plan said Rocket League should be your main game. You said you are
+    better at Fortnite. <strong>So the plan changed.</strong> Not because you complained, but
+    because you were right and you said so.</p>
+    <p>Then we pulled your actual stats. Three things came out of that, and they are all on
+    the <em>Your Stats</em> tab:</p>
+    <ul>
+      <li>You are having <strong>the best season of your entire career</strong>, right now,
+      by a huge margin.</li>
+      <li>You are <strong>a lot better than your current rank says</strong>.</li>
+      <li>There is <strong>one specific thing</strong> you are doing that is holding you
+      back, and it is completely fixable.</li>
+    </ul>
+    <div class="big g">You said something, someone checked it properly, and the plan moved.
+    That is how this works from now on. If something is wrong, say so.</div>
+  </div>
+
+  <div class="card hot">
+    <h2><span class="n">01</span>The mission</h2>
+    <p class="lead">Read this bit properly once. It is the whole idea.</p>
+    <p>Loads of kids say they want to go pro. Almost none of them ever build a system. They
+    just play a lot, which feels like training but is not. You already have the hours.
+    <strong>824 of them.</strong> What you have not had yet is a system pointing them
+    somewhere.</p>
+    <div class="big">By the time you are 15, the goal is four things: you can find your own
+    weakness and fix it, you own a channel full of your own videos, you have a real tournament
+    record, and you can lose in public without falling apart.</div>
+    <p>Here is the honest bit, because you should hear it from us and not from someone in a
+    Discord: <strong>almost nobody becomes a paid pro player.</strong> That is just true, and
+    this plan does not need to lie to you to work.</p>
+    <p>Now look at those four again. Every one is worth having even if you never go pro:</p>
+    <div class="grid">
+      <div class="stat"><b class="sm">Editing</b><span>a real job at 16</span></div>
+      <div class="stat"><b class="sm b">Coaching</b><span>a real job</span></div>
+      <div class="stat"><b class="sm g">Casting</b><span>a real job</span></div>
+      <div class="stat"><b class="sm p">Events</b><span>a real job</span></div>
+    </div>
+    <div class="big b">We build the skills, the rank follows, and nothing is wasted either
+    way. That is why it is set up like this.</div>
+  </div>
+
+  <div class="card warn">
+    <h2><span class="n">02</span>The Twitch thing, straight up</h2>
+    <p class="lead">The part you will not enjoy. Read it anyway, then we move on.</p>
+    <p>You have to be <strong>13 to have a Twitch account</strong>. Not 13 to be famous on it.
+    13 to <em>exist</em> on it at all. You are 11. That is why the account went.</p>
+    <p>It was not unfair and it was not personal. Same rule for everybody on the planet, and
+    it is not getting reversed by an appeal. The followers are gone. That is rubbish and it is
+    allowed to feel rubbish for a bit.</p>
+    <div class="big r">Do not make a new account with a fake birthday. Not one. Not ever.</div>
+    <p>Cold strategy version: if a second account gets caught, you can be banned
+    <strong>permanently</strong>. Not "until you are 13". Permanently. So the exact moment
+    Twitch becomes useful to you, you would be locked out for life while everyone else starts.
+    Two years of impatience traded for losing the platform forever is a terrible deal, and you
+    are smarter than that.</p>
+    <p>These rules are getting <strong>stricter</strong> every year. Australia moved theirs to
+    16 and deleted every under-16 account in January.</p>
+    <h3>What 13 actually unlocks</h3>
+    <div class="grid">
+      <div class="stat"><b class="sm">Twitch</b><span>properly, real birthday</span></div>
+      <div class="stat"><b class="sm b">FNCS</b><span>Fortnite's world series</span></div>
+      <div class="stat"><b class="sm g">The SA LAN</b><span>13+, dad signs the form</span></div>
+    </div>
+    <p>All three, same birthday. The whole industry decided 13 is when you start. So we spend
+    two years getting ready instead of getting banned.</p>
+    <h3>The lesson worth more than the followers</h3>
+    <p>An audience on someone else's platform can be deleted overnight. You learned that
+    earlier than most people, at a point where it cost you almost nothing.</p>
+    <p>So: <strong>record everything.</strong> Every session, on your own drive. Dad holds the
+    YouTube channel (that is the law under 13, not him being annoying) and you put up one clip
+    a week. Two years of that and you hit 13 with a back catalogue and real editing skill,
+    while everyone else turning 13 that month starts from an empty page.</p>
+    <div class="big">That is how you turn a ban into a two year head start.</div>
+  </div>
+
+  <div class="card">
+    <h2><span class="n">03</span>The five rules</h2>
+    <p class="lead">Short list. Agree once, then we never argue about them again.</p>
+    <div class="rule"><i>1</i><div><b>School and sleep come first</b>
+      <span>9 hours or more. Not a bedtime thing, a performance thing. Sleep is when your
+      brain saves what you practised that day. Tired players have slower reactions and tilt
+      faster. Be the well slept one.</span></div></div>
+    <div class="rule"><i>2</i><div><b>Two bad losses in a row, stop for ten minutes</b>
+      <span>Not a punishment. Learning this at 11 instead of 19 is a huge head start. Stand
+      up, walk off, water, come back.</span></div></div>
+    <div class="rule"><i>3</i><div><b>No new Twitch account. Wait for 13.</b>
+      <span>See section 02. The one that can cost you everything.</span></div></div>
+    <div class="rule"><i>4</i><div><b>Never post your surname, school or suburb</b>
+      <span>Dad holds the passwords until you are older. Not because you are a kid, because
+      the internet is full of weirdos.</span></div></div>
+    <div class="rule"><i>5</i><div><b>One rest day a week, properly off</b>
+      <span>Sunday. No ranked. Rest is part of training, not the opposite of it.</span></div></div>
+  </div>
+</div>
+
+<!-- ==================== YOUR STATS ==================== -->
+<div class="page" id="you">
+
+  <div class="card win">
+    <h2><span class="n">04</span>You are having your best season ever</h2>
+    <p class="lead">This is not a pep talk. It is your own data, season by season.</p>
+    <p>Here is your win rate in every season you have played. Look at the last bar.</p>
+    <div id="seasonChart"></div>
+    <div class="grid">
+      <div class="stat"><b class="g">18.8%</b><span>win rate this season</span></div>
+      <div class="stat"><b class="sm">11.7%</b><span>your previous best</span></div>
+      <div class="stat"><b class="b">48</b><span>wins this season</span></div>
+      <div class="stat"><b class="p">256</b><span>matches this season</span></div>
+    </div>
+    <div class="big g">You are winning almost 1 game in every 5. Your old record was 1 in 8.
+    Nobody handed you that. You did it in the last few weeks.</div>
+    <h3>And you are doing it faster than ever</h3>
+    <p>Wins per hour played is the fairest way to compare seasons, because some seasons you
+    played way more than others.</p>
+    <div class="cmp">
+      <div class="cmp-row">
+        <div class="cmp-top"><span>This season</span><span>1.05 wins per hour</span></div>
+        <div class="cmp-bar"><i class="g" style="width:100%"></i></div>
+      </div>
+      <div class="cmp-row">
+        <div class="cmp-top"><span>Your lifetime average</span><span>0.45 wins per hour</span></div>
+        <div class="cmp-bar"><i class="n" style="width:43%"></i></div>
+      </div>
+      <div class="cmp-row">
+        <div class="cmp-top"><span>Chapter 5 Season 1 (your biggest grind, 119 hours)</span><span>0.51</span></div>
+        <div class="cmp-bar"><i class="n" style="width:49%"></i></div>
+      </div>
+    </div>
+    <p>You are winning <strong>more than twice as often per hour</strong> as your career
+    average. Whatever you changed recently, keep doing it.</p>
+  </div>
+
+  <div class="card hot">
+    <h2><span class="n">05</span>Your rank is lying about you</h2>
+    <p class="lead">Platinum 2 is not your level. Here is the proof.</p>
+    <div class="grid">
+      <div class="stat"><b class="g sm">Champion 2</b><span>your best ever, last season</span></div>
+      <div class="stat"><b class="p sm">Unreal</b><span>your best in Reload</span></div>
+      <div class="stat"><b class="b sm">Platinum 2</b><span>where you are now</span></div>
+      <div class="stat"><b>2.73</b><span>lifetime K/D, top 9%</span></div>
+    </div>
+    <p>Fortnite <strong>wipes everyone's rank at the start of every season</strong>. Being
+    Platinum 2 right now does not mean you got worse. It means the season is young and you
+    have not gone and re-climbed it yet.</p>
+    <h3>The pattern nobody else would spot</h3>
+    <p>Look at what your last few seasons finished on:</p>
+    <ul>
+      <li>Chapter 6, seasons 3 and 4: <strong>Bronze 2</strong></li>
+      <li>Chapter 7 season 1: <strong>Gold 1</strong></li>
+      <li>Chapter 7 season 2: <strong>Champion 2</strong></li>
+    </ul>
+    <p>That is not a player who randomly gets better and worse. That is a player who
+    <em>climbs hard in the seasons he actually plays ranked</em> and sits low in the seasons
+    he does not.</p>
+    <div class="big">Your ceiling is not the problem. Your consistency is. That is genuinely
+    great news, because consistency is the much easier one to fix.</div>
+  </div>
+
+  <div class="card warn">
+    <h2><span class="n">06</span>The one thing to change</h2>
+    <p class="lead">The single biggest finding in your whole profile.</p>
+    <p>We went through your last 85 or so matches. Almost every single one was
+    <strong>Casual</strong>, and a big chunk was <strong>Zero Build</strong>. In all of that,
+    there was <strong>one</strong> session of Ranked Build.</p>
+    <div class="split">
+      <div class="sp bad">
+        <h4>What you mostly play</h4>
+        <div class="vs">Casual, a lot of it Zero Build</div>
+        <p>No building. No editing. No piece control. No retakes. Bots in the lobbies. Nothing
+        on the line.</p>
+      </div>
+      <div class="sp good">
+        <h4>What tournaments actually are</h4>
+        <div class="vs">Ranked, Build mode</div>
+        <p>FNCS and the SA championship are <strong>Build</strong>. Every skill on the Train
+        tab is a Build skill. Real players, real pressure.</p>
+      </div>
+    </div>
+    <p>Zero Build is a great game. It is just <strong>a different game</strong> to the one the
+    tournaments run. Hours there barely move your Build rank, which is exactly how you end up
+    with 824 hours and a Platinum rank at the same time.</p>
+    <div class="big r">You do not need more hours. You have loads of hours. You need your
+    hours pointed at the mode you actually want to compete in.</div>
+    <p>The fix is not "stop playing Zero Build". Play it with your mates, enjoy it. The fix
+    is: <strong>your training sessions are Ranked Build. Always.</strong></p>
+    <div class="note">One honest catch: your last-30-days K/D of 5.28 looks amazing next to
+    your 2.73 lifetime, but most of it is Casual, which has bots in it. You are genuinely
+    improving. Just do not take that exact number to the bank.</div>
+  </div>
+
+  <div class="card cool">
+    <h2><span class="n">07</span>Which mode to grind</h2>
+    <p class="lead">Your own numbers point somewhere surprising.</p>
+    <div class="cmp">
+      <div class="cmp-row">
+        <div class="cmp-top"><span>Trios &middot; 387 matches</span><span>K/D 4.60 &middot; 14.2% wins</span></div>
+        <div class="cmp-bar"><i class="g" style="width:100%"></i></div>
+      </div>
+      <div class="cmp-row">
+        <div class="cmp-top"><span>Squads &middot; 831 matches</span><span>K/D 4.13 &middot; 11.7% wins</span></div>
+        <div class="cmp-bar"><i class="g" style="width:90%"></i></div>
+      </div>
+      <div class="cmp-row">
+        <div class="cmp-top"><span>Duos &middot; 2,469 matches</span><span>K/D 2.81 &middot; 6.2% wins</span></div>
+        <div class="cmp-bar"><i class="n" style="width:61%"></i></div>
+      </div>
+      <div class="cmp-row">
+        <div class="cmp-top"><span>Solo &middot; 1,845 matches</span><span>K/D 1.71 &middot; 3.6% wins</span></div>
+        <div class="cmp-bar"><i class="r" style="width:37%"></i></div>
+      </div>
+    </div>
+    <p>The South African championship runs <strong>Solos and Trios</strong>. So:</p>
+    <ul>
+      <li><strong>Trios is your best mode by a mile</strong>, and it is the one you play
+      <em>least</em>. 387 matches out of 5,532.</li>
+      <li><strong>Solo is your weakest mode</strong>, and it is half the prize money there.</li>
+    </ul>
+    <div class="big">Your best mode is the one you barely touch. Playing more Trios is
+    basically free rank.</div>
+    <p><strong>What about Duos, your most played mode?</strong> It is not an event at the
+    South African championship. But it <em>is</em> the format of <strong>FNCS in 2026</strong>,
+    the actual world championship. So those 2,469 matches are not wasted at all. See the
+    Compete tab.</p>
+    <div class="big b">Short version: Solos and Trios for South Africa, Duos for the world
+    championship. The formats change every year anyway, so being good at all three is the
+    real answer.</div>
+    <p><strong>Trios with your team. Solo for training.</strong> Solo is where you are exposed
+    and where you improve fastest, because there is no teammate to bail you out.</p>
+    <div class="note">Being fair: solo K/D is lower than trio K/D for literally everyone,
+    because in trios you get knocks and your mates help. So 1.71 is not as bad as it looks.
+    But the 3.6% win rate is the real weak spot.</div>
+  </div>
+
+  <div class="card">
+    <h2><span class="n">08</span>Your FNCS eligibility check</h2>
+    <p class="lead">Dad asked about the Account Level 350 rule. Here is the answer.</p>
+    <p>To play FNCS you need <strong>Account Level 350 or higher</strong>, plus 14 different
+    Epic tournaments in the last 180 days, 2FA switched on, and to be 13.</p>
+    <p><strong>Account Level is not the same as Battle Pass Level.</strong> Battle Pass level
+    resets every season. Account Level keeps adding up forever and never resets.</p>
+    <div class="grid">
+      <div class="stat"><b class="b">246</b><span>battle pass level, THIS season alone</span></div>
+      <div class="stat"><b>14</b><span>seasons played</span></div>
+      <div class="stat"><b class="g">824h</b><span>total play time</span></div>
+      <div class="stat"><b class="p">350</b><span>what FNCS needs</span></div>
+    </div>
+    <div class="big g">You almost certainly cleared 350 a very long time ago. You hit 246
+    levels in this season on its own, and you have played 14 seasons.</div>
+    <p>But "almost certainly" is not "definitely", and this one is worth being sure about. It
+    is a 10 second check:</p>
+    <ol class="steps">
+      <li><b>Open Fortnite</b>Go to the main lobby.</li>
+      <li><b>Click the Career tab</b>Top of the screen.</li>
+      <li><b>Read your Account Level</b>Write the number in the box on the Track tab.</li>
+    </ol>
+    <div class="note">The 14-tournaments-in-180-days rule is the one that will actually catch
+    you out, not the level. That grind has to start well before your 13th birthday, so we will
+    plan for it in the year you turn 12.</div>
+  </div>
+</div>
+
+<!-- ==================== ROADMAP ==================== -->
+<div class="page" id="road">
+
+  <div class="card hot">
+    <h2><span class="n">09</span>The roadmap</h2>
+    <p class="lead">Seven stages. You have already finished the first one.</p>
+    <div class="rm">
+      <div class="st done" data-n="1">
+        <div class="st-tag">Complete</div>
+        <div class="st-h">Put in the hours</div>
+        <ul>
+          <li><b>824 hours. 5,532 matches. 14,100 kills.</b> Done. Most people never get here.</li>
+          <li>You proved you can hit <b>Champion 2</b>. The ceiling is real.</li>
+        </ul>
+      </div>
+      <div class="st now" data-n="2">
+        <div class="st-tag">You are here &middot; now</div>
+        <div class="st-h">Point the hours at Ranked Build</div>
+        <ul>
+          <li>Every training session is <b>Ranked Build</b>, not Casual, not Zero Build.</li>
+          <li>Do the <b>skill check</b> on the Train tab and find your worst area.</li>
+          <li>Run your first <b>14 day weakness cycle</b>.</li>
+          <li>Target: back to <b>Diamond</b> this season.</li>
+        </ul>
+      </div>
+      <div class="st next" data-n="3">
+        <div class="st-tag">Next &middot; a few months</div>
+        <div class="st-h">Beat your own record</div>
+        <ul>
+          <li>Get past <b>Champion 2</b>. That is the number to beat, nobody else's.</li>
+          <li>Build the <b>trio</b>. Trios is your best mode and half the SA prize money.</li>
+          <li>20 clips on the channel, edited by you.</li>
+        </ul>
+      </div>
+      <div class="st next" data-n="4">
+        <div class="st-tag">Age 12</div>
+        <div class="st-h">Start the tournament grind</div>
+        <ul>
+          <li>FNCS needs <b>14 Epic tournaments in 180 days</b>. Start ticking those off.</li>
+          <li>Confirm <b>Account Level 350</b> and switch on <b>2FA</b>.</li>
+          <li>Enter anything local you are old enough for. Get used to losing on purpose.</li>
+        </ul>
+      </div>
+      <div class="st far" data-n="5">
+        <div class="st-tag">17 June 2028 &middot; age 13</div>
+        <div class="st-h">Launch day</div>
+        <ul>
+          <li><b>Twitch</b>, properly, with two years of footage behind you.</li>
+          <li><b>ACGL Fortnite Solos and Trios</b>, online and at the Cape Town LAN.</li>
+          <li><b>FNCS</b> becomes possible.</li>
+          <li>Target rank: <b>Unreal</b>.</li>
+        </ul>
+      </div>
+      <div class="st far" data-n="6">
+        <div class="st-tag">Age 13 to 14</div>
+        <div class="st-h">Get properly beaten, on purpose</div>
+        <ul>
+          <li>Enter, lose, and <b>measure the real gap</b>. One real answer beats a year of guessing.</li>
+          <li>Then close it. This is the part almost nobody has the stomach for.</li>
+        </ul>
+      </div>
+      <div class="st far" data-n="7">
+        <div class="st-tag">Age 15</div>
+        <div class="st-h">The honest checkpoint</div>
+        <ul>
+          <li>Placing in ACGL events? Then we have a very different conversation.</li>
+          <li>Not placing? The answer is <b>not</b> "stop". You will have four years of
+          editing, discipline and an audience. Point it at the thing next door.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="n">10</span>The rank climb</h2>
+    <p class="lead">Where you are, where you have been, where you are going.</p>
+    <div class="ladr">
+      <div class="lr"><span class="dot" style="background:#8c6239"></span><span class="nm">Bronze I, II, III</span></div>
+      <div class="lr"><span class="dot" style="background:#9aa7bd"></span><span class="nm">Silver I, II, III</span></div>
+      <div class="lr"><span class="dot" style="background:#ffc93c"></span><span class="nm">Gold I, II, III</span></div>
+      <div class="lr here"><span class="dot" style="background:#7fd8e8"></span><span class="nm">Platinum I, II, III</span><span class="tag">YOU ARE HERE</span></div>
+      <div class="lr tgt"><span class="dot" style="background:#29b6ff"></span><span class="nm">Diamond I, II, III</span><span class="tag">THIS SEASON</span></div>
+      <div class="lr"><span class="dot" style="background:#a97bff"></span><span class="nm">Elite I, II, III</span></div>
+      <div class="lr tgt"><span class="dot" style="background:#ff6b1a"></span><span class="nm">Champion I, II, III</span><span class="tag">YOUR BEST EVER</span></div>
+      <div class="lr tgt2"><span class="dot" style="background:#ff4d5e"></span><span class="nm">Unreal</span><span class="tag">THE GOAL</span></div>
+    </div>
+    <p>Every tier from Bronze to Champion now has three divisions. Epic split
+    <strong>Elite and Champion into three each</strong> in the v40.20 update, so the full
+    climb is 21 steps before Unreal. Above Unreal there is <strong>Unreal Legends</strong>,
+    for Unreal players in the top 500.</p>
+    <div class="big">The old plan said "Diamond by 13". That was wrong, because you have
+    already been Champion 2. Aiming at Diamond would be aiming below where you have literally
+    already been. <strong>The target is Unreal.</strong></div>
+  </div>
+
+  <div class="card">
+    <h2><span class="n">11</span>Your week</h2>
+    <p class="lead">About 10 to 12 hours. Homework first, every time.</p>
+    <div class="week">
+      <div class="day train"><b>MON</b><span class="pill">Train</span><span>Session, Ranked Build</span></div>
+      <div class="day play"><b>TUE</b><span class="pill">Free</span><span>Zero Build or CoD with mates</span></div>
+      <div class="day train"><b>WED</b><span class="pill">Train</span><span>Session, Ranked Build</span></div>
+      <div class="day play"><b>THU</b><span class="pill">Free</span><span>Creative or casual</span></div>
+      <div class="day train"><b>FRI</b><span class="pill">Trio</span><span>Trio night, Ranked</span></div>
+      <div class="day play"><b>SAT</b><span class="pill">Big</span><span>Long session, editing</span></div>
+      <div class="day rest"><b>SUN</b><span class="pill">Rest</span><span>Off. Properly off.</span></div>
+    </div>
+    <p>Pros play eight hours a day. <strong>You should not</strong>, and copying them would
+    wreck your schooling and your hands. Three focused Ranked Build sessions beat twenty
+    unfocused hours, and your own stats already prove it: your best season is not your most
+    played one.</p>
+  </div>
+</div>
+
+<!-- ==================== COMPETE ==================== -->
+<div class="page" id="comp">
+
+  <div class="card warn">
+    <h2><span class="n">12</span>The hard answer about tournaments</h2>
+    <p class="lead">You asked what you can enter. Here it is, straight.</p>
+    <div class="big r">You cannot legally enter a single official Fortnite tournament until
+    17 June 2028. Not one. Not even the free ones inside the game.</div>
+    <p>Epic's rule is <strong>13 and over for every competitive event</strong>, and that
+    includes the in-game Cash Cups you can see in the Compete tab. ACGL, who run the South
+    African tournaments, are also <strong>13+</strong>, with a parent consent form needed
+    under 16.</p>
+    <p>So that is <strong>22 months</strong> with no official competition available. I am not
+    going to dress that up. It is the single most annoying fact in this whole plan.</p>
+    <h3>And here is the bit that really matters</h3>
+    <p>The <strong>Compete</strong> tab is right there in the game. You will see tournaments in
+    it. You might even be able to click into one.</p>
+    <div class="big r">Do not enter one. Epic's rule says anyone competing who does not meet
+    the age requirement is disqualified from that event.</div>
+    <p>It is the same logic as the Twitch rule. Getting flagged now, on your real account, the
+    one with 824 hours and 14,100 kills on it, to play one tournament you cannot win anything
+    in, would be a genuinely terrible trade.</p>
+    <div class="note">Dad: worth checking what birthdate the Epic account is registered under.
+    If it is set wrong, he could enter something and get disqualified without either of you
+    realising why.</div>
+  </div>
+
+  <div class="card win">
+    <h2><span class="n">13</span>What you CAN compete in, today</h2>
+    <p class="lead">This is genuinely not nothing. Three of these are real competition.</p>
+    <div class="grid">
+      <div class="stat"><b class="g sm">Ranked</b><span>no age limit</span></div>
+      <div class="stat"><b class="g sm">Creative 1v1s</b><span>no age limit</span></div>
+      <div class="stat"><b class="g sm">Scrims</b><span>no age limit</span></div>
+      <div class="stat"><b class="b sm">School</b><span>check the titles</span></div>
+    </div>
+    <h3>1. Ranked Battle Royale</h3>
+    <p>There is <strong>no age gate on ranked itself</strong>, only on tournaments. Ranked is
+    real competition against real people with something on the line. This is your league for
+    the next 22 months, and climbing it is a completely legitimate goal.</p>
+    <h3>2. Creative 1v1s and box fights</h3>
+    <p><strong>Piece Control 1v1 had 3,378 people in it</strong> when we checked. That is a
+    live opponent, trying to beat you, right now. It is not a tournament but it is absolutely
+    competition, and it is the closest thing to tournament pressure you can legally get.</p>
+    <h3>3. Scrims with your trio</h3>
+    <p>Custom games against other teams. No age rule, because nobody is running a prize pool.
+    This is how you build a team that is ready on day one at 13 instead of starting then.</p>
+    <h3>4. School esports</h3>
+    <p>MSSA and the ACGL Schools League run school competitions where you can earn provincial
+    and even national colours. <strong>Worth checking which titles your school actually
+    runs</strong>, because Fortnite may not be one of them at primary school level.</p>
+    <div class="note">If Fortnite is not offered, Rocket League might genuinely be your only
+    route to school or provincial colours before 13. Not a reason to switch your main game,
+    just a reason to know the door is there.</div>
+  </div>
+
+  <div class="card cool">
+    <h2><span class="n">14</span>FNCS, explained properly</h2>
+    <p class="lead">The Fortnite Champion Series. Epic's official world series.</p>
+    <p>This is the big one, and it is what you unlock at 13. Here is how it actually works,
+    because most people your age have no idea.</p>
+    <h3>The ladder</h3>
+    <ol class="steps">
+      <li><b>Divisional Cups</b>Everyone starts in the lowest Division. Do well and you climb
+      toward <b>Division 1</b>, which is where the strongest players are and where the cash
+      sessions happen.</li>
+      <li><b>Majors</b>Online tournaments run in stages: Play-In, then Heats, then Last
+      Chance, then Finals. Survive each stage to reach the next.</li>
+      <li><b>The LAN</b>The top duos from the Major fly out and play in person. In 2026 that
+      was <b>Düsseldorf, Germany, for a $1,000,000 prize pool</b>.</li>
+      <li><b>The Global Championship</b><b>50 duos</b> from the whole planet, playing to be
+      crowned world champions.</li>
+    </ol>
+    <h3>Two things about FNCS that will surprise you</h3>
+    <div class="split">
+      <div class="sp good">
+        <h4>It is DUOS in 2026</h4>
+        <div class="vs">not solos, not trios</div>
+        <p>Which means your <strong>most played mode</strong>, with 2,469 matches, is the
+        actual format of the world championship right now.</p>
+      </div>
+      <div class="sp bad">
+        <h4>You play in the Middle East region</h4>
+        <div class="vs">not Europe</div>
+        <p>South Africa routes to the ME servers, around <strong>120 ping</strong>. ME has its
+        own FNCS cups and leaderboards, so that is the field you would be in.</p>
+      </div>
+    </div>
+    <p><strong>Correction to something I told you earlier.</strong> On the Stats tab I said
+    Duos "is not even an event". That was only true about the South African championship, which
+    runs Solos and Trios. For FNCS, Duos <em>is</em> the event. I should have been clearer.</p>
+    <div class="big">And the format changes. FNCS has been solos, duos and trios in different
+    years. By the time you are 13 it could be any of them, so the real answer is to be good at
+    all three. Which is lucky, because you already play all three.</div>
+    <h3>The full checklist to enter FNCS</h3>
+    <ul>
+      <li><strong>Be 13.</strong> 17 June 2028.</li>
+      <li><strong>Account Level 350+.</strong> You are almost certainly way past this. Check
+      the Career tab and log it on the Track tab.</li>
+      <li><strong>14 different Epic tournaments in the last 180 days.</strong> This is the
+      sneaky one. See below.</li>
+      <li><strong>2FA switched on.</strong> Do this now, it also protects your account.</li>
+      <li><strong>Account in good standing.</strong> Another reason not to break rules.</li>
+      <li><strong>A parent for the prize money.</strong> If you are 13 to 17 and you win, dad
+      has to give his contact and banking details to claim it. That is Epic's rule, not his.</li>
+    </ul>
+    <div class="big r">The 14 tournaments rule is the one that catches people out. It is not
+    the level, it is not the age. You have to have already played 14 Epic tournaments in the
+    six months before. So the FIRST thing you do at 13 is start ticking those off, not try to
+    qualify.</div>
+  </div>
+
+  <div class="card">
+    <h2><span class="n">15</span>Do these two things now</h2>
+    <p class="lead">Both take five minutes and both matter later.</p>
+    <ol class="steps">
+      <li><b>Switch on 2FA</b>Epic Games account settings. It is required for tournaments, so
+      you will need it anyway, and it stops anyone stealing an account with 824 hours on it.</li>
+      <li><b>Check the Career tab for your Account Level</b>Write it on the Track tab. Then we
+      know for certain instead of assuming.</li>
+    </ol>
+  </div>
+</div>
+
+<!-- ==================== TRAIN ==================== -->
+<div class="page" id="train">
+
+  <div class="card hot">
+    <h2>Today's session</h2>
+    <p class="lead">Tap a block to start its timer. In order. About 65 minutes.</p>
+    <div class="ses">
+      <div class="ring-wrap">
+        <svg width="150" height="150" viewBox="0 0 150 150">
+          <circle cx="75" cy="75" r="64" fill="none" stroke="#1a2233" stroke-width="12"/>
+          <circle id="sesRing" cx="75" cy="75" r="64" fill="none" stroke="#ff6b1a"
+                  stroke-width="12" stroke-linecap="round"
+                  stroke-dasharray="402.1" stroke-dashoffset="402.1"
+                  transform="rotate(-90 75 75)" style="transition:stroke-dashoffset .5s"/>
+        </svg>
+        <div class="lbl"><div class="t" id="sesT">--:--</div><div class="s" id="sesS">ready</div></div>
+      </div>
+      <div class="ses-side">
+        <div class="cd-lbl">Session progress</div>
+        <div class="bar"><i id="sesBar" style="width:0%"></i></div>
+        <div class="cd-lbl" id="sesCount">0 of 4 blocks done</div>
+        <div class="row" style="margin-top:14px">
+          <button class="btn" id="logBtn">Log session</button>
+          <button class="btn ghost" id="resetBtn">Reset</button>
+        </div>
+      </div>
+    </div>
+    <div class="blocks" id="blocks"></div>
+    <div class="note">The review block at the end is the one you will want to skip. It is the
+    one that actually moves your rank.</div>
+  </div>
+
+  <div class="card cool">
+    <h2>Skill check: score yourself</h2>
+    <p class="lead">Six areas. Be honest, not kind. Redo it on the 1st of every month.</p>
+    <div id="radar"></div>
+    <div id="saList"></div>
+    <div class="row" style="margin-top:6px">
+      <button class="btn blue" id="saSave">Save this month's scores</button>
+    </div>
+    <div id="saHist"></div>
+    <div class="note">Your lowest score is your next 14 day weakness. That is the whole point
+    of doing this. Do not pick the fun one, pick the low one.</div>
+  </div>
+
+  <div class="card">
+    <h2>Verified training maps</h2>
+    <p class="lead">Every code below was checked as live. Read the warning at the bottom.</p>
+    <div id="maps"></div>
+    <div class="card warn" style="margin-top:16px;margin-bottom:0">
+      <h3 style="margin-top:0">Read this before you Google for more maps</h3>
+      <p>We tested <strong>12 map codes</strong> from articles called things like "best
+      Fortnite training maps of 2026". <strong>Nine of them were dead.</strong> Disabled,
+      deleted, or the code pointed at a completely different map.</p>
+      <p>So here is a skill worth more than any code list. <strong>Before you trust a map
+      code, check it yourself:</strong></p>
+      <ol class="steps">
+        <li><b>Go to fortnite.gg and paste the code in</b>It shows every island.</li>
+        <li><b>Look at PLAYERS RIGHT NOW</b>Zero players on a 1v1 map means you cannot use it.</li>
+        <li><b>Look at UPDATED</b>If it was last updated two years ago, the building physics
+        have changed since. Skip it.</li>
+      </ol>
+      <p style="margin-bottom:0">Checking your sources instead of believing them is genuinely
+      one of the most useful things you will ever learn, and it applies to a lot more than
+      Fortnite maps.</p>
+    </div>
+  </div>
+
+  <div class="card cool">
+    <h2>How to review a death</h2>
+    <p class="lead">Ten minutes. One death. Five questions. Out loud.</p>
+    <p>Most people watch a clip back and go "yeah he was just better". That is not review,
+    that is watching. Ask these instead, in order:</p>
+    <ol class="steps">
+      <li><b>Where was I, and should I have been there at all?</b>Half of all deaths are a
+      positioning mistake wearing a costume.</li>
+      <li><b>What were my mats and shield when it started?</b>If you went in on low mats or no
+      shield, the fight was lost before it began.</li>
+      <li><b>Did I take this fight, or did it take me?</b>A fight you chose is a mistake you
+      can fix. A fight that found you is a rotation problem.</li>
+      <li><b>When did this death really start?</b>Almost always 20 seconds earlier, not 2.
+      Rewind further than feels necessary.</li>
+      <li><b>What is the ONE thing I would do differently?</b>Say it out loud. Out loud works
+      better than thinking it, which sounds fake but is not.</li>
+    </ol>
+    <p>That fifth answer becomes your next 14 day weakness. That loop is the entire engine.</p>
+  </div>
+
+  <div class="card">
+    <h2>Current weakness</h2>
+    <p class="lead">One thing. Fourteen days. Then the next one.</p>
+    <div class="row">
+      <input type="text" id="wkIn" placeholder="e.g. never hit zero mats">
+      <button class="btn blue" id="wkSet">Start 14 days</button>
+    </div>
+    <div id="wkNow"></div>
+  </div>
+
+  <div class="card">
+    <h2>The skill ladder</h2>
+    <p class="lead">Open your rank. Tap a skill to make it your current weakness.</p>
+    <div id="ladder"></div>
+  </div>
+</div>
+
+<!-- ==================== TRACK ==================== -->
+<div class="page" id="track">
+
+  <div class="card hot">
+    <h2>The numbers</h2>
+    <div class="grid">
+      <div class="stat"><b id="sTot">0</b><span>total sessions</span></div>
+      <div class="stat"><b class="b" id="sWk">0</b><span>this week</span></div>
+      <div class="stat"><b class="g" id="sCyc">0</b><span>cycles done</span></div>
+      <div class="stat"><b class="p sm" id="sRank">?</b><span>current rank</span></div>
+    </div>
+    <h3>Sessions, last 8 weeks</h3>
+    <div class="weeks" id="weeks"></div>
+    <div class="wklbl" id="weeksL"></div>
+  </div>
+
+  <div class="card">
+    <h2>This week</h2>
+    <p class="lead">Resets every Monday.</p>
+    <div id="weekly"></div>
+  </div>
+
+  <div class="card">
+    <h2>Rank log</h2>
+    <p class="lead">Log it every time it changes. In a year this list is the proof.</p>
+    <div class="row">
+      <select id="rkSel"></select>
+      <button class="btn" id="rkAdd">Log rank</button>
+    </div>
+    <div id="rkProg"></div>
+    <div id="rkLadder" class="ladr"></div>
+    <ul class="log" id="rkLog"></ul>
+  </div>
+
+  <div class="card">
+    <h2>Account level</h2>
+    <p class="lead">From the Career tab in game. FNCS needs 350.</p>
+    <div class="row">
+      <input type="text" id="alIn" placeholder="e.g. 1240" inputmode="numeric">
+      <button class="btn blue" id="alSet">Save</button>
+    </div>
+    <div id="alOut"></div>
+  </div>
+
+  <div class="card">
+    <h2>Finished weakness cycles</h2>
+    <p class="lead">Each one is a hole you closed for good. Target is 20 by the time you are 13.</p>
+    <div class="bar g"><i id="cycBar" style="width:0%"></i></div>
+    <div class="cd-lbl" id="cycLbl">0 of 20</div>
+    <ul class="log" id="cycLog"></ul>
+  </div>
+</div>
+
+</div>
+
+<footer>
+  Road to 13 &middot; target date 17 June 2028<br>
+  Stats pulled 16 August 2026. Everything you tick is saved on this device only.
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var K='rl13_',mem={},BDAY='2015-06-17',PEAK='Champion II';
+
+  function get(k,d){
+    if(Object.prototype.hasOwnProperty.call(mem,k))return mem[k];
+    try{var v=localStorage.getItem(K+k);
+      if(v!==null){mem[k]=JSON.parse(v);return mem[k]}
+    }catch(e){}
+    return d;
+  }
+  function set(k,v){
+    mem[k]=v;
+    try{localStorage.setItem(K+k,JSON.stringify(v))}catch(e){warnSave()}
+  }
+  function warnSave(){
+    if(document.getElementById('saveWarn'))return;
+    var d=document.createElement('div');d.id='saveWarn';
+    d.style.cssText='background:#3a1216;border:1px solid #ff4d5e;color:#ffb3ba;'+
+      'padding:12px 16px;border-radius:11px;margin:0 0 16px;font-size:14px';
+    d.textContent='Heads up: this browser will not let the page save. Your ticks work now '+
+      'but vanish when you close it. Open the file from the folder in Chrome.';
+    var w=document.querySelector('.page.on');
+    if(w)w.insertBefore(d,w.firstChild);
+  }
+  function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+  /* Local dates. Never toISOString: UTC+2 rolls midnight back a day. */
+  function fmt(d){var m=d.getMonth()+1,dy=d.getDate();
+    return d.getFullYear()+'-'+(m<10?'0':'')+m+'-'+(dy<10?'0':'')+dy}
+  function today(){return fmt(new Date())}
+  function weekKey(dt){var d=dt?new Date(dt+'T00:00:00'):new Date();
+    var day=(d.getDay()+6)%7;d.setDate(d.getDate()-day);return fmt(d)}
+  function daysBetween(a,b){return Math.round((b-a)/86400000)}
+
+  /* ---------- TABS ---------- */
+  var tabs=document.querySelectorAll('.tab');
+  for(var i=0;i<tabs.length;i++){
+    tabs[i].addEventListener('click',function(){
+      document.querySelector('.tab.on').classList.remove('on');
+      document.querySelector('.page.on').classList.remove('on');
+      this.classList.add('on');
+      document.getElementById(this.dataset.p).classList.add('on');
+      window.scrollTo(0,0);
+    });
+  }
+
+  /* ---------- COUNTDOWN ---------- */
+  (function(){
+    var b=new Date(BDAY+'T00:00:00');
+    var t13=new Date(b.getFullYear()+13,b.getMonth(),b.getDate());
+    var t11=new Date(b.getFullYear()+11,b.getMonth(),b.getDate());
+    var now=new Date(today()+'T00:00:00');
+    var left=daysBetween(now,t13);
+    document.getElementById('cdNum').textContent=left>0?left.toLocaleString():'GO';
+    var total=daysBetween(t11,t13),gone=daysBetween(t11,now);
+    var pct=Math.max(0,Math.min(100,Math.round(gone/total*100)));
+    document.getElementById('cdPct').innerHTML=pct+'%<i>THERE</i>';
+    document.getElementById('cdRing').setAttribute('stroke-dashoffset',(2*Math.PI*41)*(1-pct/100));
+    if(left<=0)document.getElementById('cdDate').textContent='You are 13. Everything is unlocked.';
+  })();
+
+  /* ---------- SEASON WIN-RATE CHART (his real data) ---------- */
+  (function(){
+    var S=[['Ch4 S2',9.0],['Ch5 S1',9.5],['Ch5 S2',4.6],['Ch5 S3',4.3],['Ch5 S4',7.9],
+           ['Ch5 S5',4.1],['Ch6 S1',8.3],['Ch6 S2',11.7],['Ch6 S3',5.9],['Ch6 S4',7.0],
+           ['Ch6 M2',10.5],['Ch7 S1',9.3],['Ch7 S2',10.5],['Ch7 S3',18.8]];
+    var W=620,H=210,pad=26,bw=(W-pad*2)/S.length,max=20;
+    var s='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Win rate by season">';
+    S.forEach(function(d,ix){
+      var h=(d[1]/max)*(H-58);
+      var x=pad+ix*bw+3, y=H-30-h, w=bw-6;
+      var last=ix===S.length-1;
+      s+='<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="3" fill="'+
+         (last?'#ff6b1a':'#3d4763')+'"/>';
+      if(last){
+        s+='<text x="'+(x+w/2)+'" y="'+(y-16)+'" fill="#ff6b1a" font-size="13" '+
+           'font-weight="900" text-anchor="middle" font-family="sans-serif">18.8%</text>';
+        s+='<text x="'+(x+w/2)+'" y="'+(y-4)+'" fill="#ffc93c" font-size="9" '+
+           'font-weight="900" text-anchor="end" font-family="sans-serif">CAREER BEST</text>';
+      }
+      s+='<text x="'+(x+w/2)+'" y="'+(H-16)+'" fill="#8996b2" font-size="8.5" '+
+         'text-anchor="middle" font-family="sans-serif" font-weight="700">'+d[0]+'</text>';
+    });
+    s+='<text x="'+pad+'" y="14" fill="#8996b2" font-size="10" font-weight="800" '+
+       'font-family="sans-serif">WIN RATE BY SEASON</text></svg>';
+    document.getElementById('seasonChart').innerHTML=s;
+  })();
+
+  /* ---------- SESSION ---------- */
+  var BLOCKS=[
+    {n:'Warm-up',m:10,d:'Mechanics Training V5. Aim section only.'},
+    {n:'Drill',m:15,d:'ONE thing: this fortnight’s weakness. Nothing else.'},
+    {n:'Play',m:30,d:'RANKED BUILD. Not casual, not Zero Build. Solo or Trios.'},
+    {n:'Review',m:10,d:'ONE death back. Run the five questions out loud.'}
+  ];
+  var TOTAL=BLOCKS.reduce(function(a,b){return a+b.m*60},0);
+  var bEl=document.getElementById('blocks'),timers=[],running=-1,tick=null;
+  var RING_C=2*Math.PI*64;
+
+  function blockState(){
+    var s=get('blocks',null);
+    if(!s||s.d!==today()){s={d:today(),v:[0,0,0,0]};set('blocks',s)}
+    return s;
+  }
+  function drawBlocks(){
+    var s=blockState();bEl.innerHTML='';
+    BLOCKS.forEach(function(b,ix){
+      if(timers[ix]===undefined)timers[ix]=b.m*60;
+      var done=s.v[ix]===1;
+      var btn=document.createElement('button');
+      btn.className='blk'+(done?' done':'')+(running===ix?' run':'');
+      var mm=Math.floor(timers[ix]/60),ss=timers[ix]%60;
+      btn.innerHTML='<span class="blk-t">'+mm+':'+(ss<10?'0':'')+ss+'</span>'+
+        '<span class="blk-n"><b>'+b.n+'</b><span>'+b.d+'</span></span>'+
+        '<span class="blk-x">&#10003;</span>';
+      btn.addEventListener('click',function(){startBlock(ix)});
+      bEl.appendChild(btn);
+    });
+    var doneN=s.v.reduce(function(a,b){return a+b},0);
+    var ringPct = running>=0 ? (1-timers[running]/(BLOCKS[running].m*60))*100 : doneN/4*100;
+    ringPct=Math.max(0,Math.min(100,ringPct));
+    document.getElementById('sesRing').setAttribute('stroke-dashoffset',RING_C*(1-ringPct/100));
+    var remain=0;BLOCKS.forEach(function(b,ix){remain+=(timers[ix]===undefined?b.m*60:timers[ix])});
+    var sesPct=Math.max(0,Math.min(100,(1-remain/TOTAL)*100));
+    document.getElementById('sesBar').style.width=sesPct.toFixed(1)+'%';
+    document.getElementById('sesCount').innerHTML=
+      doneN+' of 4 blocks done &middot; '+Math.round(sesPct)+'% of the session';
+    if(running>=0){
+      var t=timers[running],m2=Math.floor(t/60),s2=t%60;
+      document.getElementById('sesT').textContent=m2+':'+(s2<10?'0':'')+s2;
+      document.getElementById('sesS').textContent=BLOCKS[running].n;
+    }else if(doneN===4){
+      document.getElementById('sesT').textContent='DONE';
+      document.getElementById('sesS').textContent='log it';
+    }else{
+      document.getElementById('sesT').textContent='--:--';
+      document.getElementById('sesS').textContent='ready';
+    }
+  }
+  function startBlock(ix){
+    if(running===ix){running=-1;clearInterval(tick);tick=null;drawBlocks();return}
+    if(tick)clearInterval(tick);
+    running=ix;
+    if(timers[ix]<=0)timers[ix]=BLOCKS[ix].m*60;
+    tick=setInterval(function(){
+      timers[running]--;
+      if(timers[running]<=0){
+        timers[running]=0;
+        var st=blockState();st.v[running]=1;set('blocks',st);
+        clearInterval(tick);tick=null;running=-1;
+      }
+      drawBlocks();
+    },1000);
+    drawBlocks();
+  }
+  function clearSession(){
+    if(tick)clearInterval(tick);tick=null;running=-1;timers=[];
+    set('blocks',{d:today(),v:[0,0,0,0]});drawBlocks();
+  }
+  document.getElementById('resetBtn').addEventListener('click',clearSession);
+  document.getElementById('logBtn').addEventListener('click',function(){
+    var ss=get('sessions',[]);ss.push(today());set('sessions',ss);
+    clearSession();drawStats();
+    var self=this;self.textContent='Logged. Nice.';
+    setTimeout(function(){self.textContent='Log session'},1800);
+  });
+
+  /* ---------- SELF ASSESSMENT + RADAR ---------- */
+  var AREAS=[
+    {k:'aim',n:'Aim',t:[
+      'I miss most shots at any range',
+      'I hit close range, miss mid range',
+      'I hit close and mid consistently',
+      'I can track moving targets at mid range',
+      'I win most aim duels I choose to take']},
+    {k:'build',n:'Building',t:[
+      'I panic and place random walls',
+      'I can wall and ramp under pressure',
+      'I can 90 both ways without stopping',
+      'I can 90 while being shot and keep height',
+      'I can tunnel and refresh while moving fast']},
+    {k:'edit',n:'Editing',t:[
+      'I edit slowly and miss the confirm',
+      'I can do a window edit and reset it',
+      'I do window resets fast without thinking',
+      'I edit through their pieces mid fight',
+      'I win most edit based fights']},
+    {k:'piece',n:'Piece control',t:[
+      'I am not sure what piece control is',
+      'I can take a wall when they take mine',
+      'I can cone and wall to trap someone',
+      'I win more than half my Piece Control 1v1s',
+      'I control the box and pick when to fight']},
+    {k:'sense',n:'Game sense',t:[
+      'I get caught in the storm',
+      'I rotate, but usually too late',
+      'I rotate on the first circle most games',
+      'I reach top 25 in more than half my ranked games',
+      'I am almost always in a good spot with mats and height']},
+    {k:'end',n:'Endgames',t:[
+      'I panic when it gets to top 10',
+      'I reach top 10 but die quickly',
+      'I can hold a spot in the endgame',
+      'I win more than 1 in 5 endgames I reach',
+      'I control the endgame and pick my fights']}
+  ];
+  var saEl=document.getElementById('saList');
+  function scores(){return get('scores',{})}
+  function drawSA(){
+    var sc=scores();saEl.innerHTML='';
+    AREAS.forEach(function(a){
+      var v=sc[a.k]||0;
+      var d=document.createElement('div');d.className='sa';
+      var h='<div class="sah"><span class="san">'+a.n+'</span>'+
+            '<span class="sav">'+(v?v+' / 5':'not scored')+'</span></div>'+
+            '<div class="sat">'+(v?esc(a.t[v-1]):'Pick the highest one that is honestly true.')+
+            '</div><div class="dots">';
+      for(var j=1;j<=5;j++)h+='<button data-k="'+a.k+'" data-v="'+j+'"'+
+        (v===j?' class="on"':'')+'>'+j+'</button>';
+      d.innerHTML=h+'</div>';
+      var bs=d.querySelectorAll('.dots button');
+      for(var q=0;q<bs.length;q++)bs[q].addEventListener('click',function(){
+        var s=scores();s[this.dataset.k]=+this.dataset.v;set('scores',s);drawSA();drawRadar();
+      });
+      saEl.appendChild(d);
+    });
+  }
+  function drawRadar(){
+    var sc=scores(),N=AREAS.length,cx=150,cy=140,R=95;
+    function pt(ix,val){
+      var ang=-Math.PI/2+ix*2*Math.PI/N,r=R*(val/5);
+      return [cx+r*Math.cos(ang),cy+r*Math.sin(ang)];
+    }
+    var s='<svg viewBox="0 0 300 260" role="img" aria-label="Your skill shape">';
+    [1,2,3,4,5].forEach(function(ring){
+      var p=[];for(var i2=0;i2<N;i2++)p.push(pt(i2,ring).join(','));
+      s+='<polygon points="'+p.join(' ')+'" fill="none" stroke="#26314c" stroke-width="1"/>';
+    });
+    for(var i3=0;i3<N;i3++){
+      var e=pt(i3,5);
+      s+='<line x1="'+cx+'" y1="'+cy+'" x2="'+e[0]+'" y2="'+e[1]+'" stroke="#26314c"/>';
+      var l=pt(i3,6.05);
+      var anch=Math.abs(l[0]-cx)<6?'middle':(l[0]>cx?'start':'end');
+      s+='<text x="'+l[0]+'" y="'+(l[1]+3)+'" fill="#8996b2" font-size="10" '+
+         'font-weight="800" text-anchor="'+anch+'" font-family="sans-serif">'+
+         AREAS[i3].n+'</text>';
+    }
+    var any=AREAS.some(function(a){return sc[a.k]});
+    if(any){
+      var pp=AREAS.map(function(a,ix){return pt(ix,sc[a.k]||0.15).join(',')});
+      s+='<polygon points="'+pp.join(' ')+'" fill="rgba(255,107,26,.28)" '+
+         'stroke="#ff6b1a" stroke-width="2.5" stroke-linejoin="round"/>';
+      AREAS.forEach(function(a,ix){
+        var p2=pt(ix,sc[a.k]||0.15);
+        s+='<circle cx="'+p2[0]+'" cy="'+p2[1]+'" r="3.5" fill="#ff6b1a"/>';
+      });
+    }
+    s+='</svg>';
+    var lowest=null;
+    AREAS.forEach(function(a){
+      if(sc[a.k]&&(!lowest||sc[a.k]<sc[lowest.k]))lowest=a;
+    });
+    if(lowest)s+='<div class="big" style="margin-top:4px">Weakest area right now: <em>'+
+      lowest.n+'</em>. That is your next 14 days.</div>';
+    document.getElementById('radar').innerHTML=s;
+  }
+  document.getElementById('saSave').addEventListener('click',function(){
+    var sc=scores();
+    if(!AREAS.some(function(a){return sc[a.k]}))return;
+    var h=get('scoreHist',[]);
+    h.push({d:today(),s:JSON.parse(JSON.stringify(sc))});set('scoreHist',h);
+    drawHist();
+    var self=this;self.textContent='Saved.';
+    setTimeout(function(){self.textContent='Save this month’s scores'},1600);
+  });
+  function drawHist(){
+    var h=get('scoreHist',[]),el=document.getElementById('saHist');
+    if(!h.length){el.innerHTML='';return}
+    var s='<h3>Your skill check history</h3><ul class="log">';
+    h.slice().reverse().slice(0,6).forEach(function(x){
+      var tot=AREAS.reduce(function(a,ar){return a+(x.s[ar.k]||0)},0);
+      s+='<li><b>'+tot+' / 30</b><span>'+x.d+'</span></li>';
+    });
+    el.innerHTML=s+'</ul>';
+  }
+
+  /* ---------- VERIFIED MAPS ---------- */
+  var MAPS=[
+    {n:'MECHANICS TRAINING V5',by:'raider464',c:'2424-4344-7824',
+     live:'2,337 playing &middot; updated 4 Aug 2026',
+     u:'<b>Your main map.</b> Aim, piece control, editing, peeks and box fighting all in one. '+
+       'Use the aim section for your 10 minute warm-up, then whichever section matches your '+
+       'current weakness.'},
+    {n:'Piece Control 1v1',by:'',c:'8298-6891-9930',live:'3,378 playing',
+     u:'Real 1v1s against real people. <b>The fastest way to fix piece control</b>, which is '+
+       'the skill that decides most box fights.'},
+    {n:'Piece Control 2v2',by:'',c:'0148-0322-5437',live:'8,085 playing',
+     u:'The busiest training map in Fortnite right now. <b>Good for trio practice</b> when '+
+       'there are two of you.'},
+    {n:'PANDVIL Box Fights (2v2)',by:'',c:'6562-8953-6567',live:'2,030 playing',
+     u:'Box fights carry over to real endgames better than anything else in Creative. '+
+       '<b>Do this with your trio.</b>'},
+    {n:'INFINITE Edits Map',by:'edit course warmup',c:'1763-9705-6616',live:'54 playing',
+     u:'Solo edit course. <b>Five minutes before you queue</b>, every session.'},
+    {n:'MECHANICS TRAINING V4',by:'raider464',c:'8135-1582-8472',live:'verified live',
+     u:'The older version. Adds <b>movement and tunnelling</b> sections that V5 does not have.'}
+  ];
+  document.getElementById('maps').innerHTML=MAPS.map(function(m){
+    return '<div class="map"><div class="mh"><span class="mn">'+m.n+
+      (m.by?' <span style="color:#8996b2;font-weight:700;font-size:12px">by '+m.by+'</span>':'')+
+      '</span><span class="live">'+m.live+'</span></div>'+
+      '<div class="code">'+m.c+'</div>'+
+      '<div class="use">'+m.u+'</div></div>';
+  }).join('');
+
+  /* ---------- WEAKNESS ---------- */
+  var wkNow=document.getElementById('wkNow');
+  function drawWk(){
+    var w=get('weakness',null);
+    if(!w){wkNow.innerHTML='<div class="cd-lbl">Nothing set yet. Do the skill check above, '+
+      'then pick your lowest area.</div>';return}
+    var d=daysBetween(new Date(w.s+'T00:00:00'),new Date(today()+'T00:00:00'));
+    var pct=Math.max(0,Math.min(100,Math.round(d/14*100))),left=14-d;
+    wkNow.innerHTML='<div class="big" style="margin-top:14px">'+esc(w.t)+'</div>'+
+      '<div class="bar"><i style="width:'+pct+'%"></i></div>'+
+      '<div class="cd-lbl">day '+Math.max(0,Math.min(d,14))+' of 14 &middot; '+
+      (left>0?left+' days left':'cycle complete, log it')+'</div>'+
+      '<div class="row" style="margin-top:14px">'+
+      '<button class="btn" id="wkDone">Finish this cycle</button></div>';
+    var b=document.getElementById('wkDone');
+    if(b)b.addEventListener('click',function(){
+      var c=get('cycles',[]);c.push({t:w.t,d:today()});set('cycles',c);
+      set('weakness',null);drawWk();drawStats();
+    });
+  }
+  document.getElementById('wkSet').addEventListener('click',function(){
+    var v=document.getElementById('wkIn').value.trim();
+    if(!v)return;
+    set('weakness',{t:v,s:today()});
+    document.getElementById('wkIn').value='';drawWk();
+  });
+
+  /* ---------- SKILL LADDER ---------- */
+  var LADDER=[
+    {r:'Fix these first',c:'the ones costing you rank right now',s:[
+      {n:'Play Ranked Build, not Casual',w:'You have 824 hours and a Platinum rank. This is why.',
+       h:'Every training session. No exceptions. Casual and Zero Build are for fun time.'},
+      {n:'Grind Solo',w:'Solo is your worst mode (3.6% wins) and it is half the SA prize money.',
+       h:'Solo is where nobody can bail you out, so it exposes you fastest. That is the point.'},
+      {n:'Play more Trios',w:'Your best mode by far (K/D 4.60) and you have played it only 387 times.',
+       h:'Trio night, once a week, same two mates. Build the team now, not at 13.'}
+    ]},
+    {r:'Platinum to Diamond',c:'box fights and mats',s:[
+      {n:'Box fighting',w:'Where most endgame kills actually happen.',
+       h:'PANDVIL 2v2, code 6562-8953-6567. 15 minutes, real people not bots.'},
+      {n:'Piece control',w:'Taking their piece wins the box without needing better aim.',
+       h:'Piece Control 1v1, code 8298-6891-9930. This is the highest value map on the list.'},
+      {n:'Never hit zero mats',w:'The most common reason good players lose endgames.',
+       h:'Check your mats every time a fight ends. Make it a reflex. Never below 300.'},
+      {n:'High ground retakes',w:'Losing height is normal. Staying without it is fatal.',
+       h:'Use the retake section inside Mechanics Training V5. The standalone retake maps are mostly dead.'},
+      {n:'Read the storm',w:'Being in position before the circle closes is free advantage.',
+       h:'Look at the map every single circle. Every one, not most.'}
+    ]},
+    {r:'Diamond to Champion',c:'getting back to your record',s:[
+      {n:'Endgame positioning',w:'At this level everyone can build and shoot. Position decides it.',
+       h:'Watch your last 5 endgame deaths. It will be position, not aim. It nearly always is.'},
+      {n:'Trigger discipline',w:'Knowing when NOT to fight is most of the skill up here.',
+       h:'Count how many deaths came from a fight you chose. The number will surprise you.'},
+      {n:'Height without over-committing',w:'Being highest and alone is how you get third-partied.',
+       h:'Take height, but always keep a wall and a way out.'},
+      {n:'Trio comms',w:'Three people who talk beat three better players who do not.',
+       h:'Call your mats, your shield and your position. Every fight. Out loud.'}
+    ]},
+    {r:'Champion to Unreal',c:'nerves, not mechanics',s:[
+      {n:'Consistency under pressure',w:'From here up it is your head, not your hands.',
+       h:'Only tournaments teach this. Creative cannot.'},
+      {n:'Play the player',w:'You stop playing the ball and start playing the person.',
+       h:'Watch what they did the last three times in this spot. They will do it again.'},
+      {n:'Survive the tilt',w:'Unreal runs are lost in the 20 minutes after a bad game.',
+       h:'Two bad losses, stop for ten minutes. This is the rule that gets you there.'}
+    ]}
+  ];
+  var ladEl=document.getElementById('ladder');
+  LADDER.forEach(function(g){
+    var d=document.createElement('div');d.className='acc';
+    var h='<button class="hd">'+g.r+'<span class="cnt">'+g.c+'</span></button><div class="bd">';
+    g.s.forEach(function(s){
+      h+='<div class="skill"><b>'+esc(s.n)+'</b><p>'+esc(s.w)+'</p>'+
+         '<div class="how">How: '+esc(s.h)+'</div>'+
+         '<button data-s="'+esc(s.n)+'">Make this my weakness</button></div>';
+    });
+    d.innerHTML=h+'</div>';
+    d.querySelector('.hd').addEventListener('click',function(){d.classList.toggle('open')});
+    var picks=d.querySelectorAll('.skill button');
+    for(var j=0;j<picks.length;j++){
+      picks[j].addEventListener('click',function(){
+        set('weakness',{t:this.dataset.s,s:today()});
+        drawWk();
+        document.getElementById('wkNow').scrollIntoView({behavior:'smooth',block:'center'});
+      });
+    }
+    ladEl.appendChild(d);
+  });
+
+  /* ---------- WEEKLY ---------- */
+  var WEEKLY=[
+    {k:'ranked',n:'Train in Ranked Build, not casual',d:'Every session. This is the big one.'},
+    {k:'rev',n:'Review 3 deaths on video',d:'Five questions each. The answer is your next weakness.'},
+    {k:'clip',n:'Publish 1 clip to the channel',d:'One. Not ten. And you edit it yourself.'},
+    {k:'trio',n:'One session with the trio',d:'Your best mode and the one you play least.'},
+    {k:'rest',n:'Take the rest day',d:'Sunday off. Properly off.'}
+  ];
+  var wEl=document.getElementById('weekly');
+  function drawWeekly(){
+    var wk=weekKey(),st=get('weekly',{});
+    if(!st[wk])st[wk]={};
+    wEl.innerHTML='';
+    WEEKLY.forEach(function(item){
+      var on=!!st[wk][item.k];
+      var b=document.createElement('button');
+      b.className='chk'+(on?' on':'');
+      b.innerHTML='<span class="box">&#10003;</span><span class="chk-n"><b>'+item.n+
+        '</b><span>'+item.d+'</span></span>';
+      b.addEventListener('click',function(){
+        var s=get('weekly',{});if(!s[wk])s[wk]={};
+        s[wk][item.k]=!s[wk][item.k];set('weekly',s);drawWeekly();
+      });
+      wEl.appendChild(b);
+    });
+    set('weekly',st);
+  }
+
+  /* ---------- RANKS ---------- */
+  var RANKS=['Bronze I','Bronze II','Bronze III','Silver I','Silver II','Silver III',
+    'Gold I','Gold II','Gold III','Platinum I','Platinum II','Platinum III',
+    'Diamond I','Diamond II','Diamond III','Elite I','Elite II','Elite III',
+    'Champion I','Champion II','Champion III','Unreal'];
+  var TIERCOL={'Bronze':'#8c6239','Silver':'#9aa7bd','Gold':'#ffc93c','Platinum':'#7fd8e8',
+    'Diamond':'#29b6ff','Elite':'#a97bff','Champion':'#ff6b1a','Unreal':'#ff4d5e'};
+  function tierOf(r){return r.split(' ')[0]}
+  var rkSel=document.getElementById('rkSel');
+  RANKS.forEach(function(r){
+    var o=document.createElement('option');o.value=r;o.textContent=r;
+    if(r==='Platinum II')o.selected=true;
+    rkSel.appendChild(o);
+  });
+  document.getElementById('rkAdd').addEventListener('click',function(){
+    var l=get('ranks',[]);l.push({r:rkSel.value,d:today()});set('ranks',l);
+    drawRanks();drawStats();
+  });
+  function drawRanks(){
+    var l=get('ranks',[]),el=document.getElementById('rkLog'),prog=document.getElementById('rkProg');
+    var cur=l.length?l[l.length-1].r:null;
+    var curIx=cur?RANKS.indexOf(cur):-1, peakIx=RANKS.indexOf(PEAK);
+    if(cur){
+      var tgt=RANKS.indexOf('Unreal');
+      var pct=Math.min(100,Math.round((curIx+1)/(tgt+1)*100));
+      var gap=peakIx-curIx;
+      prog.innerHTML='<div class="bar b"><i style="width:'+pct+'%"></i></div>'+
+        '<div class="cd-lbl">'+cur+' &middot; '+pct+'% of the way to Unreal'+
+        (gap>0?' &middot; '+gap+' steps below your own best':
+         gap===0?' &middot; you have matched your best ever':
+                 ' &middot; NEW PERSONAL BEST')+'</div>';
+    } else prog.innerHTML='<div class="cd-lbl">No rank logged yet. Log Platinum II to start.</div>';
+
+    var lad=document.getElementById('rkLadder');lad.innerHTML='';
+    var show=['Platinum I','Platinum II','Platinum III','Diamond I','Diamond II','Diamond III',
+              'Elite I','Elite II','Elite III','Champion I','Champion II','Champion III','Unreal'];
+    if(cur&&show.indexOf(cur)===-1)show.unshift(cur);
+    show.forEach(function(r){
+      var isHere=(r===cur), isPeak=(r===PEAK)&&!isHere, isGoal=(r==='Unreal')&&!isHere;
+      var row=document.createElement('div');
+      row.className='lr'+(isHere?' here':'')+(isPeak?' tgt':'')+(isGoal?' tgt2':'');
+      row.innerHTML='<span class="dot" style="background:'+(TIERCOL[tierOf(r)]||'#666')+'"></span>'+
+        '<span class="nm">'+r+'</span>'+
+        (isHere?'<span class="tag">YOU ARE HERE</span>':
+         isPeak?'<span class="tag">YOUR BEST EVER</span>':
+         isGoal?'<span class="tag">THE GOAL</span>':'');
+      lad.appendChild(row);
+    });
+    el.innerHTML='';
+    l.slice().reverse().forEach(function(x){
+      var li=document.createElement('li');
+      li.innerHTML='<b>'+x.r+'</b><span>'+x.d+'</span>';el.appendChild(li);
+    });
+  }
+
+  /* ---------- ACCOUNT LEVEL ---------- */
+  function drawAL(){
+    var v=get('acctLvl',null),el=document.getElementById('alOut');
+    if(v===null){el.innerHTML='<div class="cd-lbl">Not checked yet. Career tab, in game.</div>';return}
+    var ok=v>=350;
+    el.innerHTML='<div class="big '+(ok?'g':'r')+'">Account Level '+v+'. '+
+      (ok?'You clear the FNCS requirement of 350.':
+          'FNCS needs 350, so you need '+(350-v)+' more. You will get there just by playing.')+
+      '</div>';
+  }
+  document.getElementById('alSet').addEventListener('click',function(){
+    var raw=document.getElementById('alIn').value.replace(/[^0-9]/g,'');
+    if(!raw)return;
+    set('acctLvl',parseInt(raw,10));drawAL();
+  });
+
+  /* ---------- CYCLES + STATS ---------- */
+  function drawCycles(){
+    var c=get('cycles',[]),el=document.getElementById('cycLog');el.innerHTML='';
+    document.getElementById('cycBar').style.width=Math.min(100,Math.round(c.length/20*100))+'%';
+    document.getElementById('cycLbl').textContent=c.length+' of 20';
+    if(!c.length){el.innerHTML='<div class="cd-lbl" style="padding:6px 2px">None yet. '+
+      'The first one is the hardest.</div>';return}
+    c.slice().reverse().forEach(function(x){
+      var li=document.createElement('li');
+      li.innerHTML='<b>'+esc(x.t)+'</b><span>'+x.d+'</span>';el.appendChild(li);
+    });
+  }
+  function drawStats(){
+    var ss=get('sessions',[]),c=get('cycles',[]),r=get('ranks',[]);
+    document.getElementById('sTot').textContent=ss.length;
+    document.getElementById('sCyc').textContent=c.length;
+    document.getElementById('sRank').textContent=r.length?r[r.length-1].r:'?';
+    var thisWk=weekKey(),n=0;
+    ss.forEach(function(d){if(weekKey(d)===thisWk)n++});
+    document.getElementById('sWk').textContent=n;
+    var counts=[],labels=[],base=new Date(thisWk+'T00:00:00');
+    for(var w=7;w>=0;w--){
+      var d=new Date(base);d.setDate(d.getDate()-w*7);
+      var key=fmt(d),ct=0;
+      ss.forEach(function(x){if(weekKey(x)===key)ct++});
+      counts.push(ct);labels.push(d.getDate()+'/'+(d.getMonth()+1));
+    }
+    var max=Math.max.apply(null,counts.concat([3]));
+    var we=document.getElementById('weeks'),wl=document.getElementById('weeksL');
+    we.innerHTML='';wl.innerHTML='';
+    counts.forEach(function(ct,ix){
+      var b=document.createElement('div');
+      b.style.height=Math.max(4,Math.round(ct/max*86))+'px';
+      if(ct>0)b.className='has';
+      b.title=ct+' sessions';we.appendChild(b);
+      var l=document.createElement('div');l.textContent=labels[ix];wl.appendChild(l);
+    });
+    drawCycles();
+  }
+
+  drawBlocks();drawSA();drawRadar();drawHist();drawWk();
+  drawWeekly();drawRanks();drawAL();drawStats();
+})();
+</script>
+</body>
+</html>
