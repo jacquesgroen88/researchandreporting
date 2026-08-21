@@ -1,0 +1,930 @@
+<!doctype html><html lang="en-ZA"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Die Veiling Klub · How the system works | JCE Media</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --navy:#181109; --navy2:#22180E; --line:rgba(255,255,255,.10); --line2:rgba(255,255,255,.18);
+  --blue:#E8A33D; --blue2:#F5C57A; --violet:#C2703A;
+  --red:#FF6B5A; --amber:#FFC46B; --good:#4FCF92; --gold:#F2A919;
+  --ink:#F7F2E9; --mute:#B0A08C; --mute2:#7D6E5C;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#0B0805;overflow:hidden;
+  font-family:Inter,-apple-system,'Segoe UI',sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+#deck{position:relative;width:100vw;height:100vh}
+.s{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+  padding:clamp(26px,4vw,68px) clamp(34px,5.2vw,86px) clamp(58px,6vw,96px);
+  background:
+    radial-gradient(900px 520px at 88% -8%,rgba(232,163,61,.15),transparent 62%),
+    radial-gradient(760px 460px at -6% 106%,rgba(194,112,58,.12),transparent 60%),
+    linear-gradient(160deg,var(--navy) 0%,#1E1509 55%,#120C06 100%);
+  overflow-y:auto}
+.s>*{flex-shrink:0}
+.s.on{display:flex;animation:in .42s cubic-bezier(.2,.7,.3,1)}
+@keyframes in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.s.warm{background:
+  radial-gradient(900px 520px at 88% -8%,rgba(255,107,90,.18),transparent 62%),
+  radial-gradient(760px 460px at -6% 106%,rgba(255,196,107,.09),transparent 60%),
+  linear-gradient(160deg,#1B0D0A 0%,#1A1109 55%,#120C06 100%)}
+.s.gogo{background:
+  radial-gradient(900px 520px at 88% -8%,rgba(79,207,146,.15),transparent 62%),
+  radial-gradient(760px 460px at -6% 106%,rgba(232,163,61,.10),transparent 60%),
+  linear-gradient(160deg,#0A1611 0%,#0F1A12 55%,#120C06 100%)}
+.s.cool{background:
+  radial-gradient(900px 520px at 88% -8%,rgba(194,112,58,.16),transparent 62%),
+  radial-gradient(760px 460px at -6% 106%,rgba(232,163,61,.08),transparent 60%),
+  linear-gradient(160deg,#14100C 0%,#1A1409 55%,#100A05 100%)}
+.s.center{align-items:center;text-align:center}
+
+.eyebrow{font-family:'Space Grotesk';font-size:clamp(10px,1.05vw,13px);letter-spacing:.22em;
+  text-transform:uppercase;color:var(--blue);font-weight:600;margin-bottom:clamp(12px,1.6vw,22px)}
+.eyebrow.r{color:var(--red)} .eyebrow.g{color:var(--good)} .eyebrow.a{color:var(--gold)}
+h1{font-family:'Space Grotesk';font-weight:700;font-size:clamp(30px,5.2vw,74px);line-height:1.04;letter-spacing:-.028em}
+h2{font-family:'Space Grotesk';font-weight:700;font-size:clamp(23px,3.6vw,52px);line-height:1.08;
+  letter-spacing:-.022em;margin-bottom:clamp(13px,1.8vw,26px)}
+h2.sm{font-size:clamp(20px,2.9vw,42px);margin-bottom:clamp(8px,1.1vw,15px)}
+h3{font-family:'Space Grotesk';font-weight:600;font-size:clamp(15px,1.75vw,24px);line-height:1.26;margin-bottom:7px}
+p.lede{font-size:clamp(14px,1.5vw,22px);color:var(--mute);line-height:1.55;max-width:62ch}
+.sub{font-size:clamp(13px,1.4vw,19px);color:var(--mute);margin-top:13px;max-width:56ch;line-height:1.5}
+.sub.wide{max-width:76ch}
+.hi{color:var(--blue2)} .hr{color:var(--red)} .hg{color:var(--good)} .ha{color:var(--amber)}
+.big{font-family:'Space Grotesk';font-weight:700;font-size:clamp(58px,13vw,190px);line-height:.88;letter-spacing:-.05em;
+  background:linear-gradient(120deg,var(--blue2),var(--violet));-webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:clamp(10px,1.3vw,20px);margin-top:clamp(18px,2.4vw,36px)}
+.stat{background:rgba(255,255,255,.045);border:1px solid var(--line);border-radius:15px;padding:clamp(14px,1.7vw,26px)}
+.stat .n{font-family:'Space Grotesk';font-weight:700;font-size:clamp(24px,3.1vw,46px);line-height:1;color:var(--blue);letter-spacing:-.025em}
+.stat .n.r{color:var(--red)} .stat .n.g{color:var(--good)}
+.stat .k{font-size:clamp(10.5px,1.02vw,14px);color:var(--mute);margin-top:9px;line-height:1.4}
+
+.two{display:grid;grid-template-columns:1fr 1fr;gap:clamp(16px,2.4vw,42px);align-items:center}
+.two.top{align-items:start}
+@media(max-width:900px){.two{grid-template-columns:1fr;gap:18px}}
+.three{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:clamp(12px,1.6vw,24px);margin-top:clamp(16px,2vw,30px)}
+.four{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:clamp(10px,1.3vw,18px);margin-top:clamp(14px,1.8vw,26px)}
+
+.card{background:rgba(255,255,255,.045);border:1px solid var(--line);border-radius:17px;padding:clamp(16px,2vw,30px)}
+.card.sm{padding:clamp(12px,1.5vw,20px);border-radius:13px}
+.card.warn{border-color:rgba(255,107,90,.42);background:rgba(255,107,90,.07)}
+.card.good{border-color:rgba(79,207,146,.38);background:rgba(79,207,146,.06)}
+.card.pick{border-color:rgba(232,163,61,.55);background:rgba(232,163,61,.09)}
+.card p{font-size:clamp(12.5px,1.28vw,17px);color:var(--mute);line-height:1.5}
+.card.sm p{font-size:clamp(11px,1.1vw,14.5px)}
+.card .n{font-family:'Space Grotesk';font-weight:700;font-size:clamp(26px,3vw,44px);line-height:1;letter-spacing:-.03em;color:var(--blue)}
+.card.warn .n{color:var(--red)} .card.good .n{color:var(--good)}
+
+ul.pts{list-style:none;margin-top:clamp(12px,1.6vw,24px)}
+ul.pts li{font-size:clamp(13px,1.5vw,21px);line-height:1.45;padding:clamp(8px,1vw,14px) 0 clamp(8px,1vw,14px) 34px;
+  position:relative;border-bottom:1px solid var(--line);color:var(--mute)}
+ul.pts li:last-child{border-bottom:0}
+ul.pts li b{color:var(--ink);font-weight:600}
+ul.pts li::before{content:"";position:absolute;left:6px;top:calc(50% - 4px);width:9px;height:9px;border-radius:50%;
+  background:linear-gradient(120deg,var(--blue2),var(--violet))}
+ul.pts.tight li{font-size:clamp(12px,1.3vw,18px);padding-top:clamp(6px,.8vw,11px);padding-bottom:clamp(6px,.8vw,11px)}
+ul.pts.no li::before{background:linear-gradient(120deg,var(--amber),var(--red))}
+ul.pts.yes li::before{background:linear-gradient(120deg,var(--good),var(--blue2))}
+
+table{width:100%;border-collapse:collapse;font-size:clamp(11.5px,1.18vw,17px);margin-top:clamp(10px,1.4vw,20px)}
+table.sm{font-size:clamp(10.5px,1.05vw,15px)}
+th{text-align:left;font-family:'Space Grotesk';font-size:clamp(9px,.9vw,12px);letter-spacing:.13em;text-transform:uppercase;
+  color:var(--mute2);font-weight:600;padding:0 10px 10px;border-bottom:1px solid var(--line2)}
+td{padding:clamp(7px,.85vw,13px) 10px;border-bottom:1px solid var(--line);color:var(--mute);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+td b{color:var(--ink);font-weight:600}
+.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.us td{background:rgba(255,107,90,.09);color:var(--ink)}
+tr.us td:first-child{box-shadow:inset 3px 0 0 var(--red)}
+tr.win td{background:rgba(79,207,146,.07)}
+td.neg{color:var(--red);font-weight:600} td.pos{color:var(--good);font-weight:600}
+tr.us td.neg,tr.win td.neg{color:var(--red)} tr.us td.pos,tr.win td.pos{color:var(--good)}
+
+.scope{display:grid;grid-template-columns:1fr 1fr;gap:clamp(14px,1.8vw,28px);margin-top:clamp(14px,1.8vw,26px)}
+@media(max-width:820px){.scope{grid-template-columns:1fr}}
+.scope .hd{font-family:'Space Grotesk';font-size:clamp(10px,1vw,13px);letter-spacing:.15em;text-transform:uppercase;
+  font-weight:600;margin-bottom:11px}
+.scope .in .hd{color:var(--good)} .scope .out .hd{color:var(--amber)}
+.scope ul{list-style:none}
+.scope li{font-size:clamp(11.5px,1.15vw,16px);color:var(--mute);padding:5px 0 5px 20px;position:relative;line-height:1.42}
+.scope li::before{position:absolute;left:0;top:5px;font-weight:700;font-size:12px}
+.scope .in li::before{content:'✓';color:var(--good)}
+.scope .out li::before{content:'✕';color:var(--red)}
+
+.pill{display:inline-block;padding:3px 11px;border-radius:999px;font-size:clamp(9.5px,.95vw,12px);font-weight:700;
+  letter-spacing:.06em;text-transform:uppercase;border:1px solid}
+.p-g{color:var(--good);border-color:rgba(79,207,146,.4);background:rgba(79,207,146,.13)}
+.p-a{color:var(--amber);border-color:rgba(255,196,107,.4);background:rgba(255,196,107,.13)}
+.p-r{color:var(--red);border-color:rgba(255,107,90,.4);background:rgba(255,107,90,.13)}
+.p-b{color:var(--blue2);border-color:rgba(232,163,61,.4);background:rgba(232,163,61,.13)}
+
+.src{font-size:clamp(10px,.95vw,13px);color:rgba(176,160,140,.72);margin-top:clamp(12px,1.6vw,24px);line-height:1.5}
+
+/* flow */
+.flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:clamp(9px,1.1vw,16px);
+  margin-top:clamp(16px,2vw,28px);align-items:stretch}
+.fbox{background:rgba(255,255,255,.045);border:1px solid var(--line);border-radius:13px;
+  padding:clamp(12px,1.5vw,20px);position:relative}
+.fbox .t{font-family:'Space Grotesk';font-weight:600;font-size:clamp(12px,1.25vw,17px);color:var(--ink);margin-bottom:6px}
+.fbox .d{font-size:clamp(10.5px,1.05vw,14px);color:var(--mute);line-height:1.45}
+.fbox .st{position:absolute;top:-9px;left:14px;width:22px;height:22px;border-radius:7px;
+  background:linear-gradient(135deg,var(--blue),var(--violet));color:#160E06;display:flex;align-items:center;
+  justify-content:center;font-weight:700;font-size:11px;font-family:'Space Grotesk'}
+.fbox.key{border-color:rgba(232,163,61,.5);background:rgba(232,163,61,.08)}
+
+/* JOURNEY MAP */
+.jm{display:grid;gap:clamp(5px,.7vw,9px);margin-top:clamp(12px,1.6vw,22px);
+  grid-template-columns:clamp(58px,6.6vw,96px) repeat(var(--n),1fr)}
+.jm .lane{font-family:'Space Grotesk';font-size:clamp(8px,.82vw,10.5px);letter-spacing:.11em;text-transform:uppercase;
+  font-weight:700;color:var(--mute2);display:flex;align-items:center;padding-right:5px;line-height:1.25}
+.jm .lane.f{color:var(--blue)} .jm .lane.b{color:var(--violet)} .jm .lane.stf{color:var(--good)}
+.jm .hd{font-family:'Space Grotesk';font-size:clamp(8px,.82vw,10.5px);letter-spacing:.11em;text-transform:uppercase;
+  font-weight:600;color:var(--mute2);padding:0 0 3px 3px}
+.jm .jc{border-radius:10px;padding:clamp(7px,.9vw,13px);font-size:clamp(9.5px,.96vw,13px);line-height:1.4;
+  color:var(--mute);background:rgba(255,255,255,.04);border:1px solid var(--line)}
+.jm .jc b{display:block;color:var(--ink);font-weight:600;font-size:clamp(10px,1vw,14px);margin-bottom:3px}
+.jm .jc.f{background:rgba(232,163,61,.09);border-color:rgba(232,163,61,.30)}
+.jm .jc.b{background:rgba(194,112,58,.10);border-color:rgba(194,112,58,.30)}
+.jm .jc.stf{background:rgba(79,207,146,.09);border-color:rgba(79,207,146,.30)}
+.jm .jc.key{background:rgba(255,196,107,.13);border-color:rgba(255,196,107,.45)}
+@media(max-width:900px){.jm{grid-template-columns:1fr}.jm .lane,.jm .hd{display:none}}
+
+/* PHONE MOCKUP */
+.ph3{display:flex;gap:clamp(10px,1.8vw,30px);justify-content:center;flex-wrap:wrap;margin-top:clamp(12px,1.6vw,24px);align-items:flex-start}
+.mob{width:clamp(138px,13.6vw,196px);background:#0F0A05;border:1px solid var(--line2);border-radius:20px;
+  padding:clamp(7px,.9vw,11px);box-shadow:0 20px 54px rgba(0,0,0,.6);flex:0 0 auto}
+.mob .notch{width:34%;height:3px;border-radius:99px;background:rgba(255,255,255,.18);margin:2px auto 8px}
+.mob .cap{font-size:clamp(9px,.9vw,12px);color:var(--mute2);text-align:center;margin-top:8px;line-height:1.35}
+.mcard{background:linear-gradient(150deg,#EFB055 0%,#C2703A 62%,#8E4A22 100%);border-radius:12px;
+  padding:clamp(8px,1vw,13px);color:#1D1206}
+.mcard .brandline{font-family:'Space Grotesk';font-weight:700;font-size:clamp(7.5px,.76vw,10px);letter-spacing:.16em;
+  text-transform:uppercase;opacity:.72}
+.mcard .who{font-family:'Space Grotesk';font-weight:700;font-size:clamp(11px,1.1vw,15px);line-height:1.15;margin-top:4px}
+.mcard .tier{font-size:clamp(8px,.82vw,11px);font-weight:700;letter-spacing:.1em;text-transform:uppercase;opacity:.8;margin-top:2px}
+.mcard .qrwrap{background:#fff;border-radius:8px;padding:5px;margin:clamp(7px,.9vw,11px) 0;display:flex;justify-content:center}
+.mcard .qrwrap svg{width:100%;height:auto;display:block;max-width:104px}
+.mcard .bal{font-family:'Space Grotesk';font-weight:700;font-size:clamp(9.5px,.95vw,13px);line-height:1.25}
+.mcard .bal small{display:block;font-weight:500;font-size:clamp(7.5px,.76vw,10px);opacity:.72;margin-top:2px}
+.mscreen{background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:12px;padding:clamp(8px,1vw,13px);min-height:clamp(120px,13vw,178px)}
+.mscreen .mh{font-family:'Space Grotesk';font-weight:700;font-size:clamp(10px,1vw,13.5px);color:var(--ink);margin-bottom:7px}
+.mrow{display:flex;justify-content:space-between;gap:6px;font-size:clamp(8.5px,.86vw,11.5px);color:var(--mute);
+  padding:5px 0;border-bottom:1px solid var(--line);line-height:1.3}
+.mrow:last-child{border-bottom:0}
+.mrow b{color:var(--ink);font-weight:600}
+.mnote{background:rgba(232,163,61,.12);border:1px solid rgba(232,163,61,.32);border-radius:9px;
+  padding:clamp(7px,.85vw,11px);font-size:clamp(8.5px,.86vw,11.5px);color:var(--mute);line-height:1.4;margin-bottom:6px}
+.mnote b{display:block;color:var(--ink);font-size:clamp(9px,.9vw,12px);margin-bottom:2px}
+
+/* STAFF TERMINAL */
+.terms{display:flex;gap:clamp(12px,2vw,32px);justify-content:center;flex-wrap:wrap;margin-top:clamp(12px,1.6vw,24px)}
+.term{width:clamp(200px,22vw,306px);background:#0E0A05;border:1px solid var(--line2);border-radius:14px;
+  overflow:hidden;box-shadow:0 18px 46px rgba(0,0,0,.55);flex:0 0 auto}
+.term .tb{padding:clamp(6px,.75vw,9px) clamp(9px,1.1vw,13px);font-size:clamp(8px,.8vw,10.5px);color:var(--mute2);
+  border-bottom:1px solid var(--line);display:flex;justify-content:space-between;letter-spacing:.06em}
+.term .bd{padding:clamp(12px,1.5vw,22px) clamp(10px,1.3vw,18px);text-align:center}
+.term.ok .bd{background:rgba(79,207,146,.11)}
+.term.no .bd{background:rgba(255,107,90,.11)}
+.term .ic{font-size:clamp(22px,2.6vw,38px);line-height:1}
+.term.ok .ic{color:var(--good)} .term.no .ic{color:var(--red)}
+.term .nm{font-family:'Space Grotesk';font-weight:700;font-size:clamp(12px,1.25vw,18px);color:var(--ink);margin-top:6px;line-height:1.2}
+.term .it{font-size:clamp(10px,1vw,14px);color:var(--mute);margin-top:4px;line-height:1.35}
+.term .st{font-family:'Space Grotesk';font-weight:700;font-size:clamp(9px,.92vw,12px);letter-spacing:.1em;
+  text-transform:uppercase;margin-top:8px}
+.term.ok .st{color:var(--good)} .term.no .st{color:var(--red)}
+.term .btn{margin-top:clamp(9px,1.1vw,14px);background:rgba(255,255,255,.08);border:1px solid var(--line2);
+  border-radius:8px;padding:clamp(6px,.75vw,10px);font-size:clamp(9px,.9vw,12px);color:var(--ink);font-weight:600}
+.term .fld{margin-top:8px;background:rgba(255,255,255,.05);border:1px dashed var(--line2);border-radius:8px;
+  padding:clamp(6px,.75vw,9px);font-size:clamp(8.5px,.85vw,11px);color:var(--mute);text-align:left;line-height:1.35}
+.term .fld b{color:var(--ink);display:block;font-size:clamp(9px,.9vw,12px)}
+.term .cap{font-size:clamp(9px,.9vw,12px);color:var(--mute2);text-align:center;margin-top:8px}
+
+/* DASHBOARD MOCK */
+.dash{background:rgba(255,255,255,.035);border:1px solid var(--line);border-radius:14px;
+  padding:clamp(11px,1.4vw,20px);margin-top:clamp(12px,1.6vw,22px)}
+.dash .dh{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:clamp(9px,1.1vw,15px);
+  padding-bottom:9px;border-bottom:1px solid var(--line)}
+.dash .dh .tt{font-family:'Space Grotesk';font-weight:700;font-size:clamp(12px,1.25vw,17px);color:var(--ink)}
+.dash .dh .dt{font-size:clamp(9px,.9vw,12px);color:var(--mute2)}
+.dgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(112px,1fr));gap:clamp(7px,.9vw,13px)}
+.dtile{background:rgba(255,255,255,.045);border:1px solid var(--line);border-radius:10px;padding:clamp(8px,1vw,14px)}
+.dtile .v{font-family:'Space Grotesk';font-weight:700;font-size:clamp(15px,1.85vw,27px);line-height:1;color:var(--blue);letter-spacing:-.02em}
+.dtile .v.g{color:var(--good)} .dtile .v.r{color:var(--red)}
+.dtile .l{font-size:clamp(8.5px,.85vw,11.5px);color:var(--mute);margin-top:5px;line-height:1.3}
+.brow{display:flex;align-items:center;gap:clamp(7px,.9vw,12px);padding:clamp(5px,.65vw,9px) 0}
+.brow .bl{flex:0 0 clamp(66px,7.4vw,112px);font-size:clamp(9.5px,.95vw,13px);color:var(--ink);font-weight:600}
+.brow .bt{flex:1;height:7px;border-radius:99px;background:rgba(255,255,255,.07);overflow:hidden}
+.brow .bt i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--blue),var(--violet))}
+.brow .bv{flex:0 0 auto;font-size:clamp(9px,.92vw,12.5px);color:var(--mute);font-variant-numeric:tabular-nums;min-width:52px;text-align:right}
+
+/* phases */
+.ph{display:flex;align-items:flex-start;gap:clamp(11px,1.4vw,20px);padding:clamp(8px,1vw,14px) 0;
+  border-bottom:1px solid var(--line)}
+.ph:last-child{border-bottom:0}
+.ph .tag{flex:0 0 auto;width:clamp(54px,6vw,82px);font-family:'Space Grotesk';font-weight:700;
+  font-size:clamp(9.5px,.95vw,12.5px);letter-spacing:.09em;text-transform:uppercase;color:var(--blue);padding-top:3px}
+.ph .bd{flex:1}
+.ph .bd .h{font-size:clamp(12.5px,1.3vw,18px);font-weight:600;color:var(--ink);line-height:1.3}
+.ph .bd .p{font-size:clamp(10.5px,1.05vw,14.5px);color:var(--mute);margin-top:4px;line-height:1.42}
+.ph.gate .tag{color:var(--red)}
+.ph.gate .bd .h{color:var(--amber)}
+
+/* chrome */
+#bar{position:fixed;left:0;top:0;height:3px;background:linear-gradient(90deg,var(--blue),var(--violet));width:0;
+  transition:width .35s ease;z-index:9}
+#num{position:fixed;right:clamp(18px,2.4vw,38px);bottom:clamp(14px,1.8vw,28px);font-family:'Space Grotesk';
+  font-size:clamp(11px,1.05vw,14px);color:var(--mute);letter-spacing:.1em;z-index:9}
+#brand{position:fixed;left:clamp(18px,2.4vw,38px);bottom:clamp(14px,1.8vw,28px);font-family:'Space Grotesk';
+  font-weight:700;font-size:clamp(12px,1.15vw,16px);letter-spacing:-.01em;z-index:9;opacity:.7}
+#brand i{color:var(--blue);font-style:normal}
+#nav{position:fixed;right:clamp(18px,2.4vw,38px);top:clamp(16px,2vw,28px);display:flex;gap:8px;z-index:9}
+#nav button{width:34px;height:34px;border-radius:9px;border:1px solid var(--line);background:rgba(255,255,255,.05);
+  color:var(--ink);cursor:pointer;font-size:15px;line-height:1}
+#nav button:hover{background:rgba(232,163,61,.22);border-color:var(--blue)}
+.hint{position:fixed;left:50%;transform:translateX(-50%);bottom:clamp(14px,1.8vw,28px);font-size:12px;
+  color:rgba(176,160,140,.5);z-index:9;letter-spacing:.04em}
+@media(max-width:700px){.hint{display:none}}
+
+@media(max-height:1000px){
+  .s{padding-top:clamp(16px,2.3vw,36px);padding-bottom:clamp(40px,4.4vw,62px)}
+  h2{margin-bottom:clamp(8px,1.1vw,15px)}
+  .eyebrow{margin-bottom:clamp(7px,1vw,13px)}
+  ul.pts li{padding-top:6px;padding-bottom:6px}
+  ul.pts.tight li{padding-top:4px;padding-bottom:4px}
+  td{padding-top:5px;padding-bottom:5px}
+  th{padding-bottom:6px}
+  .stats{margin-top:clamp(11px,1.5vw,22px)}
+  .stat{padding:clamp(10px,1.2vw,18px)}
+  .src{margin-top:clamp(8px,1.1vw,16px)}
+  .card{padding:clamp(12px,1.5vw,22px)}
+  .scope li{padding-top:3px;padding-bottom:3px}
+  .ph{padding-top:6px;padding-bottom:6px}
+  .fbox{padding:clamp(9px,1.1vw,15px)}
+  .jm{margin-top:clamp(9px,1.2vw,16px)}
+  .ph3,.terms{margin-top:clamp(9px,1.2vw,17px)}
+  .dash{padding:clamp(9px,1.1vw,16px);margin-top:clamp(9px,1.2vw,16px)}
+}
+
+/* architecture */
+.arch{margin-top:clamp(12px,1.6vw,22px)}
+.alayer{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:clamp(9px,1.1vw,16px)}
+.abox{background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:12px;padding:clamp(10px,1.3vw,17px);text-align:center}
+.abox .t{font-family:'Space Grotesk';font-weight:700;font-size:clamp(11px,1.15vw,15.5px);color:var(--ink);line-height:1.2}
+.abox .d{font-size:clamp(9.5px,.96vw,13px);color:var(--mute);margin-top:5px;line-height:1.4}
+.abox .who{font-size:clamp(8.5px,.85vw,11px);color:var(--blue);letter-spacing:.1em;text-transform:uppercase;font-weight:700;margin-bottom:5px}
+.aconn{text-align:center;color:var(--mute2);font-size:clamp(13px,1.5vw,20px);line-height:1;padding:clamp(5px,.7vw,9px) 0}
+.acore{background:rgba(232,163,61,.10);border:1px solid rgba(232,163,61,.45);border-radius:12px;
+  padding:clamp(11px,1.4vw,19px);text-align:center}
+.acore .t{font-family:'Space Grotesk';font-weight:700;font-size:clamp(12px,1.3vw,18px);color:var(--blue2)}
+.acore .d{font-size:clamp(9.5px,.96vw,13px);color:var(--mute);margin-top:5px;line-height:1.4}
+.afeed{background:rgba(255,255,255,.035);border:1px dashed var(--line2);border-radius:12px;
+  padding:clamp(9px,1.2vw,15px);text-align:center;font-size:clamp(9.5px,.98vw,13.5px);color:var(--mute);line-height:1.4}
+.afeed b{color:var(--ink)}
+
+/* allowance timeline */
+.tl{display:grid;grid-template-columns:repeat(auto-fit,minmax(84px,1fr));gap:clamp(6px,.8vw,11px);margin-top:clamp(12px,1.6vw,22px)}
+.tlc{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:10px;padding:clamp(8px,1vw,13px);text-align:center}
+.tlc .dy{font-family:'Space Grotesk';font-size:clamp(8.5px,.85vw,11px);letter-spacing:.11em;text-transform:uppercase;color:var(--mute2);font-weight:700}
+.tlc .bg{font-family:'Space Grotesk';font-weight:700;font-size:clamp(17px,2vw,29px);line-height:1;margin-top:6px;color:var(--blue)}
+.tlc .lb{font-size:clamp(8.5px,.86vw,11.5px);color:var(--mute);margin-top:5px;line-height:1.35}
+.tlc.use{background:rgba(232,163,61,.10);border-color:rgba(232,163,61,.34)}
+.tlc.zero .bg{color:var(--mute2)}
+.tlc.reset{background:rgba(79,207,146,.10);border-color:rgba(79,207,146,.36)}
+.tlc.reset .bg{color:var(--good)}
+
+/* whatsapp */
+.wa{background:#0B141A;border:1px solid var(--line2);border-radius:16px;padding:clamp(9px,1.1vw,14px)}
+.wa .top{display:flex;align-items:center;gap:8px;padding:3px 2px 9px;border-bottom:1px solid rgba(255,255,255,.07);margin-bottom:9px}
+.wa .av{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#E8A33D,#8E4A22);flex:0 0 auto}
+.wa .who{font-size:clamp(10px,1.02vw,13.5px);font-weight:600;color:#E9EDF0;line-height:1.25}
+.wa .who small{display:block;font-size:clamp(8.5px,.85vw,11px);color:#6b7a84;font-weight:400}
+.msg{max-width:88%;padding:7px 10px;border-radius:11px;font-size:clamp(9.5px,.96vw,13px);line-height:1.42;margin-bottom:6px;color:#E9EDF0}
+.msg.them{background:#1F2C34;border-top-left-radius:4px}
+.msg.us{background:#005C4B;margin-left:auto;border-top-right-radius:4px}
+.msg .t{display:block;font-size:8.5px;color:rgba(233,237,240,.45);text-align:right;margin-top:3px}
+
+/* admin panel */
+.adm{background:rgba(255,255,255,.035);border:1px solid var(--line);border-radius:13px;padding:clamp(10px,1.3vw,18px)}
+.adm .ah{font-family:'Space Grotesk';font-weight:700;font-size:clamp(11px,1.15vw,15.5px);color:var(--ink);
+  padding-bottom:8px;border-bottom:1px solid var(--line);margin-bottom:9px}
+.fldrow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:clamp(5px,.7vw,9px) 0;
+  border-bottom:1px solid var(--line);font-size:clamp(9.5px,.98vw,13px);color:var(--mute)}
+.fldrow:last-child{border-bottom:0}
+.fldrow .val{background:rgba(255,255,255,.07);border:1px solid var(--line2);border-radius:6px;
+  padding:3px 9px;color:var(--ink);font-weight:600;white-space:nowrap;font-size:clamp(9px,.94vw,12.5px)}
+.fldrow .val.on{background:rgba(79,207,146,.15);border-color:rgba(79,207,146,.4);color:var(--good)}
+
+</style></head><body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="qr" viewBox="0 0 25 25">
+<rect width="25" height="25" fill="#fff"/>
+<path fill="#171008" d="M0 0h7v7H0zM18 0h7v7h-7zM0 18h7v7H0z"/>
+<path fill="#fff" d="M1 1h5v5H1zM19 1h5v5h-5zM1 19h5v5H1z"/>
+<path fill="#171008" d="M2 2h3v3H2zM20 2h3v3h-3zM2 20h3v3H2z
+M9 0h1v1H9zM11 0h1v1h-1zM14 0h1v1h-1zM8 1h1v1H8zM12 1h1v1h-1zM15 1h1v1h-1z
+M10 2h1v1h-1zM13 2h1v1h-1zM16 2h1v1h-1zM8 3h1v1H8zM9 3h1v1H9zM14 3h1v1h-1z
+M11 4h1v1h-1zM15 4h1v1h-1zM16 4h1v1h-1zM8 5h1v1H8zM12 5h1v1h-1zM13 5h1v1h-1z
+M10 6h1v1h-1zM14 6h1v1h-1zM16 6h1v1h-1z
+M0 8h1v1H0zM2 8h1v1H2zM5 8h1v1H5zM8 8h1v1H8zM11 8h1v1h-1zM13 8h1v1h-1zM16 8h1v1h-1zM19 8h1v1h-1zM22 8h1v1h-1zM24 8h1v1h-1z
+M1 9h1v1H1zM4 9h1v1H4zM9 9h1v1H9zM12 9h1v1h-1zM15 9h1v1h-1zM18 9h1v1h-1zM21 9h1v1h-1zM23 9h1v1h-1z
+M3 10h1v1H3zM6 10h1v1H6zM10 10h1v1h-1zM14 10h1v1h-1zM17 10h1v1h-1zM20 10h1v1h-1zM24 10h1v1h-1z
+M0 11h1v1H0zM2 11h1v1H2zM8 11h1v1H8zM11 11h1v1h-1zM13 11h1v1h-1zM16 11h1v1h-1zM19 11h1v1h-1zM22 11h1v1h-1z
+M5 12h1v1H5zM9 12h1v1H9zM12 12h1v1h-1zM15 12h1v1h-1zM18 12h1v1h-1zM21 12h1v1h-1zM23 12h1v1h-1z
+M1 13h1v1H1zM4 13h1v1H4zM10 13h1v1h-1zM14 13h1v1h-1zM17 13h1v1h-1zM20 13h1v1h-1zM24 13h1v1h-1z
+M3 14h1v1H3zM6 14h1v1H6zM8 14h1v1H8zM11 14h1v1h-1zM16 14h1v1h-1zM19 14h1v1h-1zM22 14h1v1h-1z
+M0 15h1v1H0zM9 15h1v1H9zM13 15h1v1h-1zM18 15h1v1h-1zM21 15h1v1h-1zM23 15h1v1h-1z
+M2 16h1v1H2zM5 16h1v1H5zM10 16h1v1h-1zM12 16h1v1h-1zM15 16h1v1h-1zM17 16h1v1h-1zM20 16h1v1h-1zM24 16h1v1h-1z
+M8 17h1v1H8zM11 17h1v1h-1zM14 17h1v1h-1zM19 17h1v1h-1zM22 17h1v1h-1z
+M9 18h1v1H9zM12 18h1v1h-1zM16 18h1v1h-1zM18 18h1v1h-1zM21 18h1v1h-1zM23 18h1v1h-1z
+M8 19h1v1H8zM13 19h1v1h-1zM15 19h1v1h-1zM20 19h1v1h-1zM24 19h1v1h-1z
+M10 20h1v1h-1zM14 20h1v1h-1zM17 20h1v1h-1zM19 20h1v1h-1zM22 20h1v1h-1z
+M9 21h1v1H9zM11 21h1v1h-1zM16 21h1v1h-1zM21 21h1v1h-1zM23 21h1v1h-1z
+M8 22h1v1H8zM12 22h1v1h-1zM15 22h1v1h-1zM18 22h1v1h-1zM20 22h1v1h-1zM24 22h1v1h-1z
+M10 23h1v1h-1zM13 23h1v1h-1zM17 23h1v1h-1zM22 23h1v1h-1z
+M9 24h1v1H9zM11 24h1v1h-1zM14 24h1v1h-1zM19 24h1v1h-1zM21 24h1v1h-1zM23 24h1v1h-1z"/>
+</symbol></svg>
+
+
+<div id="bar"></div>
+<div id="brand">JCE<i> Media</i></div>
+<div id="num"></div>
+<div class="hint">Arrows or space to advance &middot; F for fullscreen</div>
+<div id="nav"><button onclick="go(-1)" aria-label="Previous">&lsaquo;</button><button onclick="go(1)" aria-label="Next">&rsaquo;</button></div>
+
+<div id="deck">
+
+<!-- 1 -->
+<section class="s center">
+  <div class="eyebrow">Die Veiling Klub</div>
+  <h1>How the system<br>actually works</h1>
+  <p class="lede" style="margin-top:18px;text-align:center">What we would build, what your members see,<br>what your barmen do, and what lands on your desk.</p>
+  <div style="margin-top:clamp(26px,3.4vw,50px);display:flex;gap:clamp(16px,2.4vw,40px);flex-wrap:wrap;justify-content:center;font-size:clamp(11px,1.1vw,15px);color:var(--mute2);letter-spacing:.04em">
+    <div>Prepared for <b style="color:var(--ink)">Harry</b></div>
+    <div>By <b style="color:var(--ink)">JCE Media</b></div>
+    <div>21 August 2026</div>
+  </div>
+</section>
+
+<!-- 2 -->
+<section class="s">
+  <div class="eyebrow">What it has to do</div>
+  <h2>Five jobs</h2>
+  <table>
+    <thead><tr><th style="width:34px"></th><th>The job</th><th>What you get out of it</th></tr></thead>
+    <tbody>
+      <tr><td><b>1</b></td><td><b>Know who is a member and what they are owed</b></td><td>Nobody takes more than they paid for</td></tr>
+      <tr><td><b>2</b></td><td><b>Record every free drink that goes out</b></td><td>Cost by member, by bar, by barman, by night</td></tr>
+      <tr class="win"><td><b>3</b></td><td><b>Tie that drink to the till slip</b></td><td>What the member spent while he was in</td></tr>
+      <tr><td><b>4</b></td><td><b>Keep count of what you still owe</b></td><td>Drinks paid for but not yet poured</td></tr>
+      <tr><td><b>5</b></td><td><b>Split all of it four ways</b></td><td>Which bar the club is filling, and what it costs there</td></tr>
+    </tbody>
+  </table>
+  <p class="sub wide">Everything else in this deck is one of those five jobs wearing a different hat.</p>
+</section>
+
+<!-- 3 -->
+<section class="s">
+  <div class="eyebrow">The shape of it</div>
+  <h2 class="sm">Four pieces, and one record<br>that holds everything</h2>
+  <div class="arch">
+    <div class="alayer">
+      <div class="abox"><div class="who">Member</div><div class="t">Digital card</div><div class="d">A web page saved to his home screen. Shows his code and what he has left.</div></div>
+      <div class="abox"><div class="who">Your bar</div><div class="t">Bar screen</div><div class="d">Scan, check, type the slip number, pour. Works when the wifi does not.</div></div>
+      <div class="abox"><div class="who">You</div><div class="t">Dashboard</div><div class="d">All four bars. Members, cost, spend, and the rules you can change yourself.</div></div>
+    </div>
+    <div class="aconn">&#9660;&nbsp;&nbsp;&nbsp;&nbsp;&#9660;&nbsp;&nbsp;&nbsp;&nbsp;&#9660;</div>
+    <div class="acore">
+      <div class="t">The record</div>
+      <div class="d">Every member, every allowance, every drink poured, every slip number. Written once and never edited, so you can always go back and see exactly what happened.</div>
+    </div>
+    <div class="aconn">&#9650;</div>
+    <div class="afeed">Once a week, your manager uploads <b>the sales export he already runs</b>. That is the only contact this system ever has with your till.</div>
+  </div>
+</section>
+
+<!-- 4 -->
+<section class="s gogo">
+  <div class="eyebrow g">Scope</div>
+  <h2>What we build now,<br>and what waits</h2>
+  <div class="scope">
+    <div class="in">
+      <div class="hd">In the first build</div>
+      <ul>
+        <li>Member sign-up from a QR poster, no app store</li>
+        <li>Digital card with a code that changes every 30 seconds</li>
+        <li>The allowance engine: what each package gets, and when it resets</li>
+        <li>Bar screen for your staff, working offline</li>
+        <li>Slip number capture and the weekly sales upload</li>
+        <li>Your dashboard across all four bars</li>
+        <li>WhatsApp messaging to members</li>
+        <li>Family Package with children and their treats</li>
+      </ul>
+    </div>
+    <div class="out">
+      <div class="hd">Deliberately left for later</div>
+      <ul>
+        <li>Till system integration</li>
+        <li>Points and a rewards catalogue</li>
+        <li>Table and event bookings</li>
+        <li>Beer Passport, badges, leaderboards</li>
+        <li>Native iPhone and Android apps</li>
+        <li>Gift and corporate memberships</li>
+      </ul>
+    </div>
+  </div>
+  <p class="sub wide">The list on the right gets much easier once the record on the left exists. Almost none of it is possible before.</p>
+</section>
+
+<!-- 5 -->
+<section class="s">
+  <div class="eyebrow">Under the bonnet</div>
+  <h2 class="sm">What the system keeps<br>about each member</h2>
+  <div class="three">
+    <div class="card sm">
+      <h3>Who he is</h3>
+      <p>Name, cellphone, birthday, home bar, and how he found you. Plus a record of what he agreed to be contacted about, and when he agreed to it.</p>
+    </div>
+    <div class="card sm">
+      <h3>What he bought</h3>
+      <p>Which package, what he paid, when it started and when it runs out. We store a payment reference and never a card number.</p>
+    </div>
+    <div class="card sm">
+      <h3>What he has taken</h3>
+      <p>Every drink, with the bar, the barman, the time, the slip number and what that drink cost you on the day.</p>
+    </div>
+  </div>
+  <p class="sub wide">That last one matters more than it looks. Keg prices move. If we did not store the cost at the moment of the pour, a price increase in March would quietly rewrite what January looked like.</p>
+</section>
+
+<!-- 6 -->
+<section class="s">
+  <div class="eyebrow">Under the bonnet</div>
+  <h2 class="sm">How an allowance actually works</h2>
+  <p class="lede" style="font-size:clamp(13px,1.35vw,18px)">Piet is on Silver, which is two draughts a week. Here is what the system is doing across seven days.</p>
+  <div class="tl">
+    <div class="tlc reset"><div class="dy">Mon</div><div class="bg">2</div><div class="lb">Week opens, two granted</div></div>
+    <div class="tlc use"><div class="dy">Tue</div><div class="bg">1</div><div class="lb">Takes one</div></div>
+    <div class="tlc"><div class="dy">Wed</div><div class="bg">1</div><div class="lb">Not in</div></div>
+    <div class="tlc use zero"><div class="dy">Thu</div><div class="bg">0</div><div class="lb">Takes the second</div></div>
+    <div class="tlc zero"><div class="dy">Fri</div><div class="bg">0</div><div class="lb">Red screen if he tries</div></div>
+    <div class="tlc zero"><div class="dy">Sun</div><div class="bg">0</div><div class="lb">Week closes, nothing carries</div></div>
+    <div class="tlc reset"><div class="dy">Mon</div><div class="bg">2</div><div class="lb">Resets</div></div>
+  </div>
+  <p class="sub wide">The balance is never a number sitting in a box being counted up and down. It is worked out fresh every time from what he was granted and what he has taken, which is why a mis-scan can be reversed without the sums going wrong.</p>
+</section>
+
+<!-- 7 -->
+<section class="s gogo">
+  <div class="eyebrow g">Under the bonnet</div>
+  <h2 class="sm">You can change the rules<br>without phoning us</h2>
+  <div class="two top">
+    <div class="adm">
+      <div class="ah">Packages &rsaquo; Silver</div>
+      <div class="fldrow"><span>What they get</span><span class="val">500ml draught</span></div>
+      <div class="fldrow"><span>How many</span><span class="val">2</span></div>
+      <div class="fldrow"><span>How often</span><span class="val">Per week</span></div>
+      <div class="fldrow"><span>Unused drinks</span><span class="val">Fall away</span></div>
+      <div class="fldrow"><span>Valid days</span><span class="val">Mon to Sun</span></div>
+      <div class="fldrow"><span>Max per visit</span><span class="val">1</span></div>
+      <div class="fldrow"><span>Blackout dates</span><span class="val">31 Dec</span></div>
+      <div class="fldrow"><span>Available at</span><span class="val on">All four bars</span></div>
+    </div>
+    <div>
+      <p class="lede" style="font-size:clamp(13px,1.35vw,18px)">Every one of those is a setting, not something buried in code. If you decide in March that Silver should be Monday to Thursday only, you change it yourself in about ten seconds.</p>
+      <ul class="pts yes tight">
+        <li><b>Old rules stay attached to old members.</b> Change Silver today and the man who joined in January keeps what he was sold until his year is up.</li>
+        <li><b>Rules can differ by bar.</b> Useful, because Sasolburg is in the Free State and the other three are in Gauteng.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 8 -->
+<section class="s cool center">
+  <div class="eyebrow">Part one</div>
+  <h1 style="max-width:16ch">What your<br>members see</h1>
+</section>
+
+<!-- 9 -->
+<section class="s cool">
+  <div class="eyebrow">Signing up</div>
+  <h2 class="sm">Ninety seconds, from a poster on the table</h2>
+  <div class="jm" style="--n:5">
+    <div></div>
+    <div class="hd">Step 1</div><div class="hd">Step 2</div><div class="hd">Step 3</div><div class="hd">Step 4</div><div class="hd">Step 5</div>
+    <div class="lane f">He<br>does</div>
+    <div class="jc f"><b>Scans the poster</b>On the table talker while he waits for his order</div>
+    <div class="jc f"><b>Fills in four fields</b>Name, cellphone, birthday, and which bar is his local</div>
+    <div class="jc f"><b>Picks a package</b>Sees what each one gives him and what it costs</div>
+    <div class="jc f"><b>Pays on his phone</b>Card or instant EFT. No queue at the bar</div>
+    <div class="jc key"><b>Saves the card</b>Added to his home screen like any other app</div>
+    <div class="lane b">System<br>does</div>
+    <div class="jc b">Notes which bar the poster is in, so you know what recruits</div>
+    <div class="jc b">Checks the number is not already a member</div>
+    <div class="jc b">Records what he agreed to be contacted about</div>
+    <div class="jc b">Takes payment, starts his year, keeps only a reference</div>
+    <div class="jc b">Opens his record and grants the first week</div>
+  </div>
+  <p class="src">Your staff do not have to do anything during this. No tablet at the door, nobody typing his details in for him.</p>
+</section>
+
+<!-- 10 -->
+<section class="s cool">
+  <div class="eyebrow">Signing up</div>
+  <h2 class="sm">What he carries around</h2>
+  <div class="ph3">
+    <div class="mob">
+      <div class="notch"></div>
+      <div class="mcard">
+        <div class="brandline">Die Veiling Klub</div>
+        <div class="who">Piet van Zyl</div>
+        <div class="tier">Silver Member</div>
+        <div class="qrwrap"><svg viewBox="0 0 25 25"><use href="#qr"></use></svg></div>
+        <div class="bal">2 beers left<br><small>Resets Monday &middot; Sasolburg</small></div>
+      </div>
+      <div class="cap">The card. Code changes every 30 seconds.</div>
+    </div>
+    <div class="mob">
+      <div class="notch"></div>
+      <div class="mscreen">
+        <div class="mh">My Club</div>
+        <div class="mrow"><span>This week</span><b>2 of 2</b></div>
+        <div class="mrow"><span>Used this year</span><b>38 beers</b></div>
+        <div class="mrow"><span>Visits</span><b>31</b></div>
+        <div class="mrow"><span>Membership</span><b>To 14 Aug</b></div>
+        <div class="mrow"><span>Birthday</span><b>3 March</b></div>
+        <div class="mrow"><span>Home bar</span><b>Sasolburg</b></div>
+      </div>
+      <div class="cap">His balance, so there are no surprises at the tap.</div>
+    </div>
+    <div class="mob">
+      <div class="notch"></div>
+      <div class="mscreen">
+        <div class="mh">News</div>
+        <div class="mnote"><b>Members Steak Night</b>Thursday, members only. R129 for 300g rump.</div>
+        <div class="mnote"><b>New artist announced</b>Friday at Vereeniging. Members get first tickets.</div>
+        <div class="mnote"><b>Your birthday</b>Next week. Come and collect your free meal.</div>
+      </div>
+      <div class="cap">Whatever you send goes here too, so nothing gets lost.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 11 -->
+<section class="s cool">
+  <div class="eyebrow a">Keeping it honest</div>
+  <h2 class="sm">Why the code moves</h2>
+  <div class="two top">
+    <div class="card warn">
+      <h3>A fixed code would not survive a month</h3>
+      <p>If every member had one permanent barcode, somebody screenshots it and puts it in a WhatsApp group. Within a fortnight you are pouring free beer for people who never paid.</p>
+    </div>
+    <div class="card good">
+      <h3>So it changes every 30 seconds</h3>
+      <p>The code on his screen is only good for half a minute and can only be used once. A screenshot sent to a friend is expired by the time it arrives.</p>
+    </div>
+  </div>
+  <ul class="pts yes tight">
+    <li><b>Your barman does the scanning.</b> The member holds up his phone and never hands it over, and never taps anything himself.</li>
+    <li><b>The system knows who poured it.</b> Every drink carries the barman's name, which is what makes the weekly check on the last panel possible.</li>
+  </ul>
+</section>
+
+<!-- 12 -->
+<section class="s cool">
+  <div class="eyebrow">Talking to members</div>
+  <h2 class="sm">WhatsApp, because everyone already has it</h2>
+  <div class="two top">
+    <div class="wa">
+      <div class="top"><div class="av"></div><div class="who">Die Veiling Klub<small>business account</small></div></div>
+      <div class="msg them">Piet, dis Donderdag. Lede-steak aand by Sasolburg, R129 vir 300g rump. Jou gratis bier wag ook nog.<span class="t">16:02</span></div>
+      <div class="msg us">Ek kom<span class="t">16:14</span></div>
+      <div class="msg them">Lekker. Sien jou netnou.<span class="t">16:14</span></div>
+    </div>
+    <div>
+      <p class="lede" style="font-size:clamp(13px,1.35vw,18px)">Push notifications get switched off and emails go unread. A WhatsApp from the bar gets opened.</p>
+      <ul class="pts tight">
+        <li><b>Send to a bar, a package, or a behaviour.</b> Everyone at Meyerton. Everyone on Gold. Everyone who has not been in for three weeks.</li>
+        <li><b>Only to people who agreed to it</b>, with the date they agreed on file. That is a legal requirement and it is built in rather than bolted on.</li>
+        <li><b>Send in Afrikaans, English, or both.</b> Your call, and it can differ per bar.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 13 -->
+<section class="s center gogo">
+  <div class="eyebrow g">Part two</div>
+  <h1 style="max-width:16ch">What happens<br>behind the bar</h1>
+</section>
+
+<!-- 14 -->
+<section class="s cool">
+  <div class="eyebrow">A Thursday night</div>
+  <h2 class="sm">Piet comes in at twenty to seven</h2>
+  <div class="jm" style="--n:5">
+    <div></div>
+    <div class="hd">18:40</div><div class="hd">18:41</div><div class="hd">18:41</div><div class="hd">21:15</div><div class="hd">Monday</div>
+    <div class="lane f">Piet</div>
+    <div class="jc f"><b>Walks in</b>Opens the card on his phone at the bar</div>
+    <div class="jc f"><b>Holds up the code</b>Does not hand over his phone</div>
+    <div class="jc f"><b>Gets his draught</b>Sees "1 left this week" update on his screen</div>
+    <div class="jc f"><b>Buys two more and a burger</b>Pays the normal way at the till</div>
+    <div class="jc f"><b>Nothing</b>He is at home</div>
+    <div class="lane stf">Thabo</div>
+    <div class="jc stf"><b>Carries on working</b>Nothing to do yet</div>
+    <div class="jc stf"><b>Scans it</b>From the bar's phone. Green screen with the name and the drink</div>
+    <div class="jc stf"><b>Types the slip number</b>Five seconds, then pours</div>
+    <div class="jc stf">Rings the rest up as normal</div>
+    <div class="jc stf">Nothing</div>
+    <div class="lane b">System</div>
+    <div class="jc b">Idle</div>
+    <div class="jc b">Checks his package, the week, his balance and the bar</div>
+    <div class="jc b"><b>Writes it down</b>Member, barman, bar, time, cost, slip number</div>
+    <div class="jc b">Holds the slip number and waits</div>
+    <div class="jc key"><b>Sales file goes up</b>Slip 4471 was R318</div>
+  </div>
+  <p class="src">One pour out, R318 in. Until the sales file lands on Monday that visit is only half a story.</p>
+</section>
+
+<!-- 15 -->
+<section class="s cool">
+  <div class="eyebrow g">Behind the bar</div>
+  <h2 class="sm">The two screens your barman will ever see</h2>
+  <div class="terms">
+    <div class="term ok">
+      <div class="tb"><span>DIE VEILING &middot; SASOLBURG</span><span>18:41</span></div>
+      <div class="bd">
+        <div class="ic">&#10003;</div>
+        <div class="nm">Piet van Zyl</div>
+        <div class="it">Silver Member &middot; 500ml Draught</div>
+        <div class="st">1 left this week</div>
+        <div class="fld"><b>Slip number</b>4471</div>
+        <div class="btn">Pour &amp; done</div>
+      </div>
+    </div>
+    <div class="term no">
+      <div class="tb"><span>DIE VEILING &middot; VANDERBIJLPARK</span><span>20:07</span></div>
+      <div class="bd">
+        <div class="ic">&#10007;</div>
+        <div class="nm">Annelie du Toit</div>
+        <div class="it">Silver Member &middot; 500ml Draught</div>
+        <div class="st">Already used Wednesday</div>
+        <div class="fld" style="border-style:solid"><b>Resets Monday 00:00</b>4 days to go</div>
+        <div class="btn">Back</div>
+      </div>
+    </div>
+  </div>
+  <p class="sub wide" style="margin-top:clamp(10px,1.4vw,20px)">The red screen is the one worth getting right. <b style="color:var(--ink)">"Not eligible" starts an argument at the bar. "Already used Wednesday, resets Monday" ends it</b>, and your barman never has to be the one saying no.</p>
+</section>
+
+<!-- 16 -->
+<section class="s cool">
+  <div class="eyebrow a">Behind the bar</div>
+  <h2 class="sm">The five seconds that pay for the whole thing</h2>
+  <p class="lede">One extra field on that green screen: the till slip number. It is the only thing your staff do differently, and it is what turns a record of what the club costs into a record of what it earns.</p>
+  <div class="three">
+    <div class="card sm">
+      <h3>What it costs them</h3>
+      <p>Four digits off the slip already in their hand. The keypad is already open when the green screen appears.</p>
+    </div>
+    <div class="card sm">
+      <h3>What it gives you</h3>
+      <p>Every free drink joined to what that table actually spent. Without it you know your cost and are guessing at your revenue.</p>
+    </div>
+    <div class="card sm">
+      <h3>If a bar stops doing it</h3>
+      <p>The dashboard shows the capture rate per bar per week, so you see it slipping at Meyerton before it becomes a habit.</p>
+    </div>
+  </div>
+  <p class="sub wide">If one bar simply will not keep it up, we move that bar to sampling on two shifts a week instead of losing the number altogether.</p>
+</section>
+
+<!-- 17 -->
+<section class="s cool">
+  <div class="eyebrow a">Behind the bar</div>
+  <h2 class="sm">When things go wrong, and they will</h2>
+  <table>
+    <thead><tr><th>What happens</th><th>What the system does about it</th></tr></thead>
+    <tbody>
+      <tr><td><b>The wifi drops on a Friday night</b></td><td>The bar screen keeps working. Redemptions queue on the device and go up when the signal comes back, with a limit on how many can stack up unchecked</td></tr>
+      <tr><td><b>His phone is dead</b></td><td>Your barman looks him up on his cellphone number. That one gets marked so you can see how often it happens</td></tr>
+      <tr><td><b>Scanned the wrong member</b></td><td>Reversed on the spot. The original stays on record with the reversal next to it, so the history stays honest</td></tr>
+      <tr><td><b>Poured the wrong drink</b></td><td>Same. Reverse it and scan again</td></tr>
+      <tr><td><b>He is had enough for one night</b></td><td>Your barman refuses and records why. You need that for the licence, and it protects the man behind the bar</td></tr>
+      <tr><td><b>He wants to cancel in month two</b></td><td>Refund works off what he has already drunk, at menu price, against what he paid</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 18 -->
+<section class="s cool">
+  <div class="eyebrow">Sunday lunch</div>
+  <h2 class="sm">The family flow, and where it leaks</h2>
+  <p class="lede" style="font-size:clamp(13px,1.35vw,18px)">Annelie du Toit, Vanderbijlpark. Two children on her membership: Jana, 7, and Ruan, 4.</p>
+  <div class="jm" style="--n:4">
+    <div></div>
+    <div class="hd">Arrives</div><div class="hd">Orders</div><div class="hd">The treats</div><div class="hd">Ninth visit</div>
+    <div class="lane f">She<br>sees</div>
+    <div class="jc f"><b>Scans once at the door</b>Covers her and both children</div>
+    <div class="jc f"><b>Orders lunch</b>Member price on the Sunday roast</div>
+    <div class="jc f"><b>Jana takes a soft serve, Ruan a slush</b>Chosen when she registered them</div>
+    <div class="jc key"><b>"1 more visit to a free milkshake"</b>A reason to come back next Sunday</div>
+    <div class="lane b">System<br>does</div>
+    <div class="jc b">Opens one visit and lists both children on the bar screen</div>
+    <div class="jc b">Waits for a slip number before it releases the treats</div>
+    <div class="jc b"><b>Holds the minimum spend</b>No treat without something bought on the same visit</div>
+    <div class="jc b">Counts visits rather than treats, and fires the milkshake on the tenth</div>
+  </div>
+  <p class="sub wide"><b style="color:var(--ink)">As your plan stands there is no fee, no cap and no minimum spend on the family side.</b> Nothing stops a parent registering four children and coming in daily without buying a thing. The minimum spend sorts it without anyone feeling policed.</p>
+</section>
+
+<!-- 19 -->
+<section class="s center">
+  <div class="eyebrow a">Part three</div>
+  <h1 style="max-width:16ch">What lands<br>on your desk</h1>
+</section>
+
+<!-- 20 -->
+<section class="s cool">
+  <div class="eyebrow a">Your Monday morning</div>
+  <h2 class="sm">The one screen you would actually open</h2>
+  <div class="dash">
+    <div class="dh"><span class="tt">Die Veiling Klub &middot; Week 34</span><span class="dt">All four bars &middot; 18 to 24 Aug</span></div>
+    <div class="dgrid">
+      <div class="dtile"><div class="v">612</div><div class="l">Active members</div></div>
+      <div class="dtile"><div class="v">+41</div><div class="l">New this week</div></div>
+      <div class="dtile"><div class="v">438</div><div class="l">Drinks redeemed</div></div>
+      <div class="dtile"><div class="v r">R6,570</div><div class="l">Cost of the club</div></div>
+      <div class="dtile"><div class="v g">R94,284</div><div class="l">Member spend on those visits</div></div>
+      <div class="dtile"><div class="v g">R215</div><div class="l">Average spend per redemption visit</div></div>
+    </div>
+    <div style="margin-top:clamp(10px,1.3vw,18px);border-top:1px solid var(--line);padding-top:clamp(9px,1.2vw,15px)">
+      <div class="brow"><span class="bl">Sasolburg</span><span class="bt"><i style="width:88%"></i></span><span class="bv">147</span></div>
+      <div class="brow"><span class="bl">Vanderbijlpark</span><span class="bt"><i style="width:74%"></i></span><span class="bv">124</span></div>
+      <div class="brow"><span class="bl">Vereeniging</span><span class="bt"><i style="width:59%"></i></span><span class="bv">98</span></div>
+      <div class="brow"><span class="bl">Meyerton</span><span class="bt"><i style="width:41%"></i></span><span class="bv">69</span></div>
+    </div>
+  </div>
+  <p class="src">The figures are made up. It is the layout to look at: what it cost you, what came back, and the same again split across your four bars.</p>
+</section>
+
+<!-- 21 -->
+<section class="s cool">
+  <div class="eyebrow a">Your Monday morning</div>
+  <h2 class="sm">And underneath it, six reports</h2>
+  <div class="three">
+    <div class="card sm"><h3>Redemptions</h3><p>Every free drink last week by bar, by barman, by night. Tells you which nights the club is moving.</p></div>
+    <div class="card sm"><h3>Slip capture rate</h3><p>How often your staff are typing the number in. Per bar, so you know where to have a word.</p></div>
+    <div class="card sm"><h3>No slip attached</h3><p>Members taking a free drink and buying nothing. The panel after this one.</p></div>
+    <div class="card sm"><h3>What you still owe</h3><p>Drinks paid for and not yet poured, in units and in rands.</p></div>
+    <div class="card sm"><h3>Sign-ups and renewals</h3><p>Who joined, at which bar, off which poster, and who is coming up for renewal.</p></div>
+    <div class="card sm"><h3>Visit frequency</h3><p>How often members come in now against what they did before they joined.</p></div>
+  </div>
+  <p class="sub wide">All six land in your inbox on a Monday whether you open the dashboard or not.</p>
+</section>
+
+<!-- 22 -->
+<section class="s cool">
+  <div class="eyebrow a">Your Monday morning</div>
+  <h2 class="sm">The report worth reading every week</h2>
+  <p class="lede">Members who take a free beer and buy nothing, week after week.</p>
+  <table class="sm">
+    <thead><tr><th>Member</th><th>Bar</th><th class="num">Took</th><th class="num">No spend</th><th>Worth a look because</th></tr></thead>
+    <tbody>
+      <tr class="us"><td><b>J. Mokoena</b></td><td>Meyerton</td><td class="num">14</td><td class="num">14</td><td>Same barman on shift every time. Worth checking the roster</td></tr>
+      <tr><td><b>W. Pretorius</b></td><td>Vanderbijlpark</td><td class="num">11</td><td class="num">9</td><td>Comes in, takes it, leaves. Genuine member, and costing you</td></tr>
+      <tr><td><b>L. Naidoo</b></td><td>Vereeniging</td><td class="num">8</td><td class="num">2</td><td>Normal. Nothing to do</td></tr>
+    </tbody>
+  </table>
+  <p class="sub wide">The first row is probably a staff problem. The second is the club simply not working on that member. <b style="color:var(--ink)">From the redemption count alone the two look the same</b>, which is what the slip number gets you for five seconds a pour.</p>
+</section>
+
+<!-- 23 -->
+<section class="s">
+  <div class="eyebrow a">Closing the gaps</div>
+  <h2>What people will try</h2>
+  <table>
+    <thead><tr><th>The move</th><th>What stops it</th></tr></thead>
+    <tbody>
+      <tr><td>Screenshot the card and send it to a mate</td><td>Code changes every 30 seconds and only works once</td></tr>
+      <tr><td>Redeem for friends who are not members</td><td>Your barman scans, so the member has to be standing there</td></tr>
+      <tr><td>A barman pouring for mates against absent members</td><td>Every drink carries his name, and the no-slip report surfaces the pattern</td></tr>
+      <tr><td>Taking the whole week's allowance in one sitting</td><td>One per visit</td></tr>
+      <tr><td>One person, several memberships</td><td>A cellphone number can only belong to one member</td></tr>
+      <tr class="us"><td>Family Package: free ice cream, buy nothing, every day</td><td>A cap on children per membership and a minimum spend</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 24 -->
+<section class="s">
+  <div class="eyebrow">Access</div>
+  <h2 class="sm">Who can see and do what</h2>
+  <table>
+    <thead><tr><th>Role</th><th>Can see</th><th>Can do</th></tr></thead>
+    <tbody>
+      <tr><td><b>Member</b></td><td>His own card, balance and history</td><td>Show his code. Nothing else</td></tr>
+      <tr><td><b>Barman</b></td><td>The member in front of him, right now</td><td>Scan, redeem, reverse, refuse and record why</td></tr>
+      <tr><td><b>Bar manager</b></td><td>His own bar only</td><td>Everything a barman can, plus his bar's reports and the weekly sales upload</td></tr>
+      <tr class="win"><td><b>You</b></td><td>All four bars</td><td>All of the above, plus the package rules, prices, intake caps and messaging</td></tr>
+    </tbody>
+  </table>
+  <p class="sub wide">A manager at Meyerton cannot see Sasolburg's numbers or change what a package includes. Every change anyone makes is stamped with who made it and when.</p>
+</section>
+
+<!-- 25 -->
+<section class="s warm">
+  <div class="eyebrow r">Built in from the start</div>
+  <h2 class="sm">Two things that are cheaper<br>to build now than to fix later</h2>
+  <div class="two top">
+    <div class="card warn">
+      <h3>The licence</h3>
+      <p>Your barmen can refuse a redemption and record the reason, there are hard ceilings on how much anyone can take in a day regardless of what they paid, and no drink offer can ever attach itself to a child's record.</p>
+      <p style="margin-top:10px">Sasolburg falls under the Free State and the other three are Gauteng, so the rules can be set differently per bar if your attorney comes back with different answers.</p>
+    </div>
+    <div class="card warn">
+      <h3>Personal information</h3>
+      <p>Consent for WhatsApp is captured at sign-up with the date attached. For children we store a first name and a birthday, nothing else, no photographs, and never any marketing aimed at them.</p>
+      <p style="margin-top:10px">If a member asks for his data or asks to be deleted, that is a button rather than a project.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 26 -->
+<section class="s gogo">
+  <div class="eyebrow g">Delivery</div>
+  <h2>How it gets built</h2>
+  <div style="margin-top:clamp(6px,1vw,14px)">
+    <div class="ph"><div class="tag">Week 1</div><div class="bd"><div class="h">Settle the details</div><div class="p">Your cost per drink, the final package structure, the intake cap per bar, and the attorney briefed on both provinces.</div></div></div>
+    <div class="ph"><div class="tag">Week 1&ndash;2</div><div class="bd"><div class="h">Measure the four bars as they are</div><div class="p">How often people come in now and what they spend. It runs while we build, and it is the only before-and-after you will get.</div></div></div>
+    <div class="ph"><div class="tag">Week 2&ndash;5</div><div class="bd"><div class="h">Build</div><div class="p">Sign-up, digital card, allowance engine, bar screen, slip capture, dashboard, WhatsApp. One system serving all four bars.</div></div></div>
+    <div class="ph"><div class="tag">Week 5</div><div class="bd"><div class="h">Train the staff, one shift per bar</div><div class="p">Half an hour behind the bar with the real screens. The people who will use it every night are the ones who decide whether it works.</div></div></div>
+    <div class="ph"><div class="tag">Week 6</div><div class="bd"><div class="h">Open the doors at all four</div><div class="p">Posters on the tables, first intake capped, weekly allowances only.</div></div></div>
+    <div class="ph gate"><div class="bd"><div class="tag" style="width:auto;display:inline-block">Day 45</div><div class="h">Sit down with the numbers</div><div class="p">Go through it bar by bar, then decide whether to close the intake, extend it, or reprice the second one.</div></div></div>
+  </div>
+</section>
+
+<!-- 27 -->
+<section class="s">
+  <div class="eyebrow a">Before we can quote</div>
+  <h2>What we need from you</h2>
+  <div class="scope">
+    <div class="in">
+      <div class="hd">Answers</div>
+      <ul>
+        <li>Your cost per drink including wastage: draught, single, double, soft serve, slush, milkshake</li>
+        <li>Is the Bronze package paid, and how much</li>
+        <li>Is the Family Package paid, and is there a minimum spend</li>
+        <li>What till system each bar runs, only so we know what the weekly export looks like</li>
+        <li>Roughly how many regulars per bar</li>
+      </ul>
+    </div>
+    <div class="out">
+      <div class="hd">Decisions only you can make</div>
+      <ul>
+        <li>Weekly allowance or daily, once the attorney has answered</li>
+        <li>One drink per package, and which one</li>
+        <li>How long a membership runs, and whether it renews on its own</li>
+        <li>Refund and cancellation policy</li>
+        <li>The first intake cap per bar</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 28 -->
+<section class="s center gogo">
+  <div class="eyebrow g">In short</div>
+  <h2 style="max-width:26ch">A web page in his pocket,<br>one extra screen behind<br>the bar, and a record<br>that never lies to you.</h2>
+  <p class="lede" style="text-align:center;max-width:56ch">Six weeks to build, no new tills, no app store, and nothing your staff have to learn beyond scan, type four digits, pour.</p>
+  <div style="margin-top:clamp(22px,2.8vw,40px);font-size:clamp(12px,1.2vw,16px);color:var(--mute2);letter-spacing:.04em">
+    Jacques Groenewald &middot; JCE Media &middot; jacques@jcemedia.com
+  </div>
+</section>
+
+</div>
+
+<script>
+
+const S=[...document.querySelectorAll('section.s')];let i=0;
+function show(n){i=Math.max(0,Math.min(S.length-1,n));S.forEach((s,k)=>s.classList.toggle('on',k===i));
+  document.getElementById('bar').style.width=((i+1)/S.length*100)+'%';
+  document.getElementById('num').textContent=(i+1)+' / '+S.length;
+  S[i].scrollTop=0;}
+function go(d){show(i+d)}
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown','Enter'].includes(e.key)){e.preventDefault();go(1)}
+  if(['ArrowLeft','ArrowUp','PageUp','Backspace'].includes(e.key)){e.preventDefault();go(-1)}
+  if(e.key==='Home')show(0); if(e.key==='End')show(S.length-1);
+  if(e.key==='f'||e.key==='F'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}
+});
+document.getElementById('deck').addEventListener('click',e=>{if(!e.target.closest('#nav')&&!e.target.closest('a'))go(1)});
+let x0=null;
+addEventListener('touchstart',e=>x0=e.changedTouches[0].clientX,{passive:true});
+addEventListener('touchend',e=>{if(x0===null)return;const d=e.changedTouches[0].clientX-x0;if(Math.abs(d)>50)go(d<0?1:-1);x0=null},{passive:true});
+show(0);
+
+</script>
+</body></html>
