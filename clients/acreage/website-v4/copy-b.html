@@ -192,13 +192,6 @@
     .flourish path{stroke-dashoffset:0!important}
     .atmos .plx img{animation:none!important;transform:none!important}
     .float-y{animation:none!important}
-    /* unpinned, the reel is just a horizontal scroller */
-    .reel{height:auto!important;padding:var(--s7) 0}
-    .reel-pin{position:static;height:auto;display:block}
-    .reel-head{position:static;margin-bottom:var(--s4)}
-    .reel-track{width:auto;overflow-x:auto;transform:none!important}
-    .up,.dn{align-self:auto;margin-top:0;margin-bottom:0}
-    .reel-cue{position:static;transform:none;margin-top:var(--s3);justify-content:center}
     html.js .shn{-webkit-text-fill-color:currentColor;color:inherit;background:none}
     .grain,.dither,.curtain{display:none!important}
     .scan video{display:none}
@@ -562,60 +555,46 @@
     .hour:hover p,.hour:focus-within p{max-height:130px;opacity:1}
   }
 
-  /* ── the reel: a collage that travels sideways as you scroll ────────── */
-  /* .reel is tall; .reel-pin sticks inside it for exactly that extra height,
-     and the shared scroll loop maps the distance travelled through .reel onto
-     translateX of the track. One transform per frame, no library, and the
-     height is set from the real track width so it can never over- or
-     under-shoot. Without JS it degrades to a normal horizontal scroller. */
-  .reel{position:relative;background:var(--night);padding:0}
-  /* the padding reserves the heading band and the cue, so the track centres in
-     what is left instead of colliding with either */
-  .reel-pin{position:sticky;top:0;height:100svh;overflow:hidden;
-    display:flex;flex-direction:column;justify-content:center;
-    padding:clamp(150px,25vh,215px) 0 clamp(50px,8vh,80px)}
-  /* clears the fixed header — at 7vh the eyebrow label sat underneath it */
-  .reel-head{position:absolute;top:clamp(116px,14vh,140px);left:0;right:0;z-index:3;
-    text-align:center;pointer-events:none}
+  /* ── the estate arc: a curved wall of images that turns by itself ───── */
+  /* Not scroll-driven. One rAF loop advances a single offset and writes one
+     transform per card. It only runs while the section is actually on screen,
+     it pauses on hover so a card can be looked at, and under reduced motion
+     the whole thing degrades to a plain horizontal scroller. */
+  .reel{position:relative;background:var(--night);padding:var(--s7) 0 var(--s6);overflow:hidden}
+  .reel-head{text-align:center;margin-bottom:clamp(26px,5vh,50px);padding:0 var(--s4)}
   .reel-head .label{color:var(--gold-lite)}
   .reel-head h2{color:#fff;font-size:clamp(1.6rem,3.2vw,2.6rem);margin-top:10px}
-  .reel-track{display:flex;align-items:center;gap:clamp(14px,1.8vw,28px);
-    width:max-content;padding:0 clamp(20px,6vw,90px);will-change:transform}
-  .tile{position:relative;flex:none;overflow:hidden;background:#1a201b;cursor:zoom-in;
-    box-shadow:0 30px 60px -30px rgba(0,0,0,.7);
-    transition:transform .55s var(--ease),box-shadow .55s var(--ease)}
-  /* while the pointer is inside, the transform is driven every mousemove,
-     so the easing has to come off or it lags a frame behind the cursor */
-  .tile.tilting{transition:box-shadow .35s var(--ease);will-change:transform;z-index:2;
-    box-shadow:0 44px 80px -34px rgba(0,0,0,.85)}
-  /* specular highlight that tracks the cursor across the tile */
-  .tile:before{content:"";position:absolute;inset:0;z-index:3;pointer-events:none;opacity:0;
+
+  .arc{--tw:clamp(200px,19vw,320px);--th:clamp(280px,26vw,440px);
+    position:relative;height:clamp(330px,34vw,540px);
+    perspective:1250px;perspective-origin:50% 50%}
+  .arc .tile{position:absolute;top:50%;left:50%;
+    width:var(--tw);height:var(--th);
+    margin:calc(var(--th) / -2) 0 0 calc(var(--tw) / -2);
+    border-radius:14px;overflow:hidden;background:#141a15;cursor:zoom-in;
+    box-shadow:0 34px 70px -30px rgba(0,0,0,.9);
+    /* the loop writes transform every frame, so it must not be transitioned */
+    will-change:transform,opacity;backface-visibility:hidden}
+  .arc .tile img{width:100%;height:100%;object-fit:cover;display:block}
+  /* specular highlight that tracks the cursor across the card */
+  .arc .tile:before{content:"";position:absolute;inset:0;z-index:3;pointer-events:none;opacity:0;
     background:radial-gradient(240px circle at var(--mx,50%) var(--my,50%),
-      rgba(255,255,255,.26),rgba(255,255,255,.05) 45%,transparent 65%);
-    transition:opacity .45s var(--ease)}
-  .tile.tilting:before{opacity:1}
-  .tile:focus-visible{outline:2px solid var(--gold-lite);outline-offset:4px}
-  .tile img{width:100%;height:100%;object-fit:cover;display:block;
-    transition:transform 1.2s var(--ease)}
-  .tile:hover img{transform:scale(1.05)}
-  .tile b{position:absolute;left:16px;bottom:14px;z-index:2;color:#fff;font-weight:500;
+      rgba(255,255,255,.28),rgba(255,255,255,.06) 45%,transparent 66%);
+    transition:opacity .4s var(--ease)}
+  .arc .tile.tilting:before{opacity:1}
+  .arc .tile:after{content:"";position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(180deg,transparent 52%,rgba(6,10,6,.8))}
+  .arc .tile b{position:absolute;left:16px;bottom:14px;z-index:2;color:#fff;font-weight:500;
     font-size:11px;letter-spacing:.2em;text-transform:uppercase;
     text-shadow:0 2px 12px rgba(0,0,0,.9)}
-  .tile:after{content:"";position:absolute;inset:0;
-    background:linear-gradient(180deg,transparent 55%,rgba(9,13,9,.75));pointer-events:none}
-  /* three silhouettes, offset vertically so the row reads as a collage rather
-     than a filmstrip */
-  .t-w{width:clamp(300px,34vw,520px);height:clamp(200px,23vw,347px)}
-  .t-p{width:clamp(200px,22vw,340px);height:clamp(267px,29.3vw,420px)}
-  .t-s{width:clamp(230px,25vw,380px);height:clamp(230px,25vw,380px)}
-  .up{align-self:flex-start;margin-top:clamp(24px,5vh,56px)}
-  .dn{align-self:flex-end;margin-bottom:clamp(24px,5vh,56px)}
-  .reel-cue{position:absolute;bottom:clamp(20px,5vh,44px);left:50%;transform:translateX(-50%);
-    z-index:3;display:flex;align-items:center;gap:12px;color:rgba(246,241,232,.55);
-    font-size:10px;letter-spacing:.28em;text-transform:uppercase;pointer-events:none}
-  .reel-cue i{width:54px;height:1px;background:rgba(216,189,139,.35);position:relative;overflow:hidden}
-  .reel-cue i:after{content:"";position:absolute;inset:0;background:var(--gold-lite);
-    transform:scaleX(var(--p,0));transform-origin:0 50%}
+  .arc .tile:focus-visible{outline:2px solid var(--gold-lite);outline-offset:5px}
+
+  /* Reduced motion: no rotation at all, just a scroller they control. */
+  @media(prefers-reduced-motion:reduce){
+    .arc{perspective:none;height:auto;display:flex;gap:16px;overflow-x:auto;padding-bottom:8px}
+    .arc .tile{position:relative;top:auto;left:auto;margin:0;flex:none;
+      transform:none!important;opacity:1!important;visibility:visible!important}
+  }
 
   /* ── host cards ─────────────────────────────────────────────────────── */
   .host{background:var(--paper)}
@@ -886,17 +865,7 @@
     .float{display:none}
     .mbar{display:grid}
     .hstrip .cell:nth-child(4){display:none}
-    /* the reel becomes a swipe rail: no pin, no scroll budget */
-    .reel{height:auto!important;padding:var(--s7) 0 var(--s6)}
-    .reel-pin{position:static;height:auto;display:block}
-    .reel-head{position:static;margin-bottom:var(--s4);padding:0 var(--s3)}
-    .reel-track{width:auto;overflow-x:auto;scroll-snap-type:x mandatory;
-      transform:none!important;padding:0 var(--s3) 8px;
-      -webkit-overflow-scrolling:touch;scrollbar-width:none;align-items:center}
-    .reel-track::-webkit-scrollbar{display:none}
-    .tile{scroll-snap-align:center}
-    .up,.dn{align-self:auto;margin-top:0;margin-bottom:0}
-    .reel-cue{position:static;transform:none;margin-top:var(--s3);justify-content:center}
+    .reel-head{padding:0 var(--s3)}
   }
   @media(max-width:700px){
     :root{--s4:24px;--s5:38px;--s6:50px;--s7:64px}
@@ -1192,26 +1161,27 @@
 </section>
 
 <section class="reel" id="reel">
-  <div class="reel-pin">
-    <div class="reel-head">
-      <span class="label">The estate</span>
-      <h2>A look around the estate.</h2>
-    </div>
-    <div class="reel-track" id="reelTrack">
-      <div class="tile t-w dn"><img loading="lazy" decoding="async" src="assets/reel-01-flare.webp" alt="Late sun through the trees at The Acreage"><b>Golden hour</b></div>
-      <div class="tile t-p up"><img loading="lazy" decoding="async" src="assets/reel-02-families.webp" alt="Families under umbrellas on the lawn"><b>Sunday on the lawn</b></div>
-      <div class="tile t-w"><img loading="lazy" decoding="async" src="assets/reel-03-tents.webp" alt="Stretch tents above the flowering gardens"><b>The tents</b></div>
-      <div class="tile t-p dn"><img loading="lazy" decoding="async" src="assets/reel-04-taps.webp" alt="Beer taps at the bar"><b>The bar</b></div>
-      <div class="tile t-w up"><img loading="lazy" decoding="async" src="assets/reel-05-market.webp" alt="A market day under the trees"><b>Market days</b></div>
-      <div class="tile t-p"><img loading="lazy" decoding="async" src="assets/reel-06-coffee.webp" alt="Morning coffee on the table"><b>First coffee</b></div>
-      <div class="tile t-s dn"><img loading="lazy" decoding="async" src="assets/reel-07-dog.webp" alt="Guests and their dog at a table on the lawn"><b>Dogs welcome</b></div>
-      <div class="tile t-w up"><img loading="lazy" decoding="async" src="assets/reel-08-shadows.webp" alt="Long shadows across the lawns"><b>Late afternoon</b></div>
-      <div class="tile t-p"><img loading="lazy" decoding="async" src="assets/reel-09-sharing.webp" alt="Sharing bowls on the table"><b>From the kitchen</b></div>
-      <div class="tile t-w dn"><img loading="lazy" decoding="async" src="assets/reel-10-fire.webp" alt="A fire pit burning on the lawn at dusk"><b>After dark</b></div>
-      <div class="tile t-p up"><img loading="lazy" decoding="async" src="assets/reel-11-duck.webp" alt="A duck on the grass"><b>The locals</b></div>
-      <div class="tile t-w"><img loading="lazy" decoding="async" src="assets/reel-12-avenue.webp" alt="The tree-lined avenue into the estate"><b>The way in</b></div>
-    </div>
-    <div class="reel-cue" aria-hidden="true">Keep scrolling<i id="reelBar"></i></div>
+  <div class="reel-head">
+    <span class="label">The estate</span>
+    <h2>A look around the estate.</h2>
+  </div>
+  <!--
+    The cards are positioned entirely from script; the markup carries no
+    order-dependent classes, so the arc can be retuned without touching it.
+  -->
+  <div class="arc" id="arc">
+      <div class="tile"><img loading="lazy" decoding="async" src="assets/reel-01-flare.webp" alt="Late sun through the trees at The Acreage"><b>Golden hour</b></div>
+      <div class="tile"><img loading="lazy" decoding="async" src="assets/reel-02-families.webp" alt="Families under umbrellas on the lawn"><b>Sunday on the lawn</b></div>
+      <div class="tile"><img loading="lazy" decoding="async" src="assets/reel-03-tents.webp" alt="Stretch tents above the flowering gardens"><b>The tents</b></div>
+      <div class="tile"><img loading="lazy" decoding="async" src="assets/reel-04-taps.webp" alt="Beer taps at the bar"><b>The bar</b></div>
+      <div class="tile"><img loading="lazy" decoding="async" src="assets/reel-05-market.webp" alt="A market day under the trees"><b>Market days</b></div>
+      <div class="tile"><img loading="lazy" decoding="async" src="assets/reel-06-coffee.webp" alt="Morning coffee on the table"><b>First coffee</b></div>
+      <div class="tile"><img loading="lazy" decoding="async" src="assets/reel-07-dog.webp" alt="Guests and their dog at a table on the lawn"><b>Dogs welcome</b></div>
+      <div class="tile"><img loading="lazy" decoding="async" src="assets/reel-08-shadows.webp" alt="Long shadows across the lawns"><b>Late afternoon</b></div>
+      <div class="tile"><img loading="lazy" decoding="async" src="assets/reel-09-sharing.webp" alt="Sharing bowls on the table"><b>From the kitchen</b></div>
+      <div class="tile"><img loading="lazy" decoding="async" src="assets/reel-10-fire.webp" alt="A fire pit burning on the lawn at dusk"><b>After dark</b></div>
+      <div class="tile"><img loading="lazy" decoding="async" src="assets/reel-11-duck.webp" alt="A duck on the grass"><b>The locals</b></div>
+      <div class="tile"><img loading="lazy" decoding="async" src="assets/reel-12-avenue.webp" alt="The tree-lined avenue into the estate"><b>The way in</b></div>
   </div>
 </section>
 
@@ -1580,30 +1550,8 @@
 
   var lastY=0, ticking=false, vh=window.innerHeight, docH=1;
 
-  /* The reel's section height IS its scroll budget: one viewport to pin
-     against, plus exactly the overflow the track needs to travel. Measured
-     from the real rendered width, so it stays honest at any breakpoint and
-     after the tiles' images load. */
-  var reel={el:$('#reel'), track:$('#reelTrack'), bar:$('#reelBar'), travel:0};
-  function measureReel(){
-    if(!reel.el||!reel.track) return;
-    /* Pin only where it earns its keep. On a phone the tiles hit their min
-       widths, so the track is ~3,800px and pinning would charge the visitor
-       eight screens of scrolling to cross one section. Below 1000px it falls
-       back to a native swipe rail instead, which is the better gesture there
-       anyway. Reduced motion gets the same treatment. */
-    if(REDUCE || window.innerWidth<=1000){
-      reel.travel=0; reel.el.style.height=''; reel.track.style.transform=''; return;
-    }
-    reel.track.style.transform='none';
-    var over=reel.track.scrollWidth-window.innerWidth;
-    reel.travel=Math.max(0,over);
-    reel.el.style.height=(window.innerHeight+reel.travel)+'px';
-  }
-
   function measure(){
     vh=window.innerHeight;
-    measureReel();
     docH=Math.max(1,document.documentElement.scrollHeight-vh);
   }
   measure();
@@ -1641,16 +1589,6 @@
         var mid=(r.top+r.height/2-vh/2)/vh;
         img.style.transform='translate3d(0,'+(mid*-30).toFixed(1)+'px,0)';
       }
-      /* the reel: vertical distance through .reel drives horizontal travel */
-      if(reel.travel>0){
-        var rr=reel.el.getBoundingClientRect();
-        if(rr.top<vh && rr.bottom>0){
-          var p=Math.min(1,Math.max(0,-rr.top/(rr.height-vh)));
-          reel.track.style.transform='translate3d('+(-p*reel.travel).toFixed(1)+'px,0,0)';
-          if(reel.bar) reel.bar.style.setProperty('--p',p.toFixed(3));
-        }
-      }
-
       /* pull-quote background, transform not background-attachment:fixed */
       if(atmosPlx){
         var ar=atmosPlx.parentElement.getBoundingClientRect();
@@ -1773,18 +1711,23 @@
        translated for the horizontal scroll and a shared 3D context there would
        fight it. Listeners live on the tile and attach on enter, so there is
        nothing bound to the document and nothing to interfere with scrolling. */
-    $$('.tile').forEach(function(t){
+    /* The arc loop owns the transform, so the hover tilt cannot write its own
+       or the two would clobber each other every frame. It parks its angles on
+       the element and the loop composes them into the single transform. */
+    $$('.arc .tile').forEach(function(t){
       function move(e){
         var r=t.getBoundingClientRect();
         var px=(e.clientX-r.left)/r.width, py=(e.clientY-r.top)/r.height;
-        t.style.transform='perspective(900px) rotateX('+((0.5-py)*9).toFixed(2)+'deg) '+
-                          'rotateY('+((px-0.5)*11).toFixed(2)+'deg) translateZ(16px)';
+        t._rx=(0.5-py)*10; t._ry=(px-0.5)*12;
         t.style.setProperty('--mx',(px*100).toFixed(1)+'%');
         t.style.setProperty('--my',(py*100).toFixed(1)+'%');
       }
-      t.addEventListener('mouseenter',function(){ t.classList.add('tilting'); t.addEventListener('mousemove',move); });
+      t.addEventListener('mouseenter',function(){
+        t.classList.add('tilting'); t.addEventListener('mousemove',move);
+      });
       t.addEventListener('mouseleave',function(){
-        t.classList.remove('tilting'); t.removeEventListener('mousemove',move); t.style.transform='';
+        t.classList.remove('tilting'); t.removeEventListener('mousemove',move);
+        t._rx=0; t._ry=0;
       });
     });
 
@@ -1892,7 +1835,7 @@
 
     /* reel tiles open the same lightbox. No preventDefault on anything but
        the click itself, so scroll and swipe behave exactly as before. */
-    var track=$('#reelTrack');
+    var track=$('#arc');
     if(track){
       $$('.tile',track).forEach(function(t){
         t.setAttribute('role','button');
@@ -2040,6 +1983,77 @@
       });
     });
   })();
+
+  /* ════════════════════════════════════════════════════════════════════
+     9c. THE ESTATE ARC
+     A curved wall of cards that turns on its own. Deliberately NOT tied to
+     scroll position: the previous version made the visitor do the work.
+
+     Each card sits at a wrapped offset along a virtual line; its distance
+     from centre drives how far forward it comes and how far it turns, which
+     is what produces the curve. Cost is one rAF while the section is on
+     screen and one transform write per card, all on the compositor.
+     ════════════════════════════════════════════════════════════════════ */
+  (function(){
+    var arc=$('#arc');
+    if(!arc || REDUCE) return;
+    var tiles=$$('.tile',arc);
+    if(!tiles.length) return;
+
+    var SPEED=0.45, DEPTH=420, MAX_ANGLE=46, FADE_FROM=0.86, FADE_TO=1.25;
+    var offset=0, spacing=0, span=0, half=1, paused=false, running=false, raf=0, last=0;
+
+    function measureArc(){
+      var tw=tiles[0].offsetWidth || 200;
+      spacing=tw*0.94;
+      span=spacing*tiles.length;
+      half=Math.max(300, arc.clientWidth*0.50);
+      offset=((offset%span)+span)%span;
+    }
+
+    function place(ts){
+      raf=0;
+      var dt=last?Math.min(3,(ts-last)/16.667):1; last=ts;
+      if(!paused) offset-=SPEED*dt;
+      if(offset<=-span) offset+=span;
+
+      for(var i=0;i<tiles.length;i++){
+        var t=tiles[i];
+        var rel=((i*spacing+offset)%span+span)%span-span/2;
+        var p=rel/half, ap=Math.abs(p);
+        if(ap>FADE_TO){ t.style.visibility='hidden'; continue; }
+        t.style.visibility='visible';
+        var z=DEPTH*p*p;                      /* the edges come toward you */
+        var ry=-MAX_ANGLE*p + (t._ry||0);     /* and turn to face the centre */
+        t.style.transform='translate3d('+rel.toFixed(1)+'px,0,'+z.toFixed(1)+'px) '+
+                          'rotateY('+ry.toFixed(2)+'deg) rotateX('+(t._rx||0).toFixed(2)+'deg)';
+        t.style.opacity=(ap<=FADE_FROM?1:Math.max(0,1-(ap-FADE_FROM)/(FADE_TO-FADE_FROM))).toFixed(3);
+        t.style.zIndex=Math.round(ap*100);    /* nearer cards paint over further ones */
+      }
+      if(running) raf=requestAnimationFrame(place);
+    }
+
+    function start(){ if(running) return; running=true; last=0; raf=requestAnimationFrame(place); }
+    function stop(){ running=false; if(raf) cancelAnimationFrame(raf); raf=0; }
+
+    /* pausing on hover is what makes a moving card clickable */
+    arc.addEventListener('mouseenter',function(){ paused=true; });
+    arc.addEventListener('mouseleave',function(){ paused=false; });
+
+    measureArc();
+    place(0);
+    /* only spend frames while the section is actually on screen */
+    new IntersectionObserver(function(es){
+      es[0].isIntersecting ? start() : stop();
+    },{rootMargin:'120px'}).observe(arc);
+
+    var rt;
+    window.addEventListener('resize',function(){
+      clearTimeout(rt);
+      rt=setTimeout(function(){ measureArc(); place(performance.now()); },160);
+    },{passive:true});
+  })();
+
 
   /* ════════════════════════════════════════════════════════════════════
      10. ENQUIRY SUBMIT
