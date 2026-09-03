@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Real Estate Hero | Sales playbook</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0a1120;--s1:#101a2e;--s2:#142038;--s3:#18253f;--line:rgba(255,255,255,.09);--line2:rgba(255,255,255,.16);
+    --ink:#fff;--muted:#aab5ca;--dim:#7e8aa3;--gold:#d4a941;--gold2:#e8be61;
+    --ok:#4ade80;--bad:#f87171;--grad:linear-gradient(135deg,#b88a2a,#d4a941 55%,#e8be61)}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);line-height:1.62;font-size:16px;-webkit-font-smoothing:antialiased}
+  h1,h2,h3,h4{font-family:'Space Grotesk',sans-serif;line-height:1.14;letter-spacing:-.02em}
+  .deck{flex:1;min-width:0;max-width:1000px;margin:0 auto;padding:36px 24px 80px}
+  .layout{display:flex;align-items:flex-start;max-width:1320px;margin:0 auto}
+  .sidenav{width:252px;flex-shrink:0;position:sticky;top:0;height:100vh;overflow-y:auto;padding:26px 14px 30px 24px;border-right:1px solid var(--line)}
+  .sidenav .brand{display:flex;align-items:center;gap:10px;margin-bottom:8px;padding:0 10px}
+  .sidenav .brand img{height:38px;width:auto}
+  .sidenav .tag{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);padding:0 10px;margin-bottom:20px}
+  .sidenav a{display:flex;align-items:baseline;gap:10px;padding:9px 12px;border-radius:9px;text-decoration:none;color:var(--muted);font-size:14.5px;line-height:1.35;transition:background .15s,color .15s}
+  .sidenav a:hover{background:rgba(255,255,255,.05);color:#fff}
+  .sidenav a.on{background:rgba(212,169,65,.13);color:#fff}
+  .sidenav a .i{font-family:'Space Grotesk',sans-serif;font-size:11.5px;font-weight:700;color:var(--dim);min-width:17px;font-variant-numeric:tabular-nums}
+  .sidenav a.on .i{color:var(--gold2)}
+  .mobnav{display:none;position:sticky;top:0;z-index:60;background:rgba(10,17,32,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:11px 16px;align-items:center;gap:12px}
+  .mobnav img{height:32px;width:auto}
+  .mobnav select{flex:1;background:var(--s2);color:#fff;border:1px solid var(--line2);border-radius:9px;padding:9px 11px;font-family:'Inter',sans-serif;font-size:14px;min-height:42px}
+  @media(max-width:1000px){
+    .layout{display:block}
+    .sidenav{display:none}
+    .mobnav{display:flex}
+  }
+
+  .slide{scroll-margin-top:70px;background:var(--s1);border:1px solid var(--line);border-radius:22px;padding:50px 54px;margin-bottom:20px;position:relative;overflow:hidden}
+  .slide::before{content:"";position:absolute;top:0;left:8%;right:8%;height:1px;background:linear-gradient(90deg,transparent,rgba(212,169,65,.7),transparent)}
+  .num{position:absolute;top:24px;right:30px;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;color:var(--dim);letter-spacing:.14em}
+  .kick{display:inline-block;font-size:11.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--gold2);background:rgba(212,169,65,.1);border:1px solid rgba(212,169,65,.28);padding:6px 14px;border-radius:9999px;margin-bottom:18px}
+  h2{font-size:clamp(23px,2.9vw,33px);font-weight:700;margin-bottom:14px}
+  h3{font-size:17.5px;margin:26px 0 10px;color:#fff}
+  p{color:var(--muted);margin-bottom:13px}
+  p b,li b,td b,.a b{color:#fff;font-weight:600}
+  .lead{font-size:18px;color:#dfe5ef}
+  ul{list-style:none;margin:6px 0 12px}
+  li{color:var(--muted);padding:8px 0 8px 26px;position:relative;border-top:1px solid var(--line)}
+  li:first-child{border-top:none}
+  li::before{content:"";position:absolute;left:2px;top:16px;width:7px;height:7px;border-radius:50%;background:var(--gold)}
+  ul.yes li::before{background:var(--ok)}
+  ul.no li::before{background:var(--bad)}
+  ul.check li{padding-left:30px}
+  ul.check li::before{content:"";width:13px;height:13px;border-radius:4px;border:1.5px solid var(--gold);background:transparent;top:13px;left:0}
+  .cover{background:linear-gradient(160deg,#12203c,#0a1120);text-align:center;padding:66px 54px}
+  .cover img{height:76px;width:auto;margin:0 auto 24px;display:block}
+  .cover h1{font-size:clamp(29px,4.2vw,44px);margin-bottom:12px}
+  .cover .sub{font-size:18px;color:var(--muted);margin-bottom:24px}
+  .warn{background:rgba(248,113,113,.09);border:1px solid rgba(248,113,113,.32);border-radius:14px;padding:15px 22px;font-size:14.5px;color:#f5b5b5;display:inline-block}
+  .warn b{color:#fff}
+  table{width:100%;border-collapse:collapse;margin:12px 0 6px;font-size:15px}
+  th{text-align:left;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);padding:0 14px 11px 0;border-bottom:1px solid var(--line2)}
+  td{padding:12px 14px 12px 0;border-bottom:1px solid var(--line);color:var(--muted);vertical-align:top}
+  td.n{font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--gold2);white-space:nowrap;font-variant-numeric:tabular-nums}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:6px}
+  .card{background:var(--s2);border:1px solid var(--line);border-radius:16px;padding:22px 24px}
+  .card.good{border-color:rgba(74,222,128,.3)}
+  .card.bad{border-color:rgba(248,113,113,.3)}
+  .card h4{font-size:15px;margin-bottom:10px}
+  .card.good h4{color:var(--ok)}
+  .card.bad h4{color:var(--bad)}
+  .card p,.card li{font-size:14.5px}
+  .box{background:var(--s2);border-left:3px solid var(--gold);border-radius:0 14px 14px 0;padding:18px 24px;margin:16px 0}
+  .box .cap{font-size:11.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold2);margin-bottom:7px}
+  .box p{margin:0}
+  .say{background:rgba(212,169,65,.07);border:1px solid rgba(212,169,65,.25);border-radius:12px;padding:15px 20px;margin:10px 0;color:#f0e4c6;font-size:15.5px}
+  .say::before{content:"Say: ";font-weight:700;color:var(--gold2)}
+  .obj{border-top:1px solid var(--line);padding:20px 0}
+  .obj:first-of-type{border-top:none}
+  .obj .q{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:17px;color:#fff;margin-bottom:10px}
+  .obj .mean{font-size:14px;color:var(--dim);margin-bottom:10px}
+  .obj .mean::before{content:"What he means: ";color:var(--gold2);font-weight:600}
+  .obj .a{color:var(--muted);font-size:15.5px;margin-bottom:9px}
+  .obj .re{font-size:14.5px;color:#cbd5e6;background:var(--s2);border-radius:10px;padding:11px 16px}
+  .obj .re::before{content:"Then ask: ";color:var(--gold2);font-weight:600}
+  .steps{counter-reset:s}
+  .step{display:grid;grid-template-columns:40px 1fr;gap:15px;align-items:start;padding:14px 0;border-top:1px solid var(--line)}
+  .step:first-child{border-top:none}
+  .step .b{counter-increment:s;width:32px;height:32px;border-radius:10px;background:var(--grad);color:#181004;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px}
+  .step .b::before{content:counter(s)}
+  .step h4{font-size:15.5px;margin-bottom:3px}
+  .step p{margin:0;font-size:14.5px}
+  .tmpl{background:#0c1424;border:1px solid var(--line2);border-radius:12px;padding:18px 22px;margin:12px 0;font-size:14.5px;color:#cbd5e6;line-height:1.6}
+  .tmpl .th{font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold2);margin-bottom:9px}
+  .timeline{border-left:2px solid rgba(212,169,65,.35);padding-left:22px;margin:14px 0}
+  .tl{margin-bottom:20px;position:relative}
+  .tl::before{content:"";position:absolute;left:-28px;top:6px;width:11px;height:11px;border-radius:50%;background:var(--gold)}
+  .tl .t{font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;color:var(--gold2);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
+  .tl h4{font-size:16.5px;margin-bottom:5px}
+  .tl p{font-size:15px;margin-bottom:6px}
+  a{color:var(--gold2)}
+  .foot{text-align:center;color:var(--dim);font-size:13px;padding:18px 0 0}
+  @media(max-width:760px){.slide{padding:32px 22px}.grid2{grid-template-columns:1fr}.cover{padding:42px 22px}}
+  @media print{body{background:#fff;color:#000}.slide{page-break-after:always;border:none;background:#fff}}
+</style>
+</head>
+<body>
+<div class="mobnav"><img src="https://realestatehero.co.za/assets/rh-logo-onDark.png" alt="Real Estate Hero"><select id="jump" aria-label="Jump to section">
+  <option value="cover">Cover</option>
+  <option value="s1">01. Read this first</option>
+  <option value="s2">02. Targeting</option>
+  <option value="s3">03. Pre-call ritual</option>
+  <option value="s4">04. The call</option>
+  <option value="s5">05. Discovery</option>
+  <option value="s6">06. The teardown</option>
+  <option value="s7">07. Quantify</option>
+  <option value="s8">08. Number objection</option>
+  <option value="s9">09. Closing</option>
+  <option value="s10">10. Objections</option>
+  <option value="s11">11. Follow-up</option>
+  <option value="s12">12. Pricing</option>
+  <option value="s13">13. Guardrails</option>
+  <option value="s14">14. Pipeline</option>
+</select></div>
+<div class="layout">
+<nav class="sidenav" aria-label="Playbook sections">
+  <div class="brand"><img src="https://realestatehero.co.za/assets/rh-logo-onDark.png" alt="Real Estate Hero"></div>
+  <p class="tag">Sales playbook</p>
+  <a href="#cover" data-spy="cover"><span class="i">&middot;</span><span>Cover</span></a>
+  <a href="#s1" data-spy="s1"><span class="i">01</span><span>Read this first</span></a>
+  <a href="#s2" data-spy="s2"><span class="i">02</span><span>Targeting</span></a>
+  <a href="#s3" data-spy="s3"><span class="i">03</span><span>Pre-call ritual</span></a>
+  <a href="#s4" data-spy="s4"><span class="i">04</span><span>The call</span></a>
+  <a href="#s5" data-spy="s5"><span class="i">05</span><span>Discovery</span></a>
+  <a href="#s6" data-spy="s6"><span class="i">06</span><span>The teardown</span></a>
+  <a href="#s7" data-spy="s7"><span class="i">07</span><span>Quantify</span></a>
+  <a href="#s8" data-spy="s8"><span class="i">08</span><span>Number objection</span></a>
+  <a href="#s9" data-spy="s9"><span class="i">09</span><span>Closing</span></a>
+  <a href="#s10" data-spy="s10"><span class="i">10</span><span>Objections</span></a>
+  <a href="#s11" data-spy="s11"><span class="i">11</span><span>Follow-up</span></a>
+  <a href="#s12" data-spy="s12"><span class="i">12</span><span>Pricing</span></a>
+  <a href="#s13" data-spy="s13"><span class="i">13</span><span>Guardrails</span></a>
+  <a href="#s14" data-spy="s14"><span class="i">14</span><span>Pipeline</span></a>
+</nav>
+<div class="deck">
+
+<div class="slide cover" id="cover">
+  <img src="https://realestatehero.co.za/assets/rh-logo-onDark.png" alt="Real Estate Hero">
+  <h1>Real Estate Hero</h1>
+  <p class="sub">Sales playbook. How to prepare, run the call,<br>handle the pushback and close the diagnostic.</p>
+  <div class="warn"><b>Internal.</b> Contains price floors, internal pricing and commission. Never send this to a client.</div>
+</div>
+
+<div class="slide" id="s1">
+  <span class="num">01</span>
+  <span class="kick">Read this first</span>
+  <h2>Your prep is the pitch.</h2>
+  <p class="lead">You are not selling software to someone who wants software. You are showing a principal something broken in his own business that he has never seen, and then offering to measure it. The pitch is not what you say about us. It is what you show him about him.</p>
+  <p>Which means the ten minutes before the call matter more than anything in this document. A rep who walks in with their listing open, their review count and their competitor's review count already pulled will out-sell a rep who knows every feature by heart. Every time.</p>
+  <div class="box">
+    <div class="cap">The whole sale in one sentence</div>
+    <p>"The portals report leads sent, your agents report deals closed, and the five minutes in between where the buyer decides who to work with belongs to nobody."</p>
+  </div>
+  <h3>How this plays out on a call</h3>
+  <ul>
+    <li><b>You ask questions he cannot answer.</b> That is the point. Each one is a hole.</li>
+    <li><b>You show him his own enquiry path,</b> live, on his own listing.</li>
+    <li><b>You put a rand figure on it</b> using his numbers, not ours.</li>
+    <li><b>You ask for the smallest possible yes:</b> a R9,500 diagnostic that he keeps either way.</li>
+  </ul>
+  <p style="margin-top:14px">You are not trying to close a R150,000 a year system on the first call. You are trying to sell two weeks of evidence.</p>
+</div>
+
+<div class="slide" id="s2">
+  <span class="num">02</span>
+  <span class="kick">Targeting</span>
+  <h2>Who to chase, and who to leave alone.</h2>
+  <div class="grid2">
+    <div class="card good">
+      <h4>Go after</h4>
+      <ul class="yes">
+        <li><b>2 to 9 offices.</b> Multi-office is where the visibility problem becomes painful and where the money is</li>
+        <li><b>Paying for Property24 or Private Property</b> and unable to say what it returns</li>
+        <li><b>10 or more agents.</b> Below that the principal still sees everything himself</li>
+        <li><b>Owner is reachable.</b> Broker owner or principal, not a marketing coordinator</li>
+        <li><b>Thin Google reviews</b> versus the top agency in their town. Easy, visible, undeniable</li>
+        <li>Holiday lets or coastal stock, where after-hours enquiries are the norm</li>
+      </ul>
+    </div>
+    <div class="card bad">
+      <h4>Walk away from</h4>
+      <ul class="no">
+        <li><b>Single agent operations.</b> No visibility problem, no budget, high support load</li>
+        <li><b>Anyone who cannot get you to the owner.</b> This is an owner decision, always</li>
+        <li><b>Franchise offices with a head-office system mandate</b> nobody will confirm in writing</li>
+        <li><b>Agencies with almost no digital enquiry flow.</b> We manage leads, we do not create demand</li>
+        <li><b>Price shoppers who open with "what's your cheapest"</b> before telling you anything</li>
+        <li><b>Anyone who will not do the diagnostic.</b> If they will not buy two weeks of evidence at R9,500, they will not pay R12,500 a month</li>
+      </ul>
+    </div>
+  </div>
+  <div class="box">
+    <div class="cap">The qualifying rule</div>
+    <p>Before you quote anything, you must know three things: <b>who signs, how many enquiries a month, and what an average sale earns the office.</b> If you cannot answer all three, you are not ready to talk price and you should book a second call instead.</p>
+  </div>
+</div>
+
+<div class="slide" id="s3">
+  <span class="num">03</span>
+  <span class="kick">Before every call</span>
+  <h2>The ten-minute ritual.</h2>
+  <p>Do this every time, without exception. It is all public information and needs no access from them.</p>
+  <ul class="check">
+    <li><b>Open two of their live listings</b> in separate tabs. Pick a decent price bracket and note the suburb</li>
+    <li><b>Find the enquiry buttons.</b> Whose number does the WhatsApp button go to? Is it a cell or an office line? Same number on both listings, or different?</li>
+    <li><b>Open the enquiry form</b> and check what is required. Note whether it asks budget, timeline or finance. It almost never does</li>
+    <li><b>Google each of their offices.</b> Write down the star rating and review count for every one</li>
+    <li><b>Google the top competing agency in the same town.</b> Write down their rating and count. This comparison is your sharpest single slide</li>
+    <li><b>Count their agents</b> from the team page, then divide their total reviews by that number. "Reviews per agent, ever" is the figure that stops a room</li>
+    <li><b>Check the office landline</b> on Google, then check whether that number appears anywhere in the enquiry path on the site. Usually it does not</li>
+    <li><b>Note which portals they syndicate to</b> from the listing footers</li>
+  </ul>
+  <div class="box">
+    <div class="cap">Write the one sentence</div>
+    <p>Before you dial, finish this out loud: <b>"On your Somerset West listing, the WhatsApp button goes to a personal cell, your form does not ask for a budget, and you have fourteen reviews across nine agents while RE/MAX up the road has twenty-six."</b> If you cannot say a sentence like that, you have not prepped and the call will be a feature pitch.</p>
+  </div>
+</div>
+
+<div class="slide" id="s4">
+  <span class="num">04</span>
+  <span class="kick">The call</span>
+  <h2>Twenty minutes, five moves.</h2>
+  <div class="timeline">
+    <div class="tl">
+      <div class="t">Minute 0 to 2 &middot; Frame</div>
+      <h4>Set the agenda and lower the stakes</h4>
+      <div class="say">"Thanks for the twenty minutes. I am not going to present anything at you. I want to open one of your own listings and show you what happens when a buyer enquires on it, and then you tell me whether it is a problem worth fixing. If it is not, I will say so and we can both get on with our day."</div>
+      <p>This buys permission for the teardown and removes the sales-pitch guard.</p>
+    </div>
+    <div class="tl">
+      <div class="t">Minute 2 to 8 &middot; Discover</div>
+      <h4>Ask the questions he cannot answer</h4>
+      <p>Slide 5. Do not skip to the demo. The teardown only lands after he has admitted he does not know what happens to his leads.</p>
+    </div>
+    <div class="tl">
+      <div class="t">Minute 8 to 13 &middot; Show</div>
+      <h4>The teardown on his own listing</h4>
+      <p>Slide 6. This is the moment the deal is won or lost. Everything before it is setup.</p>
+    </div>
+    <div class="tl">
+      <div class="t">Minute 13 to 17 &middot; Quantify</div>
+      <h4>Put his own numbers on it</h4>
+      <p>Slide 7. His enquiry volume, his commission, his estimate of what gets missed. Never our figures.</p>
+    </div>
+    <div class="tl">
+      <div class="t">Minute 17 to 20 &middot; Close</div>
+      <h4>Ask for the diagnostic and book the next date</h4>
+      <p>Slides 8 and 9. One ask. Never leave without a date in the diary.</p>
+    </div>
+  </div>
+</div>
+
+<div class="slide" id="s5">
+  <span class="num">05</span>
+  <span class="kick">Discovery</span>
+  <h2>The questions he cannot answer.</h2>
+  <p>Most discovery tries to find pain the buyer already feels. Here you are doing something different: <b>exposing a blind spot.</b> The power is not in his answers, it is in the pauses. Ask these, then stay quiet.</p>
+  <h3>Situation, get the facts you need to quote</h3>
+  <ul>
+    <li>How many offices, and how many agents across them?</li>
+    <li>Which portals are you paying for, and roughly what a month?</li>
+    <li>When an enquiry comes off Property24, where does it physically land right now?</li>
+    <li>Who is responsible for that lead between it arriving and an agent phoning back?</li>
+  </ul>
+  <h3>The blind spot, these are the ones that do the work</h3>
+  <ul>
+    <li><b>"If a buyer enquires at nine on a Saturday night, what happens?"</b> Nearly always: it waits until Monday</li>
+    <li><b>"How would you know today if one of your agents never followed up on a lead?"</b> He would not. Let that sit</li>
+    <li><b>"Which portal produced your last three sales?"</b> He will not know. That is a R100,000 a year spending decision made blind</li>
+    <li><b>"Of the enquiries you got last month, how many got a second contact?"</b> Nobody has ever measured this. It is the single number the diagnostic sells on</li>
+    <li><b>"How many Google reviews does your Knysna office have?"</b> You already know. He usually does not</li>
+  </ul>
+  <h3>Decision, ask before you talk price</h3>
+  <ul>
+    <li>Other than you, who would be part of a decision like this?</li>
+    <li>Have you tried anything like this before? What happened?</li>
+    <li>What would need to be true for this to be an easy yes?</li>
+  </ul>
+  <div class="box">
+    <div class="cap">The pivot line</div>
+    <p>After three or four "I don't know"s: <b>"I am not asking to catch you out. I am pointing at the fact that this is the only part of your business with no numbers on it. Everything else you can measure. Let me show you what I mean."</b> Then go to the teardown.</p>
+  </div>
+</div>
+
+<div class="slide" id="s6">
+  <span class="num">06</span>
+  <span class="kick">The demo</span>
+  <h2>The teardown. This is the whole sale.</h2>
+  <p>Share your screen. Use <b>his</b> listing, never a demo account. Move slowly and let him talk.</p>
+  <div class="steps">
+    <div class="step"><span class="b"></span><div><h4>Open his listing and say nothing for a beat</h4><p>"This is your three bed in Somerset West. I am a buyer, it is Saturday night, and I am on my phone."</p></div></div>
+    <div class="step"><span class="b"></span><div><h4>Point at the WhatsApp button and ask him whose number it is</h4><p>Do not tell him. Ask. Make him say "that's Danie's cell" out loud. It lands ten times harder from his mouth than yours.</p></div></div>
+    <div class="step"><span class="b"></span><div><h4>Ask the killer question</h4><p>"So if I tap this at nine on a Saturday, and Danie is at a braai, what happens to me?" Then stop talking. The silence does the work.</p></div></div>
+    <div class="step"><span class="b"></span><div><h4>Open the enquiry form and scroll it</h4><p>"Nothing on this form is required. It will accept an enquiry with no phone number and no budget. Your agent phones a stranger and starts from zero."</p></div></div>
+    <div class="step"><span class="b"></span><div><h4>Put his Google profile next to his competitor's</h4><p>"You have fourteen reviews across nine agents. RE/MAX up the road has twenty-six. Your buyers see both of those before they ever phone anyone."</p></div></div>
+    <div class="step"><span class="b"></span><div><h4>Then hand him the frame, not a pitch</h4><p>"None of this is a criticism, and none of it is unusual. It is what happens when a growing agency runs its lead flow on handsets and memory. The question is only whether it is costing you enough to be worth fixing."</p></div></div>
+  </div>
+  <div class="box">
+    <div class="cap">If his setup is actually good</div>
+    <p>It happens. If the numbers go to an office line and the forms are decent, do not pretend otherwise, he will catch you and you will lose the room. Pivot to visibility instead: <b>"Your capture is better than most. So let me ask a different question, can you tell me which of your agents answered fastest last month?"</b> That gap is always open, and the Owner Report sells straight into it.</p>
+  </div>
+</div>
+
+<div class="slide" id="s7">
+  <span class="num">07</span>
+  <span class="kick">Quantify</span>
+  <h2>Make it cost something, using his numbers.</h2>
+  <p>Never assert what he is losing. Get him to build the number himself, then let him react to his own arithmetic. Open <a href="https://realestatehero.co.za/#calculator">the calculator on the site</a> and drive it while he watches.</p>
+  <table>
+    <tr><th>Ask him</th><th>Then say</th></tr>
+    <tr><td><b>"Roughly how many enquiries a month across all channels?"</b></td><td>Type it in. Do not correct him if it sounds low, use his figure</td></tr>
+    <tr><td><b>"What share do you think get answered slowly or not at all?"</b></td><td>Whatever he says, use it. If he says ten percent, use ten percent. It still works</td></tr>
+    <tr><td><b>"What does an average sale earn the office in gross commission?"</b></td><td>This is the number that turns the conversation from software to money</td></tr>
+  </table>
+  <p style="margin-top:12px">The calculator assumes the engine converts just <b>one in fifty</b> of the leads he is already missing. Say that out loud. A deliberately conservative assumption is far more persuasive than an impressive one, and it is the reason the figure survives scrutiny after the call.</p>
+  <div class="box">
+    <div class="cap">The anchor</div>
+    <p>"So on your own numbers, that is roughly R690,000 of commission sitting in leads you already paid Property24 for. The system that goes after it starts at R12,500 a month. <b>One saved mandate covers the year.</b>"</p>
+  </div>
+</div>
+
+<div class="slide" id="s8">
+  <span class="num">08</span>
+  <span class="kick">The number objection</span>
+  <h2>"We don't want to change the numbers on our listings."</h2>
+  <p>The most common blocker you will hit, straight out of a real client meeting. It is why we sell in two phases. <b>Learn this one cold.</b></p>
+  <div class="grid2">
+    <div class="card good">
+      <h4>Phase one: nothing changes</h4>
+      <p>Their portal enquiries, website forms and office line already produce a record the moment a buyer acts. We capture that copy. <b>Not one listing is edited, not one agent number changes</b>, and their agents' phones ring exactly as they do today.</p>
+      <p style="margin:0">This is what you sell on call one.</p>
+    </div>
+    <div class="card bad">
+      <h4>Phase two: later, on his evidence</h4>
+      <p>A buyer who taps call or WhatsApp <b>straight off a listing</b> still reaches the agent's own phone, and the missed ones stay missed. Catching those needs agency-owned numbers per agent.</p>
+      <p style="margin:0">Do not push this on call one.</p>
+    </div>
+  </div>
+  <div class="say">"We don't need to touch a single listing. Every enquiry off Property24 already sends an email the second a buyer submits it, with their name and number on it. That email is arriving today. It just lands somewhere nobody is watching for the first five minutes."</div>
+  <p><b>Then name the limit yourself, before he finds it.</b> This is what makes the rest believable:</p>
+  <div class="say">"If a buyer taps call and your agent misses it, that call is still missed today and it still will be under phase one. Fixing that needs the number change you are not comfortable with, so make that call in three months on your own numbers, not on mine."</div>
+  <div class="box">
+    <div class="cap">Kill the admin fear too</div>
+    <p>If his real worry is the workload, not the agents: on most platforms the listing number comes from the agent record, so it is <b>one change per agent that flows to every listing and both portals</b>, not a change per listing. Offer to confirm it with his Prop Data admin. That single fact has dissolved the objection more than once.</p>
+  </div>
+</div>
+
+<div class="slide" id="s9">
+  <span class="num">09</span>
+  <span class="kick">Closing</span>
+  <h2>Ask for two weeks of evidence, nothing bigger.</h2>
+  <p>You are not closing the system on call one. You are closing a R9,500 diagnostic. Treat anything else as a bonus.</p>
+  <div class="say">"Here is what I would do. Before anyone commits to a system, buy two weeks of evidence about your own agency. R9,500. We read every enquiry path the way a buyer experiences it, we time your actual responses across every channel, and we pull your review standing against every competitor in your towns. You get the four numbers your agency runs on, dated and sourced. If you go ahead with the build, that R9,500 comes off in full. If you walk away, you keep the report and use it with anyone you like."</div>
+  <h3>Then stop talking</h3>
+  <p>The first person to speak after a price loses. Let the pause run as long as it needs to.</p>
+  <h3>Never leave without one of these</h3>
+  <ul>
+    <li><b>A yes.</b> Confirm the invoicing entity and email, tell him the diagnostic starts within three working days</li>
+    <li><b>A date.</b> If he needs a partner in the room, book that meeting now, on the call, with the partner's name written down</li>
+    <li><b>A clean no.</b> Genuinely fine. Ask what would have had to be different and write it down</li>
+  </ul>
+  <div class="warn" style="display:block;margin-top:14px"><b>"Send me a proposal" is not a yes.</b> It is the most common way this deal dies. Slide 10 has the response.</div>
+</div>
+
+<div class="slide" id="s10">
+  <span class="num">10</span>
+  <span class="kick">Objection handling</span>
+  <h2>What they say, what they mean, what you say.</h2>
+
+  <div class="obj">
+    <div class="q">"Send me a proposal and I'll look at it."</div>
+    <div class="mean">Usually a polite exit, or he does not have authority and does not want to say so.</div>
+    <div class="a">"I will, gladly. But proposals I write without knowing your numbers are guesses, and you would be right to ignore one. Give me two things first and it will actually be worth reading."</div>
+    <div class="re">"Who else needs to be comfortable with this before it could happen, and what is the number that would make it obviously worth doing for you?"</div>
+  </div>
+
+  <div class="obj">
+    <div class="q">"I need to discuss it with my partner / co-director."</div>
+    <div class="mean">Genuine most of the time. The risk is that he now has to sell it for you, badly, in a room you are not in.</div>
+    <div class="a">"Of course. Two things that will help you in that conversation: I will send one page, not a deck, so it can be forwarded, and the diagnostic exists precisely so that conversation happens over your own numbers instead of my opinion."</div>
+    <div class="re">"What do you think his first objection will be? Let me give you the answer to it now."</div>
+  </div>
+
+  <div class="obj">
+    <div class="q">"We already have a CRM."</div>
+    <div class="mean">He thinks we are replacing something, and a migration sounds expensive and painful.</div>
+    <div class="a">"Good, keep it. We are not a CRM and we do not replace one. Your CRM records what your agents did. We handle the ninety minutes before your agent is even involved, then hand the lead over warm. If head office mandates a system, it stays the system of record and we feed it."</div>
+    <div class="re">"When a lead lands in that CRM today, how long before a human touches it?"</div>
+  </div>
+
+  <div class="obj">
+    <div class="q">"My agents won't use it."</div>
+    <div class="mean">He has been burned by software nobody adopted, and he is protecting himself from that again.</div>
+    <div class="a">"Then it is fortunate that it works whether they use it or not. Answering, qualifying and booking do not depend on agent adoption. What needs adoption is the workspace, which is why onboarding is one on one, on their own screen, with their own leads. And by month two the league table does the rest, because the good ones finally have proof."</div>
+    <div class="re">"Which of your agents would be the loudest about it? Let us put them in the pilot on purpose."</div>
+  </div>
+
+  <div class="obj">
+    <div class="q">"We tried an agency before and it did nothing."</div>
+    <div class="mean">Real scar tissue. Do not argue with it, and do not distance yourself with "we're different".</div>
+    <div class="a">"I believe you, and it is the reason we start with a paid diagnostic rather than a build. You are not buying a promise, you are buying two weeks of measurement, and the report is yours whether we ever work together or not. That is deliberately the smallest thing I could ask you for."</div>
+    <div class="re">"What did they promise that they did not deliver? I want to make sure I am not about to say the same sentence."</div>
+  </div>
+
+  <div class="obj">
+    <div class="q">"Can you guarantee more sales?"</div>
+    <div class="mean">Fair question, and a trap. Anyone who says yes is lying and he may be testing you.</div>
+    <div class="a">"No, and I would not trust anyone who did. Too much of a sale depends on your stock, your pricing and your agents. What I will guarantee is measurement: three numbers baselined on day one and put back in front of you, so you can see for yourself whether it moved. If it has not, you should stop."</div>
+    <div class="re">"If response time and second-contact rate both improved, would you expect that to show up in sales?"</div>
+  </div>
+
+  <div class="obj">
+    <div class="q">"It's too expensive."</div>
+    <div class="mean">Usually means the value is not yet obvious, not that the money is unavailable. Do not discount, diagnose.</div>
+    <div class="a">"Compared to what, out of interest? Because on your own numbers a moment ago, one saved mandate covers the year. If it still feels expensive, that tells me I have not shown you enough yet, or the enquiry volume is not there, and either of those is worth knowing now."</div>
+    <div class="re">"What would it need to return in a year for the price to be a non-issue?"</div>
+  </div>
+
+  <div class="obj">
+    <div class="q">"Won't an AI annoy our buyers?"</div>
+    <div class="mean">He is picturing a clunky chatbot, and he is protective of his brand.</div>
+    <div class="a">"Read the conversation on our homepage and tell me if that would annoy you. It is trained on your areas, your stock and your tone during the build, and you approve the voice before it speaks to a single buyer. Weigh it against the alternative, which is silence until Monday."</div>
+    <div class="re">"What would it have to say for you to be comfortable with it going out under your name?"</div>
+  </div>
+</div>
+
+<div class="slide" id="s11">
+  <span class="num">11</span>
+  <span class="kick">After the call</span>
+  <h2>Follow-up. Where most of these are actually lost.</h2>
+  <p>Send the recap the same day, while it is warm. Short, no attachments, one ask.</p>
+
+  <div class="tmpl">
+    <div class="th">Same day &middot; recap</div>
+    Hi [Name],<br><br>
+    Thanks for the time. Three things we found on your own listings while we were talking:<br><br>
+    1. The WhatsApp button on your [suburb] listing goes to [agent]'s personal cell<br>
+    2. Your enquiry form does not ask for budget, timeline or finance<br>
+    3. [Their office] has [X] Google reviews against [competitor]'s [Y] in the same town<br><br>
+    On your own numbers that came to roughly [R amount] a year in commission sitting in enquiries you have already paid for.<br><br>
+    The next step is the two week diagnostic, R9,500, credited in full if you go ahead and yours to keep if you do not. Say the word and I will send the invoice, we start within three working days.<br><br>
+    [Sign off]
+  </div>
+
+  <div class="tmpl">
+    <div class="th">Day 3 &middot; no reply</div>
+    Hi [Name], did the review numbers land the way I thought they would? Happy to pull the same comparison for your other two offices so you have the full picture before deciding anything.
+  </div>
+
+  <div class="tmpl">
+    <div class="th">Day 7 &middot; give, do not chase</div>
+    Hi [Name], one thing I did not mention: on most platforms the listing number comes off the agent record, so changing it is one edit per agent, not per listing. That was the part you were most wary of, so I thought it was worth knowing either way.
+  </div>
+
+  <div class="tmpl">
+    <div class="th">Day 14 &middot; the close-out</div>
+    Hi [Name], I will stop chasing, I know the timing is not always right. If it helps, the one number I would still go and look at yourself is how many of last month's enquiries got a second contact. If that number is fine, you genuinely do not need us. If nobody can tell you what it is, you know where I am.
+  </div>
+
+  <p style="font-size:14.5px;margin-top:6px">That last one gets more replies than the other three combined, because it is the only one that costs him something to ignore.</p>
+</div>
+
+<div class="slide" id="s12">
+  <span class="num">12</span>
+  <span class="kick">Pricing</span>
+  <h2>What you may quote.</h2>
+  <table>
+    <tr><th>Line</th><th>Number</th><th>Notes</th></tr>
+    <tr><td><b>Diagnostic</b></td><td class="n">R9,500</td><td>Two weeks. Credited in full against the build. Theirs to keep if they walk</td></tr>
+    <tr><td><b>Pilot office, monthly</b></td><td class="n">R12,500</td><td>Managed, all in</td></tr>
+    <tr><td><b>Pilot office, setup</b></td><td class="n">R10,000</td><td>Less the R9,500 credit, so R500 on the day they say go</td></tr>
+    <tr><td><b>Each office after, monthly</b></td><td class="n">R9,500</td><td>They inherit the build, so they cost less</td></tr>
+    <tr><td><b>Each office after, setup</b></td><td class="n">R7,500</td><td>Billed as that office goes live, never up front</td></tr>
+    <tr><td><b>Month one, all in</b></td><td class="n">R22,500</td><td>R9,500 plus R500 plus R12,500. The number he actually says yes to</td></tr>
+  </table>
+  <div class="box">
+    <div class="cap">One rule, everywhere</div>
+    <p>First site pays full rate. Every additional site is R9,500. Setup is R10,000 on the first and R7,500 on each one after, always billed as that site goes live. One rule means you never invent a number in a room, and two proposals can never contradict each other.</p>
+  </div>
+  <h3>The site says "from R9,500", your quote says R12,500</h3>
+  <p>Both true, and you must hold them together without fumbling. The site publishes only the entry price so a principal books a call instead of pricing himself out on a web page. If he raises it:</p>
+  <div class="say">"That is where it starts, for an office joining a setup that already exists. Your first office carries the build the others inherit, so it is R12,500 with the R10,000 setup, and your diagnostic comes off that in full. It gets cheaper per office as you add them."</div>
+  <div class="warn" style="display:block;margin-top:14px"><b>Hard floor: R10,000 a month on office one.</b> You may not go under it without phoning Jacques first, and you cannot authorise discounts, free months or extra scope on your own.</div>
+</div>
+
+<div class="slide" id="s13">
+  <span class="num">13</span>
+  <span class="kick">Guardrails</span>
+  <h2>What you may say, and what you may never.</h2>
+  <div class="grid2">
+    <div class="card good">
+      <h4>True today, say it freely</h4>
+      <ul class="yes">
+        <li>One workspace per office, own number, own team, rolling into a single owner view</li>
+        <li>Role-based access: each agent sees their own work, the principal sees everything</li>
+        <li>Per-agent pipelines and stats, by name</li>
+        <li>Timestamped conversation history on every enquiry</li>
+        <li><b>Per-agent review attribution.</b> Nobody else in the market has this</li>
+        <li>"You will see which agent got the enquiry, how fast they answered, what they did next and what came of it"</li>
+      </ul>
+    </div>
+    <div class="card bad">
+      <h4>Never say these</h4>
+      <ul class="no">
+        <li><b>Never say GoHighLevel or GHL.</b> It is the Reviewtap System, always</li>
+        <li>Not a bespoke owner dashboard. It is a configured workspace with an owner-level view</li>
+        <li>Never promise an automatically generated monthly report. <b>We assemble it</b></li>
+        <li>Never promise a 90-day stop button or money back. It was removed from the public offer</li>
+        <li>Never present "average response time per agent" as a metric already on a screen. It is derivable, and it is a build</li>
+        <li>Never guarantee sales, rankings or lead volume</li>
+      </ul>
+    </div>
+  </div>
+  <div class="box">
+    <div class="cap">Why this matters more than it looks</div>
+    <p>Every one of these came from a real delivery risk. Overselling the dashboard or the report is how a signed deal turns into a dispute in month two, and losing it on a delivery call is the worst way to lose it.</p>
+  </div>
+</div>
+
+<div class="slide" id="s14">
+  <span class="num">14</span>
+  <span class="kick">Pipeline</span>
+  <h2>What a working week looks like.</h2>
+  <p>Starting assumptions until we have your real conversion data. Replace them with actuals after the first ten conversations.</p>
+  <table>
+    <tr><th>Stage</th><th>Rough ratio</th><th>What counts</th></tr>
+    <tr><td><b>Approaches</b></td><td class="n">40</td><td>Principal or broker owner reached, not gatekeepers</td></tr>
+    <tr><td><b>Real conversations</b></td><td class="n">10</td><td>Full twenty minutes with a teardown, not a brush-off</td></tr>
+    <tr><td><b>Diagnostics sold</b></td><td class="n">3</td><td>R9,500 invoiced</td></tr>
+    <tr><td><b>Builds signed</b></td><td class="n">1</td><td>R12,500 a month recurring, plus expansion offices later</td></tr>
+  </table>
+  <h3>Log these on every opportunity, or it is not in pipeline</h3>
+  <ul>
+    <li>Who signs, by name, and whether you have met them</li>
+    <li>Offices, agents, portals they pay for</li>
+    <li>Monthly enquiry volume and average gross commission</li>
+    <li>Their review counts and the competitor's, dated</li>
+    <li>The specific objection they raised, in their words</li>
+    <li>Next step with a date, never "following up"</li>
+  </ul>
+  <p style="font-size:14.5px;color:var(--dim);margin-top:14px">Commission runs per your JCE Systems Group arrangement, 30% on recurring including setup and monthly. Vicky is still papering the formal agreement, so treat that as the working position rather than the signed one.</p>
+</div>
+
+<div class="foot">Real Estate Hero, created by ReviewTap and JCE Media &middot; internal sales playbook &middot; 1 September 2026</div>
+</div>
+</div>
+<script>
+(function(){
+  var links = Array.prototype.slice.call(document.querySelectorAll('.sidenav a[data-spy]'));
+  var sel = document.getElementById('jump');
+  var map = {}; links.forEach(function(a){ map[a.getAttribute('data-spy')] = a; });
+  var io = new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if(e.isIntersecting){
+        links.forEach(function(a){ a.classList.remove('on'); });
+        if(map[e.target.id]) map[e.target.id].classList.add('on');
+        if(sel && sel.value !== e.target.id) sel.value = e.target.id;
+      }
+    });
+  }, {rootMargin:'-45% 0px -50% 0px'});
+  document.querySelectorAll('.slide[id]').forEach(function(el){ io.observe(el); });
+  if(sel) sel.addEventListener('change', function(){
+    var t = document.getElementById(sel.value);
+    if(t) t.scrollIntoView({behavior:'smooth', block:'start'});
+  });
+})();
+</script>
+</body>
+</html>
