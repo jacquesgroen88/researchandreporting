@@ -581,8 +581,20 @@
   .reel-head h2{color:#fff;font-size:clamp(1.6rem,3.2vw,2.6rem);margin-top:10px}
   .reel-track{display:flex;align-items:center;gap:clamp(14px,1.8vw,28px);
     width:max-content;padding:0 clamp(20px,6vw,90px);will-change:transform}
-  .tile{position:relative;flex:none;overflow:hidden;background:#1a201b;
-    box-shadow:0 30px 60px -30px rgba(0,0,0,.7)}
+  .tile{position:relative;flex:none;overflow:hidden;background:#1a201b;cursor:zoom-in;
+    box-shadow:0 30px 60px -30px rgba(0,0,0,.7);
+    transition:transform .55s var(--ease),box-shadow .55s var(--ease)}
+  /* while the pointer is inside, the transform is driven every mousemove,
+     so the easing has to come off or it lags a frame behind the cursor */
+  .tile.tilting{transition:box-shadow .35s var(--ease);will-change:transform;z-index:2;
+    box-shadow:0 44px 80px -34px rgba(0,0,0,.85)}
+  /* specular highlight that tracks the cursor across the tile */
+  .tile:before{content:"";position:absolute;inset:0;z-index:3;pointer-events:none;opacity:0;
+    background:radial-gradient(240px circle at var(--mx,50%) var(--my,50%),
+      rgba(255,255,255,.26),rgba(255,255,255,.05) 45%,transparent 65%);
+    transition:opacity .45s var(--ease)}
+  .tile.tilting:before{opacity:1}
+  .tile:focus-visible{outline:2px solid var(--gold-lite);outline-offset:4px}
   .tile img{width:100%;height:100%;object-fit:cover;display:block;
     transition:transform 1.2s var(--ease)}
   .tile:hover img{transform:scale(1.05)}
@@ -863,6 +875,8 @@
     .cater .grid2{grid-template-columns:1fr;gap:var(--s4)}
     .fgrid{grid-template-columns:1fr;gap:var(--s4)}
     .grid{grid-template-columns:repeat(2,1fr);grid-auto-rows:180px}
+    /* spans cannot tile a two-column grid without leaving holes */
+    .g-tall,.g-wide{grid-row:span 1;grid-column:span 1}
     .frow{grid-template-columns:1fr}
     .fwrap{padding:var(--s4) var(--s3)}
     .mapwrap iframe{height:250px}
@@ -1253,9 +1267,9 @@
   <div class="wrap grid2">
     <div>
       <span class="label reveal">Venue and catering</span>
-      <h2 class="reveal d1" data-split>One owner. One number. One less thing to broker.</h2>
+      <h2 class="reveal d1" data-split>One group. One quote. One less thing to broker.</h2>
       <p class="lede reveal d2">Most venues in Midrand hand you a list of approved caterers and step back. We do not, because the caterer is ours.</p>
-      <p class="reveal d2">Good &amp; Proper Food Trucks is part of the same group, so the venue and the food can be quoted together, by one person, on one number. If something needs to change three days out, you make one call rather than chairing a negotiation between two suppliers who have never met.</p>
+      <p class="reveal d2">Good &amp; Proper Food Trucks is part of the same group, so the venue and the food are quoted together, by the same people. If something needs to change three days out, you make one call rather than chairing a negotiation between two suppliers who have never met.</p>
       <a href="#enquire" class="btn btn-outline reveal d3" data-mag><span>Ask for a combined quote
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
     </div>
@@ -1328,7 +1342,7 @@
       <a class="g-wide wipe" href="#" data-full="assets/g-parkland-full.webp"><img loading="lazy" decoding="async" src="assets/g-parkland.webp" alt="Old trees across the estate parkland"><b>The parkland</b></a>
       <a class="wipe" href="#" data-full="assets/g-frozen-full.webp"><img loading="lazy" decoding="async" src="assets/g-frozen.webp" alt="A frozen cocktail at the bar"><b>Frozen cocktails</b></a>
       <a class="wipe" href="#" data-full="assets/g-salad-full.webp"><img loading="lazy" decoding="async" src="assets/g-salad.webp" alt="A seasonal salad plate"><b>On the plate</b></a>
-      <a class="wipe" href="#" data-full="assets/g-veranda2-full.webp"><img loading="lazy" decoding="async" src="assets/g-veranda2.webp" alt="The veranda above the track"><b>The veranda</b></a>
+      <a class="g-wide wipe" href="#" data-full="assets/g-veranda2-full.webp"><img loading="lazy" decoding="async" src="assets/g-veranda2.webp" alt="The veranda above the track"><b>The veranda</b></a>
       <!-- revealed by "See more", so these stay out of the initial layout cost -->
       <a class="g-wide wipe more" hidden href="#" data-full="assets/g-avenue2-full.webp"><img loading="lazy" decoding="async" src="assets/g-avenue2.webp" alt="Sunlight through the trees along the estate drive"><b>The long drive</b></a>
       <a class="wipe more" hidden href="#" data-full="assets/g-dog-full.webp"><img loading="lazy" decoding="async" src="assets/g-dog.webp" alt="A dog at The Acreage"><b>Bring the dog</b></a>
@@ -1753,6 +1767,27 @@
      never pays for them.
      ════════════════════════════════════════════════════════════════════ */
   if(FINE && !REDUCE){
+    /* Reel tiles: cursor-tracked 3D tilt.
+       perspective() is applied inside the tile's own transform rather than as
+       a perspective property on the track, because the track is already being
+       translated for the horizontal scroll and a shared 3D context there would
+       fight it. Listeners live on the tile and attach on enter, so there is
+       nothing bound to the document and nothing to interfere with scrolling. */
+    $$('.tile').forEach(function(t){
+      function move(e){
+        var r=t.getBoundingClientRect();
+        var px=(e.clientX-r.left)/r.width, py=(e.clientY-r.top)/r.height;
+        t.style.transform='perspective(900px) rotateX('+((0.5-py)*9).toFixed(2)+'deg) '+
+                          'rotateY('+((px-0.5)*11).toFixed(2)+'deg) translateZ(16px)';
+        t.style.setProperty('--mx',(px*100).toFixed(1)+'%');
+        t.style.setProperty('--my',(py*100).toFixed(1)+'%');
+      }
+      t.addEventListener('mouseenter',function(){ t.classList.add('tilting'); t.addEventListener('mousemove',move); });
+      t.addEventListener('mouseleave',function(){
+        t.classList.remove('tilting'); t.removeEventListener('mousemove',move); t.style.transform='';
+      });
+    });
+
     /* magnetic buttons: listeners attach on enter, detach on leave */
     $$('[data-mag]').forEach(function(el){
       function move(e){
@@ -1828,7 +1863,10 @@
         lbcount=$('#lbcount'), moreBtn=$('#moreBtn');
     if(!gal||!lb) return;
 
-    function shots(){ return $$('a:not([hidden])',gal); }
+    /* the lightbox serves two collections now, the gallery grid and the
+       reel tiles, so the active one is held rather than assumed */
+    var listEl=gal;
+    function shots(){ return listEl===gal ? $$('a:not([hidden])',gal) : $$('.tile',listEl); }
     var idx=0;
 
     function show(i){
@@ -1848,8 +1886,35 @@
       var a=e.target.closest('a');
       if(!a||!gal.contains(a)) return;
       e.preventDefault();
+      listEl=gal;
       show(shots().indexOf(a));
     });
+
+    /* reel tiles open the same lightbox. No preventDefault on anything but
+       the click itself, so scroll and swipe behave exactly as before. */
+    var track=$('#reelTrack');
+    if(track){
+      $$('.tile',track).forEach(function(t){
+        t.setAttribute('role','button');
+        t.setAttribute('tabindex','0');
+        var cap=t.querySelector('b');
+        t.setAttribute('aria-label','View '+(cap?cap.textContent:'photograph'));
+      });
+      track.addEventListener('click',function(e){
+        var t=e.target.closest('.tile');
+        if(!t||!track.contains(t)) return;
+        listEl=track;
+        show(shots().indexOf(t));
+      });
+      track.addEventListener('keydown',function(e){
+        if(e.key!=='Enter'&&e.key!==' ') return;
+        var t=e.target.closest('.tile');
+        if(!t) return;
+        e.preventDefault();
+        listEl=track;
+        show(shots().indexOf(t));
+      });
+    }
 
     $('.close',lb).addEventListener('click',hide);
     $('.prev',lb).addEventListener('click',function(){show(idx-1);});
