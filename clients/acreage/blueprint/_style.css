@@ -174,3 +174,72 @@ tr:last-child td{border-bottom:none}
   h2{font-size:23px}
   .stats{grid-template-columns:1fr}
 }
+
+/* ==================================================================
+   DESIGN v2 — 3 Sep 2026
+   Problem being solved: every section looked identical, so a reader
+   scrolling had no anchors and lost the thread. This adds numbered
+   section headers, full-bleed alternating bands, a single pull-quote
+   per section, and a readability pass on body text.
+================================================================== */
+
+:root{
+  --muted:#4d5f7d;              /* was #5b6b86 — lifts long-form contrast */
+  --ink-soft:#2b3a55;
+  --band:#ffffff;
+}
+.wrap{max-width:820px}
+body{font-size:16px}
+
+/* --- section rhythm --- */
+section{padding:52px 0 20px;position:relative}
+section + section{border-top:1px solid var(--line)}
+section.band + section, section + section.band{border-top:none}
+
+/* full-bleed alternating band, breaks the endless scroll */
+section.band{border-top:none}
+section.band::before{content:"";position:absolute;left:calc(50% - 50vw);width:100vw;
+  top:0;bottom:0;background:var(--band);z-index:0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+section.band > *{position:relative;z-index:1}
+
+/* --- numbered section header --- */
+.shead{display:grid;grid-template-columns:44px 1fr;gap:16px;align-items:start;margin-bottom:14px}
+.shead .sn{width:44px;height:44px;border-radius:13px;background:var(--grad);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;
+  font-weight:700;font-size:16px;box-shadow:0 7px 16px rgba(99,102,241,.30)}
+.shead .sn.warmn{background:var(--grad-warm);box-shadow:0 7px 16px rgba(255,140,60,.30)}
+.shead .sn.greenn{background:linear-gradient(135deg,#1a7f4e,#25a066);box-shadow:0 7px 16px rgba(26,127,78,.28)}
+.shead .sx{padding-top:1px}
+.shead .eyebrow{margin-bottom:5px;display:block}
+.shead h2{font-size:30px;letter-spacing:-.02em;margin-bottom:0;line-height:1.14}
+@media(max-width:560px){
+  .shead{grid-template-columns:36px 1fr;gap:12px}
+  .shead .sn{width:36px;height:36px;font-size:14px;border-radius:11px}
+  .shead h2{font-size:23px}
+}
+.shead + .lead{margin-left:60px;margin-top:10px;max-width:62ch}
+@media(max-width:560px){.shead + .lead{margin-left:0}}
+
+/* --- the one line that matters in a section --- */
+.keyline{margin-top:22px;padding:20px 24px;border-left:4px solid var(--blue);
+  background:linear-gradient(90deg,rgba(47,107,246,.07),rgba(47,107,246,0));
+  border-radius:0 14px 14px 0}
+.keyline p{font-family:'Space Grotesk',sans-serif;font-size:19.5px;line-height:1.45;
+  color:var(--ink);font-weight:500;letter-spacing:-.01em}
+.keyline.warmk{border-left-color:var(--coral);
+  background:linear-gradient(90deg,rgba(255,106,69,.09),rgba(255,106,69,0))}
+.keyline.greenk{border-left-color:var(--green);
+  background:linear-gradient(90deg,rgba(31,157,103,.09),rgba(31,157,103,0))}
+@media(max-width:560px){.keyline{padding:16px 18px}.keyline p{font-size:17px}}
+
+/* --- readability pass --- */
+.lead{font-size:17px;line-height:1.6;color:var(--muted)}
+.card p,.good p,.callout,.warn{font-size:15.2px;line-height:1.65}
+.method p{font-size:14.8px;line-height:1.65}
+h2{letter-spacing:-.02em}
+h3{letter-spacing:-.01em}
+
+/* section closer: what this means, one line, quiet */
+.sfoot{margin-top:18px;font-size:13.5px;color:var(--muted);display:flex;gap:9px;align-items:baseline}
+.sfoot b{color:var(--blue);font-family:'Space Grotesk',sans-serif;font-size:11.5px;
+  letter-spacing:.09em;text-transform:uppercase;flex:0 0 auto}
