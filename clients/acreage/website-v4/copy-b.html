@@ -420,15 +420,18 @@
   .head p{margin-top:var(--s2);font-size:17px}
 
   /* divider owns its own margin instead of leaning on its neighbours */
+  /* margin:0 on purpose. The neighbouring sections already contribute 124px
+     of padding each, so any margin here stacks on top of that. With var(--s5)
+     the ornament had 64px of clear space above it and 188px below, which is
+     what read as a hole under the intro. */
   .div{display:flex;align-items:center;justify-content:center;gap:22px;padding:0 var(--s4);
-       margin:var(--s5) 0;color:var(--line)}
+       margin:0;color:var(--line)}
   .div .l{height:1px;flex:1;max-width:230px;background:linear-gradient(90deg,transparent,var(--line));
     transform:scaleX(0);transform-origin:100% 50%;transition:transform 1.2s var(--ease)}
   .div .l+.l{background:linear-gradient(270deg,transparent,var(--line));transform-origin:0 50%}
   .div.in .l{transform:scaleX(1)}
   .div img{height:34px;opacity:.92}
-  section + .div,
-  .stage + .div{margin-top:calc(var(--s5) - var(--s7))}
+  /* the absorption rule this replaced only ever worked on the top side */
 
   /* big ghost numeral behind a section heading */
   .ghost{position:absolute;font-family:'Playfair Display SC',serif;font-size:clamp(7rem,17vw,15rem);
@@ -458,8 +461,12 @@
   .split .txt p{font-size:16.5px;margin-bottom:var(--s3)}
   .split .txt .ghost{top:calc(var(--s7) - 34px);right:clamp(var(--s4),6vw,88px)}
   .split .media{position:relative;min-height:100%;height:100%;overflow:hidden}
-  .split .media img{width:100%;height:118%;object-fit:cover;position:absolute;top:-9%;left:0;
-    will-change:transform}
+  .split .media img{width:100%;height:118%;object-fit:cover;object-position:center 45%;
+    position:absolute;top:-9%;left:0;will-change:transform}
+  /* the tents and the crowd sit low in this frame; a centre crop cuts them */
+  #venue .media img{object-position:center 62%}
+  /* the plates sit high in a tall portrait frame */
+  #restaurant .media img{object-position:center 38%}
   /* a gold hairline frame that eases inward over the photograph */
   .split .media:after{content:"";position:absolute;inset:22px;border:1px solid rgba(216,189,139,.42);
     pointer-events:none;opacity:0;transform:scale(1.04);
@@ -600,7 +607,9 @@
 
   /* ── host cards ─────────────────────────────────────────────────────── */
   .host{background:var(--paper)}
-  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:var(--s3)}
+  .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s3)}
+  /* four cards only resolve cleanly as 4x1 or 2x2; auto-fit produced 3+1 */
+  @media(max-width:1180px){.cards{grid-template-columns:repeat(2,1fr)}}
   .hcard{position:relative;background:#fff;border:1px solid var(--line);overflow:hidden;
     display:flex;flex-direction:column;
     transition:transform .55s var(--ease),box-shadow .55s var(--ease),border-color .55s}
@@ -757,7 +766,17 @@
   .chk input{width:18px;height:18px;flex:none;margin-top:2px;accent-color:var(--forest)}
   .fnote{font-size:13px;color:var(--muted);margin-top:var(--s3);text-align:center}
   .fnote a{color:var(--olive);border-bottom:1px solid var(--line)}
-    .ctas{display:flex;gap:14px;flex-wrap:wrap}
+    .ctas{display:flex;gap:14px 26px;flex-wrap:wrap;align-items:center}
+  .link-cta{display:inline-flex;align-items:center;gap:9px;cursor:pointer;
+    font-family:'Karla',sans-serif;font-size:12px;font-weight:600;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--gold);padding-bottom:4px;
+    border-bottom:1px solid rgba(126,95,34,.45);
+    transition:color .3s var(--ease),border-color .3s var(--ease)}
+  .link-cta:hover{color:var(--ink);border-color:var(--ink)}
+  .link-cta svg{width:13px;height:13px;transition:transform .4s var(--ease)}
+  .link-cta:hover svg{transform:translateX(4px)}
+  .band-forest .link-cta{color:var(--gold-lite);border-color:rgba(195,173,132,.45)}
+  .band-forest .link-cta:hover{color:#fff;border-color:#fff}
   .fsubmit{display:flex;justify-content:center;margin-top:var(--s4)}
   .thanks{display:none;text-align:center;padding:var(--s4) var(--s2)}
   .thanks.show{display:block;animation:lbin .6s var(--ease)}
@@ -1034,7 +1053,7 @@
   <span class="ghost" aria-hidden="true">01</span>
   <div class="wrap">
     <span class="label reveal">Welcome to The Acreage</span>
-    <h2 class="reveal d1" data-split>A country estate you can book, and a restaurant you can walk into.</h2>
+    <h2 class="reveal d1" data-split>A country estate you can book, and a restaurant for breakfast or lunch.</h2>
     <p class="reveal d2">The Acreage sits on the Randjesfontein racecourse, twenty minutes from Sandton and five from the N1. The lawns and the lapa are hired for weddings, year-end functions, birthdays and markets, from fifty guests up to three thousand. The restaurant is open to everyone, Tuesday to Sunday, from seven in the morning.</p>
     <div class="facts reveal d3">
       <div class="fact"><div class="n"><span data-to="4.7" data-dec="1">0</span><small>&#9733;</small></div><div class="t">Rated on Google</div></div>
@@ -1069,11 +1088,11 @@
     <div class="ctas reveal d4">
       <a href="#enquire" class="btn btn-gold" data-cta="availability" data-mag><span>Check availability
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
-      <a href="#enquire" class="btn btn-outline" data-cta="pack" data-mag><span>Get the function pack</span></a>
+      <a href="#enquire" class="link-cta" data-cta="pack">Get the function pack<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
     </div>
   </div>
   <div class="media">
-    <img loading="lazy" decoding="async" data-par src="assets/venue-lapa.webp" alt="The lapa and lawns in the late afternoon">
+    <img loading="lazy" decoding="async" data-par src="assets/venue-scale.webp" alt="Tents and guests spread across the lawn on an event day">
   </div>
 </section>
 
@@ -1092,7 +1111,7 @@
     <a href="tel:+27662726862" class="btn btn-outline reveal d4" data-mag><span>Book a table &middot; 066 272 6862</span></a>
   </div>
   <div class="media">
-    <img loading="lazy" decoding="async" data-par src="assets/restaurant-view.webp" alt="The view across the racecourse from the restaurant">
+    <img loading="lazy" decoding="async" data-par src="assets/restaurant-food.webp" alt="Burger, chips and sharing plates on the table">
   </div>
 </section>
 
@@ -1191,7 +1210,7 @@
     </div>
     <div class="cards">
       <a class="hcard reveal" href="#enquire">
-        <div class="ph"><img loading="lazy" decoding="async" src="assets/host-weddings.webp" alt="Stretch tents and flowering gardens set for a celebration"></div>
+        <div class="ph"><img loading="lazy" decoding="async" src="assets/host-weddings-b.webp" alt="A long table set with candles and glassware for an evening"></div>
         <div class="c">
           <h3>Weddings</h3>
           <p>Lawns, old trees and the track behind you. The lapa for something small, a stretch tent for something not.</p>
@@ -1200,7 +1219,7 @@
         </div>
       </a>
       <a class="hcard reveal d1" href="#enquire">
-        <div class="ph"><img loading="lazy" decoding="async" src="assets/host-corporate.webp" alt="Tables and stools set out under the stretch tent"></div>
+        <div class="ph"><img loading="lazy" decoding="async" src="assets/host-corporate-b.webp" alt="Branded gazebos and guests on the lawn at a corporate day"></div>
         <div class="c">
           <h3>Corporate</h3>
           <p>Year-end functions that have to run to time, and do. Power, parking, and twenty minutes from Sandton.</p>
@@ -1209,7 +1228,7 @@
         </div>
       </a>
       <a class="hcard reveal d2" href="#enquire">
-        <div class="ph"><img loading="lazy" decoding="async" src="assets/host-celebrations.webp" alt="Umbrella seating on the lawn under a blue sky"></div>
+        <div class="ph"><img loading="lazy" decoding="async" src="assets/host-celebrations-b.webp" alt="Families gathered under the umbrellas on the lawn"></div>
         <div class="c">
           <h3>Celebrations</h3>
           <p>Birthdays, anniversaries, and the ones with no name. Book the lapa and it is yours for the evening.</p>
