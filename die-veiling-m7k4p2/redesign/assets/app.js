@@ -7,23 +7,53 @@
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
 
-  /* ---------------- scroll reveal ---------------- */
+  /* ---------------- scroll reveal ----------------
+     The observer gives the staggered entrance. The scroll sweep is the
+     safety net: on a very long page (the spyskaart runs to 18 000px) or
+     during a fast fling, observer callbacks can be missed, and a missed
+     callback means a section of the menu stays at opacity 0 forever.
+     The sweep is cheap because the pending list only ever shrinks. */
   var rv = $$('.rv');
   if (!('IntersectionObserver' in window) || reduce) {
     rv.forEach(function (el) { el.classList.add('in'); });
   } else {
+    var pending = rv.slice();
+    // named 'reveal', not 'show' — the lightbox further down declares its own
+    // var show in this same function scope, and hoisting made the later one win
+    var reveal = function (el) {
+      el.classList.add('in');
+      var i = pending.indexOf(el);
+      if (i > -1) pending.splice(i, 1);
+    };
+
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
-        // Reveal when it comes into view, and also when it has already been
-        // scrolled past — a fast fling or a deep-link jump must never leave
-        // content stranded at opacity 0.
         if (e.isIntersecting || e.boundingClientRect.top < 0) {
-          e.target.classList.add('in');
+          reveal(e.target);
           io.unobserve(e.target);
         }
       });
     }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
     rv.forEach(function (el) { io.observe(el); });
+
+    var ticking = false;
+    var sweep = function () {
+      ticking = false;
+      if (!pending.length) return;
+      var limit = window.innerHeight * 0.92;
+      pending.slice().forEach(function (el) {
+        if (el.getBoundingClientRect().top < limit) { reveal(el); io.unobserve(el); }
+      });
+    };
+    var queueSweep = function () {
+      if (ticking) return;
+      ticking = true;
+      setTimeout(sweep, 120);
+    };
+    window.addEventListener('scroll', queueSweep, { passive: true });
+    window.addEventListener('resize', queueSweep);
+    window.addEventListener('load', sweep);
+    sweep();
   }
 
   /* ---------------- header solidify ---------------- */
@@ -34,20 +64,58 @@
     window.addEventListener('scroll', onScroll, { passive: true });
   }
 
+  /* ---------------- hero: fetch slides 2 and 3 only after load ----------------
+     Keeps the hero to one image on first paint instead of three. */
+  var deferBg = function () {
+    $$('.hero .slide i[data-bg]').forEach(function (el) {
+      el.style.backgroundImage = "url('" + el.getAttribute('data-bg') + "')";
+      el.removeAttribute('data-bg');
+    });
+  };
+  if (document.readyState === 'complete') deferBg();
+  else window.addEventListener('load', deferBg);
+
   /* ---------------- mobile drawer ---------------- */
   var burger = $('.burger');
-  if (burger) {
-    burger.addEventListener('click', function () {
-      var open = document.body.classList.toggle('nav-open');
+  var drawer = $('.drawer');
+  if (burger && drawer) {
+    var setDrawer = function (open, silent) {
+      document.body.classList.toggle('nav-open', open);
       burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      drawer.setAttribute('aria-hidden', open ? 'false' : 'true');
+      // inert, not the visibility transition, is what keeps the closed
+      // drawer's ten links out of the tab order — CSS timing is not a
+      // reliable way to control focusability
+      if (open) drawer.removeAttribute('inert');
+      else drawer.setAttribute('inert', '');
       document.body.style.overflow = open ? 'hidden' : '';
+      if (silent) return;                       // setting the initial state must not grab focus
+      if (open) {
+        // the stylesheet flips the drawer's visibility with no delay on open,
+        // so the first link is focusable as soon as the class lands
+        var first = $('a', drawer);
+        if (first) first.focus();
+      } else {
+        burger.focus();
+      }
+    };
+    setDrawer(false, true);
+    burger.addEventListener('click', function () {
+      setDrawer(!document.body.classList.contains('nav-open'));
     });
-    $$('.drawer a').forEach(function (a) {
-      a.addEventListener('click', function () {
-        document.body.classList.remove('nav-open');
-        document.body.style.overflow = '';
-        burger.setAttribute('aria-expanded', 'false');
-      });
+    $$('a', drawer).forEach(function (a) {
+      a.addEventListener('click', function () { setDrawer(false); });
+    });
+    document.addEventListener('keydown', function (e) {
+      if (!document.body.classList.contains('nav-open')) return;
+      if (e.key === 'Escape') { setDrawer(false); return; }
+      if (e.key !== 'Tab') return;
+      // keep focus inside the drawer while it is open
+      var items = $$('a,button', drawer).filter(function (el) { return el.offsetParent !== null; });
+      if (!items.length) return;
+      var first = items[0], last = items[items.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
     });
   }
 

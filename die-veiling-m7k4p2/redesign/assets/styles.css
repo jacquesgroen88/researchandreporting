@@ -29,7 +29,7 @@
   --cream:#f7f1e9;
   --ink:#f7f1e9;
   --mute:#a89a8e;
-  --mute2:#7c7167;
+  --mute2:#948a83;   /* was #7c7167 — measured 3.82:1 on .card, below WCAG AA */
 
   --glow:0 0 18px rgba(255,45,32,.55), 0 0 46px rgba(255,45,32,.25);
   --glow-brass:0 0 16px rgba(233,185,104,.4);
@@ -83,6 +83,15 @@ body::after{
 .eyebrow.c{justify-content:center}
 
 .neon{color:var(--neon);text-shadow:var(--glow)}
+
+/* keyboard users get past the header without tabbing the whole nav */
+.skip{
+  position:absolute;left:16px;top:-100px;z-index:400;
+  background:var(--red);color:#fff;padding:14px 22px;border-radius:var(--r);
+  font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  transition:top .2s var(--ease);
+}
+.skip:focus{top:16px}
 .lead{font-size:clamp(16px,1.5vw,18.5px);color:var(--mute);max-width:62ch}
 
 .sec{padding:clamp(72px,9vw,132px) 0;position:relative}
@@ -180,9 +189,14 @@ body.nav-open .burger span::after{top:0;transform:rotate(-45deg)}
   position:fixed;inset:0;z-index:190;background:rgba(8,7,10,.98);backdrop-filter:blur(20px);
   padding:110px clamp(24px,6vw,48px) 40px;overflow-y:auto;
   opacity:0;visibility:hidden;transform:translateY(-14px);
-  transition:opacity .35s,transform .35s var(--ease),visibility .35s;
+  /* visibility flips instantly on open so the first link is focusable right
+     away, and is held back until the fade finishes on close */
+  transition:opacity .35s,transform .35s var(--ease),visibility 0s linear .35s;
 }
-body.nav-open .drawer{opacity:1;visibility:visible;transform:none}
+body.nav-open .drawer{
+  opacity:1;visibility:visible;transform:none;
+  transition:opacity .35s,transform .35s var(--ease),visibility 0s;
+}
 .drawer a{display:block;font-family:'Anton',sans-serif;font-size:30px;text-transform:uppercase;
   color:#fff;padding:14px 0;border-bottom:1px solid var(--line)}
 .drawer a.sub{font-family:'Inter',sans-serif;font-size:15px;font-weight:500;text-transform:none;
@@ -226,10 +240,18 @@ body.nav-open .drawer{opacity:1;visibility:visible;transform:none}
 .hero .fade-txt{animation:fadeUp .8s var(--ease) both}
 @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
 
-.hero .dots{position:absolute;right:clamp(20px,4vw,40px);bottom:clamp(56px,7vw,96px);z-index:4;
-  display:flex;flex-direction:column;gap:11px}
-.hero .dots button{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.28);transition:.3s}
-.hero .dots button.on{background:var(--neon);box-shadow:var(--glow);transform:scale(1.25)}
+.hero .dots{position:absolute;right:calc(clamp(20px,4vw,40px) - 17px);bottom:clamp(40px,6vw,80px);z-index:4;
+  display:flex;flex-direction:column;gap:0}
+.hero .dots button{
+  width:44px;height:44px;display:flex;align-items:center;justify-content:center;
+  background:none;border:none;padding:0;
+}
+.hero .dots button::before{
+  content:"";width:9px;height:9px;border-radius:50%;
+  background:rgba(255,255,255,.34);transition:.3s var(--ease);
+}
+.hero .dots button.on::before{background:var(--neon);box-shadow:var(--glow);transform:scale(1.3)}
+.hero .dots button:hover::before{background:rgba(255,255,255,.7)}
 
 /* ---------- marquee ticker ---------- */
 .ticker{background:var(--red);color:#fff;padding:13px 0;overflow:hidden;position:relative;
@@ -593,4 +615,88 @@ footer .fl{margin-bottom:15px;line-height:1.5}
 @media print{
   header,.float,.ticker,.lb,.drawer{display:none!important}
   body{background:#fff;color:#000}
+}
+
+/* ==================================================================
+   SPYSKAART — the menu as real text
+   Replaces four photographs of printed boards. Prices are set in the
+   display face so they read as fast as they do on the board itself.
+   ================================================================== */
+.menunav{
+  position:sticky;top:64px;z-index:80;margin:0 0 clamp(30px,4vw,48px);
+  background:rgba(10,8,11,.92);backdrop-filter:blur(14px);
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+}
+.menunav .row{display:flex;gap:8px;overflow-x:auto;padding:12px 0;scrollbar-width:thin}
+.menunav a{
+  flex:0 0 auto;font-size:11.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--mute);border:1px solid var(--line2);border-radius:100px;padding:9px 16px;
+  transition:.25s var(--ease);white-space:nowrap;
+}
+.menunav a:hover{color:#fff;border-color:var(--neon);background:rgba(255,45,32,.12)}
+
+.msec{margin-bottom:clamp(40px,5vw,66px);scroll-margin-top:158px}
+.msec .hd{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;
+  padding-bottom:14px;margin-bottom:20px;border-bottom:2px solid var(--line2)}
+.msec h2{font-size:clamp(24px,3.4vw,40px)}
+.msec .kick{font-size:11.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--brass-soft)}
+.msec .note{width:100%;font-size:14px;color:var(--mute2);margin-top:2px}
+
+.mlist{display:grid;gap:2px}
+.mitem{padding:13px 0;border-bottom:1px solid rgba(255,255,255,.06);
+  display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 18px;align-items:baseline}
+.mitem:last-child{border-bottom:none}
+.mitem .n{font-size:16.5px;font-weight:600;color:var(--cream);letter-spacing:.005em}
+.mitem .d{grid-column:1;font-size:14px;color:var(--mute2);line-height:1.55;max-width:62ch}
+.mitem .p{
+  font-family:'Anton',sans-serif;font-size:19px;color:var(--neon);
+  letter-spacing:.02em;white-space:nowrap;font-variant-numeric:tabular-nums;
+}
+.mitem .sz{display:flex;gap:16px;flex-wrap:wrap;justify-content:flex-end}
+.mitem .sz b{display:block;font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--mute2);font-family:'Inter',sans-serif;margin-bottom:2px;text-align:right}
+.mtag{
+  display:inline-block;margin-left:9px;font-size:9px;font-weight:700;letter-spacing:.14em;
+  text-transform:uppercase;padding:3px 8px;border-radius:100px;vertical-align:middle;
+  border:1px solid rgba(255,45,32,.4);color:var(--neon-soft);
+}
+.mtag.veg{border-color:rgba(120,200,140,.4);color:#8fd8a6}
+.mtag.hot{border-color:rgba(255,122,53,.45);color:var(--ember)}
+
+/* compact two/three column lists for sides, sauces and drinks */
+.mlist.compact{grid-template-columns:repeat(3,1fr);gap:0 30px}
+.mlist.compact .mitem{padding:10px 0}
+.mlist.compact .mitem .n{font-size:15px}
+/* weight-priced cuts read better as cards than as rows */
+.mlist.grid{grid-template-columns:repeat(2,1fr);gap:14px}
+.mlist.grid .mitem{
+  border:1px solid var(--line);border-radius:var(--rl);padding:18px 20px;background:var(--card);
+  grid-template-columns:1fr;gap:12px;align-items:start}
+.mlist.grid .mitem .n{font-family:'Anton',sans-serif;font-size:20px;text-transform:uppercase;color:#fff}
+.mlist.grid .mitem .sz{justify-content:flex-start;gap:22px}
+.mlist.grid .mitem .sz b{text-align:left}
+
+.doneness{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.doneness span{
+  font-size:12.5px;color:var(--mute);border:1px solid var(--line);border-radius:100px;
+  padding:8px 15px;background:var(--card)}
+.doneness span b{color:var(--neon-soft);font-weight:600;margin-left:7px;font-variant-numeric:tabular-nums}
+
+.mnote{
+  background:var(--card);border:1px solid var(--line);border-left:3px solid var(--brass);
+  border-radius:var(--rl);padding:18px 22px;margin-bottom:clamp(26px,3vw,38px);
+  font-size:14.5px;color:var(--mute)}
+.mnote b{color:var(--brass-soft)}
+
+.boards{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:24px}
+
+@media(max-width:960px){
+  .mlist.compact{grid-template-columns:repeat(2,1fr)}
+  .mlist.grid{grid-template-columns:1fr}
+  .menunav{top:58px}
+  .boards{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  .mlist.compact{grid-template-columns:1fr}
+  .mitem .p{font-size:17px}
 }
