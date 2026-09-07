@@ -1,0 +1,118 @@
+/* Deck: one slide at a time on screen, all of them stacked for print/PDF.
+   Type is sized in vmin so a slide fills a projector and a laptop equally. */
+
+.page-deck { overflow: hidden; }
+.page-deck .site-head, .page-deck .site-foot { display: none; }
+
+.deck { position: fixed; inset: 0; display: flex; flex-direction: column; background: var(--bg); }
+
+.deck-chrome {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  padding: .55rem clamp(.75rem, 2vw, 1.25rem);
+  border-bottom: 1px solid var(--line-soft); background: var(--bg-alt); flex: 0 0 auto;
+}
+.deck-exit { text-decoration: none; font-size: 1.25rem; color: var(--ink-soft); padding: 0 .4rem; line-height: 1; }
+.deck-exit:hover { color: var(--accent); }
+.deck-title { font-family: var(--serif); font-size: .95rem; color: var(--ink-soft); }
+.deck-controls { display: flex; align-items: center; gap: .45rem; }
+.deck-controls button {
+  background: var(--bg-card); border: 1px solid var(--line); color: var(--ink);
+  border-radius: 8px; width: 34px; height: 32px; font-size: 1.2rem; line-height: 1;
+  cursor: pointer; font-family: inherit;
+}
+.deck-controls button:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+.deck-controls button:disabled { opacity: .3; cursor: default; }
+.deck-print { width: auto !important; padding: 0 .8rem; font-size: .8rem !important; font-weight: 600; }
+.deck-counter { font-size: .8rem; color: var(--ink-faint); min-width: 4.5rem; text-align: center; font-variant-numeric: tabular-nums; }
+@media (max-width: 560px) { .deck-title { display: none; } }
+
+.slides { flex: 1 1 auto; position: relative; overflow: hidden; }
+
+.slide { position: absolute; inset: 0; display: none; overflow-y: auto; padding: clamp(1.25rem, 4vmin, 3rem); }
+.slide.is-current { display: block; }
+.slide-inner { max-width: 1180px; margin: 0 auto; min-height: 100%; display: flex; flex-direction: column; justify-content: center; }
+
+.deck-kicker, .deck-eyebrow {
+  font-size: clamp(.68rem, 1.35vmin, .85rem); text-transform: uppercase; letter-spacing: .16em;
+  font-weight: 700; color: var(--accent); margin-bottom: .75rem;
+}
+.slide h1 { font-size: clamp(2.4rem, 8vmin, 5.5rem); margin-bottom: .35em; }
+.slide h2 { font-size: clamp(1.6rem, 4.4vmin, 3rem); margin-bottom: .5em; }
+.slide h3 { font-size: clamp(.92rem, 1.9vmin, 1.15rem); color: var(--accent); margin: 0 0 .55em; text-transform: uppercase; letter-spacing: .07em; }
+.slide p { font-size: clamp(.88rem, 1.75vmin, 1.05rem); }
+
+.slide-cover {
+  background:
+    radial-gradient(120% 90% at 10% 0%, rgba(255,176,32,.16), transparent 55%),
+    radial-gradient(90% 80% at 92% 100%, rgba(255,90,82,.13), transparent 60%);
+}
+.slide-cover .slide-inner { text-align: left; }
+.deck-sub { font-size: clamp(1rem, 2.4vmin, 1.45rem) !important; color: var(--ink-soft); max-width: 46ch; }
+.deck-meta { font-size: .85rem !important; color: var(--ink-faint); margin-top: 2.5rem; }
+.deck-url { font-family: var(--serif); font-size: clamp(1.4rem, 4vmin, 2.4rem) !important; color: var(--accent); margin-top: 1.5rem; }
+.slide-end .slide-inner { text-align: center; align-items: center; }
+
+.deck-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: clamp(1.25rem, 3vmin, 2.5rem); }
+.deck-cols-3 { grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
+.deck-col { background: var(--bg-card); border: 1px solid var(--line); border-radius: 12px; padding: clamp(.9rem, 2vmin, 1.35rem); }
+.deck-col-flags { border-left: 3px solid var(--severe); }
+.deck-col-flags h3 { color: var(--severe); }
+.deck-col-do { border-left: 3px solid var(--moderate); }
+.deck-col-do h3 { color: var(--moderate); }
+
+.deck-scam-head { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 1.5rem; margin-bottom: clamp(1rem, 2.5vmin, 2rem); }
+.deck-scam-head > div:first-child { flex: 1 1 380px; }
+.deck-scam-head h2 { margin-bottom: .3em; }
+.deck-sum { color: var(--ink-soft); max-width: 58ch; margin: 0; }
+.deck-score { display: flex; flex-direction: column; align-items: flex-end; text-align: right; flex: 0 0 auto; }
+.deck-score-num { font-family: var(--serif); font-size: clamp(2.4rem, 6vmin, 3.6rem); font-weight: 700; line-height: 1; color: var(--band-color, var(--accent)); }
+.deck-score-lbl { font-size: .7rem; text-transform: uppercase; letter-spacing: .12em; color: var(--ink-faint); font-weight: 700; margin-top: .3rem; }
+.deck-score-loss { font-size: .8rem; color: var(--ink-soft); margin-top: .5rem; }
+
+.deck-list { margin: 0; padding-left: 1.15rem; display: grid; gap: .5rem; }
+.deck-list li { font-size: clamp(.8rem, 1.55vmin, .95rem); color: var(--ink-soft); line-height: 1.5; }
+.deck-list strong { color: var(--ink); }
+.deck-link { font-size: .75rem !important; color: var(--ink-faint); margin: 1rem 0 0; word-break: break-word; }
+
+.deck-six { list-style: none; counter-reset: d; padding: 0; margin: 1rem 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: .8rem; }
+.deck-six li { counter-increment: d; position: relative; padding: .9rem 1rem .9rem 3rem; background: var(--bg-card); border: 1px solid var(--line); border-radius: 10px; display: grid; gap: .2rem; }
+.deck-six li::before { content: counter(d); position: absolute; left: 1.1rem; top: .85rem; font-family: var(--serif); font-weight: 700; color: var(--accent); }
+.deck-six strong { font-size: clamp(.9rem, 1.8vmin, 1.05rem); }
+.deck-six span { font-size: clamp(.78rem, 1.5vmin, .9rem); color: var(--ink-soft); }
+
+.deck-rules { list-style: none; padding: 0; margin: 1rem 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: .55rem; }
+.deck-rules li { padding: .7rem .95rem; background: var(--bg-card); border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 8px; font-size: clamp(.78rem, 1.5vmin, .92rem); color: var(--ink-soft); }
+.deck-report { padding-left: 1.3rem; margin: 1rem 0 0; display: grid; gap: .55rem; }
+.deck-report li { font-size: clamp(.82rem, 1.6vmin, .98rem); color: var(--ink-soft); }
+.deck-report strong { color: var(--ink); }
+
+.deck-rule { border-left: 3px solid var(--accent); padding-left: .9rem; color: var(--ink) !important; font-weight: 550; }
+.deck-nav-help kbd { background: var(--bg-raised); border: 1px solid var(--line); border-radius: 5px; padding: .1rem .4rem; font-size: .85em; }
+.deck-foot { margin-top: 1.5rem !important; color: var(--ink-faint); font-size: .85rem !important; }
+
+/* Print: every slide, one per page, on white. This is the PDF export. */
+@media print {
+  @page { size: A4 landscape; margin: 12mm; }
+  .page-deck { overflow: visible; }
+  .deck { position: static; display: block; }
+  .deck-chrome { display: none !important; }
+  .slides { overflow: visible; position: static; }
+  .slide {
+    position: static; display: block !important; break-after: page; page-break-after: always;
+    min-height: auto; padding: 0 0 1rem; overflow: visible;
+    background: #fff !important; color: #000;
+  }
+  .slide:last-child { break-after: auto; page-break-after: auto; }
+  .slide-inner { display: block; min-height: 0; max-width: none; }
+  .slide h1 { font-size: 30pt; } .slide h2 { font-size: 19pt; } .slide h3 { font-size: 10pt; color: #a06000; }
+  .slide p, .deck-list li, .deck-six span, .deck-rules li, .deck-report li { font-size: 9.5pt !important; color: #222 !important; }
+  .deck-sub { font-size: 12pt !important; }
+  .deck-col, .deck-six li, .deck-rules li { background: #fff !important; border: 1px solid #bbb !important; break-inside: avoid; }
+  .deck-kicker, .deck-eyebrow { color: #a06000 !important; }
+  .deck-score-num { color: #000 !important; }
+  .deck-col-flags h3 { color: #c22 !important; }
+  .deck-col-do h3 { color: #157 !important; }
+}
+
+.deck-dl { display: inline-flex; align-items: center; height: 32px; text-decoration: none; color: var(--ink); border: 1px solid var(--line); background: var(--bg-card); border-radius: 8px; }
+.deck-dl:hover { border-color: var(--accent); color: var(--accent); }

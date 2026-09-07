@@ -17,7 +17,13 @@ const path = require('path');
 const ROOT = __dirname;
 const DATA = path.join(ROOT, 'data');
 const SRC = path.join(ROOT, 'src');
-const OUT = path.join(ROOT, 'public');
+const OUT = path.join(ROOT, process.env.OUT_DIR || 'public');
+
+/* BASE_PATH lets the whole site be served from a sub-path (a Netlify deploy
+   preview, a staging folder) without touching a single template. Every internal
+   link is written root-relative, so prefixing them on the way out is enough.
+   Empty for a normal root deploy. */
+const BASE = (process.env.BASE_PATH || '').replace(/\/$/, '');
 
 const site = readJson(path.join(DATA, 'site.json'));
 const checklist = readJson(path.join(DATA, 'checklist.json'));
@@ -95,8 +101,17 @@ function esc(s) {
 function write(relPath, html) {
   const full = path.join(OUT, relPath);
   fs.mkdirSync(path.dirname(full), { recursive: true });
-  fs.writeFileSync(full, html);
+  fs.writeFileSync(full, withBase(html));
   pages.push(relPath);
+}
+
+/* Root-relative hrefs and srcs only. Absolute URLs (https://…) and the full
+   URLs inside JSON-LD start with a scheme, so they are left alone. */
+function withBase(html) {
+  if (!BASE) return html;
+  return html
+    .replace(/href="\//g, `href="${BASE}/`)
+    .replace(/src="\//g, `src="${BASE}/`);
 }
 
 function rands(n) {
@@ -967,6 +982,6 @@ buildReport();
 buildDeck();
 buildExtras();
 
-console.log(`Built ${pages.length} pages from ${scams.length} scams into public/`);
+console.log(`Built ${pages.length} pages from ${scams.length} scams into ${path.relative(ROOT, OUT)}/${BASE ? ` (base path ${BASE})` : ''}`);
 console.log(`  ${top20.length} scams ranked in the South African top 20`);
 console.log(`  ${sitemapUrls.length} URLs in sitemap.xml`);
