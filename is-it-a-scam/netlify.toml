@@ -1,0 +1,45 @@
+# Is It A Scam? — Netlify configuration.
+#
+# Note the deliberate difference from a private reporting site: this one MUST
+# be indexable. Organic search is the entire distribution strategy, so there is
+# no X-Robots-Tag noindex header here.
+
+[build]
+  command = "node build.js"
+  publish = "public"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options           = "SAMEORIGIN"
+    X-Content-Type-Options    = "nosniff"
+    Referrer-Policy           = "strict-origin-when-cross-origin"
+    Permissions-Policy        = "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+    # frame-src allows the YouTube embeds on scam pages. Everything else is
+    # self-hosted, so the rest stays tight.
+    Content-Security-Policy   = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-src https://www.youtube-nocookie.com https://www.youtube.com; object-src 'none'; base-uri 'self'; form-action 'self'"
+
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/downloads/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+# Pretty URLs are real directories, so only the 404 needs wiring up.
+[[redirects]]
+  from = "/*"
+  to = "/404.html"
+  status = 404
