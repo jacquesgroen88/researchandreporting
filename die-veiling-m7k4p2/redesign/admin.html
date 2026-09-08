@@ -1,0 +1,532 @@
+<!doctype html>
+<html lang="af">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Gebeure-bestuur | Die Veiling</title>
+<link rel="icon" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="assets/styles.css?v=e5c65a3e">
+<style>
+  /* ---- back office chrome, layered on top of the site's own tokens ---- */
+  body{background:var(--void);padding-bottom:0}
+  .abar{position:sticky;top:0;z-index:50;background:rgba(10,8,11,.94);backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--line);padding:14px 0}
+  .abar .in{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  .abar img{height:40px;width:auto}
+  .abar h1{font-size:18px;letter-spacing:.03em}
+  .abar .sp{flex:1}
+  .abar .count{font-size:12.5px;color:var(--mute2);letter-spacing:.06em}
+  .dirty{display:none;align-items:center;gap:7px;font-size:12px;font-weight:700;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--ember)}
+  .dirty::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--ember)}
+  body.is-dirty .dirty{display:inline-flex}
+
+  .cols{display:grid;grid-template-columns:minmax(0,1fr) 420px;gap:28px;padding:28px 0 80px;align-items:start}
+  @media(max-width:1080px){.cols{grid-template-columns:1fr}}
+
+  .panel2{background:var(--card);border:1px solid var(--line);border-radius:var(--rl);padding:22px 24px}
+  .panel2 h2{font-size:19px;margin-bottom:4px}
+  .panel2 .hint{font-size:13px;color:var(--mute2);margin-bottom:18px}
+
+  .toolbar{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:18px}
+  .toolbar input[type=search]{flex:1;min-width:170px;background:var(--void);border:1px solid var(--line2);
+    border-radius:var(--r);padding:11px 14px;color:var(--cream);font:inherit;font-size:14px}
+  .toolbar select{background:var(--void);border:1px solid var(--line2);border-radius:var(--r);
+    padding:11px 12px;color:var(--cream);font:inherit;font-size:13.5px}
+
+  .elist{display:grid;gap:8px;max-height:56vh;overflow-y:auto;padding-right:4px}
+  .erow{display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:13px;align-items:center;
+    background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:10px 12px;
+    cursor:pointer;transition:border-color .2s,background .2s}
+  .erow:hover{border-color:var(--line2)}
+  .erow.sel{border-color:var(--neon);background:rgba(255,45,32,.08)}
+  .erow.past{opacity:.45}
+  .erow .d{text-align:center;line-height:1}
+  .erow .d b{display:block;font-family:'Anton',sans-serif;font-size:19px;color:#fff}
+  .erow .d span{display:block;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--neon-soft);margin-top:3px}
+  .erow .m{min-width:0}
+  .erow .m b{display:block;font-size:14.5px;color:var(--cream);font-weight:600;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .erow .m span{font-size:11.5px;color:var(--mute2);letter-spacing:.04em}
+  .erow .tag{font-size:9.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+    border:1px solid var(--line2);border-radius:100px;padding:4px 8px;color:var(--mute2);white-space:nowrap}
+
+  .fields{display:grid;gap:14px}
+  .fields .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .fields label{display:block;font-size:10.5px;font-weight:700;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--mute2);margin-bottom:6px}
+  .fields input,.fields select,.fields textarea{
+    width:100%;background:var(--void);border:1px solid var(--line2);border-radius:var(--r);
+    padding:12px 14px;color:var(--cream);font:inherit;font-size:14.5px}
+  .fields textarea{min-height:88px;resize:vertical}
+  .fields input:focus,.fields select:focus,.fields textarea:focus{
+    outline:none;border-color:var(--neon);box-shadow:0 0 0 3px rgba(255,45,32,.15)}
+  .fields .err{border-color:var(--ember)!important}
+  .emsg{font-size:12px;color:var(--ember);margin-top:5px;display:none}
+  .emsg.on{display:block}
+  .check{display:flex;align-items:center;gap:9px}
+  .check input{width:auto}
+  .check label{margin:0;letter-spacing:.1em}
+
+  .drop{border:1.5px dashed var(--line2);border-radius:var(--rl);padding:16px;text-align:center;
+    font-size:13px;color:var(--mute2);transition:border-color .2s,background .2s;cursor:pointer}
+  .drop.over{border-color:var(--neon);background:rgba(255,45,32,.07);color:var(--cream)}
+  .drop b{display:block;color:var(--cream);font-size:13.5px;margin-bottom:3px}
+
+  .acts2{display:flex;gap:9px;flex-wrap:wrap;margin-top:20px;padding-top:18px;border-top:1px solid var(--line)}
+  .btn-ghost2{border:1px solid var(--line2);color:var(--cream);background:none}
+  .btn-ghost2:hover{border-color:#fff;background:rgba(255,255,255,.07)}
+  .btn-danger{border:1px solid rgba(255,106,90,.45);color:var(--neon-soft);background:none}
+  .btn-danger:hover{background:rgba(255,45,32,.12);border-color:var(--neon)}
+
+  .pv{position:sticky;top:88px}
+  .pv .cap{font-size:10.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--mute2);margin-bottom:12px;display:flex;align-items:center;gap:9px}
+  .pv .cap::after{content:"";flex:1;height:1px;background:var(--line)}
+  .pv .evgrid{grid-template-columns:1fr}
+
+  .note{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--brass);
+    border-radius:var(--rl);padding:15px 18px;font-size:13.5px;color:var(--mute);margin-top:18px;line-height:1.6}
+  .note b{color:var(--brass-soft)}
+
+  .toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,120%);z-index:200;
+    background:var(--good,#1f9d67);color:#04220f;padding:13px 22px;border-radius:100px;
+    font-size:13.5px;font-weight:700;box-shadow:0 14px 34px rgba(0,0,0,.45);transition:transform .35s var(--ease)}
+  .toast.on{transform:translate(-50%,0)}
+  .toast.bad{background:var(--ember);color:#2a1000}
+</style>
+</head>
+<body>
+
+<div class="abar">
+  <div class="wrap in">
+    <img src="assets/favicon.png?v=87ffe450" alt="">
+    <h1>Gebeure-bestuur</h1>
+    <span class="count" id="count"></span>
+    <span class="dirty">Ongestoorde veranderinge</span>
+    <span class="sp"></span>
+    <a class="btn btn-ghost btn-sm" href="gebeure.html" target="_blank" rel="noopener">Sien die webwerf</a>
+    <button class="btn btn-red btn-sm" id="save" type="button">Stoor</button>
+  </div>
+</div>
+
+<div class="wrap cols">
+
+  <div>
+    <div class="panel2">
+      <h2>Die kalender</h2>
+      <p class="hint">Kies iets om dit te wysig, of begin ’n nuwe een. Verby gebeure is dowwer, en verdwyn vanself van die webwerf af.</p>
+      <div class="toolbar">
+        <input type="search" id="q" placeholder="Soek op naam">
+        <select id="fbranch"><option value="">Alle takke</option><option value="vanderbijlpark">Die Veiling Vanderbijlpark</option><option value="meyerton">Die Veiling Meyerton</option><option value="sasolburg">Die Veiling Sasolburg</option><option value="vereeniging">Die Veiling Vereeniging</option></select>
+        <select id="fwhen">
+          <option value="up">Komende</option>
+          <option value="all">Alles</option>
+          <option value="past">Verby</option>
+        </select>
+      </div>
+      <div class="elist" id="list"></div>
+      <div class="acts2">
+        <button class="btn btn-red btn-sm" id="new" type="button">Nuwe gebeurtenis</button>
+        <button class="btn btn-ghost2 btn-sm" id="export" type="button">Laai events.json af</button>
+        <button class="btn btn-ghost2 btn-sm" id="import" type="button">Laai ’n lêer op</button>
+        <input type="file" id="file" accept="application/json" hidden>
+      </div>
+    </div>
+
+    <div class="panel2" style="margin-top:20px">
+      <h2 id="formTitle">Nuwe gebeurtenis</h2>
+      <p class="hint">Alles wat jy hier tik, wys dadelik regs presies soos dit op die webwerf sal lyk.</p>
+      <div class="fields">
+        <div>
+          <label for="f-title">Naam van die gebeurtenis</label>
+          <input id="f-title" type="text" placeholder="Bv. Radio Kalahari Orkes Live">
+          <div class="emsg" id="e-title">Die naam is nodig.</div>
+        </div>
+        <div class="two">
+          <div>
+            <label for="f-date">Datum</label>
+            <input id="f-date" type="date">
+            <div class="emsg" id="e-date">Kies ’n datum.</div>
+          </div>
+          <div>
+            <label for="f-time">Tyd</label>
+            <input id="f-time" type="time" value="20:00">
+          </div>
+        </div>
+        <div class="two">
+          <div>
+            <label for="f-branch">Tak</label>
+            <select id="f-branch"><option value="vanderbijlpark">Die Veiling Vanderbijlpark</option><option value="meyerton">Die Veiling Meyerton</option><option value="sasolburg">Die Veiling Sasolburg</option><option value="vereeniging">Die Veiling Vereeniging</option></select>
+          </div>
+          <div>
+            <label for="f-type">Tipe</label>
+            <select id="f-type">
+              <option value="show">Live show</option>
+              <option value="mark">Mark</option>
+              <option value="fees">Fees of kompetisie</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label for="f-blurb">Kort beskrywing</label>
+          <textarea id="f-blurb" placeholder="Een of twee sinne. Dit wys op die kaartjie."></textarea>
+          <div class="emsg" id="e-blurb">Skryf ’n kort beskrywing.</div>
+        </div>
+        <div class="two">
+          <div>
+            <label for="f-price">Prys, as daar een is</label>
+            <input id="f-price" type="text" placeholder="Bv. R80 per persoon">
+          </div>
+          <div>
+            <label for="f-info">Ekstra inligting</label>
+            <input id="f-info" type="text" placeholder="Bv. Navrae: 079 809 4063">
+          </div>
+        </div>
+        <div>
+          <label for="f-poster">Plakkaat</label>
+          <input id="f-poster" type="url" placeholder="Plak ’n skakel, of sleep ’n prent hieronder in">
+          <div class="drop" id="drop">
+            <b>Sleep die plakkaat hierheen</b>
+            of klik om een te kies
+          </div>
+          <div class="emsg" id="e-poster">’n Plakkaat is nodig.</div>
+        </div>
+        <div class="check">
+          <input id="f-tickets" type="checkbox">
+          <label for="f-tickets">Kaartjies vooraf beskikbaar</label>
+        </div>
+      </div>
+      <div class="acts2">
+        <button class="btn btn-red btn-sm" id="apply" type="button">Voeg by die kalender</button>
+        <button class="btn btn-ghost2 btn-sm" id="cancel" type="button">Kanselleer</button>
+        <button class="btn btn-danger btn-sm" id="del" type="button" hidden>Verwyder</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="pv">
+    <div class="cap">Voorskou</div>
+    <div class="evgrid" id="preview"></div>
+    <div class="note">
+      <b>Waar dit gestoor word.</b> Stoor hou alles in hierdie blaaier, sodat niks verlore gaan
+      terwyl jy werk nie. Om dit op die regte webwerf te kry, laai <b>events.json</b> af en stuur
+      dit vir ons, en ons plaas dit. Sodra ons die agterkant aanskakel, sal Stoor dit reguit
+      publiseer sonder hierdie stap.
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  'use strict';
+  var BRANCHES = {"vanderbijlpark":"Vanderbijlpark","meyerton":"Meyerton","sasolburg":"Sasolburg","vereeniging":"Vereeniging"};
+  var MON = ['Jan','Feb','Mrt','Apr','Mei','Jun','Jul','Aug','Sep','Okt','Nov','Des'];
+  var MONL = ['Januarie','Februarie','Maart','April','Mei','Junie','Julie','Augustus','September','Oktober','November','Desember'];
+  var KEY = 'dv-events-v1';
+  var WA = "BESPREEK";
+
+  var $ = function(s){ return document.querySelector(s); };
+  var esc = function(s){ return String(s == null ? '' : s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); };
+
+  /* ---- storage adapter: the one place that knows where events live ---- */
+  var STORE = {
+    seed: [{"id":"2026-08-22T10:00|sasolburg|Vrouedag Mark","date":"2026-08-22T10:00","title":"Vrouedag Mark","branch":"sasolburg","type":"mark","poster":"https://dieveiling.co.za/wp-content/uploads/2026/03/622720893_122282263550189273_6144323891435134420_n.jpg","blurb":"Kom vier sterk vroue en mooi, unieke produkte saam met ons. Vars blomme, handgemaakte en plaaslike produkte.","price":"","info":"Navrae en stalletjies: 079 809 4063 of 076 927 4639","tickets":false},{"id":"2026-08-28T20:00|vanderbijlpark|Radio Kalahari Orkes Live","date":"2026-08-28T20:00","title":"Radio Kalahari Orkes Live","branch":"vanderbijlpark","type":"show","poster":"https://dieveiling.co.za/wp-content/uploads/2026/08/732af674418f61f5.jpg","blurb":"’n Aand van eg Suid-Afrikaanse musiek, stories en energie.","price":"Vooraf: VIP R250 · Normaal R100 · Kinders onder 12 gratis. By die deur: VIP R300 · Normaal R150","info":"","tickets":true},{"id":"2026-08-28T20:00|meyerton|Neil Somers Live","date":"2026-08-28T20:00","title":"Neil Somers Live","branch":"meyerton","type":"show","poster":"https://dieveiling.co.za/wp-content/uploads/2026/08/1df655a782d6d08f.jpg","blurb":"Lekker musiek, koue drankies, goeie vibes en ’n jol tot laatnag.","price":"R80 per persoon","info":"","tickets":true},{"id":"2026-09-04T20:00|meyerton|Irene-Louise van Wyk Live","date":"2026-09-04T20:00","title":"Irene-Louise van Wyk Live","branch":"meyerton","type":"show","poster":"https://dieveiling.co.za/wp-content/uploads/2026/08/c70cb1db4f7c570e.jpg","blurb":"Al jou gunsteling treffers, lekker kos, koue drankies en goeie geselskap.","price":"R50 per persoon","info":"","tickets":true},{"id":"2026-09-05T19:00|vanderbijlpark|Semi-finale: Battle van die Boere Orkeste","date":"2026-09-05T19:00","title":"Semi-finale: Battle van die Boere Orkeste","branch":"vanderbijlpark","type":"fees","poster":"https://dieveiling.co.za/wp-content/uploads/2026/08/1369950001945072.jpg","blurb":"TNT vs Vaalhoed vs Pollie Dansorkes. Kom ondersteun jou gunsteling.","price":"","info":"Die kompetisie is vuriger as ooit","tickets":false},{"id":"2026-09-06T10:00|vanderbijlpark|Erfenismark","date":"2026-09-06T10:00","title":"Erfenismark","branch":"vanderbijlpark","type":"mark","poster":"https://dieveiling.co.za/wp-content/uploads/2026/03/624321183_1356891249786833_4947032174530532468_n.jpg","blurb":"Lekker op die plotte. Sondagmark met vars produkte, handgemaakte goed en plaaslike lekkernye.","price":"","info":"10:00 tot 15:00 · 079 809 4063 of 076 927 4639","tickets":false},{"id":"2026-09-12T18:00|vanderbijlpark|Semi-finale: Battle van die Boere Orkeste","date":"2026-09-12T18:00","title":"Semi-finale: Battle van die Boere Orkeste","branch":"vanderbijlpark","type":"fees","poster":"https://dieveiling.co.za/wp-content/uploads/2026/08/3139851552873475.jpg","blurb":"Die stryd raak nou ernstig. Nog ’n aand van boere-orkeste wat dit uitspook.","price":"","info":"","tickets":false},{"id":"2026-09-12T20:00|vereeniging|Biggy Live","date":"2026-09-12T20:00","title":"Biggy Live","branch":"vereeniging","type":"show","poster":"https://dieveiling.co.za/wp-content/uploads/2026/08/3b5eb995a16d7afb.jpg","blurb":"As jy hou van lekker musiek en ’n goeie kuier, is hierdie joune.","price":"Beskikbaar by Computicket","info":"","tickets":true},{"id":"2026-09-19T10:00|sasolburg|Lente Mark","date":"2026-09-19T10:00","title":"Lente Mark","branch":"sasolburg","type":"mark","poster":"https://dieveiling.co.za/wp-content/uploads/2026/03/622921149_122282263844189273_4873675422758540249_n.jpg","blurb":"Lente is hier, kom blom saam met ons. ’n Dag vol kleur, vars energie en lekker kuier.","price":"","info":"10:00 tot 15:00 · 079 809 4063 of 076 927 4639","tickets":false},{"id":"2026-09-24T09:00|sasolburg|Loop vir Pret","date":"2026-09-24T09:00","title":"Loop vir Pret","branch":"sasolburg","type":"fees","poster":"https://dieveiling.co.za/wp-content/uploads/2026/08/993685770059868.jpg","blurb":"5 km pretloop en colour run saam met Open Hands. Vanaf 10:00 kunstenaars, springkastele en Braaidag-kuier.","price":"","info":"Toegang: ’n nie-bederfbare voedselproduk · Kleurpoeier R5 · Registreer vooraf by form.jotform.com/260712651149051","tickets":false},{"id":"2026-09-24T11:00|vanderbijlpark|Potjiekos Kompetisie","date":"2026-09-24T11:00","title":"Potjiekos Kompetisie","branch":"vanderbijlpark","type":"fees","poster":"https://dieveiling.co.za/wp-content/uploads/2026/08/1073736712210811.jpg","blurb":"Die potte gaan kook. Dink jy en jou span het wat dit vat om die beste potjie te maak?","price":"","info":"Inskrywing R200 per span · Maksimum vier per span · Slegs vuur, geen vooraf voorbereiding","tickets":false},{"id":"2026-09-24T11:00|sasolburg|Potjiekos Kompetisie","date":"2026-09-24T11:00","title":"Potjiekos Kompetisie","branch":"sasolburg","type":"fees","poster":"https://dieveiling.co.za/wp-content/uploads/2026/08/1770474527412647.jpg","blurb":"Kom wys wat jou span kan doen by Die Veiling se Potjiekos Kompetisie 2026.","price":"","info":"Kontak die tak vir inskrywings en verdere besonderhede","tickets":false},{"id":"2026-09-24T11:00|vereeniging|Potjiekos Kompetisie","date":"2026-09-24T11:00","title":"Potjiekos Kompetisie","branch":"vereeniging","type":"fees","poster":"https://dieveiling.co.za/wp-content/uploads/2026/08/aa1f3da60f5071c8.jpg","blurb":"Uitdunronde 24 September op Braaidag, groot finaal 26 September op Boeredag. Twee spanne per tak gaan deur.","price":"","info":"Inskrywing R200 per span · Maksimum vier per span · Slegs vuur, geen vooraf voorbereiding","tickets":false},{"id":"2026-09-24T11:00|meyerton|Potjiekos Kompetisie","date":"2026-09-24T11:00","title":"Potjiekos Kompetisie","branch":"meyerton","type":"fees","poster":"https://dieveiling.co.za/wp-content/uploads/2026/08/5927aa3a2baab30e.jpg","blurb":"Uitdunronde 24 September op Braaidag, groot finaal 26 September op Boeredag. Twee spanne per tak gaan deur.","price":"","info":"Inskrywing R200 per span · Maksimum vier per span · Slegs vuur, geen vooraf voorbereiding","tickets":false},{"id":"2026-09-26T11:00|vanderbijlpark|Boeredag 2026","date":"2026-09-26T11:00","title":"Boeredag 2026","branch":"vanderbijlpark","type":"fees","poster":"https://dieveiling.co.za/wp-content/uploads/2026/08/2473611386432970.jpg","blurb":"’n Dag propvol plaas-vibes, lekker musiek, heerlike kos en goeie mense. Die groot finaal van die potjiekos kompetisie.","price":"","info":"","tickets":false},{"id":"2026-10-04T10:00|vanderbijlpark|Blomme en Buitelug Mark","date":"2026-10-04T10:00","title":"Blomme en Buitelug Mark","branch":"vanderbijlpark","type":"mark","poster":"https://dieveiling.co.za/wp-content/uploads/2026/03/624612412_1356892639786694_2559911582046394094_n.jpg","blurb":"Kleur jou dag op die plotte. Vars produkte, handgemaakte produkte en plaaslike lekkernye.","price":"","info":"10:00 tot 15:00 · 079 809 4063 of 076 927 4639","tickets":false},{"id":"2026-10-24T10:00|sasolburg|Pret Mark","date":"2026-10-24T10:00","title":"Pret Mark","branch":"sasolburg","type":"mark","poster":"https://dieveiling.co.za/wp-content/uploads/2026/03/623377225_122282264324189273_6776574172513403904_n.jpg","blurb":"Pret vir groot en klein. ’n Dag propvol speelgoed, kindersnacks, speletjies en hope pret.","price":"","info":"10:00 tot 15:00 · 079 809 4063 of 076 927 4639","tickets":false},{"id":"2026-10-31T11:00|sasolburg|Bierfees 2026","date":"2026-10-31T11:00","title":"Bierfees 2026","branch":"sasolburg","type":"fees","poster":"https://dieveiling.co.za/wp-content/uploads/2026/08/2215976498941966.jpg","blurb":"Sasolburg se grootste bierfees. ’n Dag vol yskoue bier, Duitse kos, vermaak en ’n groot fees-atmosfeer.","price":"","info":"","tickets":false},{"id":"2026-11-01T10:00|vanderbijlpark|Somer Mark","date":"2026-11-01T10:00","title":"Somer Mark","branch":"vanderbijlpark","type":"mark","poster":"https://dieveiling.co.za/wp-content/uploads/2026/03/624336712_1356894083119883_1438809255122482442_n.jpg","blurb":"Somervibes begin hier. Vars produkte, handgemaakte produkte en plaaslike lekkernye.","price":"","info":"10:00 tot 15:00 · 079 809 4063 of 076 927 4639","tickets":false},{"id":"2026-11-14T20:00|vanderbijlpark|Dirk & Irene Live","date":"2026-11-14T20:00","title":"Dirk & Irene Live","branch":"vanderbijlpark","type":"show","poster":"https://dieveiling.co.za/wp-content/uploads/2026/08/1867659817241101.jpg","blurb":"’n Aand vol groot treffers, lekker kuier en daardie unieke Dirk & Irene-energie.","price":"","info":"","tickets":true},{"id":"2026-11-21T10:00|sasolburg|Kersmark","date":"2026-11-21T10:00","title":"Kersmark","branch":"sasolburg","type":"mark","poster":"https://dieveiling.co.za/wp-content/uploads/2026/03/622733393_122282264486189273_1524226276481858109_n.jpg","blurb":"Begin jou kersinkopies vroeg. Feestyd afskop met vars produkte, handgemaakte produkte en plaaslike lekkernye.","price":"","info":"10:00 tot 15:00 · 079 809 4063 of 076 927 4639","tickets":false},{"id":"2026-12-04T18:30|vereeniging|Girls Night met Timothy Kieswetter","date":"2026-12-04T18:30","title":"Girls Night met Timothy Kieswetter","branch":"vereeniging","type":"show","poster":"https://dieveiling.co.za/wp-content/uploads/2026/08/c4e6f3d20386c532.jpg","blurb":"Kry die girls bymekaar, haal jou mooiste vintage pinup-uitrusting uit en kom geniet die aand.","price":"Tafel van 6: R1 200 · Tafel van 12: R1 800 · Enkelkaartjie: R250","info":"18:30 vir 19:00 · Vintage pinup-tema","tickets":true},{"id":"2026-12-05T20:00|sasolburg|Biggy Live","date":"2026-12-05T20:00","title":"Biggy Live","branch":"sasolburg","type":"show","poster":"https://dieveiling.co.za/wp-content/uploads/2026/08/1332424942389300.jpg","blurb":"Biggy is op pad Sasolburg toe. Merk die datum en kom kuier saam.","price":"","info":"","tickets":true},{"id":"2026-12-12T10:00|vanderbijlpark|Kersmark","date":"2026-12-12T10:00","title":"Kersmark","branch":"vanderbijlpark","type":"mark","poster":"https://dieveiling.co.za/wp-content/uploads/2026/03/624157923_1356895029786455_7428630463736645223_n.jpg","blurb":"Kersfees begin op die plotte. Sondagmark met vars produkte, handgemaakte produkte en plaaslike lekkernye.","price":"","info":"10:00 tot 15:00 · 079 809 4063 of 076 927 4639","tickets":false},{"id":"2026-12-19T10:00|sasolburg|Kersmark","date":"2026-12-19T10:00","title":"Kersmark","branch":"sasolburg","type":"mark","poster":"https://dieveiling.co.za/wp-content/uploads/2026/03/622733393_122282264486189273_1524226276481858109_n.jpg","blurb":"Kersfees begin by die mark. Vars produkte, handgemaakte produkte en plaaslike lekkernye.","price":"","info":"10:00 tot 15:00 · 079 809 4063 of 076 927 4639","tickets":false}],
+    load: function(){
+      try {
+        var raw = localStorage.getItem(KEY);
+        if (raw) return JSON.parse(raw);
+      } catch(e){}
+      return this.seed.slice();
+    },
+    save: function(list){
+      try { localStorage.setItem(KEY, JSON.stringify(list)); return true; }
+      catch(e){ return false; }
+    },
+    reset: function(){ try { localStorage.removeItem(KEY); } catch(e){} }
+  };
+
+  var events = STORE.load();
+  var editing = null;
+  var dirty = false;
+
+  function setDirty(v){ dirty = v; document.body.classList.toggle('is-dirty', v); }
+  function toast(msg, bad){
+    var t = $('#toast'); t.textContent = msg; t.classList.toggle('bad', !!bad);
+    t.classList.add('on'); setTimeout(function(){ t.classList.remove('on'); }, 2600);
+  }
+  function iso(d,t){ return d + 'T' + (t || '20:00'); }
+  function parts(isoStr){
+    var m = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})$/.exec(isoStr || '');
+    if (!m) return null;
+    return { y:+m[1], mo:+m[2], d:+m[3], h:m[4], mi:m[5] };
+  }
+  function longDate(isoStr){
+    var p = parts(isoStr); if (!p) return '';
+    return p.d + ' ' + MONL[p.mo-1] + ' ' + p.y + ' om ' + p.h + ':' + p.mi;
+  }
+  function isPast(isoStr){
+    var p = parts(isoStr); if (!p) return false;
+    var end = new Date(p.y, p.mo-1, p.d, 23, 59);
+    return end < new Date();
+  }
+  function sortEvents(){ events.sort(function(a,b){ return a.date.localeCompare(b.date); }); }
+
+  /* ---- the real event card, same markup and classes as the site ---- */
+  function cardHTML(e){
+    var p = parts(e.date);
+    var branch = BRANCHES[e.branch] || '';
+    var poster = e.poster || 'data:image/svg+xml,' + encodeURIComponent(
+      '<svg xmlns="http://www.w3.org/2000/svg" width="8" height="6">' +
+      '<rect width="8" height="6" fill="%23191419"/></svg>');
+    return "<article class=\"ev\">\n  <div class=\"pic\">\n    <i class=\"blur\" style=\"background-image:url('__POSTER__')\"></i>\n    <img src=\"__POSTER__\" alt=\"\" loading=\"lazy\" decoding=\"async\">\n    <div class=\"when\"><b>__DAY__</b><span>__MON__</span></div>\n  </div>\n  <div class=\"c\">\n    <span class=\"where\">Die Veiling __BRANCH__</span>\n    <h3>__TITLE__</h3>\n    <p>__BLURB__</p>\n    <div class=\"meta\">__WHEN____PRICE____INFO__</div>\n    <div class=\"acts\">\n      <a class=\"btn btn-red btn-sm\" href=\"#\" onclick=\"return false\">__WA__</a>\n      __TICKETS__\n    </div>\n  </div>\n</article>"
+      .replace(/__POSTER__/g, esc(poster))
+      .replace(/__DAY__/g, p ? p.d : '?')
+      .replace(/__MON__/g, p ? MON[p.mo-1] : '')
+      .replace(/__BRANCH__/g, esc(branch))
+      .replace(/__TITLE__/g, esc(e.title || 'Naamloos'))
+      .replace(/__BLURB__/g, esc(e.blurb || ''))
+      .replace(/__WHEN__/g, esc(longDate(e.date)))
+      .replace(/__PRICE__/g, e.price ? '<br><b>' + esc(e.price) + '</b>' : '')
+      .replace(/__INFO__/g, e.info ? '<br>' + esc(e.info) : '')
+      .replace(/__TICKETS__/g, e.tickets
+        ? '<a class="btn btn-ghost btn-sm" href="#" onclick="return false">Kaartjies</a>' : '')
+      .replace(/__WA__/g, esc(WA));
+  }
+
+  function draft(){
+    return {
+      id: editing ? editing.id : null,
+      title: $('#f-title').value.trim(),
+      date: iso($('#f-date').value, $('#f-time').value),
+      branch: $('#f-branch').value,
+      type: $('#f-type').value,
+      blurb: $('#f-blurb').value.trim(),
+      price: $('#f-price').value.trim(),
+      info: $('#f-info').value.trim(),
+      poster: $('#f-poster').value.trim(),
+      tickets: $('#f-tickets').checked
+    };
+  }
+
+  function renderPreview(){
+    var d = draft();
+    if (!d.poster && !d.title) {
+      $('#preview').innerHTML =
+        '<div class="ev" style="align-items:center;justify-content:center;min-height:300px;' +
+        'border-style:dashed;text-align:center;padding:34px">' +
+        '<p style="font-size:14px;color:var(--mute2);margin:0">Begin tik, en die kaartjie ' +
+        'verskyn hier presies soos dit op die webwerf sal lyk.</p></div>';
+      return;
+    }
+    $('#preview').innerHTML = cardHTML(d);
+  }
+
+  function renderList(){
+    var q = $('#q').value.toLowerCase();
+    var fb = $('#fbranch').value, fw = $('#fwhen').value;
+    sortEvents();
+    var rows = events.filter(function(e){
+      if (q && (e.title||'').toLowerCase().indexOf(q) === -1) return false;
+      if (fb && e.branch !== fb) return false;
+      var past = isPast(e.date);
+      if (fw === 'up' && past) return false;
+      if (fw === 'past' && !past) return false;
+      return true;
+    });
+    $('#count').textContent = events.length + ' gebeure · ' +
+      events.filter(function(e){ return !isPast(e.date); }).length + ' kom nog';
+    $('#list').innerHTML = rows.map(function(e){
+      var p = parts(e.date);
+      return '<div class="erow' + (isPast(e.date)?' past':'') +
+        (editing && editing.id === e.id ? ' sel' : '') + '" data-id="' + esc(e.id) + '">' +
+        '<div class="d"><b>' + (p?p.d:'?') + '</b><span>' + (p?MON[p.mo-1]:'') + '</span></div>' +
+        '<div class="m"><b>' + esc(e.title) + '</b><span>Die Veiling ' + esc(BRANCHES[e.branch]||'') + '</span></div>' +
+        '<span class="tag">' + (e.type === 'show' ? 'Show' : e.type === 'mark' ? 'Mark' : 'Fees') + '</span>' +
+        '</div>';
+    }).join('') || '<p class="hint" style="margin:0">Niks pas by hierdie keuse nie.</p>';
+  }
+
+  function fill(e){
+    editing = e;
+    var p = parts(e.date);
+    $('#f-title').value = e.title || '';
+    $('#f-date').value = p ? (p.y + '-' + String(p.mo).padStart(2,'0') + '-' + String(p.d).padStart(2,'0')) : '';
+    $('#f-time').value = p ? (p.h + ':' + p.mi) : '20:00';
+    $('#f-branch').value = e.branch || 'vanderbijlpark';
+    $('#f-type').value = e.type || 'show';
+    $('#f-blurb').value = e.blurb || '';
+    $('#f-price').value = e.price || '';
+    $('#f-info').value = e.info || '';
+    $('#f-poster').value = e.poster || '';
+    $('#f-tickets').checked = !!e.tickets;
+    $('#formTitle').textContent = 'Wysig: ' + (e.title || '');
+    $('#apply').textContent = 'Stoor veranderinge';
+    $('#del').hidden = false;
+    renderPreview(); renderList();
+  }
+
+  function blank(){
+    editing = null;
+    ['f-title','f-blurb','f-price','f-info','f-poster'].forEach(function(id){ $('#'+id).value = ''; });
+    $('#f-date').value = ''; $('#f-time').value = '20:00';
+    $('#f-branch').value = 'vanderbijlpark'; $('#f-type').value = 'show';
+    $('#f-tickets').checked = false;
+    $('#formTitle').textContent = 'Nuwe gebeurtenis';
+    $('#apply').textContent = 'Voeg by die kalender';
+    $('#del').hidden = true;
+    clearErrors(); renderPreview(); renderList();
+  }
+
+  function clearErrors(){
+    ['title','date','blurb','poster'].forEach(function(k){
+      $('#e-'+k).classList.remove('on'); $('#f-'+k).classList.remove('err');
+    });
+  }
+  function validate(d){
+    clearErrors();
+    var bad = [];
+    if (!d.title) bad.push('title');
+    if (!$('#f-date').value) bad.push('date');
+    if (!d.blurb) bad.push('blurb');
+    if (!d.poster) bad.push('poster');
+    bad.forEach(function(k){
+      $('#e-'+k).classList.add('on'); $('#f-'+k).classList.add('err');
+    });
+    return bad.length === 0;
+  }
+
+  /* ---- wiring ---- */
+  ['f-title','f-date','f-time','f-branch','f-type','f-blurb','f-price','f-info','f-poster','f-tickets']
+    .forEach(function(id){
+      var el = $('#'+id);
+      el.addEventListener('input', function(){ renderPreview(); setDirty(true); });
+      el.addEventListener('change', function(){ renderPreview(); setDirty(true); });
+    });
+  ['q','fbranch','fwhen'].forEach(function(id){
+    $('#'+id).addEventListener('input', renderList);
+    $('#'+id).addEventListener('change', renderList);
+  });
+
+  $('#list').addEventListener('click', function(ev){
+    var row = ev.target.closest('.erow'); if (!row) return;
+    var e = events.find(function(x){ return x.id === row.dataset.id; });
+    if (e) fill(e);
+  });
+
+  $('#new').addEventListener('click', blank);
+  $('#cancel').addEventListener('click', blank);
+
+  $('#apply').addEventListener('click', function(){
+    var d = draft();
+    if (!validate(d)) { toast('Vul asseblief die rooi velde in', true); return; }
+    if (editing) {
+      var i = events.findIndex(function(x){ return x.id === editing.id; });
+      d.id = editing.id;
+      if (i > -1) events[i] = d;
+    } else {
+      d.id = d.date + '|' + d.branch + '|' + d.title;
+      if (events.some(function(x){ return x.id === d.id; })) {
+        toast('Daardie gebeurtenis bestaan reeds', true); return;
+      }
+      events.push(d);
+    }
+    setDirty(true);
+    blank();
+    toast('Bygevoeg. Klik Stoor om dit te hou.');
+  });
+
+  $('#del').addEventListener('click', function(){
+    if (!editing) return;
+    if (!confirm('Verwyder "' + editing.title + '"?')) return;
+    events = events.filter(function(x){ return x.id !== editing.id; });
+    setDirty(true); blank(); toast('Verwyder.');
+  });
+
+  $('#save').addEventListener('click', function(){
+    sortEvents();
+    if (STORE.save(events)) { setDirty(false); toast('Gestoor.'); }
+    else toast('Kon nie stoor nie. Is jou blaaier se stoorplek vol?', true);
+  });
+
+  $('#export').addEventListener('click', function(){
+    sortEvents();
+    var out = events.map(function(e){
+      var o = { date:e.date, title:e.title, branch:e.branch, type:e.type, poster:e.poster, blurb:e.blurb };
+      if (e.price) o.price = e.price;
+      if (e.info) o.info = e.info;
+      if (e.tickets) o.tickets = true;
+      return o;
+    });
+    var blob = new Blob([JSON.stringify(out, null, 1)], {type:'application/json'});
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'events.json';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); }, 1000);
+    toast('events.json afgelaai.');
+  });
+
+  $('#import').addEventListener('click', function(){ $('#file').click(); });
+  $('#file').addEventListener('change', function(ev){
+    var f = ev.target.files && ev.target.files[0]; if (!f) return;
+    var fr = new FileReader();
+    fr.onload = function(){
+      try {
+        var list = JSON.parse(fr.result);
+        if (!Array.isArray(list)) throw new Error('nie ’n lys nie');
+        events = list.map(function(e){
+          return { id: e.date + '|' + e.branch + '|' + e.title, date:e.date, title:e.title,
+                   branch:e.branch, type:e.type||'show', poster:e.poster||'', blurb:e.blurb||'',
+                   price:e.price||'', info:e.info||'', tickets:!!e.tickets };
+        });
+        setDirty(true); blank();
+        toast(events.length + ' gebeure gelaai.');
+      } catch(err){ toast('Kon nie die lêer lees nie', true); }
+    };
+    fr.readAsText(f);
+    ev.target.value = '';
+  });
+
+  /* poster drop: a data URL is fine for the preview; a real upload needs a back end */
+  var drop = $('#drop');
+  drop.addEventListener('click', function(){
+    var i = document.createElement('input'); i.type = 'file'; i.accept = 'image/*';
+    i.onchange = function(){ if (i.files[0]) readImage(i.files[0]); };
+    i.click();
+  });
+  ['dragenter','dragover'].forEach(function(t){
+    drop.addEventListener(t, function(e){ e.preventDefault(); drop.classList.add('over'); });
+  });
+  ['dragleave','drop'].forEach(function(t){
+    drop.addEventListener(t, function(e){ e.preventDefault(); drop.classList.remove('over'); });
+  });
+  drop.addEventListener('drop', function(e){
+    var f = e.dataTransfer.files && e.dataTransfer.files[0];
+    if (f) readImage(f);
+  });
+  function readImage(f){
+    if (!/^image\//.test(f.type)) { toast('Dis nie ’n prent nie', true); return; }
+    if (f.size > 3 * 1024 * 1024) { toast('Prent is groter as 3 MB', true); return; }
+    var fr = new FileReader();
+    fr.onload = function(){ $('#f-poster').value = fr.result; renderPreview(); setDirty(true);
+      toast('Plakkaat gelaai vir die voorskou.'); };
+    fr.readAsDataURL(f);
+  }
+
+  window.addEventListener('beforeunload', function(e){
+    if (!dirty) return;
+    e.preventDefault(); e.returnValue = '';
+  });
+
+  blank();
+})();
+</script>
+</body>
+</html>
