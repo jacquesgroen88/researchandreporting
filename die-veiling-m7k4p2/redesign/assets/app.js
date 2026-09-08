@@ -159,10 +159,13 @@
         if (!e.isIntersecting) return;
         nio.unobserve(e.target);
         var el = e.target, to = parseInt(el.getAttribute('data-count'), 10), t0 = null;
+        // keep the thousands separator while counting, so 1 383 never
+        // flickers back to 1383 on the way up
+        var fmt = function (v) { return String(v).replace(/\B(?=(\d{3})+(?!\d))/g, ' '); };
         var step = function (ts) {
           if (!t0) t0 = ts;
           var p = Math.min((ts - t0) / 1200, 1);
-          el.textContent = Math.round(to * (1 - Math.pow(1 - p, 3)));
+          el.textContent = fmt(Math.round(to * (1 - Math.pow(1 - p, 3))));
           if (p < 1) requestAnimationFrame(step);
         };
         requestAnimationFrame(step);

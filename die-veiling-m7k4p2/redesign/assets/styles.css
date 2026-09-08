@@ -61,7 +61,7 @@ h1,h2,h3,.display{
 p{color:var(--mute)}
 strong{color:var(--cream);font-weight:600}
 
-.wrap{max-width:var(--wrap);margin:0 auto;padding:0 clamp(20px,4vw,40px)}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 clamp(22px,4vw,40px)}
 .narrow{max-width:820px}
 
 /* ---------- film grain over the whole page ---------- */
@@ -94,8 +94,9 @@ body::after{
 .skip:focus{top:16px}
 .lead{font-size:clamp(16px,1.5vw,18.5px);color:var(--mute);max-width:62ch}
 
-.sec{padding:clamp(72px,9vw,132px) 0;position:relative}
-.sec-head{max-width:760px;margin-bottom:clamp(38px,5vw,62px)}
+.sec{padding:clamp(58px,8vw,124px) 0;position:relative}
+.sec + .sec{padding-top:clamp(40px,5.5vw,88px)}
+.sec-head{max-width:760px;margin-bottom:clamp(34px,4.4vw,58px)}
 .sec-head.c{margin-left:auto;margin-right:auto;text-align:center}
 .sec-head h2{font-size:clamp(32px,5.4vw,68px);margin:16px 0 18px}
 .sec-head p{font-size:clamp(15.5px,1.4vw,17.5px)}
@@ -138,13 +139,17 @@ header.solid{
   padding:11px 0;border-bottom-color:var(--line);box-shadow:0 10px 40px rgba(0,0,0,.5);
 }
 header .bar{display:flex;align-items:center;justify-content:space-between;gap:22px}
-.brand{display:flex;align-items:center;gap:13px;flex-shrink:0}
-.brand img{height:56px;width:auto;transition:height .4s;
-  filter:drop-shadow(0 0 12px rgba(255,45,32,.55))}
-header.solid .brand img{height:44px}
-.brand .bt{line-height:1.15}
-.brand .bt b{display:block;font-family:'Anton',sans-serif;font-size:16px;letter-spacing:.05em;color:#fff}
-.brand .bt span{display:block;font-size:9.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--neon-soft)}
+.brand{display:flex;align-items:center;gap:15px;flex-shrink:0;min-width:0}
+/* The mark is the brand. It carries its own neon, so the only job here is to
+   give it room and a light lift off the dark ground. */
+.brand img{height:clamp(58px,7.4vw,84px);width:auto;transition:height .4s;
+  filter:drop-shadow(0 2px 10px rgba(0,0,0,.55)) drop-shadow(0 0 16px rgba(255,45,32,.4))}
+header.solid .brand img{height:clamp(48px,5.6vw,64px)}
+.brand .bt{line-height:1.12;min-width:0}
+.brand .bt b{display:block;font-family:'Anton',sans-serif;font-size:clamp(17px,1.5vw,21px);
+  letter-spacing:.04em;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.5)}
+.brand .bt span{display:block;font-size:clamp(9px,.8vw,10.5px);letter-spacing:.28em;
+  text-transform:uppercase;color:var(--neon-soft);margin-top:2px}
 
 nav.main{display:flex;align-items:center;gap:30px}
 nav.main > a,.drop > button{
@@ -226,9 +231,10 @@ body.nav-open .drawer{
     linear-gradient(90deg,rgba(8,7,10,.9) 0%,rgba(8,7,10,.62) 38%,rgba(8,7,10,.14) 70%,transparent 100%),
     linear-gradient(180deg,rgba(8,7,10,.78) 0%,rgba(8,7,10,.24) 34%,rgba(8,7,10,.7) 74%,var(--void) 100%);
 }
-.hero .inner{position:relative;z-index:3;width:100%;padding:150px 0 clamp(56px,7vw,96px)}
+.hero .inner{position:relative;z-index:3;width:100%;
+  padding-top:clamp(120px,17vh,170px);padding-bottom:clamp(56px,7vw,96px)}
 .hero .rot{min-height:1px}
-.hero .hl{font-size:clamp(46px,9.4vw,132px);margin:20px 0 22px;
+.hero .hl{font-size:clamp(34px,9.6vw,132px);margin:18px 0 22px;
   text-shadow:0 6px 40px rgba(0,0,0,.6)}
 .hero .hl em{font-style:normal;color:var(--neon);text-shadow:var(--glow)}
 
@@ -270,7 +276,9 @@ body.nav-open .drawer{
 .stats .row{display:grid;grid-template-columns:repeat(4,1fr)}
 .stat{padding:clamp(34px,4.4vw,58px) 26px;text-align:center;border-right:1px solid var(--line)}
 .stat:last-child{border-right:none}
-.stat .n{font-family:'Anton',sans-serif;font-size:clamp(38px,5vw,62px);color:#fff;line-height:1}
+.stat .n{font-family:'Anton',sans-serif;font-size:clamp(38px,5vw,62px);color:#fff;line-height:1;
+  display:flex;align-items:center;justify-content:center;gap:8px}
+.stat .n .star{color:var(--brass);font-size:.55em;line-height:1;font-family:'Inter',sans-serif}
 .stat .n em{font-style:normal;color:var(--neon);text-shadow:var(--glow)}
 .stat .t{font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--mute2);margin-top:10px}
 
@@ -279,7 +287,7 @@ body.nav-open .drawer{
    ================================================================== */
 .branches{background:var(--void)}
 .bgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
-.bcard{position:relative;overflow:hidden;border-radius:var(--rl);min-height:clamp(400px,46vw,520px);
+.bcard{position:relative;overflow:hidden;border-radius:var(--rl);min-height:clamp(330px,44vw,520px);
   display:flex;flex-direction:column;justify-content:flex-end;
   border:1px solid var(--line);transition:transform .5s var(--ease),border-color .4s,box-shadow .5s}
 .bcard img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
@@ -503,11 +511,23 @@ body.nav-open .drawer{
 .cta .btn-dark:hover{background:#000;transform:translateY(-3px)}
 
 /* extra bottom room so the floating WhatsApp pill never sits on the legal links */
-footer{background:var(--coal);border-top:1px solid var(--line);padding:clamp(58px,6vw,88px) 0 96px}
+footer{background:var(--coal);border-top:1px solid var(--line);padding:clamp(58px,6vw,88px) 0 clamp(96px,10vw,110px)}
 .fgrid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1.2fr;gap:clamp(28px,4vw,56px);
   padding-bottom:44px;border-bottom:1px solid var(--line)}
-.fbrand img{height:92px;margin-bottom:18px;filter:drop-shadow(0 0 18px rgba(255,45,32,.45))}
+.fbrand .flogo{display:block;width:fit-content;margin-bottom:20px}
+.fbrand img{
+  height:auto;width:clamp(150px,15vw,186px);   /* width-led: the mark is taller than it is wide */
+  filter:drop-shadow(0 3px 14px rgba(0,0,0,.6));
+  transition:transform .35s var(--ease);
+}
+.fbrand .flogo:hover img{transform:translateY(-2px) scale(1.02)}
 .fbrand p{font-size:14px;max-width:34ch}
+.fbrand .fscore{
+  display:flex;align-items:center;gap:7px;margin-bottom:12px;
+  font-size:13.5px;color:var(--mute);
+}
+.fbrand .fscore b{font-family:'Anton',sans-serif;font-size:19px;color:#fff;letter-spacing:.02em}
+.fbrand .fscore span{color:var(--brass);font-size:15px}
 footer h4{font-family:'Anton',sans-serif;font-size:13.5px;letter-spacing:.2em;text-transform:uppercase;
   color:var(--brass-soft);margin-bottom:18px}
 footer ul{display:grid;gap:11px}
@@ -527,12 +547,24 @@ footer .fl{margin-bottom:15px;line-height:1.5}
 .fbot .lk{display:flex;gap:20px;flex-wrap:wrap}
 
 /* ---------- floating WhatsApp ---------- */
-.float{position:fixed;right:22px;bottom:22px;z-index:150;display:inline-flex;align-items:center;gap:10px;
-  background:#25d366;color:#04220f;padding:14px 20px;border-radius:100px;
-  font-size:13px;font-weight:700;letter-spacing:.06em;
-  box-shadow:0 16px 38px rgba(37,211,102,.4);transition:transform .3s var(--ease),box-shadow .3s}
-.float:hover{transform:translateY(-4px) scale(1.03);box-shadow:0 22px 48px rgba(37,211,102,.55)}
-.float svg{width:19px;height:19px;fill:currentColor}
+.float{
+  position:fixed;right:22px;bottom:22px;z-index:150;
+  display:inline-flex;align-items:center;gap:11px;
+  background:#25d366;color:#052b13;padding:0 22px 0 15px;height:56px;border-radius:100px;
+  font-size:13.5px;font-weight:700;letter-spacing:.04em;
+  box-shadow:0 10px 24px rgba(0,0,0,.35),0 4px 14px rgba(37,211,102,.45);
+  transition:transform .3s var(--ease),box-shadow .3s,background .25s;
+}
+.float:hover{background:#1fbe5b;transform:translateY(-3px);
+  box-shadow:0 16px 34px rgba(0,0,0,.4),0 6px 20px rgba(37,211,102,.6)}
+.float:active{transform:translateY(-1px)}
+/* the glyph sits in its own white disc so it reads as the WhatsApp mark
+   rather than a shape cut out of the pill */
+.float .ic{
+  flex:0 0 auto;width:34px;height:34px;border-radius:50%;background:#fff;
+  display:flex;align-items:center;justify-content:center;
+}
+.float .ic svg{width:21px;height:21px;fill:#25d366;display:block}
 .float .lbl{white-space:nowrap}
 
 /* ---------- inner page hero ---------- */
@@ -543,7 +575,8 @@ footer .fl{margin-bottom:15px;line-height:1.5}
   background:
     linear-gradient(90deg,rgba(8,7,10,.86) 0%,rgba(8,7,10,.5) 42%,rgba(8,7,10,.1) 72%,transparent 100%),
     linear-gradient(180deg,rgba(8,7,10,.8) 0%,rgba(8,7,10,.34) 42%,var(--void) 100%)}
-.phero .in{position:relative;z-index:3;width:100%;padding:170px 0 clamp(44px,5vw,72px)}
+.phero .in{position:relative;z-index:3;width:100%;
+  padding-top:clamp(128px,18vh,178px);padding-bottom:clamp(44px,5vw,72px)}
 .phero h1{font-size:clamp(40px,7.6vw,104px);margin:18px 0 16px}
 .phero .sub{font-size:clamp(16px,1.6vw,19px);color:rgba(247,241,233,.84);max-width:56ch}
 .crumbs{display:flex;gap:9px;align-items:center;font-size:11.5px;letter-spacing:.16em;
@@ -590,12 +623,17 @@ footer .fl{margin-bottom:15px;line-height:1.5}
 }
 @media(max-width:680px){
   .bgrid,.evgrid{grid-template-columns:1fr}
+  /* icon-only pill on a phone, sized as a proper touch target */
+  .float{padding:0;width:60px;height:60px;justify-content:center;right:16px;bottom:16px}
+  .float .lbl{display:none}
+  .float .ic{width:38px;height:38px}
+  .float .ic svg{width:23px;height:23px}
+  .fbrand img{width:clamp(140px,42vw,170px)}
+  .sec-head h2{font-size:clamp(30px,8.8vw,44px)}
   .hours,.people,.form .fr{grid-template-columns:1fr}
   .fgrid{grid-template-columns:1fr;gap:32px}
   .hero .dots{flex-direction:row;right:auto;left:clamp(20px,4vw,40px);bottom:24px}
   .hero .inner{padding-bottom:74px}
-  .float .lbl{display:none}
-  .float{padding:15px;right:16px;bottom:16px}
   .rows .row{flex-direction:column;align-items:flex-start;gap:6px}
   .rows .row .k{width:auto}
   .ggrid{grid-template-columns:1fr 1fr;grid-auto-rows:130px}
@@ -627,7 +665,7 @@ footer .fl{margin-bottom:15px;line-height:1.5}
   background:rgba(10,8,11,.92);backdrop-filter:blur(14px);
   border-top:1px solid var(--line);border-bottom:1px solid var(--line);
 }
-.menunav .row{display:flex;gap:8px;overflow-x:auto;padding:12px 0;scrollbar-width:thin}
+.menunav .row{display:flex;gap:8px;overflow-x:auto;padding-top:12px;padding-bottom:12px;scrollbar-width:thin}
 .menunav a{
   flex:0 0 auto;font-size:11.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
   color:var(--mute);border:1px solid var(--line2);border-radius:100px;padding:9px 16px;
