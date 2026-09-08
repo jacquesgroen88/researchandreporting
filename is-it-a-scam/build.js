@@ -150,8 +150,11 @@ function layout({ title, description, canonical, body, jsonld = [], bodyClass = 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="${esc(fullTitle)}">
 <meta name="twitter:description" content="${esc(description)}">
-<meta name="theme-color" content="#0d0f13">
+<meta name="theme-color" content="#f2efe6">
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;700&display=swap">
 <link rel="stylesheet" href="/assets/styles.css">
 ${extraHead}
 ${jsonld.map((j) => `<script type="application/ld+json">${JSON.stringify(j)}</script>`).join('\n')}
@@ -162,7 +165,7 @@ ${jsonld.map((j) => `<script type="application/ld+json">${JSON.stringify(j)}</sc
   <div class="wrap head-inner">
     <a class="brand" href="/">
       <span class="brand-mark" aria-hidden="true">?</span>
-      <span class="brand-text"><strong>Is It A Scam</strong><span class="brand-q">?</span></span>
+      <span class="brand-text">Is It A Scam<span class="brand-q">?</span></span>
     </a>
     <nav class="nav" aria-label="Main">
       <a href="/scams/">Scam library</a>
@@ -225,16 +228,10 @@ function crumbHtml(trail) {
 }
 
 /* ── Components ──────────────────────────────────────────────────────────── */
-function scoreRing(score, band, size = 'md') {
-  const circumference = 2 * Math.PI * 42;
-  const offset = circumference - (score / 100) * circumference;
-  return `<div class="ring ring-${size} band-${band.id}" role="img" aria-label="Threat score ${score} out of 100, rated ${band.label}">
-  <svg viewBox="0 0 100 100" aria-hidden="true">
-    <circle class="ring-track" cx="50" cy="50" r="42"></circle>
-    <circle class="ring-value" cx="50" cy="50" r="42"
-      stroke-dasharray="${circumference.toFixed(1)}" stroke-dashoffset="${offset.toFixed(1)}"></circle>
-  </svg>
-  <div class="ring-inner"><span class="ring-num">${score}</span><span class="ring-band">${esc(band.label)}</span></div>
+function scoreStamp(score, band, size = 'md') {
+  return `<div class="stamp stamp-${size} band-${band.id}" role="img" aria-label="Threat score ${score} out of 100, rated ${band.label}">
+  <span class="stamp-num">${score}</span>
+  <span class="stamp-side"><span class="stamp-band">${esc(band.label)}</span><span class="stamp-lbl">threat<br>score</span></span>
 </div>`;
 }
 
@@ -256,14 +253,15 @@ ${site.scoreDimensions.map((d) => {
 }
 
 function scamCard(s) {
-  return `<article class="card band-${s.band.id}" data-slug="${esc(s.slug)}" data-category="${esc(s.category)}" data-threat="${s.threat}" data-search="${esc((s.name + ' ' + (s.aka || []).join(' ') + ' ' + s.summary + ' ' + s.keywords.join(' ')).toLowerCase())}">
-  <div class="card-top">
+  const search = (s.name + ' ' + (s.aka || []).join(' ') + ' ' + s.summary + ' ' + s.keywords.join(' ')).toLowerCase();
+  return `<article class="card band-${s.band.id}" data-slug="${esc(s.slug)}" data-category="${esc(s.category)}" data-threat="${s.threat}" data-search="${esc(search)}">
+  <div class="card-bar">
     <span class="cat-tag">${esc(s.categoryName)}</span>
-    <span class="threat-chip band-${s.band.id}"><span class="chip-num">${s.threat}</span><span class="chip-lbl">${esc(s.band.label)}</span></span>
+    <span class="card-score">${s.threat}</span>
   </div>
   <h3><a href="${s.url}">${esc(s.name)}</a></h3>
   <p class="card-sum">${esc(s.summary)}</p>
-  <p class="card-meta">Typical loss ${rands(s.typicalLoss.low)} – ${rands(s.typicalLoss.high)}</p>
+  <p class="card-meta"><span class="card-band">${esc(s.band.label)} threat</span><span class="card-loss">${rands(s.typicalLoss.low)}–${rands(s.typicalLoss.high)}</span></p>
 </article>`;
 }
 
@@ -273,21 +271,29 @@ function buildHome() {
   const body = `
 <section class="hero">
   <div class="wrap">
-    <p class="eyebrow">Free scam intelligence for South Africa</p>
-    <h1>Is it a scam?<br><span class="hero-accent">Look it up before you pay.</span></h1>
-    <p class="hero-lede">${esc(site.description)}</p>
-    <div class="hero-actions">
-      <a class="btn btn-primary" href="/scams/">Search ${scams.length} scams</a>
-      <a class="btn btn-ghost" href="/checklist/">Use the 6-point checklist</a>
+    <p class="eyebrow">Free scam intelligence &middot; South Africa</p>
+    <h1 class="hero-h1">
+      <span class="hero-line">Is it</span>
+      <span class="hero-line">a scam<span class="hero-q">?</span></span>
+    </h1>
+    <div class="hero-grid">
+      <div>
+        <p class="hero-lede">${esc(site.description)}</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="/scams/">Search ${scams.length} scams</a>
+          <a class="btn btn-ghost" href="/checklist/">Run the 6-point checklist</a>
+        </div>
+      </div>
+      <ul class="hero-stats">
+        <li><strong>${scams.length}</strong><span>scams documented</span></li>
+        <li><strong>${site.categories.length}</strong><span>categories</span></li>
+        <li><strong>20</strong><span>ranked for SA</span></li>
+        <li><strong>5</strong><span>scored dimensions</span></li>
+      </ul>
     </div>
-    <ul class="hero-stats">
-      <li><strong>${scams.length}</strong><span>scams documented</span></li>
-      <li><strong>${site.categories.length}</strong><span>categories</span></li>
-      <li><strong>20</strong><span>ranked for South Africa</span></li>
-      <li><strong>5</strong><span>scored dimensions each</span></li>
-    </ul>
   </div>
 </section>
+<div class="hazard" aria-hidden="true"></div>
 
 <section class="band">
   <div class="wrap">
@@ -515,8 +521,7 @@ ${crumbHtml(trail)}
       </ul>
     </div>
     <div class="scam-head-score">
-      ${scoreRing(s.threat, s.band, 'lg')}
-      <p class="score-caption">Threat score</p>
+      ${scoreStamp(s.threat, s.band, 'lg')}
     </div>
   </div>
 </header>

@@ -21,7 +21,9 @@
     Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
     # frame-src allows the YouTube embeds on scam pages. Everything else is
     # self-hosted, so the rest stays tight.
-    Content-Security-Policy   = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-src https://www.youtube-nocookie.com https://www.youtube.com; object-src 'none'; base-uri 'self'; form-action 'self'"
+    # style-src/font-src cover the Google Fonts the type system depends on;
+    # frame-src covers the YouTube embeds on scam pages. Nothing else is allowed.
+    Content-Security-Policy   = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; frame-src https://www.youtube-nocookie.com https://www.youtube.com; object-src 'none'; base-uri 'self'; form-action 'self'"
 
 [[headers]]
   for = "/*.html"
