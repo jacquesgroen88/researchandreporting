@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>ReviewTap Recovery Desk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+
+<style>
+:root{
+  --paper:#F4F6F3; --raised:#FFFFFF; --ink:#16211F; --muted:#657570;
+  --rule:#DBE2DB; --rule-soft:#E7EDE7;
+  --accent:#C24E1B; --accent-soft:#FBEAE1;
+  --deep:#12403C; --deep-soft:#E2ECEA;
+  --good:#2C6349; --warn:#96591A; --stop:#9C2F21;
+  --good-bg:#E4EFE8; --warn-bg:#FAEEDD; --stop-bg:#F8E6E3;
+  --shadow:0 1px 2px rgba(22,33,31,.05), 0 8px 24px -16px rgba(22,33,31,.28);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#111614; --raised:#181E1B; --ink:#E7EDE8; --muted:#94A29B;
+    --rule:#29322D; --rule-soft:#212823;
+    --accent:#F07A42; --accent-soft:#2E1C13;
+    --deep:#6FC3B5; --deep-soft:#152825;
+    --good:#7FC69F; --warn:#DFA85C; --stop:#EC8878;
+    --good-bg:#16241C; --warn-bg:#2A2015; --stop-bg:#2B1A17;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#111614; --raised:#181E1B; --ink:#E7EDE8; --muted:#94A29B;
+  --rule:#29322D; --rule-soft:#212823;
+  --accent:#F07A42; --accent-soft:#2E1C13;
+  --deep:#6FC3B5; --deep-soft:#152825;
+  --good:#7FC69F; --warn:#DFA85C; --stop:#EC8878;
+  --good-bg:#16241C; --warn-bg:#2A2015; --stop-bg:#2B1A17;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.7);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:"Source Serif 4",Georgia,"Times New Roman",serif;
+  font-size:17px; line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:940px;margin:0 auto;padding:0 28px 96px}
+section{max-width:66ch}
+section.wide{max-width:none}
+
+h1,h2,h3,h4,.ui{font-family:Archivo,"Helvetica Neue",Arial,sans-serif}
+h2,h3{text-wrap:balance}
+.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace}
+
+/* ---------- masthead ---------- */
+.mast{padding:56px 0 28px;border-bottom:2px solid var(--ink)}
+.eyebrow{
+  font-family:Archivo,sans-serif;font-size:11.5px;font-weight:600;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:0 0 14px
+}
+h1{
+  font-size:clamp(38px,6.4vw,60px);font-weight:700;letter-spacing:-.028em;
+  line-height:1.02;margin:0 0 16px
+}
+.standfirst{font-size:19.5px;color:var(--muted);margin:0;max-width:56ch}
+.meta{
+  display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:24px;
+  font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--muted)
+}
+.meta b{color:var(--ink);font-weight:500}
+
+/* ---------- numbers strip ---------- */
+.figures{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));
+  gap:1px;background:var(--rule);border:1px solid var(--rule);
+  margin:34px 0 8px;border-radius:3px;overflow:hidden
+}
+.fig{background:var(--raised);padding:18px 18px 16px}
+.fig .n{
+  font-family:Archivo,sans-serif;font-size:29px;font-weight:700;
+  letter-spacing:-.02em;line-height:1;font-variant-numeric:tabular-nums
+}
+.fig .n.hot{color:var(--accent)}
+.fig .l{
+  font-family:Archivo,sans-serif;font-size:11px;font-weight:600;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--muted);margin-top:8px;line-height:1.35
+}
+
+/* ---------- sections ---------- */
+h2{
+  font-size:13px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--ink);margin:0;padding-bottom:10px;border-bottom:1px solid var(--ink)
+}
+.sec{margin-top:62px}
+.sec > h2 + *{margin-top:26px}
+h3{font-size:21px;font-weight:600;letter-spacing:-.012em;margin:38px 0 10px}
+p{margin:0 0 17px}
+p:last-child{margin-bottom:0}
+strong{font-weight:600}
+a{color:var(--accent)}
+
+/* ---------- callouts ---------- */
+.note{
+  border-left:3px solid var(--accent);background:var(--accent-soft);
+  padding:20px 24px;border-radius:0 4px 4px 0;margin:26px 0
+}
+.note.stop{border-color:var(--stop);background:var(--stop-bg)}
+.note.deep{border-color:var(--deep);background:var(--deep-soft)}
+.note h4{
+  font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  margin:0 0 9px;color:var(--accent)
+}
+.note.stop h4{color:var(--stop)}
+.note.deep h4{color:var(--deep)}
+.note p{margin-bottom:11px;font-size:16.5px}
+
+/* ---------- tables ---------- */
+.scroll{overflow-x:auto;margin:24px 0;border:1px solid var(--rule);border-radius:4px;background:var(--raised)}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th{
+  font-family:Archivo,sans-serif;font-size:11px;font-weight:600;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--muted);text-align:left;
+  padding:13px 16px;border-bottom:1px solid var(--rule);white-space:nowrap
+}
+td{padding:12px 16px;border-bottom:1px solid var(--rule-soft);vertical-align:top}
+tr:last-child td{border-bottom:none}
+td.num,th.num{text-align:right;font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;white-space:nowrap}
+td.nm{font-weight:600}
+.pill{
+  display:inline-block;font-family:Archivo,sans-serif;font-size:10.5px;font-weight:600;
+  letter-spacing:.07em;text-transform:uppercase;padding:3px 8px;border-radius:3px;white-space:nowrap
+}
+.pill.ok{background:var(--good-bg);color:var(--good)}
+.pill.low{background:var(--warn-bg);color:var(--warn)}
+.pill.out{background:var(--stop-bg);color:var(--stop)}
+
+/* ---------- call flow ---------- */
+ol.flow{list-style:none;counter-reset:s;margin:26px 0 0;padding:0}
+ol.flow > li{
+  counter-increment:s;position:relative;padding:0 0 26px 52px;
+  border-left:1px solid var(--rule);margin-left:15px
+}
+ol.flow > li:last-child{border-left-color:transparent;padding-bottom:0}
+ol.flow > li::before{
+  content:counter(s);position:absolute;left:-15px;top:-2px;
+  width:30px;height:30px;border-radius:50%;background:var(--deep);color:var(--paper);
+  font-family:Archivo,sans-serif;font-size:13px;font-weight:700;
+  display:grid;place-items:center
+}
+ol.flow h4{font-family:Archivo,sans-serif;font-size:17px;font-weight:600;margin:2px 0 7px}
+
+/* ---------- script ---------- */
+.script{
+  background:var(--raised);border:1px solid var(--rule);border-radius:4px;
+  padding:24px 26px;margin:22px 0;box-shadow:var(--shadow)
+}
+.script .say{
+  font-size:18px;line-height:1.66;border-left:3px solid var(--deep);
+  padding-left:18px;margin:0 0 14px
+}
+.script .say:last-child{margin-bottom:0}
+.script .dir{
+  font-family:Archivo,sans-serif;font-size:13px;font-weight:600;color:var(--accent);
+  margin:0;letter-spacing:.005em
+}
+.tag{
+  font-family:Archivo,sans-serif;font-size:11px;font-weight:700;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--muted);display:block;margin-bottom:12px
+}
+
+/* ---------- objections ---------- */
+.obj{border-top:1px solid var(--rule);padding:22px 0}
+.obj:last-of-type{border-bottom:1px solid var(--rule)}
+.obj .they{
+  font-family:Archivo,sans-serif;font-size:16.5px;font-weight:600;margin:0 0 4px;
+  display:flex;gap:10px;align-items:baseline;flex-wrap:wrap
+}
+.obj .freq{
+  font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:500;
+  color:var(--accent);letter-spacing:.03em;text-transform:none
+}
+.obj .you{margin:9px 0 0;padding-left:16px;border-left:2px solid var(--deep);font-size:16.5px}
+.obj .why{margin:9px 0 0;font-size:14.5px;color:var(--muted)}
+
+/* ---------- rules ---------- */
+ul.rules{list-style:none;margin:24px 0 0;padding:0}
+ul.rules li{
+  position:relative;padding:0 0 0 30px;margin-bottom:15px;font-size:16.5px
+}
+ul.rules li::before{
+  content:"";position:absolute;left:6px;top:.62em;width:7px;height:7px;
+  border-radius:50%;background:var(--accent)
+}
+ul.rules li.no::before{background:var(--stop)}
+ul.plain{padding-left:22px;margin:16px 0}
+ul.plain li{margin-bottom:9px}
+
+/* ---------- email ---------- */
+.email{
+  background:var(--raised);border:1px solid var(--rule);border-radius:4px;
+  font-family:"IBM Plex Mono",monospace;font-size:14.5px;line-height:1.72;
+  padding:0;margin:22px 0;overflow:hidden
+}
+.email .hdr{
+  padding:13px 22px;border-bottom:1px solid var(--rule);
+  font-size:12.5px;color:var(--muted);background:var(--rule-soft)
+}
+.email .body{padding:20px 22px;white-space:pre-wrap}
+
+.codes{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin:24px 0}
+.code{
+  border:1px solid var(--rule);border-radius:4px;padding:13px 15px;background:var(--raised)
+}
+.code b{
+  font-family:"IBM Plex Mono",monospace;font-size:13px;font-weight:600;
+  color:var(--accent);display:block;margin-bottom:3px
+}
+.code span{font-size:14.5px;color:var(--muted)}
+
+/* ---------- roster ---------- */
+ol.roster{list-style:none;margin:26px 0 0;padding:0;display:flex;flex-direction:column;gap:12px}
+.row{
+  background:var(--raised);border:1px solid var(--rule);border-radius:5px;
+  padding:16px 18px 14px;box-shadow:var(--shadow)
+}
+.row.exist{border-left:3px solid var(--deep)}
+.rh{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px}
+.rnum{
+  font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;color:var(--muted);
+  font-variant-numeric:tabular-nums;min-width:22px
+}
+.rname{font-family:Archivo,sans-serif;font-size:18px;font-weight:600;letter-spacing:-.012em}
+.seg{
+  font-family:Archivo,sans-serif;font-size:10px;font-weight:700;letter-spacing:.09em;
+  text-transform:uppercase;background:var(--deep-soft);color:var(--deep);
+  padding:3px 7px;border-radius:3px
+}
+.rmeta{margin:0 0 3px 32px;font-size:14px;color:var(--muted);word-break:break-word}
+.rprod{margin:0 0 0 32px;font-size:15px}
+.rprod b{font-variant-numeric:tabular-nums}
+.rn{margin:6px 0 0 32px;font-size:13.5px;color:var(--deep)}
+.acts{display:flex;flex-wrap:wrap;gap:7px;margin:13px 0 0 32px}
+.act{
+  font-family:Archivo,sans-serif;font-size:12.5px;font-weight:600;letter-spacing:.02em;
+  text-decoration:none;padding:7px 13px;border-radius:4px;border:1px solid var(--rule);
+  color:var(--ink);background:var(--paper);transition:transform .08s ease,border-color .12s ease
+}
+.act:hover{border-color:var(--ink);transform:translateY(-1px)}
+.act.wa{background:var(--good-bg);color:var(--good);border-color:transparent}
+.act.tel{background:var(--accent);color:#fff;border-color:transparent}
+:root[data-theme="dark"] .act.tel{color:#1A0E07}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .act.tel{color:#1A0E07}}
+.act.cart{background:var(--deep);color:var(--paper);border-color:transparent}
+.act.off{
+  font-family:Archivo,sans-serif;font-size:12.5px;font-weight:600;padding:7px 13px;
+  border-radius:4px;color:var(--muted);border:1px dashed var(--rule)
+}
+@media (max-width:560px){
+  .rmeta,.rprod,.acts,.rn{margin-left:0}
+  .acts .act{flex:1 1 auto;text-align:center}
+}
+
+footer{
+  margin-top:76px;padding-top:24px;border-top:2px solid var(--ink);
+  font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--muted);
+  display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap
+}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media (max-width:640px){
+  body{font-size:16px}
+  .wrap{padding:0 20px 64px}
+  .mast{padding-top:38px}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<header class="mast">
+  <p class="eyebrow">ReviewTap · Sales brief for Giorgio</p>
+  <h1>Recovery Desk</h1>
+  <p class="standfirst">61 South African businesses chose a ReviewTap product, filled in their delivery details, reached the payment screen, and stopped. Your job is to finish those orders.</p>
+</header>
+
+<div class="figures">
+  <div class="fig"><div class="n hot">61</div><div class="l">People to work</div></div>
+  <div class="fig"><div class="n">42</div><div class="l">With a phone number</div></div>
+  <div class="fig"><div class="n">R45,451</div><div class="l">Cart value in play</div></div>
+  <div class="fig"><div class="n">R720</div><div class="l">Average callable cart</div></div>
+  <div class="fig"><div class="n">16</div><div class="l">Removed as buyers</div></div>
+</div>
+
+<section class="sec">
+  <h2>What this list is</h2>
+  <p>Every person on it went through the whole buying process on <span class="mono">reviewtap.co.za</span>. They picked a product, picked a colour, chose a quantity, typed their name, email, phone number and street address, and landed on the payment screen. Then they left without paying.</p>
+  <p>That makes them the warmest list in the business. They are not enquiries and they are not cold leads. They are people who had their card out.</p>
+  <p><strong>Your call sheet is sent to you separately.</strong> It has every person's details, a one-tap WhatsApp, call and email button for each, and your recovery code. This page is the playbook; the sheet is what you work from.</p>
+  <p>The list covers abandoned checkouts from <strong>21 June to 6 September 2026</strong>. It is sorted for you already: recency first, then cart size, then whether the person tried more than once, then whether we have a phone number. <strong>Work it top down.</strong> Row 1 is the best call on the sheet.</p>
+
+  <div class="note deep">
+    <h4>How it was cleaned</h4>
+    <p>The list was checked against all 200 real orders placed between 12 June and 7 September, on four separate keys: email address, phone number, customer name, and Shopify's own customer records.</p>
+    <p><strong>16 people were removed because they abandoned and then bought anyway.</strong> Two of those paid under a completely different email address and were only caught by matching their phone number. One of them bought thirteen minutes after abandoning a R1,347 cart.</p>
+    <p style="margin-bottom:0">If you phone someone who has already paid, you damage a real customer relationship. Never work a version of this list that has not been re-checked. Ask Jacques for a fresh scrub before each calling session, not once at the start.</p>
+  </div>
+</section>
+
+<section class="sec">
+  <h2>What you are selling</h2>
+  <p>ReviewTap makes a small physical card or counter stand with a tap chip and a QR code in it. A customer taps their phone on it or scans it, and the Google review page for that business opens instantly. No app, no typing, no searching. It exists because most happy customers never leave a review, and the reason is friction, not feeling.</p>
+  <p>The <strong>Custom Branded</strong> versions carry the customer's own logo and colours. That is the difference worth explaining on the phone, and it is where most of the money on this list sits.</p>
+</section>
+
+<section class="sec wide">
+  <div class="scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th class="num">Price</th>
+          <th class="num">Delivered under R1,000</th>
+          <th class="num">People wanting it</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="nm">Custom Branded Google Review Stand<br><span style="color:var(--muted);font-weight:400;font-size:14px">their logo, NFC + QR, white or black</span></td>
+          <td class="num">R649</td><td class="num">R774</td><td class="num">28</td>
+        </tr>
+        <tr>
+          <td class="nm">NFC Google Review Stand<br><span style="color:var(--muted);font-weight:400;font-size:14px">standard, unbranded</span></td>
+          <td class="num">R499</td><td class="num">R624</td><td class="num">21</td>
+        </tr>
+        <tr>
+          <td class="nm">NFC Google Review Card<br><span style="color:var(--muted);font-weight:400;font-size:14px">standard, unbranded</span></td>
+          <td class="num">R299</td><td class="num">R424</td><td class="num">8</td>
+        </tr>
+        <tr>
+          <td class="nm">Custom Branded Google Review Card<br><span style="color:var(--muted);font-weight:400;font-size:14px">their logo, NFC + QR</span></td>
+          <td class="num">R449</td><td class="num">R574</td><td class="num">1</td>
+        </tr>
+        <tr>
+          <td class="nm">Custom Smart Business Card</td>
+          <td class="num">R649</td><td class="num">R774</td><td class="num">2</td>
+        </tr>
+        <tr>
+          <td class="nm">Instagram NFC Cards</td>
+          <td class="num">R299</td><td class="num">R424</td><td class="num">1</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="sec">
+  <h2>Why they did not pay</h2>
+  <p>This is the single most useful thing to understand before you pick up the phone, because it tells you that almost nobody on this list rejected the product.</p>
+  <p>The store charges <strong>R125 for Courier Guy delivery on any order under R1,000</strong>. Delivery is free above R1,000. Nearly every cart on this list sits between R299 and R774, so the sequence is: a business owner picks a R649 branded stand, agrees with the price, types in all their details, and then watches R125 appear on the final screen. On a R649 item that is a nineteen percent jump, revealed at the last possible moment.</p>
+  <p><strong>More than half of the people who reach the ReviewTap checkout leave at that screen.</strong> Not at the product page. At the payment page, after committing their time.</p>
+
+  <div class="note">
+    <h4>The example that explains the whole list</h4>
+    <p style="margin-bottom:0">One shop owner on your sheet put <strong>two</strong> standard stands in the cart. Two at R499 is R998. The free delivery threshold is R1,000. They were <strong>two rands short</strong>, got charged R125, and left. They are near the top of your call order.</p>
+  </div>
+
+  <p>So the call is never "why didn't you buy". You already know why. The call is closer to: <em>you got all the way to the end, let me just take this over the phone and sort the delivery out for you.</em></p>
+</section>
+
+<section class="sec">
+  <h2>The move that solves it without a discount</h2>
+  <p>You do not need permission to use this, and it is not a concession. It is the store's existing published policy.</p>
+  <p><strong>Orders over R1,000 ship free.</strong> So for most people on this list, adding a second unit removes the delivery charge entirely. The customer gets a second stand for their second location or their counter, and the R125 disappears. That converts the exact thing that stopped them into a reason to spend more.</p>
+</section>
+
+<section class="sec wide">
+  <div class="scroll">
+    <table>
+      <thead>
+        <tr><th>If they wanted</th><th class="num">One unit, delivered</th><th class="num">The free-delivery order</th><th>What you say</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="nm">Custom Branded Stand</td>
+          <td class="num">R649 + R125 = R774</td>
+          <td class="num">2 for R1,298</td>
+          <td>Two branded stands, delivery free</td>
+        </tr>
+        <tr>
+          <td class="nm">Standard NFC Stand</td>
+          <td class="num">R499 + R125 = R624</td>
+          <td class="num">3 for R1,497</td>
+          <td>Two is R998, still charged. Three ships free</td>
+        </tr>
+        <tr>
+          <td class="nm">Custom Branded Card</td>
+          <td class="num">R449 + R125 = R574</td>
+          <td class="num">3 for R1,347</td>
+          <td>Three branded cards, delivery free</td>
+        </tr>
+        <tr>
+          <td class="nm">Standard NFC Card</td>
+          <td class="num">R299 + R125 = R424</td>
+          <td class="num">4 for R1,196</td>
+          <td>Four cards, one per till point, delivery free</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="max-width:66ch;color:var(--muted);font-size:15.5px">Note that two standard stands comes to R998, two rands under the threshold. Know the numbers above so you are never caught out on a call.</p>
+</section>
+
+<section class="sec">
+  <h2>How to work a call</h2>
+  <ol class="flow">
+    <li>
+      <h4>Check the row before you dial</h4>
+      <p>Name, product, quantity, cart value, how many days ago, and whether they abandoned more than once. Ten seconds. You should never ask a question the sheet already answers.</p>
+    </li>
+    <li>
+      <h4>Open, then stop talking</h4>
+      <p>The opener below is short on purpose. Their first reaction tells you which of the four conversations you are actually in, and you cannot know that in advance.</p>
+    </li>
+    <li>
+      <h4>Name the delivery charge before they do</h4>
+      <p>Most of them are hesitating about it and will not say so. Raising it yourself is disarming, and it lets you go straight to the free-delivery ladder.</p>
+    </li>
+    <li>
+      <h4>Take the order on the call, or send the link while you are still on the phone</h4>
+      <p>Do not end the call with "have a look and get back to me". The one-click link is on their row. Send it while they are listening.</p>
+    </li>
+    <li>
+      <h4>Log the outcome immediately</h4>
+      <p>In the Outcome column, before the next call. A sheet that is filled in at the end of the day is a sheet full of guesses.</p>
+    </li>
+  </ol>
+</section>
+
+<section class="sec">
+  <h2>The opener</h2>
+  <div class="script">
+    <span class="tag">Say this</span>
+    <p class="say">"Hi, is that [NAME]? It's Giorgio from ReviewTap.</p>
+    <p class="say">I'm calling because you were setting up an order with us for the [PRODUCT] a little while back, and it looks like it didn't go through on our side. I wanted to check whether you still need it, or whether something got in the way?"</p>
+    <p class="dir">Now stop. Let them answer. Their answer is the entire call.</p>
+  </div>
+  <p>"It didn't go through on our side" matters. It removes any suggestion that they failed at something or changed their mind, and it gives them a clean way back in without having to explain themselves.</p>
+</section>
+
+<section class="sec">
+  <h2>What they will say, and what you say back</h2>
+
+  <div class="obj">
+    <p class="they">"The delivery cost put me off." <span class="freq">expect this most</span></p>
+    <p class="you">"That's fair, it catches a lot of people. Here's the thing though: delivery is free over a thousand rand. So one stand is R774 all in, but two is R1,298 with nothing added. If you've got a second counter or a second branch, that's the one that makes sense. Which would you like me to put through?"</p>
+    <p class="why">Always try this first. True, on-policy, needs no approval, and turns the objection into a bigger order.</p>
+    <p class="you" style="margin-top:14px">If they only want one: <em>"Then let me take the delivery off this one for you. I'll give you a code that takes R125 off at checkout. It's yours for the next few weeks."</em></p>
+    <p class="why">Only after the two-unit option has been offered and declined. See the section below.</p>
+  </div>
+
+  <div class="obj">
+    <p class="they">"I was just looking. I'm not ready."</p>
+    <p class="you">"No problem at all. Can I ask what you'd be using it for, is it one location or a few?"</p>
+    <p class="why">Do not push. Find out the size of the opportunity instead. Anything multi-location goes to Jacques the same day.</p>
+  </div>
+
+  <div class="obj">
+    <p class="they">"I forgot about it." / "I got distracted."</p>
+    <p class="you">"Easiest thing is I send you your cart exactly as you left it, one tap and it's done. Are you still on [EMAIL]?"</p>
+    <p class="why">This is the fastest close on the sheet. Send the link while they are still on the phone with you.</p>
+  </div>
+
+  <div class="obj">
+    <p class="they">"I found something cheaper."</p>
+    <p class="you">"Which one were you looking at? The difference with ours is it's printed with your own logo and colours, and it opens your Google review page without the customer downloading anything. Happy to send you a picture so you can compare properly."</p>
+    <p class="why">Never name or criticise a competitor.</p>
+  </div>
+
+  <div class="obj">
+    <p class="they">"Does it actually work? Do people use it?"</p>
+    <p class="you">"It works on any phone from the last few years, either by tapping or by scanning the code, and it takes the customer straight to your review page. The reason it gets used is that there's nothing to type and nothing to search for."</p>
+    <p class="why">Explain the mechanism. Do not quote a star rating, a review count, or a success percentage. See the rules below.</p>
+  </div>
+
+  <div class="obj">
+    <p class="they">"Not interested."</p>
+    <p class="you">"Understood, thanks for your time."</p>
+    <p class="why">End it. Mark it. Move on. One "no" is a no.</p>
+  </div>
+</section>
+
+<section class="sec">
+  <h2>Your discount code</h2>
+  <p>You have a recovery code that takes <strong>R125 off any order</strong>, which is exactly the delivery charge that stopped these people. <strong>The code itself is on your private call sheet, not on this page</strong>, and that is deliberate: this page can be opened by anyone who has the link.</p>
+
+  <div class="note">
+    <h4>Use it second, never first</h4>
+    <p>The two-unit free-delivery option is always the opening move, because it grows the order instead of shrinking it. A customer who takes two branded stands is worth R1,298 to the business. The same customer given the code on a single stand is worth R649.</p>
+    <p style="margin-bottom:0">Reach for the code only when they have heard the two-unit option and want one unit anyway. At that point R649 beats losing the sale, so use it without hesitation.</p>
+  </div>
+</section>
+
+<section class="sec wide">
+  <div class="scroll" style="max-width:640px">
+    <table>
+      <thead><tr><th>Setting</th><th>Value</th></tr></thead>
+      <tbody>
+        <tr><td class="nm">Discount</td><td>R125 off the order total</td></tr>
+        <tr><td class="nm">Expires</td><td>End of <strong>10 October 2026</strong></td></tr>
+        <tr><td class="nm">Total uses</td><td>61, then it stops working</td></tr>
+        <tr><td class="nm">Per customer</td><td>Once</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div style="max-width:66ch">
+    <p>The 61-use cap is deliberate. It matches the size of your list, so even if the code leaks it cannot run away. If it stops working before you have finished the list, that means it has leaked. Tell Jacques immediately rather than asking for a new one.</p>
+    <p><strong>Give it out on calls and in replies only.</strong> Never post it anywhere, never put it in a bulk email, never give it to somebody who is not on your sheet.</p>
+    <p>It applies to the order total, so a customer under R1,000 is left paying exactly what the product costs. Above R1,000 delivery is already free, so on those the code is a straight R125 concession. On a large order that is worth it to close, but the two-unit route is still the better conversation.</p>
+  </div>
+</section>
+
+<section class="sec">
+  <h2>The one-click link</h2>
+  <p>Every row on the sheet has a <strong>One-Click Recovery Link</strong> in the last column. It reopens that person's exact cart, with their products, quantities, name and delivery address already filled in. They tap it and pay. Nothing to re-enter.</p>
+  <p>It is the highest-converting thing you have. Use it on every call you do not close outright: WhatsApp it or email it while you are still speaking to them, and confirm out loud that it has arrived before you hang up.</p>
+  <p>Each link is unique to one person. Do not forward one to anybody else, and do not post one anywhere.</p>
+</section>
+
+<section class="sec">
+  <h2>The 19 with no phone number</h2>
+  <p>Nineteen people on the sheet did not leave a phone number, and they carry R15,198 of cart value between them. They get an email instead. Send it from your own address so replies reach a human.</p>
+  <div class="email">
+    <div class="hdr">Subject: Your ReviewTap order</div>
+    <div class="body">Hi [NAME],
+
+You started an order with us for the [PRODUCT] and it looks like it didn't complete.
+
+If you still want it, here's your cart exactly as you left it, one click and you're done:
+[RECOVERY LINK]
+
+If something got in the way, reply and tell me what it was. I'd genuinely like to know.
+
+Giorgio
+ReviewTap</div>
+  </div>
+  <p>Keep it exactly that short. No product features, no images, no attachments, no second link. The only job of this email is to get the link in front of them.</p>
+</section>
+
+<section class="sec">
+  <h2>Rules</h2>
+  <ul class="rules">
+    <li class="no"><strong>Never contact anyone marked EXISTING CUSTOMER with the recovery script.</strong> Six people on the sheet have already bought something and then abandoned a second cart. They are an upsell conversation, not a recovery one. Their row says so.</li>
+    <li class="no"><strong>Do not promise free delivery as a general policy.</strong> It is free over R1,000 and R125 below that. Quote the threshold, never a favour.</li>
+    <li class="no"><strong>Offer the two-unit free-delivery option before you offer the code.</strong> The code is approved and live, but it is the fallback, not the opener.</li>
+    <li class="no"><strong>Never publish the code.</strong> Spoken on calls and typed into direct replies only. It is capped at 61 uses and shared with nobody outside your sheet.</li>
+    <li class="no"><strong>Do not quote a star rating or a review count.</strong> The "4.8 stars" figure that appears in some old material is unverified and must not be repeated to a customer.</li>
+    <li class="no"><strong>Do not promise a delivery date on an out-of-stock product.</strong> Take the interest and hand it to Jacques.</li>
+    <li><strong>Business hours only</strong>, 08:00 to 17:00 on weekdays. Almost everyone on this list is a business.</li>
+    <li><strong>Three no-answers and the number is done.</strong> Switch that person to the email above rather than calling a fourth time.</li>
+    <li><strong>Log every outcome as it happens</strong>, in the Outcome column, using the codes below.</li>
+  </ul>
+</section>
+
+<section class="sec">
+  <h2>Outcome codes</h2>
+  <p>Use these exactly. They are what the next scrub and the next list are built from.</p>
+  <div class="codes">
+    <div class="code"><b>SALE</b><span>Order taken. Note the value.</span></div>
+    <div class="code"><b>LINK SENT</b><span>Recovery link sent, not yet paid.</span></div>
+    <div class="code"><b>CALLBACK 15/09</b><span>Agreed a specific date and time.</span></div>
+    <div class="code"><b>NO ANSWER 1 / 2 / 3</b><span>Increment. Three and stop.</span></div>
+    <div class="code"><b>NOT INTERESTED</b><span>Clear no. Do not call again.</span></div>
+    <div class="code"><b>WRONG NUMBER</b><span>Number does not reach them.</span></div>
+    <div class="code"><b>OUT OF STOCK</b><span>Wants it, cannot be supplied yet.</span></div>
+    <div class="code"><b>TO JACQUES</b><span>Multi-location or anything unusual.</span></div>
+  </div>
+</section>
+
+<section class="sec">
+  <h2>What good looks like</h2>
+  <p>Phone recovery on a warm abandoned cart typically closes between 15% and 25%. On the 42 callable rows, holding R30,253 of cart value at an average of R720:</p>
+  <div class="scroll" style="max-width:520px">
+    <table>
+      <thead><tr><th>Close rate</th><th class="num">Orders</th><th class="num">Revenue</th></tr></thead>
+      <tbody>
+        <tr><td>15%</td><td class="num">6</td><td class="num">R4,538</td></tr>
+        <tr><td>20%</td><td class="num">8</td><td class="num">R6,051</td></tr>
+        <tr><td>25%</td><td class="num">10</td><td class="num">R7,563</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>The nineteen email rows carry a further R15,198 on top of that.</p>
+</section>
+
+<section class="sec">
+  <h2>Send these to Jacques</h2>
+  <ul class="plain">
+    <li><strong>Anything multi-location or multi-branch.</strong> A group of five sites is a different conversation and a different price.</li>
+    <li><strong>Anyone asking about ongoing review software</strong> rather than the physical card. That is a separate ReviewTap product.</li>
+    <li><strong>Anyone who wants a product that is out of stock.</strong> Name, product, quantity, same day.</li>
+    <li><strong>Any complaint about a previous order.</strong> Do not attempt to resolve it on the call.</li>
+    <li><strong>Any request for an invoice, a PO, or company billing terms.</strong></li>
+  </ul>
+</section>
+
+<section class="sec">
+  <h2>Still to be confirmed</h2>
+  <p>Two things are not settled. Ask Jacques before your first session rather than guessing.</p>
+  <ul class="plain">
+    <li><strong>Your commission on recovered revenue.</strong> Agree it with Jacques in writing before you start dialling.</li>
+    <li><strong>Which inbox the 19 emails send from</strong>, and who watches it for replies.</li>
+  </ul>
+  <p style="margin-top:18px;color:var(--muted);font-size:15.5px">The discount code was the third open item and is now settled: it is live, capped at 61 uses, and expires 10 October.</p>
+</section>
+
+
+<footer>
+  <span>ReviewTap · Recovery Desk · 10 Sep 2026</span>
+  <span>Prepared for Giorgio · Duel Digital (Pty) Ltd</span>
+</footer>
+
+</div>
+
+</body>
+</html>
