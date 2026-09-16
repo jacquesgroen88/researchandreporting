@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>The visuals we need | The Acreage</title>
+<link rel="stylesheet" href="../blueprint/_style.css?v=2">
+<style>
+section{scroll-margin-top:64px}
+text{font-family:'Inter',system-ui,sans-serif}
+
+.intbox{background:#fff8e8;border:1px solid #ffe1a6;border-left:4px solid var(--amber);
+        border-radius:0 14px 14px 0;padding:18px 22px;margin-top:22px}
+.intbox h3{font-size:15.5px;margin-bottom:7px;color:#6b4407}
+.intbox p{font-size:14.2px;color:#7a5510;line-height:1.62}
+.intbox p + p{margin-top:8px}
+
+/* figures */
+.figure{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+        padding:22px 22px 18px;margin-top:18px;box-shadow:var(--shadow-sm)}
+.figure h3{font-size:17px;margin-bottom:5px}
+.figure .cap{font-size:13.4px;color:var(--muted);margin-bottom:14px;line-height:1.55}
+.figure .svgwrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.figure svg{width:100%;min-width:700px;height:auto;display:block}
+.gt{font-size:11.5px;fill:#101a2e;font-weight:600}
+.gh{font-size:10.5px;fill:#5b6b86;font-weight:700;letter-spacing:.04em}
+.gs{font-size:9.5px;fill:#fff;font-weight:700}
+.gd{font-size:9px;fill:#8494ad;font-weight:600}
+.gl{font-size:9.5px;fill:#101a2e;font-weight:600}
+
+.leg{display:flex;flex-wrap:wrap;gap:10px 16px;margin-top:14px;padding-top:13px;border-top:1px solid var(--line)}
+.leg span{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:var(--muted);font-weight:500}
+.leg i{width:11px;height:11px;border-radius:3px;flex:0 0 auto}
+
+/* audit cards */
+.aud{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:18px}
+@media(max-width:720px){.aud{grid-template-columns:1fr}}
+.aud .c{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;box-shadow:var(--shadow-sm)}
+.aud .c.bad{border-left:3px solid var(--coral)}
+.aud .c.ok{border-left:3px solid var(--green)}
+.aud .c .n{font-family:'Space Grotesk',sans-serif;font-size:23px;font-weight:700;color:var(--ink);line-height:1.1}
+.aud .c .l{font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-top:5px}
+.aud .c .d{font-size:12.6px;color:var(--muted);margin-top:7px;line-height:1.5}
+
+/* model cards */
+.mod{background:var(--card);border:1px solid var(--line);border-radius:16px;margin-top:13px;
+     box-shadow:var(--shadow-sm);overflow:hidden;border-left:3px solid var(--blue)}
+.mod.warn{border-left-color:var(--coral)}
+.mod.good{border-left-color:var(--green)}
+.mod .mh{padding:15px 19px 12px;border-bottom:1px solid var(--line);background:#fbfcfe}
+.mod .mh h3{font-size:17px;margin-bottom:3px}
+.mod .mh .who{font-size:12.2px;color:var(--muted)}
+.mod .mh .who b{color:var(--ink);font-weight:600}
+.mod .mb{padding:14px 19px 16px}
+.mod .mb p{font-size:14.6px;line-height:1.62}
+.mod .ev{margin-top:11px;padding:11px 14px;background:#f5f8fe;border-radius:10px;font-size:12.8px;
+     color:#5b6b86;line-height:1.55}
+.mod .ev b{color:var(--ink);font-weight:600}
+
+/* pillars */
+.pil{background:var(--card);border:1px solid var(--line);border-radius:16px;margin-top:13px;
+     box-shadow:var(--shadow-sm);overflow:hidden}
+.pil .ph{display:grid;grid-template-columns:38px 1fr;gap:14px;align-items:center;
+     padding:15px 19px 13px;border-bottom:1px solid var(--line);background:#fbfcfe}
+.pil .pd{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;
+     font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;color:#fff}
+.pil .ph h3{font-size:17px;margin-bottom:2px}
+.pil .ph p{font-size:12.4px;color:var(--muted);line-height:1.45}
+.pil .pb{padding:14px 19px 17px}
+.pil .pb p{font-size:14.6px;line-height:1.62}
+.pil .meta{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+.pil .meta b{font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+     padding:3px 9px;border-radius:999px;font-family:'Space Grotesk',sans-serif;
+     background:#f2f6fe;color:#5b6b86;border:1px solid var(--line)}
+.pil .meta b.hot{background:#fff2ec;color:#b8431f;border-color:transparent}
+.pil .meta b.cool{background:rgba(47,107,246,.10);color:#2f6bf6;border-color:transparent}
+.pil .meta b.grn{background:#e9f7ef;color:#146c42;border-color:transparent}
+
+.own{font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;
+     border-radius:999px;text-align:center;font-family:'Space Grotesk',sans-serif;white-space:nowrap;display:inline-block}
+.own.jce{background:rgba(47,107,246,.11);color:#2f6bf6}
+.own.you{background:#fff2d8;color:#a86a00}
+.own.both{background:#eaf7f0;color:#146c42}
+
+/* phase blocks */
+.wk{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    margin-top:14px;box-shadow:var(--shadow-sm);overflow:hidden}
+.wk .wh{display:grid;grid-template-columns:66px 1fr;gap:15px;padding:16px 20px 13px;
+    border-bottom:1px solid var(--line);align-items:center;background:#fbfcfe}
+.wk .wn{width:66px;height:54px;border-radius:13px;background:var(--grad);color:#fff;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;line-height:1;
+    box-shadow:0 6px 14px rgba(99,102,241,.28)}
+.wk .wn span{font-size:8.5px;font-weight:600;letter-spacing:.07em;margin-top:4px;opacity:.85}
+.wk .wn.warm{background:var(--grad-warm);box-shadow:0 6px 14px rgba(255,140,60,.28)}
+.wk .wn.grn{background:linear-gradient(135deg,#1a7f4e,#25a066);box-shadow:0 6px 14px rgba(26,127,78,.26)}
+.wk .wh h3{font-size:17.5px;margin-bottom:2px}
+.wk .wh p{font-size:12.5px;color:var(--muted)}
+.wk .wb{padding:14px 20px 18px}
+.row{display:grid;grid-template-columns:1fr 96px;gap:12px;padding:9px 0;
+     border-bottom:1px dashed var(--line);align-items:start}
+.row:last-child{border-bottom:none}
+.row .t{font-size:13.8px;color:var(--ink);font-weight:500;line-height:1.5}
+.row .t small{display:block;font-size:12.2px;color:var(--muted);font-weight:400;margin-top:2px;line-height:1.52}
+
+/* campaign cards */
+.camp{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 20px;
+      margin-top:13px;box-shadow:var(--shadow-sm);border-top:3px solid var(--blue)}
+.camp.two{border-top-color:var(--indigo)}
+.camp.three{border-top-color:var(--green)}
+.camp h3{font-size:17px;margin-bottom:3px}
+.camp .sub{font-size:12.4px;color:var(--muted);margin-bottom:12px}
+.camp dl{display:grid;grid-template-columns:112px 1fr;gap:6px 14px;font-size:13.4px;margin-top:4px}
+@media(max-width:520px){.camp dl{grid-template-columns:1fr}}
+.camp dt{font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
+     padding-top:3px;font-family:'Space Grotesk',sans-serif}
+.camp dd{color:var(--ink);line-height:1.55}
+
+/* shot list */
+.shots{counter-reset:shot;margin-top:16px}
+.shot{display:grid;grid-template-columns:30px 1fr 92px;gap:13px;padding:11px 0;
+      border-bottom:1px dashed var(--line);align-items:start}
+.shot:last-child{border-bottom:none}
+.shot .k{counter-increment:shot;width:26px;height:26px;border-radius:8px;background:#f2f6fe;
+      color:var(--blue);font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:11.5px;
+      display:flex;align-items:center;justify-content:center}
+.shot .k:before{content:counter(shot,decimal-leading-zero)}
+.shot .b{font-size:14px;color:var(--ink);font-weight:600;line-height:1.45}
+.shot .b small{display:block;font-size:12.4px;color:var(--muted);font-weight:400;margin-top:3px;line-height:1.55}
+.shot .f{font-size:9.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;
+      font-family:'Space Grotesk',sans-serif;color:#5b6b86;text-align:right;padding-top:5px}
+
+.src{margin-top:10px;font-size:11.8px;color:#8494ad;line-height:1.55}
+.src b{color:#5b6b86;font-weight:700}
+
+body{padding-bottom:70px}
+.dhead{background:linear-gradient(135deg,#1d1205 0%,#3a2410 55%,#5a3410 100%);color:#fff;
+  padding:20px 0 22px;margin-bottom:6px}
+.dhead .wrap{display:flex;align-items:center;gap:15px}
+.dhead .dn{width:42px;height:42px;flex:0 0 auto;border-radius:12px;background:rgba(255,255,255,.14);
+  border:1px solid rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;
+  font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;color:#ffd98a}
+.dhead h1{color:#fff;font-size:23px;margin:0 0 3px;line-height:1.2;letter-spacing:-.01em}
+.dhead p{color:rgba(255,255,255,.72);font-size:13px;margin:0;line-height:1.45}
+.dhead .flag{margin-left:auto;flex:0 0 auto;font-family:'Space Grotesk',sans-serif;font-size:9.5px;
+  font-weight:800;letter-spacing:.1em;color:#2a1a00;background:#ffb020;border-radius:999px;padding:4px 11px}
+@media(max-width:620px){.dhead .flag{display:none}.dhead h1{font-size:19px}}
+section:first-of-type{padding-top:26px}
+
+.shead{grid-template-columns:1fr}
+.shead + .lead{margin-left:0}
+@media(max-width:560px){.shead{grid-template-columns:1fr}}
+
+.dhead .flag.cs{background:#86C9A1;color:#062A22}
+.fmts{display:flex;flex-wrap:wrap;gap:22px 26px;align-items:flex-end;margin-top:18px}
+.fmt{display:flex;flex-direction:column;gap:8px;width:max-content;max-width:100%}
+.fmt .box{position:relative;overflow:hidden;border-radius:6px;border:2px solid #0B4337;background:#e9e6df;max-width:100%}
+.fmt .box img{width:100%;height:100%;object-fit:cover;display:block}
+.fmt .box .px{position:absolute;left:6px;bottom:6px;background:rgba(6,42,34,.86);color:#F6F1E6;font:600 10.5px/1 'Space Grotesk',sans-serif;border-radius:4px;padding:4px 6px;font-variant-numeric:tabular-nums}
+.fmt b{font-family:'Space Grotesk',sans-serif;font-size:14px;color:var(--ink)}
+.fmt span{font-size:12.2px;color:var(--muted);line-height:1.45;max-width:190px}
+.scale{font-size:12px;color:#8494ad;margin-top:12px}
+.phones{display:flex;flex-wrap:wrap;gap:26px;margin-top:16px}
+.phone{width:170px;height:348px;border:7px solid #1b1f24;border-radius:26px;background:#fff;overflow:hidden;position:relative;box-shadow:0 10px 26px rgba(16,26,46,.18)}
+.phone .hdr{height:26px;display:flex;align-items:center;gap:5px;padding:0 7px;font-size:8px;font-weight:600;color:#111}
+.phone .hdr i{width:14px;height:14px;border-radius:50%;background:#0B4337;display:inline-block}
+.phone .pimg{width:100%;overflow:hidden}
+.phone .pimg img{width:100%;height:100%;object-fit:cover;display:block}
+.phone .rest{padding:6px 7px}
+.phone .rest div{height:6px;background:#eceff3;border-radius:3px;margin-bottom:5px}
+.phlabel{font-size:12.4px;color:var(--muted);margin-top:8px;max-width:170px;line-height:1.45}
+.phlabel b{color:var(--ink);font-family:'Space Grotesk',sans-serif}
+.safe{position:relative;width:216px;height:384px;border-radius:10px;overflow:hidden;border:2px solid #0B4337;flex:0 0 auto}
+.safe img{width:100%;height:100%;object-fit:cover;display:block}
+.safe .zt,.safe .zb{position:absolute;left:0;right:0;background:repeating-linear-gradient(135deg,rgba(255,106,69,.62) 0 8px,rgba(255,106,69,.42) 8px 16px);color:#fff;
+  font:700 10px/1.25 'Space Grotesk',sans-serif;display:flex;align-items:center;justify-content:center;text-align:center;padding:4px}
+.safe .zt{top:0;height:14%}
+.safe .zb{bottom:0;height:35%}
+.safe .zs{position:absolute;top:14%;bottom:35%;width:6%;background:rgba(255,106,69,.35)}
+.safe .zs.l{left:0}.safe .zs.r{right:0}
+.safe .ok{position:absolute;top:14%;bottom:35%;left:6%;right:6%;border:2px dashed #fff;display:flex;align-items:center;justify-content:center;
+  color:#fff;font:700 12px/1.3 'Space Grotesk',sans-serif;text-align:center;text-shadow:0 1px 4px rgba(0,0,0,.6);padding:8px}
+.saferow{display:flex;flex-wrap:wrap;gap:24px;align-items:center;margin-top:16px}
+.saferow ul{flex:1;min-width:240px}
+.crop{position:relative;border-radius:8px;overflow:hidden;border:2px solid #0B4337;flex:0 0 auto;max-width:100%}
+.crop img{width:100%;height:100%;object-fit:cover;display:block}
+.crop .win{position:absolute;top:0;bottom:0;border:3px solid #fff;box-shadow:0 0 0 999px rgba(6,42,34,.62)}
+.crop .cap{position:absolute;left:8px;bottom:8px;background:rgba(6,42,34,.86);color:#F6F1E6;font:600 11px/1.3 'Space Grotesk',sans-serif;border-radius:5px;padding:5px 7px}
+.croprow{display:flex;flex-wrap:wrap;gap:22px;align-items:flex-start;margin-top:16px}
+.croprow .txt{font-size:13px;color:var(--muted);max-width:340px;line-height:1.55;margin-top:8px}
+.croprow .txt b{color:var(--ink)}
+.shots{counter-reset:shot;margin-top:16px}
+.shot{display:grid;grid-template-columns:30px 1fr 110px;gap:13px;padding:11px 0;border-bottom:1px dashed var(--line);align-items:start}
+.shot:last-child{border-bottom:none}
+.shot .k{counter-increment:shot;width:26px;height:26px;border-radius:8px;background:#f2f6fe;color:var(--blue);font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:11.5px;display:flex;align-items:center;justify-content:center}
+.shot .k:before{content:counter(shot,decimal-leading-zero)}
+.shot .b{font-size:14px;color:var(--ink);font-weight:600;line-height:1.45}
+.shot .b small{display:block;font-size:12.4px;color:var(--muted);font-weight:400;margin-top:3px;line-height:1.55}
+.shot .f{text-align:right;padding-top:3px;display:flex;flex-direction:column;gap:4px;align-items:flex-end}
+.shot .f em{font-style:normal;font-size:9.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;font-family:'Space Grotesk',sans-serif;color:#5b6b86}
+.shot .f .ad{background:#eef4ff;color:#2f6bf6;border-radius:999px;padding:1px 7px}
+.own{font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:999px;font-family:'Space Grotesk',sans-serif;white-space:nowrap;display:inline-block}
+.own.jce{background:rgba(47,107,246,.11);color:#2f6bf6}
+.own.you{background:#fff2d8;color:#a86a00}
+.own.both{background:#eaf7f0;color:#146c42}
+.src{margin-top:10px;font-size:11.8px;color:#8494ad;line-height:1.55}
+.src b{color:#5b6b86}
+</style>
+</head>
+<body>
+<div class="dhead"><div class="wrap">
+  
+  <div><h1>The visuals we need</h1><p>What to photograph and film, in what shape, and what the advertising needs. Prepared for The Acreage.</p></div>
+  <div class="flag cs">For The Acreage</div>
+</div></div>
+<div class="wrap viz">
+<section>
+  <div class="shead"><div class="sx">
+    <span class="eyebrow">Where we are starting from</span>
+    <h2>Beautiful photographs of the place, and very few of it in use.</h2>
+  </div></div>
+  <p class="lead">The February shoot and the restaurant launch interiors give The Acreage close to 400 professional photographs, and they are genuinely good. Alongside them are about a hundred phone photos of family days, match days, markets and set-ups, and over two hundred photos from past functions that have never been posted. What is still missing is people enjoying breakfast on the lawns, your own dogs, and video with sound, which is what social media and advertising respond to most.</p>
+  <p style="font-size:15.2px;margin-top:10px">This page sets out three things: the design templates we will build, one half-day photo shoot to fill the gaps, and a short daily habit on a phone. Then the shapes everything needs to be in, drawn to scale, and what the advertising specifically needs.</p>
+</section>
+
+<section class="band">
+  <div class="shead"><div class="sx">
+    <span class="eyebrow">The formats, drawn to scale</span>
+    <h2>What 1080 by 1350 actually looks like.</h2>
+  </div></div>
+  <p class="lead">Every platform crops to a particular shape. The numbers are width by height in pixels, and the proportions below are true to each other, so you can see how much taller a vertical frame is than a square one.</p>
+  <div class="fmts"><div class="fmt"><div class="box" style="width:151px;height:151px"><img src="assets/library/B24.jpg" alt="" style="object-position:center"><span class="px">1080 &times; 1080</span></div><b>Square, 1:1</b><span>Carousel slides, ad carousels, WhatsApp shares.</span></div><div class="fmt"><div class="box" style="width:151px;height:189px"><img src="assets/library/B24.jpg" alt="" style="object-position:center"><span class="px">1080 &times; 1350</span></div><b>Portrait, 4:5</b><span>Every single feed post and feed ad. Takes up the most room in a scrolling feed.</span></div><div class="fmt"><div class="box" style="width:151px;height:269px"><img src="assets/library/D47.jpg" alt="" style="object-position:center"><span class="px">1080 &times; 1920</span></div><b>Vertical, 9:16</b><span>Stories, Reels, TikTok, and Story and Reel ads. The shape of a phone screen.</span></div><div class="fmt"><div class="box" style="width:269px;height:151px"><img src="assets/library/V116.jpg" alt="" style="object-position:center"><span class="px">1920 &times; 1080</span></div><b>Landscape, 16:9</b><span>The website, YouTube, and the drone footage as it was delivered.</span></div><div class="fmt"><div class="box" style="width:168px;height:88px"><img src="assets/library/V95.jpg" alt="" style="object-position:center"><span class="px">1200 &times; 628</span></div><b>Wide, 1.91:1</b><span>The cover image on a Facebook enquiry form.</span></div><div class="fmt"><div class="box" style="width:269px;height:141px"><img src="assets/library/V122.jpg" alt="" style="object-position:center"><span class="px">1920 &times; 1005</span></div><b>Event cover, 1.91:1</b><span>The top of a Facebook Event page, such as the Open Day.</span></div></div>
+  <p class="scale">Drawn at 14 percent of real size. Every shape above uses a real photograph from your library.</p>
+
+  <h3 style="margin-top:30px">Why portrait beats square in a feed</h3>
+  <p style="font-size:15.2px">The same photograph, posted two ways, on the same phone. The 4:5 version takes about a quarter more of the screen as someone scrolls past, which is why every feed post and feed ad in the plan is 4:5.</p>
+  <div class="phones">
+    <div><div class="phone"><div class="hdr"><i></i>acreagevenue</div><div class="pimg" style="height:156px"><img src="assets/library/B24.jpg" alt=""></div><div class="rest"><div style="width:70%"></div><div style="width:90%"></div><div style="width:50%"></div></div></div>
+      <div class="phlabel"><b>Square, 1:1.</b> 1080 by 1080. Leaves room for the next post to start competing.</div></div>
+    <div><div class="phone"><div class="hdr"><i></i>acreagevenue</div><div class="pimg" style="height:195px"><img src="assets/library/B24.jpg" alt=""></div><div class="rest"><div style="width:70%"></div><div style="width:90%"></div></div></div>
+      <div class="phlabel"><b>Portrait, 4:5.</b> 1080 by 1350. The recommended size for feed posts and feed ads.</div></div>
+    <div><div class="phone"><div class="pimg" style="height:334px"><img src="assets/library/D47.jpg" alt=""></div></div>
+      <div class="phlabel"><b>Vertical, 9:16.</b> 1080 by 1920. Stories and Reels fill the whole screen.</div></div>
+  </div>
+
+  <h3 style="margin-top:30px">Where text can and cannot go on a Story or Reel</h3>
+  <div class="saferow">
+    <div class="safe"><img src="assets/library/D48.jpg" alt=""><div class="zt">Top 14%: covered by the profile name</div><div class="zs l"></div><div class="zs r"></div><div class="ok">Headline, price and logo go here</div><div class="zb">Bottom 35%: covered by the caption, buttons and the call to action</div></div>
+    <ul class="ev">
+      <li>On a 1080 by 1920 frame, keep the <b>top 250 pixels</b> and the <b>bottom 670 pixels</b> free of anything that has to be read.</li>
+      <li>Leave about <b>65 pixels</b> clear on each side.</li>
+      <li>The photograph itself can run edge to edge. Only words, prices and the logo need to stay inside the dashed area.</li>
+      <li>Every Story and Reel template we build will have this area marked, so nobody has to remember the numbers.</li>
+    </ul>
+  </div>
+  <div class="src"><b>Source</b> Meta's recommended sizes and the Stories and Reels safe zones as published for 2026, including the lead form cover at 1200 by 628 and the Facebook Event cover at 1920 by 1005.</div>
+
+  <h3 style="margin-top:30px">Why we ask for everything to be shot vertically</h3>
+  <div class="croprow">
+    <div>
+      <div class="crop" style="width:400px;height:225px"><img src="assets/library/V116.jpg" alt=""><div class="win" style="left:34.2%;width:31.6%"></div><div class="cap">A landscape photo cut down to 9:16 keeps under a third of its width</div></div>
+      <p class="txt"><b>Landscape to vertical.</b> The white frame is all that survives in a Story or Reel. For drone footage and wide lawn shots, that loses exactly what made them worth taking.</p>
+    </div>
+    <div>
+      <div class="crop" style="width:127px;height:225px"><img src="assets/library/D47.jpg" alt=""><div class="win" style="top:15%;bottom:15%;left:0;right:0;border-width:3px"></div><div class="cap">Vertical to 4:5: almost nothing lost</div></div>
+      <p class="txt" style="max-width:200px"><b>Vertical to portrait or square.</b> A vertical photo trims neatly to 4:5 for the feed or 1:1 for a carousel.</p>
+    </div>
+  </div>
+  <div class="keyline"><p>A vertical photograph can become any format. A landscape one can never become a good Story. When in doubt, turn the phone upright.</p></div>
+</section>
+
+<section>
+  <div class="shead"><div class="sx">
+    <span class="eyebrow">Part one</span>
+    <h2>The design templates we will build.</h2>
+  </div></div>
+  <p class="lead">Built once, in The Acreage's colours and logo, and handed over, so a post can be put together in a few minutes by someone who is not a designer. Your existing nineteen templates already have the right look, so we will build from those rather than start again.</p>
+  <h3 style="margin-top:20px">Your templates, and the shapes they need to become</h3>
+  <p style="font-size:15.2px">The current templates are 1414 by 2000, the proportions of an A4 page. Drawn to the same scale as above, here is how that compares with the two shapes social media actually uses.</p>
+  <div class="fmts"><div class="fmt"><div class="box" style="width:151px;height:214px"><img src="assets/library/T1.jpg" alt="" style="object-position:center"><span class="px">1414 &times; 2000</span></div><b>Current templates</b><span>A4 proportions, as designed.</span></div><div class="fmt"><div class="box" style="width:151px;height:189px"><img src="assets/library/T1.jpg" alt="" style="object-position:center"><span class="px">1080 &times; 1350</span></div><b>Feed, 4:5</b><span>About an eighth shorter. The top and bottom lines of text would be cut off.</span></div><div class="fmt"><div class="box" style="width:151px;height:269px"><img src="assets/library/T1.jpg" alt="" style="object-position:center"><span class="px">1080 &times; 1920</span></div><b>Story, 9:16</b><span>About a quarter taller, and the words have to move inside the safe area.</span></div></div>
+  <p style="font-size:15.2px;margin-top:14px">So each template gets re-set in both shapes rather than stretched. While we do that, four small things to settle with you:</p>
+  <ul class="ev">
+    <li><b>Your own photographs in place of the sample ones.</b> A few templates use generic photographs, such as the teal coffee cups, the cast-iron pans, the barista in Staff Spotlight and the booth seating in We're Hiring. We will swap in photographs of The Acreage.</li>
+    <li><b>The hours.</b> The templates say 7am to 3pm, and Facebook says the kitchen closes at 15:30. Which is right?</li>
+    <li><b>The editable files.</b> We have the finished images. If they were made in Canva, sharing the Canva designs saves rebuilding them from scratch.</li>
+    <li><b>The fonts.</b> Canyon and Pinklatte, the two display fonts in the brand folder, are the free versions, which are licensed for personal use only. Social media and advertising count as commercial use, so either a commercial licence is bought for each (both are inexpensive) or we use Montserrat, already in the folder and free for commercial use, with a licensed script font for headlines.</li>
+  </ul>
+  <div class="tblwrap"><table>
+    <tr><th>Template</th><th>Format</th><th>Used for</th></tr>
+    <tr><td><b>Menu carousel</b></td><td>4:5 &middot; 1080 &times; 1350</td><td>The food menu, drinks menu and catering menus as readable slides.</td></tr>
+    <tr><td><b>Spaces and capacity carousel</b></td><td>4:5 &middot; 1080 &times; 1350</td><td>Every space and how many guests it holds, from the restaurant to the whole estate.</td></tr>
+    <tr><td><b>Offer card</b></td><td>4:5 and 1:1</td><td>Weekly offers, specials, Christmas lunch, gift vouchers. The price is the headline.</td></tr>
+    <tr><td><b>Function showcase</b></td><td>4:5 &middot; 1080 &times; 1350</td><td>Real functions, with the space and the headcount always in the layout.</td></tr>
+    <tr><td><b>Story set</b></td><td>9:16 &middot; 1080 &times; 1920</td><td>Today on the estate, clear and rainy-day versions, offer of the day, countdowns, and "we're open". Safe area marked.</td></tr>
+    <tr><td><b>Reel covers and end frames</b></td><td>9:16 &middot; 1080 &times; 1920</td><td>A title at the start and a call to action at the end, so a phone clip becomes a finished Reel.</td></tr>
+    <tr><td><b>Event invitation set</b></td><td>4:5, 9:16 and 1920 &times; 1005</td><td>The Open Day: an invitation, a save-the-date, a Story and the Facebook Event cover.</td></tr>
+    <tr><td><b>Logo pack</b></td><td>SVG and PNG</td><td>Built from the vector logo and colour versions in your brand folder, plus the monogram on its own and a profile icon for each platform. The WhatsApp profile icon is already done.</td></tr>
+  </table></div>
+</section>
+
+<section class="band">
+  <div class="shead"><div class="sx">
+    <span class="eyebrow">Part two</span>
+    <h2>One half-day shoot, on a busy Saturday.</h2>
+  </div></div>
+  <p class="lead"><b>Booked for Saturday 19 September, weather permitting.</b> The photographer's brief, with the timings, the full shot list and a checklist for the day, is here: <a href="https://jcereports.netlify.app/clients/acreage/shoot-brief/" style="color:var(--blue)">jcereports.netlify.app/clients/acreage/shoot-brief/</a></p>
+  <p class="lead" style="margin-top:10px">Half a day with a photographer, photographing people, food at the table, and the lawn at sunset. It closes the gaps in one go, and we would brief and direct it. The format column shows which shapes each shot has to work in; shots marked "Also for ads" are the ones the advertising depends on.</p>
+  <p style="font-size:15.2px;margin-top:10px"><b>Permission matters.</b> Anyone recognisable needs to agree to be photographed, and a short signed release is best, especially for anything used in paid advertising. Staff should be covered by their employment terms, but it is worth checking. Backlit and silhouette shots keep this simple.</p>
+  <div class="shots"><div class="shot"><div class="k"></div><div class="b">Two people eating breakfast on the lawn, mid-conversation<small>Not looking at the camera. Plates visible but not the subject. The single most important frame on this list.</small></div><div class="f"><em>4:5 + 9:16</em><em class="ad">Also for ads</em></div></div><div class="shot"><div class="k"></div><div class="b">Hands, coffee being poured, steam<small>Tight and close. Shoot it three or four ways.</small></div><div class="f"><em>9:16</em><em class="ad">Also for ads</em></div></div><div class="shot"><div class="k"></div><div class="b">A family of four at a table, children included<small>The kids' menu exists, and families are a main audience. There is no photograph yet that says children are welcome.</small></div><div class="f"><em>4:5</em><em class="ad">Also for ads</em></div></div><div class="shot"><div class="k"></div><div class="b">A child with a milkshake or a dessert<small>The milkshakes and desserts are already photographed beautifully. The child is what is missing, and it is the frame that gets shared.</small></div><div class="f"><em>4:5 + 9:16</em><em class="ad">Also for ads</em></div></div><div class="shot"><div class="k"></div><div class="b">A full breakfast plate being put down in front of someone<small>Over the shoulder, the server's hands in frame. Movement rather than a styled still.</small></div><div class="f"><em>4:5</em></div></div><div class="shot"><div class="k"></div><div class="b">The menu being read at a table<small>Says breakfast is served all day without needing a caption.</small></div><div class="f"><em>4:5</em></div></div><div class="shot"><div class="k"></div><div class="b">A dog under a table, the owner's legs in frame<small>The one Bring the Dog photo that has to be your own, not saved from someone else.</small></div><div class="f"><em>4:5 + 9:16</em><em class="ad">Also for ads</em></div></div><div class="shot"><div class="k"></div><div class="b">A dog on the lawn with the lake behind<small>Wide, with the estate doing the selling.</small></div><div class="f"><em>4:5</em></div></div><div class="shot"><div class="k"></div><div class="b">A water bowl being put down for a dog<small>A small detail that proves dogs are welcomed, not tolerated.</small></div><div class="f"><em>9:16</em></div></div><div class="shot"><div class="k"></div><div class="b">The kitchen mid-service, a chef working<small>Faces. People behind the food.</small></div><div class="f"><em>4:5 + 9:16</em><em class="ad">Also for ads</em></div></div><div class="shot"><div class="k"></div><div class="b">The pass, plates going out<small>Movement and heat. Film it as well as photographing it.</small></div><div class="f"><em>9:16 video</em><em class="ad">Also for ads</em></div></div><div class="shot"><div class="k"></div><div class="b">Front of house greeting an arriving table<small>The welcome, which is what your reviews talk about.</small></div><div class="f"><em>4:5</em></div></div><div class="shot"><div class="k"></div><div class="b">A barista or bartender making something, hands and face<small>Sells the bar hours after the kitchen closes.</small></div><div class="f"><em>9:16</em></div></div><div class="shot"><div class="k"></div><div class="b">Jade and Andrew on the lawn, together<small>One good frame of both owners, used sparingly.</small></div><div class="f"><em>4:5</em></div></div><div class="shot"><div class="k"></div><div class="b">A table of eight or ten, full, mid-meal<small>Proves the restaurant takes a group. Function bookers look for exactly this.</small></div><div class="f"><em>4:5</em><em class="ad">Also for ads</em></div></div><div class="shot"><div class="k"></div><div class="b">A dressed long table before guests arrive, then the same table full<small>If a real function is on the day of the shoot, photograph that instead, with the client's permission.</small></div><div class="f"><em>4:5 + 16:9</em><em class="ad">Also for ads</em></div></div><div class="shot"><div class="k"></div><div class="b">People on the lawn at golden hour, backlit, in silhouette<small>Beautiful, and nobody is identifiable, which keeps permissions simple.</small></div><div class="f"><em>9:16 + 4:5</em><em class="ad">Also for ads</em></div></div><div class="shot"><div class="k"></div><div class="b">Drinks on a table at sunset, people blurred behind<small>Sells the occasion, not just the view.</small></div><div class="f"><em>4:5</em></div></div><div class="shot"><div class="k"></div><div class="b">The braai or fire pit in use<small>Needed for every function and year-end promotion.</small></div><div class="f"><em>9:16 video</em><em class="ad">Also for ads</em></div></div><div class="shot"><div class="k"></div><div class="b">Arrival: the gate, the drive, the first view of the estate<small>Answers what it is like to get there. Also the first two seconds of every Reel.</small></div><div class="f"><em>9:16 video</em><em class="ad">Also for ads</em></div></div></div>
+</section>
+
+<section>
+  <div class="shead"><div class="sx">
+    <span class="eyebrow">Part three</span>
+    <h2>Ten minutes a day, on a phone.</h2>
+  </div></div>
+  <p class="lead">The part only the team at The Acreage can do, because you are there. Deliberately short, so it actually happens.</p>
+  <ul class="ev">
+    <li><b>Every trading morning:</b> one photo of the estate as it is right now, clear sky or not. Posted as a Story before eight.</li>
+    <li><b>Twice a week:</b> whatever is coming out of the kitchen, with a hand in the frame.</li>
+    <li><b>Every weekend:</b> one dog, one family, one full table. Ask first.</li>
+    <li><b>Whenever a function is on:</b> the room dressed before guests arrive, and one wide shot of it full, with the client's permission.</li>
+    <li><b>Any good sunset:</b> ten seconds of video, held steady, phone upright, with the sound on.</li>
+  </ul>
+</section>
+
+<section class="band">
+  <div class="shead"><div class="sx">
+    <span class="eyebrow">The advertising</span>
+    <h2>What the ads need, campaign by campaign.</h2>
+  </div></div>
+  <p class="lead">Ads need more variety than posts, because the same people see them repeatedly and an ad that has been seen too often stops working. Each campaign runs three to five different versions at a time, and they are replaced every two to three weeks.</p>
+
+  <div class="tblwrap"><table>
+    <tr><th>Campaign</th><th>What it does</th><th>Visuals it needs</th><th>Formats</th></tr>
+    <tr>
+      <td><b>Tables</b></td>
+      <td>Brings people in for breakfast and lunch. The ad opens a WhatsApp chat.</td>
+      <td>Two short vertical videos, 6 to 15 seconds, with sound: breakfast on the lawn and coffee being made. Three dish photos with space around the plate for a price. One family or dog photo of people who have agreed to be in an ad.</td>
+      <td>9:16 video &middot; 4:5 photos</td>
+    </tr>
+    <tr>
+      <td><b>Functions</b></td>
+      <td>Brings in wedding, year-end and corporate enquiries through a short form.</td>
+      <td>A dressed function space with guests in it, from a real event with the client's permission. The past functions in your Dropbox, such as the tents lit at night and the restaurant full for a year-end, are exactly this, if those clients agree. Wide shots that show scale. A 10 to 15 second walk-through video of one space. A cover image for the enquiry form.</td>
+      <td>4:5 &middot; 9:16 &middot; form cover 1200 &times; 628</td>
+    </tr>
+    <tr>
+      <td><b>Warm</b></td>
+      <td>Speaks again to people who have already watched, visited or engaged.</td>
+      <td>Offer-specific designs built from the templates: the Open Day invitation, Christmas lunch, gift vouchers. These use existing photographs and need no new shoot.</td>
+      <td>4:5 &middot; 9:16 &middot; event cover 1920 &times; 1005</td>
+    </tr>
+  </table></div>
+
+  <h3 style="margin-top:26px">Rules the ad visuals have to follow</h3>
+  <ul class="ev">
+    <li><b>The first three seconds decide it.</b> A video opens on the most striking moment, not a logo or a slow reveal.</li>
+    <li><b>Most people watch without sound,</b> so every video carries on-screen words, and sound is a bonus for those who turn it on.</li>
+    <li><b>Keep the words short.</b> A headline and a price. Ads with less text on the image generally do better.</li>
+    <li><b>Only photographs The Acreage owns.</b> Photos saved from other people's Instagram accounts can never be used in an ad.</li>
+    <li><b>Recognisable guests need written permission</b> before they appear in paid advertising, even if they were happy to be in an ordinary post.</li>
+    <li><b>Vertical and 4:5 versions of everything,</b> because one ad is shown in the feed, in Stories and in Reels, and each crops differently.</li>
+  </ul>
+
+  <div class="keyline"><p>The shoot list above is weighted towards the ads on purpose. The advertising is where the new photographs earn their cost back, so every "Also for ads" shot is worth getting right.</p></div>
+</section>
+
+<section>
+  <div class="shead"><div class="sx">
+    <span class="eyebrow">Who does what</span>
+    <h2>Splitting the work.</h2>
+  </div></div>
+  <div class="tblwrap"><table>
+    <tr><th>Piece</th><th>Who</th><th>Detail</th></tr>
+    <tr><td><b>Brand look and templates</b></td><td><span class="own jce">JCE Media</span></td><td>Colours, type, layouts and every template listed above, built so the team can use them.</td></tr>
+    <tr><td><b>The shot list and briefing</b></td><td><span class="own jce">JCE Media</span></td><td>This list, plus briefing the photographer and being there on the day.</td></tr>
+    <tr><td><b>Ad designs</b></td><td><span class="own jce">JCE Media</span></td><td>Every ad version, built from whatever photographs and video exist, and refreshed as they tire.</td></tr>
+    <tr><td><b>The half-day shoot</b></td><td><span class="own both">Together</span></td><td>The Acreage books the photographer and the date; we brief and direct.</td></tr>
+    <tr><td><b>Daily phone photos</b></td><td><span class="own you">The Acreage</span></td><td>Ten minutes a day against the list above.</td></tr>
+    <tr><td><b>Permissions</b></td><td><span class="own you">The Acreage</span></td><td>Guests, function clients and staff agreeing to be photographed and, for ads, signing a release. That includes the past functions in the "Events Not Posted" folders.</td></tr>
+    <tr><td><b>Files</b></td><td><span class="own you">The Acreage</span></td><td>The full-resolution originals from the February shoot, the raw drone footage, and the editable versions of the social media templates.</td></tr>
+  </table></div>
+</section>
+
+</div>
+</body>
+</html>
