@@ -83,10 +83,38 @@ ul.tick li{position:relative;padding-left:18px;font-size:13.6px;line-height:1.55
 ul.tick li:before{content:"";position:absolute;left:2px;top:.62em;width:7px;height:7px;border-radius:50%;background:var(--gold)}
 ul.tick li b{color:var(--deep)}
 
-/* formats mini diagram */
-.fm{display:flex;gap:14px;align-items:flex-end;margin-top:10px}
-.fm i{font-style:normal;border:1.5px solid var(--green);border-radius:4px;display:flex;align-items:flex-end;justify-content:center;font-size:10px;font-weight:600;color:var(--green);padding-bottom:3px;font-variant-numeric:tabular-nums}
-.fm span{display:block;text-align:center;font-size:11px;color:var(--muted);margin-top:4px}
+/* formats, drawn to scale */
+.fmts{display:flex;flex-wrap:wrap;gap:22px 26px;align-items:flex-end;margin-top:18px}
+.fmt{display:flex;flex-direction:column;gap:8px;width:max-content;max-width:100%}
+.fmt .fbox{position:relative;overflow:hidden;border-radius:6px;border:2px solid var(--green);background:#EFE7D9;max-width:100%}
+.fmt .fbox img{width:100%;height:100%;object-fit:cover;display:block}
+.fmt .fbox .px{position:absolute;left:6px;bottom:6px;background:rgba(6,42,34,.86);color:var(--cream);
+  font:600 10.5px/1 "Montserrat",sans-serif;border-radius:4px;padding:4px 6px;font-variant-numeric:tabular-nums}
+.fmt b{font-size:13.5px;font-weight:600}
+.fmt span{font-size:12.2px;color:var(--muted);line-height:1.45;max-width:190px}
+.scale{font-size:12px;color:var(--muted);margin-top:12px}
+
+.croprow{display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start;margin-top:18px}
+.croprow .txt{font-size:13.2px;color:var(--muted);max-width:340px;line-height:1.55;margin-top:9px}
+.croprow .txt b{color:var(--ink)}
+.crop{position:relative;border-radius:8px;overflow:hidden;border:2px solid var(--green);flex:0 0 auto;max-width:100%}
+.crop img{width:100%;height:100%;object-fit:cover;display:block}
+.crop .win{position:absolute;top:0;bottom:0;border:3px solid #fff;box-shadow:0 0 0 999px rgba(6,42,34,.62)}
+.crop .cap{position:absolute;left:8px;bottom:8px;background:rgba(6,42,34,.86);color:var(--cream);
+  font:600 11px/1.3 "Montserrat",sans-serif;border-radius:5px;padding:5px 7px}
+
+.saferow{display:flex;flex-wrap:wrap;gap:24px;align-items:center;margin-top:18px}
+.safe{position:relative;width:216px;height:384px;border-radius:10px;overflow:hidden;border:2px solid var(--green);flex:0 0 auto}
+.safe img{width:100%;height:100%;object-fit:cover;display:block}
+.safe .zt,.safe .zb{position:absolute;left:0;right:0;color:#fff;font:700 10px/1.25 "Montserrat",sans-serif;
+  display:flex;align-items:center;justify-content:center;text-align:center;padding:4px;
+  background:repeating-linear-gradient(135deg,rgba(184,67,31,.62) 0 8px,rgba(184,67,31,.42) 8px 16px)}
+.safe .zt{top:0;height:14%}
+.safe .zb{bottom:0;height:35%}
+.safe .zs{position:absolute;top:14%;bottom:35%;width:6%;background:rgba(184,67,31,.35)}
+.safe .zs.l{left:0}.safe .zs.r{right:0}
+.safe .ok{position:absolute;top:14%;bottom:35%;left:6%;right:6%;border:2px dashed #fff;display:flex;align-items:center;
+  justify-content:center;color:#fff;font:700 12px/1.3 "Montserrat",sans-serif;text-align:center;text-shadow:0 1px 4px rgba(0,0,0,.6);padding:8px}
 
 .release{margin-top:12px;border-left:3px solid var(--gold);padding:4px 0 4px 14px;font-family:"Cormorant Garamond",Georgia,serif;font-size:17px;font-style:italic;color:var(--deep);line-height:1.45}
 .check{list-style:none;padding:0;margin:10px 0 0;columns:2;column-gap:22px}
@@ -179,21 +207,53 @@ ul.tick li b{color:var(--deep)}
 </section>
 
 <section class="pb">
+  <div class="eyebrow">The shapes</div>
+  <h2>What each format actually looks like.</h2>
+  <p class="lead">Every platform crops to its own shape. Below are the ones we use, drawn true to each other, each one filled with a photograph from The Acreage's existing library.</p>
+  <div class="fmts">
+    <div class="fmt"><div class="fbox" style="width:151px;height:151px"><img src="assets/library/B24.jpg" alt=""><span class="px">1080 &times; 1080</span></div><b>Square, 1:1</b><span>Carousel slides and ad carousels.</span></div>
+    <div class="fmt"><div class="fbox" style="width:151px;height:189px"><img src="assets/library/B24.jpg" alt=""><span class="px">1080 &times; 1350</span></div><b>Portrait, 4:5</b><span>Every feed post and feed ad. The workhorse.</span></div>
+    <div class="fmt"><div class="fbox" style="width:151px;height:269px"><img src="assets/library/D47.jpg" alt=""><span class="px">1080 &times; 1920</span></div><b>Vertical, 9:16</b><span>Stories, Reels, TikTok, and all video.</span></div>
+    <div class="fmt"><div class="fbox" style="width:269px;height:151px"><img src="assets/library/V116.jpg" alt=""><span class="px">1920 &times; 1080</span></div><b>Landscape, 16:9</b><span>The website only.</span></div>
+    <div class="fmt"><div class="fbox" style="width:269px;height:141px"><img src="assets/library/V122.jpg" alt=""><span class="px">1920 &times; 1005</span></div><b>Event cover</b><span>The top of a Facebook Event page. Leave the middle clear.</span></div>
+  </div>
+  <p class="scale">Drawn at 14 percent of real size.</p>
+
+  <h3 style="margin-top:30px;font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:22px;color:var(--deep)">Why we ask for everything upright</h3>
+  <div class="croprow">
+    <div>
+      <div class="crop" style="width:400px;height:225px"><img src="assets/library/V116.jpg" alt=""><div class="win" style="left:34.2%;width:31.6%"></div><div class="cap">A landscape frame cut to 9:16 keeps under a third of its width</div></div>
+      <p class="txt"><b>Landscape to vertical.</b> The white box is all that survives in a Story, a Reel or a vertical ad. On a wide lawn shot that throws away exactly what made it worth taking.</p>
+    </div>
+    <div>
+      <div class="crop" style="width:127px;height:225px"><img src="assets/library/D47.jpg" alt=""><div class="win" style="top:15%;bottom:15%;left:0;right:0;border-width:3px"></div><div class="cap">Vertical to 4:5: almost nothing lost</div></div>
+      <p class="txt" style="max-width:210px"><b>Vertical to portrait or square.</b> An upright frame trims neatly to 4:5 for the feed and 1:1 for a carousel, so one shot covers three places.</p>
+    </div>
+  </div>
+
+  <h3 style="margin-top:30px;font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:22px;color:var(--deep)">Where the words have to go</h3>
+  <div class="saferow">
+    <div class="safe"><img src="assets/library/D48.jpg" alt=""><div class="zt">Covered by the profile name</div><div class="zs l"></div><div class="zs r"></div><div class="ok">Headline and price sit here</div><div class="zb">Covered by the caption, the buttons and the call to action</div></div>
+    <ul>
+      <li>On a vertical frame, the <b>top 14 percent and bottom 35 percent</b> are covered by the interface, and about <b>6 percent down each side</b>.</li>
+      <li>The photograph itself can fill the frame. It is the <b>headline and the price</b> that have to live inside the dashed area, which is why we ask for space around the subject.</li>
+      <li>Shooting a little wider than feels right is the single most useful habit. A crop can always be tightened later; it cannot be loosened.</li>
+    </ul>
+  </div>
+  <div class="note" style="margin-top:20px"><b>In short:</b> upright, a little wider than tight, with quiet space near the top or the bottom of the frame. A vertical photograph can become any of the shapes above. A landscape one can never become a good Story.</div>
+</section>
+
+<section class="pb">
   <div class="eyebrow">The technical side</div>
   <h2>Formats, video and delivery.</h2>
   <div class="two">
     <div class="box">
       <h3>Photographs</h3>
       <ul class="tick">
-        <li><b>Both orientations</b> for every key frame, with room around the subject so it can be cropped.</li>
+        <li><b>Both orientations</b> for every key frame, with room around the subject so it can be cropped. The shapes are drawn above.</li>
         <li>Leave <b>clear space at the top</b> of some frames, for a headline or price.</li>
         <li>Full-resolution JPEG, colour-edited to the soft, natural look above, <b>no watermark</b>.</li>
       </ul>
-      <div class="fm">
-        <div><i style="width:44px;height:55px">4:5</i><span>Feed</span></div>
-        <div><i style="width:44px;height:78px">9:16</i><span>Stories</span></div>
-        <div><i style="width:78px;height:44px">16:9</i><span>Website</span></div>
-      </div>
     </div>
     <div class="box">
       <h3>Video clips</h3>
