@@ -19,6 +19,17 @@
     X-Robots-Tag                   = "noindex, nofollow, noarchive"
     Content-Security-Policy        = "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https:; object-src 'none'; base-uri 'self';"
 
+# ── Die Veiling Klub app: re-allow the camera for QR scanning at the bar. ──
+# The global /* rule above forbids camera for the whole reports site (right for
+# reports). This more-specific path wins for the Klub app and re-permits the
+# camera for the origin only; everything else in the policy stays locked.
+# Without this, getUserMedia throws NotAllowedError on every device with no
+# permission prompt, even when the OS/browser camera permission is granted.
+[[headers]]
+  for = "/die-veiling-m7k4p2/klub/*"
+  [headers.values]
+    Permissions-Policy = "camera=(self), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()"
+
 # ── HTML: never cache (always serve fresh) ──
 [[headers]]
   for = "/*.html"
