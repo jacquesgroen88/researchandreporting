@@ -36,7 +36,7 @@
   weight 500, since a didone's hairlines are what disappear first on screen.
   Layout, copy, imagery and behaviour are identical to the final v4 build.
 -->
-<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;1,6..96,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;1,6..96,400&family=Jost:wght@300;400;500;600&family=MonteCarlo&display=swap" rel="stylesheet">
 <style>
   /* ══════════════════════════════════════════════════════════════════════
      THE ACREAGE — v4
@@ -74,6 +74,9 @@
     /* Jade, 23 Sep: buttons in a much lighter gold. Filled light with forest
        text reads 5.9:1, so it clears AA where a pale gold on white would not. */
     --gold-btn:#DCCCA9; --gold-btn-deep:#CBB88F;
+    /* The signature script. Alternatives that pair with Bodoni Moda:
+       'Carattere', 'Ballet', 'Birthstone'. One-line swap. */
+    --script:'MonteCarlo', 'Snell Roundhand', cursive;
     --line:#E2D9C6;
 
     /* ONE spacing scale, carried over from v2. Section padding and inner
@@ -542,10 +545,10 @@
                   to{transform:translate3d(34px,-320px,0);opacity:0}}
 
   /* ── a day at the acreage ───────────────────────────────────────────── */
-  .day{background:var(--forest-deep);color:var(--cream);overflow:hidden}
-  .day .head h2{color:#fff}
-  .day .head p{color:rgba(246,241,232,.75)}
-  .day .head .label{color:var(--gold-lite)}
+  .day{background:var(--paper-2);color:var(--ink);overflow:hidden}
+  .day .head h2{color:var(--forest)}
+  .day .head p{color:var(--soft-ink)}
+  .day .head .label{color:var(--gold)}
   .rail{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s2)}
   .hour{position:relative;overflow:hidden;min-height:440px;display:flex;align-items:flex-end;
     background:var(--night);isolation:isolate}
@@ -730,11 +733,11 @@
     color:rgba(246,241,232,.6);font-size:11.5px;letter-spacing:.24em}
 
   /* ── visit ──────────────────────────────────────────────────────────── */
-  .visit{background:var(--forest-deep);color:var(--cream)}
+  .visit{background:var(--paper);color:var(--ink)}
   .visit .grid2{display:grid;grid-template-columns:1.05fr .95fr;gap:var(--s6);align-items:center}
-  .visit .label{color:var(--gold-lite)}
-  .visit h2{color:#fff;font-size:clamp(1.82rem,3.65vw,2.98rem);margin:var(--s2) 0 var(--s3)}
-  .visit p{color:rgba(246,241,232,.82);font-size:16.5px;margin-bottom:var(--s4)}
+  .visit .label{color:var(--gold)}
+  .visit h2{color:var(--forest);font-size:clamp(1.82rem,3.65vw,2.98rem);margin:var(--s2) 0 var(--s3)}
+  .visit p{color:var(--soft-ink);font-size:16.5px;margin-bottom:var(--s4)}
   .info{display:grid;margin-bottom:var(--s4);border-top:1px solid rgba(255,255,255,.16)}
   .info .row{padding:17px 0;border-bottom:1px solid rgba(255,255,255,.16);
     transition:padding-left .4s var(--ease)}
@@ -945,7 +948,9 @@
      Scroll-snap does the moving; the script only nudges it along and keeps
      the dots in step, so the slider still works with script disabled.
      --------------------------------------------------------------------- */
-  .slider{position:relative;margin-top:var(--s4)}
+  .slider{position:relative;margin-top:var(--s4);background:var(--paper)}
+  .stage + .slider,
+  .ratingline + .slider{margin-top:0}
   .slider .track{display:flex;gap:0;overflow-x:auto;scroll-snap-type:x mandatory;
     -webkit-overflow-scrolling:touch;scrollbar-width:none}
   .slider .track::-webkit-scrollbar{height:0}
@@ -965,6 +970,9 @@
   .stacked{padding:var(--s7) 0}
   .stacked .wrap{max-width:1280px;margin:0 auto;padding:0 var(--s4)}
   .stacked .txt{max-width:64ch}
+  .stacked .txt h2{font-size:clamp(1.78rem,3.45vw,2.95rem);margin:var(--s2) 0 var(--s3)}
+  .stacked .txt p{font-size:16.5px;margin-bottom:var(--s2)}
+  .stacked .txt p:last-of-type{margin-bottom:0}
   .stacked .slider{margin-top:var(--s5)}
   .stacked .feat{margin-top:var(--s3)}
 
@@ -984,6 +992,38 @@
   }
   @media (prefers-reduced-motion:reduce){
     .slider .track{scroll-behavior:auto}
+  }
+
+  /* Jade, 23 Sep: green carries the headings, not the backgrounds. */
+  .intro h2, .stacked .txt h2, .host .head h2, .cater h2,
+  .gallery .head h2, .enquire .head h2{color:var(--forest)}
+
+  /* Her note on the day cards: bring the dark overlay down. */
+  .hour:after{background:linear-gradient(180deg,rgba(10,15,10,.10) 0%,rgba(10,15,10,.14) 32%,rgba(9,13,9,.58) 60%,rgba(8,12,8,.86) 100%)!important}
+  .hour:hover:after{background:linear-gradient(180deg,rgba(10,15,10,.2) 0%,rgba(10,15,10,.26) 32%,rgba(9,13,9,.7) 60%,rgba(8,12,8,.92) 100%)!important}
+
+  /* ═══════════════ CURSIVE MIXED WITH THE SERIF ═══════════════
+     Her reference sets one word of a heading in a script against the rest.
+     Bodoni Moda stays the voice of the page; MonteCarlo is the signature,
+     used on one word per section and nowhere else. Swapping the script is
+     one line: change --script.
+
+     .ln is the reveal mask and clips at the box, so a script word with long
+     ascenders and descenders needs the mask opened up on that word only. */
+  .ln.has-script{overflow:visible}
+  i.script{
+    font-family:var(--script);
+    font-size:1.58em;
+    line-height:.72;
+    letter-spacing:.01em;
+    padding-inline:.06em;
+    /* the script sits optically high against the serif baseline */
+    transform:translateY(.10em);
+  }
+  .ln.has-script > i.script{transform:translateY(calc(.10em + 106%))}
+  .lit .ln.has-script > i.script{transform:translateY(.10em)}
+  @media (prefers-reduced-motion:reduce){
+    .ln.has-script > i.script{transform:translateY(.10em)!important}
   }
 </style>
 </head>
@@ -1060,7 +1100,7 @@
 
 <section class="hero" id="top">
   <div class="wrap inner" id="heroInner">
-    <h1 data-split>Event Venue &amp; Restaurant</h1>
+    <h1 data-split data-script="&amp;">Event Venue &amp; Restaurant</h1>
     <p class="sub">Twenty minutes from Sandton.</p>
     <div class="actions">
       <a href="#venue" class="btn btn-gold" data-mag><span>Explore the venue
@@ -1079,12 +1119,15 @@
   <span class="ghost" aria-hidden="true">01</span>
   <div class="wrap">
     <span class="label reveal">Welcome to The Acreage</span>
-    <h2 class="reveal d1" data-split>The city feels a long way from here.</h2>
+    <h2 class="reveal d1" data-split data-script="here">The city feels a long way from here.</h2>
     <p class="reveal d2">The Acreage is a restaurant and event venue on an expansive country estate, set among acres of green, overlooking the Randjesfontein racecourse, just 20 minutes from Sandton and five minutes from the N1.</p>
     <p class="reveal d2">Join us at the restaurant for breakfast on the terrace or settle in for a long lunch under the trees and simply let time pass by.</p>
     <p class="reveal d2">Host your event with us. The Acreage perfectly combines scale and setting, contemporary country elegance with the space to host everything from intimate gatherings to large corporate events of up to 3,000 guests.</p>
   </div>
 </section>
+
+</div><!-- /.stage — the pinned drone backdrop is released here, once the
+     cream intro panel has fully risen over it -->
 
 <div class="slider" data-slider>
     <div class="track">
@@ -1103,9 +1146,6 @@
     <div class="t">Rated on Google</div>
   </div>
 
-</div><!-- /.stage — the pinned drone backdrop is released here, once the
-     cream intro panel has fully risen over it -->
-
 <div class="div">
   <span class="l"></span>
   <img src="assets/Submark-Gold.png" alt="" width="34" height="34" loading="lazy">
@@ -1116,7 +1156,7 @@
   <div class="wrap">
     <div class="txt">
       <span class="label reveal">The Venue</span>
-      <h2 class="reveal d1" data-split>From intimate gatherings to events for 3,000 guests.</h2>
+      <h2 class="reveal d1" data-split data-script="intimate">From intimate gatherings to events for 3,000 guests.</h2>
       <p class="reveal d2">A beautiful restaurant space overlooking the racecourse with adjacent tented lawns, a lakeside lapa and bar, and a number of separate lawned areas offering flexibility for events of different sizes.</p>
       <ul class="feat reveal d3">
         <li><strong>Versatile catering</strong> from canap&eacute;s and plated menus to braais, spit braais and gourmet food trucks, we cater for events of every style and scale.</li>
@@ -1148,7 +1188,7 @@
   <div class="wrap">
     <div class="txt">
       <span class="label reveal">The Restaurant</span>
-      <h2 class="reveal d1" data-split>Breakfast and lunch, Tuesday to Sunday.</h2>
+      <h2 class="reveal d1" data-split data-script="Breakfast">Breakfast and lunch, Tuesday to Sunday.</h2>
       <p class="reveal d2">Come early, when there is still mist over the track and the horses are out training. Stay for breakfast on the terrace, lunch on the lawns, a bottle of wine or two, and let time pass by.</p>
       <p class="reveal d2">Our menu is built around favourites, elevated with thoughtful flavours, fresh ingredients and attention to detail. Great coffee starts the day; hand-blended cocktails, craft gins and beer on tap complete a beautiful afternoon.</p>
       <p class="reveal d2">Find a table in the sun and settle in.</p>
@@ -1196,7 +1236,7 @@
   <div class="wrap">
     <div class="head">
       <span class="label reveal">A day on the estate</span>
-      <h2 class="reveal d1" data-split>From first coffee to last toast.</h2>
+      <h2 class="reveal d1" data-split data-script="toast">From first coffee to last toast.</h2>
       <p class="reveal d2">Experience the changing rhythms of Acreage as the day unfolds. Quiet mornings give way to long lunches, afternoons drift towards sundowners against an immaculate sunset, and evenings take on an energy all their own.</p>
     </div>
     <div class="rail">
@@ -1266,7 +1306,7 @@
   <div class="wrap">
     <div class="head">
       <span class="label reveal">What we host</span>
-      <h2 class="reveal d1" data-split>From intimate gatherings to events for thousands.</h2>
+      <h2 class="reveal d1" data-split data-script="thousands">From intimate gatherings to events for thousands.</h2>
     </div>
     <div class="cards">
       <a class="hcard reveal" href="#enquire">
@@ -1313,7 +1353,7 @@
   <div class="wrap grid2">
     <div>
       <span class="label reveal">What we cater</span>
-      <h2 class="reveal d1" data-split>From canap&eacute;s to food trucks and mobile bars. We do it all.</h2>
+      <h2 class="reveal d1" data-split data-script="canap&eacute;s">From canap&eacute;s to food trucks and mobile bars. We do it all.</h2>
       <p class="lede reveal d2">Beyond the views and calm country atmosphere, our in-house catering and bar capabilities really set The Acreage apart.</p>
       <p class="reveal d2">The Acreage is part of the Good &amp; Proper group, bringing together an exceptional venue with the expertise and experience of one of South Africa&rsquo;s leading food truck and mobile event catering companies.</p>
       <p class="reveal d2">From plated meals, platters and canap&eacute;s to braais, spit braais and an extensive selection of food trucks, we cater for events of every style and scale, with in-house mobile bar capabilities for events of any size.</p>
@@ -1338,7 +1378,7 @@
   <div class="wrap" style="position:relative;z-index:1">
     <div class="head">
       <span class="label reveal">Reviews</span>
-      <h2 class="reveal d1" data-split>What guests say.</h2>
+      <h2 class="reveal d1" data-split data-script="guests">What guests say.</h2>
       <div class="rating reveal d2">&#9733;&#9733;&#9733;&#9733;&#9733; &nbsp;4.7 on Google</div>
     </div>
     <div class="tgrid">
@@ -1416,7 +1456,7 @@
   <div class="wrap">
     <div class="head">
       <span class="label reveal">Enquire</span>
-      <h2 class="reveal d1" data-split>Tell us what you are planning.</h2>
+      <h2 class="reveal d1" data-split data-script="planning">Tell us what you are planning.</h2>
           </div>
 
     <div class="fwrap reveal d2">
@@ -1701,10 +1741,18 @@
      the finished markup */
   $$('[data-split]').forEach(function(el){
     var words=el.textContent.trim().split(/\s+/);
+    /* data-script names the word or words to set in the signature script */
+    var accent=(el.getAttribute('data-script')||'').toLowerCase().split(/\s+/).filter(Boolean);
+    function isAccent(w){
+      var bare=w.toLowerCase().replace(/[^\p{L}\p{N}]/gu,'');
+      return accent.indexOf(bare)>-1;
+    }
     el.textContent='';
     words.forEach(function(w,n){
-      var s=document.createElement('span'); s.className='ln';
+      var hit=isAccent(w);
+      var s=document.createElement('span'); s.className='ln'+(hit?' has-script':'');
       var i=document.createElement('i'); i.textContent=w;
+      if(hit) i.className='script';
       i.style.transitionDelay=(n*0.045)+'s';
       s.appendChild(i); el.appendChild(s);
       if(n<words.length-1) el.appendChild(document.createTextNode(' '));
@@ -2231,28 +2279,33 @@
       }, 90);
     }, { passive: true });
 
-    var hold = false, timer = null;
-    sl.addEventListener('pointerenter', function(){ hold = true; });
-    sl.addEventListener('pointerleave', function(){ hold = false; });
-    sl.addEventListener('focusin',  function(){ hold = true; });
-    sl.addEventListener('focusout', function(){ hold = false; });
+    var hold = false, onScreen = true, timer = null;
+    function pause(){ hold = true; }
+    function resume(){ hold = false; }
+    sl.addEventListener('pointerenter', pause);
+    sl.addEventListener('pointerleave', resume);
+    sl.addEventListener('focusin',  pause);
+    sl.addEventListener('focusout', resume);
 
-    function start(){
-      stop();
-      if (slow.matches) return;
-      timer = setInterval(function(){
-        if (hold || document.hidden) return;
-        go((cur + 1) % figs.length);
-      }, 5200);
+    function tick(){
+      if (hold || !onScreen) return;
+      go((cur + 1) % figs.length);
     }
-    function stop(){ if (timer) { clearInterval(timer); timer = null; } }
+    function start(){ if (!timer && !slow.matches) timer = setInterval(tick, 5000); }
+    function stop(){ if (timer){ clearInterval(timer); timer = null; } }
 
-    /* Only run the timer while the slider is actually on screen. */
+    /* Idle the ticker when the tab is in the background, and pick it straight
+       back up rather than dropping the beat. */
+    document.addEventListener('visibilitychange', function(){
+      document.hidden ? stop() : start();
+    });
+
     if ('IntersectionObserver' in window){
       new IntersectionObserver(function(es){
-        es.forEach(function(e){ e.isIntersecting ? start() : stop(); });
-      }, { threshold: 0.25 }).observe(sl);
-    } else { start(); }
+        es.forEach(function(e){ onScreen = e.isIntersecting; });
+      }, { threshold: 0.2 }).observe(sl);
+    }
+    start();
   });
 })();
 
