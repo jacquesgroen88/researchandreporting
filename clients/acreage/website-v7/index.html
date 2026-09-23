@@ -1011,9 +1011,13 @@
      .ln is the reveal mask and clips at the box, so a script word with long
      ascenders and descenders needs the mask opened up on that word only. */
   .ln.has-script{overflow:visible}
+  /* A script word is far taller than the serif it sits beside, so any heading
+     carrying one is given the leading to hold it without touching the line
+     beneath. */
+  h1.has-accent,h2.has-accent{line-height:1.46}
   i.script{
     font-family:var(--script);
-    font-size:1.58em;
+    font-size:1.42em;
     line-height:.72;
     letter-spacing:.01em;
     padding-inline:.06em;
@@ -1744,15 +1748,16 @@
     /* data-script names the word or words to set in the signature script */
     var accent=(el.getAttribute('data-script')||'').toLowerCase().split(/\s+/).filter(Boolean);
     function isAccent(w){
-      var bare=w.toLowerCase().replace(/[^\p{L}\p{N}]/gu,'');
-      return accent.indexOf(bare)>-1;
+      var raw=w.toLowerCase();
+      var bare=raw.replace(/[^\p{L}\p{N}]/gu,'');
+      return accent.indexOf(raw)>-1 || (bare!=='' && accent.indexOf(bare)>-1);
     }
     el.textContent='';
     words.forEach(function(w,n){
       var hit=isAccent(w);
       var s=document.createElement('span'); s.className='ln'+(hit?' has-script':'');
       var i=document.createElement('i'); i.textContent=w;
-      if(hit) i.className='script';
+      if(hit){ i.className='script'; el.classList.add('has-accent'); }
       i.style.transitionDelay=(n*0.045)+'s';
       s.appendChild(i); el.appendChild(s);
       if(n<words.length-1) el.appendChild(document.createTextNode(' '));
