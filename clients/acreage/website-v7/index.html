@@ -952,7 +952,7 @@
   .stage + .slider,
   .ratingline + .slider{margin-top:0}
   .slider .track{display:flex;gap:0;overflow-x:auto;scroll-snap-type:x mandatory;
-    -webkit-overflow-scrolling:touch;scrollbar-width:none;scroll-behavior:smooth}
+    -webkit-overflow-scrolling:touch;scrollbar-width:none}
   .slider .track::-webkit-scrollbar{height:0}
   .slider figure{flex:0 0 100%;margin:0;scroll-snap-align:center;position:relative;
     height:clamp(300px,46vw,580px);overflow:hidden}
@@ -990,9 +990,7 @@
     .stacked .wrap{padding:0 var(--s3)}
     .arc{padding-left:var(--s3);padding-right:var(--s3)}
   }
-  @media (prefers-reduced-motion:reduce){
-    .slider .track{scroll-behavior:auto}
-  }
+
 
   /* Jade, 23 Sep: green carries the headings, not the backgrounds. */
   .intro h2, .stacked .txt h2, .host .head h2, .cater h2,
@@ -1015,6 +1013,7 @@
      carrying one is given the leading to hold it without touching the line
      beneath. */
   h1.has-accent,h2.has-accent{line-height:1.40}
+  @media (max-width:820px){h1.has-accent,h2.has-accent{line-height:1.54}}
   i.script{
     font-family:var(--script);
     font-size:1.2em;
@@ -2259,7 +2258,16 @@
     }
     function go(i){
       mark(i);
-      track.scrollLeft = figs[i].offsetLeft - track.offsetLeft;
+      var to = figs[i].offsetLeft - track.offsetLeft;
+      if (slow.matches){ track.scrollLeft = to; return; }
+      var from = track.scrollLeft, t0 = 0, dur = 560;
+      cancelAnimationFrame(sl._raf);
+      (function step(ts){
+        if (!t0) t0 = ts;
+        var p = Math.min(1, (ts - t0) / dur);
+        track.scrollLeft = from + (to - from) * (1 - Math.pow(1 - p, 3));
+        if (p < 1) sl._raf = requestAnimationFrame(step);
+      })(performance.now());
     }
     mark(0);
 
