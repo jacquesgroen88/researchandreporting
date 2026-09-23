@@ -952,7 +952,7 @@
   .stage + .slider,
   .ratingline + .slider{margin-top:0}
   .slider .track{display:flex;gap:0;overflow-x:auto;scroll-snap-type:x mandatory;
-    -webkit-overflow-scrolling:touch;scrollbar-width:none}
+    -webkit-overflow-scrolling:touch;scrollbar-width:none;scroll-behavior:smooth}
   .slider .track::-webkit-scrollbar{height:0}
   .slider figure{flex:0 0 100%;margin:0;scroll-snap-align:center;position:relative;
     height:clamp(300px,46vw,580px);overflow:hidden}
@@ -2248,7 +2248,7 @@
       var b = document.createElement('button');
       b.type = 'button';
       b.setAttribute('aria-label', 'Show image ' + (i + 1) + ' of ' + figs.length);
-      b.addEventListener('click', function(){ go(i, true); });
+      b.addEventListener('click', function(){ go(i); });
       dots.appendChild(b);
     });
     var btns = Array.prototype.slice.call(dots.children), cur = 0;
@@ -2257,10 +2257,9 @@
       cur = i;
       btns.forEach(function(b, n){ b.setAttribute('aria-current', n === i ? 'true' : 'false'); });
     }
-    function go(i, user){
+    function go(i){
       mark(i);
-      track.scrollTo({ left: figs[i].offsetLeft - track.offsetLeft,
-                       behavior: (user && slow.matches) ? 'auto' : 'smooth' });
+      track.scrollLeft = figs[i].offsetLeft - track.offsetLeft;
     }
     mark(0);
 
