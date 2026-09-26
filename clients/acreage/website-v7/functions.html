@@ -36,7 +36,7 @@
   weight 500, since a didone's hairlines are what disappear first on screen.
   Layout, copy, imagery and behaviour are identical to the final v4 build.
 -->
-<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;1,6..96,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;1,6..96,400&family=Jost:wght@300;400;500;600&family=MonteCarlo&display=swap" rel="stylesheet">
 <style>
   /* ══════════════════════════════════════════════════════════════════════
      THE ACREAGE — v4
@@ -72,6 +72,9 @@
     --olive:#4A5B4E; --sage:#9DAEA1;
     --gold:#7E5F22; --gold-lite:#C3AD84; --gold-glow:rgba(195,173,132,.5);
     --gold-btn:#DCCCA9; --gold-btn-deep:#CBB88F;
+    /* The signature script. Alternatives that pair with Bodoni Moda:
+       'Carattere', 'Ballet', 'Birthstone'. One-line swap. */
+    --script:'MonteCarlo', 'Snell Roundhand', cursive;
     --line:#E2D9C6;
 
     /* ONE spacing scale, carried over from v2. Section padding and inner
@@ -1126,6 +1129,21 @@
   .clients .head h2,.gallery .head h2,.enquire .head h2,.menu .head h2,
   .notes .head h2{color:var(--forest)}
   .hour:after{background:linear-gradient(180deg,rgba(10,15,10,.10) 0%,rgba(10,15,10,.14) 32%,rgba(9,13,9,.58) 60%,rgba(8,12,8,.86) 100%)!important}
+  .ln.has-script{overflow:visible}
+  /* A script word is far taller than the serif it sits beside, so any heading
+     carrying one is given the leading to hold it without touching the line
+     beneath. */
+  h1.has-accent,h2.has-accent{line-height:1.40}
+  @media (max-width:820px){h1.has-accent,h2.has-accent{line-height:1.54}}
+  i.script{
+    font-family:var(--script);
+    font-size:1.2em;
+    line-height:1;
+    letter-spacing:.01em;
+    padding-inline:.05em;
+  }
+  .ln.has-script > i.script{transform:translateY(106%)}
+  .lit .ln.has-script > i.script{transform:none}
 </style>
 </head>
 <body>
@@ -1720,15 +1738,23 @@
      the finished markup */
   $$('[data-split]').forEach(function(el){
     var words=el.textContent.trim().split(/\s+/);
+    /* data-script names the word or words to set in the signature script */
+    var accent=(el.getAttribute('data-script')||'').toLowerCase().split(/\s+/).filter(Boolean);
+    function isAccent(w){
+      var raw=w.toLowerCase();
+      var bare=raw.replace(/[^\p{L}\p{N}]/gu,'');
+      return accent.indexOf(raw)>-1 || (bare!=='' && accent.indexOf(bare)>-1);
+    }
     el.textContent='';
     words.forEach(function(w,n){
-      var s=document.createElement('span'); s.className='ln';
+      var hit=isAccent(w);
+      var s=document.createElement('span'); s.className='ln'+(hit?' has-script':'');
       var i=document.createElement('i'); i.textContent=w;
+      if(hit){ i.className='script'; el.classList.add('has-accent'); }
       i.style.transitionDelay=(n*0.045)+'s';
       s.appendChild(i); el.appendChild(s);
       if(n<words.length-1) el.appendChild(document.createTextNode(' '));
     });
-  });
 
   var io=new IntersectionObserver(function(es){
     es.forEach(function(e){
