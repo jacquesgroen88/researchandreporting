@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Website notes from Jade</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display+SC:wght@400&family=Karla:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--green:#0B4337;--deep:#07231C;--cream:#FCFBF7;--gold:#A8895A;--line:#E8DFCE;--ink:#1C1B18;--muted:#5F6B66}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--cream);color:var(--ink);
+    font:400 15px/1.6 'Karla',system-ui,sans-serif;padding-inline:18px;padding-block:0 60px}
+  .wrap{max-width:900px;margin:0 auto}
+  header.top{background:var(--green);color:var(--cream);margin-inline:-18px;padding:34px 18px 30px}
+  header.top .in{max-width:900px;margin:0 auto}
+  header.top h1{font-family:'Playfair Display SC',Georgia,serif;font-weight:400;
+    font-size:clamp(26px,4.2vw,38px);margin:0 0 8px;line-height:1}
+  header.top p{margin:0;color:#D7E0DA;font-size:14px;max-width:60ch}
+  .eyebrow{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:#D9C49C;margin-bottom:9px}
+  .bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding-top:24px}
+  .bar button,.bar a{font:600 11.5px/1 'Karla',sans-serif;letter-spacing:.12em;text-transform:uppercase;
+    border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;
+    padding:10px 15px;cursor:pointer;text-decoration:none}
+  .bar button.on{background:var(--green);color:#fff;border-color:var(--green)}
+  .bar .count{margin-left:auto;color:var(--muted);font-size:13px}
+  .grp{margin-top:30px}
+  .grp h2{font-family:'Playfair Display SC',Georgia,serif;font-weight:400;font-size:21px;
+    color:var(--green);margin:0 0 4px}
+  .grp a.view{font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);text-decoration:none}
+  .note{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-top:12px}
+  .note .m{font-size:12px;color:var(--muted);display:flex;flex-wrap:wrap;gap:8px 14px;margin-bottom:8px}
+  .note .m b{color:var(--green);font-weight:600}
+  .note .q{font-size:13px;color:var(--muted);border-left:3px solid var(--line);
+    padding-left:11px;margin-bottom:9px}
+  .note .t{white-space:pre-wrap;font-size:15.5px}
+  .empty{margin-top:28px;border:1px dashed var(--line);border-radius:14px;padding:26px 20px;
+    color:var(--muted);text-align:center}
+  textarea#md{width:100%;height:230px;margin-top:14px;border:1px solid var(--line);border-radius:12px;
+    padding:12px;font:400 13px/1.5 ui-monospace,Menlo,Consolas,monospace;display:none}
+  .foot{margin-top:36px;border-top:1px solid var(--line);padding-top:14px;color:var(--muted);font-size:12.5px}
+</style></head>
+<body>
+<div class="wrap">
+<header class="top"><div class="in">
+  <div class="eyebrow">The Acreage &middot; Website review</div>
+  <h1>Notes from Jade</h1>
+  <p>Everything Jade has left on the three review pages, newest first. This page reads the notes live, so refreshing is enough to see anything new.</p>
+</div></header>
+
+<div class="bar">
+  <button type="button" data-f="all" class="on">All pages</button>
+  <button type="button" data-f="index">Home</button>
+  <button type="button" data-f="restaurant">Restaurant</button>
+  <button type="button" data-f="functions">Functions</button>
+  <button type="button" id="copy">Copy as markdown</button>
+  <span class="count" id="count">Loading</span>
+</div>
+<textarea id="md" readonly></textarea>
+<div id="out"></div>
+<div class="foot">Notes are stored centrally and cannot be edited or deleted from the website, so this is the full record.</div>
+</div>
+
+<script>
+var API='https://plinxeaiapsskkvblbar.supabase.co/rest/v1/acreage_notes';
+var KEY='sb_publishable_qFYgdq9_Oc-_rD0y7JR_4A_HngmfHJF';
+var LABEL={index:'Home',restaurant:'The Restaurant',functions:'Functions & Events'};
+var URLS={index:'index.html',restaurant:'restaurant.html',functions:'functions.html'};
+var all=[],filter='all';
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){
+  return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c];});}
+function when(iso){var d=new Date(iso);return d.toLocaleDateString('en-ZA',{day:'numeric',month:'short'})+
+  ' '+d.toLocaleTimeString('en-ZA',{hour:'2-digit',minute:'2-digit'});}
+function render(){
+  var rows=all.filter(function(n){return filter==='all'||n.page===filter;});
+  document.getElementById('count').textContent=rows.length+(rows.length===1?' note':' notes');
+  var out=document.getElementById('out');
+  if(!rows.length){out.innerHTML='<div class="empty">Nothing yet. Once Jade saves a note it appears here.</div>';return;}
+  var by={};rows.forEach(function(n){(by[n.page]=by[n.page]||[]).push(n);});
+  out.innerHTML=Object.keys(by).map(function(p){
+    return '<div class="grp"><h2>'+LABEL[p]+'</h2><a class="view" href="'+URLS[p]+'" target="_blank">Open that page &rarr;</a>'+
+      by[p].map(function(n){
+        return '<div class="note"><div class="m"><b>'+esc(n.author)+'</b><span>'+when(n.created_at)+'</span></div>'+
+          (n.quote?'<div class="q">'+esc(n.quote)+'</div>':'')+
+          '<div class="t">'+esc(n.note)+'</div></div>';}).join('')+'</div>';
+  }).join('');
+}
+document.querySelectorAll('.bar button[data-f]').forEach(function(b){
+  b.onclick=function(){filter=b.getAttribute('data-f');
+    document.querySelectorAll('.bar button[data-f]').forEach(function(o){o.classList.toggle('on',o===b);});
+    render();};
+});
+document.getElementById('copy').onclick=function(){
+  var rows=all.filter(function(n){return filter==='all'||n.page===filter;});
+  var md=rows.map(function(n){return '- **'+LABEL[n.page]+'** ('+esc(n.quote||'')+')\n  '+n.note+'\n  _'+n.author+', '+when(n.created_at)+'_';}).join('\n');
+  var ta=document.getElementById('md');ta.style.display='block';ta.value=md;ta.select();
+  try{document.execCommand('copy');this.textContent='Copied';setTimeout(function(){document.getElementById('copy').textContent='Copy as markdown';},1600);}catch(e){}
+};
+fetch(API+'?order=created_at.desc&select=*',{headers:{apikey:KEY,Authorization:'Bearer '+KEY}})
+  .then(function(r){if(!r.ok)throw new Error(r.status);return r.json();})
+  .then(function(rows){all=rows;render();})
+  .catch(function(e){document.getElementById('count').textContent='Could not load';
+    document.getElementById('out').innerHTML='<div class="empty">Could not reach the notes store. Refresh to try again.</div>';});
+</script>
+</body></html>
