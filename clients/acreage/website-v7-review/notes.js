@@ -16,6 +16,7 @@
   var PAGE = (document.body.getAttribute('data-nm-page') || 'index');
 
   var PEOPLE = ['Jade', 'Jacques'];
+  var all = [];
   var notes = [], on = false, composer = null, bubble = null;
 
   /* ── talking to the store ──────────────────────────────────────────── */
@@ -28,7 +29,11 @@
     return fetch(API + '?page=eq.' + PAGE + '&order=created_at.asc&select=*',
                  { headers: headers({}) })
       .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
-      .then(function (rows) { notes = rows; return rows; });
+      .then(function (rows) {
+        all = rows;
+        notes = rows.filter(function (r) { return !r.parent_id; });
+        return rows;
+      });
   }
   function save(row) {
     return fetch(API, {
@@ -197,18 +202,57 @@
 
   function openBubble(note, el) {
     close();
+    var thread = repliesTo(note.id).map(function (rp) {
+      return '<div class="nm-reply"><div class="nm-meta' + (rp.kind === 'agency' ? ' nm-ameta' : '') + '">' +
+             esc(rp.author || 'Jade') + ' &middot; ' + when(rp.created_at) + '</div>' +
+             '<div class="nm-text">' + esc(rp.note) + '</div></div>';
+    }).join('');
+
     bubble = document.createElement('div');
-    bubble.className = 'nm-ui';
+    bubble.className = 'nm-ui nm-thread';
     bubble.innerHTML =
       '<div class="nm-q"><b>On:</b> ' + esc(note.quote || '') + '</div>' +
       '<div class="nm-body"><div class="nm-meta' + (note.kind === 'agency' ? ' nm-ameta' : '') + '">' +
       esc(note.author || 'Jade') + (note.kind === 'agency' ? ' &middot; suggestion' : '') +
       ' &middot; ' + when(note.created_at) + '</div><div class="nm-text">' + esc(note.note) + '</div>' +
-      '<div class="nm-row"><button type="button" class="nm-cancel">Close</button></div></div>';
+      '<div class="nm-thread-list">' + thread + '</div>' +
+      '<div class="nm-replybox">' +
+        '<textarea class="nm-rt" placeholder="Reply"></textarea>' +
+        '<label class="nm-wholbl">Replying as' +
+        '<select class="nm-who">' + PEOPLE.map(function (p) {
+          return '<option' + (p === who() ? ' selected' : '') + '>' + esc(p) + '</option>';
+        }).join('') + '</select></label>' +
+        '<div class="nm-err"></div>' +
+        '<div class="nm-row"><button type="button" class="nm-cancel">Close</button>' +
+        '<button type="button" class="nm-save nm-sendreply">Reply</button></div>' +
+      '</div></div>';
     document.body.appendChild(bubble);
     var r = el ? el.getBoundingClientRect() : { left: 40, bottom: 80 };
     place(bubble, r.left + window.scrollX, r.bottom + window.scrollY);
     bubble.querySelector('.nm-cancel').onclick = close;
+
+    bubble.querySelector('.nm-sendreply').onclick = function () {
+      var ta = bubble.querySelector('.nm-rt');
+      var text = ta.value.trim();
+      if (!text) { ta.focus(); return; }
+      var name = bubble.querySelector('.nm-who').value || PEOPLE[0];
+      try { localStorage.setItem('nm-who', name); } catch (err) {}
+      var btn = this; btn.disabled = true; btn.textContent = 'Sending';
+      save({ page: PAGE, parent_id: note.id, note: text, author: name,
+             quote: note.quote, anchor: note.anchor })
+        .then(function (rows) {
+          all.push(rows[0] || rows);
+          openBubble(note, el);            /* redraw with the new reply in it */
+          render();
+        })
+        .catch(function (err) {
+          btn.disabled = false; btn.textContent = 'Reply';
+          var e2 = bubble.querySelector('.nm-err');
+          e2.style.display = 'block';
+          e2.textContent = 'That did not send. Try again in a moment.';
+          if (window.console) console.error('[notes]', err);
+        });
+    };
   }
 
   /* ── drawing pins and the list ─────────────────────────────────────── */
@@ -240,7 +284,10 @@
       row.innerHTML = '<span class="n">' + (i + 1) + ' &middot; ' + esc(note.author || 'Jade') +
                       (note.kind === 'agency' ? ' &middot; suggestion' : '') + '</span>' +
                       '<span class="q">' + esc(note.quote || 'On the page') + '</span>' +
-                      '<span class="t">' + esc(note.note) + '</span>';
+                      '<span class="t">' + esc(note.note) + '</span>' +
+                      (repliesTo(note.id).length
+                        ? '<span class="nm-rc">' + repliesTo(note.id).length + ' repl' +
+                          (repliesTo(note.id).length === 1 ? 'y' : 'ies') + '</span>' : '');
       row.onclick = function () {
         var t = find(note);
         if (t) { t.scrollIntoView({ behavior: 'smooth', block: 'center' }); setTimeout(function () { openBubble(note, t); }, 420); }
@@ -260,6 +307,11 @@
   if (window.ResizeObserver) new ResizeObserver(reflow).observe(document.body);
 
   /* ── helpers ───────────────────────────────────────────────────────── */
+  function repliesTo(id) {
+    return all.filter(function (r) { return r.parent_id === id; })
+              .sort(function (a, b) { return a.created_at < b.created_at ? -1 : 1; });
+  }
+
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {
     return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]; }); }
   function who() {

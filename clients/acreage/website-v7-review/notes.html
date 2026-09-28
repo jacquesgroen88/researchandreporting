@@ -38,6 +38,9 @@
   .note.agency .m b{color:var(--green)}
   .tag{display:inline-block;font-size:10px;letter-spacing:.16em;text-transform:uppercase;
     color:var(--green);border:1px solid var(--line);border-radius:999px;padding:3px 8px}
+  .reply{border-left:2px solid var(--line);margin:10px 0 0 14px;padding:8px 0 8px 12px}
+  .reply .m{margin-bottom:4px}
+  .reply .t{font-size:14.5px}
   .empty{margin-top:28px;border:1px dashed var(--line);border-radius:14px;padding:26px 20px;
     color:var(--muted);text-align:center}
   textarea#md{width:100%;height:230px;margin-top:14px;border:1px solid var(--line);border-radius:12px;
@@ -80,17 +83,25 @@ function when(iso){var d=new Date(iso);return d.toLocaleDateString('en-ZA',{day:
   ' '+d.toLocaleTimeString('en-ZA',{hour:'2-digit',minute:'2-digit'});}
 function render(){
   var rows=all.filter(function(n){return (filter==='all'||n.page===filter)&&(kind==='all'||(n.kind||'client')===kind);});
-  document.getElementById('count').textContent=rows.length+(rows.length===1?' note':' notes');
+  var top=rows.filter(function(n){return !n.parent_id;}).length;
+  var rep=rows.length-top;
+  document.getElementById('count').textContent=top+(top===1?' note':' notes')+(rep?', '+rep+(rep===1?' reply':' replies'):'');
   var out=document.getElementById('out');
   if(!rows.length){out.innerHTML='<div class="empty">Nothing yet. Once Jade saves a note it appears here.</div>';return;}
-  var by={};rows.forEach(function(n){(by[n.page]=by[n.page]||[]).push(n);});
+  var by={};rows.filter(function(n){return !n.parent_id;}).forEach(function(n){(by[n.page]=by[n.page]||[]).push(n);});
+  function repliesTo(id){return all.filter(function(r){return r.parent_id===id;})
+    .sort(function(a,b){return a.created_at<b.created_at?-1:1;});}
   out.innerHTML=Object.keys(by).map(function(p){
     return '<div class="grp"><h2>'+LABEL[p]+'</h2><a class="view" href="'+URLS[p]+'" target="_blank">Open that page &rarr;</a>'+
       by[p].map(function(n){
         return '<div class="note'+(n.kind==='agency'?' agency':'')+'"><div class="m"><b>'+esc(n.author)+'</b><span>'+when(n.created_at)+'</span>'+
           (n.kind==='agency'?'<span class="tag">Our suggestion</span>':'')+'</div>'+
           (n.quote?'<div class="q">'+esc(n.quote)+'</div>':'')+
-          '<div class="t">'+esc(n.note)+'</div></div>';}).join('')+'</div>';
+          '<div class="t">'+esc(n.note)+'</div>'+
+          repliesTo(n.id).map(function(rp){
+            return '<div class="reply"><div class="m"><b>'+esc(rp.author)+'</b><span>'+when(rp.created_at)+'</span></div>'+
+                   '<div class="t">'+esc(rp.note)+'</div></div>';}).join('')+
+          '</div>';}).join('')+'</div>';
   }).join('');
 }
 document.querySelectorAll('.bar button[data-f]').forEach(function(b){

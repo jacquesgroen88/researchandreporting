@@ -661,19 +661,19 @@
   .testi .head .label{color:var(--gold)}
   .testi .rating{color:var(--gold);font-size:12.5px;letter-spacing:.16em;margin-top:var(--s2)}
   .tgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s3)}
-  .tcard{position:relative;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);
+  .tcard{position:relative;background:var(--paper);border:1px solid var(--line);
     padding:var(--s4) var(--s3);overflow:hidden;
     transition:background .45s,border-color .45s,transform .5s var(--ease)}
-  .tcard:hover{background:rgba(255,255,255,.07);border-color:rgba(216,189,139,.38);transform:translateY(-5px)}
+  .tcard:hover{background:#fff;border-color:rgba(168,137,90,.5);transform:translateY(-5px)}
   .tcard:before{content:"";position:absolute;left:0;top:0;width:100%;height:1px;
     background:linear-gradient(90deg,transparent,var(--gold-lite),transparent);
     transform:scaleX(0);transition:transform .7s var(--ease)}
   .tcard:hover:before{transform:scaleX(1)}
   .tcard .qm{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-size:56px;
-    color:var(--gold-lite);line-height:.6;margin-bottom:var(--s2);opacity:.7}
-  .tcard p{color:rgba(246,241,232,.9);font-size:15.5px}
-  .tcard .who{margin-top:var(--s3);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--sage)}
-  .tcard .stars{color:var(--gold-lite);letter-spacing:.18em;font-size:12px;margin-top:8px}
+    color:var(--gold);line-height:.6;margin-bottom:var(--s2);opacity:.7}
+  .tcard p{color:var(--soft-ink);font-size:15.5px}
+  .tcard .who{margin-top:var(--s3);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+  .tcard .stars{color:var(--gold);letter-spacing:.18em;font-size:12px;margin-top:8px}
 
   /* ── gallery ────────────────────────────────────────────────────────── */
   .gallery{background:var(--cream)}
@@ -1113,8 +1113,15 @@
   .logowall ul{display:flex;gap:14px;list-style:none;margin:0;padding:0;width:max-content;
     animation:marquee 46s linear infinite}
   .logowall:hover ul{animation-play-state:paused}
-  .logowall li{flex:none;border:1px solid var(--line);border-radius:999px;
-    padding:10px 20px;font-size:14px;color:var(--soft-ink);white-space:nowrap;background:var(--paper)}
+  .logowall li{flex:none;display:flex;align-items:center;justify-content:center;
+    height:66px;padding:0 26px;white-space:nowrap}
+  .logowall li img{max-height:42px;max-width:150px;width:auto;height:auto;object-fit:contain;
+    filter:grayscale(1) opacity(.62);transition:filter .3s}
+  .logowall li:hover img{filter:grayscale(0) opacity(1)}
+  .logowall li span{display:none}
+  /* no file for this one yet, so the name carries it */
+  .logowall li.nologo span{display:inline;border:1px solid var(--line);border-radius:999px;
+    padding:10px 20px;font-size:14px;color:var(--soft-ink);background:var(--paper)}
   @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
   @media (prefers-reduced-motion:reduce){
     .logowall ul{animation:none;flex-wrap:wrap;width:auto;justify-content:center}
@@ -1126,6 +1133,35 @@
   .clients .head h2,.gallery .head h2,.enquire .head h2,.menu .head h2,
   .notes .head h2{color:var(--forest)}
   .hour:after{background:linear-gradient(180deg,rgba(10,15,10,.10) 0%,rgba(10,15,10,.14) 32%,rgba(9,13,9,.58) 60%,rgba(8,12,8,.86) 100%)!important}
+
+  /* ───────────────────────────────────────────────────────────────────
+     Text that turned invisible when Reviews and Find Us came off their
+     dark grounds. Only the section background and headings were changed
+     at the time; the inner tokens were still set for a dark panel, so
+     the address, hours, enquiries and every review sat cream on cream.
+     ─────────────────────────────────────────────────────────────────── */
+  .visit .info .k{color:var(--muted)}
+  .visit .info .v{color:var(--ink)}
+  .visit .info .v a{color:var(--forest);text-decoration:underline;text-underline-offset:3px}
+  .visit .info .v a:hover{color:var(--gold)}
+  .visit .info .row{border-bottom-color:var(--line)}
+  .testi .tcard .qm{opacity:.85}
+
+  /* A caption has to read over whatever the photograph happens to be
+     doing behind it, so it carries its own scrim rather than relying on
+     the image being dark in that corner. */
+  .slider figure:after{
+    content:"";position:absolute;inset:auto 0 0 0;height:42%;pointer-events:none;
+    background:linear-gradient(180deg,transparent,rgba(8,14,11,.62));z-index:1;
+  }
+  .slider figcaption{z-index:2;text-shadow:0 1px 10px rgba(0,0,0,.55)}
+
+  /* Portrait photographs cropped into a landscape frame lose their subject
+     from the middle. Biasing the crop upward keeps plates, faces and
+     horizons in shot. */
+  .slider figure img{object-position:center 38%}
+  .slider figure img.nm-top{object-position:center 22%}
+  .slider figure img.nm-low{object-position:center 62%}
 </style>
 <link rel="stylesheet" href="notes.css">
 </head>
@@ -1243,7 +1279,7 @@
         <figure><img loading="lazy" decoding="async" src="/clients/acreage/website-v7/assets/space-indoor.webp" alt="The indoor venue with the bar and tables set"><figcaption>Indoors</figcaption></figure>
         <figure><img loading="lazy" decoding="async" src="/clients/acreage/website-v7/assets/g-eveningtable.webp" alt="A long table set for an evening function"><figcaption>Seated dinners</figcaption></figure>
         <figure><img loading="lazy" decoding="async" src="/clients/acreage/website-v7/assets/restaurant-view.webp" alt="The restaurant looking out over the track"><figcaption>The view</figcaption></figure>
-        <figure><img loading="lazy" decoding="async" src="/clients/acreage/website-v7/assets/g-tents.webp" alt="The permanent stretch tent beside the restaurant"><figcaption>The stretch tent</figcaption></figure>
+        <figure><img loading="lazy" decoding="async" src="/clients/acreage/website-v7/assets/reel-03-tents.webp" alt="The permanent stretch tent beside the restaurant"><figcaption>The stretch tent</figcaption></figure>
       </div>
       <div class="dots"></div>
     </div>
@@ -1260,8 +1296,8 @@
     <div class="slider" data-slider>
       <div class="track">
         <figure><img loading="lazy" decoding="async" src="/clients/acreage/website-v7/assets/space-lawns.webp" alt="Umbrellas and picnic tables on the restaurant lawn"><figcaption>The lawns</figcaption></figure>
-        <figure><img loading="lazy" decoding="async" src="/clients/acreage/website-v7/assets/g-umbrellas2.webp" alt="Guests under the umbrellas on the lawn"><figcaption>In use</figcaption></figure>
-        <figure><img loading="lazy" decoding="async" src="/clients/acreage/website-v7/assets/g-blossom2.webp" alt="Blossom over the gardens"><figcaption>In spring</figcaption></figure>
+        <figure><img loading="lazy" decoding="async" src="/clients/acreage/website-v7/assets/host-celebrations-b.webp" alt="Guests on the lawn under the umbrellas"><figcaption>In use</figcaption></figure>
+        <figure><img loading="lazy" decoding="async" class="nm-top" src="/clients/acreage/website-v7/assets/g-blossom2.webp" alt="Blossom over the gardens"><figcaption>In spring</figcaption></figure>
       </div>
       <div class="dots"></div>
     </div>
@@ -1280,7 +1316,7 @@
       <div class="track">
         <figure><img loading="lazy" decoding="async" src="/clients/acreage/website-v7/assets/space-lapa.webp" alt="The thatched lapa beside the lake"><figcaption>The lapa</figcaption></figure>
         <figure><img loading="lazy" decoding="async" src="/clients/acreage/website-v7/assets/venue-lapa.webp" alt="The lapa bar looking over the water"><figcaption>The bar</figcaption></figure>
-        <figure><img loading="lazy" decoding="async" src="/clients/acreage/website-v7/assets/g-tents.webp" alt="Stretch tents above the flowering gardens"><figcaption>Extended with tents</figcaption></figure>
+        <figure><img loading="lazy" decoding="async" src="/clients/acreage/website-v7/assets/reel-03-tents.webp" alt="Stretch tents above the flowering gardens"><figcaption>Extended with tents</figcaption></figure>
       </div>
       <div class="dots"></div>
     </div>
@@ -1336,7 +1372,7 @@
     </div>
 
     <div class="logowall reveal" aria-label="A selection of companies we have hosted">
-      <ul><li>Absa</li><li>Mercedes-Benz</li><li>MTN</li><li>Standard Bank</li><li>FNB</li><li>WesBank</li><li>Deloitte</li><li>Netflix</li><li>DHL</li><li>Siemens</li><li>Bosch</li><li>Ericsson</li><li>Telkom</li><li>Cell C</li><li>Spar</li><li>Nando&rsquo;s</li><li>Hyundai</li><li>Clover</li><li>Tiger Brands</li><li>Sanofi</li><li>Norton Rose</li><li>Leroy Merlin</li><li>Radisson</li><li>Entelect</li><li>Derivco</li><li>Datacentrix</li><li>Tracker</li><li>MiX Telematics</li><li>Wits Health</li><li>e.tv</li><li>Australian High Commission</li><li>SA Bank Note Company</li><li>Absa</li><li>Mercedes-Benz</li><li>MTN</li><li>Standard Bank</li><li>FNB</li><li>WesBank</li><li>Deloitte</li><li>Netflix</li><li>DHL</li><li>Siemens</li><li>Bosch</li><li>Ericsson</li><li>Telkom</li><li>Cell C</li><li>Spar</li><li>Nando&rsquo;s</li><li>Hyundai</li><li>Clover</li><li>Tiger Brands</li><li>Sanofi</li><li>Norton Rose</li><li>Leroy Merlin</li><li>Radisson</li><li>Entelect</li><li>Derivco</li><li>Datacentrix</li><li>Tracker</li><li>MiX Telematics</li><li>Wits Health</li><li>e.tv</li><li>Australian High Commission</li><li>SA Bank Note Company</li></ul>
+      <ul><li><img src="/clients/acreage/website-v7/assets/logos/absa.png" alt="Absa" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>Absa</span></li><li><img src="/clients/acreage/website-v7/assets/logos/mercedes-benz.png" alt="Mercedes-Benz" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>Mercedes-Benz</span></li><li><img src="/clients/acreage/website-v7/assets/logos/mtn.png" alt="MTN" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>MTN</span></li><li><img src="/clients/acreage/website-v7/assets/logos/standard-bank.png" alt="Standard Bank" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>Standard Bank</span></li><li><img src="/clients/acreage/website-v7/assets/logos/fnb.png" alt="FNB" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>FNB</span></li><li><img src="/clients/acreage/website-v7/assets/logos/wesbank.png" alt="WesBank" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>WesBank</span></li><li><img src="/clients/acreage/website-v7/assets/logos/deloitte.png" alt="Deloitte" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>Deloitte</span></li><li><img src="/clients/acreage/website-v7/assets/logos/netflix.png" alt="Netflix" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>Netflix</span></li><li><img src="/clients/acreage/website-v7/assets/logos/dhl.png" alt="DHL" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>DHL</span></li><li><img src="/clients/acreage/website-v7/assets/logos/siemens.png" alt="Siemens" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>Siemens</span></li><li><img src="/clients/acreage/website-v7/assets/logos/bosch.png" alt="Bosch" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>Bosch</span></li><li><img src="/clients/acreage/website-v7/assets/logos/ericsson.png" alt="Ericsson" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>Ericsson</span></li><li><img src="/clients/acreage/website-v7/assets/logos/telkom.png" alt="Telkom" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>Telkom</span></li><li><img src="/clients/acreage/website-v7/assets/logos/cell-c.png" alt="Cell C" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>Cell C</span></li><li><img src="/clients/acreage/website-v7/assets/logos/spar.png" alt="Spar" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>Spar</span></li><li><img src="/clients/acreage/website-v7/assets/logos/nandos.png" alt="Nando's" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>Nando&rsquo;s</span></li><li><img src="/clients/acreage/website-v7/assets/logos/hyundai.png" alt="Hyundai" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>Hyundai</span></li><li><img src="/clients/acreage/website-v7/assets/logos/clover.png" alt="Clover" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>Clover</span></li><li><img src="/clients/acreage/website-v7/assets/logos/tiger-brands.png" alt="Tiger Brands" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>Tiger Brands</span></li><li><img src="/clients/acreage/website-v7/assets/logos/sanofi.png" alt="Sanofi" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>Sanofi</span></li><li><img src="/clients/acreage/website-v7/assets/logos/norton-rose.png" alt="Norton Rose" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>Norton Rose</span></li><li><img src="/clients/acreage/website-v7/assets/logos/leroy-merlin.png" alt="Leroy Merlin" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>Leroy Merlin</span></li><li><img src="/clients/acreage/website-v7/assets/logos/radisson.png" alt="Radisson" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>Radisson</span></li><li><img src="/clients/acreage/website-v7/assets/logos/entelect.png" alt="Entelect" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>Entelect</span></li><li><img src="/clients/acreage/website-v7/assets/logos/derivco.png" alt="Derivco" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>Derivco</span></li><li><img src="/clients/acreage/website-v7/assets/logos/datacentrix.png" alt="Datacentrix" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>Datacentrix</span></li><li><img src="/clients/acreage/website-v7/assets/logos/tracker.png" alt="Tracker" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>Tracker</span></li><li><img src="/clients/acreage/website-v7/assets/logos/mix-telematics.png" alt="MiX Telematics" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>MiX Telematics</span></li><li><img src="/clients/acreage/website-v7/assets/logos/wits-health.png" alt="Wits Health" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>Wits Health</span></li><li><img src="/clients/acreage/website-v7/assets/logos/e-tv.png" alt="e.tv" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>e.tv</span></li><li><img src="/clients/acreage/website-v7/assets/logos/australian-high-commission.png" alt="Australian High Commission" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>Australian High Commission</span></li><li><img src="/clients/acreage/website-v7/assets/logos/sa-bank-note-company.png" alt="SA Bank Note Company" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>SA Bank Note Company</span></li><li><img src="/clients/acreage/website-v7/assets/logos/absa.png" alt="Absa" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>Absa</span></li><li><img src="/clients/acreage/website-v7/assets/logos/mercedes-benz.png" alt="Mercedes-Benz" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>Mercedes-Benz</span></li><li><img src="/clients/acreage/website-v7/assets/logos/mtn.png" alt="MTN" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>MTN</span></li><li><img src="/clients/acreage/website-v7/assets/logos/standard-bank.png" alt="Standard Bank" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>Standard Bank</span></li><li><img src="/clients/acreage/website-v7/assets/logos/fnb.png" alt="FNB" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>FNB</span></li><li><img src="/clients/acreage/website-v7/assets/logos/wesbank.png" alt="WesBank" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>WesBank</span></li><li><img src="/clients/acreage/website-v7/assets/logos/deloitte.png" alt="Deloitte" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>Deloitte</span></li><li><img src="/clients/acreage/website-v7/assets/logos/netflix.png" alt="Netflix" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>Netflix</span></li><li><img src="/clients/acreage/website-v7/assets/logos/dhl.png" alt="DHL" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>DHL</span></li><li><img src="/clients/acreage/website-v7/assets/logos/siemens.png" alt="Siemens" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>Siemens</span></li><li><img src="/clients/acreage/website-v7/assets/logos/bosch.png" alt="Bosch" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>Bosch</span></li><li><img src="/clients/acreage/website-v7/assets/logos/ericsson.png" alt="Ericsson" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>Ericsson</span></li><li><img src="/clients/acreage/website-v7/assets/logos/telkom.png" alt="Telkom" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>Telkom</span></li><li><img src="/clients/acreage/website-v7/assets/logos/cell-c.png" alt="Cell C" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>Cell C</span></li><li><img src="/clients/acreage/website-v7/assets/logos/spar.png" alt="Spar" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>Spar</span></li><li><img src="/clients/acreage/website-v7/assets/logos/nandos.png" alt="Nando's" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>Nando&rsquo;s</span></li><li><img src="/clients/acreage/website-v7/assets/logos/hyundai.png" alt="Hyundai" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>Hyundai</span></li><li><img src="/clients/acreage/website-v7/assets/logos/clover.png" alt="Clover" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>Clover</span></li><li><img src="/clients/acreage/website-v7/assets/logos/tiger-brands.png" alt="Tiger Brands" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>Tiger Brands</span></li><li><img src="/clients/acreage/website-v7/assets/logos/sanofi.png" alt="Sanofi" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>Sanofi</span></li><li><img src="/clients/acreage/website-v7/assets/logos/norton-rose.png" alt="Norton Rose" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>Norton Rose</span></li><li><img src="/clients/acreage/website-v7/assets/logos/leroy-merlin.png" alt="Leroy Merlin" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>Leroy Merlin</span></li><li><img src="/clients/acreage/website-v7/assets/logos/radisson.png" alt="Radisson" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>Radisson</span></li><li><img src="/clients/acreage/website-v7/assets/logos/entelect.png" alt="Entelect" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>Entelect</span></li><li><img src="/clients/acreage/website-v7/assets/logos/derivco.png" alt="Derivco" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>Derivco</span></li><li><img src="/clients/acreage/website-v7/assets/logos/datacentrix.png" alt="Datacentrix" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>Datacentrix</span></li><li><img src="/clients/acreage/website-v7/assets/logos/tracker.png" alt="Tracker" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>Tracker</span></li><li><img src="/clients/acreage/website-v7/assets/logos/mix-telematics.png" alt="MiX Telematics" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>MiX Telematics</span></li><li><img src="/clients/acreage/website-v7/assets/logos/wits-health.png" alt="Wits Health" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>Wits Health</span></li><li><img src="/clients/acreage/website-v7/assets/logos/e-tv.png" alt="e.tv" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>e.tv</span></li><li><img src="/clients/acreage/website-v7/assets/logos/australian-high-commission.png" alt="Australian High Commission" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>Australian High Commission</span></li><li><img src="/clients/acreage/website-v7/assets/logos/sa-bank-note-company.png" alt="SA Bank Note Company" loading="lazy" onerror="this.closest('li').classList.add('nologo');this.remove()"><span>SA Bank Note Company</span></li></ul>
     </div>
 
     <div class="slider" data-slider>
@@ -1413,12 +1449,12 @@
     </div>
     <div class="slider" data-slider>
       <div class="track">
-        <figure><img loading="lazy" decoding="async" src="/clients/acreage/website-v7/assets/restaurant-food.webp" alt="Plated food from the kitchen"><figcaption>Plated meals</figcaption></figure>
-        <figure><img loading="lazy" decoding="async" src="/clients/acreage/website-v7/assets/g-salad.webp" alt="Platters and salads laid out"><figcaption>Platters and canap&eacute;s</figcaption></figure>
-        <figure><img loading="lazy" decoding="async" src="/clients/acreage/website-v7/assets/g-ribs.webp" alt="Meat off the braai"><figcaption>Braais and spit braais</figcaption></figure>
+        <figure><img loading="lazy" decoding="async" class="nm-top" src="/clients/acreage/website-v7/assets/restaurant-food.webp" alt="Plated food from the kitchen"><figcaption>Plated meals</figcaption></figure>
+        <figure><img loading="lazy" decoding="async" class="nm-top" src="/clients/acreage/website-v7/assets/g-salad.webp" alt="Platters and salads laid out"><figcaption>Platters and canap&eacute;s</figcaption></figure>
+        <figure><img loading="lazy" decoding="async" class="nm-top" src="/clients/acreage/website-v7/assets/g-ribs.webp" alt="Meat off the braai"><figcaption>Braais and spit braais</figcaption></figure>
         <figure><img loading="lazy" decoding="async" src="/clients/acreage/website-v7/assets/Market-Day.webp" alt="Food trucks on the lawn at a market day"><figcaption>Food trucks</figcaption></figure>
-        <figure><img loading="lazy" decoding="async" src="/clients/acreage/website-v7/assets/g-barman.webp" alt="The barman pouring at the mobile bar"><figcaption>Mobile bars</figcaption></figure>
-        <figure><img loading="lazy" decoding="async" src="/clients/acreage/website-v7/assets/g-frozen.webp" alt="Frozen cocktails at the bar"><figcaption>Drinks</figcaption></figure>
+        <figure><img loading="lazy" decoding="async" class="nm-top" src="/clients/acreage/website-v7/assets/g-barman.webp" alt="The barman pouring at the mobile bar"><figcaption>Mobile bars</figcaption></figure>
+        <figure><img loading="lazy" decoding="async" class="nm-top" src="/clients/acreage/website-v7/assets/g-frozen.webp" alt="Frozen cocktails at the bar"><figcaption>Drinks</figcaption></figure>
       </div>
       <div class="dots"></div>
     </div>
@@ -1740,6 +1776,34 @@
   },{threshold:0.12,rootMargin:'0px 0px -6% 0px'});
   function watch(el){ io.observe(el); }
   $$('.reveal,.wipe,.rule,.flourish,.div,.split,[data-split]').forEach(watch);
+
+  /* Entrance animations are a nicety; content being visible is not. If
+     IntersectionObserver is unavailable, throttled, or simply has not fired
+     by the time someone has scrolled to a block, show it anyway. Without
+     this a failed observer leaves whole sections occupying space at zero
+     opacity, which reads as a large empty gap. */
+  (function safetyNet(){
+    var sel = '.reveal,.wipe,.rule,.flourish,.div,.split,[data-split]';
+    function showIfSeen(){
+      var vh = window.innerHeight || document.documentElement.clientHeight;
+      $$(sel).forEach(function(el){
+        if (el.classList.contains('in')) return;
+        var r = el.getBoundingClientRect();
+        if (r.top < vh * 0.98 && r.bottom > 0) el.classList.add('in','lit');
+      });
+    }
+    if (!('IntersectionObserver' in window)) {
+      $$(sel).forEach(function(el){ el.classList.add('in','lit'); });
+      return;
+    }
+    window.addEventListener('scroll', showIfSeen, { passive:true });
+    window.addEventListener('resize', showIfSeen);
+    showIfSeen();
+    setTimeout(showIfSeen, 400);
+    setTimeout(showIfSeen, 1200);
+    /* last resort: nothing stays hidden forever */
+    setTimeout(function(){ $$(sel).forEach(function(el){ el.classList.add('in','lit'); }); }, 6000);
+  })();
 
   /* the hero is already on screen at load, so it fires on a timer */
   function litHero(){
