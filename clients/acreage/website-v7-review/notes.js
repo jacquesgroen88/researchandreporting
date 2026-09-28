@@ -111,9 +111,13 @@
   bar.querySelector('#nmlistbtn').onclick = function () { panel.classList.toggle('nm-open'); };
 
   toggle.onclick = function () { setMode(!on); };
+  var hintTimer = null;
   function setMode(v) {
     on = v;
     document.body.classList.toggle('nm-on', on);
+    /* the hint has said its piece after a few seconds */
+    clearTimeout(hintTimer); hint.classList.remove('nm-fade');
+    if (on) hintTimer = setTimeout(function () { hint.classList.add('nm-fade'); }, 4500);
     toggle.textContent = on ? 'Done' : 'Leave a note';
     toggle.classList.toggle('nm-primary', on);
     clearHi(); close();
