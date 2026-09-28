@@ -1,0 +1,764 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="description" content="Internal operations sheet: ReviewTap orders paid and not yet shipped, joined to Design Studio.">
+<title>ReviewTap Fulfilment Queue</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --app: #EEF1F4;
+    --chrome: #F6F8F9;
+    --grid: #FFFFFF;
+    --hdr: #EDF0F3;
+    --hdr-ink: #57636F;
+    --rule: #D6DCE2;
+    --rule-soft: #E7EBEF;
+    --ink: #16202B;
+    --ink-soft: #5B6875;
+    --ink-faint: #8A96A2;
+    --accent: #D9531B;
+    --accent-ink: #FFFFFF;
+    --sel: #D9531B;
+    --sel-fill: rgba(217, 83, 27, .08);
+    --locked: #FBFCFC;
+    --editable: #FFFDF7;
+    --bad: #A8231C; --bad-fill: #FBE4E1;
+    --warn: #7A4E00; --warn-fill: #FBF0DA;
+    --ok: #13623F; --ok-fill: #E0F0E8;
+    --info: #1B4F8A; --info-fill: #E5EEF8;
+    --display: 'Archivo', 'Trebuchet MS', sans-serif;
+    --body: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --mono: 'IBM Plex Mono', ui-monospace, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --app: #0C1219; --chrome: #131C25; --grid: #161F29; --hdr: #1D2833; --hdr-ink: #93A1AE;
+      --rule: #2C3A47; --rule-soft: #232E3A;
+      --ink: #E6ECF2; --ink-soft: #97A4B1; --ink-faint: #6B7885;
+      --accent: #FF7B41; --accent-ink: #1A0D06;
+      --sel: #FF7B41; --sel-fill: rgba(255, 123, 65, .12);
+      --locked: #141D26; --editable: #1B2430;
+      --bad: #FF9184; --bad-fill: #3A1A17;
+      --warn: #E3AB44; --warn-fill: #342811;
+      --ok: #5CCB95; --ok-fill: #123024;
+      --info: #7FB3EA; --info-fill: #13253A;
+    }
+  }
+  :root[data-theme="dark"] {
+    --app: #0C1219; --chrome: #131C25; --grid: #161F29; --hdr: #1D2833; --hdr-ink: #93A1AE;
+    --rule: #2C3A47; --rule-soft: #232E3A;
+    --ink: #E6ECF2; --ink-soft: #97A4B1; --ink-faint: #6B7885;
+    --accent: #FF7B41; --accent-ink: #1A0D06;
+    --sel: #FF7B41; --sel-fill: rgba(255, 123, 65, .12);
+    --locked: #141D26; --editable: #1B2430;
+    --bad: #FF9184; --bad-fill: #3A1A17;
+    --warn: #E3AB44; --warn-fill: #342811;
+    --ok: #5CCB95; --ok-fill: #123024;
+    --info: #7FB3EA; --info-fill: #13253A;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--app); color: var(--ink);
+    font-family: var(--body); font-size: 13px; line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1400px; margin: 0 auto; padding-inline: 16px; padding-block: 18px 40px; }
+
+  /* ---------- title bar ---------- */
+  .titlebar { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px; margin-bottom: 10px; }
+  .titlebar h1 {
+    font-family: var(--display); font-size: 21px; font-weight: 700; letter-spacing: -.015em; margin: 0;
+  }
+  .titlebar .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-faint); }
+  .savestate {
+    margin-left: auto; font-family: var(--mono); font-size: 10.5px; letter-spacing: .05em;
+    padding: 4px 8px; border-radius: 3px; border: 1px solid var(--rule);
+    background: var(--chrome); color: var(--ink-soft); white-space: nowrap;
+  }
+  .savestate[data-kind="live"] { color: var(--ok); border-color: var(--ok); background: var(--ok-fill); }
+  .savestate[data-kind="off"] { color: var(--warn); border-color: var(--warn); background: var(--warn-fill); }
+
+  /* ---------- toolbar ---------- */
+  .toolbar {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 6px;
+    background: var(--chrome); border: 1px solid var(--rule); border-bottom: 0;
+    border-radius: 5px 5px 0 0; padding: 7px 9px;
+  }
+  .tbtn {
+    font-family: var(--body); font-size: 12px; color: var(--ink-soft); background: transparent;
+    border: 1px solid transparent; border-radius: 3px; padding: 4px 9px; cursor: pointer; white-space: nowrap;
+  }
+  .tbtn:hover { background: var(--hdr); color: var(--ink); }
+  .tbtn[aria-pressed="true"] { background: var(--sel-fill); border-color: var(--sel); color: var(--sel); font-weight: 500; }
+  .tbtn:focus-visible { outline: 2px solid var(--sel); outline-offset: 1px; }
+  .tsep { width: 1px; align-self: stretch; background: var(--rule); margin: 0 3px; }
+  .tbtn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 500; }
+  .tbtn.primary:hover { filter: brightness(1.06); }
+
+  /* ---------- formula bar ---------- */
+  .fbar {
+    display: flex; align-items: stretch; background: var(--grid);
+    border: 1px solid var(--rule); border-bottom: 0;
+  }
+  .fref {
+    font-family: var(--mono); font-size: 11.5px; color: var(--ink-soft); min-width: 62px;
+    display: flex; align-items: center; justify-content: center;
+    border-right: 1px solid var(--rule); padding: 5px 8px; background: var(--chrome);
+  }
+  .fx { font-family: var(--mono); font-size: 11.5px; color: var(--ink-faint); padding: 5px 8px; border-right: 1px solid var(--rule); }
+  .fval {
+    flex: 1; min-width: 0; padding: 5px 10px; font-size: 12.5px; color: var(--ink);
+    white-space: nowrap; overflow-x: auto; display: flex; align-items: center;
+  }
+
+  /* ---------- grid ---------- */
+  .gridwrap {
+    overflow: auto; border: 1px solid var(--rule); border-radius: 0 0 5px 5px;
+    background: var(--grid); max-height: min(70vh, 760px);
+  }
+  table { border-collapse: separate; border-spacing: 0; table-layout: fixed; }
+  th, td {
+    border-right: 1px solid var(--rule-soft); border-bottom: 1px solid var(--rule-soft);
+    padding: 0; text-align: left; vertical-align: middle; font-weight: 400; overflow: hidden;
+  }
+  .cell { padding: 5px 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* column-letter strip */
+  thead tr.alpha th {
+    position: sticky; top: 0; z-index: 4; background: var(--hdr); color: var(--hdr-ink);
+    font-family: var(--mono); font-size: 10px; text-align: center; letter-spacing: .06em;
+    padding: 3px 4px; border-bottom: 1px solid var(--rule); height: 20px;
+  }
+  /* header labels row */
+  thead tr.labels th {
+    position: sticky; top: 20px; z-index: 4; background: var(--hdr); color: var(--ink);
+    font-size: 11.5px; font-weight: 600; letter-spacing: .01em;
+    padding: 6px 8px; border-bottom: 2px solid var(--rule); white-space: nowrap;
+  }
+  /* frozen gutter + first column */
+  .gut {
+    position: sticky; left: 0; z-index: 3; background: var(--hdr); color: var(--hdr-ink);
+    font-family: var(--mono); font-size: 10.5px; text-align: center; width: 34px; min-width: 34px;
+    padding: 4px 0; border-right: 1px solid var(--rule);
+  }
+  thead .gut { z-index: 6; }
+  .frz {
+    position: sticky; left: 34px; z-index: 3; background: var(--grid);
+    border-right: 1px solid var(--rule); width: 74px; min-width: 74px;
+  }
+  thead .frz { z-index: 6; background: var(--hdr); }
+  tbody tr:hover .gut { background: var(--sel-fill); color: var(--sel); }
+
+  td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: right; }
+  td.ord { font-family: var(--mono); font-weight: 600; }
+  td.locked { background: var(--locked); }
+  td.edit { background: var(--editable); }
+  td.sel { outline: 2px solid var(--sel); outline-offset: -2px; position: relative; z-index: 2; }
+  td.sel.frz, td.sel.gut { z-index: 5; }
+
+  .fill-bad { background: var(--bad-fill) !important; color: var(--bad); font-weight: 500; }
+  .fill-warn { background: var(--warn-fill) !important; color: var(--warn); font-weight: 500; }
+  .fill-ok { background: var(--ok-fill) !important; color: var(--ok); font-weight: 500; }
+  .fill-info { background: var(--info-fill) !important; color: var(--info); font-weight: 500; }
+  .muted { color: var(--ink-faint); }
+
+  /* in-cell controls */
+  td select, td input {
+    width: 100%; border: 0; background: transparent; font-family: var(--body); font-size: 12.5px;
+    color: var(--ink); padding: 5px 8px; line-height: 1.4;
+  }
+  td select { appearance: none; cursor: pointer; }
+  td select:focus-visible, td input:focus-visible { outline: 2px solid var(--sel); outline-offset: -2px; }
+  td input::placeholder { color: var(--ink-faint); }
+  td.has-status { font-weight: 500; }
+
+  /* ---------- sheet tabs ---------- */
+  .tabs { display: flex; align-items: stretch; gap: 2px; margin-top: 0; padding-top: 6px; }
+  .tab {
+    font-family: var(--body); font-size: 12px; padding: 6px 14px; cursor: pointer;
+    background: var(--chrome); color: var(--ink-soft);
+    border: 1px solid var(--rule); border-top: 0; border-radius: 0 0 5px 5px;
+  }
+  .tab[aria-selected="true"] { background: var(--grid); color: var(--sel); font-weight: 600; border-top: 2px solid var(--sel); }
+  .tab:focus-visible { outline: 2px solid var(--sel); outline-offset: 1px; }
+
+  /* ---------- summary sheet ---------- */
+  .sumwrap { border: 1px solid var(--rule); border-radius: 0 0 5px 5px; background: var(--grid); overflow: auto; }
+  .sumwrap table { width: 100%; }
+  .sumwrap th { background: var(--hdr); font-size: 11.5px; font-weight: 600; padding: 7px 10px; border-bottom: 2px solid var(--rule); }
+  .sumwrap td { padding: 7px 10px; font-size: 12.5px; vertical-align: top; }
+  .sumwrap td.wrapcell { white-space: normal; max-width: 520px; }
+  .sumwrap tr.totalrow td { font-weight: 600; border-top: 2px solid var(--rule); background: var(--chrome); }
+
+  .howto {
+    margin: 12px 0 0; font-size: 12.5px; color: var(--ink-soft); max-width: 78ch;
+    border-left: 3px solid var(--accent); padding: 2px 0 2px 10px;
+  }
+  .howto b { color: var(--ink); font-weight: 600; }
+  .legend { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 10px; font-size: 11.5px; color: var(--ink-faint); }
+  .legend span { display: inline-flex; align-items: center; gap: 5px; }
+  .swatch { width: 11px; height: 11px; border-radius: 2px; border: 1px solid var(--rule); display: inline-block; }
+
+  #copyout { width: 100%; min-height: 140px; margin-top: 10px; font-family: var(--mono); font-size: 11.5px; white-space: pre; overflow: auto; border: 1px solid var(--rule); border-radius: 4px; background: var(--grid); color: var(--ink); padding: 8px; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<style>
+  :root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  [hidden] { display: none !important; }
+  img { max-width: 100%; }
+  .sitefoot {
+    margin-top: 22px; padding-top: 12px; border-top: 1px solid var(--rule);
+    font-family: var(--mono); font-size: 10.5px; color: var(--ink-faint); line-height: 1.7;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="titlebar">
+    <h1>ReviewTap Fulfilment Queue</h1>
+    <span class="meta" id="meta"></span>
+    <span class="savestate" id="savestate" data-kind="wait">connecting</span>
+  </div>
+
+  <div class="toolbar" id="toolbar">
+    <button class="tbtn" type="button" data-filter="all" aria-pressed="true">All 10</button>
+    <button class="tbtn" type="button" data-filter="1" aria-pressed="false">Ship today</button>
+    <button class="tbtn" type="button" data-filter="2" aria-pressed="false">Waiting on us</button>
+    <button class="tbtn" type="button" data-filter="3" aria-pressed="false">Waiting on customer</button>
+    <button class="tbtn" type="button" data-filter="4" aria-pressed="false">Not started</button>
+    <button class="tbtn" type="button" data-filter="5" aria-pressed="false">At printer</button>
+    <span class="tsep"></span>
+    <button class="tbtn" type="button" id="btn-sort">Sort by age</button>
+    <span class="tsep"></span>
+    <button class="tbtn primary" type="button" id="btn-copy">Copy report</button>
+    <button class="tbtn" type="button" id="btn-wa">Copy for WhatsApp</button>
+  </div>
+
+  <div class="fbar">
+    <span class="fref" id="fref">&mdash;</span>
+    <span class="fx">fx</span>
+    <span class="fval" id="fval">Click any cell to read it in full.</span>
+  </div>
+
+  <div id="sheet-queue">
+    <div class="gridwrap" id="gridwrap">
+      <table id="grid">
+        <thead>
+          <tr class="alpha" id="alpharow"></tr>
+          <tr class="labels" id="labelrow"></tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="sheet-summary" hidden>
+    <div class="sumwrap">
+      <table>
+        <thead><tr><th style="width:34px"></th><th>Bucket</th><th>Orders</th><th>Value</th><th>What it means</th></tr></thead>
+        <tbody id="sumbody"></tbody>
+      </table>
+    </div>
+    <div class="sumwrap" style="margin-top:14px">
+      <table>
+        <thead><tr><th style="width:34px"></th><th>Order</th><th>Finding</th><th>Action</th></tr></thead>
+        <tbody id="findbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" id="tab-queue" aria-selected="true" aria-controls="sheet-queue">Queue</button>
+    <button class="tab" role="tab" id="tab-summary" aria-selected="false" aria-controls="sheet-summary">Summary</button>
+  </div>
+
+  <p class="howto">Mark the Status and Dispatch note columns as you work. Those marks are saved in
+    this browser only and nobody else sees them, so when you are done press <b>Copy report</b> and
+    send it back on WhatsApp.</p>
+
+  <div class="legend">
+    <span><i class="swatch" style="background:var(--editable)"></i> editable columns</span>
+    <span><i class="swatch" style="background:var(--bad-fill)"></i> overdue or missing</span>
+    <span><i class="swatch" style="background:var(--warn-fill)"></i> in progress</span>
+    <span><i class="swatch" style="background:var(--ok-fill)"></i> clear</span>
+    <span><i class="swatch" style="background:var(--info-fill)"></i> customer side</span>
+  </div>
+
+  <textarea id="copyout" hidden readonly aria-label="Generated text to copy"></textarea>
+  <p class="sitefoot">Internal operations sheet, JCE Media and ReviewTap. Unlisted page, not indexed.<br>
+    Shopify and ReviewTap Design Studio both read 28 September 2026. Figures go stale, re-read before acting on a number.</p>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var READ_AT = "2026-09-28";
+
+  var ORDERS = [
+    { id:"1855", name:"#1855", date:"2026-07-24", cust:"Hlulani Shivambu", city:"Hoedspruit, Limpopo",
+      product:"Custom Branded Stand", variant:"White", qty:1, value:774, group:4, shopTag:"",
+      studio:"no record", logo:"none", design:"none", approval:"none", sstatus:"not in studio",
+      studioTone:"bad", logoTone:"bad", designTone:"bad", sstatusTone:"bad", blockerTone:"bad",
+      blocker:"66 days and nothing has ever been started. No intake, no logo, no design, no QR. Last of the nine July white stands and the only one that never shipped." },
+
+    { id:"1917", name:"#1917", date:"2026-09-02", cust:"Hennie Steyn", city:"Cape Town, Western Cape",
+      product:"Custom Branded Stand", variant:"White", qty:1, value:774, group:2, shopTag:"At Printer",
+      studio:"MyCar", logo:"yes, we uploaded 4 Sep", design:"Diane 4 Sep, Giorgio revised 10 Sep",
+      approval:"v2 viewed 10 Sep", sstatus:"done, 14 Sep",
+      studioTone:"", logoTone:"ok", designTone:"ok", sstatusTone:"ok", blockerTone:"bad",
+      blocker:"Closed off as done 14 days ago and never shipped. Separately, QR code mjF1s5b has its destination set to the literal word placeholder, and so does the order's review URL. Fix the link before it prints or the stand is dead on arrival." },
+
+    { id:"1933", name:"#1933", date:"2026-09-22", cust:"Beulah Meyer", city:"Middelburg, North West",
+      product:"Custom Branded Stand", variant:"White", qty:1, value:774, group:2, shopTag:"",
+      studio:"Asemskep", logo:"yes, intake 22 Sep", design:"Diane 23 Sep, revised 25 Sep",
+      approval:"approved 25 Sep", sstatus:"pending_print, 25 Sep",
+      studioTone:"", logoTone:"ok", designTone:"ok", sstatusTone:"warn", blockerTone:"warn",
+      blocker:"Customer approved it three days ago. It is waiting to be sent to the printer and nothing else is in its way." },
+
+    { id:"1928", name:"#1928", date:"2026-09-06", cust:"Minette Swart", city:"Malmesbury, Western Cape",
+      product:"Custom Branded Stand", variant:"White", qty:1, value:774, group:3, shopTag:"",
+      studio:"New Creation Dermatology Clinic", logo:"yes, on file 7 Sep", design:"Diane 7 Sep",
+      approval:"sent 7 + 16 Sep, never opened", sstatus:"pending_approval, 16 Sep",
+      studioTone:"", logoTone:"ok", designTone:"ok", sstatusTone:"warn", blockerTone:"info",
+      blocker:"Two approval links, 22 days apart, and she has opened neither. Email is not reaching her. Her WhatsApp number is on the order record in Design Studio, reach her there." },
+
+    { id:"1936", name:"#1936", date:"2026-09-23", cust:"Wendy Bezuidenhout", city:"Centurion, Gauteng",
+      product:"Custom Branded Card", variant:"Black", qty:1, value:574, group:3, shopTag:"",
+      studio:"@hair", logo:"yes, intake 23 Sep", design:"Diane 23 Sep",
+      approval:"viewed 23 Sep, changes asked", sstatus:"pending, 23 Sep",
+      studioTone:"", logoTone:"ok", designTone:"ok", sstatusTone:"warn", blockerTone:"warn",
+      blocker:"Her words five days ago: could we do the logo in gold, I have changed my branding to gold. Nobody has actioned it. Recolour, resend the link, and check black card blanks are in stock." },
+
+    { id:"1932", name:"#1932", date:"2026-09-22", cust:"Jackie de Klerk", city:"Knysna, Western Cape",
+      product:"NFC Stand, standard", variant:"White", qty:1, value:624, group:1, shopTag:"At Printer",
+      studio:"none needed", logo:"not required", design:"not required", approval:"not required",
+      sstatus:"absent, correctly",
+      studioTone:"", logoTone:"", designTone:"", sstatusTone:"ok", blockerTone:"ok",
+      blocker:"The At Printer tag is wrong: this is the standard stand and there is nothing to print. Clear the tag and ship it." },
+
+    { id:"1934", name:"#1934", date:"2026-09-23", cust:"Rasnil Ahir", city:"Johannesburg, Gauteng",
+      product:"NFC Card, standard", variant:"White", qty:5, value:1495, group:1, shopTag:"",
+      studio:"none needed", logo:"not required", design:"not required", approval:"not required",
+      sstatus:"absent, correctly",
+      studioTone:"", logoTone:"", designTone:"", sstatusTone:"ok", blockerTone:"ok",
+      blocker:"Largest order on the list and the easiest. Five plain cards, nothing to make." },
+
+    { id:"1935", name:"#1935", date:"2026-09-23", cust:"Jessica Quan", city:"Johannesburg, Gauteng",
+      product:"Custom Branded Stand", variant:"White", qty:1, value:774, group:4, shopTag:"",
+      studio:"no record", logo:"none", design:"none", approval:"none", sstatus:"not in studio",
+      studioTone:"bad", logoTone:"bad", designTone:"bad", sstatusTone:"bad", blockerTone:"bad",
+      blocker:"Paid five days ago and no intake submitted. Send link.reviewtap.co.za/setup/1935 today." },
+
+    { id:"1937", name:"#1937", date:"2026-09-23", cust:"Ruan de Wet", city:"Pretoria, Gauteng",
+      product:"Custom Branded Card", variant:"White", qty:1, value:574, group:4, shopTag:"At Printer",
+      studio:"no record", logo:"none", design:"none", approval:"none", sstatus:"not in studio",
+      studioTone:"bad", logoTone:"bad", designTone:"bad", sstatusTone:"bad", blockerTone:"bad",
+      blocker:"Tagged At Printer in Shopify but there is no logo, no design and no order record in the studio. The tag is false. Send link.reviewtap.co.za/setup/1937 and correct the tag." },
+
+    { id:"1938", name:"#1938", date:"2026-09-23", cust:"Hendrik Harmse", city:"Rustenburg, North West",
+      product:"Custom Branded Stand", variant:"White", qty:1, value:774, group:5, shopTag:"At Printer",
+      studio:"Toolshack", logo:"yes, intake 23 Sep", design:"Diane 25 Sep",
+      approval:"approved 25 Sep", sstatus:"at_printer, 25 Sep",
+      studioTone:"", logoTone:"ok", designTone:"ok", sstatusTone:"ok", blockerTone:"ok",
+      blocker:"The only order where the Shopify tag and Design Studio agree. Just needs a dispatch date." }
+  ];
+
+  var GROUP_NAME = {
+    1: "Ship today, nothing to make",
+    2: "Waiting on us",
+    3: "Waiting on the customer",
+    4: "Never started, no logo",
+    5: "At the printer"
+  };
+  var GROUP_MEANS = {
+    1: "Standard catalogue items, correctly absent from Design Studio. Nothing blocks them.",
+    2: "Artwork exists and the customer has done their part. Stuck on an internal step.",
+    3: "Design built and approval sent. Cannot move until the customer answers.",
+    4: "No intake, no logo, no design. Nothing can be made until the customer sends a logo.",
+    5: "Approved and genuinely in production. Needs a dispatch date only."
+  };
+
+  var STATUSES = [
+    { key:"", label:"—" },
+    { key:"chasing", label:"Chasing customer", tone:"warn" },
+    { key:"in_design", label:"In design", tone:"warn" },
+    { key:"at_printer", label:"At printer", tone:"warn" },
+    { key:"ready", label:"Ready to ship", tone:"" },
+    { key:"shipped", label:"Shipped", tone:"ok" },
+    { key:"blocked", label:"Blocked, needs Jacques", tone:"bad" }
+  ];
+
+  var COLS = [
+    { key:"name",    label:"Order",          w:74,  cls:"ord",  frozen:true },
+    { key:"cust",    label:"Customer",       w:158 },
+    { key:"city",    label:"City",           w:158 },
+    { key:"product", label:"Product",        w:168 },
+    { key:"variant", label:"Variant",        w:74 },
+    { key:"qty",     label:"Qty",            w:44,  cls:"num" },
+    { key:"value",   label:"Value",          w:90,  cls:"num" },
+    { key:"date",    label:"Placed",         w:80 },
+    { key:"age",     label:"Age",            w:54,  cls:"num" },
+    { key:"shopTag", label:"Shopify tag",    w:92 },
+    { key:"studio",  label:"Studio record",  w:170 },
+    { key:"logo",    label:"Logo",           w:150 },
+    { key:"design",  label:"Design by",      w:190 },
+    { key:"approval",label:"Approval",       w:160 },
+    { key:"sstatus", label:"Studio status",  w:130 },
+    { key:"group",   label:"Bucket",         w:170 },
+    { key:"blocker", label:"Real blocker",   w:300 },
+    { key:"_status", label:"Status",         w:150, editable:true },
+    { key:"_note",   label:"Dispatch note",  w:240, editable:true }
+  ];
+
+  var STORE_KEY = "rt-fulfilment-queue-v1";
+  var state = {}, noteTimers = {}, canWrite = true;
+  var filter = "all", sortAge = true, selected = null;
+
+  function daysSince(iso) {
+    return Math.max(0, Math.floor((Date.now() - new Date(iso + "T00:00:00Z").getTime()) / 86400000));
+  }
+  function rands(n) { return "R" + n.toLocaleString("en-ZA"); }
+  function shortDate(iso) {
+    var d = new Date(iso + "T00:00:00Z");
+    return d.getUTCDate() + " " + ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][d.getUTCMonth()];
+  }
+  function colLetter(i) {
+    var s = "";
+    i += 1;
+    while (i > 0) { var r = (i - 1) % 26; s = String.fromCharCode(65 + r) + s; i = Math.floor((i - 1) / 26); }
+    return s;
+  }
+  function statusLabel(k) {
+    for (var i = 0; i < STATUSES.length; i++) if (STATUSES[i].key === k) return STATUSES[i].label;
+    return "";
+  }
+  function statusTone(k) {
+    for (var i = 0; i < STATUSES.length; i++) if (STATUSES[i].key === k) return STATUSES[i].tone || "";
+    return "";
+  }
+  function setSaveState(kind, text) {
+    var el = document.getElementById("savestate");
+    el.dataset.kind = kind; el.textContent = text;
+  }
+
+  // Marks live in this browser only. The page is a public link, so there is no shared
+  // store behind it: the way an update travels back is the Copy report button.
+  function loadState() {
+    try {
+      var raw = window.localStorage.getItem(STORE_KEY);
+      state = raw ? (JSON.parse(raw) || {}) : {};
+      setSaveState("live", "saved on this device");
+    } catch (e) {
+      state = {};
+      canWrite = false;
+      setSaveState("off", "marks will not save here");
+    }
+  }
+  function write() {
+    if (!canWrite) return;
+    try {
+      window.localStorage.setItem(STORE_KEY, JSON.stringify(state));
+    } catch (e) {
+      canWrite = false;
+      setSaveState("off", "marks will not save here");
+    }
+  }
+
+  function visibleOrders() {
+    var list = ORDERS.filter(function (o) { return filter === "all" || String(o.group) === filter; });
+    if (sortAge) list.sort(function (x, y) { return daysSince(y.date) - daysSince(x.date); });
+    else list.sort(function (x, y) { return x.group - y.group || daysSince(y.date) - daysSince(x.date); });
+    return list;
+  }
+
+  function cellValue(o, col) {
+    var st = state[o.id] || {};
+    switch (col.key) {
+      case "qty": return String(o.qty);
+      case "value": return rands(o.value);
+      case "date": return shortDate(o.date);
+      case "age": return daysSince(o.date) + "d";
+      case "shopTag": return o.shopTag || "—";
+      case "group": return GROUP_NAME[o.group];
+      case "_status": return statusLabel(st.status || "");
+      case "_note": return st.note || "";
+      default: return o[col.key] == null ? "" : String(o[col.key]);
+    }
+  }
+
+  function cellTone(o, col) {
+    var st = state[o.id] || {};
+    switch (col.key) {
+      case "age": { var a = daysSince(o.date); return a >= 30 ? "bad" : (a >= 14 ? "warn" : ""); }
+      case "logo": return o.logoTone;
+      case "design": return o.designTone;
+      case "studio": return o.studioTone;
+      case "sstatus": return o.sstatusTone;
+      case "blocker": return o.blockerTone;
+      case "shopTag":
+        if (!o.shopTag) return "";
+        return (o.id === "1937" || o.id === "1932") ? "bad" : "";
+      case "_status": return statusTone(st.status || "");
+      default: return "";
+    }
+  }
+
+  function selectCell(td, ref, text) {
+    if (selected) selected.classList.remove("sel");
+    selected = td;
+    td.classList.add("sel");
+    document.getElementById("fref").textContent = ref;
+    document.getElementById("fval").textContent = text || "(empty)";
+  }
+
+  function buildHead() {
+    var alpha = document.getElementById("alpharow");
+    var labels = document.getElementById("labelrow");
+    alpha.textContent = ""; labels.textContent = "";
+
+    // table-layout: fixed honours the column widths only with an explicit table width
+    var total = COLS.reduce(function (s, c) { return s + c.w; }, 34);
+    document.getElementById("grid").style.width = total + "px";
+
+    var a0 = document.createElement("th");
+    a0.className = "gut"; a0.textContent = "";
+    alpha.appendChild(a0);
+    var l0 = document.createElement("th");
+    l0.className = "gut"; l0.textContent = "";
+    labels.appendChild(l0);
+
+    COLS.forEach(function (c, i) {
+      var a = document.createElement("th");
+      a.textContent = colLetter(i);
+      a.style.width = c.w + "px";
+      if (c.frozen) a.className = "frz";
+      alpha.appendChild(a);
+
+      var l = document.createElement("th");
+      l.textContent = c.label;
+      l.style.width = c.w + "px";
+      if (c.frozen) l.className = "frz";
+      labels.appendChild(l);
+    });
+  }
+
+  function renderGrid() {
+    var tb = document.getElementById("tbody");
+    tb.textContent = "";
+    var list = visibleOrders();
+
+    list.forEach(function (o, ri) {
+      var tr = document.createElement("tr");
+      var rowNo = ri + 2; // row 1 is the header
+
+      var g = document.createElement("td");
+      g.className = "gut";
+      g.textContent = String(rowNo);
+      tr.appendChild(g);
+
+      COLS.forEach(function (c, ci) {
+        var td = document.createElement("td");
+        var ref = colLetter(ci) + rowNo;
+        td.style.width = c.w + "px";
+        var classes = [];
+        if (c.frozen) classes.push("frz");
+        if (c.cls) classes.push(c.cls);
+        classes.push(c.editable ? "edit" : "locked");
+        var tone = cellTone(o, c);
+        if (tone) classes.push("fill-" + tone);
+        td.className = classes.join(" ");
+
+        if (c.key === "_status") {
+          var sel = document.createElement("select");
+          sel.setAttribute("aria-label", "Status for order " + o.name);
+          sel.id = "st-" + o.id;
+          STATUSES.forEach(function (s) {
+            var op = document.createElement("option");
+            op.value = s.key; op.textContent = s.label;
+            if ((state[o.id] || {}).status === s.key) op.selected = true;
+            sel.appendChild(op);
+          });
+          sel.disabled = !canWrite;
+          sel.addEventListener("change", function () {
+            state[o.id] = state[o.id] || { status: "", note: "" };
+            state[o.id].status = sel.value;
+            write(o.id); renderGrid();
+          });
+          sel.addEventListener("focus", function () { selectCell(td, ref, statusLabel(sel.value)); });
+          td.appendChild(sel);
+        } else if (c.key === "_note") {
+          var inp = document.createElement("input");
+          inp.type = "text";
+          inp.id = "note-" + o.id;
+          inp.setAttribute("aria-label", "Dispatch note for order " + o.name);
+          inp.placeholder = "dispatch date, or what it waits on";
+          inp.value = (state[o.id] || {}).note || "";
+          inp.readOnly = !canWrite;
+          inp.addEventListener("input", function () {
+            state[o.id] = state[o.id] || { status: "", note: "" };
+            state[o.id].note = inp.value;
+            document.getElementById("fval").textContent = inp.value || "(empty)";
+            clearTimeout(noteTimers[o.id]);
+            noteTimers[o.id] = setTimeout(function () { write(o.id); }, 700);
+          });
+          inp.addEventListener("focus", function () { selectCell(td, ref, inp.value); });
+          td.appendChild(inp);
+        } else {
+          var v = cellValue(o, c);
+          var d = document.createElement("div");
+          d.className = "cell";
+          d.textContent = v;
+          td.appendChild(d);
+          td.addEventListener("click", function () { selectCell(td, ref, v); });
+        }
+        tr.appendChild(td);
+      });
+      tb.appendChild(tr);
+    });
+
+    var openOrders = ORDERS.filter(function (o) { return (state[o.id] || {}).status !== "shipped"; });
+    var atRisk = openOrders.reduce(function (s, o) { return s + o.value; }, 0);
+    document.getElementById("meta").textContent =
+      "Shopify paid + unfulfilled, joined to Design Studio · read " + READ_AT +
+      " · " + list.length + " rows shown · " + rands(atRisk) + " still open";
+
+    renderSummary();
+  }
+
+  function renderSummary() {
+    var sb = document.getElementById("sumbody");
+    sb.textContent = "";
+    var total = 0, totalCount = 0;
+    [1, 2, 3, 4, 5].forEach(function (g, i) {
+      var list = ORDERS.filter(function (o) { return o.group === g; });
+      var val = list.reduce(function (s, o) { return s + o.value; }, 0);
+      total += val; totalCount += list.length;
+      var tr = document.createElement("tr");
+      [String(i + 2), GROUP_NAME[g], String(list.length), rands(val), GROUP_MEANS[g]].forEach(function (t, ci) {
+        var td = document.createElement("td");
+        td.textContent = t;
+        if (ci === 0) td.className = "gut";
+        if (ci === 4) td.className = "wrapcell";
+        if (ci === 2 || ci === 3) td.className = "num";
+        tr.appendChild(td);
+      });
+      sb.appendChild(tr);
+    });
+    var tr = document.createElement("tr");
+    tr.className = "totalrow";
+    ["", "Total collected, unshipped", String(totalCount), rands(total), ""].forEach(function (t, ci) {
+      var td = document.createElement("td");
+      td.textContent = t;
+      if (ci === 0) td.className = "gut";
+      tr.appendChild(td);
+    });
+    sb.appendChild(tr);
+
+    var FINDINGS = [
+      ["#1917", "Marked done in Design Studio on 14 Sep, never shipped. Its QR mjF1s5b points at the literal word placeholder.", "Fix the review link, then dispatch. Do not print as is."],
+      ["#1937", "Tagged At Printer in Shopify, but no logo, no design and no record in Design Studio.", "Correct the tag, send the setup link today."],
+      ["#1932", "Tagged At Printer, but it is the standard stand with nothing to print.", "Clear the tag, ship today."],
+      ["#1936", "Customer asked for the logo in gold five days ago after rebranding. Untouched.", "Recolour, resend the approval link."],
+      ["#1928", "Approval links sent 7 Sep and 16 Sep, neither ever opened.", "Email is not reaching her. Use the WhatsApp number on her Design Studio record."],
+      ["#1855", "66 days paid, nothing ever started, and the other eight July white stands shipped.", "Phone call today, plus a keep-or-refund choice."]
+    ];
+    var fb = document.getElementById("findbody");
+    fb.textContent = "";
+    FINDINGS.forEach(function (f, i) {
+      var r = document.createElement("tr");
+      var g = document.createElement("td"); g.className = "gut"; g.textContent = String(i + 2); r.appendChild(g);
+      var o = document.createElement("td"); o.className = "ord"; o.textContent = f[0]; r.appendChild(o);
+      var d = document.createElement("td"); d.className = "wrapcell"; d.textContent = f[1]; r.appendChild(d);
+      var a = document.createElement("td"); a.className = "wrapcell"; a.textContent = f[2]; r.appendChild(a);
+      fb.appendChild(r);
+    });
+  }
+
+  function byAge() {
+    return ORDERS.slice().sort(function (x, y) { return daysSince(y.date) - daysSince(x.date); });
+  }
+  function reportText() {
+    var lines = ["ReviewTap paid-but-unshipped, Shopify joined to Design Studio, " + new Date().toISOString().slice(0, 10), ""];
+    byAge().forEach(function (o) {
+      var st = state[o.id] || {};
+      lines.push(o.name + "  " + o.cust + "  " + rands(o.value) + "  " + daysSince(o.date) + "d  " +
+        o.product + " (" + o.variant + (o.qty > 1 ? " x" + o.qty : "") + ")");
+      lines.push("   bucket: " + GROUP_NAME[o.group] + " | studio: " + o.studio + " | logo: " + o.logo +
+        " | design: " + o.design + " | studio status: " + o.sstatus);
+      lines.push("   blocker: " + o.blocker);
+      lines.push("   marked: " + (st.status ? statusLabel(st.status) : "not set"));
+      if (st.note) lines.push("   note: " + st.note.replace(/\s+/g, " "));
+      lines.push("");
+    });
+    var open = ORDERS.filter(function (o) { return (state[o.id] || {}).status !== "shipped"; });
+    lines.push("Open: " + open.length + " orders, " + rands(open.reduce(function (s, o) { return s + o.value; }, 0)));
+    return lines.join("\n");
+  }
+  function whatsappText() {
+    var lines = ["Giorgio, paid ReviewTap orders that have not shipped. Each one checked against Design Studio. I need a dispatch date per order today.", ""];
+    [1, 2, 3, 4, 5].forEach(function (g) {
+      var list = ORDERS.filter(function (o) { return o.group === g; });
+      if (!list.length) return;
+      lines.push(GROUP_NAME[g].toUpperCase() + ":");
+      list.forEach(function (o) {
+        lines.push("  " + o.name + " " + o.cust + ", " + o.city + " - " +
+          o.product + " " + o.variant + (o.qty > 1 ? " x" + o.qty : "") + " - " + daysSince(o.date) + "d");
+        if (g !== 1) lines.push("     " + o.blocker);
+      });
+      lines.push("");
+    });
+    return lines.join("\n");
+  }
+  function offerText(txt, btn) {
+    var out = document.getElementById("copyout");
+    out.value = txt; out.hidden = false;
+    var original = btn.textContent;
+    function done(m) { btn.textContent = m; setTimeout(function () { btn.textContent = original; }, 2000); }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(txt).then(function () { done("Copied"); }, function () { done("Copy below"); });
+    } else { out.focus(); out.select(); done("Copy below"); }
+  }
+
+  document.getElementById("toolbar").addEventListener("click", function (e) {
+    var b = e.target.closest("[data-filter]");
+    if (!b) return;
+    filter = b.getAttribute("data-filter");
+    Array.prototype.forEach.call(document.querySelectorAll("[data-filter]"), function (x) {
+      x.setAttribute("aria-pressed", x === b ? "true" : "false");
+    });
+    selected = null;
+    document.getElementById("fref").textContent = "—";
+    document.getElementById("fval").textContent = "Click any cell to read it in full.";
+    renderGrid();
+  });
+  document.getElementById("btn-sort").addEventListener("click", function () {
+    sortAge = !sortAge;
+    this.textContent = sortAge ? "Sort by age" : "Sort by bucket";
+    renderGrid();
+  });
+  document.getElementById("btn-copy").addEventListener("click", function () { offerText(reportText(), this); });
+  document.getElementById("btn-wa").addEventListener("click", function () { offerText(whatsappText(), this); });
+
+  function showSheet(which) {
+    var q = which === "queue";
+    document.getElementById("sheet-queue").hidden = !q;
+    document.getElementById("sheet-summary").hidden = q;
+    document.getElementById("tab-queue").setAttribute("aria-selected", q ? "true" : "false");
+    document.getElementById("tab-summary").setAttribute("aria-selected", q ? "false" : "true");
+  }
+  document.getElementById("tab-queue").addEventListener("click", function () { showSheet("queue"); });
+  document.getElementById("tab-summary").addEventListener("click", function () { showSheet("summary"); });
+
+  loadState();
+  buildHead();
+  renderGrid();
+})();
+</script>
+
+</body></html>
