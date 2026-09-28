@@ -34,6 +34,10 @@
   .note .q{font-size:13px;color:var(--muted);border-left:3px solid var(--line);
     padding-left:11px;margin-bottom:9px}
   .note .t{white-space:pre-wrap;font-size:15.5px}
+  .note.agency{border-left:4px solid var(--green);background:#F6F4EE}
+  .note.agency .m b{color:var(--green)}
+  .tag{display:inline-block;font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--green);border:1px solid var(--line);border-radius:999px;padding:3px 8px}
   .empty{margin-top:28px;border:1px dashed var(--line);border-radius:14px;padding:26px 20px;
     color:var(--muted);text-align:center}
   textarea#md{width:100%;height:230px;margin-top:14px;border:1px solid var(--line);border-radius:12px;
@@ -53,6 +57,9 @@
   <button type="button" data-f="index">Home</button>
   <button type="button" data-f="restaurant">Restaurant</button>
   <button type="button" data-f="functions">Functions</button>
+  <button type="button" data-k="all" class="on kind">Everything</button>
+  <button type="button" data-k="client" class="kind">Jade only</button>
+  <button type="button" data-k="agency" class="kind">Our suggestions</button>
   <button type="button" id="copy">Copy as markdown</button>
   <span class="count" id="count">Loading</span>
 </div>
@@ -66,13 +73,13 @@ var API='https://plinxeaiapsskkvblbar.supabase.co/rest/v1/acreage_notes';
 var KEY='sb_publishable_qFYgdq9_Oc-_rD0y7JR_4A_HngmfHJF';
 var LABEL={index:'Home',restaurant:'The Restaurant',functions:'Functions & Events'};
 var URLS={index:'index.html',restaurant:'restaurant.html',functions:'functions.html'};
-var all=[],filter='all';
+var all=[],filter='all',kind='all';
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){
   return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c];});}
 function when(iso){var d=new Date(iso);return d.toLocaleDateString('en-ZA',{day:'numeric',month:'short'})+
   ' '+d.toLocaleTimeString('en-ZA',{hour:'2-digit',minute:'2-digit'});}
 function render(){
-  var rows=all.filter(function(n){return filter==='all'||n.page===filter;});
+  var rows=all.filter(function(n){return (filter==='all'||n.page===filter)&&(kind==='all'||(n.kind||'client')===kind);});
   document.getElementById('count').textContent=rows.length+(rows.length===1?' note':' notes');
   var out=document.getElementById('out');
   if(!rows.length){out.innerHTML='<div class="empty">Nothing yet. Once Jade saves a note it appears here.</div>';return;}
@@ -80,7 +87,8 @@ function render(){
   out.innerHTML=Object.keys(by).map(function(p){
     return '<div class="grp"><h2>'+LABEL[p]+'</h2><a class="view" href="'+URLS[p]+'" target="_blank">Open that page &rarr;</a>'+
       by[p].map(function(n){
-        return '<div class="note"><div class="m"><b>'+esc(n.author)+'</b><span>'+when(n.created_at)+'</span></div>'+
+        return '<div class="note'+(n.kind==='agency'?' agency':'')+'"><div class="m"><b>'+esc(n.author)+'</b><span>'+when(n.created_at)+'</span>'+
+          (n.kind==='agency'?'<span class="tag">Our suggestion</span>':'')+'</div>'+
           (n.quote?'<div class="q">'+esc(n.quote)+'</div>':'')+
           '<div class="t">'+esc(n.note)+'</div></div>';}).join('')+'</div>';
   }).join('');
@@ -90,8 +98,13 @@ document.querySelectorAll('.bar button[data-f]').forEach(function(b){
     document.querySelectorAll('.bar button[data-f]').forEach(function(o){o.classList.toggle('on',o===b);});
     render();};
 });
+document.querySelectorAll('.bar button.kind').forEach(function(b){
+  b.onclick=function(){kind=b.getAttribute('data-k');
+    document.querySelectorAll('.bar button.kind').forEach(function(o){o.classList.toggle('on',o===b);});
+    render();};
+});
 document.getElementById('copy').onclick=function(){
-  var rows=all.filter(function(n){return filter==='all'||n.page===filter;});
+  var rows=all.filter(function(n){return (filter==='all'||n.page===filter)&&(kind==='all'||(n.kind||'client')===kind);});
   var md=rows.map(function(n){return '- **'+LABEL[n.page]+'** ('+esc(n.quote||'')+')\n  '+n.note+'\n  _'+n.author+', '+when(n.created_at)+'_';}).join('\n');
   var ta=document.getElementById('md');ta.style.display='block';ta.value=md;ta.select();
   try{document.execCommand('copy');this.textContent='Copied';setTimeout(function(){document.getElementById('copy').textContent='Copy as markdown';},1600);}catch(e){}

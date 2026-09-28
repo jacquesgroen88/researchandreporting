@@ -15,6 +15,7 @@
   var KEY  = 'sb_publishable_qFYgdq9_Oc-_rD0y7JR_4A_HngmfHJF';
   var PAGE = (document.body.getAttribute('data-nm-page') || 'index');
 
+  var PEOPLE = ['Jade', 'Jacques'];
   var notes = [], on = false, composer = null, bubble = null;
 
   /* ── talking to the store ──────────────────────────────────────────── */
@@ -161,7 +162,10 @@
       '<div class="nm-q"><b>On:</b> ' + esc(quote) + '</div>' +
       '<div class="nm-body">' +
       '<textarea placeholder="What would you like changed here?"></textarea>' +
-      '<input type="text" class="nm-who" placeholder="Your name" value="' + esc(who()) + '">' +
+      '<label class="nm-wholbl">Commenting as' +
+      '<select class="nm-who">' + PEOPLE.map(function (p) {
+        return '<option' + (p === who() ? ' selected' : '') + '>' + esc(p) + '</option>';
+      }).join('') + '</select></label>' +
       '<div class="nm-err"></div>' +
       '<div class="nm-row"><button type="button" class="nm-cancel">Cancel</button>' +
       '<button type="button" class="nm-save">Save note</button></div>' +
@@ -173,7 +177,7 @@
     composer.querySelector('.nm-save').onclick = function () {
       var text = ta.value.trim();
       if (!text) { ta.focus(); return; }
-      var name = composer.querySelector('.nm-who').value.trim() || 'Jade';
+      var name = composer.querySelector('.nm-who').value || PEOPLE[0];
       try { localStorage.setItem('nm-who', name); } catch (err) {}
       var btn = this; btn.disabled = true; btn.textContent = 'Saving';
       save({ page: PAGE, anchor: pathOf(el), quote: quote, note: text, author: name, x: x, y: y })
@@ -197,8 +201,9 @@
     bubble.className = 'nm-ui';
     bubble.innerHTML =
       '<div class="nm-q"><b>On:</b> ' + esc(note.quote || '') + '</div>' +
-      '<div class="nm-body"><div class="nm-meta">' + esc(note.author || 'Jade') + ' &middot; ' +
-      when(note.created_at) + '</div><div class="nm-text">' + esc(note.note) + '</div>' +
+      '<div class="nm-body"><div class="nm-meta' + (note.kind === 'agency' ? ' nm-ameta' : '') + '">' +
+      esc(note.author || 'Jade') + (note.kind === 'agency' ? ' &middot; suggestion' : '') +
+      ' &middot; ' + when(note.created_at) + '</div><div class="nm-text">' + esc(note.note) + '</div>' +
       '<div class="nm-row"><button type="button" class="nm-cancel">Close</button></div></div>';
     document.body.appendChild(bubble);
     var r = el ? el.getBoundingClientRect() : { left: 40, bottom: 80 };
@@ -220,7 +225,8 @@
         var r = el.getBoundingClientRect();
         var pin = document.createElement('button');
         pin.type = 'button';
-        pin.className = 'nm-pin' + (note.status === 'done' ? ' nm-done' : '');
+        pin.className = 'nm-pin' + (note.kind === 'agency' ? ' nm-agency' : '') +
+                        (note.status === 'done' ? ' nm-done' : '');
         pin.textContent = i + 1;
         pin.title = note.note.slice(0, 80);
         pin.style.left = (r.right + window.scrollX) + 'px';
@@ -230,7 +236,9 @@
       }
       var row = document.createElement('button');
       row.type = 'button'; row.className = 'nm-item';
-      row.innerHTML = '<span class="n">' + (i + 1) + ' &middot; ' + esc(note.author || 'Jade') + '</span>' +
+      row.className = 'nm-item' + (note.kind === 'agency' ? ' nm-agencyrow' : '');
+      row.innerHTML = '<span class="n">' + (i + 1) + ' &middot; ' + esc(note.author || 'Jade') +
+                      (note.kind === 'agency' ? ' &middot; suggestion' : '') + '</span>' +
                       '<span class="q">' + esc(note.quote || 'On the page') + '</span>' +
                       '<span class="t">' + esc(note.note) + '</span>';
       row.onclick = function () {
@@ -254,7 +262,10 @@
   /* ── helpers ───────────────────────────────────────────────────────── */
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {
     return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]; }); }
-  function who() { try { return localStorage.getItem('nm-who') || ''; } catch (e) { return ''; } }
+  function who() {
+    var v; try { v = localStorage.getItem('nm-who'); } catch (e) {}
+    return PEOPLE.indexOf(v) > -1 ? v : PEOPLE[0];   /* Jade unless told otherwise */
+  }
   function when(iso) {
     if (!iso) return '';
     var d = new Date(iso);
