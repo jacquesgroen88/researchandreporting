@@ -265,7 +265,7 @@
   .logo .word{height:17px;width:auto;transition:height .45s var(--ease),filter .45s;
               filter:drop-shadow(0 1px 9px rgba(0,0,0,.6))}
   header nav{display:flex;gap:var(--s4)}
-  header nav a{color:rgba(255,255,255,.9);font-size:11.5px;font-weight:500;letter-spacing:.18em;
+  header nav a{color:rgba(255,255,255,.9);font-size:12.5px;font-weight:500;letter-spacing:.18em;
     text-transform:uppercase;position:relative;padding:4px 0;text-shadow:0 1px 9px rgba(0,0,0,.55);
     white-space:nowrap;transition:color .3s}
   header nav a:after{content:"";position:absolute;left:0;bottom:-2px;width:100%;height:1px;
@@ -366,6 +366,11 @@
      strip below the fold on a standard laptop. */
   .hero h1{color:#fff;font-size:clamp(2.3rem,4.8vw,4.2rem);margin:var(--s3) 0;max-width:19ch;
     text-shadow:0 4px 40px rgba(5,9,5,.75)}
+  .hero h1 a{color:inherit;text-decoration:none;position:relative}
+  .hero h1 a:after{content:"";position:absolute;left:0;right:0;bottom:.04em;height:2px;
+    background:var(--gold-lite);transform:scaleX(0);transform-origin:0 50%;
+    transition:transform .5s var(--ease)}
+  .hero h1 a:hover:after,.hero h1 a:focus-visible:after{transform:scaleX(1)}
   .hero p{color:rgba(255,255,255,.94);font-size:clamp(16px,1.7vw,18.5px);max-width:52ch;
     margin-bottom:var(--s4);text-shadow:0 2px 20px rgba(5,9,5,.85)}
   .hero .actions{display:flex;gap:14px;flex-wrap:wrap}
@@ -386,14 +391,6 @@
   .live.shut b{background:#c9885f;animation:none}
   @keyframes ping{0%{box-shadow:0 0 0 0 rgba(127,192,138,.6)}70%{box-shadow:0 0 0 9px rgba(127,192,138,0)}100%{box-shadow:0 0 0 0 rgba(127,192,138,0)}}
 
-  /* Anchored right, not centre. Centred it collided with the second hero
-     button, which is left-aligned but wide enough to cross the midline. */
-  .scroll-hint{position:absolute;bottom:122px;right:var(--s4);z-index:3;
-    color:rgba(255,255,255,.65);font-size:9.5px;letter-spacing:.3em;text-transform:uppercase;
-    display:flex;flex-direction:column;align-items:center;gap:9px;pointer-events:none}
-  .scroll-hint i{width:1px;height:42px;background:linear-gradient(rgba(255,255,255,.8),transparent);
-    transform-origin:0 0;animation:drop 2.6s var(--ease) infinite}
-  @keyframes drop{0%{transform:scaleY(0)}45%{transform:scaleY(1)}100%{transform:scaleY(0) translateY(42px)}}
 
   /* ── marquee ────────────────────────────────────────────────────────── */
   /* Same z-index reasoning as the marquee it replaces: this block sits inside
@@ -842,8 +839,8 @@
      too big to keep a seven-item nav below ~1100. Tighten the gaps first, then
      hand over to the hamburger while there is still room to spare, rather than
      letting the CTA push out past the page gutter. */
-  @media(max-width:1240px){ header nav{gap:var(--s3)} }
-  @media(max-width:1120px){
+  @media(max-width:1340px){ header nav{gap:var(--s3)} }
+  @media(max-width:1240px){
     header nav,.cta-top{display:none}
     .menu-btn{display:flex}
     .logo .word{height:15px}
@@ -892,7 +889,6 @@
     header.scrolled .logo .mark{height:32px}
     .hero .actions{flex-direction:column;align-items:stretch}
     .hero .actions .btn{width:100%}
-    .scroll-hint{display:none}
     /* the strip becomes a two-up so the type never squeezes */
     .hstrip .in{padding:0 var(--s3)}
     .hstrip .cell{min-width:calc(50% - 12px);padding:14px 0}
@@ -1189,6 +1185,7 @@
       <a href="restaurant.html">Restaurant</a>
       <a href="index.html#gallery">Gallery</a>
       <a href="index.html#visit">Visit</a>
+      <a href="#enquire">Contact</a>
     </nav>
     <a href="functions.html#enquire" class="btn btn-gold cta-top" data-mag><span>Enquire</span></a>
     <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="panel">
@@ -1203,6 +1200,7 @@
   <a class="pl" href="restaurant.html">Restaurant</a>
   <a class="pl" href="index.html#gallery">Gallery</a>
   <a class="pl" href="index.html#visit">Visit</a>
+  <a class="pl" href="#enquire">Contact</a>
   <div class="pfoot">
     <a href="mailto:events@acreagevenue.co.za">events@acreagevenue.co.za</a>
     <a href="tel:+27662726862">+27 66 272 6862</a>
@@ -1755,6 +1753,9 @@
   /* split display headings into per-word masks first, so the observer sees
      the finished markup */
   $$('[data-split]').forEach(function(el){
+    /* Already split by hand, because it holds links. Leave it: this
+       function rebuilds from textContent and would drop them. */
+    if(el.children.length) return;
     var words=el.textContent.trim().split(/\s+/);
     el.textContent='';
     words.forEach(function(w,n){
