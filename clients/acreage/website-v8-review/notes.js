@@ -282,7 +282,9 @@
                         (note.status === 'waiting' ? ' nm-waiting' : '');
         pin.textContent = i + 1;
         pin.title = note.note.slice(0, 80);
-        pin.style.left = (r.right + window.scrollX) + 'px';
+        /* never past the right edge: a pin poking out widens the page, and a
+           phone or tablet then zooms out and shows a white strip */
+        pin.style.left = (Math.min(r.right, document.documentElement.clientWidth - 30) + window.scrollX) + 'px';
         pin.style.top = (r.top + window.scrollY) + 'px';
         pin.onclick = function (ev) { ev.stopPropagation(); openBubble(note, el); };
         document.body.appendChild(pin);
