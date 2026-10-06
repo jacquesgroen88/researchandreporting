@@ -1280,6 +1280,22 @@
   section.stacked + section.stacked:not(.hero):not(.phero),
   section.stacked + section.menu:not(.hero):not(.phero){padding-top:var(--s5)}
 
+  /* Sliders, 6 Oct: no pale strip under the photo on beige sections, room
+     under the dots, and arrows either side of the photo. */
+  .slider{background:transparent}
+  .slider .dots{margin:16px 0 0;padding-bottom:12px}
+  .sl-stage{position:relative}
+  .sl-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:44px;height:44px;
+    border:0;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;
+    background:rgba(252,251,247,.88);color:var(--forest);box-shadow:0 6px 18px -8px rgba(0,0,0,.5);
+    transition:background .25s,transform .25s}
+  .sl-arrow:hover{background:#fff;transform:translateY(-50%) scale(1.06)}
+  .sl-arrow svg{width:20px;height:20px}
+  .sl-prev{left:14px}
+  .sl-next{right:14px}
+  .sl-arrow:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+  @media (max-width:600px){ .sl-arrow{width:36px;height:36px} .sl-prev{left:8px} .sl-next{right:8px} }
+
 </style>
 </head>
 <body>
@@ -2300,6 +2316,23 @@
       })(performance.now());
     }
     mark(0);
+
+    /* Arrows either side of the photo (Jacques, 6 Oct). Swiping already
+       works on touch screens because the track scrolls sideways. */
+    var stage = document.createElement('div');
+    stage.className = 'sl-stage';
+    track.parentNode.insertBefore(stage, track);
+    stage.appendChild(track);
+    [['prev', -1, 'Previous image', 'M15 18l-6-6 6-6'],
+     ['next',  1, 'Next image',     'M9 6l6 6-6 6']].forEach(function(a){
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'sl-arrow sl-' + a[0];
+      b.setAttribute('aria-label', a[2]);
+      b.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="' + a[3] + '"/></svg>';
+      b.addEventListener('click', function(){ go((cur + a[1] + figs.length) % figs.length); });
+      stage.appendChild(b);
+    });
 
     /* Follow manual scrolling and swipes so the dots never lie. */
     var tick;
