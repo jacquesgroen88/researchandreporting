@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<style>*,*::before,*::after{box-sizing:border-box}body{margin:0}</style>
+<title>Cold Call Playbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: one reading column with an industry switcher pinned at the top. Each tab is a full call for one kind of business, read top to bottom in call order. "How to dial" holds what every call shares. */
+:root{
+  --bg:#F4F6F8; --paper:#FFFFFF; --ink:#14213D; --muted:#56627A; --line:#D9DEE6;
+  --accent:#D9621F; --say:#1F6E74; --saybg:#E8F3F3; --warn:#9A3B12; --warnbg:#FBEDE4; --tabbg:#E6EAF0;
+  --display:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --body:"Source Sans 3","Segoe UI",Arial,sans-serif;
+  --mono:"JetBrains Mono",Consolas,"Courier New",monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0F1522; --paper:#172033; --ink:#E7ECF4; --muted:#9AA6BC; --line:#2A3650;
+  --accent:#F08A4B; --say:#7CC9CC; --saybg:#16303A; --warn:#F2A47C; --warnbg:#35221A; --tabbg:#1D2840; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F1522; --paper:#172033; --ink:#E7ECF4; --muted:#9AA6BC; --line:#2A3650;
+  --accent:#F08A4B; --say:#7CC9CC; --saybg:#16303A; --warn:#F2A47C; --warnbg:#35221A; --tabbg:#1D2840; color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font:17px/1.55 var(--body);padding-inline:16px;padding-block:28px 64px}
+.wrap{max-width:780px;margin:0 auto;display:flex;flex-direction:column;gap:24px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.15}
+h1{font-size:2.1rem;font-weight:800;letter-spacing:-.01em}
+h2{font-size:1.3rem;font-weight:700;display:flex;gap:12px;align-items:baseline;flex-wrap:wrap}
+h2 .n{font-family:var(--mono);font-size:.8rem;color:var(--accent);font-weight:500}
+h3{font-size:1.02rem;font-weight:700}
+p{margin:0}
+.eyebrow{font-family:var(--mono);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+header{display:flex;flex-direction:column;gap:10px}
+.job{background:var(--ink);color:var(--bg);border-radius:6px;padding:16px 18px;display:flex;flex-direction:column;gap:6px}
+.job strong{font-family:var(--display);font-size:1.12rem}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:8px}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px}
+.tabs button{flex:0 0 auto;font:600 .92rem var(--body);color:var(--ink);background:var(--tabbg);border:1px solid var(--line);border-radius:999px;padding:7px 14px;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tabs button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.panel{display:flex;flex-direction:column;gap:18px}
+section{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:20px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.say{background:var(--saybg);border-radius:4px;padding:12px 14px;display:grid;grid-template-columns:auto 1fr;gap:6px 12px;align-items:baseline}
+.say::before{content:"SAY";font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;color:var(--say);padding-top:3px}
+.say p+p{grid-column:2}
+.note{color:var(--muted);font-size:.95rem}
+.warn{background:var(--warnbg);color:var(--warn);border-radius:4px;padding:10px 14px;font-size:.95rem}
+.col{font-family:var(--mono);font-size:.8em;background:var(--bg);border:1px solid var(--line);border-radius:3px;padding:0 5px;white-space:nowrap}
+ul,ol{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px}
+.pain{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.pain div{border:1px solid var(--line);border-radius:4px;padding:12px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.pain b{font-family:var(--display);font-size:.98rem}
+.pain span{color:var(--muted);font-size:.93rem}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.95rem}
+th,td{text-align:left;vertical-align:top;padding:10px 8px;border-bottom:1px solid var(--line)}
+th{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500}
+td:first-child{font-weight:600;width:32%}
+.num{font-variant-numeric:tabular-nums}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-family:var(--mono);font-size:.78rem;border:1px solid var(--line);border-radius:999px;padding:3px 10px}
+.why{font-size:.92rem;color:var(--muted);border-top:1px dashed var(--line);padding-top:10px}
+.why b{color:var(--ink)}
+footer{color:var(--muted);font-size:.85rem;display:flex;flex-direction:column;gap:6px}
+footer a{color:var(--muted)}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <span class="eyebrow">For Giorgio · Coastal and Vaal lists · October 2026</span>
+  <h1>Cold Call Playbook</h1>
+  <p>Pick the tab for the business you are about to call. Each tab is one full call, in order. The <b>How to dial</b> tab covers when to call, how often, and the answers that work for everyone.</p>
+  <div class="job">
+    <strong>The job of the call is a booked 15-minute video walkthrough.</strong>
+    <span>You are not selling on this call and you are not explaining the system. A date and a time in the calendar is a win.</span>
+  </div>
+</header>
+
+<nav aria-label="Industry">
+  <div class="tabs" role="tablist">
+    <button role="tab" id="t-dial" aria-controls="dial" aria-selected="true">How to dial</button>
+    <button role="tab" id="t-guest" aria-controls="guest" aria-selected="false">Guesthouses &amp; lodges</button>
+    <button role="tab" id="t-rest" aria-controls="rest" aria-selected="false">Restaurants</button>
+    <button role="tab" id="t-rent" aria-controls="rent" aria-selected="false">Holiday rentals</button>
+    <button role="tab" id="t-wed" aria-controls="wed" aria-selected="false">Wedding venues</button>
+    <button role="tab" id="t-train" aria-controls="train" aria-selected="false">Training providers</button>
+  </div>
+</nav>
+
+<!-- ================= HOW TO DIAL ================= -->
+<div class="panel" id="dial" role="tabpanel" aria-labelledby="t-dial">
+
+<section>
+  <h2><span class="n">When</span>Call when they can talk</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Business</th><th>Best window</th><th>Avoid</th></tr></thead>
+    <tbody>
+      <tr><td>Guesthouses &amp; lodges</td><td class="num">11:30 to 14:00</td><td>Before 10:30 (breakfast and check-out) and after 15:00 (check-in)</td></tr>
+      <tr><td>Restaurants</td><td class="num">15:00 to 17:00</td><td>Lunch and dinner service, and Friday to Sunday</td></tr>
+      <tr><td>Holiday rental agencies</td><td class="num">10:00 to 12:00, 15:00 to 16:30</td><td>Saturdays (changeover day)</td></tr>
+      <tr><td>Wedding &amp; event venues</td><td class="num">Tuesday to Thursday, 10:00 to 15:00</td><td>Friday to Monday (events)</td></tr>
+      <tr><td>Training providers</td><td class="num">11:00 to 12:00, 16:00 to 17:00</td><td>08:00 to 10:00 (classes starting)</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">Put most of your dialling on Wednesday and Thursday.</p>
+</section>
+
+<section>
+  <h2><span class="n">How often</span>Six attempts before you give up</h2>
+  <ul>
+    <li>Try each number <b>six times over two weeks</b>, at different times and on different days. Most people are reached on a later attempt, not the first.</li>
+    <li>If a row has a landline and a mobile, try the landline first. The owner's mobile is for when the landline fails or the receptionist says they're out.</li>
+    <li>Log every attempt in <span class="col">Notes</span> (for example "Att 3, Wed 15:10, no answer"), so you never call at the same bad time twice.</li>
+    <li>After six attempts with no conversation, mark <span class="col">Status: No answer</span> and move on.</li>
+  </ul>
+</section>
+
+<section>
+  <h2><span class="n">Open</span>The first 20 seconds</h2>
+  <ol>
+    <li><b>Greet and ask how they are.</b> "Hi [name], it's Giorgio. How's your week going?" Then let them answer.</li>
+    <li><b>Give the reason for the call straight away.</b> Every tab has its own reason line. Say it before anything else.</li>
+    <li><b>Ask for 30 seconds, not for permission to exist.</b> "Can I take 30 seconds to tell you why, and you tell me if it's relevant?"</li>
+  </ol>
+  <div class="warn">Never open with "Did I catch you at a bad time?" or "Have you got two minutes?" Both invite a no before you've said anything.</div>
+  <p class="why"><b>Why:</b> Gong's analysis of 90,380 cold calls found that stating the reason for the call more than doubled the booking rate, while "Did I catch you at a bad time?" made a booking less likely than saying nothing at all.</p>
+</section>
+
+<section>
+  <h2><span class="n">Middle</span>Talk, then trade questions</h2>
+  <ul>
+    <li><b>Know your 30-second story by heart.</b> Every tab has one. Successful cold calls have a longer stretch where the caller explains clearly, not a string of nervous one-liners.</li>
+    <li><b>Then go back and forth.</b> Short questions, short answers, many turns. Write their answers down in their own words.</li>
+    <li><b>Talk about their problem, not our system.</b> Never name software, and never say "automation" or "workflow".</li>
+    <li><b>Say "we" and "us".</b> "We'd look at that together" lands better than "I can sell you".</li>
+  </ul>
+  <p class="why"><b>Why:</b> In the same Gong research, calls that booked a meeting were about twice as long, had about 77% more back-and-forth, and spent roughly half the call on next steps.</p>
+</section>
+
+<section>
+  <h2><span class="n">Close</span>Ask for the time, specifically</h2>
+  <div class="say"><p>"It's much easier to show you than to explain it. Do you have your calendar handy? I've got Thursday at ten or Friday at two, which is better?"</p></div>
+  <ul>
+    <li>Always two named times. Never "when suits you?"</li>
+    <li>If neither works, take their time and book it before you hang up.</li>
+    <li>Straight after: send a calendar invite and a WhatsApp confirming the day, date and time.</li>
+    <li>Use the row's <span class="col">Opening line</span> evidence on the walkthrough too. That's where the website findings belong, as proof, not as the reason for the call.</li>
+  </ul>
+</section>
+
+<section>
+  <h2><span class="n">Gatekeeper</span>When someone else answers</h2>
+  <div class="say"><p>"Hi, it's Giorgio. I'm hoping to speak to the owner about guest reviews. What's their name, and when are they usually in?"</p></div>
+  <p class="note">Write the name in <span class="col">Decision-maker</span> and the time in <span class="col">Next step date</span>. Don't pitch the receptionist.</p>
+</section>
+
+<section>
+  <h2><span class="n">Objections</span>Answers that work for every business</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>They say</th><th>You say</th></tr></thead>
+    <tbody>
+      <tr><td>"Just send me something."</td><td>"I will. So it's actually useful to you, can I show you for 15 minutes first and send it the same day? Thursday at ten or Friday at two?"</td></tr>
+      <tr><td>"How much is it?"</td><td>"It depends on the size of the place, which is why I'd rather show you. For a single property it starts at R3,100 a month. Thursday or Friday?"</td></tr>
+      <tr><td>"Can you do it cheaper?"</td><td>"I can't move on price on this call. Let me take it back and come back to you tonight."</td></tr>
+      <tr><td>"Someone already does our website."</td><td>"Good, keep them. This sits next to your website. It isn't a new one."</td></tr>
+      <tr><td>"We tried something like this before."</td><td>"What did you try, and what happened?" Then listen. Whatever went wrong is the thing to show them on the walkthrough.</td></tr>
+      <tr><td>"Not interested."</td><td>"No problem. Is it the timing, or is it just not something you need?" Ask once. If it's still no, thank them and mark <span class="col">Not interested</span>.</td></tr>
+      <tr><td>"Don't call me again."</td><td>"Of course, I'll take you off the list." Mark <span class="col">Do not contact</span> and never call that number again.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <h2><span class="n">Prices</span>Only quote what exists</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Who it fits</th><th>What it is</th><th>Price</th></tr></thead>
+    <tbody>
+      <tr><td>Single small property</td><td>Enquiries, follow-up and reviews for one site</td><td class="num">R3,100/mo + R3,500 setup</td></tr>
+      <tr><td>Bigger single property</td><td>Growth system</td><td class="num">R5,999/mo + R2,500 setup</td></tr>
+      <tr><td>Small restaurant or very small property</td><td>ReviewTap Pro, reviews only</td><td class="num">R399/mo</td></tr>
+      <tr><td>Added at install</td><td>Cards and table stands</td><td class="num">Card R449, stand R649</td></tr>
+      <tr><td>Groups, several properties, large venues</td><td>Priced by Jacques</td><td>Do not quote</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">On the walkthrough, Jacques joins for price and the close until you have five wins. Never quote a website. Never quote a statistic to a prospect: if you want to make a point, ask a question.</p>
+</section>
+
+<section>
+  <h2><span class="n">Log</span>After every call</h2>
+  <p>Fill in <span class="col">Status</span>, <span class="col">Next step date</span>, <span class="col">Decision-maker</span> and <span class="col">Notes</span> before you dial again. Use these statuses only:</p>
+  <div class="chips"><span class="chip">Not called</span><span class="chip">No answer</span><span class="chip">Call back</span><span class="chip">Walkthrough booked</span><span class="chip">Not interested</span><span class="chip">Do not contact</span><span class="chip">Disqualified</span></div>
+</section>
+</div>
+
+<!-- ================= GUESTHOUSES ================= -->
+<div class="panel" id="guest" role="tabpanel" aria-labelledby="t-guest" hidden>
+
+<section>
+  <h2><span class="n">Know this</span>What actually keeps them up at night</h2>
+  <div class="pain">
+    <div><b>Commission</b><span>Booking.com takes roughly 15 to 25% of every room it sells. Every direct booking is money they keep.</span></div>
+    <div><b>The quiet months</b><span>December is full. February, May and winter are what hurt.</span></div>
+    <div><b>Doing it all themselves</b><span>Most are owner-run. They answer messages at night, between check-ins.</span></div>
+  </div>
+  <div class="warn">Don't pitch "more December bookings". In October most of December is already booked, and an owner who is full doesn't need you. The angle is <b>using December to fix the rest of the year</b>.</div>
+</section>
+
+<section>
+  <h2><span class="n">01</span>Reason for the call</h2>
+  <div class="say"><p>"Hi [name], it's Giorgio. How's your week going?"</p>
+  <p>"The reason I'm calling: I work with guesthouses on one thing, getting more of next year's bookings to come direct instead of through Booking.com. Can I take 30 seconds to tell you how, and you tell me if it's relevant?"</p></div>
+</section>
+
+<section>
+  <h2><span class="n">02</span>Your 30-second story</h2>
+  <div class="say"><p>"December is the month you meet the most guests all year. Most of them have a great stay, mean to leave a Google review, and forget once they're home. And unless they booked direct, you don't really have a way to reach them again."</p>
+  <p>"We fix both. Every guest gets a card in the room and a message after they check out, so the review gets written while they still remember the stay. And you end the season with a list of happy guests you can invite back in the quiet months, direct, without paying commission."</p></div>
+</section>
+
+<section>
+  <h2><span class="n">03</span>Questions (pick two or three)</h2>
+  <ul>
+    <li>"Roughly how much of your business comes through Booking.com or the other booking sites?"</li>
+    <li>"Which months are the hardest to fill?"</li>
+    <li>"When a guest checks out, does anyone ask them for a Google review?"</li>
+    <li>"If you wanted to message everyone who stayed with you last year, could you?"</li>
+  </ul>
+  <p class="note">The last question matters most. If the answer is no, that's the problem you're solving.</p>
+</section>
+
+<section>
+  <h2><span class="n">04</span>Use the row's observation as proof</h2>
+  <p>After they've answered, connect what we found to what they just told you:</p>
+  <div class="say"><p><em>No own site or no booking on it:</em> "That's partly why so much goes through Booking.com. Right now the easiest way to book you is through them."</p>
+  <p><em>Site marked not secure or out of date:</em> "When a guest does look you up directly, the browser warns them off before they can book."</p>
+  <p><em>Good site already:</em> "Your site is good. What's missing is the reviews and the guest list behind it."</p></div>
+</section>
+
+<section>
+  <h2><span class="n">05</span>Branches</h2>
+  <div class="tbl"><table>
+    <tbody>
+      <tr><td>"We're full for December."</td><td>"That's exactly why now is the time. A full December is your biggest batch of reviews and your biggest guest list of the year. The question is whether you keep them."</td></tr>
+      <tr><td>"We still have gaps."</td><td>"Then the fastest bookings usually come from people who've already stayed with you. We can message your past guests about the open dates. You pay nothing upfront, and we take 10% of what it brings in." <span class="note">Only a few of these run at once. Jacques approves each one, so don't promise a start date.</span></td></tr>
+      <tr><td>"Booking.com handles all that."</td><td>"It handles the booking, and it charges you for it. It doesn't build your Google reviews, and it keeps the guest. We help you keep the next booking."</td></tr>
+      <tr><td>"We already get good reviews."</td><td>"That's great. How do you ask for them at the moment?" Most say they don't, or only sometimes.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <h2><span class="n">06</span>Ask</h2>
+  <div class="say"><p>"If we want this working before your December guests arrive, we'd need to set it up next month. Do you have your calendar handy? Thursday at ten or Friday at two?"</p></div>
+  <p class="note">Rows that go to Jacques for price: Hermanus Boutique Guest House, Starfish Guest Lodge (Shell Lodges group), Casa Alexandra (Beautiful East).</p>
+</section>
+</div>
+
+<!-- ================= RESTAURANTS ================= -->
+<div class="panel" id="rest" role="tabpanel" aria-labelledby="t-rest" hidden>
+
+<section>
+  <h2><span class="n">Know this</span>What actually keeps them up at night</h2>
+  <div class="pain">
+    <div><b>Visitors choose from Google</b><span>A holiday family picks tonight's restaurant from the map and the stars. They've never heard of you.</span></div>
+    <div><b>December stretches everyone</b><span>Full service, extra staff, no time. They will not take on a project in December.</span></div>
+    <div><b>Reviews go unwritten</b><span>Happy diners leave. Unhappy ones write the review.</span></div>
+  </div>
+  <div class="warn">Keep the offer small and quick for restaurants: table stands and reviews, set up before December. Bigger systems only if they raise booking or enquiry problems themselves.</div>
+</section>
+
+<section>
+  <h2><span class="n">01</span>Reason for the call</h2>
+  <div class="say"><p>"Hi [name], it's Giorgio. How's the week going?"</p>
+  <p>"The reason I'm calling: I work with restaurants on the coast on one thing, turning the December crowd into the reviews that bring next year's visitors in. Can I take 30 seconds to tell you how?"</p></div>
+</section>
+
+<section>
+  <h2><span class="n">02</span>Your 30-second story</h2>
+  <div class="say"><p>"Most of your December customers are on holiday. Next year's holiday crowd will choose where to eat the same way: they'll search the town on Google and pick by the stars and the number of reviews."</p>
+  <p>"So we put a small stand on every table. A diner taps their phone on it, and the review is done before the bill arrives. It takes a day to set up and nobody on your staff has to do anything differently."</p></div>
+</section>
+
+<section>
+  <h2><span class="n">03</span>Questions (pick two)</h2>
+  <ul>
+    <li>"When someone on holiday searches for restaurants in [town], where do you think you come up?"</li>
+    <li>"How do you ask diners for reviews at the moment?"</li>
+    <li>"Over December, how do bookings come in: phone, WhatsApp, or walk-ins?"</li>
+  </ul>
+  <p class="note">If they say WhatsApp bookings after hours are a headache, note it. That's the bigger system, and Jacques prices it on the walkthrough.</p>
+</section>
+
+<section>
+  <h2><span class="n">04</span>Branches</h2>
+  <div class="tbl"><table>
+    <tbody>
+      <tr><td>"We're too busy for anything new."</td><td>"That's exactly why it has to be in before December. It takes a day, and after that it runs without anyone touching it."</td></tr>
+      <tr><td>"We already have lots of reviews."</td><td>"Then this keeps them coming in the month you're busiest. How many came in last December?"</td></tr>
+      <tr><td>"We're inside a hotel / centre."</td><td>"Who decides on things like this for the restaurant?" Get the name. Mark the row and move on.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <h2><span class="n">05</span>Ask</h2>
+  <div class="say"><p>"I can show you the stand and how it works in 15 minutes on a video call. Do you have your calendar handy? Tuesday at three or Wednesday at four?"</p></div>
+  <p class="note">Restaurants get afternoon slots, between services.</p>
+</section>
+</div>
+
+<!-- ================= HOLIDAY RENTALS ================= -->
+<div class="panel" id="rent" role="tabpanel" aria-labelledby="t-rent" hidden>
+
+<section>
+  <h2><span class="n">Know this</span>What actually keeps them up at night</h2>
+  <div class="pain">
+    <div><b>The same questions all night</b><span>Where's the key, what's the wifi, how does the gate work. Multiplied by every property.</span></div>
+    <div><b>Owners want results</b><span>The agency has to show property owners that it fills their places.</span></div>
+    <div><b>Reviews per property</b><span>Each unit lives or dies on its own reviews.</span></div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">01</span>Reason for the call</h2>
+  <div class="say"><p>"Hi [name], it's Giorgio. How's your week going?"</p>
+  <p>"The reason I'm calling: I work with rental agencies on the guest messages that come in at all hours over the season. Can I take 30 seconds to tell you what we do?"</p></div>
+</section>
+
+<section>
+  <h2><span class="n">02</span>Your 30-second story</h2>
+  <div class="say"><p>"Over December, every property you run generates the same questions, mostly at night: the key, the wifi, the gate, check-out time. Someone on your team answers every one by hand."</p>
+  <p>"We set up an assistant on your WhatsApp that answers those instantly for each property, and hands anything unusual to a person. After each stay it asks the guest for a review of that property, so every unit builds its own reputation."</p></div>
+</section>
+
+<section>
+  <h2><span class="n">03</span>Questions</h2>
+  <ul>
+    <li>"How many properties are you running this December?"</li>
+    <li>"Who answers guests after hours at the moment?"</li>
+    <li>"How do you show your owners how their property is doing?"</li>
+  </ul>
+</section>
+
+<section>
+  <h2><span class="n">04</span>Ask</h2>
+  <div class="say"><p>"I'd like to show you how it handles a guest message live, it takes 15 minutes. Do you have your calendar handy? Thursday at ten or Friday at two?"</p></div>
+  <p class="note">Several properties means Jacques prices it. Don't quote. Applies to Van Heerden Letting and Happy Holiday Homes.</p>
+</section>
+</div>
+
+<!-- ================= WEDDING VENUES ================= -->
+<div class="panel" id="wed" role="tabpanel" aria-labelledby="t-wed" hidden>
+
+<section>
+  <h2><span class="n">Know this</span>What actually keeps them up at night</h2>
+  <div class="pain">
+    <div><b>Couples enquire everywhere at once</b><span>They send the same enquiry to several venues in one evening. The venue that answers properly first gets the viewing.</span></div>
+    <div><b>Quotes go cold</b><span>A quote goes out and nobody follows up. The couple books elsewhere and never says why.</span></div>
+    <div><b>Weekends are taken</b><span>The owner is running an event exactly when new enquiries come in.</span></div>
+  </div>
+  <div class="warn">Jacques to confirm these rows stay on the list before you call them.</div>
+</section>
+
+<section>
+  <h2><span class="n">01</span>Reason for the call</h2>
+  <div class="say"><p>"Hi [name], it's Giorgio. How's your week going?"</p>
+  <p>"The reason I'm calling: I work with wedding venues on the enquiries that come in while you're busy running an event. Can I take 30 seconds to tell you what we do?"</p></div>
+</section>
+
+<section>
+  <h2><span class="n">02</span>Your 30-second story</h2>
+  <div class="say"><p>"Couples usually send the same enquiry to three or four venues on the same night. The venue that gives them a proper answer first is the one they come and see. But that's often a Saturday night, when you're in the middle of someone else's wedding."</p>
+  <p>"We make sure every enquiry gets a real reply within minutes, with your packages and a link to book a viewing, and every quote gets followed up until the couple says yes or no."</p></div>
+</section>
+
+<section>
+  <h2><span class="n">03</span>Questions</h2>
+  <ul>
+    <li>"How are couples finding you at the moment?"</li>
+    <li>"When an enquiry comes in on a Saturday night, when does it usually get answered?"</li>
+    <li>"After you send a quote, what happens if the couple goes quiet?"</li>
+  </ul>
+  <p class="note">If the row says the domain is dead or the email bounces, that's your proof: "The email address on your listings isn't working, so some of those enquiries may never be reaching you."</p>
+</section>
+
+<section>
+  <h2><span class="n">04</span>Ask</h2>
+  <div class="say"><p>"I can show you what a couple sees when they enquire, it takes 15 minutes. Do you have your calendar handy? Tuesday at eleven or Wednesday at two?"</p></div>
+  <p class="note">Kiepersol Wedding Village goes to Jacques for price.</p>
+</section>
+</div>
+
+<!-- ================= TRAINING ================= -->
+<div class="panel" id="train" role="tabpanel" aria-labelledby="t-train" hidden>
+
+<section>
+  <h2><span class="n">Know this</span>What actually keeps them up at night</h2>
+  <div class="pain">
+    <div><b>Refreshers nobody chases</b><span>Certificates expire. If nobody reminds the client, the refresher goes to whoever calls first.</span></div>
+    <div><b>Company quotes go quiet</b><span>A quote goes to a safety officer and sits there. One follow-up rarely happens, a second never does.</span></div>
+    <div><b>Enquiries from directories</b><span>Without a working website, students and companies find them through listings that may be out of date.</span></div>
+  </div>
+  <p class="note">Lead on refreshers and quote follow-up, not reviews. We already run this for a training company in the Vaal. Jacques to confirm whether you may name them.</p>
+</section>
+
+<section>
+  <h2><span class="n">01</span>Reason for the call</h2>
+  <div class="say"><p>"Hi [name], it's Giorgio. How's your week going?"</p>
+  <p>"The reason I'm calling: I work with training companies in the Vaal on two things, refresher bookings and quotes that go quiet. Can I take 30 seconds to explain?"</p></div>
+</section>
+
+<section>
+  <h2><span class="n">02</span>Your 30-second story</h2>
+  <div class="say"><p>"Every certificate you issue has an expiry date. That's a refresher booking you've already earned, but if nobody reminds the client, they book with whoever phones them first."</p>
+  <p>"We set it up so every client gets reminded before their certificate runs out, and every quote you send gets followed up until you get an answer. We already do this for another training company in the Vaal."</p></div>
+</section>
+
+<section>
+  <h2><span class="n">03</span>Questions</h2>
+  <ul>
+    <li>"When someone's certificate comes up for a refresher, how do they find out it's due?"</li>
+    <li>"When you send a company a quote, how do you keep track of which ones need a follow-up?"</li>
+    <li>"Do most of your students come through companies or as individuals?"</li>
+  </ul>
+</section>
+
+<section>
+  <h2><span class="n">04</span>Ask</h2>
+  <div class="say"><p>"I can show you exactly how it works in 15 minutes. Do you have your calendar handy? Thursday at eleven or Friday at four?"</p></div>
+  <p class="note">Nirvana Training Academy (two branches) goes to Jacques for price.</p>
+</section>
+</div>
+
+<footer>
+  <span>Sits alongside the Discovery Call Script, which runs the walkthrough itself. Prices from The Menu (30 July 2026).</span>
+  <span>Research behind the "How to dial" tab: <a href="https://www.gong.io/blog/cold-call-opening-lines">Gong, cold call opening lines (90,380 calls)</a> · <a href="https://www.gong.io/blog/cold-calling-tips/">Gong, cold calling tips</a> · <a href="https://roomraccoon.co.za/resources/south-african-summer-hospitality-report-2024/">RoomRaccoon, SA Summer Hospitality Report 2024</a> (December booked about 58 days ahead). Gong's data is mostly US business-to-business calls, so treat the timing advice as a starting point and adjust to what your own call log shows.</span>
+</footer>
+</div>
+
+<script>
+(function(){
+  var tabs=[].slice.call(document.querySelectorAll('[role="tab"]'));
+  function show(id,focus){
+    tabs.forEach(function(t){
+      var on=t.getAttribute('aria-controls')===id;
+      t.setAttribute('aria-selected',on?'true':'false');
+      t.tabIndex=on?0:-1;
+      document.getElementById(t.getAttribute('aria-controls')).hidden=!on;
+      if(on&&focus)t.focus();
+    });
+    try{localStorage.setItem('ccp-tab',id)}catch(e){}
+  }
+  tabs.forEach(function(t,i){
+    t.addEventListener('click',function(){show(t.getAttribute('aria-controls'));window.scrollTo(0,0)});
+    t.addEventListener('keydown',function(e){
+      var d=e.key==='ArrowRight'?1:e.key==='ArrowLeft'?-1:0;
+      if(d){e.preventDefault();var n=tabs[(i+d+tabs.length)%tabs.length];show(n.getAttribute('aria-controls'),true)}
+    });
+  });
+  var start=(location.hash||'').slice(1);
+  if(!document.getElementById(start)||!/^(dial|guest|rest|rent|wed|train)$/.test(start)){
+    try{start=localStorage.getItem('ccp-tab')||'dial'}catch(e){start='dial'}
+  }
+  show(/^(dial|guest|rest|rent|wed|train)$/.test(start)?start:'dial');
+})();
+</script>
+
+</body>
+</html>
