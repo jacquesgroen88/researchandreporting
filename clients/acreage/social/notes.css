@@ -1,0 +1,189 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   Note mode for the Acreage review copies.
+   A reviewer turns it on from the bar, clicks anything on the page and
+   leaves a comment against it. Comments are stored centrally, so whoever
+   opens the link next sees the same pins.
+   Namespaced nm- throughout so nothing here can collide with the site.
+   ───────────────────────────────────────────────────────────────────────── */
+
+:root{ --nm-h:50px; --nm-green:#07231C; --nm-gold:#D8BD8B; --nm-cream:#F3EFE4; }
+
+body{ padding-top:var(--nm-h)!important; }
+header#hdr{ top:var(--nm-h)!important; }
+
+/* ── the bar ─────────────────────────────────────────────────────────── */
+#nmbar{
+  position:fixed; inset:0 0 auto 0; height:var(--nm-h); z-index:100000;
+  background:var(--nm-green); color:var(--nm-cream);
+  display:flex; align-items:center; gap:12px; padding:0 14px;
+  font:500 11.5px/1 'Figtree',system-ui,sans-serif; letter-spacing:.1em;
+  text-transform:uppercase; border-bottom:1px solid rgba(216,189,139,.3);
+}
+#nmbar .nm-lead{ color:var(--nm-gold); white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
+#nmbar .nm-sp{ margin-left:auto }
+#nmbar button{
+  font:600 11.5px/1 'Figtree',system-ui,sans-serif; letter-spacing:.1em;
+  text-transform:uppercase; cursor:pointer; white-space:nowrap;
+  border-radius:999px; padding:10px 15px; border:1px solid rgba(243,239,228,.34);
+  background:transparent; color:var(--nm-cream); transition:background .2s,color .2s,border-color .2s;
+}
+#nmbar button:hover{ border-color:var(--nm-gold) }
+#nmbar button.nm-primary{ background:var(--nm-gold); color:var(--nm-green); border-color:var(--nm-gold) }
+#nmbar .nm-count{
+  display:inline-flex; align-items:center; justify-content:center; min-width:20px; height:20px;
+  padding:0 6px; margin-left:7px; border-radius:999px; background:rgba(243,239,228,.16);
+  font-size:11px; letter-spacing:0;
+}
+#nmbar button.nm-primary .nm-count{ background:rgba(7,35,28,.2) }
+@media (max-width:620px){ #nmbar .nm-lead{ display:none } #nmbar{ gap:8px; padding:0 10px } }
+
+/* ── picking a target ────────────────────────────────────────────────── */
+body.nm-on, body.nm-on *{ cursor:crosshair!important }
+body.nm-on #nmbar, body.nm-on #nmbar *,
+body.nm-on .nm-ui, body.nm-on .nm-ui *{ cursor:default!important }
+body.nm-on .nm-pin{ cursor:pointer!important }
+.nm-hi{ outline:2px dashed var(--nm-gold)!important; outline-offset:3px!important;
+  background:rgba(216,189,139,.14)!important; }
+
+#nmhint{
+  position:fixed; left:50%; transform:translateX(-50%); top:calc(var(--nm-h) + 112px);
+  z-index:99998; background:var(--nm-green); color:var(--nm-cream);
+  font:500 12px/1 'Figtree',system-ui,sans-serif; letter-spacing:.06em;
+  padding:11px 18px; border-radius:999px; border:1px solid rgba(216,189,139,.4);
+  box-shadow:0 14px 34px -18px rgba(0,0,0,.7); pointer-events:none;
+  opacity:0; transition:opacity .25s;
+}
+body.nm-on #nmhint{ opacity:1 }
+body.nm-on #nmhint.nm-fade{ opacity:0 }
+
+/* ── pins ────────────────────────────────────────────────────────────── */
+.nm-pin{
+  position:absolute; z-index:99990; width:27px; height:27px; border-radius:50% 50% 50% 3px;
+  background:var(--nm-gold); color:var(--nm-green); border:0;
+  font:700 12px/1 'Figtree',system-ui,sans-serif; display:flex; align-items:center;
+  justify-content:center; box-shadow:0 5px 16px -6px rgba(0,0,0,.6);
+  transform:translate(-4px,-4px); transition:transform .18s;
+}
+.nm-pin:hover,.nm-pin:focus-visible{ transform:translate(-4px,-4px) scale(1.14); outline:none }
+.nm-pin.nm-done{ background:#9DB4A8 }
+/* a suggestion from us, so it never reads as the client's own comment */
+.nm-pin.nm-agency{ background:#0B4337; color:var(--nm-gold); border-radius:50% 50% 3px 50% }
+
+.nm-ui .nm-wholbl{ display:block; margin-top:9px; font-size:11.5px; letter-spacing:.12em;
+  text-transform:uppercase; color:#5F6B66 }
+.nm-ui select.nm-who{ display:block; width:100%; margin-top:5px; border:1px solid #E2D9C6;
+  border-radius:9px; padding:9px 11px; background:#fff; color:#1C1B18;
+  font:400 14px/1.4 'Figtree',system-ui,sans-serif; outline:none; cursor:pointer }
+.nm-ui select.nm-who:focus{ border-color:#A8895A }
+.nm-ui .nm-meta.nm-ameta{ color:#0B4337; font-weight:600 }
+#nmlist .nm-item.nm-agencyrow{ border-left:3px solid #0B4337; background:#F6F4EE }
+#nmlist .nm-item.nm-agencyrow .n{ color:#0B4337 }
+
+/* ── composer and note bubble ────────────────────────────────────────── */
+.nm-ui{
+  position:absolute; z-index:99999; width:min(330px,calc(100vw - 28px));
+  background:#fff; color:#1C1B18; border:1px solid #E2D9C6; border-radius:14px;
+  box-shadow:0 26px 60px -26px rgba(11,30,24,.6);
+  font:400 14px/1.55 'Figtree',system-ui,sans-serif; overflow:hidden;
+}
+.nm-ui .nm-q{
+  background:#F7F4EC; border-bottom:1px solid #EDE5D5; padding:10px 14px;
+  font-size:12.5px; color:#5F6B66; max-height:66px; overflow:hidden;
+}
+.nm-ui .nm-q b{ color:#0B4337; font-weight:600 }
+.nm-ui .nm-body{ padding:12px 14px 14px }
+.nm-ui textarea{
+  width:100%; min-height:88px; resize:vertical; border:1px solid #E2D9C6; border-radius:9px;
+  padding:10px 11px; font:400 14px/1.5 'Figtree',system-ui,sans-serif; color:inherit;
+  background:#fff; outline:none;
+}
+.nm-ui textarea:focus{ border-color:#A8895A }
+.nm-ui input[type=text]{
+  width:100%; margin-top:8px; border:1px solid #E2D9C6; border-radius:9px; padding:9px 11px;
+  font:400 13px/1.4 'Figtree',system-ui,sans-serif; outline:none;
+}
+.nm-ui input[type=text]:focus{ border-color:#A8895A }
+.nm-ui .nm-row{ display:flex; gap:8px; margin-top:10px }
+.nm-ui .nm-row button{
+  flex:1; border-radius:999px; padding:10px 12px; cursor:pointer; border:1px solid #E2D9C6;
+  background:#fff; color:#1C1B18; font:600 11.5px/1 'Figtree',system-ui,sans-serif;
+  letter-spacing:.1em; text-transform:uppercase;
+}
+.nm-ui .nm-row button.nm-save{ background:#0B4337; color:#fff; border-color:#0B4337 }
+.nm-ui .nm-row button:disabled{ opacity:.55; cursor:default }
+.nm-ui .nm-err{ color:#B8431F; font-size:12.5px; margin-top:8px; display:none }
+.nm-ui .nm-meta{ font-size:12px; color:#5F6B66; margin-bottom:6px }
+.nm-ui .nm-text{ white-space:pre-wrap; font-size:14.5px }
+
+@media (max-width:560px){
+  .nm-ui{ position:fixed!important; left:10px!important; right:10px!important;
+    top:auto!important; bottom:10px!important; width:auto!important; }
+}
+
+/* ── the list ────────────────────────────────────────────────────────── */
+#nmlist{
+  position:fixed; top:var(--nm-h); right:0; bottom:0; width:min(370px,100vw);
+  z-index:99997; background:#FCFBF7; border-left:1px solid #E2D9C6;
+  transform:translateX(102%); transition:transform .32s cubic-bezier(.22,1,.36,1);
+  display:flex; flex-direction:column;
+  font:400 14px/1.55 'Figtree',system-ui,sans-serif; color:#1C1B18;
+}
+#nmlist.nm-open{ transform:none }
+#nmlist .nm-head{
+  padding:16px 18px; border-bottom:1px solid #E2D9C6; display:flex;
+  align-items:center; justify-content:space-between; gap:10px;
+}
+#nmlist .nm-head b{ font-size:13px; letter-spacing:.12em; text-transform:uppercase; color:#0B4337 }
+#nmlist .nm-head button{ border:0; background:none; font-size:22px; line-height:1; cursor:pointer; color:#5F6B66 }
+#nmlist .nm-items{ overflow:auto; padding:8px 0 20px; flex:1 }
+#nmlist .nm-item{ width:100%; text-align:left; background:none; border:0; border-bottom:1px solid #EFE8D9;
+  padding:13px 18px; cursor:pointer; display:block }
+#nmlist .nm-item:hover{ background:#F7F4EC }
+#nmlist .nm-item .n{ font-size:11.5px; letter-spacing:.14em; text-transform:uppercase; color:#A8895A }
+#nmlist .nm-item .q{ font-size:12.5px; color:#5F6B66; margin:3px 0 5px;
+  display:-webkit-box; -webkit-line-clamp:1; -webkit-box-orient:vertical; overflow:hidden }
+#nmlist .nm-item .t{ font-size:14px; display:-webkit-box; -webkit-line-clamp:3;
+  -webkit-box-orient:vertical; overflow:hidden }
+#nmlist .nm-empty{ padding:24px 18px; color:#5F6B66; font-size:14px }
+#nmlist .nm-foot{ border-top:1px solid #E2D9C6; padding:12px 18px; font-size:12.5px; color:#5F6B66 }
+
+@media print{ #nmbar,#nmlist,#nmhint,.nm-pin,.nm-ui{ display:none!important } body{ padding-top:0!important } }
+
+/* ── replies ─────────────────────────────────────────────────────────── */
+.nm-ui.nm-thread .nm-body{ max-height:min(62vh,460px); overflow:auto }
+.nm-thread-list:not(:empty){ margin-top:12px; border-top:1px solid #EDE5D5; padding-top:10px }
+.nm-reply{ border-left:2px solid #E2D9C6; padding:8px 0 8px 11px; margin-top:8px }
+.nm-reply .nm-meta{ margin-bottom:3px }
+.nm-replybox{ margin-top:12px; border-top:1px solid #EDE5D5; padding-top:11px }
+.nm-replybox textarea{ min-height:62px }
+#nmlist .nm-item .nm-rc{ display:inline-block; margin-top:6px; font-size:11px;
+  letter-spacing:.12em; text-transform:uppercase; color:#A8895A }
+
+/* ── status, v8 ──────────────────────────────────────────────────────── */
+.nm-st{ display:inline-block; font:600 10px/1 'Figtree',system-ui,sans-serif; letter-spacing:.12em;
+  text-transform:uppercase; border-radius:999px; padding:5px 8px; margin:6px 0 2px; white-space:nowrap }
+.nm-st-done{ background:#E3EDE7; color:#0B4337 }
+.nm-st-check{ background:#F4ECD9; color:#6B4F17 }
+.nm-st-waiting{ background:#FBE6D8; color:#8A3E12 }
+#nmlist .nm-item .nm-st{ margin-top:8px }
+#nmlist .nm-sum{ padding:10px 16px 0; font-size:12px; color:#5F6B66; line-height:2 }
+.nm-pin.nm-check{ background:#E7D7AE }
+.nm-pin.nm-waiting{ background:#E9A77C; color:#3A1A08 }
+
+/* Belt and braces for the same white strip: the closed notes panel sits
+   off-screen to the right, and some mobile browsers count that as width. */
+html{ overflow-x:hidden }
+#nmlist:not(.nm-open){ visibility:hidden; transition:transform .32s cubic-bezier(.22,1,.36,1), visibility 0s .32s }
+#nmlist.nm-open{ visibility:visible; transition:transform .32s cubic-bezier(.22,1,.36,1) }
+
+/* ── editor mode (JCE Media only) ───────────────────────────────────── */
+body.nm-editor #nmbar .nm-lead:after{ content:" \00b7 editor mode"; color:#F4ECD9 }
+.nm-ui .nm-editbtn{ margin-left:8px; border:1px solid #D8CDB6; background:#fff; color:#0B4337;
+  border-radius:999px; padding:2px 9px; font:600 10.5px/1.6 'Figtree',system-ui,sans-serif;
+  letter-spacing:.06em; cursor:pointer }
+.nm-ui .nm-editbtn:hover{ border-color:#0B4337 }
+.nm-ui .nm-stlbl{ display:flex; align-items:center; gap:8px; margin:8px 0 2px; font-size:11.5px;
+  letter-spacing:.1em; text-transform:uppercase; color:#5F6B66 }
+.nm-ui .nm-stsel{ border:1px solid #E2D9C6; border-radius:8px; padding:5px 8px; background:#fff;
+  font:400 13px/1.3 'Figtree',system-ui,sans-serif; color:#1C1B18; text-transform:none; letter-spacing:0 }
+.nm-ui textarea.nm-et{ width:100%; min-height:90px }
