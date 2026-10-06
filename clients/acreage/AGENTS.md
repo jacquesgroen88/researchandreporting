@@ -1,5 +1,11 @@
 # The Acreage website — brief for an agent working on type and style
 
+> **UPDATE 6 Oct 2026: `website-v8/` is now the live build** (review copies in
+> `website-v8-review/`, rebuilt by `JCE Media/clients/Acreage/website/2026-10-05-build-v8-review-copies.py`).
+> `website-v7/` and `website-v7-review/` are frozen. **The font is chosen:** Libre Caslon Text
+> italic for headings, Figtree Light body, Montserrat for the home tagline. Where this file says
+> v7 or "no font chosen" below, read v8 and this type stack.
+
 You are working on a live client website for The Acreage, an event venue and
 restaurant on the Randjesfontein racecourse in Midrand, South Africa. The client
 is Jade Mann. The job in hand is **typography and visual style**.
