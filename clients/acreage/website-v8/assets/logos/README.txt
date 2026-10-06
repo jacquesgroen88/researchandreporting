@@ -1,12 +1,24 @@
 Client logos for the "Previous events" wall on functions.html.
 
-Drop a file here named after the slug in the markup, e.g. absa.png, mtn.png.
-PNG with transparency or SVG. Any height; the wall scales them to a common
-optical size and renders them in a single ink colour, so colour files are fine.
+The wall shows each logo in grey and full colour on hover. A file named after
+the slug in the markup (absa.png, standard-bank.svg ...) replaces the company
+name; if a file is missing the name shows instead, so logos can be added one
+at a time.
 
-If a file is missing the wall falls back to the company name set in type, so
-the page never breaks and logos can be added a few at a time.
+Gathered 6 October 2026:
+  Wikimedia Commons (public domain / CC0 / CC BY-SA): absa, mercedes-benz, mtn,
+    fnb, deloitte, netflix (2015), dhl, siemens, ericsson, telkom, cell-c,
+    spar, nandos, hyundai, sanofi, norton-rose, leroy-merlin, radisson, e-tv,
+    clover, bosch
+  English Wikipedia logo files: tiger-brands, sa-bank-note-company
+  The company's own website: standard-bank, wesbank, tracker, entelect,
+    derivco, datacentrix, wits-health (white backgrounds removed; Entelect and
+    Derivco white lettering darkened so it shows on the light wall)
+  australian-high-commission: the Commonwealth coat of arms (public domain)
+    set beside the name, as the High Commission's own site shows it
 
-These are third party trademarks. They should come from The Acreage's own
-records of each event, with the same client permission being sought for the
-function photographs, rather than being taken off the web.
+Still showing the name: mix-telematics (MiX is now Powerfleet; confirm with
+the client which logo to show).
+
+These are third party trademarks, shown as companies The Acreage has hosted.
+The client should confirm each one is a real past client before go-live.

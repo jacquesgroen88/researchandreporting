@@ -17,6 +17,27 @@
 
   var PEOPLE = ['Jade', 'Jacques'];
   var STATUS = { done: 'Done', check: 'Done, please check', waiting: 'Waiting on you' };
+  var STATUS_OPTS = [['open', 'Open'], ['done', 'Done'], ['check', 'Done, please check'], ['waiting', 'Waiting on you']];
+  var EKEY = null;
+  try { EKEY = localStorage.getItem('nm-editor-key'); } catch (e) {}
+  var EDITOR_PARAM = (location.search + location.hash).match(/[?#&]editor(=off)?\b/);
+  function rpc(fn, body) {
+    return fetch(API.replace(/\/acreage_notes$/, '') + '/rpc/' + fn, {
+      method: 'POST', headers: headers({ 'Content-Type': 'application/json' }), body: JSON.stringify(body)
+    }).then(function (r) {
+      if (!r.ok) return r.text().then(function (t) { throw new Error(t || ('HTTP ' + r.status)); });
+      return r.json();
+    });
+  }
+  function editor() { return !!EKEY; }
+  function setEditor(k) {
+    EKEY = k || null;
+    try { k ? localStorage.setItem('nm-editor-key', k) : localStorage.removeItem('nm-editor-key'); } catch (e) {}
+    document.body.classList.toggle('nm-editor', !!k);
+  }
+  function canEdit(n) { return editor() && n.kind === 'agency'; }
+  function editBtn(n) { return canEdit(n) ? ' <button type="button" class="nm-editbtn" data-id="' + n.id + '">Edit</button>' : ''; }
+  function edited(n) { return n.edited_at ? ' &middot; edited' : ''; }
   function chip(s) { return STATUS[s] ? '<span class="nm-st nm-st-' + s + '">' + STATUS[s] + '</span>' : ''; }
   var all = [];
   var notes = [], on = false, composer = null, bubble = null;
@@ -112,6 +133,14 @@
     '<div class="nm-foot">Jacques can see these as soon as you save them.</div>';
   document.body.appendChild(panel);
 
+  if (EKEY) document.body.classList.add('nm-editor');
+  if (EDITOR_PARAM && EDITOR_PARAM[1]) { setEditor(null); }
+  else if (EDITOR_PARAM && !EKEY) {
+    var k = window.prompt('Editor passcode');
+    if (k) rpc('acreage_editor_check', { p_key: k.trim() }).then(function (ok) {
+      if (ok === true) { setEditor(k.trim()); render(); } else { alert('That passcode did not work.'); }
+    }).catch(function () { alert('Could not check the passcode. Try again.'); });
+  }
   var toggle = bar.querySelector('#nmtoggle');
   var countEl = bar.querySelector('#nmcount');
   var items = panel.querySelector('.nm-items');
@@ -205,8 +234,8 @@
   function openBubble(note, el) {
     close();
     var thread = repliesTo(note.id).map(function (rp) {
-      return '<div class="nm-reply"><div class="nm-meta' + (rp.kind === 'agency' ? ' nm-ameta' : '') + '">' +
-             esc(rp.author || 'Jade') + ' &middot; ' + when(rp.created_at) + '</div>' +
+      return '<div class="nm-reply" data-id="' + rp.id + '"><div class="nm-meta' + (rp.kind === 'agency' ? ' nm-ameta' : '') + '">' +
+             esc(rp.author || 'Jade') + ' &middot; ' + when(rp.created_at) + edited(rp) + editBtn(rp) + '</div>' +
              '<div class="nm-text">' + esc(rp.note) + '</div></div>';
     }).join('');
 
@@ -216,7 +245,11 @@
       '<div class="nm-q"><b>On:</b> ' + esc(note.quote || '') + '</div>' +
       '<div class="nm-body"><div class="nm-meta' + (note.kind === 'agency' ? ' nm-ameta' : '') + '">' +
       esc(note.author || 'Jade') + (note.kind === 'agency' ? ' &middot; suggestion' : '') +
-      ' &middot; ' + when(note.created_at) + '</div>' + chip(note.status) + '<div class="nm-text">' + esc(note.note) + '</div>' +
+      ' &middot; ' + when(note.created_at) + edited(note) + editBtn(note) + '</div>' + chip(note.status) +
+      (editor() ? '<label class="nm-stlbl">Status <select class="nm-stsel">' + STATUS_OPTS.map(function (o) {
+        return '<option value="' + o[0] + '"' + ((note.status || 'open') === o[0] ? ' selected' : '') + '>' + o[1] + '</option>';
+      }).join('') + '</select></label>' : '') +
+      '<div class="nm-text" data-id="' + note.id + '">' + esc(note.note) + '</div>' +
       '<div class="nm-thread-list">' + thread + '</div>' +
       '<div class="nm-replybox">' +
         '<textarea class="nm-rt" placeholder="Reply"></textarea>' +
@@ -232,6 +265,7 @@
     var r = el ? el.getBoundingClientRect() : { left: 40, bottom: 80 };
     place(bubble, r.left + window.scrollX, r.bottom + window.scrollY);
     bubble.querySelector('.nm-cancel').onclick = close;
+    wireEditing(note, el);
 
     bubble.querySelector('.nm-sendreply').onclick = function () {
       var ta = bubble.querySelector('.nm-rt');
@@ -255,6 +289,42 @@
           if (window.console) console.error('[notes]', err);
         });
     };
+  }
+
+  function byId(id) { for (var i = 0; i < all.length; i++) if (all[i].id === id) return all[i]; return null; }
+  function refresh(row) {
+    for (var i = 0; i < all.length; i++) if (all[i].id === row.id) all[i] = row;
+    for (var j = 0; j < notes.length; j++) if (notes[j].id === row.id) notes[j] = row;
+  }
+  function wireEditing(note, el) {
+    if (!editor() || !bubble) return;
+    var sel = bubble.querySelector('.nm-stsel');
+    if (sel) sel.onchange = function () {
+      sel.disabled = true;
+      rpc('acreage_agency_edit', { p_key: EKEY, p_id: note.id, p_status: sel.value })
+        .then(function (row) { refresh(row); openBubble(byId(note.id), el); render(); })
+        .catch(function (err) { sel.disabled = false; alert('Status not saved. ' + (err.message || '')); });
+    };
+    Array.prototype.forEach.call(bubble.querySelectorAll('.nm-editbtn'), function (b) {
+      b.onclick = function () {
+        var id = b.getAttribute('data-id'), row = byId(id);
+        var box = b.closest('.nm-reply') ? b.closest('.nm-reply').querySelector('.nm-text')
+                                         : bubble.querySelector('.nm-body > .nm-text');
+        if (!row || !box || box.querySelector('textarea')) return;
+        box.innerHTML = '<textarea class="nm-et"></textarea>' +
+          '<div class="nm-row"><button type="button" class="nm-ecancel">Cancel</button>' +
+          '<button type="button" class="nm-save nm-esave">Save edit</button></div>';
+        var ta = box.querySelector('textarea'); ta.value = row.note; ta.focus();
+        box.querySelector('.nm-ecancel').onclick = function () { openBubble(byId(note.id), el); };
+        box.querySelector('.nm-esave').onclick = function () {
+          var t = ta.value.trim(); if (!t) { ta.focus(); return; }
+          var sv = this; sv.disabled = true; sv.textContent = 'Saving';
+          rpc('acreage_agency_edit', { p_key: EKEY, p_id: id, p_note: t })
+            .then(function (r2) { refresh(r2); openBubble(byId(note.id), el); render(); })
+            .catch(function (err) { sv.disabled = false; sv.textContent = 'Save edit'; alert('Edit not saved. ' + (err.message || '')); });
+        };
+      };
+    });
   }
 
   /* ── drawing pins and the list ─────────────────────────────────────── */
