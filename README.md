@@ -76,3 +76,13 @@ Each report in this repo represents hours of research, data scraping, and strate
 ---
 
 *Last updated: May 2026 · Maintained by JCE Media*
+
+---
+
+## Related & Connections
+
+- **Part of**: JCE Media (agency pillar) → Mission Control portfolio
+- **Deployed at**: jcereports.netlify.app (Netlify, GitHub repo jacquesgroen88/researchandreporting)
+- **Covers**: client research and reports including ReviewTap competitor ad intelligence
+- **Sibling**: `JCE Media/reports/JCEMediaReports/` (local client report index)
+- **Workflow lineage**: research → report HTML → publish to GitHub → Netlify auto-deploy → share with client
