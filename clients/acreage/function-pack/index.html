@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>The Acreage Function Pack</title>
+<link rel="icon" href="../social/assets/avatar.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;1,400&family=Figtree:wght@300;400;500;600&family=Montserrat:wght@400;500&display=swap">
+<style>
+:root{
+  --paper:#FCFBF7; --linen:#F5F2EA; --ink:#1C1B18; --soft:#44443E; --muted:#6B6759; --line:#E2D9C6;
+  --forest:#0B4337; --brand-gold:#B08A4F; --gold:#7E5F22; --gold-lite:#C3AD84;
+  --head:'Libre Caslon Text',Georgia,'Times New Roman',serif;
+  --body:'Figtree',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --caps:'Montserrat',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:#E9E4D8}
+body{background:#E9E4D8;color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased;padding:72px 16px 80px}
+img{display:block;max-width:100%}
+
+/* screen toolbar */
+.tools{max-width:210mm;margin:0 auto 22px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
+.tools p{font:400 14px/1.5 var(--body);color:var(--soft);max-width:60ch}
+.tools a{display:inline-flex;align-items:center;gap:8px;background:var(--forest);color:var(--gold-lite);border:1px solid rgba(195,173,132,.45);
+  border-radius:99px;padding:13px 22px;font:500 12px/1 var(--caps);letter-spacing:.18em;text-transform:uppercase;text-decoration:none}
+.tools a:hover{background:#063028}
+
+/* ═══ the A4 page, drawn to scale: 100cqw = 210mm ═══ */
+.pg{position:relative;width:100%;max-width:210mm;aspect-ratio:210/297;margin:0 auto 28px;background:var(--paper);
+  container-type:inline-size;overflow:hidden;box-shadow:0 30px 60px -35px rgba(30,30,20,.45)}
+.pg .ph{position:absolute;object-fit:cover}
+.fill{inset:0;width:100%;height:100%}
+.pad{position:absolute;inset:9cqw 9cqw 11cqw}
+.foot{position:absolute;left:9cqw;right:9cqw;bottom:5cqw;display:flex;justify-content:space-between;
+  font:400 1.15cqw/1 var(--caps);letter-spacing:.3em;text-transform:uppercase;color:var(--muted)}
+.foot.w{color:rgba(255,255,255,.8)}
+
+.lb{font:500 1.55cqw/1.3 var(--caps);letter-spacing:.3em;text-transform:uppercase;color:var(--gold)}
+.lb.w{color:#EBDDBF}
+h1,h2,h3{font-family:var(--head);font-style:italic;font-weight:400;color:var(--forest);letter-spacing:-.005em;text-wrap:balance}
+h2{font-size:5.4cqw;line-height:1.1;margin:1.8cqw 0 2.6cqw}
+h3{font-size:3.4cqw;line-height:1.15;margin:.8cqw 0 1.4cqw}
+.p{font:300 1.95cqw/1.62 var(--body);color:var(--soft)}
+.p + .p{margin-top:1.4cqw}
+.a{width:4.2cqw;height:4.6cqw;background:url(assets/Submark-Gold.png) center/contain no-repeat}
+.a.w{background-image:url(assets/Submark-White.png)}
+.no{font:400 italic 2.4cqw/1 var(--head);color:var(--brand-gold)}
+.cap{display:flex;flex-wrap:wrap;gap:1.2cqw 3.6cqw;margin-top:1.8cqw;padding-top:1.6cqw;border-top:.15cqw solid var(--line)}
+.cap div span{display:block;font:500 1.2cqw/1.3 var(--caps);letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+.cap div b{display:block;font:400 italic 2.7cqw/1.2 var(--head);color:var(--forest);margin-top:.4cqw}
+
+/* 1 cover */
+.cover:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,20,15,.45) 0%,rgba(8,20,15,0) 28%,rgba(8,20,15,0) 45%,rgba(8,20,15,.72) 100%)}
+.cover .top{position:absolute;top:9cqw;left:0;right:0;z-index:2;display:flex;flex-direction:column;align-items:center;gap:2.4cqw}
+.cover .top .a{width:7cqw;height:7.7cqw}
+.cover .top .tg{font:400 1.45cqw/1 var(--caps);letter-spacing:.314em;text-transform:uppercase;color:#fff}
+.cover .bot{position:absolute;left:9cqw;right:9cqw;bottom:13cqw;z-index:2;color:#fff}
+.cover h1{color:#fff;font-size:13cqw;line-height:.95;margin:2.4cqw 0 3cqw}
+.cover .sub{font:300 2.3cqw/1.5 var(--body);max-width:34em;color:rgba(255,255,255,.92)}
+.cover .rule{width:12cqw;height:.18cqw;background:var(--gold-lite);margin:3.4cqw 0 0}
+
+/* 2 welcome */
+.welcome .txt{position:absolute;left:9cqw;top:11cqw;width:43cqw}
+.welcome .ph{right:0;top:0;width:40cqw;height:100%}
+.welcome .facts{position:absolute;left:9cqw;width:43cqw;top:88cqw;display:grid;grid-template-columns:1fr 1fr;gap:4cqw 4cqw}
+.welcome .facts div{border-top:.15cqw solid var(--line);padding-top:1.6cqw}
+.welcome .facts b{display:block;font:400 italic 5.4cqw/1 var(--head);color:var(--forest)}
+.welcome .facts span{display:block;margin-top:1cqw;font:300 1.7cqw/1.45 var(--body);color:var(--soft)}
+
+/* 3 the estate */
+.estate .ph{left:0;top:0;width:100%;height:50%}
+.estate .body{position:absolute;left:9cqw;right:9cqw;top:53%}
+.estate table{width:100%;border-collapse:collapse;margin-top:.6cqw}
+.estate td{padding:1.02cqw 0;border-top:.15cqw solid var(--line);font:300 1.95cqw/1.3 var(--body);color:var(--soft);vertical-align:baseline}
+.estate tr:last-child td{border-bottom:.15cqw solid var(--line)}
+.estate td:first-child{color:var(--ink);font-weight:400}
+.estate td.n{text-align:right;font:400 italic 2.5cqw/1.2 var(--head);color:var(--forest);white-space:nowrap}
+.estate .note{margin-top:2cqw;font:300 1.7cqw/1.5 var(--body);color:var(--muted)}
+
+/* 4-6 spaces, two per page */
+.spaces .blk{position:absolute;left:9cqw;right:9cqw}
+.spaces .blk.one{top:8cqw}
+.spaces .blk.two{top:72cqw}
+.spaces .pic{position:relative;width:100%;height:33cqw;overflow:hidden}
+.spaces .pic img{width:100%;height:100%;object-fit:cover}
+.spaces .pic.duo{display:grid;grid-template-columns:1.55fr 1fr;gap:1cqw}
+.spaces .row{display:grid;grid-template-columns:7cqw 1fr;gap:0 2cqw;margin-top:2.6cqw}
+.spaces .row .no{padding-top:1.2cqw}
+.spaces h3{margin-top:0}
+
+/* 7 catering */
+.cater .ph.big{left:0;top:0;width:100%;height:44%}
+.cater .body{position:absolute;left:9cqw;right:9cqw;top:49%}
+.cater .opts{display:grid;grid-template-columns:repeat(3,1fr);gap:0 3cqw;margin-top:2.6cqw}
+.cater .opts div{border-top:.15cqw solid var(--line);padding:1.4cqw 0;font:400 1.9cqw/1.3 var(--body);color:var(--ink)}
+.cater .strip{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4cqw;margin-top:3.4cqw}
+.cater .strip img{width:100%;aspect-ratio:4/3;object-fit:cover}
+
+/* 8 full service + what we host */
+.service .top{position:absolute;left:9cqw;right:9cqw;top:9cqw}
+.service .list{display:grid;grid-template-columns:1fr 1fr;gap:0 5cqw;margin-top:.6cqw}
+.service .list div{display:flex;gap:1.6cqw;align-items:baseline;padding:1.3cqw 0;border-top:.15cqw solid var(--line);font:400 1.95cqw/1.35 var(--body);color:var(--ink)}
+.service .list div:before{content:"";flex:0 0 1.1cqw;height:1.1cqw;border:.18cqw solid var(--brand-gold);border-radius:50%;transform:translateY(.2cqw)}
+.service .host{position:absolute;left:9cqw;right:9cqw;top:50cqw}
+.service .cards{display:grid;grid-template-columns:1fr 1fr;gap:3.4cqw 3.4cqw;margin-top:.4cqw}
+.service .card img{width:100%;aspect-ratio:16/10;object-fit:cover}
+.service .card h3{font-size:2.7cqw;margin:1.6cqw 0 .8cqw}
+.service .card p{font:300 1.75cqw/1.55 var(--body);color:var(--soft)}
+
+/* 9 reviews */
+.reviews .ph{left:0;top:0;width:100%;height:34%}
+.reviews .body{position:absolute;left:9cqw;right:9cqw;top:39%}
+.reviews .stars{display:flex;align-items:baseline;gap:2cqw;margin:-.6cqw 0 2.6cqw}
+.reviews .stars b{font:400 italic 6cqw/1 var(--head);color:var(--forest)}
+.reviews .stars span{font:300 1.85cqw/1.4 var(--body);color:var(--soft)}
+.reviews .q{padding:2.4cqw 0;border-top:.15cqw solid var(--line)}
+.reviews .q:last-child{border-bottom:.15cqw solid var(--line)}
+.reviews .q p{font:400 italic 2.55cqw/1.45 var(--head);color:var(--forest)}
+.reviews .q span{display:block;margin-top:1cqw;font:500 1.2cqw/1.3 var(--caps);letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
+
+/* 10 planning + find us */
+.plan .ph{left:0;top:0;width:100%;height:30%}
+.plan .body{position:absolute;left:9cqw;right:9cqw;top:34%}
+.plan .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:3cqw;margin-top:.4cqw}
+.plan .steps div{border-top:.18cqw solid var(--brand-gold);padding-top:1.6cqw}
+.plan .steps b{display:block;font:400 italic 3.6cqw/1 var(--head);color:var(--brand-gold)}
+.plan .steps p{margin-top:1.2cqw;font:300 1.7cqw/1.5 var(--body);color:var(--soft)}
+.plan .find{display:grid;grid-template-columns:1.2fr 1fr;gap:5cqw;margin-top:6cqw;padding-top:4cqw;border-top:.15cqw solid var(--line)}
+.plan .find h3{font-size:3cqw;margin-top:1cqw}
+.plan .find .k{font:500 1.2cqw/1.3 var(--caps);letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-top:1.6cqw}
+.plan .find .v{font:300 1.9cqw/1.5 var(--body);color:var(--ink);margin-top:.4cqw}
+.plan .find .big{font:400 italic 2.6cqw/1.3 var(--head);color:var(--forest)}
+.plan .sign{position:absolute;left:0;right:0;bottom:9cqw;display:flex;flex-direction:column;align-items:center;gap:1.8cqw}
+.plan .sign .tg{font:400 1.3cqw/1 var(--caps);letter-spacing:.314em;text-transform:uppercase;color:var(--muted)}
+
+/* print: real A4 pages, no review bar */
+@page{size:A4;margin:0}
+@media print{
+  html,body{background:#fff;padding:0}
+  .tools,#nmbar,#nmhint,#nmlist,.nm-pin,.nm-ui{display:none!important}
+  .pg{width:210mm;height:297mm;max-width:none;aspect-ratio:auto;margin:0;box-shadow:none;break-after:page;page-break-after:always}
+  .pg:last-child{break-after:auto;page-break-after:auto}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+@media(max-width:640px){body{padding-inline:10px}}
+</style>
+</head>
+<body data-nm-page="pack" data-nm-lead="The Acreage &middot; function pack &middot; for review">
+
+<div class="tools">
+  <p>The Acreage function pack, ten A4 pages. Comment on anything with <b>Leave a note</b>, or download the PDF to send to clients.</p>
+  <a href="The-Acreage-Function-Pack.pdf" download>Download the PDF</a>
+</div>
+
+<!-- 1 cover -->
+<section class="pg cover">
+  <img class="ph fill" src="assets/V117.jpg" alt="The lawns and stretch tent at The Acreage in the late afternoon">
+  <div class="top"><span class="a w"></span><span class="tg">Event Venue &nbsp;|&nbsp; Restaurant</span></div>
+  <div class="bot">
+    <div class="lb w">Functions &amp; Events &nbsp;·&nbsp; 2026</div>
+    <h1>The Acreage</h1>
+    <p class="sub">A country estate in Midrand for gatherings of every size, from thirty guests at the lapa to five thousand across the whole venue.</p>
+    <div class="rule"></div>
+  </div>
+  <div class="foot w"><span>Randjesfontein, Midrand</span><span>Twenty minutes from Sandton</span></div>
+</section>
+
+<!-- 2 welcome -->
+<section class="pg welcome">
+  <div class="txt">
+    <span class="a" style="display:block;margin-bottom:3cqw"></span>
+    <div class="lb">Welcome</div>
+    <h2>An Estate Made for Gathering</h2>
+    <p class="p">The Acreage is an event venue and restaurant set across acres of lawn, trees and water in Randjesfontein, Midrand. It is close enough to Sandton and Pretoria to be easy for everyone, and far enough from the city to feel like a day out.</p>
+    <p class="p">Each space can be hired on its own or combined, so the estate shapes itself around your event, whether that is a team lunch under a stretch tent or a festival on the lawns.</p>
+  </div>
+  <div class="facts">
+    <div><b>6</b><span>distinct spaces across the estate</span></div>
+    <div><b>5,000</b><span>guests across the whole venue</span></div>
+    <div><b>20 min</b><span>from Sandton, five minutes off the N1</span></div>
+    <div><b>In-house</b><span>catering and fully serviced mobile bars</span></div>
+  </div>
+  <img class="ph" src="assets/V148.jpg" alt="The tree-lined drive into the estate">
+  <div class="foot"><span>The Acreage</span><span>02</span></div>
+</section>
+
+<!-- 3 the estate at a glance -->
+<section class="pg estate">
+  <img class="ph" src="assets/aerial2.jpg" alt="The estate from the air, with the restaurant, lawns and lake">
+  <div class="body">
+    <div class="lb">The Estate</div>
+    <h2>At a Glance</h2>
+    <table>
+      <tr><td>Full venue</td><td class="n">Up to 5,000 guests</td></tr>
+      <tr><td>Restaurant</td><td class="n">150 guests</td></tr>
+      <tr><td>Stretch tent, 10 × 12 m</td><td class="n">100 to 150 guests</td></tr>
+      <tr><td>Restaurant lawns</td><td class="n">300 to 400 guests</td></tr>
+      <tr><td>Lakeside lapa</td><td class="n">30 to 90 guests</td></tr>
+      <tr><td>Lawns around the lapa</td><td class="n">Up to 3,000 guests</td></tr>
+      <tr><td>Entrance lawns</td><td class="n">300 to 400 guests</td></tr>
+      <tr><td>Top lawns</td><td class="n">Extends larger events</td></tr>
+    </table>
+    <p class="note">Every space can be hired on its own or together with the others. The lapa can be extended with stretch tents.</p>
+  </div>
+  <div class="foot"><span>The Acreage</span><span>03</span></div>
+</section>
+
+<!-- 4 spaces: full venue, restaurant -->
+<section class="pg spaces">
+  <div class="blk one">
+    <div class="pic"><img src="assets/fn-hero.jpg" alt="An event spread across the lawns"></div>
+    <div class="row"><span class="no">01</span><div>
+      <h3>Full Venue</h3>
+      <p class="p">The whole estate: the restaurant and its lawns, the lakeside lapa and the lawns around it, and two more expansive lawned areas, for events on the largest scale.</p>
+      <div class="cap"><div><span>Capacity</span><b>Up to 5,000 guests</b></div></div>
+    </div></div>
+  </div>
+  <div class="blk two">
+    <div class="pic duo"><img src="assets/W24.jpg" alt="The restaurant interior"><img src="assets/V122.jpg" alt="The stretch tent beside the restaurant"></div>
+    <div class="row"><span class="no">02</span><div>
+      <h3>Restaurant Venue</h3>
+      <p class="p">An elegant terraced space overlooking the racecourse, with the option to extend onto the adjoining tented lawn. The restaurant and the tent can be hired separately or together.</p>
+      <div class="cap"><div><span>Restaurant</span><b>150 guests</b></div><div><span>Stretch tent</span><b>100 to 150 guests</b></div></div>
+    </div></div>
+  </div>
+  <div class="foot"><span>The Spaces</span><span>04</span></div>
+</section>
+
+<!-- 5 spaces: restaurant lawns, lapa -->
+<section class="pg spaces">
+  <div class="blk one">
+    <div class="pic"><img src="assets/V115.jpg" alt="The restaurant lawns in late light"></div>
+    <div class="row"><span class="no">03</span><div>
+      <h3>Restaurant Lawns</h3>
+      <p class="p">Rolling lawns that run down from the restaurant. Use them to extend the restaurant, or hire them as an event space of their own.</p>
+      <div class="cap"><div><span>Capacity</span><b>300 to 400 guests</b></div></div>
+    </div></div>
+  </div>
+  <div class="blk two">
+    <div class="pic duo"><img src="assets/V96.jpg" alt="The thatched lapa by the water"><img src="assets/V74.jpg" alt="The lawns around the lapa"></div>
+    <div class="row"><span class="no">04</span><div>
+      <h3>Lakeside Lapa</h3>
+      <p class="p">A private lapa and bar beside the water, opening onto wide lawns. Intimate on its own, with room around it for a far larger event.</p>
+      <div class="cap"><div><span>Lapa</span><b>30 to 90 guests</b></div><div><span>Surrounding lawns</span><b>Up to 3,000 guests</b></div></div>
+    </div></div>
+  </div>
+  <div class="foot"><span>The Spaces</span><span>05</span></div>
+</section>
+
+<!-- 6 spaces: entrance lawns, top lawns -->
+<section class="pg spaces">
+  <div class="blk one">
+    <div class="pic"><img src="assets/V104.jpg" alt="The entrance lawns beneath established trees"></div>
+    <div class="row"><span class="no">05</span><div>
+      <h3>Entrance Lawns</h3>
+      <p class="p">A generous lawned area beneath established trees, with plenty of shade and open space.</p>
+      <div class="cap"><div><span>Capacity</span><b>300 to 400 guests</b></div></div>
+    </div></div>
+  </div>
+  <div class="blk two">
+    <div class="pic"><img src="assets/aerial1.jpg" alt="The estate from above"></div>
+    <div class="row"><span class="no">06</span><div>
+      <h3>Top Lawns</h3>
+      <p class="p">Extra ground that extends the footprint of larger events: room for activities, activations, production or additional parking. Hired alongside another space rather than on its own.</p>
+      <div class="cap"><div><span>Use</span><b>Extends larger events</b></div></div>
+    </div></div>
+  </div>
+  <div class="foot"><span>The Spaces</span><span>06</span></div>
+</section>
+
+<!-- 7 catering -->
+<section class="pg cater">
+  <img class="ph big" src="assets/L73.jpg" alt="A long table set with sharing plates">
+  <div class="body">
+    <div class="lb">Catering &amp; Bars</div>
+    <h2>Canapés to Braais, Food Trucks and Mobile Bars</h2>
+    <p class="p">Our in-house catering and bar capabilities are what set The Acreage apart. From plated meals, platters and canapés to braais, spit braais and an extensive selection of food trucks, we cater for events of every style and scale, with mobile bars for events of any size.</p>
+    <div class="opts"><div>Plated meals</div><div>Platters &amp; canapés</div><div>Braais &amp; spit braais</div><div>Food trucks</div><div>Mobile bars</div><div>Drinks packages</div></div>
+    <div class="strip"><img src="assets/x-platter1.jpg" alt="A fruit platter"><img src="assets/D13.jpg" alt="A cocktail at the bar"><img src="assets/L39.jpg" alt="Ribs from the grill"></div>
+  </div>
+  <div class="foot"><span>Catering menus available on request</span><span>07</span></div>
+</section>
+
+<!-- 8 full service + what we host -->
+<section class="pg service">
+  <div class="top">
+    <div class="lb">Full Service Venue</div>
+    <h2>Everything in One Place</h2>
+    <div class="list">
+      <div>Versatile in-house catering</div><div>Fully serviced mobile bars</div>
+      <div>Ample, secure on-site parking</div><div>Back-up power</div>
+      <div>A permanent stretch tent</div><div>A trusted supplier network</div>
+    </div>
+  </div>
+  <div class="host">
+    <div class="lb">What We Host</div>
+    <div class="cards" style="margin-top:2.4cqw">
+      <div class="card"><img src="assets/x-night2.jpg" alt="Stretch tents lit up for an evening function"><h3>Corporate Events</h3><p>Year-end functions, team days and family days, twenty minutes from Sandton.</p></div>
+      <div class="card"><img src="assets/x-room.jpg" alt="The restaurant set for a celebration"><h3>Celebrations</h3><p>Milestone birthdays, bridal and baby showers, long lunches and lively evenings.</p></div>
+      <div class="card"><img src="assets/host-weddings-b.jpg" alt="A table set for a wedding dinner"><h3>Weddings</h3><p>Sweeping lawns and country surroundings, the canvas for the day you have in mind.</p></div>
+      <div class="card"><img src="assets/Market-Day.jpg" alt="A market on the lawns"><h3>Markets, Fairs &amp; Expos</h3><p>Acres of green and room for thousands, for public events of every kind.</p></div>
+    </div>
+  </div>
+  <div class="foot"><span>The Acreage</span><span>08</span></div>
+</section>
+
+<!-- 9 reviews -->
+<section class="pg reviews">
+  <img class="ph" src="assets/D34.jpg" alt="Two glasses of wine in the afternoon sun">
+  <div class="body">
+    <div class="lb">What Guests Say</div>
+    <h2>In Their Words</h2>
+    <div class="stars"><b>4.7</b><span>out of 5 on Google, from 84 reviews</span></div>
+    <div class="q"><p>&ldquo;The venue is absolutely breathtaking. The driveway to the restaurant was so beautiful. The food was amazing.&rdquo;</p><span>Vash, bridal shower</span></div>
+    <div class="q"><p>&ldquo;We had such a fun party at your amazing venue! Everything was perfect.&rdquo;</p><span>Christine, 40th birthday</span></div>
+    <div class="q"><p>&ldquo;Feel like you&rsquo;re on a farm. Well priced food, awesome waitron, and really tasty.&rdquo;</p><span>Barrie, Google Local Guide</span></div>
+  </div>
+  <div class="foot"><span>The Acreage</span><span>09</span></div>
+</section>
+
+<!-- 10 planning + find us -->
+<section class="pg plan">
+  <img class="ph" src="assets/V158.jpg" alt="Sunset through the trees on the estate">
+  <div class="body">
+    <div class="lb">Planning Your Event</div>
+    <h2>Four Simple Steps</h2>
+    <div class="steps">
+      <div><b>1</b><p>Send us your date, your guest count and the kind of event you have in mind.</p></div>
+      <div><b>2</b><p>Come and walk the estate with our events team and see each space for yourself.</p></div>
+      <div><b>3</b><p>We send a tailored quote covering the space, catering, bars and set-up.</p></div>
+      <div><b>4</b><p>Confirm your date, and we take care of the rest.</p></div>
+    </div>
+    <div class="find">
+      <div>
+        <div class="lb">Find Us</div>
+        <h3>Five Minutes off the N1</h3>
+        <div class="k">Address</div><div class="v">Cnr Tlokwa &amp; Olievenhoutbosch Rd<br>Randjesfontein, Midrand</div>
+        <div class="k">Getting here</div><div class="v">Five minutes from the Samrand interchange, twenty minutes from Sandton and about the same from Pretoria.</div>
+      </div>
+      <div>
+        <div class="lb">Event Bookings</div>
+        <div class="k">Email</div><div class="v big">events@acreagevenue.co.za</div>
+        <div class="k">Phone</div><div class="v big">076 014 8081</div>
+        <div class="k">Website</div><div class="v big">acreagevenue.co.za</div>
+      </div>
+    </div>
+  </div>
+  <div class="sign"><span class="a"></span><span class="tg">The Acreage &nbsp;·&nbsp; Event Venue &nbsp;|&nbsp; Restaurant</span></div>
+</section>
+
+<link rel="stylesheet" href="../social/notes.css">
+<script src="../social/notes.js"></script>
+</body>
+</html>
