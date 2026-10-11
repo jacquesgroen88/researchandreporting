@@ -6,134 +6,287 @@
 <title>A Blueprint for Pixsan | JCE Media</title>
 <meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --ink:#0f1219; --muted:#48525f; --line:#e4e7ec; --soft:#f6f7f9;
-  --pink:#ff1f63; --pink-dk:#d6004f; --dark:#08080b;
-  --display:'Anton',Impact,sans-serif; --body:'Poppins',system-ui,sans-serif;
+  color-scheme:light;
+  --bg:#f5f8fe; --card:#fff; --ink:#101a2e; --ink2:#2a3650; --muted:#5b6b86; --line:#e7edf8; --track:#e9eef8;
+  --blue:#2f6bf6; --blue-dk:#1f55d6; --indigo:#6366f1; --violet:#8b5cf6; --coral:#f0703f;
+  --grad:linear-gradient(135deg,#2f6bf6 0%,#6366f1 55%,#8b5cf6 100%);
+  --shadow:0 6px 18px rgba(38,66,120,.07); --shadow-lg:0 18px 48px rgba(38,66,120,.12);
+  --head:'Space Grotesk',system-ui,sans-serif; --body:'Inter',system-ui,sans-serif;
 }
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
-body{margin:0;background:#fff;color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.65}
-a{color:var(--pink-dk)}
-.wrap{max-width:860px;margin:0 auto;padding:0 20px}
-header{background:var(--dark);color:#fff;padding:56px 0 48px}
-header .kicker{color:var(--pink);font-weight:600;letter-spacing:.12em;text-transform:uppercase;font-size:13px}
-header h1{font-family:var(--display);font-weight:400;font-size:clamp(38px,7vw,64px);line-height:1.05;margin:10px 0 18px;text-transform:uppercase;letter-spacing:.01em}
-header p{color:rgba(255,255,255,.78);max-width:620px;margin:0}
-header .meta{margin-top:26px;font-size:14px;color:rgba(255,255,255,.55)}
-section{padding:44px 0;border-bottom:1px solid var(--line)}
-section:last-of-type{border-bottom:0}
-h2{font-family:var(--display);font-weight:400;text-transform:uppercase;font-size:clamp(26px,4.4vw,36px);line-height:1.1;margin:0 0 6px;letter-spacing:.01em}
-.num{color:var(--pink);font-weight:700;font-size:13px;letter-spacing:.12em;text-transform:uppercase;display:block;margin-bottom:6px}
-h3{font-size:18px;margin:26px 0 6px}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:var(--blue-dk)}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+.narrow{max-width:760px}
+h1,h2,h3{font-family:var(--head);letter-spacing:-.02em;line-height:1.12;margin:0}
 p{margin:12px 0}
-.lede{font-size:18px;color:var(--muted)}
-.items{display:grid;grid-template-columns:1fr;gap:14px;margin-top:22px}
-@media(min-width:700px){.items{grid-template-columns:1fr 1fr}}
-.item{border:1px solid var(--line);border-top:4px solid var(--pink);border-radius:6px;padding:18px 20px;background:#fff}
-.item h3{margin:0 0 6px;font-size:17px}
-.item p{margin:0 0 8px;font-size:15px;color:var(--muted)}
-.item ul{margin:6px 0 0;padding-left:18px;font-size:15px}
-.item li{margin:2px 0}
-.ex{background:var(--soft);border-radius:8px;padding:22px 22px 18px;margin:26px 0}
-.ex .from{font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
-.ex h3{margin:6px 0 10px}
-.quote{border-left:4px solid var(--pink);background:#fff;padding:14px 16px;margin:12px 0;font-size:15px}
-.quote b{display:block;font-size:17px}
-.forpix{margin-top:14px;font-size:15px}
-.forpix strong{color:var(--pink-dk)}
-.tbl{width:100%;overflow-x:auto;margin:12px 0}
-table{border-collapse:collapse;width:100%;min-width:480px;font-size:14px;background:#fff}
-th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
-th{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
-.seen{list-style:none;padding:0;margin:18px 0 0}
-.seen li{padding:14px 0;border-bottom:1px solid var(--line)}
-.seen li:last-child{border-bottom:0}
-.seen b{display:block}
-.steps{counter-reset:s;list-style:none;padding:0;margin:18px 0 0}
-.steps li{position:relative;padding:0 0 18px 48px}
-.steps li::before{counter-increment:s;content:counter(s);position:absolute;left:0;top:0;width:32px;height:32px;border-radius:50%;background:var(--pink);color:#fff;font-weight:700;display:grid;place-items:center;font-size:14px}
-.steps b{display:block}
-.price{display:flex;flex-wrap:wrap;gap:16px;margin:20px 0}
-.price .box{flex:1 1 220px;border:1px solid var(--line);border-radius:8px;padding:18px 20px}
-.price .big{font-family:var(--display);font-size:44px;line-height:1}
-.price .small{color:var(--muted);font-size:14px}
-.strike{text-decoration:line-through;color:var(--muted)}
-.cta{background:var(--dark);color:#fff;border-radius:10px;padding:28px 24px;margin-top:10px}
+
+/* ---------- hero ---------- */
+.hero{position:relative;overflow:hidden;background:#0a0a0a;color:#fff;padding:28px 0 72px}
+.hero::before{content:'';position:absolute;width:820px;height:820px;right:-260px;top:-380px;border-radius:50%;
+  background:radial-gradient(closest-side,rgba(99,102,241,.55),rgba(47,107,246,.18) 55%,transparent 72%)}
+.hero::after{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:48px 48px;
+  -webkit-mask-image:linear-gradient(180deg,#000 0%,transparent 85%);mask-image:linear-gradient(180deg,#000 0%,transparent 85%)}
+.hero .wrap{position:relative;z-index:1}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:64px}
+.topbar img{height:30px;width:auto;display:block}
+.topbar span{font-size:13px;color:rgba(255,255,255,.55)}
+.chip{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);border-radius:9999px;padding:6px 14px;font-size:13px;color:rgba(255,255,255,.8)}
+.chip i{width:7px;height:7px;border-radius:50%;background:#7c9dff;box-shadow:0 0 0 4px rgba(124,157,255,.18)}
+.hero h1{font-size:clamp(40px,7.2vw,78px);font-weight:700;margin:22px 0 22px;max-width:880px}
+.grad-text{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .lede{font-size:clamp(17px,2.2vw,20px);color:rgba(255,255,255,.74);max-width:640px;margin:0}
+.hero-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;margin-top:52px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.08);border-radius:14px;overflow:hidden}
+@media(min-width:760px){.hero-stats{grid-template-columns:repeat(4,1fr)}}
+.hero-stats div{background:#0f0f12;padding:20px 22px}
+.hero-stats b{display:block;font-family:var(--head);font-size:34px;font-weight:600;letter-spacing:-.02em}
+.hero-stats span{font-size:13px;color:rgba(255,255,255,.55)}
+
+/* ---------- sections ---------- */
+section{padding:84px 0}
+section + section{padding-top:0}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--blue)}
+.eyebrow .n{display:grid;place-items:center;width:28px;height:28px;border-radius:8px;background:var(--grad);color:#fff;font-family:var(--head);font-size:13px;letter-spacing:0}
+h2{font-size:clamp(30px,4.6vw,46px);font-weight:700;margin:14px 0 14px}
+.sub{font-size:18px;color:var(--muted);max-width:720px}
+.body-copy p{color:var(--ink2);font-size:17px}
+.pull{font-family:var(--head);font-size:clamp(22px,3vw,28px);font-weight:500;line-height:1.3;letter-spacing:-.01em;border-left:4px solid;border-image:var(--grad) 1;padding:4px 0 4px 22px;margin:28px 0;color:var(--ink)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}
+.grid2{display:grid;gap:18px;grid-template-columns:1fr}
+@media(min-width:760px){.grid2{grid-template-columns:1fr 1fr}}
+.grid4{display:grid;gap:16px;grid-template-columns:1fr}
+@media(min-width:640px){.grid4{grid-template-columns:1fr 1fr}}
+@media(min-width:980px){.grid4{grid-template-columns:repeat(4,1fr)}}
+
+/* sessions */
+.session{padding:26px 24px;position:relative;overflow:hidden}
+.session .tag{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.session h3{font-size:22px;margin:8px 0 4px}
+.session .len{font-size:14px;color:var(--blue-dk);font-weight:600}
+.session ul{margin:14px 0 0;padding:0;list-style:none}
+.session li{position:relative;padding:6px 0 6px 24px;font-size:15px;color:var(--ink2);border-top:1px solid var(--line)}
+.session li::before{content:'';position:absolute;left:2px;top:14px;width:10px;height:10px;border-radius:3px;background:var(--grad)}
+.session.feat{background:var(--grad);border:0;color:#fff;box-shadow:var(--shadow-lg)}
+.session.feat .tag,.session.feat .len{color:rgba(255,255,255,.8)}
+.session.feat li{color:#fff;border-color:rgba(255,255,255,.2)}
+.session.feat li::before{background:#fff}
+
+/* covers */
+.cover{padding:22px 22px 20px}
+.cover .k{font-family:var(--head);font-size:14px;font-weight:600;color:var(--blue)}
+.cover h3{font-size:19px;margin:6px 0 6px}
+.cover p{margin:0 0 10px;font-size:14.5px;color:var(--muted)}
+.cover ul{margin:0;padding-left:18px;font-size:14.5px;color:var(--ink2)}
+.cover li{margin:3px 0}
+
+/* examples */
+.example{padding:30px 28px;margin-top:22px}
+@media(max-width:600px){.example{padding:22px 18px}}
+.example .src{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:var(--bg);border:1px solid var(--line);border-radius:9999px;padding:5px 12px}
+.example h3{font-size:clamp(22px,3vw,28px);margin:14px 0 6px}
+.example .what{color:var(--muted);margin:0 0 22px;max-width:680px}
+.forpix{margin-top:24px;background:linear-gradient(135deg,rgba(47,107,246,.07),rgba(139,92,246,.07));border:1px solid rgba(99,102,241,.18);border-radius:12px;padding:16px 18px;font-size:15.5px;color:var(--ink2)}
+.forpix b{color:var(--blue-dk);font-family:var(--head)}
+.cap{font-size:13px;color:var(--muted);margin-top:12px}
+.ex-grid{display:grid;gap:28px;grid-template-columns:1fr;align-items:center}
+@media(min-width:860px){.ex-grid{grid-template-columns:.85fr 1.15fr}}
+.bignum{font-family:var(--head);font-size:clamp(52px,8vw,80px);font-weight:700;letter-spacing:-.04em;line-height:1}
+.bignum small{display:block;font-size:16px;font-weight:500;letter-spacing:0;color:var(--muted);margin-top:10px;font-family:var(--body);line-height:1.5}
+
+/* ---------- charts: html bars ---------- */
+.legend{display:flex;flex-wrap:wrap;gap:18px;font-size:13px;color:var(--muted);margin:0 0 16px}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+.legend i{width:12px;height:12px;border-radius:3px;display:inline-block}
+.hb{display:grid;gap:14px}
+.hb-row{display:grid;grid-template-columns:minmax(120px,190px) 1fr auto;align-items:center;gap:14px}
+@media(max-width:560px){.hb-row{grid-template-columns:1fr auto}.hb-row .lbl{grid-column:1/-1;margin-bottom:-8px}}
+.hb-row .lbl{font-size:14px;color:var(--ink2);line-height:1.3}
+.hb-track{position:relative;height:22px}
+.hb-bar{position:absolute;left:0;top:0;height:22px;border-radius:0 4px 4px 0;background:var(--blue);transform-origin:left;transition:filter .15s}
+.hb-bar:hover{filter:brightness(1.12)}
+.hb-val{position:absolute;top:0;line-height:22px;font-size:13px;font-weight:600;color:var(--ink);padding-left:8px;white-space:nowrap}
+.pill{font-size:12px;font-weight:600;border-radius:9999px;padding:3px 10px;background:var(--bg);border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.pill.fast{background:#eaf1ff;border-color:#cfdcff;color:var(--blue-dk)}
+.axis{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:6px;margin-top:8px}
+
+.strip{margin:0 0 20px}
+.strip .top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-size:14px;color:var(--ink2);margin-bottom:8px}
+.strip .top b{font-family:var(--head);font-size:20px;color:var(--ink)}
+.strip .bar{display:flex;gap:2px;height:30px}
+.strip .bar div{border-radius:4px}
+.strip .hl{background:var(--blue)}
+.strip .rest{background:var(--track);flex:1}
+
+.range{display:grid;gap:14px}
+.range-row{display:grid;grid-template-columns:minmax(120px,180px) 1fr;gap:14px;align-items:center}
+@media(max-width:560px){.range-row{grid-template-columns:1fr}}
+.range-row .lbl{font-size:14px;color:var(--ink2);line-height:1.3}
+.range-row .lbl small{display:block;color:var(--muted);font-size:12.5px}
+.range-track{position:relative;height:24px;background:repeating-linear-gradient(90deg,transparent 0,transparent calc(25% - 1px),var(--line) calc(25% - 1px),var(--line) 25%)}
+.range-bar{position:absolute;top:1px;height:22px;border-radius:4px}
+.range-axis{display:grid;grid-template-columns:minmax(120px,180px) 1fr;gap:14px}
+@media(max-width:560px){.range-axis{grid-template-columns:1fr}.range-axis>span:first-child{display:none}}
+.range-axis .ticks{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:6px}
+
+.vb{display:flex;align-items:flex-end;gap:10px;height:200px;border-bottom:1px solid var(--line);padding-top:26px}
+.vb-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;position:relative;min-width:0}
+.vb-col .bar{width:100%;max-width:56px;border-radius:4px 4px 0 0;background:#c9d4e8;position:relative}
+.vb-col .bar.on{background:var(--blue)}
+.vb-col .v{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:6px}
+.vb-x{display:flex;gap:10px;margin-top:8px}
+.vb-x span{flex:1;text-align:center;font-size:12.5px;color:var(--muted);min-width:0}
+
+.cases{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:6px}
+.case{border:1px solid var(--line);border-radius:12px;padding:14px 14px 12px;background:var(--bg)}
+.case.on{background:var(--grad);border:0;color:#fff}
+.case span{font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;opacity:.75}
+.case b{display:block;font-family:var(--head);font-size:clamp(20px,3vw,26px);margin-top:4px}
+.case small{font-size:12.5px;opacity:.75}
+
+svg text{font-family:var(--body)}
+.chart-svg{width:100%;height:auto;display:block;overflow:visible}
+
+/* gantt */
+.gantt{display:grid;gap:10px}
+.g-row{display:grid;grid-template-columns:minmax(110px,150px) 1fr;gap:14px;align-items:center}
+@media(max-width:560px){.g-row{grid-template-columns:1fr}}
+.g-row .lbl{font-size:14px;font-weight:500;color:var(--ink2)}
+.g-track{position:relative;height:30px;background:repeating-linear-gradient(90deg,transparent 0,transparent calc(100%/28 - 1px),rgba(231,237,248,.9) calc(100%/28 - 1px),rgba(231,237,248,.9) calc(100%/28))}
+.g-bar{position:absolute;top:4px;height:22px;border-radius:4px;background:#c9d4e8;font-size:12px;color:var(--ink2);padding:0 8px;line-height:22px;white-space:nowrap;overflow:visible}
+.g-bar.blue{background:var(--blue);color:#fff}
+.g-dot{position:absolute;top:0;width:30px;height:30px;margin-left:-15px;border-radius:50%;background:var(--grad);color:#fff;font-family:var(--head);font-weight:700;font-size:13px;display:grid;place-items:center;box-shadow:0 0 0 3px #fff,0 6px 14px rgba(47,107,246,.35)}
+.g-axis{display:grid;grid-template-columns:minmax(110px,150px) 1fr;gap:14px}
+@media(max-width:560px){.g-axis{grid-template-columns:1fr}.g-axis>span:first-child{display:none}}
+.g-axis .ticks{position:relative;height:20px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
+.g-axis .ticks span{position:absolute;top:4px;transform:translateX(-50%);white-space:nowrap}
+@media(max-width:560px){.g-bar{font-size:0;padding:0}}
+
+/* observations */
+.obs{display:grid;gap:18px;grid-template-columns:1fr}
+@media(min-width:900px){.obs{grid-template-columns:1.2fr 1fr}}
+.obs-list{display:grid;gap:14px}
+.obs-item{padding:18px 20px}
+.obs-item .k{font-family:var(--head);font-size:13px;font-weight:600;color:var(--blue);letter-spacing:.04em;text-transform:uppercase}
+.obs-item b{display:block;font-family:var(--head);font-size:18px;margin:4px 0 4px;line-height:1.3}
+.obs-item p{margin:0;font-size:15px;color:var(--muted)}
+
+/* price */
+.price-card{padding:34px 30px;display:grid;gap:28px;grid-template-columns:1fr}
+@media(min-width:820px){.price-card{grid-template-columns:1fr 1fr;align-items:center}}
+.price-main .was{font-size:15px;color:var(--muted)}
+.price-main .was s{font-family:var(--head);font-size:22px;margin-right:8px}
+.price-main .now{font-family:var(--head);font-size:clamp(56px,9vw,84px);font-weight:700;letter-spacing:-.04em;line-height:1}
+.price-main .note{color:var(--muted);font-size:15px;margin-top:8px}
+.split{display:flex;gap:2px;height:14px;margin:18px 0 8px}
+.split div{border-radius:4px}
+.split-l{display:flex;justify-content:space-between;font-size:14px;color:var(--ink2)}
+.split-l b{font-family:var(--head)}
+.price-list{list-style:none;margin:0;padding:0}
+.price-list li{display:flex;gap:12px;padding:10px 0;border-top:1px solid var(--line);font-size:15px;color:var(--ink2)}
+.price-list li:first-child{border-top:0}
+.tick{flex:0 0 22px;height:22px;border-radius:50%;background:#eaf1ff;display:grid;place-items:center;margin-top:1px}
+.tick svg{width:12px;height:12px}
+
+/* cta */
+.cta{position:relative;overflow:hidden;background:#0a0a0a;color:#fff;border-radius:22px;padding:52px 34px}
+.cta::before{content:'';position:absolute;width:600px;height:600px;left:-200px;bottom:-360px;border-radius:50%;background:radial-gradient(closest-side,rgba(47,107,246,.5),transparent 70%)}
+.cta>*{position:relative}
 .cta h2{color:#fff}
-.cta p{color:rgba(255,255,255,.8)}
-.cta a{color:#ff7fa3}
-footer{padding:28px 0 48px;color:var(--muted);font-size:13px}
-@media print{header{-webkit-print-color-adjust:exact;print-color-adjust:exact}.cta{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+.cta p{color:rgba(255,255,255,.75);font-size:17px;max-width:620px}
+.btn{display:inline-flex;align-items:center;gap:10px;margin-top:14px;background:var(--grad);color:#fff;text-decoration:none;font-weight:600;border-radius:9999px;padding:13px 24px;font-size:15px}
+footer{padding:34px 0 50px;font-size:13px;color:var(--muted)}
+
+/* tooltip */
+#tip{position:fixed;pointer-events:none;z-index:50;background:#101a2e;color:#fff;font-size:13px;line-height:1.45;padding:9px 12px;border-radius:8px;box-shadow:0 10px 24px rgba(16,26,46,.25);max-width:260px;opacity:0;transition:opacity .12s}
+#tip.on{opacity:1}
+[data-tip]{cursor:default}
+@media print{.hero,.cta,.session.feat,.case.on{-webkit-print-color-adjust:exact;print-color-adjust:exact}section{padding:40px 0}}
 </style>
 </head>
 <body>
 
-<header>
+<header class="hero">
   <div class="wrap">
-    <span class="kicker">Prepared for Sam Agia, Pixsan</span>
-    <h1>A 7-Figure Blueprint for Pixsan</h1>
-    <p>Two weeks working on Pixsan itself, not on a client. We do it together on live working sessions, and you finish with a plan your team has already agreed to: where the next clients come from, what you sell them, and who does what each week.</p>
-    <div class="meta">Jacques Groenewald &middot; JCE Media &middot; 11 October 2026</div>
+    <div class="topbar">
+      <img src="https://jcemedia.com/assets/case-studies/jcemedialogomain.png" alt="JCE Media">
+      <span>Prepared for Sam Agia &middot; 11 October 2026</span>
+    </div>
+    <span class="chip"><i></i>A 7-Figure Blueprint proposal</span>
+    <h1>Pixsan's growth, given the same structure as a <span class="grad-text">client's.</span></h1>
+    <p class="lede">Two weeks working on Pixsan itself. We do it together across three working sessions, and you finish with a plan your team has already agreed to.</p>
+    <div class="hero-stats">
+      <div><b>14</b><span>days, start to finish</span></div>
+      <div><b>3</b><span>working sessions together</span></div>
+      <div><b>8</b><span>areas of the business covered</span></div>
+      <div><b>90</b><span>day plan, with owners</span></div>
+    </div>
   </div>
 </header>
 
 <main>
 
 <section>
-  <div class="wrap">
-    <span class="num">Why I'm suggesting this</span>
+  <div class="wrap narrow body-copy">
+    <span class="eyebrow"><span class="n">01</span>Why I'm suggesting this</span>
     <h2>Following up on our chat about the Blueprint</h2>
-    <p class="lede">When we spoke about it a while back, I said I thought there was big potential in Pixsan. I still think that.</p>
-    <p>I've spent the last few months inside Pixsan's delivery on Mako and Lifeport, so I know how you work and what your team can carry. And as agency owners we both have the same habit: we put most of our energy into growing other people's businesses, and our own gets whatever time is left over.</p>
-    <p>The Blueprint is what fixes that. It gives the growth of Pixsan the same structure you give a client's: a clear picture of where things stand, a decision on where to focus, and a plan with owners and dates. It isn't a report I go away and write. We work through the business together on calls, I do the research in between, and every big decision gets made with you, not for you.</p>
+    <p>When we spoke about it a while back, I said I thought there was big potential in Pixsan. I still think that.</p>
+    <p>I've spent the last few months inside Pixsan's delivery on Mako and Lifeport, so I know how you work and what your team can carry. And as agency owners we both have the same habit.</p>
+    <div class="pull">We put most of our energy into growing other people's businesses, and our own gets whatever time is left over.</div>
+    <p>The Blueprint gives the growth of Pixsan the same structure you give a client's: a clear picture of where things stand, a decision on where to focus, and a plan with owners and dates. It isn't a report I go away and write. We work through the business together, I do the research in between, and every big decision gets made with you, not for you.</p>
     <p>I only take on two Blueprints a month, because of the time each one needs from me. I'd like one of those slots to be Pixsan's.</p>
   </div>
 </section>
 
 <section>
   <div class="wrap">
-    <span class="num">The time we spend together</span>
+    <span class="eyebrow"><span class="n">02</span>The time we spend together</span>
     <h2>Three working sessions, and me on WhatsApp in between</h2>
-    <p class="lede">This part is the real work. The documents are where it gets written down.</p>
+    <p class="sub">This part is the real work. The documents are where it gets written down.</p>
 
-    <div class="items">
-      <div class="item">
+    <div class="grid4" style="margin-top:30px">
+      <div class="card session">
+        <span class="tag">Week one</span>
         <h3>Session 1: the deep dive</h3>
-        <p>90 minutes, early in week one. You, and Anri if possible.</p>
+        <span class="len">90 minutes &middot; you, and Anri if possible</span>
         <ul>
-          <li>Where Pixsan is now and where you want it in 12 months</li>
+          <li>Where Pixsan is now, and where you want it in 12 months</li>
           <li>Every client, service and lead source, one by one</li>
           <li>What's worked, what hasn't, and what you'd rather stop doing</li>
           <li>The ideas you've had and not had time for</li>
-          <li>We set up access to your accounts during the call, so nothing waits on email</li>
+          <li>Account access set up on the call, so nothing waits on email</li>
         </ul>
       </div>
-      <div class="item">
+      <div class="card session feat">
+        <span class="tag">End of week one</span>
         <h3>Session 2: the working session</h3>
-        <p>60 minutes, end of week one.</p>
+        <span class="len">60 minutes</span>
         <ul>
           <li>I show you what the research turned up, with the evidence</li>
-          <li>We test the findings against what you know and I don't</li>
+          <li>We test it against what you know and I don't</li>
           <li>We pick the direction together: which offer, which clients, which channels</li>
-          <li>Anything you disagree with gets settled here, before the plan is written</li>
+          <li>Anything you disagree with gets settled before the plan is written</li>
         </ul>
       </div>
-      <div class="item">
+      <div class="card session">
+        <span class="tag">End of week two</span>
         <h3>Session 3: the plan, walked through</h3>
-        <p>90 minutes, end of week two. Your whole team is welcome.</p>
+        <span class="len">90 minutes &middot; your whole team welcome</span>
         <ul>
-          <li>The full diagnosis and the 90-day plan, section by section</li>
+          <li>The diagnosis and the 90-day plan, section by section</li>
           <li>The hours each phase takes, and who on your team does it</li>
           <li>Your questions, as many as you have</li>
           <li>Everyone leaves knowing their first week's tasks</li>
         </ul>
       </div>
-      <div class="item">
+      <div class="card session">
+        <span class="tag">Throughout</span>
         <h3>In between</h3>
-        <p>You won't go two weeks without hearing from me.</p>
+        <span class="len">You won't go two weeks without hearing from me</span>
         <ul>
           <li>WhatsApp or email when I find something worth knowing</li>
           <li>Quick questions answered the same day, both ways</li>
@@ -141,212 +294,181 @@ footer{padding:28px 0 48px;color:var(--muted);font-size:13px}
         </ul>
       </div>
     </div>
-    <p>All three sessions are recorded and transcribed, so nobody has to take notes and nothing that gets said is lost. Your own words end up in the plan.</p>
+
+    <div class="card example">
+      <span class="src">How the 14 days run</span>
+      <h3>Where the sessions fall</h3>
+      <p class="what">Research and writing happen between the sessions, so each call starts from something new.</p>
+      <div class="gantt" id="gantt"></div>
+      <p class="cap">All three sessions are recorded and transcribed, so nobody has to take notes and your own words end up in the plan. Your time: about four hours in total.</p>
+    </div>
   </div>
 </section>
 
 <section>
   <div class="wrap">
-    <span class="num">What we cover</span>
+    <span class="eyebrow"><span class="n">03</span>What we cover</span>
     <h2>Eight parts, one plan</h2>
-    <p>These are the areas we work through in the sessions. Each one ends up as a document in the finished Blueprint. You keep all of it, and it's written so your own team (or anyone else) could run it without me.</p>
+    <p class="sub">The areas we work through in the sessions. Each ends up as a document in the finished Blueprint. You keep all of it, and it's written so your own team (or anyone else) could run it without me.</p>
 
-    <div class="items">
-      <div class="item">
-        <h3>1. The diagnostic</h3>
-        <p>Where Pixsan actually stands, with the numbers.</p>
-        <ul>
-          <li>Revenue by client and by service</li>
-          <li>How concentrated the book is</li>
-          <li>Delivery cost and margin per service line</li>
-          <li>Where leads come from today, and what each source is worth</li>
-        </ul>
-      </div>
-      <div class="item">
-        <h3>2. Competitor teardown</h3>
-        <p>The San Diego agencies you lose to, or would lose to.</p>
-        <ul>
-          <li>What they rank and advertise for</li>
-          <li>We request their quotes and join their lists</li>
-          <li>How they package and price</li>
-          <li>Where they're weak, so you know where to push</li>
-        </ul>
-      </div>
-      <div class="item">
-        <h3>3. Offer and pricing</h3>
-        <p>What Pixsan sells, and in what order.</p>
-        <ul>
-          <li>Your four services reviewed as products</li>
-          <li>Project vs retainer, and what keeps a client past month six</li>
-          <li>Where the AI and automation work fits as its own offer</li>
-          <li>A price ladder from first project to full retainer</li>
-        </ul>
-      </div>
-      <div class="item">
-        <h3>4. Getting found</h3>
-        <p>How the right businesses hear about you.</p>
-        <ul>
-          <li>Local search and the content you already publish</li>
-          <li>Whether ChatGPT and Google's AI answers name you</li>
-          <li>Paid channels, only if the numbers support it</li>
-          <li>Partners who already sell to your buyers</li>
-        </ul>
-      </div>
-      <div class="item">
-        <h3>5. Referrals, on purpose</h3>
-        <p>Turning your best channel into something you can run.</p>
-        <ul>
-          <li>When to ask, who asks, and what they say</li>
-          <li>What a referral partner gets</li>
-          <li>Reactivating past clients and the 75+ sites you've launched</li>
-        </ul>
-      </div>
-      <div class="item">
-        <h3>6. From enquiry to signed</h3>
-        <p>What happens after someone clicks "Let's Talk".</p>
-        <ul>
-          <li>Response time and follow-up</li>
-          <li>The discovery call and the proposal</li>
-          <li>The automations that stop leads going cold</li>
-        </ul>
-      </div>
-      <div class="item">
-        <h3>7. The money model</h3>
-        <p>What the plan should produce, on three cases.</p>
-        <ul>
-          <li>Downside, base and stretch, month by month</li>
-          <li>Every assumption printed so you can argue with it</li>
-          <li>What would break the model</li>
-        </ul>
-      </div>
-      <div class="item">
-        <h3>8. The 90-day plan</h3>
-        <p>The part your team works from on Monday.</p>
-        <ul>
-          <li>Workstreams with an owner each (you, Anri, Samantha)</li>
-          <li>Weekly tasks for the first 90 days</li>
-          <li>The four numbers that tell you if it's working</li>
-        </ul>
-      </div>
+    <div class="grid4" style="margin-top:30px">
+      <div class="card cover"><span class="k">01</span><h3>The diagnostic</h3><p>Where Pixsan stands, with the numbers.</p>
+        <ul><li>Revenue by client and by service</li><li>How concentrated the book is</li><li>Delivery cost and margin per service</li><li>What each lead source is worth</li></ul></div>
+      <div class="card cover"><span class="k">02</span><h3>Competitor teardown</h3><p>The San Diego agencies you're up against.</p>
+        <ul><li>What they rank and advertise for</li><li>We request their quotes and join their lists</li><li>How they package and price</li><li>Where they're weak</li></ul></div>
+      <div class="card cover"><span class="k">03</span><h3>Offer and pricing</h3><p>What Pixsan sells, and in what order.</p>
+        <ul><li>Your four services reviewed as products</li><li>Project vs retainer, and what keeps a client past month six</li><li>Where the AI and automation work fits</li><li>A price ladder, first project to retainer</li></ul></div>
+      <div class="card cover"><span class="k">04</span><h3>Getting found</h3><p>How the right businesses hear about you.</p>
+        <ul><li>Local search and the content you publish</li><li>Whether ChatGPT and Google's AI answers name you</li><li>Paid, only if the numbers support it</li><li>Partners who already sell to your buyers</li></ul></div>
+      <div class="card cover"><span class="k">05</span><h3>Referrals, on purpose</h3><p>Your best channel, made into something you run.</p>
+        <ul><li>When to ask, who asks, what they say</li><li>What a referral partner gets</li><li>Reactivating past clients and the 75+ sites you've launched</li></ul></div>
+      <div class="card cover"><span class="k">06</span><h3>Enquiry to signed</h3><p>What happens after someone clicks "Let's Talk".</p>
+        <ul><li>Response time and follow-up</li><li>The discovery call and the proposal</li><li>The automations that stop leads going cold</li></ul></div>
+      <div class="card cover"><span class="k">07</span><h3>The money model</h3><p>What the plan should produce.</p>
+        <ul><li>Downside, base and stretch, month by month</li><li>Every assumption printed, so you can argue with it</li><li>What would break it</li></ul></div>
+      <div class="card cover"><span class="k">08</span><h3>The 90-day plan</h3><p>What your team works from on Monday.</p>
+        <ul><li>Workstreams with an owner each</li><li>Weekly tasks for the first 90 days</li><li>The four numbers that say it's working</li></ul></div>
     </div>
   </div>
 </section>
 
 <section>
   <div class="wrap">
-    <span class="num">What it looks like</span>
-    <h2>Examples from a finished one</h2>
-    <p>The best example I can give you is the Blueprint I wrote for my own product business, ReviewTap. It sells NFC review cards and stands in South Africa, so the figures are in rand, but the method is the same. The full thing is public: <a href="https://jcereports.netlify.app/seven-figure-blueprint/">jcereports.netlify.app/seven-figure-blueprint</a>.</p>
-    <p>Here are four pieces of it, and what the same piece would look at for Pixsan.</p>
+    <span class="eyebrow"><span class="n">04</span>What it looks like</span>
+    <h2>Examples from a finished Blueprint</h2>
+    <p class="sub">These come from the Blueprint I wrote for my own product business, ReviewTap. It sells NFC review cards and stands in South Africa, so the figures are in rand, but the method is the same. The whole thing is public at <a href="https://jcereports.netlify.app/seven-figure-blueprint/">jcereports.netlify.app/seven-figure-blueprint</a>.</p>
 
-    <div class="ex">
-      <div class="from">From the executive summary</div>
+    <!-- Example 1 -->
+    <div class="card example">
+      <span class="src">ReviewTap &middot; Executive summary</span>
       <h3>One number that explains the business</h3>
-      <div class="quote"><b>55 orders produced R299,458</b>Out of 817 lifetime orders, the 55 worth R2,500 or more brought in about 31% of all revenue from 6.7% of orders. Nobody had marketed to that group. It happened by accident.</div>
-      <p class="forpix"><strong>For Pixsan:</strong> the same question asked of your client list. Which clients, services and lead sources actually make the money, and is any of it being chased on purpose?</p>
+      <div class="ex-grid">
+        <div class="bignum">6.7%<small>of orders brought in 31% of all revenue. That's 55 orders out of 817, worth R299,458. Nobody had marketed to them. It happened by accident.</small></div>
+        <div>
+          <div class="strip" data-tip="55 of 817 lifetime orders were worth R2,500 or more">
+            <div class="top"><span>Share of orders</span><b>6.7%</b></div>
+            <div class="bar"><div class="hl" style="width:6.7%"></div><div class="rest"></div></div>
+          </div>
+          <div class="strip" data-tip="Those 55 orders produced R299,458, about 31% of lifetime revenue">
+            <div class="top"><span>Share of revenue</span><b>31%</b></div>
+            <div class="bar"><div class="hl" style="width:31%"></div><div class="rest"></div></div>
+          </div>
+          <p class="cap">Orders worth R2,500 or more, against all lifetime orders.</p>
+        </div>
+      </div>
+      <div class="forpix"><b>For Pixsan:</b> the same question asked of your client list. Which clients, services and lead sources actually make the money, and is any of it being chased on purpose?</div>
     </div>
 
-    <div class="ex">
-      <div class="from">From the leak map</div>
+    <!-- Example 2 -->
+    <div class="card example">
+      <span class="src">ReviewTap &middot; The leak map</span>
       <h3>Where money is leaving, costed and ranked</h3>
-      <div class="tbl"><table>
-        <thead><tr><th>#</th><th>Leak</th><th>Est. monthly cost</th><th>Effort</th></tr></thead>
-        <tbody>
-          <tr><td>1</td><td>No bulk pricing, no bulk page, no bulk enquiry route</td><td>R25,000+</td><td>Low</td></tr>
-          <tr><td>3</td><td>Best-converting search term blocked as a negative keyword</td><td>R12,000</td><td>Minutes</td></tr>
-          <tr><td>4</td><td>Courier fee killing large carts at checkout</td><td>R9,000</td><td>Low</td></tr>
-        </tbody>
-      </table></div>
-      <p>Eleven leaks in total. Every estimate says where its number came from, and the ones that are assumptions say so.</p>
-      <p class="forpix"><strong>For Pixsan:</strong> enquiries that never got a follow-up, past clients nobody went back to, services priced below what they cost to deliver. Each one with a dollar figure next to it.</p>
+      <p class="what">Eleven leaks in total. The six biggest are below. Every estimate says where its number came from, and the ones that rest on an assumption say so.</p>
+      <div class="hb" id="leaks"></div>
+      <p class="cap">Estimated monthly revenue lost, in rand. Label on the right is the effort to fix it.</p>
+      <div class="forpix"><b>For Pixsan:</b> enquiries that never got a follow-up, past clients nobody went back to, services priced below what they cost to deliver. Each one with a dollar figure next to it.</div>
     </div>
 
-    <div class="ex">
-      <div class="from">From outbound and partnerships</div>
+    <!-- Example 3 -->
+    <div class="card example">
+      <span class="src">ReviewTap &middot; Outbound and partnerships</span>
       <h3>Which motion to run first, and why</h3>
-      <div class="tbl"><table>
-        <thead><tr><th>Motion</th><th>Target</th><th>Cycle</th><th>Priority</th></tr></thead>
-        <tbody>
-          <tr><td>Group escalation</td><td>Head office of groups already buying branch by branch</td><td>4 to 12 weeks</td><td>First</td></tr>
-          <tr><td>Reorder and expansion</td><td>Customers who bought fewer units than they need</td><td>Days</td><td>First</td></tr>
-          <tr><td>Cold named accounts</td><td>Multi-site groups with no relationship yet</td><td>8 to 16 weeks</td><td>Second</td></tr>
-        </tbody>
-      </table></div>
-      <p class="forpix"><strong>For Pixsan:</strong> the warm motions first. Past clients, the people who already refer you, and businesses that sell to the same owners you do. Cold outbound comes later, if at all.</p>
+      <p class="what">The warmest leads in the business were its own invoices. Those motions are fast and need no ad spend, so they go first. Cold outreach is real, but it waits.</p>
+      <div class="legend"><span><i style="background:var(--blue)"></i>Run first</span><span><i style="background:var(--coral)"></i>Run second</span></div>
+      <div class="range" id="motions"></div>
+      <div class="range-axis" style="margin-top:8px"><span></span><div class="ticks"><span>0</span><span>4 wks</span><span>8 wks</span><span>12 wks</span><span>16 wks</span></div></div>
+      <p class="cap">Typical time from first contact to a closed deal.</p>
+      <div class="forpix"><b>For Pixsan:</b> the warm motions first. Past clients, the people who already refer you, and businesses that sell to the same owners you do. Cold outbound comes later, if at all.</div>
     </div>
 
-    <div class="ex">
-      <div class="from">From the project plan</div>
-      <h3>Six workstreams, each with an owner and a share of effort</h3>
-      <div class="tbl"><table>
-        <thead><tr><th>Workstream</th><th>Covers</th><th>Effort</th></tr></thead>
-        <tbody>
-          <tr><td>Foundation and offer</td><td>Pricing ladder, store pages, stock</td><td>15%</td></tr>
-          <tr><td>Search and site</td><td>SEO, guides, AI visibility</td><td>25%</td></tr>
-          <tr><td>Outbound and partnerships</td><td>Group accounts, reorders, resellers</td><td>30%</td></tr>
-          <tr><td>Systems and measurement</td><td>Dashboard, tracking, reporting</td><td>Rest</td></tr>
-        </tbody>
-      </table></div>
-      <p class="forpix"><strong>For Pixsan:</strong> the same layout, sized to what you, Anri and Samantha can carry alongside client work. No plan that needs a hire you haven't made.</p>
+    <!-- Example 4 -->
+    <div class="card example">
+      <span class="src">ReviewTap &middot; The money model</span>
+      <h3>What the plan should produce, month by month</h3>
+      <p class="what">The month-12 number matters less than the ramp, because the ramp shows when cash actually arrives. Every lever behind it has its assumption printed next to it.</p>
+      <div class="ex-grid" style="align-items:start">
+        <div>
+          <div class="cases">
+            <div class="case" data-tip="Outbound done only on and off, about one group account a month"><span>Low</span><b>R58k</b><small>per month</small></div>
+            <div class="case on" data-tip="Nine hours a week of outbound, kept up for twelve months"><span>Base</span><b>R114k</b><small>per month</small></div>
+            <div class="case" data-tip="Base, plus a second person selling from month four"><span>High</span><b>R196k</b><small>per month</small></div>
+          </div>
+          <p class="cap">Added monthly revenue by month 12, on three cases. The variable that moves it most is whether outbound gets done every week.</p>
+        </div>
+        <div>
+          <svg class="chart-svg" id="ramp" viewBox="0 0 560 250" role="img" aria-label="Base case added monthly revenue rising from R12,000 in month 1 to R114,000 in month 12"></svg>
+          <p class="cap">Base case, added monthly revenue in rand. Months 7 to 12 are given as ranges in the source and shown here spread evenly across them.</p>
+        </div>
+      </div>
+      <div class="forpix"><b>For Pixsan:</b> the same three cases built on your real numbers, so you can see what the plan is worth before anyone commits time to it.</div>
+    </div>
+
+    <!-- Example 5 -->
+    <div class="card example">
+      <span class="src">ReviewTap &middot; The project plan</span>
+      <h3>Where the effort goes</h3>
+      <p class="what">Six workstreams, each with an owner. The biggest share goes to the work that produces revenue soonest, and infrastructure comes after.</p>
+      <div class="hb" id="effort"></div>
+      <p class="cap">Share of total effort over twelve months.</p>
+      <div class="forpix"><b>For Pixsan:</b> the same layout, sized to what you, Anri and Samantha can carry alongside client work. No plan that needs a hire you haven't made.</div>
     </div>
   </div>
 </section>
 
 <section>
   <div class="wrap">
-    <span class="num">A head start</span>
+    <span class="eyebrow"><span class="n">05</span>A head start</span>
     <h2>Three things I noticed already</h2>
-    <p>From an hour on pixsansolutions.com. None of these are conclusions yet. They're the kind of thread the Blueprint pulls properly.</p>
-    <ul class="seen">
-      <li><b>Your homepage says 80% of clients come from referrals, with 90% retention.</b>Strong numbers. If they hold up, the cheapest growth is more of the same, run on purpose instead of left to chance, and the plan should start there and not with ads.</li>
-      <li><b>17 blog posts, all on San Diego SEO.</b>Roughly one a month, the latest on 15 September. Worth checking which of them bring in enquiries, and whether the AI and automation work you now do shows up anywhere a buyer would find it.</li>
-      <li><b>Four services on the site, and the newer work isn't one of them.</b>Design and development, lead generation, local SEO, and reviews and reputation. The CRM, automation and AI work Pixsan delivers for clients like Mako isn't listed.</li>
-    </ul>
-  </div>
-</section>
-
-<section>
-  <div class="wrap">
-    <span class="num">How it runs</span>
-    <h2>The two weeks, day by day</h2>
-    <ol class="steps">
-      <li><b>Day 1: we get going</b>A short questionnaire and a list of what I need: read access to Analytics and Search Console, and a client list with rough revenue. That stays between us, and I'm happy to sign an NDA.</li>
-      <li><b>Days 1 to 3: Session 1, the deep dive</b>90 minutes together on the whole business.</li>
-      <li><b>Days 3 to 7: research</b>Market research, the competitor teardown and the diagnostic. You'll hear from me when something turns up.</li>
-      <li><b>Days 7 to 8: Session 2, the working session</b>We go through the findings and choose the direction together.</li>
-      <li><b>Days 8 to 13: the plan gets written</b>Offer, channels and the 90-day plan, built on what we agreed in session 2.</li>
-      <li><b>Day 14: Session 3, the plan walked through</b>We go through every section with your team. You get the full set of documents.</li>
-      <li><b>Days 15 to 28: follow-up</b>I stay on hand while you start running it.</li>
-    </ol>
-    <p>Your time: about four hours across the three sessions, the questionnaire, and whatever quick questions come up in between.</p>
-  </div>
-</section>
-
-<section>
-  <div class="wrap">
-    <span class="num">Investment</span>
-    <h2>One fee, in two parts</h2>
-    <div class="price">
-      <div class="box">
-        <div class="small">Standard Blueprint</div>
-        <div class="big strike">$3,000</div>
+    <p class="sub">From an hour on pixsansolutions.com. None of these are conclusions yet. They're the kind of thread the Blueprint pulls properly.</p>
+    <div class="obs" style="margin-top:28px">
+      <div class="card example" style="margin-top:0">
+        <span class="src">pixsansolutions.com &middot; blog posts per year</span>
+        <h3 style="font-size:22px">Content came back this year</h3>
+        <p class="what" style="margin-bottom:6px">Eight posts in 2026, one a month since February. Only four in the five years before that.</p>
+        <div class="vb" id="posts"></div>
+        <div class="vb-x" id="posts-x"></div>
+        <p class="cap">From the site's own post archive. 2026 runs to 15 September.</p>
       </div>
-      <div class="box">
-        <div class="small">For Pixsan, as an existing partner</div>
-        <div class="big">$2,000</div>
+      <div class="obs-list">
+        <div class="card obs-item"><span class="k">Referrals</span><b>80% of clients from referrals, 90% retention</b><p>That's what your homepage says. If it holds up, the cheapest growth is more of the same, run on purpose, and the plan should start there and not with ads.</p></div>
+        <div class="card obs-item"><span class="k">Content</span><b>Every 2026 post is about San Diego SEO</b><p>Worth checking which of them bring in enquiries, and whether the AI and automation work you do now shows up anywhere a buyer would find it.</p></div>
+        <div class="card obs-item"><span class="k">Services</span><b>Four services listed, and the newer work isn't one of them</b><p>Design and development, lead generation, local SEO, and reviews and reputation. The CRM, automation and AI work Pixsan delivers for clients like Mako isn't on the site.</p></div>
       </div>
     </div>
-    <p><b>$1,200</b> to book the kickoff, and <b>$800</b> after session 3. So you see the whole plan before you pay the second half.</p>
-    <p>Paid in USD through Wise, the same as now. It's a one-off. There's no retainer attached, and nothing in the plan assumes JCE builds it.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <span class="eyebrow"><span class="n">06</span>Investment</span>
+    <h2>One fee, in two parts</h2>
+    <div class="card price-card" style="margin-top:28px">
+      <div class="price-main">
+        <div class="was"><s>$3,000</s>standard Blueprint</div>
+        <div class="now">$2,000</div>
+        <div class="note">For Pixsan, as an existing partner. Paid in USD through Wise, the same as now.</div>
+        <div class="split"><div style="flex:60;background:var(--blue)"></div><div style="flex:40;background:#c9d4e8"></div></div>
+        <div class="split-l"><span><b>$1,200</b> to book session 1</span><span><b>$800</b> after session 3</span></div>
+      </div>
+      <ul class="price-list">
+        <li><span class="tick"><svg viewBox="0 0 12 12"><path d="M2 6.5l2.5 2.5L10 3.5" fill="none" stroke="#1f55d6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Three working sessions, recorded and transcribed</li>
+        <li><span class="tick"><svg viewBox="0 0 12 12"><path d="M2 6.5l2.5 2.5L10 3.5" fill="none" stroke="#1f55d6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Research, competitor teardown and the costed diagnostic</li>
+        <li><span class="tick"><svg viewBox="0 0 12 12"><path d="M2 6.5l2.5 2.5L10 3.5" fill="none" stroke="#1f55d6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>The full Blueprint, with the 90-day plan and owners</li>
+        <li><span class="tick"><svg viewBox="0 0 12 12"><path d="M2 6.5l2.5 2.5L10 3.5" fill="none" stroke="#1f55d6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Two weeks of follow-up while you start running it</li>
+        <li><span class="tick"><svg viewBox="0 0 12 12"><path d="M2 6.5l2.5 2.5L10 3.5" fill="none" stroke="#1f55d6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>You see the whole plan before you pay the second half</li>
+        <li><span class="tick"><svg viewBox="0 0 12 12"><path d="M2 6.5l2.5 2.5L10 3.5" fill="none" stroke="#1f55d6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>One-off. No retainer, and nothing in the plan assumes I build it</li>
+      </ul>
+    </div>
   </div>
 </section>
 
 <section>
   <div class="wrap">
     <div class="cta">
-      <h2>Next step</h2>
-      <p>If you want to do it, reply and I'll send the questionnaire and a couple of kickoff times. If you'd rather talk it through first, 20 minutes is enough.</p>
-      <p>Jacques &middot; <a href="mailto:jacques@jcemedia.com">jacques@jcemedia.com</a></p>
+      <span class="eyebrow" style="color:#9db4ff">Next step</span>
+      <h2>Let's book session 1</h2>
+      <p>If you want to do it, reply and I'll send a couple of times for the first session. If you'd rather talk it through first, 20 minutes is enough.</p>
+      <a class="btn" href="mailto:jacques@jcemedia.com?subject=Pixsan%20Blueprint">Reply to Jacques</a>
     </div>
   </div>
 </section>
@@ -357,5 +479,136 @@ footer{padding:28px 0 48px;color:var(--muted);font-size:13px}
   <div class="wrap">JCE Media &middot; Duel Digital (Pty) Ltd &middot; Prepared for Pixsan Solutions only.</div>
 </footer>
 
+<div id="tip" role="tooltip"></div>
+
+<script>
+(function(){
+  function el(tag, cls, html){ var e=document.createElement(tag); if(cls) e.className=cls; if(html!=null) e.innerHTML=html; return e; }
+
+  /* ---- leak map ---- */
+  var leaks=[
+    {l:'Group demand not escalated to head office',v:30,t:'R30k+',e:'Medium'},
+    {l:'No bulk pricing or bulk enquiry route',v:25,t:'R25k+',e:'Low'},
+    {l:'Google Search underfunded',v:18,t:'R18k',e:'Low'},
+    {l:'No reorder motion on proven buyers',v:14,t:'R14k',e:'Medium'},
+    {l:'Best search term blocked as a negative',v:12,t:'R12k',e:'Minutes'},
+    {l:'Courier fee killing bulk carts',v:9,t:'R9k',e:'Low'}
+  ];
+  hbars('leaks', leaks, 36, function(r){ return '<span class="pill'+(r.e!=='Medium'?' fast':'')+'">'+r.e+'</span>'; },
+    function(r){ return r.l+'<br>About '+r.t+' a month &middot; effort: '+r.e; });
+
+  /* ---- effort split ---- */
+  var effort=[
+    {l:'Outbound and partnerships',v:30,t:'30%',d:'Group accounts, reorders, resellers'},
+    {l:'Search and site',v:25,t:'25%',d:'SEO, guides, AI visibility'},
+    {l:'Foundation and offer',v:15,t:'15%',d:'Pricing ladder, store pages, stock'},
+    {l:'Paid rebuild',v:15,t:'15%',d:'Google restructure, Meta, cart recovery'},
+    {l:'Content and community',v:10,t:'10%',d:'Calendar, associations, case studies'},
+    {l:'Systems and measurement',v:5,t:'5%',d:'Dashboard, tracking, reporting'}
+  ];
+  hbars('effort', effort, 34, null, function(r){ return r.l+': '+r.t+'<br>'+r.d; });
+
+  function hbars(id, rows, max, right, tip){
+    var root=document.getElementById(id);
+    rows.forEach(function(r){
+      var row=el('div','hb-row');
+      row.appendChild(el('div','lbl',r.l));
+      var tr=el('div','hb-track'); var pct=r.v/max*100;
+      var b=el('div','hb-bar'); b.style.width=pct+'%'; b.setAttribute('data-tip',tip(r));
+      var v=el('div','hb-val',r.t); v.style.left=pct+'%';
+      tr.appendChild(b); tr.appendChild(v); row.appendChild(tr);
+      row.appendChild(right?el('div','',right(r)):el('div'));
+      root.appendChild(row);
+    });
+  }
+
+  /* ---- outbound motions (weeks) ---- */
+  var motions=[
+    {l:'Reorder and expansion',s:'Customers who bought too few',a:0,b:1,c:'blue',txt:'Days'},
+    {l:'Group escalation',s:'Head offices already buying',a:4,b:12,c:'blue',txt:'4 to 12 weeks'},
+    {l:'Channel recruitment',s:'Agencies and print shops',a:2,b:6,c:'coral',txt:'2 to 6 weeks'},
+    {l:'Cold named accounts',s:'No relationship yet',a:8,b:16,c:'coral',txt:'8 to 16 weeks'}
+  ];
+  var mr=document.getElementById('motions');
+  motions.forEach(function(m){
+    var row=el('div','range-row');
+    row.appendChild(el('div','lbl',m.l+'<small>'+m.s+'</small>'));
+    var tr=el('div','range-track');
+    var b=el('div','range-bar'); b.style.left=(m.a/16*100)+'%'; b.style.width=Math.max((m.b-m.a)/16*100,2.5)+'%';
+    b.style.background=m.c==='blue'?'var(--blue)':'var(--coral)';
+    b.setAttribute('data-tip',m.l+': '+m.txt+(m.c==='blue'?' &middot; run first':' &middot; run second'));
+    var lab=el('div','hb-val',m.txt); lab.style.left=(m.b/16*100)+'%';
+    if(m.b>=14){ lab.style.left='auto'; lab.style.right=(100-m.a/16*100)+'%'; lab.style.paddingLeft='0'; lab.style.paddingRight='8px'; }
+    tr.appendChild(b); tr.appendChild(lab); row.appendChild(tr); mr.appendChild(row);
+  });
+
+  /* ---- 14-day gantt ---- */
+  var g=document.getElementById('gantt'), D=28;
+  function pos(d){ return ((d-1)/(D-1)*100)+'%'; }
+  function grow(label){ var r=el('div','g-row'); r.appendChild(el('div','lbl',label)); var t=el('div','g-track'); r.appendChild(t); g.appendChild(r); return t; }
+  var st=grow('Sessions');
+  [[2,'1','Session 1, the deep dive: 90 minutes'],[8,'2','Session 2, the working session: 60 minutes'],[14,'3','Session 3, the plan walked through: 90 minutes']].forEach(function(s){
+    var d=el('div','g-dot',s[1]); d.style.left=pos(s[0]); d.setAttribute('data-tip','Day '+s[0]+' &middot; '+s[2]); st.appendChild(d);
+  });
+  [['Research, then writing',[[3,7,'Research','blue','Market research, competitor teardown, the diagnostic'],[9,13,'Plan written','blue','Offer, channels and the 90-day plan, built on what we agreed']]],
+   ['Follow-up',[[15,28,'Follow-up while you run it','','Two weeks of support after session 3']]]].forEach(function(row){
+    var t=grow(row[0]);
+    row[1].forEach(function(b){ var e=el('div','g-bar'+(b[3]?' '+b[3]:''),b[2]); e.style.left=pos(b[0]); e.style.width='calc('+((b[1]-b[0])/(D-1)*100)+'%)'; e.setAttribute('data-tip','Days '+b[0]+' to '+b[1]+' &middot; '+b[4]); t.appendChild(e); });
+  });
+  var ax=el('div','g-axis'); ax.appendChild(el('span')); var ticks=el('div','ticks');
+  [1,7,14,21,28].forEach(function(d){ var s=el('span','', 'Day '+d); s.style.left=pos(d); if(d===1) s.style.transform='none'; if(d===28) s.style.transform='translateX(-100%)'; ticks.appendChild(s); });
+  ax.appendChild(ticks); g.appendChild(ax);
+
+  /* ---- Pixsan posts per year ---- */
+  var posts=[[2020,5],[2021,0],[2022,1],[2023,0],[2024,2],[2025,1],[2026,8]];
+  var pr=document.getElementById('posts'), px=document.getElementById('posts-x');
+  posts.forEach(function(p){
+    var c=el('div','vb-col'); c.appendChild(el('div','v',p[1]));
+    var b=el('div','bar'+(p[0]===2026?' on':'')); b.style.height=Math.max(p[1]/8*150,2)+'px';
+    b.setAttribute('data-tip',p[0]+': '+p[1]+' post'+(p[1]===1?'':'s')); c.appendChild(b); pr.appendChild(c);
+    px.appendChild(el('span','',"'"+String(p[0]).slice(2)));
+  });
+
+  /* ---- money model ramp (svg) ---- */
+  var ramp=[12,24,38,52,64,76,88,94,100,106,110,114];
+  var svg=document.getElementById('ramp'), NS='http://www.w3.org/2000/svg';
+  var L=46,R=530,T=20,B=214, ymax=120;
+  function X(i){ return L+i*(R-L)/(ramp.length-1); } function Y(v){ return B-v/ymax*(B-T); }
+  function s(tag,attrs,txt){ var e=document.createElementNS(NS,tag); for(var k in attrs) e.setAttribute(k,attrs[k]); if(txt!=null) e.textContent=txt; svg.appendChild(e); return e; }
+  [0,40,80,120].forEach(function(v){ s('line',{x1:L,x2:R,y1:Y(v),y2:Y(v),stroke:'#e7edf8','stroke-width':1}); s('text',{x:L-10,y:Y(v)+4,'text-anchor':'end','font-size':12,fill:'#5b6b86'}, v===0?'0':'R'+v+'k'); });
+  [1,3,6,9,12].forEach(function(m){ s('text',{x:X(m-1),y:B+22,'text-anchor':'middle','font-size':12,fill:'#5b6b86'},'M'+m); });
+  var dA='M'+X(0)+','+B, dL='';
+  ramp.forEach(function(v,i){ dA+=' L'+X(i)+','+Y(v); dL+=(i?' L':'M')+X(i)+','+Y(v); });
+  dA+=' L'+X(ramp.length-1)+','+B+' Z';
+  var defs=s('defs',{}); var lg=document.createElementNS(NS,'linearGradient'); lg.setAttribute('id','rg'); lg.setAttribute('x1','0'); lg.setAttribute('x2','1');
+  [['0','#2f6bf6'],['1','#8b5cf6']].forEach(function(st){ var o=document.createElementNS(NS,'stop'); o.setAttribute('offset',st[0]); o.setAttribute('stop-color',st[1]); lg.appendChild(o); }); defs.appendChild(lg);
+  s('path',{d:dA,fill:'#2f6bf6','fill-opacity':.1});
+  s('path',{d:dL,fill:'none',stroke:'url(#rg)','stroke-width':2.5,'stroke-linejoin':'round','stroke-linecap':'round'});
+  var guide=s('line',{x1:0,x2:0,y1:T,y2:B,stroke:'#5b6b86','stroke-width':1,opacity:0});
+  var hov=s('circle',{r:5,fill:'#2f6bf6',stroke:'#fff','stroke-width':2,opacity:0});
+  s('circle',{cx:X(11),cy:Y(114),r:5,fill:'#8b5cf6',stroke:'#fff','stroke-width':2});
+  s('text',{x:X(11)-10,y:Y(114)-12,'text-anchor':'end','font-size':13,'font-weight':600,fill:'#101a2e'},'R114k by month 12');
+  s('circle',{cx:X(0),cy:Y(12),r:5,fill:'#2f6bf6',stroke:'#fff','stroke-width':2});
+  s('text',{x:X(0)+12,y:Y(12)+18,'font-size':13,'font-weight':600,fill:'#101a2e'},'R12k in month 1');
+  ramp.forEach(function(v,i){
+    var w=(R-L)/(ramp.length-1);
+    var r=s('rect',{x:X(i)-w/2,y:T,width:w,height:B-T,fill:'transparent'});
+    r.setAttribute('data-tip','Month '+(i+1)+' &middot; R'+v+',000 added');
+    r.addEventListener('mouseenter',function(){ guide.setAttribute('x1',X(i)); guide.setAttribute('x2',X(i)); guide.setAttribute('opacity',.35); hov.setAttribute('cx',X(i)); hov.setAttribute('cy',Y(v)); hov.setAttribute('opacity',1); });
+    r.addEventListener('mouseleave',function(){ guide.setAttribute('opacity',0); hov.setAttribute('opacity',0); });
+  });
+
+  /* ---- tooltip ---- */
+  var tip=document.getElementById('tip');
+  document.addEventListener('mousemove',function(e){
+    var t=e.target.closest ? e.target.closest('[data-tip]') : null;
+    if(!t){ tip.classList.remove('on'); return; }
+    tip.innerHTML=t.getAttribute('data-tip'); tip.classList.add('on');
+    var x=e.clientX+14, y=e.clientY+14, w=tip.offsetWidth, h=tip.offsetHeight;
+    if(x+w>window.innerWidth-10) x=e.clientX-w-14; if(y+h>window.innerHeight-10) y=e.clientY-h-14;
+    tip.style.left=x+'px'; tip.style.top=y+'px';
+  });
+})();
+</script>
 </body>
 </html>
