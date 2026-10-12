@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Hoff's Place · Full on the quiet nights too</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0f1d2b; --navy:#16324a; --muted:#677584; --soft:#9aa5b1; --cream:#f7f3ec; --sand:#efe7da; --line:#e2d9ca;
+    --amber:#d9952b; --amber-lt:#f6dfb4; --red:#b4483c; --blue-lt:#e6eef5;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:var(--cream);color:var(--ink);font-family:Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  h1,h2,h3{font-family:'Fraunces',Georgia,serif;font-weight:600;letter-spacing:-.02em;line-height:1.02;font-variant-numeric:lining-nums}
+  .deck{height:100vh;overflow-y:auto;scroll-snap-type:y mandatory;scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){.deck{scroll-behavior:auto}}
+  .slide{position:relative;min-height:100vh;width:100%;display:flex;overflow:hidden;scroll-snap-align:start}
+  .pad{padding:clamp(28px,6vw,96px)}
+  .eyebrow{font:600 11.5px Inter;letter-spacing:.24em;text-transform:uppercase;color:var(--amber)}
+  .lead{font-weight:300;font-size:clamp(16px,1.55vw,20px);color:var(--muted);line-height:1.65;max-width:44ch}
+  .photo{background-size:cover;background-position:center}
+  .rule{width:56px;height:2px;background:var(--amber);margin:22px 0}
+
+  /* 1 HERO */
+  .hero{color:#fff;align-items:flex-end}
+  .hero::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,20,32,.35) 0%,rgba(10,20,32,.5) 40%,rgba(10,20,32,.92) 100%)}
+  .hero .inner{position:relative;max-width:1180px;width:100%}
+  .hero .logo{width:min(340px,62vw);border-radius:6px;display:block;margin-bottom:26px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+  .hero .eyebrow{color:var(--amber-lt)}
+  .hero h1{font-size:clamp(46px,7.6vw,110px);margin:16px 0 18px}
+  .hero h1 em{font-style:italic;color:var(--amber-lt);font-weight:500}
+  .hero p{font-weight:300;font-size:clamp(17px,1.8vw,23px);max-width:46ch;opacity:.95;line-height:1.5}
+  .hero h1,.hero p{text-shadow:0 2px 24px rgba(10,20,32,.5)}
+  .hero .by{margin-top:32px;display:flex;gap:18px;align-items:center;font-size:12.5px;letter-spacing:.08em;opacity:.85;flex-wrap:wrap}
+  .hero .by span{border-left:1px solid rgba(255,255,255,.4);padding-left:18px}
+  .hero .by span:first-child{border:0;padding:0}
+
+  /* 2 ASSETS */
+  .assets{display:grid;grid-template-columns:.9fr 1.1fr;width:100%}
+  .assets .text{display:flex;flex-direction:column;justify-content:center}
+  .assets h2{font-size:clamp(40px,4.8vw,70px)}
+  .mosaic{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:10px;padding:10px;min-height:100vh;background:var(--ink)}
+  .mosaic div{border-radius:6px}
+  .mosaic .tall{grid-row:span 2}
+  .facts{display:grid;grid-template-columns:1fr 1fr;margin-top:30px;max-width:540px;border-top:1px solid var(--line)}
+  .facts div{padding:15px 0;border-bottom:1px solid var(--line)}
+  .facts div:nth-child(odd){padding-right:18px}
+  .facts b{display:block;font-family:'Fraunces',serif;font-weight:600;font-size:27px;line-height:1.05;color:var(--navy);font-variant-numeric:lining-nums}
+  .facts span{font-size:13.5px;color:var(--muted)}
+
+  /* 3 PROBLEM */
+  .door{background:var(--sand);align-items:center}
+  .door .grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,5vw,80px);align-items:center;width:100%}
+  .door h2{font-size:clamp(38px,4.8vw,66px)}
+  .phones{display:flex;gap:22px;justify-content:center;align-items:center}
+  .phone{width:min(240px,40vw);aspect-ratio:9/18.5;background:#0d1620;border-radius:34px;padding:10px;box-shadow:0 30px 70px rgba(15,29,43,.3)}
+  .screen{width:100%;height:100%;background:#fff;border-radius:26px;overflow:hidden;display:flex;flex-direction:column;font-family:Arial,Helvetica,sans-serif}
+  .g-head{padding:14px 12px 8px;border-bottom:1px solid #eee}
+  .g-bar{height:26px;border-radius:13px;background:#f1f3f4;font-size:9.5px;color:#5f6368;display:flex;align-items:center;padding:0 10px;margin-bottom:6px}
+  .g-img{height:28%;background-size:cover;background-position:center}
+  .g-body{padding:10px 12px;font-size:11px;color:#202124}
+  .g-title{font-size:15px;font-weight:700;margin-bottom:2px}
+  .g-stars{color:#e7a900;font-size:11px}
+  .g-btns{display:flex;gap:6px;margin-top:10px}
+  .g-btns span{flex:1;text-align:center;border:1px solid #dadce0;border-radius:14px;padding:6px 0;font-size:9.5px;color:#1a73e8}
+  .g-btns .miss{color:#bbb;border-style:dashed;text-decoration:line-through}
+  .g-note{margin-top:10px;font-size:10px;color:#b4483c;font-weight:700}
+  .res{padding:12px;font-size:10.5px;color:#202124}
+  .res .r{padding:8px 0;border-bottom:1px solid #eee}
+  .res .r b{display:block;color:#1a0dab;font-size:11.5px;font-weight:400}
+  .res .r span{color:#5f6368;font-size:9.5px}
+  .res .none{margin-top:10px;font-size:10.5px;color:#b4483c;font-weight:700;line-height:1.35}
+
+  /* 4 LEAKS */
+  .leaks{flex-direction:column;justify-content:center}
+  .leaks h2{font-size:clamp(36px,4.6vw,64px);max-width:20ch}
+  .leakgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:40px}
+  .leak{background:#fff;border:1px solid var(--line);border-radius:4px;padding:28px 26px 26px;position:relative}
+  .leak::before{content:"";position:absolute;left:0;top:0;right:0;height:3px;background:var(--red)}
+  .leak .big{font-family:'Fraunces',serif;font-weight:600;font-size:70px;line-height:.9;color:var(--ink);font-variant-numeric:lining-nums}
+  .leak .lbl{font:600 11px Inter;letter-spacing:.18em;text-transform:uppercase;color:var(--red);margin:12px 0 10px}
+  .leak p{font-size:15px;color:var(--muted);line-height:1.55}
+  .leak small{display:block;margin-top:14px;font-size:12.5px;color:var(--soft)}
+
+  /* 5 COST */
+  .cost{color:#fff;align-items:center}
+  .cost::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(10,20,32,.93) 0%,rgba(10,20,32,.75) 48%,rgba(10,20,32,.2) 100%)}
+  .cost .inner{position:relative;max-width:640px}
+  .cost .eyebrow{color:var(--amber-lt)}
+  .cost h2{font-size:clamp(38px,5vw,72px);margin:16px 0 20px}
+  .cost h2 em{font-style:italic;color:var(--amber-lt);font-weight:500}
+  .cost p{font-weight:300;font-size:clamp(16px,1.6vw,20px);line-height:1.6;opacity:.92}
+  .sum{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+  .sum div{border:1px solid rgba(255,255,255,.25);border-radius:6px;padding:10px 14px;font-size:13.5px}
+  .sum b{display:block;font-family:'Fraunces',serif;font-size:26px;font-weight:600}
+  .cost .q{margin-top:26px;font-family:'Fraunces',serif;font-style:italic;font-size:clamp(21px,2.3vw,29px);border-left:2px solid var(--amber);padding-left:18px}
+
+  /* 6 BENEFITS */
+  .ba{flex-direction:column;justify-content:center}
+  .ba h2{font-size:clamp(36px,4.6vw,64px)}
+  .cols-h{display:grid;grid-template-columns:150px 1fr 40px 1fr;gap:18px;margin-top:26px;padding-bottom:10px;font:600 11px Inter;letter-spacing:.18em;text-transform:uppercase;color:var(--soft)}
+  .rows{border-top:1px solid var(--line)}
+  .row{display:grid;grid-template-columns:150px 1fr 40px 1fr;gap:18px;align-items:center;padding:18px 0;border-bottom:1px solid var(--line)}
+  .row .k{font-family:'Fraunces',serif;font-size:28px;font-weight:600;color:var(--navy)}
+  .row .now{font-size:15px;color:var(--muted);text-decoration:line-through;text-decoration-color:rgba(180,72,60,.45)}
+  .row .then{font-size:16px;font-weight:500}
+  .row .to{color:var(--amber);font-size:22px;text-align:center}
+
+  /* 7 HOW */
+  .how{display:grid;grid-template-columns:1fr 1fr;width:100%}
+  .how .side{display:flex;flex-direction:column;justify-content:center}
+  .how .m2{color:#fff}
+  .how .m2 .eyebrow{color:var(--amber-lt)}
+  .how h3{font-size:clamp(32px,3.8vw,54px);margin:14px 0 12px}
+  .how .m2 .lead{color:rgba(255,255,255,.85)}
+  .how ul{list-style:none;margin-top:22px}
+  .how li{padding:12px 0 12px 26px;position:relative;border-bottom:1px solid var(--line);font-size:15.5px}
+  .how .m2 li{border-color:rgba(255,255,255,.18)}
+  .how li::before{content:"";position:absolute;left:0;top:21px;width:12px;height:2px;background:var(--amber)}
+
+  /* 8 TIMELINE */
+  .tline{flex-direction:column;justify-content:center}
+  .tline h2{font-size:clamp(36px,4.6vw,64px)}
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:26px;margin-top:46px;position:relative}
+  .steps::before{content:"";position:absolute;left:0;right:0;top:17px;height:1px;background:var(--line)}
+  .st{position:relative}
+  .pill{display:inline-block;white-space:nowrap;background:var(--navy);color:#fff;font:600 12px Inter;letter-spacing:.06em;padding:9px 16px;border-radius:999px;position:relative;z-index:1;box-shadow:0 0 0 6px var(--cream)}
+  .st h3{font-size:26px;margin:18px 0 8px}
+  .st p{font-size:14.5px;color:var(--muted);line-height:1.55}
+  .strip{display:grid;grid-template-columns:2fr 1fr 1fr;gap:10px;margin-top:44px;height:26vh}
+  .strip div{border-radius:4px}
+
+  /* 9 INVESTMENT */
+  .inv{flex-direction:column;justify-content:center;background:var(--sand)}
+  .inv h2{font-size:clamp(36px,4.6vw,64px)}
+  .invgrid{display:grid;grid-template-columns:1.15fr .85fr;gap:24px;margin-top:34px;align-items:stretch}
+  .card{background:#fff;border-radius:6px;padding:clamp(24px,3vw,40px);border:1px solid var(--line)}
+  .card .tag{font:600 11px Inter;letter-spacing:.18em;text-transform:uppercase;color:var(--amber)}
+  .card .price{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(60px,6.6vw,92px);line-height:1;margin:10px 0 6px;font-variant-numeric:lining-nums}
+  .card .sub{color:var(--muted);font-size:15px;line-height:1.55}
+  .halves{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px}
+  .halves div{border:1px solid var(--line);border-radius:4px;padding:14px 16px}
+  .halves b{display:block;font-family:'Fraunces',serif;font-weight:600;font-size:30px;line-height:1}
+  .halves span{font-size:13.5px;color:var(--muted)}
+  .promise{margin-top:22px;padding:16px 18px;background:var(--blue-lt);border-radius:4px;font-size:15px;line-height:1.55}
+  .promise b{color:var(--navy)}
+  .card.dark{background:var(--navy);color:#fff;border-color:var(--navy);display:flex;flex-direction:column;justify-content:space-between}
+  .card.dark .tag{color:var(--amber-lt)}
+  .card.dark .sub{color:rgba(255,255,255,.82)}
+  .card.dark .price{font-size:clamp(50px,5.2vw,70px)}
+
+  /* 10 COSTS */
+  .costs{flex-direction:column;justify-content:center}
+  .costs h2{font-size:clamp(34px,4.4vw,60px)}
+  table{width:100%;border-collapse:collapse;margin-top:30px}
+  td,th{padding:17px 4px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top;font-size:15.5px}
+  th{font:600 11px Inter;letter-spacing:.18em;text-transform:uppercase;color:var(--soft);padding-bottom:12px}
+  td.r,th.r{text-align:right;white-space:nowrap}
+  td .t{font-family:'Fraunces',serif;font-size:23px;font-weight:600;color:var(--navy);display:block;line-height:1.15}
+  td .s{font-size:13px;color:var(--muted)}
+  td.r b{font-family:'Fraunces',serif;font-size:25px;font-weight:600;font-variant-numeric:lining-nums}
+  .fine{font-size:13px;color:var(--muted);margin-top:16px}
+
+  /* 11 CLOSE */
+  .close{color:#fff;align-items:center;justify-content:center;text-align:center}
+  .close::before{content:"";position:absolute;inset:0;background:rgba(10,20,32,.66)}
+  .close .inner{position:relative;max-width:920px}
+  .close .eyebrow{color:var(--amber-lt)}
+  .close h2{font-size:clamp(44px,6.4vw,94px);margin:16px 0 22px}
+  .close h2 em{font-style:italic;color:var(--amber-lt);font-weight:500}
+  .close .dates{display:flex;justify-content:center;margin-top:10px;flex-wrap:wrap}
+  .close .dates div{padding:8px 26px;border-left:1px solid rgba(255,255,255,.3);font-size:14px;letter-spacing:.04em}
+  .close .dates div:first-child{border:0}
+  .close .dates b{display:block;font-family:'Fraunces',serif;font-size:25px;font-weight:600;letter-spacing:0}
+  .ask{display:inline-block;margin-top:36px;background:var(--amber);color:var(--ink);border-radius:999px;padding:17px 34px;font-weight:600;font-size:16px}
+  .contact{margin-top:26px;font-size:13.5px;opacity:.8;letter-spacing:.03em}
+
+  /* chrome */
+  .count{position:fixed;bottom:20px;right:24px;z-index:20;font:500 12px Inter;letter-spacing:.1em;color:var(--ink);background:rgba(247,243,236,.9);padding:7px 13px;border-radius:999px}
+  .hint{position:fixed;bottom:20px;left:24px;z-index:20;font:400 11.5px Inter;color:var(--muted);background:rgba(247,243,236,.9);padding:7px 13px;border-radius:999px}
+  .notes{display:none;position:fixed;right:20px;top:20px;width:min(390px,92vw);max-height:72vh;overflow:auto;z-index:30;background:var(--ink);color:#e9eef4;border-radius:12px;padding:18px;font-size:14.5px;line-height:1.55;box-shadow:0 18px 50px rgba(0,0,0,.35)}
+  .notes b{color:var(--amber-lt);display:block;font-size:11px;letter-spacing:.16em;text-transform:uppercase;margin-bottom:6px}
+  body.show-notes .notes{display:block}
+
+  @media (max-width:900px){
+    .assets,.door .grid,.how,.invgrid{grid-template-columns:1fr}
+    .mosaic{min-height:60vh;order:-1}
+    .leakgrid,.steps{grid-template-columns:1fr}
+    .steps::before{display:none}
+    .row{grid-template-columns:1fr;gap:4px}
+    .row .to,.cols-h{display:none}
+    .strip{grid-template-columns:1fr;height:auto}
+    .strip div{height:30vh}
+    .phones{transform:scale(.85)}
+    .hint{display:none}
+  }
+  @media print{
+    .deck{height:auto;overflow:visible}
+    .slide{page-break-after:always}
+    .count,.hint,.notes{display:none!important}
+  }
+</style>
+</head>
+<body>
+<div class="hint">← → to move · N for notes</div>
+<div class="count" id="count">01 / 11</div>
+<div class="notes" id="notes"></div>
+
+<main class="deck" id="deck">
+
+<!-- 1 HERO -->
+<section class="slide hero photo pad" style="background-image:url('img/band.jpg')" data-notes="Open warm and short. 'Thanks for the time. We spent a few days looking at Hoff's the way a new customer would. The regulars clearly love it: 638 reviews, the vibe, the food, the pool, the music. The problem is that if you don't already know about Hoff's, it's very hard to find. I'll show you what we found, what we'd suggest, and then I want to hear what you think.' Ask who else is involved in decisions.">
+  <div class="inner">
+    <img class="logo" src="img/logo.jpg" alt="Hoff's Place">
+    <div class="eyebrow">Hoff's Place · Vanderbijlpark · October 2026</div>
+    <h1>The Vaal loves Hoff's.<br><em>The internet can't find it.</em></h1>
+    <p>A one-month plan to put your pub where people are looking, and to fill the quiet nights as well as the big ones.</p>
+    <div class="by"><span>Prepared by JCE Media</span><span>with ReviewTap</span></div>
+  </div>
+</section>
+
+<!-- 2 ASSETS -->
+<section class="slide" data-notes="Start with what's good and mean it. 'Most pubs would love to have half of this.' Ask: 'What do your regulars come back for?' and 'Which night is your best, and which is your quietest?' Write down their words.">
+  <div class="assets">
+    <div class="text pad">
+      <div class="eyebrow">What you already have</div>
+      <h2 style="margin-top:14px">A pub people keep coming back to.</h2>
+      <div class="facts">
+        <div><b>638</b><span>Google reviews, and the word that comes up most is "vibe"</span></div>
+        <div><b>Live music</b><span>Bands, themed nights and happy hour</span></div>
+        <div><b>Rugby</b><span>Big games on the big screens</span></div>
+        <div><b>Pool tables</b><span>Mentioned in more reviews than anything but the vibe</span></div>
+        <div><b>Proper food</b><span>Meat baskets, platters, snails, Sunday lunch</span></div>
+        <div><b>Deli and car wash</b><span>Two more reasons to stop by</span></div>
+      </div>
+    </div>
+    <div class="mosaic">
+      <div class="photo tall" style="background-image:url('img/platter.jpg')"></div>
+      <div class="photo" style="background-image:url('img/pool.jpg')"></div>
+      <div class="photo" style="background-image:url('img/deli.jpg')"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 3 THE PROBLEM -->
+<section class="slide door pad" data-notes="This is the key slide. 'This is what a new customer sees. On Google there's no website and no menu to tap. Search for Hoff's anywhere else and there's almost nothing.' Ask: 'Where do you post your specials and what's on? Facebook? The chalkboard?' Don't sell yet.">
+  <div class="grid">
+    <div>
+      <div class="eyebrow">The problem, in one search</div>
+      <h2 style="margin-top:14px">Look for Hoff's online, and almost nothing comes up.</h2>
+      <div class="rule"></div>
+      <p class="lead">No website, no menu, nowhere to see what's on this week. Your specials, rugby nights and live music only exist inside the pub, so only the people already inside know about them.</p>
+    </div>
+    <div class="phones">
+      <div class="phone"><div class="screen">
+        <div class="g-head"><div class="g-bar">Hoff's Place</div></div>
+        <div class="g-img" style="background-image:url('img/interior.jpg')"></div>
+        <div class="g-body">
+          <div class="g-title">Hoff's Place</div>
+          <div><span class="g-stars">★★★★☆</span> 4.1 (638) · Pub</div>
+          <div style="color:#5f6368;margin-top:3px">Ravel St, Vanderbijlpark</div>
+          <div class="g-btns"><span>Directions</span><span>Call</span><span class="miss">Website</span></div>
+          <div class="g-note">No website · No menu</div>
+        </div>
+      </div></div>
+      <div class="phone"><div class="screen">
+        <div class="g-head"><div class="g-bar">rugby pub vanderbijlpark</div></div>
+        <div class="res">
+          <div class="r"><b>Another pub's website</b><span>Watch the game with us this weekend</span></div>
+          <div class="r"><b>Another pub's Facebook page</b><span>Live music Friday, specials all week</span></div>
+          <div class="r"><b>A restaurant directory</b><span>Top 10 pubs in the Vaal</span></div>
+          <div class="none">Hoff's Place: no page to show</div>
+          <div style="margin-top:14px;font-size:8.5px;color:#9aa0a6">Illustration</div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 4 THREE LEAKS -->
+<section class="slide leaks pad" data-notes="Three leaks, one line each. 'None of this is about the pub itself. People love it. These are the gaps between a great night out and the next visit.' Ask: 'How do your regulars find out about a band or a special?'">
+  <div class="eyebrow">Where customers slip away</div>
+  <h2 style="margin-top:14px">Three leaks between a great night and the next one.</h2>
+  <div class="leakgrid">
+    <div class="leak"><div class="big">0</div><div class="lbl">Places to see what's on</div><p>No website, menu, specials page or events calendar online. Someone deciding where to watch the rugby, or where to book a birthday, can't see what Hoff's offers.</p></div>
+    <div class="leak"><div class="big">4.1</div><div class="lbl">Stars, and it matters</div><p>In "best pub near me", a few tenths of a star decide who gets the visit. A busy pub nearby shows 4.5 from almost 3,000 reviews. 61 of yours are one or two stars.</p><small>Reviews from happy regulars are the fastest way to lift it.</small></div>
+    <div class="leak"><div class="big">0</div><div class="lbl">Ways to call your regulars back</div><p>No WhatsApp list or "what's on this week" message. You're open until midnight Monday to Thursday, with no simple way to tell your regulars there's a reason to come in tonight.</p></div>
+  </div>
+</section>
+
+<!-- 5 WHAT IT COSTS -->
+<section class="slide cost photo pad" style="background-image:url('img/bar.jpg')" data-notes="The maths uses their own reviewers' numbers. 'Your reviewers say most people spend R100 to R300 a head. One extra table of eight, once a week, is roughly R8,000 a month.' Then ask the question and stop talking. Their answer is what the price gets compared with.">
+  <div class="inner">
+    <div class="eyebrow">What it costs you</div>
+    <h2>One extra table a week is worth <em>more than the whole plan.</em></h2>
+    <p>Your own reviewers say most people spend R100 to R300 a head at Hoff's. Bring in one more table of eight, once a week, and that's roughly:</p>
+    <div class="sum">
+      <div><b>8 × R250</b>per visit</div>
+      <div><b>× 4 weeks</b>a month</div>
+      <div><b>≈ R8,000</b>a month</div>
+    </div>
+    <div class="q">How full is Hoff's on a Tuesday, compared with a Saturday?</div>
+  </div>
+</section>
+
+<!-- 6 BENEFITS -->
+<section class="slide ba pad" data-notes="Read the right-hand column. 'A month from now, this is what Hoff's looks like to someone deciding where to go tonight.' Ask: 'Which of these would make the biggest difference?'">
+  <div class="eyebrow">What changes</div>
+  <h2 style="margin-top:14px">What a customer experiences, a month from now.</h2>
+  <div class="cols-h"><div></div><div>Today</div><div></div><div>After</div></div>
+  <div class="rows">
+    <div class="row"><div class="k">Found</div><div class="now">Nothing online except a Google pin</div><div class="to">→</div><div class="then">A simple site with the menu, the specials, what's on this week and how to book a table or function</div></div>
+    <div class="row"><div class="k">Invited</div><div class="now">Specials on the chalkboard, seen only inside</div><div class="to">→</div><div class="then">A weekly "what's on at Hoff's" on WhatsApp, to regulars who asked for it</div></div>
+    <div class="row"><div class="k">Trusted</div><div class="now">4.1 stars and the odd review left unanswered</div><div class="to">→</div><div class="then">Happy customers asked for a review every week, and every review answered calmly within a day</div></div>
+    <div class="row"><div class="k">Booked</div><div class="now">Walk-ins only</div><div class="to">→</div><div class="then">Tables for the big games and year-end functions booked ahead, with a deposit</div></div>
+  </div>
+</section>
+
+<!-- 7 HOW -->
+<section class="slide" data-notes="Explain the shape. 'Month one is the plan: we work out exactly what to fix and in what order, and you own it. From month two, if you want us to, we run it with you, for less than month one.'">
+  <div class="how">
+    <div class="side pad" style="background:var(--cream)">
+      <div class="eyebrow">Month 1 · the plan</div>
+      <h3>The 7-Figure Blueprint</h3>
+      <p class="lead">Two weeks to look at everything that brings people through the door, and work out what fills the quiet nights first.</p>
+      <ul>
+        <li>What Hoff's is famous for, and who it's for</li>
+        <li>Your Google and Facebook listings, fixed and consistent</li>
+        <li>What your website and menu page must show</li>
+        <li>An events plan: rugby, live music, themed nights, Sunday lunch</li>
+        <li>Functions and year-end packages, and how regulars come back</li>
+      </ul>
+    </div>
+    <div class="side m2 pad photo" style="background-image:linear-gradient(rgba(22,50,74,.92),rgba(22,50,74,.92)),url('img/stage.jpg')">
+      <div class="eyebrow">Month 2 onwards · we run it with you</div>
+      <h3>Lower than month one.</h3>
+      <p class="lead">If you want us to, we put the plan to work. Month to month, and you can stop at any time.</p>
+      <ul>
+        <li>One inbox and one WhatsApp number for every message</li>
+        <li>A weekly "what's on" to the regulars who asked for it</li>
+        <li>Reviews asked for, and every review answered</li>
+        <li>Table and function bookings, ahead of the big nights</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 8 TIMELINE -->
+<section class="slide tline pad" data-notes="'You give us about two hours over the two weeks. We do the digging.' Mention the day 5 message.">
+  <div class="eyebrow">How the two weeks run</div>
+  <h2 style="margin-top:14px">About two hours of your time.</h2>
+  <div class="steps">
+    <div class="st"><span class="pill">Day 1</span><h3>Kickoff</h3><p>An hour together: your best and quietest nights, your regulars, what you'd never change.</p></div>
+    <div class="st"><span class="pill">Days 2 to 9</span><h3>We do the work</h3><p>Your listings, reviews, specials, events, competitors and the numbers you share.</p></div>
+    <div class="st"><span class="pill">Day 5</span><h3>A first finding</h3><p>A short message as soon as we find something worth knowing.</p></div>
+    <div class="st"><span class="pill">Day 14</span><h3>The plan</h3><p>We walk you through it. You leave knowing exactly what to do, and what it costs.</p></div>
+  </div>
+  <div class="strip">
+    <div class="photo" style="background-image:url('img/platter2.jpg')"></div>
+    <div class="photo" style="background-image:url('img/pool2.jpg')"></div>
+    <div class="photo" style="background-image:url('img/meatboard.jpg')"></div>
+  </div>
+</section>
+
+<!-- 9 INVESTMENT -->
+<section class="slide inv pad" data-notes="Say it plainly. 'The plan is R10,000, once. Half to start, half when we hand it over. If it doesn't show you something you didn't already know about your business, you don't pay the second half.' Then: 'From month two, if you want us to run it, it's from R5,999 a month.' Pause.">
+  <div class="eyebrow">The investment</div>
+  <h2 style="margin-top:14px">One clear price for month one.</h2>
+  <div class="invgrid">
+    <div class="card">
+      <div class="tag">Month 1 · The 7-Figure Blueprint</div>
+      <div class="price">R10,000</div>
+      <div class="sub">Once-off. Two weeks, two calls, everything in writing and yours to keep.</div>
+      <div class="halves">
+        <div><b>R5,000</b><span>to start</span></div>
+        <div><b>R5,000</b><span>when we hand over the plan</span></div>
+      </div>
+      <div class="promise"><b>Our promise:</b> if the plan doesn't show you something about your business you didn't already know, you don't pay the second R5,000.</div>
+    </div>
+    <div class="card dark">
+      <div>
+        <div class="tag">Month 2 onwards · optional</div>
+        <div class="price">from R5,999</div>
+        <div class="sub">a month to run the plan with you. Setup is included when you continue straight after the plan.</div>
+      </div>
+      <div class="sub" style="margin-top:20px">Month to month. Stop at any time on 30 days' notice.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 10 COSTS -->
+<section class="slide costs pad" data-notes="Be clear these are estimates. 'We'd rather you know now than be surprised later. The plan confirms what you actually need, and some of this you may not need at all.'">
+  <div class="eyebrow">After the plan · estimated costs</div>
+  <h2 style="margin-top:14px">What the next steps usually cost.</h2>
+  <table>
+    <tr><th>Option</th><th>What it does</th><th class="r">Estimated</th></tr>
+    <tr><td><span class="t">Run it yourselves</span></td><td>You keep the plan and put it to work in-house</td><td class="r"><b>R0</b></td></tr>
+    <tr><td><span class="t">We run it with you</span><span class="s">Hoff's Place</span></td><td>One inbox and WhatsApp, a weekly "what's on" to regulars, reviews asked for and answered, bookings ahead of the big nights</td><td class="r"><b>from R5,999</b><br><span class="s">a month</span></td></tr>
+    <tr><td><span class="t">A website</span><span class="s">If the plan calls for one</span></td><td>Menu, specials, what's on and functions, with bookings and enquiries going to the same inbox</td><td class="r"><b>R8,000 to R12,000</b><br><span class="s">once-off</span></td></tr>
+    <tr><td><span class="t">Ads for events</span><span class="s">Optional</span></td><td>Facebook and Instagram ads for the big nights and year-end functions</td><td class="r"><b>from R3,499</b><br><span class="s">a month, plus ad spend</span></td></tr>
+  </table>
+  <p class="fine">Estimates only. The Blueprint confirms what you need and what you don't.</p>
+</section>
+
+<!-- 11 CLOSE -->
+<section class="slide close photo pad" style="background-image:url('img/stage.jpg')" data-notes="The close. 'If we start this week, you'll have the plan by the end of the month, in time for the year-end function season. Shall we book the kickoff?' If yes: book it on the call and send the R5,000 invoice today. If they hesitate: 'Is it the timing, the money, or whether it will work?'">
+  <div class="inner">
+    <div class="eyebrow">The next step</div>
+    <h2>Ready for the <em>silly season.</em></h2>
+    <div class="dates">
+      <div><b>This week</b>Kickoff call</div>
+      <div><b>End of October</b>Your plan, presented</div>
+      <div><b>November</b>Everything working</div>
+    </div>
+    <div class="ask">Shall we book your kickoff?</div>
+    <div class="contact">Jacques Groenewald · JCE Media · jacques@jcemedia.com · 079 512 4292</div>
+  </div>
+</section>
+
+</main>
+
+<script>
+(function(){
+  var deck=document.getElementById('deck'), slides=[].slice.call(document.querySelectorAll('.slide'));
+  var count=document.getElementById('count'), notes=document.getElementById('notes');
+  function pad(n){return (n<10?'0':'')+n;}
+  function current(){var best=0,bd=1e9;slides.forEach(function(s,i){var d=Math.abs(s.getBoundingClientRect().top);if(d<bd){bd=d;best=i;}});return best;}
+  function render(){var i=current();count.textContent=pad(i+1)+' / '+pad(slides.length);notes.innerHTML='<b>Presenter notes · slide '+(i+1)+'</b>'+(slides[i].dataset.notes||'');}
+  function go(i){i=Math.max(0,Math.min(slides.length-1,i));slides[i].scrollIntoView({behavior:'smooth'});}
+  deck.addEventListener('scroll',function(){window.requestAnimationFrame(render);},{passive:true});
+  document.addEventListener('keydown',function(e){
+    if(['ArrowDown','ArrowRight','PageDown',' '].indexOf(e.key)>-1){e.preventDefault();go(current()+1);}
+    else if(['ArrowUp','ArrowLeft','PageUp'].indexOf(e.key)>-1){e.preventDefault();go(current()-1);}
+    else if(e.key==='n'||e.key==='N'){document.body.classList.toggle('show-notes');render();}
+  });
+  render();
+})();
+</script>
+</body>
+</html>
