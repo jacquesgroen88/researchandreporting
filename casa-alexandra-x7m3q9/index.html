@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Casa Alexandra · A plan for the whole year</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#14263a; --muted:#5f6f80; --sand:#f6f1e8; --cream:#fbf9f4; --line:#e6dfd2;
+    --sea:#1f5d7a; --gold:#b98b4e; --white:#fff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:var(--cream);color:var(--ink);font-family:Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  h1,h2,h3,.serif,.chip b,.num b,.price .now{font-variant-numeric:lining-nums;}
+  h1,h2,h3,.serif{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;letter-spacing:-.01em;line-height:1.05}
+  .slide{position:relative;min-height:100vh;width:100%;display:flex;overflow:hidden;scroll-snap-align:start}
+  .deck{height:100vh;overflow-y:auto;scroll-snap-type:y mandatory;scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){.deck{scroll-behavior:auto}}
+  .pad{padding:clamp(28px,6vw,80px)}
+  .eyebrow{font:600 11.5px Inter;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+  .lead{font-size:clamp(16px,1.6vw,20px);color:var(--muted);line-height:1.6;max-width:46ch}
+  .photo{background-size:cover;background-position:center}
+
+  /* 1 cover */
+  .cover{color:#fff;align-items:flex-end}
+  .cover::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,25,40,.15) 0%,rgba(10,25,40,.25) 45%,rgba(10,25,40,.82) 100%)}
+  .cover .inner{position:relative;max-width:1100px}
+  .cover h1{font-size:clamp(46px,8vw,104px);margin:14px 0 14px}
+  .cover .eyebrow{color:#f3d9ae}
+  .cover p{font-size:clamp(17px,1.8vw,22px);max-width:40ch;opacity:.92;line-height:1.5}
+  .byline{margin-top:28px;font-size:13px;opacity:.8;letter-spacing:.04em}
+
+  /* split slides */
+  .split{display:grid;grid-template-columns:1.05fr .95fr;width:100%}
+  .split .text{display:flex;flex-direction:column;justify-content:center;background:var(--cream)}
+  .split h2{font-size:clamp(36px,4.6vw,62px);margin:14px 0 18px}
+  .split .img{min-height:100vh}
+
+  /* strengths */
+  .chips{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:26px;max-width:560px}
+  .chip{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+  .chip b{display:block;font-family:'Cormorant Garamond',serif;font-size:24px;line-height:1.1;margin-bottom:3px}
+  .chip span{font-size:13.5px;color:var(--muted)}
+
+  /* numbers */
+  .numbers{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:30px;max-width:640px}
+  .num{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px 18px}
+  .num b{display:block;font-family:'Cormorant Garamond',serif;font-size:64px;line-height:1;color:var(--sea)}
+  .num span{font-size:14px;color:var(--muted);line-height:1.4;display:block;margin-top:6px}
+
+  /* full-bleed with panel */
+  .bleed{align-items:center}
+  .bleed .panel{position:relative;background:rgba(251,249,244,.95);border-radius:22px;padding:clamp(26px,4vw,48px);max-width:620px;margin-left:clamp(20px,6vw,90px);box-shadow:0 24px 60px rgba(10,25,40,.25)}
+  .bleed h2{font-size:clamp(34px,4.2vw,56px);margin:12px 0 14px}
+  .quote{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(22px,2.4vw,30px);line-height:1.3;color:var(--sea);margin-top:18px}
+
+  /* blueprint */
+  .bp{background:var(--sand);flex-direction:column;justify-content:center}
+  .bp h2{font-size:clamp(38px,5vw,66px);margin:12px 0 10px}
+  .cols{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:30px}
+  .col{background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px}
+  .col h3{font-size:28px;margin-bottom:10px;color:var(--sea)}
+  .col ul{list-style:none}
+  .col li{font-size:15px;padding:7px 0 7px 18px;position:relative;border-bottom:1px dashed var(--line)}
+  .col li:last-child{border-bottom:0}
+  .col li::before{content:"";position:absolute;left:0;top:15px;width:7px;height:7px;border-radius:50%;background:var(--gold)}
+
+  /* timeline */
+  .tl{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:34px;position:relative}
+  .tl::before{content:"";position:absolute;left:4%;right:4%;top:27px;height:2px;background:var(--line)}
+  .step{position:relative;text-align:left}
+  .dot{width:56px;height:56px;border-radius:50%;background:var(--sea);color:#fff;font:600 13px Inter;display:flex;align-items:center;justify-content:center;position:relative;z-index:1;border:5px solid var(--cream)}
+  .step h3{font-size:26px;margin:14px 0 6px}
+  .step p{font-size:14.5px;color:var(--muted);line-height:1.5}
+
+  /* price */
+  .price-wrap{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:center;margin-top:24px}
+  .price{background:#fff;border:1px solid var(--line);border-radius:22px;padding:32px;box-shadow:0 18px 44px rgba(20,38,58,.08)}
+  .price .was{font-size:15px;color:var(--muted);text-decoration:line-through}
+  .price .now{font-family:'Cormorant Garamond',serif;font-size:84px;line-height:1;color:var(--ink);margin:6px 0}
+  .price .split2{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+  .price .split2 div{background:var(--sand);border-radius:12px;padding:10px 14px;font-size:14px}
+  .price .split2 b{display:block;font-size:18px}
+  .promise{border-left:3px solid var(--gold);padding:6px 0 6px 18px;margin-top:18px;font-size:15.5px;line-height:1.55}
+
+  /* after */
+  .after table{width:100%;border-collapse:collapse;margin-top:24px;background:#fff;border-radius:16px;overflow:hidden;border:1px solid var(--line)}
+  .after td,.after th{padding:15px 18px;border-bottom:1px solid var(--line);text-align:left;font-size:15.5px;vertical-align:top}
+  .after th{font:600 11px Inter;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);background:var(--sand)}
+  .after td.r{text-align:right;white-space:nowrap;font-weight:600}
+  .after tr:last-child td{border-bottom:0}
+  .note{font-size:13.5px;color:var(--muted);margin-top:14px}
+
+  /* close */
+  .close{color:#fff;align-items:center;justify-content:center;text-align:center}
+  .close::before{content:"";position:absolute;inset:0;background:rgba(10,25,40,.62)}
+  .close .inner{position:relative;max-width:820px}
+  .close h2{font-size:clamp(42px,6vw,82px);margin:14px 0 18px}
+  .close p{font-size:clamp(17px,1.8vw,21px);opacity:.92;line-height:1.55}
+  .close .eyebrow{color:#f3d9ae}
+  .ask{display:inline-block;margin-top:30px;background:#fff;color:var(--ink);border-radius:999px;padding:16px 30px;font-weight:600;font-size:16px}
+
+  /* chrome */
+  .brand{position:fixed;top:18px;left:22px;z-index:20;font:600 12px Inter;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);background:rgba(251,249,244,.85);padding:7px 12px;border-radius:999px;backdrop-filter:blur(6px)}
+  .count{position:fixed;bottom:18px;right:22px;z-index:20;font:600 12px Inter;color:var(--ink);background:rgba(251,249,244,.9);padding:7px 12px;border-radius:999px}
+  .hint{position:fixed;bottom:18px;left:22px;z-index:20;font:500 11.5px Inter;color:var(--muted);background:rgba(251,249,244,.9);padding:7px 12px;border-radius:999px}
+  .notes{display:none;position:fixed;right:18px;top:60px;width:min(380px,90vw);max-height:70vh;overflow:auto;z-index:30;background:#14263a;color:#e9eef4;border-radius:14px;padding:18px 18px 14px;font-size:14.5px;line-height:1.55;box-shadow:0 18px 50px rgba(0,0,0,.35)}
+  .notes b{color:#f3d9ae;display:block;font-size:11px;letter-spacing:.16em;text-transform:uppercase;margin-bottom:6px}
+  body.show-notes .notes{display:block}
+
+  @media (max-width:860px){
+    .split{grid-template-columns:1fr}
+    .split .img{min-height:42vh;order:-1}
+    .chips,.numbers,.cols,.price-wrap{grid-template-columns:1fr}
+    .tl{grid-template-columns:1fr 1fr}
+    .tl::before{display:none}
+    .bleed .panel{margin:20px}
+    .hint{display:none}
+  }
+  @media print{
+    .deck{height:auto;overflow:visible}
+    .slide{page-break-after:always;min-height:100vh}
+    .brand,.count,.hint,.notes{display:none!important}
+  }
+</style>
+</head>
+<body>
+<div class="hint">← → to move · N for notes</div>
+<div class="count" id="count">1 / 9</div>
+<div class="notes" id="notes"></div>
+
+<main class="deck" id="deck">
+
+<!-- 1 -->
+<section class="slide cover photo pad" style="background-image:url('img/p4.jpg')" data-notes="Open warmly. 'Thanks for having us. We've spent some time looking at Casa Alexandra the way a guest or a couple planning a wedding would. I want to show you what we found, what we'd suggest, and then you tell us what you think.' Ask who else is involved in decisions about the estate.">
+  <div class="inner">
+    <div class="eyebrow">Prepared for Casa Alexandra · Beautiful East · October 2026</div>
+    <h1>A plan to fill the house<br>and the lawn, all year.</h1>
+    <p>A 1928 house on the Ramsgate coast that guests love. Here's how more of them find it, book it and come back.</p>
+    <div class="byline">Giorgio van Rooyen · ReviewTap, with JCE Media</div>
+  </div>
+</section>
+
+<!-- 2 -->
+<section class="slide" data-notes="Start with what's good, and mean it. Point at the photos. 'Most places we look at would love to have even two of these.' Ask: 'What do guests usually say they love most?' Let them talk. Write down their words.">
+  <div class="split">
+    <div class="text pad">
+      <div class="eyebrow">What you already have</div>
+      <h2>Most venues would love to have half of this.</h2>
+      <div class="chips">
+        <div class="chip"><b>1928</b><span>A house with a real story</span></div>
+        <div class="chip"><b>Sea views</b><span>Over the lagoon and the Indian Ocean</span></div>
+        <div class="chip"><b>Up to 150</b><span>Guests on the lawn, with houses to sleep them</span></div>
+        <div class="chip"><b>Blue Flag</b><span>Ramsgate Beach, 2025/26 season</span></div>
+        <div class="chip"><b>6 golf courses</b><span>Within 30 minutes</span></div>
+        <div class="chip"><b>A loved host</b><span>Guests praise how quickly you respond</span></div>
+      </div>
+    </div>
+    <div class="img photo" style="background-image:url('img/p10.jpg')"></div>
+  </div>
+</section>
+
+<!-- 3 -->
+<section class="slide" data-notes="Keep it simple and kind. 'This isn't about how you host. It's about what a guest sees before they ever reach you.' Ask: 'Did you know the website link on Google goes to an error page?' and 'Is someone rebuilding the website at the moment?' Don't pitch anything yet.">
+  <div class="split">
+    <div class="img photo" style="background-image:url('img/p1.jpg')"></div>
+    <div class="text pad">
+      <div class="eyebrow">What a guest sees today</div>
+      <h2>A beautiful house, hard to reach.</h2>
+      <div class="numbers">
+        <div class="num"><b>0</b><span>working websites. Google sends guests to an error page</span></div>
+        <div class="num"><b>8</b><span>different ways to enquire, two phone numbers, no WhatsApp button</span></div>
+        <div class="num"><b>1</b><span>Google review on the venue profile. Nearby venues show up to 565</span></div>
+      </div>
+      <p class="lead" style="margin-top:22px">Checked on 11 October. The full detail is in your Business X-Ray, which is yours to keep.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 4 -->
+<section class="slide bleed photo" style="background-image:url('img/p11.jpg')" data-notes="This is the 'why it matters' slide. Couples and groups contact several places at once, and the first clear answer usually wins. Ask: 'How many functions or weddings do you do in a year, roughly? And what's a typical one worth?' Then: 'So if even one went somewhere else because the website was down, what does that cost you?' Let them say the number.">
+  <div class="panel">
+    <div class="eyebrow">Why it matters</div>
+    <h2>One event can be worth more than a month of stays.</h2>
+    <p class="lead">Couples and groups ask several venues at once. The first clear, easy answer usually gets the booking. Right now the first step, finding a page that works, is where Casa Alexandra loses them.</p>
+    <p class="quote">"How many events do you host a year, and what's a typical one worth?"</p>
+  </div>
+</section>
+
+<!-- 5 -->
+<section class="slide bp pad" data-notes="This is the ask. 'Before anyone builds anything, we'd like to do this properly. It's called the 7-Figure Blueprint. Over two weeks we look at the whole estate, the houses and the venue, and give you a clear plan: what to fix first, what to charge, how to fill the quiet months. You own it, whatever you decide afterwards.' Keep it short.">
+  <div class="eyebrow">What we'd like to do for you</div>
+  <h2>The 7-Figure Blueprint. Two weeks. A clear plan.</h2>
+  <p class="lead">Before anything gets built, we work out exactly what will bring more bookings to the houses and the venue, and in what order. You keep the plan, whatever you decide next.</p>
+  <div class="cols">
+    <div class="col"><h3>We look at</h3><ul>
+      <li>How guests and couples find you</li>
+      <li>Every way they enquire, and how fast it's answered</li>
+      <li>Your reviews against the venues near you</li>
+      <li>Your rates and the Copper, Silver and Gold packages</li>
+      <li>Your busy and quiet months</li>
+    </ul></div>
+    <div class="col"><h3>You get</h3><ul>
+      <li>What's costing you bookings, with your own numbers</li>
+      <li>A 90-day plan, in order of what pays first</li>
+      <li>A venue sales plan for weddings and functions</li>
+      <li>Direction for the new website</li>
+      <li>The systems you need, and what they cost</li>
+    </ul></div>
+    <div class="col"><h3>It covers</h3><ul>
+      <li>Casa Alexandra and the venue</li>
+      <li>The other houses on the estate</li>
+      <li>Two calls with us, everything in writing</li>
+      <li>Every document is yours to keep</li>
+    </ul></div>
+  </div>
+</section>
+
+<!-- 6 -->
+<section class="slide pad" style="flex-direction:column;justify-content:center" data-notes="Walk the timeline. 'You give us about two hours over the two weeks. We do the rest.' Mention the Day 5 message: 'You'll hear from us before the end, as soon as we find something worth knowing.'">
+  <div class="eyebrow">How the two weeks run</div>
+  <h2 style="font-size:clamp(36px,4.6vw,60px);margin:12px 0 6px">About two hours of your time.</h2>
+  <p class="lead">We do the digging. You tell us what only you know.</p>
+  <div class="tl">
+    <div class="step"><div class="dot">Day 1</div><h3>Kickoff call</h3><p>An hour with you: your goals, your season, what you'd never change.</p></div>
+    <div class="step"><div class="dot">Day 2-9</div><h3>We do the work</h3><p>Your listings, reviews, enquiries, rates, competitors and the numbers you share.</p></div>
+    <div class="step"><div class="dot">Day 5</div><h3>A first finding</h3><p>A short message as soon as we find something worth knowing. No waiting two weeks.</p></div>
+    <div class="step"><div class="dot">Day 14</div><h3>The plan, presented</h3><p>We walk you through it. You leave knowing exactly what to do next, and what it costs.</p></div>
+  </div>
+  <div class="photo" style="background-image:url('img/p7.jpg');height:28vh;border-radius:20px;margin-top:36px"></div>
+</section>
+
+<!-- 7 -->
+<section class="slide pad" style="flex-direction:column;justify-content:center" data-notes="Say the price plainly. 'Normally R30,000. We're doing a small number this season at R19,500 because we're building our case studies, and you'd be one of them.' Then the promise. Pause. Don't fill the silence.">
+  <div class="eyebrow">The investment</div>
+  <h2 style="font-size:clamp(36px,4.6vw,60px);margin:12px 0 0">One price. Nothing hidden.</h2>
+  <div class="price-wrap">
+    <div class="price">
+      <div class="was">Standard price R30,000</div>
+      <div class="now">R19,500</div>
+      <div style="color:var(--muted);font-size:15px">Founding price this season, for a small number of venues</div>
+      <div class="split2">
+        <div><b>R11,700</b>to start</div>
+        <div><b>R7,800</b>when we present the plan</div>
+      </div>
+    </div>
+    <div>
+      <div class="promise"><b>Our promise.</b> If the plan doesn't show you something about your business you didn't already know, you don't pay the second half.</div>
+      <div class="promise"><b>It's yours.</b> Run it yourselves, hand it to someone else, or ask us to help. Every document stays with you.</div>
+      <div class="promise"><b>Credited if you continue.</b> If you go ahead with us on the next step within 14 days, R6,500 comes off your first month.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 8 -->
+<section class="slide after pad" style="flex-direction:column;justify-content:center" data-notes="Be clear these are estimates. 'We'd rather you know the likely costs now than be surprised later. The Blueprint confirms exactly what you need, and some of this you may not need at all.' If asked what most people choose: the systems for the venue and the house.">
+  <div class="eyebrow">After the plan · estimated costs</div>
+  <h2 style="font-size:clamp(34px,4.4vw,56px);margin:12px 0 0">What the next step usually costs.</h2>
+  <table>
+    <tr><th>If the plan shows you need</th><th>What it does</th><th style="text-align:right">Estimated</th></tr>
+    <tr><td><b>Nothing from us</b></td><td>You run the plan yourselves</td><td class="r">R0</td></tr>
+    <tr><td><b>Booking and review systems</b><br><span style="color:var(--muted);font-size:13.5px">Casa Alexandra and the venue</span></td><td>One inbox, WhatsApp answered at any hour, a review asked for after every stay and event, your own guest list</td><td class="r">from R5,999 a month<br><span style="font-weight:400;color:var(--muted);font-size:13.5px">+ R4,500 setup</span></td></tr>
+    <tr><td><b>The same, for the whole estate</b></td><td>Every house and the venue in one system</td><td class="r">from R9,500 a month<br><span style="font-weight:400;color:var(--muted);font-size:13.5px">+ R7,500 setup</span></td></tr>
+    <tr><td><b>A new website</b></td><td>The house, the venue packages and the estate, with an enquiry form that feeds the same inbox</td><td class="r">R12,000 to R15,000<br><span style="font-weight:400;color:var(--muted);font-size:13.5px">once-off</span></td></tr>
+  </table>
+  <p class="note">Estimates only. The Blueprint confirms what you need and what you don't. Monthly options run month to month after the first three months.</p>
+</section>
+
+<!-- 9 -->
+<section class="slide close photo pad" style="background-image:url('img/p2.jpg')" data-notes="The close. 'If we start this week, you'll have the plan by the end of the month, in time to get everything working before December. Shall we book the kickoff?' If yes: book the kickoff on the call and say Jacques will send the deposit invoice today. If they hesitate: 'Is it the timing, the money, or whether it will work?'">
+  <div class="inner">
+    <div class="eyebrow">The next step</div>
+    <h2>Start this week. Ready before December.</h2>
+    <p>Kickoff this week, the plan in your hands two weeks later, and everything in place before the coast's busiest season.</p>
+    <div class="ask">Shall we book your kickoff call?</div>
+    <p style="margin-top:28px;font-size:14px;opacity:.8">Giorgio van Rooyen · giorgio@reviewtap.co.za · +27 82 529 3305</p>
+  </div>
+</section>
+
+</main>
+
+<script>
+(function(){
+  var deck=document.getElementById('deck'), slides=[].slice.call(document.querySelectorAll('.slide'));
+  var count=document.getElementById('count'), notes=document.getElementById('notes'), idx=0;
+  function current(){var best=0,bd=1e9;slides.forEach(function(s,i){var d=Math.abs(s.getBoundingClientRect().top);if(d<bd){bd=d;best=i;}});return best;}
+  function render(){idx=current();count.textContent=(idx+1)+' / '+slides.length;notes.innerHTML='<b>Notes for Giorgio · slide '+(idx+1)+'</b>'+(slides[idx].dataset.notes||'');}
+  function go(i){i=Math.max(0,Math.min(slides.length-1,i));slides[i].scrollIntoView({behavior:'smooth'});}
+  deck.addEventListener('scroll',function(){window.requestAnimationFrame(render);},{passive:true});
+  document.addEventListener('keydown',function(e){
+    if(['ArrowDown','ArrowRight','PageDown',' '].indexOf(e.key)>-1){e.preventDefault();go(current()+1);}
+    else if(['ArrowUp','ArrowLeft','PageUp'].indexOf(e.key)>-1){e.preventDefault();go(current()-1);}
+    else if(e.key==='n'||e.key==='N'){document.body.classList.toggle('show-notes');render();}
+  });
+  render();
+})();
+</script>
+</body>
+</html>
