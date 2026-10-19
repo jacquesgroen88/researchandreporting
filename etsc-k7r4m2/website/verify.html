@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en-ZA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Verify a certificate | Exclusive Training and Services</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css">
+</head>
+<body data-page="verify">
+<section class="dark" style="min-height:70vh">
+  <div class="wrap" style="max-width:760px;text-align:center">
+    <span class="eyebrow">Certificate verification</span>
+    <h1 style="margin-top:16px;font-size:clamp(40px,5.4vw,64px)">Is this certificate <span class="gold-t">genuine?</span></h1>
+    <p class="lead" style="margin:16px auto 0">Scan the QR code on any certificate or carry card we issue, or type the serial number below. You will see who it belongs to, what they are competent on and whether it is still valid.</p>
+    <form class="vform" id="vf" style="margin:30px auto 0"><input class="inp" id="no" placeholder="e.g. ETSC-26-04117" autocomplete="off"><button class="btn gold" type="submit">Verify</button></form>
+    <div id="out" style="margin-top:28px"></div>
+    <p style="margin-top:26px;font-size:13.5px;color:#8e8475">Try <a href="?no=ETSC-26-04117" style="color:var(--gold2)">ETSC-26-04117</a> for a valid certificate, or any other number to see what a fake looks like.</p>
+  </div>
+</section>
+<script src="site.js"></script>
+<script>
+(function(){
+  const $ = s => document.querySelector(s);
+  const REC = { 'ETSC-26-04117': { name:'Mpho Sithole', id:'5087', course:'F1 Counterbalanced Lift Truck up to 3 000 kg', us:'Unit standard 242974', issued:'19 Oct 2026', valid:'19 Oct 2028' } };
+  function check(v){
+    v = (v || '').trim().toUpperCase(); if (!v) { $('#out').innerHTML = ''; return; }
+    const r = REC[v];
+    $('#out').innerHTML = r ? `<div style="background:#fff;color:var(--ink);border-radius:20px;padding:26px;text-align:left;box-shadow:0 30px 60px rgba(0,0,0,.35)">
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><span style="background:#e5f5ed;color:#0f6b47;font-weight:800;border-radius:999px;padding:4px 14px">✓ Valid certificate</span><span style="margin-left:auto;color:var(--mute);font-weight:700;font-size:14px">${v}</span></div>
+        <div style="display:flex;gap:16px;align-items:center;margin-top:18px"><div style="width:56px;height:56px;border-radius:50%;background:var(--night);color:var(--gold2);display:grid;place-items:center;font-weight:800">MS</div><div><div style="font-family:var(--serif);font-size:28px;font-weight:700;line-height:1">${r.name}</div><div style="color:var(--mute);font-size:14px">ID number ending ${r.id}</div></div></div>
+        <div class="tl" style="margin-top:20px"><div><small>Competent in</small><b style="font-size:18px">${r.course}</b></div><div><small>Issued</small><b>${r.issued}</b></div><div><small>Card valid to</small><b>${r.valid}</b></div></div>
+        <p style="margin-top:14px;font-size:13px;color:var(--mute)">${r.us} · Issued by Exclusive Training and Services · Checked ${new Date().toLocaleDateString('en-ZA',{day:'numeric',month:'short',year:'numeric'})}</p></div>`
+      : `<div style="background:#fff;color:var(--ink);border-radius:20px;padding:26px;text-align:left"><span style="background:#fbe9e6;color:#a42614;font-weight:800;border-radius:999px;padding:4px 14px">✕ Not issued by us</span><p style="margin-top:14px">We have no certificate with the number <b>${v.replace(/</g,'')}</b>. If someone presented this to you, please call us on <a href="tel:0861333208" style="color:var(--gold-dk);font-weight:700">086 133 3208</a> before letting them operate.</p></div>`;
+  }
+  $('#vf').addEventListener('submit', e => { e.preventDefault(); check($('#no').value); });
+  const p = new URLSearchParams(location.search).get('no'); if (p) { $('#no').value = p; check(p); }
+})();
+</script>
+</body>
+</html>

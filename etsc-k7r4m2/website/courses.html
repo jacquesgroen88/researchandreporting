@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en-ZA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Courses | Exclusive Training and Services</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css">
+</head>
+<body data-page="courses">
+
+<div class="page-h"><div class="wrap">
+  <span class="eyebrow">Course catalogue</span>
+  <h1><span id="total"></span> courses. <span class="gold-t">One provider.</span></h1>
+  <p class="lead">Search by machine, code or unit standard. Add courses to your quote as you go and send them to us in one request.</p>
+</div></div>
+
+<div class="tools"><div class="wrap">
+  <input class="inp" id="search" placeholder="Search, e.g. F1, reach truck, 262744" autocomplete="off">
+  <div class="chips" id="filters"></div>
+</div></div>
+
+<main class="wrap" id="list" style="padding-bottom:110px"></main>
+
+<div class="tray" id="tray"><span><b id="tn">0</b> course<span id="ts">s</span> in your quote</span><a class="btn gold sm" href="quote.html">Continue to quote →</a></div>
+
+<script src="courses.js"></script>
+<script src="site.js"></script>
+<script>
+(function(){
+  const C = window.COURSES, CATS = window.CATS;
+  let cat = (location.hash || '').slice(1), q = '';
+  document.getElementById('total').textContent = C.length;
+  function filters(){
+    document.getElementById('filters').innerHTML = `<button class="chip ${!cat?'on':''}" data-c="">All</button>` + CATS.map(c => `<button class="chip ${cat===c.id?'on':''}" data-c="${c.id}">${c.name}</button>`).join('');
+  }
+  function card(x){
+    const on = Basket.has(x.id);
+    return `<div class="course"><div class="top">${x.code?`<span class="tag code">${x.code}</span>`:''}${x.us?`<span class="tag us">US ${x.us}</span>`:'<span class="tag">Short course</span>'}<span class="tag">On site or at our centre</span></div>
+      <h4>${x.name}</h4><div class="foot">${x.us?'Certificate and carry card':'Certificate of attendance'}<button class="add ${on?'on':''}" data-id="${x.id}">${on?'✓ Added':'+ Add to quote'}</button></div></div>`;
+  }
+  function draw(){
+    const t = q.toLowerCase();
+    const hits = C.filter(x => (!cat || x.cat === cat) && (!t || (x.name+' '+x.code+' '+x.us).toLowerCase().includes(t)));
+    const groups = CATS.filter(c => hits.some(x => x.cat === c.id));
+    document.getElementById('list').innerHTML = groups.length ? groups.map(c => {
+      const items = hits.filter(x => x.cat === c.id);
+      return `<div class="group-h" id="g-${c.id}"><h2>${c.name}</h2><span>${items.length} course${items.length>1?'s':''} · ${c.range}</span></div><div class="grid-c">${items.map(card).join('')}</div>`;
+    }).join('') : `<p style="padding:60px 0;text-align:center;color:var(--mute)">Nothing matches "${q}". Call us on <a href="tel:0861333208" style="color:var(--gold-dk);font-weight:700">086 133 3208</a>, we train on far more than we can list.</p>`;
+    tray();
+  }
+  function tray(){ const n = Basket.list().length; document.getElementById('tn').textContent = n; document.getElementById('ts').textContent = n===1?'':'s'; document.getElementById('tray').classList.toggle('on', n>0); }
+  document.getElementById('filters').addEventListener('click', e => { const b = e.target.closest('.chip'); if (!b) return; cat = b.dataset.c; history.replaceState(null,'',cat?'#'+cat:location.pathname); filters(); draw(); });
+  document.getElementById('search').addEventListener('input', e => { q = e.target.value; draw(); });
+  document.getElementById('list').addEventListener('click', e => { const b = e.target.closest('.add'); if (!b) return; const on = Basket.toggle(b.dataset.id); b.classList.toggle('on', on); b.textContent = on ? '✓ Added' : '+ Add to quote'; tray(); });
+  filters(); draw();
+})();
+</script>
+</body>
+</html>
