@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Post-Purchase Notes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f4f1ea; --ink:#1c2620; --soft:#56625a; --rule:#d9d3c5;
+  --green:#1f5a3e; --green-2:#2f7d55; --mark:#cfe8c4;
+  --ochre:#9a6a12; --ochre-bg:#f3e6c8;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:18px/1.6 "IBM Plex Sans",system-ui,sans-serif}
+h1,h2,h3{font-family:Newsreader,Georgia,serif;font-weight:500;margin:0;line-height:1.15}
+a{color:var(--green)}
+.page{min-height:100vh;border-bottom:1px solid var(--rule);display:grid;grid-template-columns:200px 1fr;padding:40px 56px 36px;gap:40px;position:relative}
+.side{border-right:1px solid var(--rule);padding-right:24px}
+.side .n{font:500 44px/1 "IBM Plex Mono";color:var(--green)}
+.side .l{font:500 13px "IBM Plex Mono";text-transform:uppercase;letter-spacing:.08em;color:var(--soft);margin-top:10px}
+.folio{position:absolute;right:56px;bottom:18px;font:13px "IBM Plex Mono";color:var(--soft)}
+.main{max-width:1020px;align-self:center}
+h2{font-size:40px;margin-bottom:12px;letter-spacing:-.01em}
+.intro{font-size:19px;color:var(--soft);max-width:780px;margin:0 0 22px}
+mark{background:linear-gradient(transparent 55%,var(--mark) 55%);color:inherit;padding:0 2px}
+
+.t{font:500 12px "IBM Plex Mono";letter-spacing:.03em;white-space:nowrap;padding:1px 6px;border-radius:3px;vertical-align:2px}
+.t-o{color:var(--soft);border:1px solid var(--rule)}
+.t-r{color:var(--green);background:#e2efe3}
+.t-a{color:var(--ochre);background:var(--ochre-bg)}
+sup a{font:500 12px "IBM Plex Mono";text-decoration:none}
+
+.cover .main{max-width:980px}
+.eyebrow{font:500 13px "IBM Plex Mono";text-transform:uppercase;letter-spacing:.1em;color:var(--green-2);margin-bottom:22px}
+.cover h1{font-size:58px;letter-spacing:-.015em;margin-bottom:24px}
+.cover h1 em{color:var(--green);font-style:italic}
+.lead{font-size:21px;max-width:820px;margin:0 0 28px}
+.beliefs{border-top:2px solid var(--ink);max-width:900px}
+.beliefs div{display:grid;grid-template-columns:40px 1fr auto;gap:16px;padding:13px 0;border-bottom:1px solid var(--rule);align-items:baseline}
+.beliefs b{font:500 15px "IBM Plex Mono";color:var(--green)}
+.byline{margin-top:26px;font-size:15px;color:var(--soft)}
+.key{font-size:14px;color:var(--soft);margin-top:8px}
+
+table{width:100%;border-collapse:collapse;font-size:16px}
+th{font:500 12px "IBM Plex Mono";text-transform:uppercase;letter-spacing:.08em;color:var(--soft);text-align:left;padding:0 14px 10px 0;border-bottom:2px solid var(--ink)}
+td{padding:11px 14px 11px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+td.r{font:500 22px "IBM Plex Mono";color:var(--green);width:46px}
+td .h{font-family:Newsreader,serif;font-size:20px;line-height:1.25;display:block;margin-bottom:2px}
+td .stop{display:block;color:var(--ochre);font-size:15px;margin-top:4px}
+.note-below{font-size:15.5px;color:var(--soft);margin-top:14px}
+.callout{margin-top:16px;border-left:4px solid var(--ochre);background:#fbf6ea;padding:12px 20px;font-size:16.5px}
+.callout b{font-weight:600}
+
+/* test page */
+.test{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-bottom:16px}
+.offer{background:#fff;border:1px solid var(--rule);border-radius:10px;padding:18px 20px}
+.offer .k{font:500 12px "IBM Plex Mono";text-transform:uppercase;letter-spacing:.08em;color:var(--soft);margin-bottom:8px}
+.offer h3{font-size:24px;margin-bottom:6px}
+.offer p{margin:0 0 12px;font-size:16px}
+.btn{display:inline-block;background:var(--green);color:#fff;font:500 15px "IBM Plex Sans";padding:9px 16px;border-radius:6px}
+.btn.ghost{background:none;color:var(--soft);padding:9px 6px}
+.offer.b{border:2px solid var(--green)}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);border-top:2px solid var(--ink)}
+.facts div{padding:12px 18px 0 0}
+.facts div+div{border-left:1px solid var(--rule);padding-left:18px}
+.facts .k{font:500 12px "IBM Plex Mono";text-transform:uppercase;letter-spacing:.08em;color:var(--soft)}
+.facts p{margin:4px 0 0;font-size:16px}
+
+/* copy page */
+.drafts{border-top:2px solid var(--ink)}
+.draft{display:grid;grid-template-columns:230px 1fr;gap:28px;padding:16px 0;border-bottom:1px solid var(--rule)}
+.draft .where{font:500 12px "IBM Plex Mono";text-transform:uppercase;letter-spacing:.08em;color:var(--soft)}
+.draft .where b{display:block;font-family:Newsreader,serif;font-size:21px;text-transform:none;letter-spacing:0;color:var(--ink);font-weight:500;margin-top:4px}
+.draft .hl{font-family:Newsreader,serif;font-size:24px;line-height:1.25;margin:0 0 4px}
+.draft p{margin:0;font-size:16px}
+.draft .cta{font:500 14px "IBM Plex Mono";color:var(--green);margin-top:6px}
+
+.qs{border-top:2px solid var(--ink)}
+.qs>div{display:grid;grid-template-columns:46px 1fr;gap:12px;padding:14px 0;border-bottom:1px solid var(--rule)}
+.qs .r{font:500 24px "IBM Plex Mono";color:var(--green)}
+.qs p{font-family:Newsreader,serif;font-size:23px;line-height:1.3;margin:0 0 2px}
+.qs span{font-size:15.5px;color:var(--soft)}
+.work{margin-top:22px;display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.work h3{font-size:21px;margin-bottom:4px}
+.work p{margin:0;font-size:16px}
+.sign{margin-top:20px;font-family:Newsreader,serif;font-style:italic;font-size:22px}
+
+footer{padding:36px 56px 60px;font-size:14px;color:var(--soft)}
+footer ol{columns:2;column-gap:48px;padding-left:20px}
+footer li{margin-bottom:6px;break-inside:avoid}
+
+@media (max-width:900px){
+  .page{grid-template-columns:1fr;padding:32px 16px 40px;gap:16px}
+  .side{border-right:0;border-bottom:1px solid var(--rule);padding:0 0 10px;display:flex;gap:14px;align-items:baseline}
+  .side .n{font-size:30px}.side .l{margin:0}
+  .cover h1{font-size:36px} h2{font-size:30px}
+  .test,.facts,.work,.draft{grid-template-columns:1fr}
+  .facts div+div{border-left:0;padding-left:0}
+  table{font-size:15px} .folio{right:16px}
+  footer{padding:28px 16px 48px} footer ol{columns:1}
+}
+</style>
+</head>
+<body>
+
+<section class="page cover" id="p1">
+  <div class="side"><div class="n">01</div><div class="l">The number</div></div>
+  <div class="main">
+    <div class="eyebrow">Working notes · subscription supplements · post-purchase</div>
+    <h1>You asked for AOV. For a subscription brand I'd manage to <em>revenue per customer at day 90</em>.</h1>
+    <p class="lead">The two usually move together. The exception is the one that matters for you: a bigger first order can quietly cost you a subscriber, and a subscriber is worth far more than any bump.</p>
+    <div class="beliefs">
+      <div><b>1</b><span>A one-click upsell averages a take rate of about 4 to 5%.<sup><a href="#s1">1</a></sup> On its own that's roughly a 5% AOV lift, which is worth having, but it isn't the big lever.</span><span class="t t-r">researched</span></div>
+      <div><b>2</b><span>Supplement subscribers churn around 5 to 8% a month, so the average one stays 12 to 20 months.<sup><a href="#s3">3</a></sup> Moving even 1 in 20 one-time buyers onto a subscription beats most order bumps.</span><span class="t t-r">researched</span></div>
+      <div><b>!</b><span>A "buy 3, save more" break on the first order can push back the moment someone decides to subscribe. Worth testing before it's switched on for everyone.</span><span class="t t-a">assumption</span></div>
+    </div>
+    <p class="byline">Jacques Groenewald · 19 October 2026</p>
+    <p class="key">Tags: <span class="t t-o">observed</span> from your post or hiring history, <span class="t t-r">researched</span> sourced at the end, <span class="t t-a">assumption</span> my judgement, tested first.</p>
+  </div>
+  <div class="folio">1 / 7</div>
+</section>
+
+<section class="page" id="p2">
+  <div class="side"><div class="n">02</div><div class="l">The audit</div></div>
+  <div class="main">
+    <h2>Where I'd look first, step by step</h2>
+    <p class="intro">I'd walk the whole path as a buyer on a phone before touching any app settings. Most of what costs money shows up in the first ten minutes.</p>
+    <table>
+      <tr><th style="width:210px">Step</th><th>What I'd check</th><th style="width:330px">What I half expect to find</th></tr>
+      <tr><td><span class="h">Which checkout</span></td><td>Your hiring history mentions CheckoutChamp funnels and Shopify funnel builds <span class="t t-o">observed</span>. First job is mapping which checkout each traffic source actually lands on.</td><td>Two flows with different offers, and reporting that only sees one of them.</td></tr>
+      <tr><td><span class="h">Order bump</span></td><td>What's offered, at what price, and whether it's the same for subscribers and one-time buyers.</td><td>A discount on more of the same product, which competes with the subscription.</td></tr>
+      <tr><td><span class="h">Post-purchase page</span></td><td>Offer order, how the subscription is shown, whether there's a downsell after a "no".</td><td>Subscription offered at checkout only, never again after payment.</td></tr>
+      <tr><td><span class="h">Thank-you page</span></td><td>Does it tell people when the bottle runs out and what happens next?</td><td>An order number and a share button.</td></tr>
+      <tr><td><span class="h">First 30 days</span></td><td>The Klaviyo flows around order one <span class="t t-o">observed</span>, especially the days before the bottle runs out.</td><td>Generic welcome emails, and nothing timed to the refill.</td></tr>
+    </table>
+    <div class="callout"><b>One technical catch:</b> Shopify's post-purchase extensions are still in beta and need an access request for a live store, and a subscription offer there needs a buyer-consent step for the stored card.<sup><a href="#s2">2</a></sup> <span class="t t-r">researched</span> Worth knowing before we promise dates.</div>
+  </div>
+  <div class="folio">2 / 7</div>
+</section>
+
+<section class="page" id="p3">
+  <div class="side"><div class="n">03</div><div class="l">Offers, ranked</div></div>
+  <div class="main">
+    <h2>Which offers I'd build, in order</h2>
+    <p class="intro">Ranked by what I think each is worth over 90 days, not by take rate. The order is my judgement until your numbers say otherwise. <span class="t t-a">assumption</span></p>
+    <table>
+      <tr><th></th><th>Offer and where it goes</th><th>Why it's ranked here</th></tr>
+      <tr><td class="r">1</td><td><span class="h">Turn this order into a subscription</span>Post-purchase page, first offer</td><td>Biggest prize per yes. Same product, so there's nothing new to explain.</td></tr>
+      <tr><td class="r">2</td><td><span class="h">One complementary product, single unit</span>Post-purchase page, second offer</td><td>On my own store, one well-matched add-on carried AOV. When it went out of stock, AOV fell 21%. One good pairing beats a menu.</td></tr>
+      <tr><td class="r">3</td><td><span class="h">Small add-on at checkout</span>Order bump</td><td>A low-price extra (travel pack, shaker, sample of a second product). Easy yes, and it doesn't fight the subscription.</td></tr>
+      <tr><td class="r">4</td><td><span class="h">Longer interval after a "no"</span>Downsell, after a declined upgrade</td><td>"Every 60 days instead" keeps the subscriber without giving away more margin.</td></tr>
+      <tr><td class="r">5</td><td><span class="h">Quantity break</span>Only for people who declined the subscription</td><td>Last, because it delays the next decision. I'd keep it away from anyone still likely to subscribe.<span class="stop">If your data shows 3-packs subscribe just as often later, this moves up.</span></td></tr>
+    </table>
+  </div>
+  <div class="folio">3 / 7</div>
+</section>
+
+<section class="page" id="p4">
+  <div class="side"><div class="n">04</div><div class="l">First test</div></div>
+  <div class="main">
+    <h2>The first thing I'd test: sell the refill date, not the discount</h2>
+    <p class="intro">Most subscription offers lead with "save 15%". Someone who's just paid isn't thinking about savings. They're thinking about whether this works, and the answer needs more than one bottle. So I'd offer them not running out.</p>
+    <div class="test">
+      <div class="offer"><div class="k">A · control</div>
+        <h3>Subscribe &amp; save 15%</h3>
+        <p>Get this every month and save 15% on every order. Cancel anytime.</p>
+        <span class="btn">Add subscription</span> <span class="btn ghost">No thanks</span></div>
+      <div class="offer b"><div class="k">B · refill date</div>
+        <h3>Your bottle lasts about 30 days</h3>
+        <p>Want the next one to arrive on <b>14 November</b>, before you run out? Same price as today, then 15% off every refill after that. Skip or cancel by email, any time.</p>
+        <span class="btn">Yes, send it on the 14th</span> <span class="btn ghost">No thanks</span></div>
+    </div>
+    <div class="facts">
+      <div><div class="k">Win means</div><p>Higher subscription take rate <i>and</i> no drop in second-order rate. Take rate alone can be bought with a bigger discount.</p></div>
+      <div><div class="k">How big a test</div><p>To see 5% go to 7% reliably takes about 2,200 orders per side. <span class="t t-a">assumption</span> Your monthly volume decides whether that's two weeks or two months.</p></div>
+      <div><div class="k">Holdout</div><p>10% of orders see no post-purchase offers at all, so the revenue we report is extra revenue and not just moved revenue.</p></div>
+    </div>
+  </div>
+  <div class="folio">4 / 7</div>
+</section>
+
+<section class="page" id="p5">
+  <div class="side"><div class="n">05</div><div class="l">Copy drafts</div></div>
+  <div class="main">
+    <h2>First drafts of the other offers</h2>
+    <p class="intro">Rough copy to show the angle. The real versions depend on your products and on what your reviews say people care about.</p>
+    <div class="drafts">
+      <div class="draft"><div class="where">Offer 2 · post-purchase<b>Complementary product</b></div>
+        <div><p class="hl">Most people taking [product] add [pairing] at night.</p><p>Here's why they work together, in one line a customer would actually say. One bottle, added to the order you just placed, no extra shipping.</p><p class="cta">[ Add to my order · $X ]</p></div></div>
+      <div class="draft"><div class="where">Offer 3 · checkout<b>Order bump</b></div>
+        <div><p class="hl">Add a travel pack for $X.</p><p>Seven days of [product] in a pouch for your bag, so a trip doesn't break the streak.</p><p class="cta">[ ✓ Add travel pack ]</p></div></div>
+      <div class="draft"><div class="where">Offer 4 · after a "no"<b>Longer interval</b></div>
+        <div><p class="hl">Monthly too often? Every 60 days works too.</p><p>Same refill, half as often, and you can change it whenever. Just reply to any email.</p><p class="cta">[ Every 60 days, please ]</p></div></div>
+      <div class="draft"><div class="where">Day 24 · email<b>Before they run out</b></div>
+        <div><p class="hl">You've got about a week left.</p><p>For one-time buyers who said no: a last, no-pressure version of the refill offer, sent when the bottle is nearly empty, not on day one.</p><p class="cta">[ Send my next bottle ]</p></div></div>
+    </div>
+  </div>
+  <div class="folio">5 / 7</div>
+</section>
+
+<section class="page" id="p6">
+  <div class="side"><div class="n">06</div><div class="l">Reporting</div></div>
+  <div class="main">
+    <h2>What I'd report every week</h2>
+    <p class="intro">Your post lists the numbers <span class="t t-o">observed</span>. These are the definitions I'd use, because each one has an easy way to flatter itself.</p>
+    <table>
+      <tr><th style="width:270px">Number</th><th>How I'd measure it</th><th style="width:330px">The way it lies</th></tr>
+      <tr><td><span class="h">Take rate</span></td><td>Accepted offers divided by offers actually shown, per offer.</td><td>Dividing by all orders hides a weak offer behind a strong one.</td></tr>
+      <tr><td><span class="h">AOV</span></td><td>Per order, split by one-time and subscription.</td><td>Blended AOV rises when subscribers are a smaller share of orders.</td></tr>
+      <tr><td><span class="h">Revenue per customer</span></td><td>At 30 and 90 days, by the offer they first saw. Holdout as the baseline.</td><td>Without a holdout you can't tell extra revenue from moved revenue.</td></tr>
+      <tr><td><span class="h">Subscription conversion</span></td><td>One-time buyers who become subscribers within 60 days, from any route.</td><td>Counting only the post-purchase yes undercounts the email route.</td></tr>
+      <tr><td><span class="h">Order-2 rate</span></td><td>Subscribers who get a second paid order, by entry offer.</td><td>The cliff is between orders one and three.<sup><a href="#s3">3</a></sup> A discount-led yes can fall off it fastest. <span class="t t-a">assumption</span></td></tr>
+    </table>
+  </div>
+  <div class="folio">6 / 7</div>
+</section>
+
+<section class="page" id="p7">
+  <div class="side"><div class="n">07</div><div class="l">Next</div></div>
+  <div class="main">
+    <h2>What I'd ask you, and how I'd like to work</h2>
+    <div class="qs">
+      <div><span class="r">1</span><div><p>Which checkout are orders going through today, Shopify's or CheckoutChamp, and does it differ by traffic source?</p><span>Everything on page 3 depends on where the offers can actually live.</span></div></div>
+      <div><span class="r">2</span><div><p>Roughly how many orders a month, and what share are subscriptions already?</p><span>That sets how fast we can test and which offer to build first.</span></div></div>
+      <div><span class="r">3</span><div><p>Do subscribers who joined on a discount cancel faster than the rest?</p><span>If they do, the refill-date test matters even more.</span></div></div>
+    </div>
+    <div class="work">
+      <div><h3>First two weeks, fixed</h3><p>Full flow audit, the offer map, and the refill-date test built and live with a holdout.</p></div>
+      <div><h3>After that, ongoing</h3><p>Hourly for the build and testing work, plus a share of the extra revenue the holdout proves. That keeps me paid for results you can see.</p></div>
+    </div>
+    <p class="sign">Jacques</p>
+  </div>
+  <div class="folio">7 / 7</div>
+</section>
+
+<footer>
+  <p><b>Sources.</b> Anything without one is tagged as an assumption. Vendor figures are directional; your own cohorts beat all of them.</p>
+  <ol>
+    <li id="s1">CartHook on post-purchase conversion rates; ReConvert data across 40,000+ merchants (4.7% take rate, 5.6% AOV lift) via Zipchat. <a href="https://carthook.com/blogs/wiki/what-is-the-conversion-rate-for-post-purchase-upsell">carthook.com</a> · <a href="https://www.zipchat.ai/blog/post-purchase-upsell-strategies">zipchat.ai</a></li>
+    <li id="s2">Shopify developer docs: post-purchase extension access, and post-purchase subscriptions. <a href="https://shopify.dev/apps/checkout/post-purchase/request-access-to-post-purchase-api">shopify.dev</a> · <a href="https://shopify.dev/docs/apps/checkout/product-offers/post-purchase/subscriptions">shopify.dev</a></li>
+    <li id="s3">Eightx on supplement subscription churn and customer lifetime by category. <a href="https://eightx.co/blog/supplement-subscription-churn-rate-benchmark">eightx.co</a> · <a href="https://www.eightx.co/blog/average-subscription-churn-rate-by-category">eightx.co</a></li>
+  </ol>
+</footer>
+</body>
+</html>
