@@ -5,56 +5,78 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
 <title>Courses | Exclusive Training and Services</title>
+<link rel="icon" href="../assets/key.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="site.css">
 </head>
 <body data-page="courses">
 
-<div class="page-h"><div class="wrap">
-  <span class="eyebrow">Course catalogue</span>
-  <h1><span id="total"></span> courses. <span class="gold-t">One provider.</span></h1>
-  <p class="lead">Search by machine, code or unit standard. Add courses to your quote as you go and send them to us in one request.</p>
+<div class="page-h"><img src="../assets/img-dozers.jpg" alt=""><div class="wrap">
+  <div class="crumbs"><a href="index.html">Home</a> / Courses</div>
+  <h1><span id="total"></span> courses, from F1 forklift to tower crane</h1>
+  <p class="lede">Search by machine, code or unit standard. Open any course for the details, and add as many as you need to one quote request.</p>
 </div></div>
 
 <div class="tools"><div class="wrap">
-  <input class="inp" id="search" placeholder="Search, e.g. F1, reach truck, 262744" autocomplete="off">
+  <div class="search-w"><span data-ico="search"></span><input class="inp" id="search" placeholder="Search, e.g. F1, reach truck, 262744" autocomplete="off" aria-label="Search courses"></div>
   <div class="chips" id="filters"></div>
 </div></div>
 
-<main class="wrap" id="list" style="padding-bottom:110px"></main>
+<main class="wrap" id="list" style="padding-bottom:90px"></main>
 
-<div class="tray" id="tray"><span><b id="tn">0</b> course<span id="ts">s</span> in your quote</span><a class="btn gold sm" href="quote.html">Continue to quote →</a></div>
+<div class="tray" id="tray"><span><b id="tn">0</b> course<span id="ts">s</span> in your quote</span><a class="btn btn-gold btn-sm" href="quote.html">Continue to quote</a></div>
+<div class="dbg" id="dbg"></div>
+<aside class="drawer" id="drawer" aria-label="Course details"></aside>
 
 <script src="courses.js"></script>
 <script src="site.js"></script>
 <script>
 (function(){
-  const C = window.COURSES, CATS = window.CATS;
+  const C = window.COURSES, CATS = window.CATS, $ = s => document.querySelector(s);
   let cat = (location.hash || '').slice(1), q = '';
-  document.getElementById('total').textContent = C.length;
-  function filters(){
-    document.getElementById('filters').innerHTML = `<button class="chip ${!cat?'on':''}" data-c="">All</button>` + CATS.map(c => `<button class="chip ${cat===c.id?'on':''}" data-c="${c.id}">${c.name}</button>`).join('');
-  }
+  $('#total').textContent = C.length;
+  const machine = c => ['lift','crane','earth'].includes(c);
+  function filters(){ $('#filters').innerHTML = `<button class="chip ${!cat?'on':''}" data-c="">All</button>` + CATS.map(c => `<button class="chip ${cat===c.id?'on':''}" data-c="${c.id}">${c.name}</button>`).join(''); }
   function card(x){
     const on = Basket.has(x.id);
-    return `<div class="course"><div class="top">${x.code?`<span class="tag code">${x.code}</span>`:''}${x.us?`<span class="tag us">US ${x.us}</span>`:'<span class="tag">Short course</span>'}<span class="tag">On site or at our centre</span></div>
-      <h4>${x.name}</h4><div class="foot">${x.us?'Certificate and carry card':'Certificate of attendance'}<button class="add ${on?'on':''}" data-id="${x.id}">${on?'✓ Added':'+ Add to quote'}</button></div></div>`;
+    return `<div class="course" data-open="${x.id}" role="button" tabindex="0"><div class="top">${x.code?`<span class="tag code">${x.code}</span>`:''}${x.us?`<span class="tag us">US ${x.us}</span>`:'<span class="tag">Short course</span>'}</div>
+      <h4>${x.name}</h4><div class="foot">${machine(x.cat)?'Certificate and carry card':'Certificate'}<button class="add ${on?'on':''}" data-id="${x.id}">${on?'Added':'Add to quote'}</button></div></div>`;
   }
   function draw(){
     const t = q.toLowerCase();
     const hits = C.filter(x => (!cat || x.cat === cat) && (!t || (x.name+' '+x.code+' '+x.us).toLowerCase().includes(t)));
     const groups = CATS.filter(c => hits.some(x => x.cat === c.id));
-    document.getElementById('list').innerHTML = groups.length ? groups.map(c => {
-      const items = hits.filter(x => x.cat === c.id);
-      return `<div class="group-h" id="g-${c.id}"><h2>${c.name}</h2><span>${items.length} course${items.length>1?'s':''} · ${c.range}</span></div><div class="grid-c">${items.map(card).join('')}</div>`;
-    }).join('') : `<p style="padding:60px 0;text-align:center;color:var(--mute)">Nothing matches "${q}". Call us on <a href="tel:0861333208" style="color:var(--gold-dk);font-weight:700">086 133 3208</a>, we train on far more than we can list.</p>`;
+    $('#list').innerHTML = groups.length ? groups.map(c => { const items = hits.filter(x => x.cat === c.id);
+      return `<div class="cgroup" id="g-${c.id}"><div class="cgroup-h"><div class="im"><img src="../assets/${c.img}" alt="" loading="lazy"></div><div><span class="kicker" style="margin-bottom:6px">${c.range}</span><h2>${c.name}</h2><p>${c.blurb} ${items.length} course${items.length>1?'s':''}.</p></div></div><div class="clist2">${items.map(card).join('')}</div></div>`;
+    }).join('') : `<p style="padding:70px 0;text-align:center;color:var(--mute)">Nothing matches "${q.replace(/</g,'')}". Call <a href="tel:0861333208" style="color:var(--gold-dk);font-weight:700">086 133 3208</a>, we train on more than we can list here.</p>`;
     tray();
   }
-  function tray(){ const n = Basket.list().length; document.getElementById('tn').textContent = n; document.getElementById('ts').textContent = n===1?'':'s'; document.getElementById('tray').classList.toggle('on', n>0); }
-  document.getElementById('filters').addEventListener('click', e => { const b = e.target.closest('.chip'); if (!b) return; cat = b.dataset.c; history.replaceState(null,'',cat?'#'+cat:location.pathname); filters(); draw(); });
-  document.getElementById('search').addEventListener('input', e => { q = e.target.value; draw(); });
-  document.getElementById('list').addEventListener('click', e => { const b = e.target.closest('.add'); if (!b) return; const on = Basket.toggle(b.dataset.id); b.classList.toggle('on', on); b.textContent = on ? '✓ Added' : '+ Add to quote'; tray(); });
+  function tray(){ const n = Basket.list().length; $('#tn').textContent = n; $('#ts').textContent = n===1?'':'s'; $('#tray').classList.toggle('on', n>0); }
+  function open(id){
+    const x = C.find(c => c.id === id), k = CATS.find(c => c.id === x.cat), m = machine(x.cat), on = Basket.has(id);
+    $('#drawer').innerHTML = `<div class="dimg"><img src="../assets/${k.img}" alt=""><button class="x" id="dx" aria-label="Close">${ico('x')}</button></div>
+      <div class="db"><span class="kicker" style="margin-bottom:0">${k.name}</span><h2>${x.code?x.code+' · ':''}${x.name}</h2>
+      <div class="spec"><div><small>Machine code</small><b>${x.code||'Not applicable'}</b></div><div><small>Unit standard</small><b>${x.us?'SAQA '+x.us:'Company short course'}</b></div>
+      <div><small>Where</small><b>Your site or Three Rivers</b></div><div><small>Options</small><b>${m?'New operator or re-licensing':'Single course'}</b></div></div>
+      <h4>What each learner receives</h4><ul>${(m?['Certificate of competence with serial number and QR code','Carry card showing machine code, capacity, restrictions and expiry','Re-licensing reminder before the card expires']:['Certificate with serial number and QR code','Attendance and results available in your client portal']).map(t=>`<li>${ico('check')}${t}</li>`).join('')}</ul>
+      <h4>How it is run</h4><ul>${(m?['Theory with up to 12 learners per facilitator','Practical with no more than 4 learners per machine','Assessed by a registered assessor against the unit standard']:['Run on your premises or at our centre','Sized to your team and shift pattern']).map(t=>`<li>${ico('check')}${t}</li>`).join('')}</ul>
+      <h4>Before the course</h4><ul><li>${ico('check')}A copy of each learner's ID</li>${m?`<li>${ico('check')}Learners must be medically fit to operate the machine</li>`:''}</ul>
+      <p style="font-size:13.5px;color:var(--mute);margin-top:18px">Duration and price depend on your team's experience and the number of learners. Both are confirmed in your quote.</p>
+      <div style="display:flex;gap:10px;margin-top:22px;flex-wrap:wrap"><a class="btn btn-gold" href="quote.html?c=${id}">Request a quote</a><button class="btn btn-ghost" id="dadd">${on?'Added to quote':'Add to quote'}</button></div></div>`;
+    $('#drawer').classList.add('on'); $('#dbg').classList.add('on');
+    $('#dx').onclick = close; $('#dadd').onclick = () => { const o = Basket.toggle(id); $('#dadd').textContent = o?'Added to quote':'Add to quote'; draw(); };
+  }
+  function close(){ $('#drawer').classList.remove('on'); $('#dbg').classList.remove('on'); }
+  $('#dbg').onclick = close; document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+  $('#filters').addEventListener('click', e => { const b = e.target.closest('.chip'); if (!b) return; cat = b.dataset.c; history.replaceState(null,'',cat?'#'+cat:location.pathname); filters(); draw(); window.scrollTo({top:0,behavior:'instant'}); });
+  $('#search').addEventListener('input', e => { q = e.target.value; draw(); });
+  $('#list').addEventListener('click', e => {
+    const b = e.target.closest('.add'); if (b) { e.stopPropagation(); const on = Basket.toggle(b.dataset.id); b.classList.toggle('on', on); b.textContent = on ? 'Added' : 'Add to quote'; tray(); return; }
+    const c = e.target.closest('[data-open]'); if (c) open(c.dataset.open);
+  });
+  $('#list').addEventListener('keydown', e => { const c = e.target.closest('[data-open]'); if (c && e.key === 'Enter') open(c.dataset.open); });
+  window.addEventListener('hashchange', () => { cat = location.hash.slice(1); filters(); draw(); });
   filters(); draw();
 })();
 </script>

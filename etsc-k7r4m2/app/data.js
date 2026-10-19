@@ -36,7 +36,7 @@ clients: [
   { id:'midrand', name:'Midrand Pharma Logistics', site:'Midrand', contact:'Priya Naidoo', role:'Warehouse manager', terms:'30-day', since:'2018', ops:51, current:49, exp90:6, spend:157300, next:'22 Oct, Reach truck', xy:[200,72] },
   { id:'boksburg', name:'Boksburg Paper & Board', site:'Boksburg', contact:'Willem du Toit', role:'Health & safety officer', terms:'30-day', since:'2011', ops:77, current:63, exp90:8, spend:243100, next:'22 Oct, Forklift re-licensing', xy:[246,136] }
 ],
-towns: [ {n:'Pretoria',x:205,y:34},{n:'Midrand',x:188,y:66},{n:'Johannesburg',x:160,y:126},{n:'Kempton Park',x:238,y:90},{n:'Benoni',x:276,y:112},{n:'Germiston',x:206,y:138},{n:'Boksburg',x:250,y:146},{n:'Alberton',x:198,y:158},{n:'Krugersdorp',x:84,y:116},{n:'Springs',x:314,y:128},{n:"Vereeniging",x:204,y:212},{n:'Vanderbijlpark',x:142,y:206},{n:'Meyerton',x:204,y:184},{n:'Sasolburg',x:160,y:236} ],
+towns: [ {n:'Pretoria',x:205,y:34},{n:'Midrand',x:188,y:66},{n:'Johannesburg',x:160,y:126},{n:'Kempton Park',x:238,y:90},{n:'Benoni',x:276,y:112},{n:'Germiston',x:206,y:138},{n:'Boksburg',x:250,y:146},{n:'Alberton',x:198,y:158},{n:'Krugersdorp',x:84,y:116},{n:'Springs',x:314,y:128},{n:"Vereeniging",x:204,y:212},{n:'Vanderbijlpark',x:118,y:198},{n:'Meyerton',x:204,y:184},{n:'Sasolburg',x:160,y:236} ],
 base: { x:184, y:222 },
 
 bookings: [
@@ -63,12 +63,12 @@ sessionsToday: [
 ],
 
 inbox: [
-  { icon:'✉', bg:'#e8effb', fg:'#2f5fb8', t:'New enquiry: Kempton DC, 8 forklift operators', d:'From the website 3 minutes ago. 8 of them are already on file and expire this month. Quote is drafted.', href:'#/quote' },
-  { icon:'!', bg:'#fdf1e2', fg:'#b45c09', t:'2 ID copies missing for Thursday', d:'Boksburg Paper & Board, BK-2615. Willem du Toit was reminded on WhatsApp this morning.', href:'#/booking/BK-2611' },
-  { icon:'✓', bg:'#e5f5ed', fg:'#16865a', t:'9 certificates ready to release', d:'BK-2598 passed moderation. Release sends the pack and the invoice together.', href:'#/certificates' },
-  { icon:'⚑', bg:'#fbe9e6', fg:'#c2321f', t:'Pieter\'s assessor registration expires 14 Nov', d:'He has 3 bookings after that date. Renewal pack is ready to submit.', href:'#/compliance' },
-  { icon:'▦', bg:'#f8efdc', fg:'#8a6220', t:'FL-03 double booked on Thursday', d:'One click to move Boksburg to FL-01.', href:'#/schedule' },
-  { icon:'R', bg:'#fbe9e6', fg:'#c2321f', t:'Boksburg Paper & Board is on day 31', d:'INV-4389, R18 630. Second reminder went out automatically. Time for a call.', href:'#/finance' }
+  { icon:'mail', bg:'#e8effb', fg:'#2f5fb8', t:'New enquiry: Kempton DC, 8 forklift operators', d:'From the website 3 minutes ago. 8 of them are already on file and expire this month. Quote is drafted.', href:'#/quote' },
+  { icon:'alert', bg:'#fdf1e2', fg:'#b45c09', t:'2 ID copies missing for Thursday', d:'Boksburg Paper & Board, BK-2615. Willem du Toit was reminded on WhatsApp this morning.', href:'#/booking/BK-2611' },
+  { icon:'check', bg:'#e5f5ed', fg:'#16865a', t:'9 certificates ready to release', d:'BK-2598 passed moderation. Release sends the pack and the invoice together.', href:'#/certificates' },
+  { icon:'flag', bg:'#fbe9e6', fg:'#c2321f', t:'Pieter\'s assessor registration expires 14 Nov', d:'He has 3 bookings after that date. Renewal pack is ready to submit.', href:'#/compliance' },
+  { icon:'schedule', bg:'#f8efdc', fg:'#8a6220', t:'FL-03 double booked on Thursday', d:'One click to move Boksburg to FL-01.', href:'#/schedule' },
+  { icon:'rand', bg:'#fbe9e6', fg:'#c2321f', t:'Boksburg Paper & Board is on day 31', d:'INV-4389, R18 630. Second reminder went out automatically. Time for a call.', href:'#/finance' }
 ],
 
 stats: { cycleDays:6, cycleBefore:24, learnersWeek:41, sitesWeek:6, oldestMod:2, debtors:186420, debtors60:22410,

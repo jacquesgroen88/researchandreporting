@@ -1,13 +1,13 @@
 /* ETSC course catalogue, taken from etsc.co.za on 19 Oct 2026 (codes and unit standards as published). */
 window.CATS = [
-  { id:'lift', name:'Lift Trucks', icon:'⛟', blurb:'Counterbalanced, reach, order picker, VNA and rail-mounted stackers, F1 to F16.', range:'F1 – F16' },
-  { id:'crane', name:'Cranes & Lifting', icon:'⚓', blurb:'Overhead, mobile, crawler, tower and truck-mounted cranes, hoists and MEWPs, with safe slinging.', range:'C30 – C54' },
-  { id:'earth', name:'Earth Moving', icon:'⛰', blurb:'Backhoe loader, excavator, front-end loader, grader, dozer, skid steer, ADT and tractor.', range:'Unit standard based' },
-  { id:'drive', name:'Driving', icon:'⛽', blurb:'Dangerous goods, rigid and combination heavy vehicles, defensive driving and K53 evaluation.', range:'Fleet and freight' },
-  { id:'hs', name:'Health & Safety', icon:'✚', blurb:'First aid, fire fighting, SHE representatives, supervisors and train-the-trainer.', range:'OHS Act compliance' },
-  { id:'mine', name:'Mining', icon:'⛏', blurb:'Crusher, signal man, spotter and underground tractor, plus competent A and B.', range:'Mine site training' },
-  { id:'related', name:'Construction & Tools', icon:'⚒', blurb:'Scaffolding, rigging, hot work, power and hand tools, and 30 more short courses.', range:'33 short courses' },
-  { id:'pack', name:'Training Packages', icon:'✦', blurb:'Bundles that save time and money, such as first aid and fire fighting in one week.', range:'Bundles' }
+  { id:'lift', name:'Lift Trucks', ic:'forklift', img:'img-forklifts.jpg', blurb:'Counterbalanced, reach, order picker, VNA and rail-mounted stackers.', range:'F1 to F16' },
+  { id:'crane', name:'Cranes & Lifting', ic:'crane', img:'img-platform.jpg', blurb:'Overhead, mobile, crawler, tower and truck-mounted cranes, hoists and MEWPs.', range:'C30 to C54' },
+  { id:'earth', name:'Earth Moving', ic:'excavator', img:'img-dozers.jpg', blurb:'Backhoe loader, excavator, loader, grader, dozer, skid steer and ADT.', range:'8 machines' },
+  { id:'hs', name:'Health & Safety', ic:'cross', img:'img-fire.jpg', blurb:'First aid, fire fighting, SHE reps, working at heights and supervisors.', range:'OHS Act' },
+  { id:'drive', name:'Driving', ic:'truck', img:'img-driver.jpg', blurb:'Dangerous goods, heavy vehicles, defensive driving and K53 evaluation.', range:'Fleet & freight' },
+  { id:'mine', name:'Mining', ic:'hat', img:'img-haultruck.jpg', blurb:'Crusher, signal man, spotter and underground tractor.', range:'Mine sites' },
+  { id:'related', name:'Construction & Tools', ic:'tools', img:'img-harness.jpg', blurb:'Scaffolding, rigging, hot work, power tools and site equipment.', range:'32 short courses' },
+  { id:'pack', name:'Training Packages', ic:'layers', img:'img-cpr.jpg', blurb:'Bundles such as first aid and fire fighting in the same week.', range:'Save on bundles' }
 ];
 window.COURSES = [
   ['lift','F1','Counterbalanced Lift Truck up to 3 000 kg','242974'],

@@ -17,15 +17,26 @@ const pill = (t, k='mute') => `<span class="pill ${k}">${t}</span>`;
 const stagePill = s => pill(STAGES[s], ['mute','info','info','warn','gold','gold','warn','good','good'][s] || 'mute');
 
 /* ---------- nav ---------- */
+const IC = {
+  today:'M3 3h7v9H3zM14 3h7v5h-7zM14 12h7v9h-7zM3 16h7v5H3z', pipeline:'M4 4h4v16H4zM10 4h4v10h-4zM16 4h4v7h-4z', schedule:'M4 5h16v15H4zM4 10h16M9 3v4M15 3v4',
+  quote:'M7 3h7l5 5v13H7zM14 3v5h5M10 13h6M10 17h6', booking:'M9 4h6v3H9zM6 5h3M15 5h3v16H6V5M9 12h6M9 16h4', field:'M8 2h8a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1zM11 18h2',
+  moderation:'M12 3 4 6v6c0 4.5 3.4 8.2 8 9 4.6-.8 8-4.5 8-9V6zM8.5 12l2.5 2.5 4.5-5', certificates:'M12 15a5 5 0 1 0 0-10 5 5 0 0 0 0 10zM8.5 13.5 7 21l5-3 5 3-1.5-7.5',
+  renewals:'M20 11a8 8 0 0 0-14.9-4M4 4v4h4M4 13a8 8 0 0 0 14.9 4M20 20v-4h-4', clients:'M4 21V7l8-4 8 4v14M9 21v-6h6v6M8 10h.01M12 10h.01M16 10h.01',
+  learners:'M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM2 21v-1a7 7 0 0 1 14 0v1M16 3.5a4 4 0 0 1 0 7.5M22 21v-1a7 7 0 0 0-4-6.3', finance:'M3 7h18v12H3zM3 11h18M7 15h3',
+  compliance:'M5 21V4M5 4h11l-2 4 2 4H5', portal:'M3 11 12 4l9 7M5 10v10h14V10', verify:'M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h2v2h-2zM18 14h2v6h-4M14 18h2v2',
+  mail:'M3 5h18v14H3zM3 6l9 7 9-7', alert:'M12 3 2 21h20zM12 10v5M12 18h.01', check:'M4 12.5 9 17.5 20 6.5', flag:'M5 21V4M5 4h11l-2 4 2 4H5', rand:'M7 20V4h6a4 4 0 0 1 0 8H7M12 12l5 8'
+};
+const svg = n => `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="${IC[n]}"/></svg>`;
+
 const NAV = [
-  ['Run the business', [['today','◎','Today'],['pipeline','▤','Pipeline',D.bookings.length],['schedule','▦','Schedule'],['quote','✎','Quote builder']]],
-  ['Deliver training', [['booking/BK-2611','❖','Live booking'],['field','▢','Trainer app'],['moderation','✓','Moderation',D.moderation.length],['certificates','✦','Certificates']]],
-  ['Grow & protect', [['renewals','↻','Renewals'],['clients','◇','Clients'],['learners','☺','Learner register'],['finance','R','Finance'],['compliance','⚑','Provider compliance']]],
-  ['What others see', [['portal','⌂','Client portal'],['verify','⌕','Verify a certificate']]]
+  ['Run the business', [['today','today','Today'],['pipeline','pipeline','Pipeline',D.bookings.length],['schedule','schedule','Schedule'],['quote','quote','Quote builder']]],
+  ['Deliver training', [['booking/BK-2611','booking','Live booking'],['field','field','Trainer app'],['moderation','moderation','Moderation',D.moderation.length],['certificates','certificates','Certificates']]],
+  ['Grow & protect', [['renewals','renewals','Renewals'],['clients','clients','Clients'],['learners','learners','Learner register'],['finance','finance','Finance'],['compliance','compliance','Provider compliance']]],
+  ['What others see', [['portal','portal','Client portal'],['verify','verify','Verify a certificate']]]
 ];
 function renderNav(route){
   $('#nav').innerHTML = NAV.map(([h, items]) => `<div class="nav-h">${h}</div>` + items.map(([r,i,l,ct]) =>
-    `<a class="nav-a ${route.startsWith(r.split('/')[0]) && (r.indexOf('/')<0 || route===r) ? 'on':''}" href="#/${r}"><i>${i}</i>${l}${ct?`<span class="ct">${ct}</span>`:''}</a>`).join('')).join('');
+    `<a class="nav-a ${route.startsWith(r.split('/')[0]) && (r.indexOf('/')<0 || route===r) ? 'on':''}" href="#/${r}"><i>${svg(i)}</i>${l}${ct?`<span class="ct">${ct}</span>`:''}</a>`).join('')).join('');
 }
 
 /* ---------- small builders ---------- */
@@ -62,7 +73,7 @@ V.today = () => {
     </div>
     <div class="card" id="todayInbox">
       <div class="card-h"><h3>Needs you today</h3><span class="pill gold">${D.inbox.length}</span></div>
-      ${D.inbox.map(i => `<a class="list-i" href="${i.href}"><div class="ic" style="background:${i.bg};color:${i.fg}">${i.icon}</div><div><b>${i.t}</b><p>${i.d}</p></div></a>`).join('')}
+      ${D.inbox.map(i => `<a class="list-i" href="${i.href}"><div class="ic" style="background:${i.bg};color:${i.fg}">${IC[i.icon]?svg(i.icon):i.icon}</div><div><b>${i.t}</b><p>${i.d}</p></div></a>`).join('')}
     </div>
   </div>
   <div class="grid g3 mt">
@@ -209,7 +220,7 @@ V.field = () => {
     <div class="phone" id="phone2"><div class="screen"><div class="notch"><span>11:05</span><span>● Synced</span></div>
       <div class="ph-top"><small>Practical assessment · Day 3</small><b>${L[0].name}</b><span class="small" style="color:#bfb39f">${co.us}</span></div>
       <div class="ph-body">${D.checklist.map((q,i)=>`<div class="crit"><div class="q">${i+1}. ${q}</div><div class="opts"><button class="${i<5?'c':''}" data-opt>Competent</button><button data-opt>Not yet</button></div></div>`).join('')}
-      <div class="crit"><div class="q">Evidence</div><div class="flex" style="margin-top:8px"><span class="pill info">📷 3 photos</span><span class="pill info">🎥 40s video</span></div></div>
+      <div class="crit"><div class="q">Evidence</div><div class="flex" style="margin-top:8px"><span class="pill info">3 photos</span><span class="pill info">40 s video</span></div></div>
       <button class="btn dark" style="width:100%;justify-content:center" data-toast="Assessment signed by assessor and learner, sent to moderation">Sign off assessment</button></div></div></div>
   </div>`;
 };
@@ -227,7 +238,7 @@ V.certificates = () => {
   <div class="split">
     <div class="cert" id="certDoc">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;position:relative;z-index:1">
-        <img src="../assets/logo-badge-400.jpg" alt="" style="width:15%;border-radius:50%">
+        <img src="../assets/logo-dark.png" alt="" style="width:24%">
         <div style="width:13%">${qr(l.no)}</div></div>
       <div class="small" style="margin-top:2%">Certificate of competence</div>
       <div class="cname" style="margin-top:1.5%">${l.name}</div>
@@ -293,7 +304,7 @@ V.compliance = () => `<div class="ph"><div><div class="eyebrow">Your own accredi
 V.portal = () => {
   const c = client('highveld');
   return `<div class="ph"><div><div class="eyebrow">What your clients log into</div><h1>Client portal</h1><p>Their HR or SHEQ manager books, uploads learner lists and purchase orders, and downloads certificates without phoning or emailing your office.</p></div></div>
-  <div class="portal-frame" id="portalFrame"><div class="browser-bar"><i></i><i></i><i></i><div class="url">🔒 clients.etsc.co.za/highveld-cold-chain</div></div>
+  <div class="portal-frame" id="portalFrame"><div class="browser-bar"><i></i><i></i><i></i><div class="url">clients.etsc.co.za/highveld-cold-chain</div></div>
   <div style="padding:22px 26px;background:var(--bg)">
     <div class="flex" style="flex-wrap:wrap"><div><div class="eyebrow">Welcome back</div><div class="serif" style="font-size:30px;font-weight:700">${c.contact}</div><div class="sub">${c.name} · ${c.site}</div></div><div class="right flex"><button class="btn ghost" data-toast="Upload learner list (Excel or photo of a list)">Upload learner list</button><button class="btn gold" data-toast="Request sent to ETSC, you will get a quote within the hour">Request training</button></div></div>
     <div class="grid g4 mt2">${kpi('Operators certified', c.current+' of '+c.ops,'')}${kpi('Expiring in 90 days', c.exp90, 'Renewal booked for 2 Nov')}${kpi('Training spend this year', R(c.spend), 'Download for your B-BBEE file')}${kpi('Next course', '20 Oct', 'Forklift novice, 6 learners')}</div>
@@ -305,9 +316,9 @@ V.portal = () => {
 };
 
 V.verify = () => `<div class="ph"><div><div class="eyebrow">Public page · verify.etsc.co.za</div><h1>Verify a certificate</h1><p>Fake operator certificates are common. Anyone, a site manager, a mine gate or an insurer, can scan the QR code or type the number and see the truth in two seconds.</p></div></div>
-  <div class="portal-frame" style="max-width:760px"><div class="browser-bar"><i></i><i></i><i></i><div class="url">🔒 verify.etsc.co.za</div></div>
+  <div class="portal-frame" style="max-width:760px"><div class="browser-bar"><i></i><i></i><i></i><div class="url">verify.etsc.co.za</div></div>
   <div style="padding:34px;background:linear-gradient(160deg,#1f1b16,#14110d);color:#fff;text-align:center">
-    <svg viewBox="0 0 64 24" style="width:70px;color:var(--gold2)"><circle cx="10" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="2.6"/><rect x="18" y="10.6" width="38" height="2.8" rx="1.4" fill="currentColor"/><path d="M44 13.4h3v6h-3zM50 13.4h3v4h-3z" fill="currentColor"/></svg>
+    <img src="../assets/logo-light.png" alt="Exclusive Training and Services" style="width:190px;margin:0 auto">
     <div class="serif" style="font-size:30px;font-weight:700;margin-top:8px">Is this certificate genuine?</div>
     <div class="flex" style="max-width:440px;margin:18px auto 0"><input id="vIn" class="inp" style="flex:1;height:44px" value="${D.certSample.no}"><button class="btn gold" style="height:44px" id="vBtn">Verify</button></div>
     <div id="vOut" style="margin-top:22px"></div></div></div>`;
@@ -325,7 +336,7 @@ function openLearner(name){
   const l = D.roster.find(x=>x.name===name) || D.learners.find(x=>x.n===name); const n = l.name||l.n;
   $('#drawer').innerHTML = `<div class="dh"><div class="who">${av(n,48)}<div><b style="font-size:18px">${n}</b><small>ID ${l.idm||l.id} · masked, access logged</small></div></div><button class="right icon-btn" id="dClose">✕</button></div>
   <div class="db"><div class="eyebrow">Training history</div>${D.history.map(h=>`<div class="list-i" style="padding:12px 0"><div class="ic" style="background:var(--gold-lt);color:var(--gold-dk)">✦</div><div><b>${h.c}</b><p>${h.d} · ${h.no}</p></div><div class="r">${pill(h.s[0],h.s[1])}</div></div>`).join('')}
-  <div class="eyebrow mt2">Documents on file</div><div class="flex mt" style="flex-wrap:wrap">${['ID copy','Photo','Medical fitness','POPIA consent','Theory test','Practical checklist','PoE'].map(x=>pill('📄 '+x,'mute')).join('')}</div>
+  <div class="eyebrow mt2">Documents on file</div><div class="flex mt" style="flex-wrap:wrap">${['ID copy','Photo','Medical fitness','POPIA consent','Theory test','Practical checklist','PoE'].map(x=>pill(x,'mute')).join('')}</div>
   <div class="note mt2">One learner, one record, for life. When ${n.split(' ')[0]} moves to a new employer, the new employer can verify the certificate and book a refresher without starting over.</div></div>`;
   $('#drawer').classList.add('on'); $('#drawerBg').classList.add('on'); $('#dClose').onclick = closeDrawer;
 }
