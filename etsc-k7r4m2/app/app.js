@@ -211,9 +211,9 @@ function bindQuote(){
 
 V.field = () => {
   const b = booking('BK-2611'), co = course(b.course), L = D.roster;
-  return `<div class="ph"><div><div class="eyebrow">What the trainer carries</div><h1>Trainer app</h1><p>Runs on the trainer's own phone, works without signal on a factory floor and syncs when it can. This is the end of paper registers, loose checklists and photographed ID copies on WhatsApp.</p></div></div>
+  return `<div class="ph"><div><div class="eyebrow">What the trainer carries</div><h1>Trainer app</h1><p>Runs on the trainer's own phone. This is the end of paper registers, loose checklists and photographed ID copies on WhatsApp.</p></div></div>
   <div class="phones">
-    <div class="phone" id="phone1"><div class="screen"><div class="notch"><span>07:34</span><span>● Offline · 3 queued</span></div>
+    <div class="phone" id="phone1"><div class="screen"><div class="notch"><span>07:34</span><span>● Synced</span></div>
       <div class="ph-top"><small>Day 1 of ${co.days} · Sign in</small><b>${client(b.client).name}</b><span class="small" style="color:#bfb39f">${co.short} · ${client(b.client).site}</span></div>
       <div class="ph-body">${L.map((l,i)=>`<div class="ph-row">${av(l.name,32)}<div><b style="font-size:13px">${l.name}</b><div class="small muted">${l.att[0]===1?'Signed 07:3'+i:'Waiting'}</div></div><div class="r"><div class="tog ${l.att[0]===1?'on':''}" data-tog></div></div></div>`).join('')}
       <button class="btn gold" style="width:100%;justify-content:center;margin-top:6px" data-toast="Register locked for Day 1 with GPS and time stamp">Lock today's register</button></div></div></div>
