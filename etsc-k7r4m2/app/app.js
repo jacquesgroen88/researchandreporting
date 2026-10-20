@@ -55,7 +55,7 @@ const V = {};
 V.today = () => {
   const s = D.stats;
   return `
-  <div class="ph"><div><div class="eyebrow">Monday 19 October 2026</div><h1>Good morning, Elize</h1><p>${D.sessionsToday.length} classes running on client sites today, ${s.learnersWeek} learners in training this week.</p></div>
+  <div class="ph"><div><div class="eyebrow">Monday 19 October 2026</div><h1>Good morning, Delana</h1><p>${D.sessionsToday.length} classes running on client sites today, ${s.learnersWeek} learners in training this week.</p></div>
   <div class="acts"><a class="btn ghost" href="#/schedule">Open schedule</a><a class="btn dark" href="#/pipeline">Pipeline</a></div></div>
   <div class="grid g5" id="kpis">
     ${kpi('Enquiry to certificate', s.cycleDays+' days', `<span style="color:#d9c9a8">target once registers, PoEs and moderation are digital</span>`,'hero')}
