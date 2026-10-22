@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>The Acreage Photo Library</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital@0;1&family=Figtree:wght@300;400;500;600&family=Montserrat:wght@500&display=swap">
+<style>
+:root{--paper:#FCFBF7;--linen:#F5F2EA;--ink:#1C1B18;--soft:#44443E;--muted:#6B6759;
+  --line:#E2D9C6;--forest:#0B4337;--gold:#7E5F22;--gold-lite:#C3AD84;
+  --head:'Libre Caslon Text',Georgia,serif;--body:'Figtree',system-ui,sans-serif;--caps:'Montserrat',sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);padding-bottom:120px}
+header{background:var(--forest);color:#fff;padding:34px 24px 30px}
+header .in{max-width:1180px;margin:0 auto}
+header .lb{font:500 11px/1 var(--caps);letter-spacing:.3em;text-transform:uppercase;color:var(--gold-lite)}
+header h1{font-family:var(--head);font-style:italic;font-weight:400;font-size:clamp(1.7rem,3.6vw,2.5rem);margin:12px 0 10px}
+header p{max-width:66ch;font-weight:300;line-height:1.65;color:rgba(255,255,255,.86)}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;padding:22px 0 6px;position:sticky;top:0;background:var(--paper);z-index:5}
+.chip{border:1px solid var(--line);background:#fff;border-radius:99px;padding:9px 15px;cursor:pointer;
+  font:500 12px/1 var(--caps);letter-spacing:.08em;color:var(--soft)}
+.chip i{font-style:normal;color:var(--muted);margin-left:5px}
+.chip:hover{border-color:var(--gold-lite)}
+.chip.off{opacity:.38}
+h2{font-family:var(--head);font-style:italic;font-weight:400;color:var(--forest);
+  font-size:1.5rem;margin:40px 0 4px;scroll-margin-top:70px}
+h2 span{font-family:var(--caps);font-style:normal;font-size:11px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--muted);margin-left:10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;margin-top:18px}
+figure{position:relative;background:var(--linen);border-radius:5px;overflow:hidden;cursor:zoom-in}
+figure img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;transition:transform .5s ease}
+figure:hover img{transform:scale(1.04)}
+figcaption{padding:9px 11px 11px;font-size:12.5px;line-height:1.35;color:var(--soft)}
+.pick{position:absolute;top:9px;left:9px;z-index:2;width:26px;height:26px;border-radius:50%;
+  border:2px solid #fff;background:rgba(10,20,16,.3);cursor:pointer;box-shadow:0 1px 6px rgba(0,0,0,.3)}
+figure.on .pick{background:var(--forest);border-color:#fff}
+figure.on .pick:after{content:"";position:absolute;left:7px;top:3px;width:7px;height:13px;
+  border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+figure.on{outline:3px solid var(--forest);outline-offset:-3px}
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--forest);color:#fff;
+  padding:14px 24px;display:flex;gap:14px;align-items:center;justify-content:center;flex-wrap:wrap;
+  transform:translateY(110%);transition:transform .3s ease}
+.bar.up{transform:none}
+.bar b{font-weight:600}
+.bar button{border:1px solid var(--gold-lite);background:var(--gold-lite);color:var(--forest);
+  border-radius:99px;padding:11px 20px;font:500 12px/1 var(--caps);letter-spacing:.14em;
+  text-transform:uppercase;cursor:pointer}
+.bar button.ghost{background:none;color:var(--gold-lite)}
+.lb{position:fixed;inset:0;background:rgba(12,18,14,.93);z-index:40;display:none;
+  align-items:center;justify-content:center;flex-direction:column;gap:14px;padding:24px}
+.lb.open{display:flex}
+.lb img{max-width:94vw;max-height:80vh;object-fit:contain;border-radius:4px}
+.lb p{color:rgba(255,255,255,.8);font-size:13px;letter-spacing:.04em}
+.lb .x{position:absolute;top:18px;right:22px;background:none;border:0;color:#fff;font-size:30px;cursor:pointer}
+@media(max-width:600px){.grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}}
+</style>
+</head>
+<body>
+<header><div class="in">
+  <div class="lb">The Acreage</div>
+  <h1>The Photo Library</h1>
+  <p>Every photograph you sent us, sorted by what it shows. Tick the ones you want us to use,
+  then press Copy and paste the list into WhatsApp. If a photograph belongs to a particular
+  space, say which one next to its name and we will put it there.</p>
+</div></header>
+
+<div class="wrap">
+  <div class="chips" id="chips"><button class="chip" data-g="all">Show everything</button><button class="chip" data-g="grounds">The grounds, lawns and views <i>49</i></button><button class="chip" data-g="lapa">The lapa <i>2</i></button><button class="chip" data-g="tents">The stretch tents <i>8</i></button><button class="chip" data-g="restaurant">The restaurant and veranda <i>14</i></button><button class="chip" data-g="bar">The bar <i>11</i></button><button class="chip" data-g="food">Food <i>17</i></button><button class="chip" data-g="drink">Drinks <i>5</i></button><button class="chip" data-g="foodtruck">Food trucks <i>6</i></button><button class="chip" data-g="event">Events in progress <i>54</i></button><button class="chip" data-g="guests">Guests <i>46</i></button><button class="chip" data-g="brand">Signage and branding <i>4</i></button><button class="chip" data-g="detail">Details <i>2</i></button></div>
+  <h2 id="g-grounds" data-g="grounds">The grounds, lawns and views <span>49 photographs</span></h2>
+  <div class="grid" data-g="grounds">
+  <figure data-name="grounds-avenue-driveway-trees"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/grounds-avenue-driveway-trees.webp" alt="avenue driveway trees"><figcaption>avenue driveway trees</figcaption></figure>
+  <figure data-name="grounds-building-lawn-palm"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/grounds-building-lawn-palm.webp" alt="building lawn palm"><figcaption>building lawn palm</figcaption></figure>
+  <figure data-name="grounds-building-lawn-wide"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/grounds-building-lawn-wide.webp" alt="building lawn wide"><figcaption>building lawn wide</figcaption></figure>
+  <figure data-name="grounds-building-palm-umbrellas"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/grounds-building-palm-umbrellas.webp" alt="building palm umbrellas"><figcaption>building palm umbrellas</figcaption></figure>
+  <figure data-name="grounds-building-palms-lawn"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/grounds-building-palms-lawn.webp" alt="building palms lawn"><figcaption>building palms lawn</figcaption></figure>
+  <figure data-name="grounds-building-track-curve"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/grounds-building-track-curve.webp" alt="building track curve"><figcaption>building track curve</figcaption></figure>
+  <figure data-name="grounds-building-track-fence"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/grounds-building-track-fence.webp" alt="building track fence"><figcaption>building track fence</figcaption></figure>
+  <figure data-name="grounds-courtyard-palm-umbrellas"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/grounds-courtyard-palm-umbrellas.webp" alt="courtyard palm umbrellas"><figcaption>courtyard palm umbrellas</figcaption></figure>
+  <figure data-name="grounds-courtyard-tents-umbrellas"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/grounds-courtyard-tents-umbrellas.webp" alt="courtyard tents umbrellas"><figcaption>courtyard tents umbrellas</figcaption></figure>
+  <figure data-name="grounds-fence-lawn-trees"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/grounds-fence-lawn-trees.webp" alt="fence lawn trees"><figcaption>fence lawn trees</figcaption></figure>
+  <figure data-name="grounds-lake-reeds-pylon"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/grounds-lake-reeds-pylon.webp" alt="lake reeds pylon"><figcaption>lake reeds pylon</figcaption></figure>
+  <figure data-name="grounds-lake-tree-view"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/grounds-lake-tree-view.webp" alt="lake tree view"><figcaption>lake tree view</figcaption></figure>
+  <figure data-name="grounds-lake-trees-autumn"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/grounds-lake-trees-autumn.webp" alt="lake trees autumn"><figcaption>lake trees autumn</figcaption></figure>
+  <figure data-name="grounds-lake-view-from-building"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/grounds-lake-view-from-building.webp" alt="lake view from building"><figcaption>lake view from building</figcaption></figure>
+  <figure data-name="grounds-lawn-buildings-duck"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/grounds-lawn-buildings-duck.webp" alt="lawn buildings duck"><figcaption>lawn buildings duck</figcaption></figure>
+  <figure data-name="grounds-lawn-path-kerb"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/grounds-lawn-path-kerb.webp" alt="lawn path kerb"><figcaption>lawn path kerb</figcaption></figure>
+  <figure data-name="grounds-lawn-path-trees-evening"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/grounds-lawn-path-trees-evening.webp" alt="lawn path trees evening"><figcaption>lawn path trees evening</figcaption></figure>
+  <figure data-name="grounds-lawn-restaurant-distance"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/grounds-lawn-restaurant-distance.webp" alt="lawn restaurant distance"><figcaption>lawn restaurant distance</figcaption></figure>
+  <figure data-name="grounds-lawn-sign-wide"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/grounds-lawn-sign-wide.webp" alt="lawn sign wide"><figcaption>lawn sign wide</figcaption></figure>
+  <figure data-name="grounds-lawn-slope-sky"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/grounds-lawn-slope-sky.webp" alt="lawn slope sky"><figcaption>lawn slope sky</figcaption></figure>
+  <figure data-name="grounds-lawn-tents-picnic-tables"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/grounds-lawn-tents-picnic-tables.webp" alt="lawn tents picnic tables"><figcaption>lawn tents picnic tables</figcaption></figure>
+  <figure data-name="grounds-lawn-tents-trees-01"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/grounds-lawn-tents-trees-01.webp" alt="lawn tents trees 1"><figcaption>lawn tents trees 1</figcaption></figure>
+  <figure data-name="grounds-lawn-tents-trees-02"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/grounds-lawn-tents-trees-02.webp" alt="lawn tents trees 2"><figcaption>lawn tents trees 2</figcaption></figure>
+  <figure data-name="grounds-lawn-tents-trees-03"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/grounds-lawn-tents-trees-03.webp" alt="lawn tents trees 03"><figcaption>lawn tents trees 03</figcaption></figure>
+  <figure data-name="grounds-lawn-tents-wide"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/grounds-lawn-tents-wide.webp" alt="lawn tents wide"><figcaption>lawn tents wide</figcaption></figure>
+  <figure data-name="grounds-lawn-tree-slope"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/grounds-lawn-tree-slope.webp" alt="lawn tree slope"><figcaption>lawn tree slope</figcaption></figure>
+  <figure data-name="grounds-lawn-trees-autumn-leaves"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/grounds-lawn-trees-autumn-leaves.webp" alt="lawn trees autumn leaves"><figcaption>lawn trees autumn leaves</figcaption></figure>
+  <figure data-name="grounds-lawn-trees-clouds"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/grounds-lawn-trees-clouds.webp" alt="lawn trees clouds"><figcaption>lawn trees clouds</figcaption></figure>
+  <figure data-name="grounds-lawn-trees-open-wide"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/grounds-lawn-trees-open-wide.webp" alt="lawn trees open wide"><figcaption>lawn trees open wide</figcaption></figure>
+  <figure data-name="grounds-lawn-trees-open"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/grounds-lawn-trees-open.webp" alt="lawn trees open"><figcaption>lawn trees open</figcaption></figure>
+  <figure data-name="grounds-lawn-trees-path-01"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/grounds-lawn-trees-path-01.webp" alt="lawn trees path 1"><figcaption>lawn trees path 1</figcaption></figure>
+  <figure data-name="grounds-lawn-trees-path-02"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/grounds-lawn-trees-path-02.webp" alt="lawn trees path 2"><figcaption>lawn trees path 2</figcaption></figure>
+  <figure data-name="grounds-lawn-trees-shadows"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/grounds-lawn-trees-shadows.webp" alt="lawn trees shadows"><figcaption>lawn trees shadows</figcaption></figure>
+  <figure data-name="grounds-lawn-trees-sunset"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/grounds-lawn-trees-sunset.webp" alt="lawn trees sunset"><figcaption>lawn trees sunset</figcaption></figure>
+  <figure data-name="grounds-lawn-trees-wide-02"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/grounds-lawn-trees-wide-02.webp" alt="lawn trees wide 2"><figcaption>lawn trees wide 2</figcaption></figure>
+  <figure data-name="grounds-lawn-trees-wide"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/grounds-lawn-trees-wide.webp" alt="lawn trees wide"><figcaption>lawn trees wide</figcaption></figure>
+  <figure data-name="grounds-lawn-umbrellas-tables-palms"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/grounds-lawn-umbrellas-tables-palms.webp" alt="lawn umbrellas tables palms"><figcaption>lawn umbrellas tables palms</figcaption></figure>
+  <figure data-name="grounds-lawn-umbrellas-trees"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/grounds-lawn-umbrellas-trees.webp" alt="lawn umbrellas trees"><figcaption>lawn umbrellas trees</figcaption></figure>
+  <figure data-name="grounds-lawn-umbrellas-wide"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/grounds-lawn-umbrellas-wide.webp" alt="lawn umbrellas wide"><figcaption>lawn umbrellas wide</figcaption></figure>
+  <figure data-name="grounds-racecourse-horses-training"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/grounds-racecourse-horses-training.webp" alt="racecourse horses training"><figcaption>racecourse horses training</figcaption></figure>
+  <figure data-name="grounds-sunset-through-trees"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/grounds-sunset-through-trees.webp" alt="sunset through trees"><figcaption>sunset through trees</figcaption></figure>
+  <figure data-name="grounds-tree-big-sky"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/grounds-tree-big-sky.webp" alt="tree big sky"><figcaption>tree big sky</figcaption></figure>
+  <figure data-name="grounds-tree-lawn-buildings"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/grounds-tree-lawn-buildings.webp" alt="tree lawn buildings"><figcaption>tree lawn buildings</figcaption></figure>
+  <figure data-name="grounds-tree-lawn-shadow"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/grounds-tree-lawn-shadow.webp" alt="tree lawn shadow"><figcaption>tree lawn shadow</figcaption></figure>
+  <figure data-name="grounds-trees-car-park"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/grounds-trees-car-park.webp" alt="trees car park"><figcaption>trees car park</figcaption></figure>
+  <figure data-name="grounds-trees-lawn-fence"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/grounds-trees-lawn-fence.webp" alt="trees lawn fence"><figcaption>trees lawn fence</figcaption></figure>
+  <figure data-name="grounds-umbrella-acreage-picnic-table"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/grounds-umbrella-acreage-picnic-table.webp" alt="umbrella acreage picnic table"><figcaption>umbrella acreage picnic table</figcaption></figure>
+  <figure data-name="grounds-umbrellas-lawn-palms"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/grounds-umbrellas-lawn-palms.webp" alt="umbrellas lawn palms"><figcaption>umbrellas lawn palms</figcaption></figure>
+  <figure data-name="grounds-view-from-building-track"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/grounds-view-from-building-track.webp" alt="view from building track"><figcaption>view from building track</figcaption></figure>
+  </div>
+  <h2 id="g-lapa" data-g="lapa">The lapa <span>2 photographs</span></h2>
+  <div class="grid" data-g="lapa">
+  <figure data-name="lapa-thatched-exterior-01"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/lapa-thatched-exterior-01.webp" alt="thatched exterior 1"><figcaption>thatched exterior 1</figcaption></figure>
+  <figure data-name="lapa-thatched-exterior-02"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/lapa-thatched-exterior-02.webp" alt="thatched exterior 2"><figcaption>thatched exterior 2</figcaption></figure>
+  </div>
+  <h2 id="g-tents" data-g="tents">The stretch tents <span>8 photographs</span></h2>
+  <div class="grid" data-g="tents">
+  <figure data-name="tents-restaurant-lawn-tree"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/tents-restaurant-lawn-tree.webp" alt="restaurant lawn tree"><figcaption>restaurant lawn tree</figcaption></figure>
+  <figure data-name="tents-restaurant-view-through-trees-01"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/tents-restaurant-view-through-trees-01.webp" alt="restaurant view through trees 1"><figcaption>restaurant view through trees 1</figcaption></figure>
+  <figure data-name="tents-restaurant-view-through-trees-02"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/tents-restaurant-view-through-trees-02.webp" alt="restaurant view through trees 2"><figcaption>restaurant view through trees 2</figcaption></figure>
+  <figure data-name="tents-stretch-bar-under-tent"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/tents-stretch-bar-under-tent.webp" alt="stretch bar under tent"><figcaption>stretch bar under tent</figcaption></figure>
+  <figure data-name="tents-stretch-palm-evening"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/tents-stretch-palm-evening.webp" alt="stretch palm evening"><figcaption>stretch palm evening</figcaption></figure>
+  <figure data-name="tents-stretch-row-event-lawn"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/tents-stretch-row-event-lawn.webp" alt="stretch row event lawn"><figcaption>stretch row event lawn</figcaption></figure>
+  <figure data-name="tents-stretch-row-lawn-evening"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/tents-stretch-row-lawn-evening.webp" alt="stretch row lawn evening"><figcaption>stretch row lawn evening</figcaption></figure>
+  <figure data-name="tents-stretch-tables-lawn-evening"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/tents-stretch-tables-lawn-evening.webp" alt="stretch tables lawn evening"><figcaption>stretch tables lawn evening</figcaption></figure>
+  </div>
+  <h2 id="g-restaurant" data-g="restaurant">The restaurant and veranda <span>14 photographs</span></h2>
+  <div class="grid" data-g="restaurant">
+  <figure data-name="restaurant-detail-festoon-lights-ceiling"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/restaurant-detail-festoon-lights-ceiling.webp" alt="detail festoon lights ceiling"><figcaption>detail festoon lights ceiling</figcaption></figure>
+  <figure data-name="restaurant-detail-pendant-lights"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/restaurant-detail-pendant-lights.webp" alt="detail pendant lights"><figcaption>detail pendant lights</figcaption></figure>
+  <figure data-name="restaurant-exterior-guests-signage"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/restaurant-exterior-guests-signage.webp" alt="exterior guests signage"><figcaption>exterior guests signage</figcaption></figure>
+  <figure data-name="restaurant-guests-table-balloons"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/restaurant-guests-table-balloons.webp" alt="guests table balloons"><figcaption>guests table balloons</figcaption></figure>
+  <figure data-name="restaurant-interior-bar-counter"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/restaurant-interior-bar-counter.webp" alt="interior bar counter"><figcaption>interior bar counter</figcaption></figure>
+  <figure data-name="restaurant-interior-bar-guests"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/restaurant-interior-bar-guests.webp" alt="interior bar guests"><figcaption>interior bar guests</figcaption></figure>
+  <figure data-name="restaurant-interior-bar-wide-01"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/restaurant-interior-bar-wide-01.webp" alt="interior bar wide 1"><figcaption>interior bar wide 1</figcaption></figure>
+  <figure data-name="restaurant-interior-bar-wide-02"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/restaurant-interior-bar-wide-02.webp" alt="interior bar wide 2"><figcaption>interior bar wide 2</figcaption></figure>
+  <figure data-name="restaurant-interior-guests-bar-dog"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/restaurant-interior-guests-bar-dog.webp" alt="interior guests bar dog"><figcaption>interior guests bar dog</figcaption></figure>
+  <figure data-name="restaurant-interior-guests-busy"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/restaurant-interior-guests-busy.webp" alt="interior guests busy"><figcaption>interior guests busy</figcaption></figure>
+  <figure data-name="restaurant-interior-guests-dancing"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/restaurant-interior-guests-dancing.webp" alt="interior guests dancing"><figcaption>interior guests dancing</figcaption></figure>
+  <figure data-name="restaurant-veranda-long-table-pots"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/restaurant-veranda-long-table-pots.webp" alt="veranda long table pots"><figcaption>veranda long table pots</figcaption></figure>
+  <figure data-name="restaurant-veranda-tables-track-view"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/restaurant-veranda-tables-track-view.webp" alt="veranda tables track view"><figcaption>veranda tables track view</figcaption></figure>
+  <figure data-name="restaurant-veranda-umbrella-track"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/restaurant-veranda-umbrella-track.webp" alt="veranda umbrella track"><figcaption>veranda umbrella track</figcaption></figure>
+  </div>
+  <h2 id="g-bar" data-g="bar">The bar <span>11 photographs</span></h2>
+  <div class="grid" data-g="bar">
+  <figure data-name="bar-bottles-gin-selection"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/bar-bottles-gin-selection.webp" alt="bottles gin selection"><figcaption>bottles gin selection</figcaption></figure>
+  <figure data-name="bar-bottles-shelf-wide"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/bar-bottles-shelf-wide.webp" alt="bottles shelf wide"><figcaption>bottles shelf wide</figcaption></figure>
+  <figure data-name="bar-bottles-spirits-shelf"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/bar-bottles-spirits-shelf.webp" alt="bottles spirits shelf"><figcaption>bottles spirits shelf</figcaption></figure>
+  <figure data-name="bar-bottles-whisky-shelf"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/bar-bottles-whisky-shelf.webp" alt="bottles whisky shelf"><figcaption>bottles whisky shelf</figcaption></figure>
+  <figure data-name="bar-cbc-beer-crates"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/bar-cbc-beer-crates.webp" alt="cbc beer crates"><figcaption>cbc beer crates</figcaption></figure>
+  <figure data-name="bar-cbc-glasses-row"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/bar-cbc-glasses-row.webp" alt="cbc glasses row"><figcaption>cbc glasses row</figcaption></figure>
+  <figure data-name="bar-cbc-taps-closeup"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/bar-cbc-taps-closeup.webp" alt="cbc taps closeup"><figcaption>cbc taps closeup</figcaption></figure>
+  <figure data-name="bar-coffee-machine-portafilter"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/bar-coffee-machine-portafilter.webp" alt="coffee machine portafilter"><figcaption>coffee machine portafilter</figcaption></figure>
+  <figure data-name="bar-ice-bucket-decanter-table"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/bar-ice-bucket-decanter-table.webp" alt="ice bucket decanter table"><figcaption>ice bucket decanter table</figcaption></figure>
+  <figure data-name="bar-taps-bushcraft-cbc"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/bar-taps-bushcraft-cbc.webp" alt="taps bushcraft cbc"><figcaption>taps bushcraft cbc</figcaption></figure>
+  <figure data-name="bar-taps-row-closeup"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/bar-taps-row-closeup.webp" alt="taps row closeup"><figcaption>taps row closeup</figcaption></figure>
+  </div>
+  <h2 id="g-food" data-g="food">Food <span>17 photographs</span></h2>
+  <div class="grid" data-g="food">
+  <figure data-name="food-avo-toast-coffee-table"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/food-avo-toast-coffee-table.webp" alt="avo toast coffee table"><figcaption>avo toast coffee table</figcaption></figure>
+  <figure data-name="food-bagel-pasta"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/food-bagel-pasta.webp" alt="bagel pasta"><figcaption>bagel pasta</figcaption></figure>
+  <figure data-name="food-burger-chips-01"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/food-burger-chips-01.webp" alt="burger chips 1"><figcaption>burger chips 1</figcaption></figure>
+  <figure data-name="food-burger-chips-02"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/food-burger-chips-02.webp" alt="burger chips 2"><figcaption>burger chips 2</figcaption></figure>
+  <figure data-name="food-burger-onion-rings-chips"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/food-burger-onion-rings-chips.webp" alt="burger onion rings chips"><figcaption>burger onion rings chips</figcaption></figure>
+  <figure data-name="food-burger-pasta-01"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/food-burger-pasta-01.webp" alt="burger pasta 1"><figcaption>burger pasta 1</figcaption></figure>
+  <figure data-name="food-canapes-bruschetta"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/food-canapes-bruschetta.webp" alt="canapes bruschetta"><figcaption>canapes bruschetta</figcaption></figure>
+  <figure data-name="food-canapes-parcels-board"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/food-canapes-parcels-board.webp" alt="canapes parcels board"><figcaption>canapes parcels board</figcaption></figure>
+  <figure data-name="food-canapes-skewers-charcuterie"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/food-canapes-skewers-charcuterie.webp" alt="canapes skewers charcuterie"><figcaption>canapes skewers charcuterie</figcaption></figure>
+  <figure data-name="food-canapes-tartlet"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/food-canapes-tartlet.webp" alt="canapes tartlet"><figcaption>canapes tartlet</figcaption></figure>
+  <figure data-name="food-canapes-wraps-platter"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/food-canapes-wraps-platter.webp" alt="canapes wraps platter"><figcaption>canapes wraps platter</figcaption></figure>
+  <figure data-name="food-chicken-wings-chips"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/food-chicken-wings-chips.webp" alt="chicken wings chips"><figcaption>chicken wings chips</figcaption></figure>
+  <figure data-name="food-dessert-chocolate-cake-slice"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/food-dessert-chocolate-cake-slice.webp" alt="dessert chocolate cake slice"><figcaption>dessert chocolate cake slice</figcaption></figure>
+  <figure data-name="food-dessert-meringues-berries"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/food-dessert-meringues-berries.webp" alt="dessert meringues berries"><figcaption>dessert meringues berries</figcaption></figure>
+  <figure data-name="food-dessert-tiramisu-pots"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/food-dessert-tiramisu-pots.webp" alt="dessert tiramisu pots"><figcaption>dessert tiramisu pots</figcaption></figure>
+  <figure data-name="food-salad-greens-flowers"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/food-salad-greens-flowers.webp" alt="salad greens flowers"><figcaption>salad greens flowers</figcaption></figure>
+  <figure data-name="food-toasted-sandwich-chips"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/food-toasted-sandwich-chips.webp" alt="toasted sandwich chips"><figcaption>toasted sandwich chips</figcaption></figure>
+  </div>
+  <h2 id="g-drink" data-g="drink">Drinks <span>5 photographs</span></h2>
+  <div class="grid" data-g="drink">
+  <figure data-name="drink-cocktail-margarita-grapefruit-01"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/drink-cocktail-margarita-grapefruit-01.webp" alt="cocktail margarita grapefruit 1"><figcaption>cocktail margarita grapefruit 1</figcaption></figure>
+  <figure data-name="drink-cocktail-margarita-grapefruit-02"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/drink-cocktail-margarita-grapefruit-02.webp" alt="cocktail margarita grapefruit 2"><figcaption>cocktail margarita grapefruit 2</figcaption></figure>
+  <figure data-name="drink-cocktail-orange-tall-glass"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/drink-cocktail-orange-tall-glass.webp" alt="cocktail orange tall glass"><figcaption>cocktail orange tall glass</figcaption></figure>
+  <figure data-name="drink-cocktails-three-bar"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/drink-cocktails-three-bar.webp" alt="cocktails three bar"><figcaption>cocktails three bar</figcaption></figure>
+  <figure data-name="drink-milkshakes-two-lawn"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/drink-milkshakes-two-lawn.webp" alt="milkshakes two lawn"><figcaption>milkshakes two lawn</figcaption></figure>
+  </div>
+  <h2 id="g-foodtruck" data-g="foodtruck">Food trucks <span>6 photographs</span></h2>
+  <div class="grid" data-g="foodtruck">
+  <figure data-name="foodtruck-black-trailer-speakers"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/foodtruck-black-trailer-speakers.webp" alt="black trailer speakers"><figcaption>black trailer speakers</figcaption></figure>
+  <figure data-name="foodtruck-black-trailer-umbrella"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/foodtruck-black-trailer-umbrella.webp" alt="black trailer umbrella"><figcaption>black trailer umbrella</figcaption></figure>
+  <figure data-name="foodtruck-donuts-purple-trailer"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/foodtruck-donuts-purple-trailer.webp" alt="donuts purple trailer"><figcaption>donuts purple trailer</figcaption></figure>
+  <figure data-name="foodtruck-pink-and-black-lawn"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/foodtruck-pink-and-black-lawn.webp" alt="pink and black lawn"><figcaption>pink and black lawn</figcaption></figure>
+  <figure data-name="foodtruck-pink-caravan-lawn"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/foodtruck-pink-caravan-lawn.webp" alt="pink caravan lawn"><figcaption>pink caravan lawn</figcaption></figure>
+  <figure data-name="foodtruck-red-trailer-caravan"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/foodtruck-red-trailer-caravan.webp" alt="red trailer caravan"><figcaption>red trailer caravan</figcaption></figure>
+  </div>
+  <h2 id="g-event" data-g="event">Events in progress <span>54 photographs</span></h2>
+  <div class="grid" data-g="event">
+  <figure data-name="event-4racing-banner-jumping-castle"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-4racing-banner-jumping-castle.webp" alt="4racing banner jumping castle"><figcaption>4racing banner jumping castle</figcaption></figure>
+  <figure data-name="event-car-show-crowd-minis-01"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-car-show-crowd-minis-01.webp" alt="car show crowd minis 1"><figcaption>car show crowd minis 1</figcaption></figure>
+  <figure data-name="event-car-show-crowd-minis-02"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-car-show-crowd-minis-02.webp" alt="car show crowd minis 2"><figcaption>car show crowd minis 2</figcaption></figure>
+  <figure data-name="event-car-show-mini-food-truck"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-car-show-mini-food-truck.webp" alt="car show mini food truck"><figcaption>car show mini food truck</figcaption></figure>
+  <figure data-name="event-car-show-vintage-minis-row"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-car-show-vintage-minis-row.webp" alt="car show vintage minis row"><figcaption>car show vintage minis row</figcaption></figure>
+  <figure data-name="event-chef-serving-guests-tent"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-chef-serving-guests-tent.webp" alt="chef serving guests tent"><figcaption>chef serving guests tent</figcaption></figure>
+  <figure data-name="event-corporate-flowers-table-detail"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-corporate-flowers-table-detail.webp" alt="corporate flowers table detail"><figcaption>corporate flowers table detail</figcaption></figure>
+  <figure data-name="event-corporate-group-stage-lights"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-corporate-group-stage-lights.webp" alt="corporate group stage lights"><figcaption>corporate group stage lights</figcaption></figure>
+  <figure data-name="event-corporate-guests-seated-02"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-corporate-guests-seated-02.webp" alt="corporate guests seated 2"><figcaption>corporate guests seated 2</figcaption></figure>
+  <figure data-name="event-corporate-guests-seated-tent"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-corporate-guests-seated-tent.webp" alt="corporate guests seated tent"><figcaption>corporate guests seated tent</figcaption></figure>
+  <figure data-name="event-corporate-limitless-letters"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-corporate-limitless-letters.webp" alt="corporate limitless letters"><figcaption>corporate limitless letters</figcaption></figure>
+  <figure data-name="event-corporate-presentation-screen"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-corporate-presentation-screen.webp" alt="corporate presentation screen"><figcaption>corporate presentation screen</figcaption></figure>
+  <figure data-name="event-corporate-screen-welcome"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-corporate-screen-welcome.webp" alt="corporate screen welcome"><figcaption>corporate screen welcome</figcaption></figure>
+  <figure data-name="event-corporate-speaker-stage"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-corporate-speaker-stage.webp" alt="corporate speaker stage"><figcaption>corporate speaker stage</figcaption></figure>
+  <figure data-name="event-corporate-stage-celebration"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-corporate-stage-celebration.webp" alt="corporate stage celebration"><figcaption>corporate stage celebration</figcaption></figure>
+  <figure data-name="event-corporate-stage-screen-tables"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-corporate-stage-screen-tables.webp" alt="corporate stage screen tables"><figcaption>corporate stage screen tables</figcaption></figure>
+  <figure data-name="event-corporate-step-and-repeat"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-corporate-step-and-repeat.webp" alt="corporate step and repeat"><figcaption>corporate step and repeat</figcaption></figure>
+  <figure data-name="event-corporate-tent-interior-lights"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-corporate-tent-interior-lights.webp" alt="corporate tent interior lights"><figcaption>corporate tent interior lights</figcaption></figure>
+  <figure data-name="event-corporate-tent-red-furniture-02"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-corporate-tent-red-furniture-02.webp" alt="corporate tent red furniture 2"><figcaption>corporate tent red furniture 2</figcaption></figure>
+  <figure data-name="event-corporate-tent-red-furniture"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-corporate-tent-red-furniture.webp" alt="corporate tent red furniture"><figcaption>corporate tent red furniture</figcaption></figure>
+  <figure data-name="event-corporate-two-speakers-stage"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-corporate-two-speakers-stage.webp" alt="corporate two speakers stage"><figcaption>corporate two speakers stage</figcaption></figure>
+  <figure data-name="event-crowd-food-truck-lawn"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-crowd-food-truck-lawn.webp" alt="crowd food truck lawn"><figcaption>crowd food truck lawn</figcaption></figure>
+  <figure data-name="event-crowd-lawn-banners"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-crowd-lawn-banners.webp" alt="crowd lawn banners"><figcaption>crowd lawn banners</figcaption></figure>
+  <figure data-name="event-crowd-lawn-trees-01"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-crowd-lawn-trees-01.webp" alt="crowd lawn trees 1"><figcaption>crowd lawn trees 1</figcaption></figure>
+  <figure data-name="event-crowd-lawn-trees-02"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-crowd-lawn-trees-02.webp" alt="crowd lawn trees 2"><figcaption>crowd lawn trees 2</figcaption></figure>
+  <figure data-name="event-crowd-lawn-wide"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-crowd-lawn-wide.webp" alt="crowd lawn wide"><figcaption>crowd lawn wide</figcaption></figure>
+  <figure data-name="event-crowd-under-trees-vintage-bus"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-crowd-under-trees-vintage-bus.webp" alt="crowd under trees vintage bus"><figcaption>crowd under trees vintage bus</figcaption></figure>
+  <figure data-name="event-crowd-walkway-tents"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-crowd-walkway-tents.webp" alt="crowd walkway tents"><figcaption>crowd walkway tents</figcaption></figure>
+  <figure data-name="event-dj-booth-two-men"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-dj-booth-two-men.webp" alt="dj booth two men"><figcaption>dj booth two men</figcaption></figure>
+  <figure data-name="event-dj-closeup-tent"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-dj-closeup-tent.webp" alt="dj closeup tent"><figcaption>dj closeup tent</figcaption></figure>
+  <figure data-name="event-dj-decks-day"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-dj-decks-day.webp" alt="dj decks day"><figcaption>dj decks day</figcaption></figure>
+  <figure data-name="event-dj-decks-night"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-dj-decks-night.webp" alt="dj decks night"><figcaption>dj decks night</figcaption></figure>
+  <figure data-name="event-dj-headphones-tent-night"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-dj-headphones-tent-night.webp" alt="dj headphones tent night"><figcaption>dj headphones tent night</figcaption></figure>
+  <figure data-name="event-dj-neon-booth"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-dj-neon-booth.webp" alt="dj neon booth"><figcaption>dj neon booth</figcaption></figure>
+  <figure data-name="event-dj-woman-decks-night"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-dj-woman-decks-night.webp" alt="dj woman decks night"><figcaption>dj woman decks night</figcaption></figure>
+  <figure data-name="event-guests-table-4racing"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-guests-table-4racing.webp" alt="guests table 4racing"><figcaption>guests table 4racing</figcaption></figure>
+  <figure data-name="event-guests-umbrellas-bar-tables"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-guests-umbrellas-bar-tables.webp" alt="guests umbrellas bar tables"><figcaption>guests umbrellas bar tables</figcaption></figure>
+  <figure data-name="event-jumping-castle-children-01"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-jumping-castle-children-01.webp" alt="jumping castle children 1"><figcaption>jumping castle children 1</figcaption></figure>
+  <figure data-name="event-jumping-castle-children-02"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-jumping-castle-children-02.webp" alt="jumping castle children 2"><figcaption>jumping castle children 2</figcaption></figure>
+  <figure data-name="event-market-boy-with-dog"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-market-boy-with-dog.webp" alt="market boy with dog"><figcaption>market boy with dog</figcaption></figure>
+  <figure data-name="event-market-rooted-guests-dog"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-market-rooted-guests-dog.webp" alt="market rooted guests dog"><figcaption>market rooted guests dog</figcaption></figure>
+  <figure data-name="event-market-rooted-signage"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-market-rooted-signage.webp" alt="market rooted signage"><figcaption>market rooted signage</figcaption></figure>
+  <figure data-name="event-market-rooted-tent-entrance"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-market-rooted-tent-entrance.webp" alt="market rooted tent entrance"><figcaption>market rooted tent entrance</figcaption></figure>
+  <figure data-name="event-market-rooted-woman-dog"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-market-rooted-woman-dog.webp" alt="market rooted woman dog"><figcaption>market rooted woman dog</figcaption></figure>
+  <figure data-name="event-market-stall-rijk-geel"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-market-stall-rijk-geel.webp" alt="market stall rijk geel"><figcaption>market stall rijk geel</figcaption></figure>
+  <figure data-name="event-market-stalls-umbrellas-lawn"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-market-stalls-umbrellas-lawn.webp" alt="market stalls umbrellas lawn"><figcaption>market stalls umbrellas lawn</figcaption></figure>
+  <figure data-name="event-mini-banner-crowd"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-mini-banner-crowd.webp" alt="mini banner crowd"><figcaption>mini banner crowd</figcaption></figure>
+  <figure data-name="event-mini-banner-tents-crowd"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-mini-banner-tents-crowd.webp" alt="mini banner tents crowd"><figcaption>mini banner tents crowd</figcaption></figure>
+  <figure data-name="event-photobooth-guests"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-photobooth-guests.webp" alt="photobooth guests"><figcaption>photobooth guests</figcaption></figure>
+  <figure data-name="event-tent-night-blue-hour"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-tent-night-blue-hour.webp" alt="tent night blue hour"><figcaption>tent night blue hour</figcaption></figure>
+  <figure data-name="event-tent-night-festoon-lights"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-tent-night-festoon-lights.webp" alt="tent night festoon lights"><figcaption>tent night festoon lights</figcaption></figure>
+  <figure data-name="event-tents-picnic-tables-crowd"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-tents-picnic-tables-crowd.webp" alt="tents picnic tables crowd"><figcaption>tents picnic tables crowd</figcaption></figure>
+  <figure data-name="event-two-men-dog-car-park"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-two-men-dog-car-park.webp" alt="two men dog car park"><figcaption>two men dog car park</figcaption></figure>
+  <figure data-name="event-wildebeest-brand-activation"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/event-wildebeest-brand-activation.webp" alt="wildebeest brand activation"><figcaption>wildebeest brand activation</figcaption></figure>
+  </div>
+  <h2 id="g-guests" data-g="guests">Guests <span>46 photographs</span></h2>
+  <div class="grid" data-g="guests">
+  <figure data-name="guests-children-camp-chairs-lawn"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/guests-children-camp-chairs-lawn.webp" alt="children camp chairs lawn"><figcaption>children camp chairs lawn</figcaption></figure>
+  <figure data-name="guests-corporate-couple-talking"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/guests-corporate-couple-talking.webp" alt="corporate couple talking"><figcaption>corporate couple talking</figcaption></figure>
+  <figure data-name="guests-corporate-man-woman-drinks"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/guests-corporate-man-woman-drinks.webp" alt="corporate man woman drinks"><figcaption>corporate man woman drinks</figcaption></figure>
+  <figure data-name="guests-corporate-three-men"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/guests-corporate-three-men.webp" alt="corporate three men"><figcaption>corporate three men</figcaption></figure>
+  <figure data-name="guests-corporate-two-men-drinks"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/guests-corporate-two-men-drinks.webp" alt="corporate two men drinks"><figcaption>corporate two men drinks</figcaption></figure>
+  <figure data-name="guests-corporate-woman-presenting"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/guests-corporate-woman-presenting.webp" alt="corporate woman presenting"><figcaption>corporate woman presenting</figcaption></figure>
+  <figure data-name="guests-corporate-women-dancing-01"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/guests-corporate-women-dancing-01.webp" alt="corporate women dancing 1"><figcaption>corporate women dancing 1</figcaption></figure>
+  <figure data-name="guests-corporate-women-dancing-02"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/guests-corporate-women-dancing-02.webp" alt="corporate women dancing 2"><figcaption>corporate women dancing 2</figcaption></figure>
+  <figure data-name="guests-couple-dancing-tent"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/guests-couple-dancing-tent.webp" alt="couple dancing tent"><figcaption>couple dancing tent</figcaption></figure>
+  <figure data-name="guests-couple-drink-tent-night"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/guests-couple-drink-tent-night.webp" alt="couple drink tent night"><figcaption>couple drink tent night</figcaption></figure>
+  <figure data-name="guests-couple-flowers-tent"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/guests-couple-flowers-tent.webp" alt="couple flowers tent"><figcaption>couple flowers tent</figcaption></figure>
+  <figure data-name="guests-couple-lawn-sunglasses-01"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/guests-couple-lawn-sunglasses-01.webp" alt="couple lawn sunglasses 1"><figcaption>couple lawn sunglasses 1</figcaption></figure>
+  <figure data-name="guests-couple-lawn-sunglasses-02"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/guests-couple-lawn-sunglasses-02.webp" alt="couple lawn sunglasses 2"><figcaption>couple lawn sunglasses 2</figcaption></figure>
+  <figure data-name="guests-couple-tent-night"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/guests-couple-tent-night.webp" alt="couple tent night"><figcaption>couple tent night</figcaption></figure>
+  <figure data-name="guests-crowd-shade-lawn"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/guests-crowd-shade-lawn.webp" alt="crowd shade lawn"><figcaption>crowd shade lawn</figcaption></figure>
+  <figure data-name="guests-families-picnic-tables-umbrella"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/guests-families-picnic-tables-umbrella.webp" alt="families picnic tables umbrella"><figcaption>families picnic tables umbrella</figcaption></figure>
+  <figure data-name="guests-families-trees-car-park"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/guests-families-trees-car-park.webp" alt="families trees car park"><figcaption>families trees car park</figcaption></figure>
+  <figure data-name="guests-family-picnic-table-tent"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/guests-family-picnic-table-tent.webp" alt="family picnic table tent"><figcaption>family picnic table tent</figcaption></figure>
+  <figure data-name="guests-four-at-picnic-table"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/guests-four-at-picnic-table.webp" alt="four at picnic table"><figcaption>four at picnic table</figcaption></figure>
+  <figure data-name="guests-four-women-cocktails-table"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/guests-four-women-cocktails-table.webp" alt="four women cocktails table"><figcaption>four women cocktails table</figcaption></figure>
+  <figure data-name="guests-group-dancing-tent-night"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/guests-group-dancing-tent-night.webp" alt="group dancing tent night"><figcaption>group dancing tent night</figcaption></figure>
+  <figure data-name="guests-group-four-vea-backdrop"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/guests-group-four-vea-backdrop.webp" alt="group four vea backdrop"><figcaption>group four vea backdrop</figcaption></figure>
+  <figure data-name="guests-group-four-women-night"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/guests-group-four-women-night.webp" alt="group four women night"><figcaption>group four women night</figcaption></figure>
+  <figure data-name="guests-group-table-track-view"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/guests-group-table-track-view.webp" alt="group table track view"><figcaption>group table track view</figcaption></figure>
+  <figure data-name="guests-group-table-veranda-track"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/guests-group-table-veranda-track.webp" alt="group table veranda track"><figcaption>group table veranda track</figcaption></figure>
+  <figure data-name="guests-man-with-dog-market"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/guests-man-with-dog-market.webp" alt="man with dog market"><figcaption>man with dog market</figcaption></figure>
+  <figure data-name="guests-men-group-event"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/guests-men-group-event.webp" alt="men group event"><figcaption>men group event</figcaption></figure>
+  <figure data-name="guests-men-table-stretch-tents"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/guests-men-table-stretch-tents.webp" alt="men table stretch tents"><figcaption>men table stretch tents</figcaption></figure>
+  <figure data-name="guests-three-men-posing-lawn"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/guests-three-men-posing-lawn.webp" alt="three men posing lawn"><figcaption>three men posing lawn</figcaption></figure>
+  <figure data-name="guests-three-men-table-umbrella"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/guests-three-men-table-umbrella.webp" alt="three men table umbrella"><figcaption>three men table umbrella</figcaption></figure>
+  <figure data-name="guests-three-posing-event"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/guests-three-posing-event.webp" alt="three posing event"><figcaption>three posing event</figcaption></figure>
+  <figure data-name="guests-three-women-coffee-tent"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/guests-three-women-coffee-tent.webp" alt="three women coffee tent"><figcaption>three women coffee tent</figcaption></figure>
+  <figure data-name="guests-three-women-lawn"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/guests-three-women-lawn.webp" alt="three women lawn"><figcaption>three women lawn</figcaption></figure>
+  <figure data-name="guests-two-men-blossom-night"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/guests-two-men-blossom-night.webp" alt="two men blossom night"><figcaption>two men blossom night</figcaption></figure>
+  <figure data-name="guests-two-women-drinks-tent-night"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/guests-two-women-drinks-tent-night.webp" alt="two women drinks tent night"><figcaption>two women drinks tent night</figcaption></figure>
+  <figure data-name="guests-two-women-hug-tent-night"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/guests-two-women-hug-tent-night.webp" alt="two women hug tent night"><figcaption>two women hug tent night</figcaption></figure>
+  <figure data-name="guests-two-women-laughing-event"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/guests-two-women-laughing-event.webp" alt="two women laughing event"><figcaption>two women laughing event</figcaption></figure>
+  <figure data-name="guests-two-women-lawn-track"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/guests-two-women-lawn-track.webp" alt="two women lawn track"><figcaption>two women lawn track</figcaption></figure>
+  <figure data-name="guests-two-women-smiling-night"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/guests-two-women-smiling-night.webp" alt="two women smiling night"><figcaption>two women smiling night</figcaption></figure>
+  <figure data-name="guests-two-women-wine-night"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/guests-two-women-wine-night.webp" alt="two women wine night"><figcaption>two women wine night</figcaption></figure>
+  <figure data-name="guests-woman-boys-bar-table"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/guests-woman-boys-bar-table.webp" alt="woman boys bar table"><figcaption>woman boys bar table</figcaption></figure>
+  <figure data-name="guests-woman-child-picnic-table"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/guests-woman-child-picnic-table.webp" alt="woman child picnic table"><figcaption>woman child picnic table</figcaption></figure>
+  <figure data-name="guests-woman-child-tent-night"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/guests-woman-child-tent-night.webp" alt="woman child tent night"><figcaption>woman child tent night</figcaption></figure>
+  <figure data-name="guests-woman-cocktail-phone-night"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/guests-woman-cocktail-phone-night.webp" alt="woman cocktail phone night"><figcaption>woman cocktail phone night</figcaption></figure>
+  <figure data-name="guests-woman-flowers-smiling"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/guests-woman-flowers-smiling.webp" alt="woman flowers smiling"><figcaption>woman flowers smiling</figcaption></figure>
+  <figure data-name="guests-woman-with-dog-bar"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/guests-woman-with-dog-bar.webp" alt="woman with dog bar"><figcaption>woman with dog bar</figcaption></figure>
+  </div>
+  <h2 id="g-brand" data-g="brand">Signage and branding <span>4 photographs</span></h2>
+  <div class="grid" data-g="brand">
+  <figure data-name="brand-mini-banner-sky-01"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/brand-mini-banner-sky-01.webp" alt="mini banner sky 1"><figcaption>mini banner sky 1</figcaption></figure>
+  <figure data-name="brand-mini-banner-sky-02"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/brand-mini-banner-sky-02.webp" alt="mini banner sky 2"><figcaption>mini banner sky 2</figcaption></figure>
+  <figure data-name="brand-signage-the-acreage-entrance"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/brand-signage-the-acreage-entrance.webp" alt="signage the acreage entrance"><figcaption>signage the acreage entrance</figcaption></figure>
+  <figure data-name="brand-umbrella-acreage-logo"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/brand-umbrella-acreage-logo.webp" alt="umbrella acreage logo"><figcaption>umbrella acreage logo</figcaption></figure>
+  </div>
+  <h2 id="g-detail" data-g="detail">Details <span>2 photographs</span></h2>
+  <div class="grid" data-g="detail">
+  <figure data-name="detail-dog-under-table"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/detail-dog-under-table.webp" alt="dog under table"><figcaption>dog under table</figcaption></figure>
+  <figure data-name="detail-duck-on-lawn"><button class="pick" aria-label="Choose this photograph"></button><img loading="lazy" decoding="async" src="img/detail-duck-on-lawn.webp" alt="duck on lawn"><figcaption>duck on lawn</figcaption></figure>
+  </div>
+</div>
+
+<div class="bar" id="bar">
+  <span><b id="count">0</b> chosen</span>
+  <button id="copy">Copy the list</button>
+  <button class="ghost" id="clear">Clear</button>
+</div>
+
+<div class="lb" id="lb"><button class="x" id="lbx" aria-label="Close">&times;</button>
+  <img id="lbimg" alt=""><p id="lbcap"></p></div>
+
+<script>
+(function(){
+  var picked = [];
+  var bar = document.getElementById('bar'), count = document.getElementById('count');
+  function refresh(){ count.textContent = picked.length; bar.classList.toggle('up', picked.length > 0); }
+
+  document.querySelectorAll('figure').forEach(function(fig){
+    fig.querySelector('.pick').addEventListener('click', function(e){
+      e.stopPropagation();
+      var n = fig.dataset.name, i = picked.indexOf(n);
+      if (i < 0) { picked.push(n); fig.classList.add('on'); }
+      else { picked.splice(i, 1); fig.classList.remove('on'); }
+      refresh();
+    });
+    fig.addEventListener('click', function(){
+      document.getElementById('lbimg').src = fig.querySelector('img').src;
+      document.getElementById('lbcap').textContent = fig.dataset.name;
+      document.getElementById('lb').classList.add('open');
+    });
+  });
+
+  document.getElementById('lbx').addEventListener('click', function(){
+    document.getElementById('lb').classList.remove('open');
+  });
+  document.getElementById('lb').addEventListener('click', function(e){
+    if (e.target.id === 'lb') this.classList.remove('open');
+  });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape') document.getElementById('lb').classList.remove('open');
+  });
+
+  document.getElementById('copy').addEventListener('click', function(){
+    var text = picked.join('\n');
+    navigator.clipboard.writeText(text).then(function(){
+      var b = document.getElementById('copy'); var old = b.textContent;
+      b.textContent = 'Copied'; setTimeout(function(){ b.textContent = old; }, 1600);
+    }, function(){ window.prompt('Copy this list', text); });
+  });
+  document.getElementById('clear').addEventListener('click', function(){
+    picked = []; document.querySelectorAll('figure.on').forEach(function(f){ f.classList.remove('on'); });
+    refresh();
+  });
+
+  document.getElementById('chips').addEventListener('click', function(e){
+    var b = e.target.closest('.chip'); if (!b) return;
+    var g = b.dataset.g;
+    document.querySelectorAll('.chip').forEach(function(c){ c.classList.toggle('off', g !== 'all' && c.dataset.g !== g && c.dataset.g !== 'all'); });
+    document.querySelectorAll('h2[data-g], .grid[data-g]').forEach(function(el){
+      el.style.display = (g === 'all' || el.dataset.g === g) ? '' : 'none';
+    });
+    if (g !== 'all') document.getElementById('g-' + g).scrollIntoView({block:'start'});
+  });
+})();
+</script>
+</body>
+</html>
