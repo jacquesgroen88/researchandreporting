@@ -42,11 +42,29 @@
     $$('.js-landing').forEach((i) => (i.value = sessionStorage.getItem('ld_landing') || location.pathname));
   } catch (e) { /* storage blocked: forms still work */ }
 
+  // ---- tracking numbers (dynamic number insertion) ----
+  // Visitors from Google Ads see the Google Ads tracking number; everyone else sees the website tracking number.
+  // Until JSG issues the numbers (config.js), the main number stays on the page.
+  let fromAds = false;
+  try {
+    const saved = JSON.parse(localStorage.getItem('ld_gclid') || 'null');
+    fromAds = !!(saved && Date.now() - saved.t < 90 * 864e5) || /utm_medium=(cpc|paid)/.test(sessionStorage.getItem('ld_utm') || '');
+  } catch (e) { /* no storage: website number */ }
+  const num = (C.trackingNumbers || {})[fromAds ? 'google_ads' : 'website'];
+  if (num && num.dial && num.display) {
+    $$('a[href^="tel:"]').forEach((a) => (a.href = 'tel:' + num.dial));
+    const walk = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    const hits = []; while (walk.nextNode()) if (walk.currentNode.nodeValue.includes(C.mainNumberDisplay)) hits.push(walk.currentNode);
+    hits.forEach((n) => (n.nodeValue = n.nodeValue.split(C.mainNumberDisplay).join(num.display)));
+  }
+
   // ---- clicks ----
   const svcOnPage = () => ($('.js-svc') || {}).value || '';
   $$('.js-wa').forEach((a) => {
     const area = areaName ? `I am in ${areaName}. ` : '';
-    a.href = 'https://wa.me/' + a.href.split('wa.me/')[1].split('?')[0] + '?text=' + encodeURIComponent((C.whatsappText || '') + area);
+    // the tag tells Dillen which channel a WhatsApp enquiry came from, so he can log it in the quote system
+    const tag = fromAds ? '(Google ad)' : '(website)';
+    a.href = 'https://wa.me/' + a.href.split('wa.me/')[1].split('?')[0] + '?text=' + encodeURIComponent(((C.whatsappText || '') + area).trimEnd() + ' ' + tag);
     a.addEventListener('click', () => { conv(C.convWhatsApp); gtag('event', 'whatsapp_click', { cta: a.dataset.cta, service: svcOnPage() }); });
   });
   $$('.js-call').forEach((a) => a.addEventListener('click', () => { conv(C.convCall); gtag('event', 'call_click', { cta: a.dataset.cta, service: svcOnPage() }); }));
@@ -90,9 +108,14 @@
     const B = window.LD_BASE || '';
     let sent = false;
     if (window.LD_PREVIEW) { location.href = B + '/thank-you/?s=' + encodeURIComponent(service) + '&demo=1'; return; }
+    // 1. the lead system (source of truth for leads, quotes and the profit share)
+    if (C.leadApi) {
+      try { const r = await fetch(B + C.leadApi, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(Object.fromEntries(fd)) }); sent = r.ok; } catch (x) { /* fall back to Netlify Forms */ }
+    }
+    // 2. Netlify Forms as a backup copy + email notification
     try {
       const r = await fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams(fd).toString() });
-      sent = r.ok;
+      sent = sent || r.ok;
     } catch (x) { /* fall through to webhook */ }
     if (C.webhookUrl) {
       try {
