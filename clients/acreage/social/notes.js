@@ -71,12 +71,23 @@
 
   /* ── finding the thing that was clicked ────────────────────────────── */
   var GOOD = /^(H1|H2|H3|H4|H5|P|LI|IMG|FIGURE|FIGCAPTION|BLOCKQUOTE|TD|TH|BUTTON|A|SPAN|B|STRONG|EM|I|DD|DT|LABEL|SUMMARY|VIDEO)$/;
+  /* Things that drive the page rather than say anything. Note mode has to let
+     these through or she cannot reach the second frame of a slider, and most
+     of the photographs live in sliders. */
+  function isControl(el) {
+    if (!el || !el.closest) return false;
+    if (el.closest('.dots, .sl-arrow, .menu-btn, .lb .prev, .lb .next, .lb .close')) return true;
+    return false;
+  }
   function target(el) {
     var hops = 0;
+    if (isControl(el)) return null;
     while (el && el !== document.body && hops < 8) {
-      if (el.closest && el.closest('.nm-ui, #nmbar, #nmlist, .nm-pin')) return null;
+      if (el.closest && el.closest('.nm-ui, #nmbar, #nmlist, .nm-pin, #nmtip')) return null;
       var txt = (el.textContent || '').trim();
       if (GOOD.test(el.tagName) && (txt.length || el.tagName === 'IMG' || el.tagName === 'VIDEO')) return el;
+      /* a wrapper holding one picture and nothing to read is that picture */
+      if (!txt.length && el.querySelectorAll && el.querySelectorAll('img').length === 1) return el;
       if (txt.length > 0 && txt.length < 320 && el.children.length <= 2) return el;
       el = el.parentElement; hops++;
     }
@@ -122,8 +133,12 @@
 
   var hint = document.createElement('div');
   hint.id = 'nmhint';
-  hint.textContent = 'Click anything on the page to comment on it';
+  hint.textContent = 'Click anything to comment on it, photographs included';
   document.body.appendChild(hint);
+
+  var tip = document.createElement('div');
+  tip.id = 'nmtip';
+  document.body.appendChild(tip);
 
   var panel = document.createElement('aside');
   panel.id = 'nmlist';
@@ -155,6 +170,7 @@
     /* the hint has said its piece after a few seconds */
     clearTimeout(hintTimer); hint.classList.remove('nm-fade');
     if (on) hintTimer = setTimeout(function () { hint.classList.add('nm-fade'); }, 4500);
+    if (!on) tip.classList.remove('nm-tipon');
     toggle.textContent = on ? 'Done' : 'Leave a note';
     toggle.classList.toggle('nm-primary', on);
     clearHi(); close();
@@ -162,13 +178,17 @@
 
   /* ── hover highlight and click to comment ──────────────────────────── */
   var hi = null;
-  function clearHi() { if (hi) { hi.classList.remove('nm-hi'); hi = null; } }
+  function clearHi() { if (hi) { hi.classList.remove('nm-hi'); hi.classList.remove('nm-hipic'); hi = null; } }
   document.addEventListener('mousemove', function (e) {
-    if (!on) return;
+    if (!on || composer || bubble) { tip.classList.remove('nm-tipon'); return; }
     var el = target(e.target);
+    tip.style.left = (e.clientX + 14) + 'px';
+    tip.style.top = (e.clientY + 16) + 'px';
+    tip.classList.toggle('nm-tipon', !!el);
+    if (el) tip.textContent = pictureIn(el) ? 'Comment on this photograph' : 'Comment on this';
     if (el === hi) return;
     clearHi();
-    if (el) { hi = el; hi.classList.add('nm-hi'); }
+    if (el) { hi = el; hi.classList.add('nm-hi'); hi.classList.toggle('nm-hipic', !!pictureIn(el)); }
   }, true);
 
   document.addEventListener('click', function (e) {
@@ -182,6 +202,7 @@
 
   /* ── composer ──────────────────────────────────────────────────────── */
   function close() {
+    tip.classList.remove('nm-tipon');
     if (composer) { composer.remove(); composer = null; }
     if (bubble) { bubble.remove(); bubble = null; }
   }
@@ -189,15 +210,38 @@
     node.style.left = Math.max(10, Math.min(x, document.documentElement.clientWidth - 344)) + 'px';
     node.style.top = (y + 12) + 'px';
   }
+  /* the picture inside whatever was clicked, if there is exactly one */
+  function pictureIn(el) {
+    if (el.tagName === 'IMG') return el;
+    var imgs = el.querySelectorAll ? el.querySelectorAll('img') : [];
+    return imgs.length === 1 ? imgs[0] : null;
+  }
+  function fileOf(img) {
+    var src = img.getAttribute('src') || '';
+    return src.split('/').pop().split('?')[0];
+  }
+  var PIC_TAGS = ['Crop it differently', 'Zoom in on the subject', 'Use a different picture',
+                  'Wrong picture for this spot', 'Too dark', 'Show more of the view'];
+
   function openComposer(el, x, y) {
     close();
+    var img = pictureIn(el);
     var quote = (el.textContent || el.getAttribute('alt') || el.tagName.toLowerCase()).trim().replace(/\s+/g, ' ').slice(0, 120);
+    if (img) {
+      var alt = (img.getAttribute('alt') || '').trim();
+      quote = (alt ? alt + ' · ' : '') + fileOf(img);
+    }
     composer = document.createElement('div');
     composer.className = 'nm-ui';
     composer.innerHTML =
-      '<div class="nm-q"><b>On:</b> ' + esc(quote) + '</div>' +
+      (img ? '<div class="nm-shot"><img src="' + esc(img.getAttribute('src')) + '" alt="">' +
+             '<div><b>This picture</b><span>' + esc(fileOf(img)) + '</span></div></div>'
+           : '<div class="nm-q"><b>On:</b> ' + esc(quote) + '</div>') +
       '<div class="nm-body">' +
-      '<textarea placeholder="What would you like changed here?"></textarea>' +
+      (img ? '<div class="nm-tags">' + PIC_TAGS.map(function (t) {
+               return '<button type="button" class="nm-tag">' + esc(t) + '</button>'; }).join('') + '</div>' : '') +
+      '<textarea placeholder="' + (img ? 'What should we do with this picture?'
+                                       : 'What would you like changed here?') + '"></textarea>' +
       '<label class="nm-wholbl">Commenting as' +
       '<select class="nm-who">' + PEOPLE.map(function (p) {
         return '<option' + (p === who() ? ' selected' : '') + '>' + esc(p) + '</option>';
@@ -209,6 +253,16 @@
     document.body.appendChild(composer);
     place(composer, x, y);
     var ta = composer.querySelector('textarea'); ta.focus();
+    Array.prototype.forEach.call(composer.querySelectorAll('.nm-tag'), function (b) {
+      b.onclick = function () {
+        b.classList.toggle('nm-tagon');
+        var picked = Array.prototype.map.call(composer.querySelectorAll('.nm-tag.nm-tagon'),
+                       function (x) { return x.textContent; });
+        var rest = ta.value.split('\n\n').slice(1).join('\n\n');
+        ta.value = picked.length ? picked.join('. ') + (rest ? '\n\n' + rest : '') : rest;
+        ta.focus();
+      };
+    });
     composer.querySelector('.nm-cancel').onclick = function () { close(); clearHi(); };
     composer.querySelector('.nm-save').onclick = function () {
       var text = ta.value.trim();
@@ -342,7 +396,7 @@
     }
     notes.forEach(function (note, i) {
       var el = find(note);
-      if (el) {
+      if (el && onScreenIn(el)) {
         var r = el.getBoundingClientRect();
         var pin = document.createElement('button');
         pin.type = 'button';
@@ -371,7 +425,7 @@
                           (repliesTo(note.id).length === 1 ? 'y' : 'ies') + '</span>' : '');
       row.onclick = function () {
         var t = find(note);
-        if (t) { t.scrollIntoView({ behavior: 'smooth', block: 'center' }); setTimeout(function () { openBubble(note, t); }, 420); }
+        if (t) { t.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' }); setTimeout(function () { openBubble(note, t); }, 420); }
         else { openBubble(note, null); }
         if (window.innerWidth < 760) panel.classList.remove('nm-open');
       };
@@ -385,6 +439,25 @@
   function reflow() { clearTimeout(t); t = setTimeout(render, 160); }
   window.addEventListener('resize', reflow);
   window.addEventListener('load', reflow);
+  window.addEventListener('scroll', function (e) {
+    if (e.target !== document && e.target.classList && e.target.classList.contains('track')) reflow();
+  }, true);
+
+  /* true when the element is inside the visible part of every scrolling
+     ancestor it sits in. A slider frame that has been scrolled past is not. */
+  function onScreenIn(el) {
+    var r = el.getBoundingClientRect(), n = el.parentElement;
+    if (!r.width) return false;
+    while (n && n !== document.body) {
+      if (n.scrollWidth > n.clientWidth + 4 || n.scrollHeight > n.clientHeight + 4) {
+        var b = n.getBoundingClientRect();
+        var cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+        if (cx < b.left || cx > b.right || cy < b.top || cy > b.bottom) return false;
+      }
+      n = n.parentElement;
+    }
+    return true;
+  }
   if (window.ResizeObserver) new ResizeObserver(reflow).observe(document.body);
 
   /* ── helpers ───────────────────────────────────────────────────────── */
