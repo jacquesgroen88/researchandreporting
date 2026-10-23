@@ -80,3 +80,21 @@
   for = "/*.woff"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+
+# ── Client work in review: images must revalidate ──────────────────────────
+# The rules above tell browsers every image is immutable for a year, which is
+# right for a published report whose pictures never change. It is wrong for a
+# site under review: we re-cut a photograph and write it back under the same
+# file name, so anyone who has already opened the page keeps seeing the old
+# one, and a normal refresh will not fetch it either, because "immutable"
+# tells the browser not to bother asking.
+#
+# Found 23 Oct 2026, when a crop fixed that morning still looked wrong to
+# Jacques while the file on the server was already correct.
+#
+# These paths revalidate instead: one conditional request per image, a 304
+# when nothing changed. Placed last so they win over the rules above.
+[[headers]]
+  for = "/clients/*"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
