@@ -68,6 +68,34 @@ tr:last-child td{border-bottom:none}
 
 .note{font-size:12.5px;color:var(--faint2);margin-top:18px;max-width:660px}
 footer{margin-top:46px;border-top:1px solid var(--line);padding-top:18px;color:var(--faint2);font-size:12px}
+
+/* ── editor / review mode (only when ?editor) ── */
+body.editor{padding-top:42px}
+body.editor [data-note]{cursor:pointer;transition:outline .12s}
+body.editor [data-note]:hover{outline:2px dashed var(--gold);outline-offset:4px;border-radius:12px}
+[data-note]{position:relative}
+.note-badge{position:absolute;top:-9px;left:-9px;min-width:21px;height:21px;padding:0 5px;border-radius:999px;background:var(--gold);color:#3a1c00;font-family:'Oswald';font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px -3px rgba(0,0,0,.7);z-index:5}
+.ed-bar{position:fixed;top:0;left:0;right:0;z-index:60;background:#1b1410;border-bottom:1px solid rgba(255,176,58,.5);display:flex;gap:10px;align-items:center;justify-content:space-between;padding:8px 16px}
+.ed-bar .l{color:var(--gold-soft);font-family:'Oswald';letter-spacing:.05em;text-transform:uppercase;font-size:12px}
+.ed-bar .r{display:flex;gap:8px}
+.ed-bar button{background:var(--gold);color:#3a1c00;border:0;border-radius:8px;padding:6px 12px;font-weight:700;font-size:12.5px;cursor:pointer;font-family:Inter}
+.ed-bar button.ghost{background:transparent;color:var(--gold-soft);border:1px solid rgba(255,176,58,.4)}
+.composer{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:70;width:min(520px,calc(100% - 32px));background:#221812;border:1px solid var(--gold);border-radius:14px;padding:16px;box-shadow:0 24px 70px -20px #000}
+.composer .for{font-size:12px;color:var(--gold-soft);margin-bottom:8px}
+.composer .for b{color:var(--ink)}
+.composer textarea{width:100%;min-height:82px;background:#120d09;border:1px solid var(--line);border-radius:10px;color:var(--ink);padding:10px;font:inherit;font-size:14px;resize:vertical}
+.composer .row{display:flex;gap:8px;justify-content:flex-end;margin-top:10px}
+.composer button{border:0;border-radius:8px;padding:8px 14px;font-weight:700;cursor:pointer;font-size:13px}
+.composer .save{background:var(--gold);color:#3a1c00}
+.composer .cancel{background:transparent;color:var(--faint);border:1px solid var(--line)}
+.panel{position:fixed;top:0;right:0;bottom:0;width:min(360px,100%);z-index:65;background:#1b1410;border-left:1px solid var(--line);transform:translateX(100%);transition:transform .2s;overflow-y:auto;padding:54px 16px 24px}
+.panel.open{transform:none}
+.panel h4{font-family:'Oswald';text-transform:uppercase;font-size:14px;color:var(--gold-soft);margin-bottom:12px}
+.pnote{background:#221812;border:1px solid var(--line);border-radius:10px;padding:11px 13px;margin-bottom:10px}
+.pnote .lab{font-size:11px;color:var(--gold-soft);font-weight:600;text-transform:uppercase;letter-spacing:.03em}
+.pnote .txt{font-size:13.5px;color:var(--dim);margin-top:4px;white-space:pre-wrap}
+.pnote .meta{font-size:10.5px;color:var(--faint2);margin-top:6px}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:80;background:var(--good);color:#06130d;font-weight:700;padding:10px 18px;border-radius:999px;font-size:13px}
 </style></head><body>
 
 <div class="founding">⚡ <b>Stigterslede-aanbod:</b> eerste 150 lede per kroeg · prys vas vir 12 maande · beperkte plekke</div>
@@ -203,4 +231,84 @@ footer{margin-top:46px;border-top:1px solid var(--line);padding-top:18px;color:v
 <footer>Die Veiling Klub · Oktober 2026.</footer>
 
 </div>
+
+<script>
+(function(){
+  if(!new URLSearchParams(location.search).has('editor')) return;
+  var PAGE='packages';
+  var FN='https://plinxeaiapsskkvblbar.supabase.co/functions/v1/review-note';
+  var ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBsaW54ZWFpYXBzc2trdmJsYmFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgzMzU1NTgsImV4cCI6MjEwMzkxMTU1OH0.-XYRj0hfJ15NhmnYcGgi_UOUNga2A2OSDmA8uCgiKJM';
+  var H={'Content-Type':'application/json',Authorization:'Bearer '+ANON,apikey:ANON};
+  document.body.classList.add('editor');
+
+  function slug(s){return s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,40);}
+  function labelFor(el){
+    if(el.classList.contains('lot')) return 'Pakket: '+((el.querySelector('.animal')||{}).textContent||'').trim();
+    if(el.classList.contains('block')) return ((el.querySelector('h3')||{}).textContent||'Blok').trim();
+    if(el.classList.contains('tblwrap')) return 'Opsies-tabel';
+    var p=el.previousElementSibling; while(p&&p.tagName!=='H2') p=p.previousElementSibling;
+    return (p?p.textContent.trim()+' — ':'')+el.textContent.trim().slice(0,28)+'…';
+  }
+
+  var map={};
+  [].slice.call(document.querySelectorAll('.lot,.tblwrap,.block,.sublede')).forEach(function(el,i){
+    var label=labelFor(el);
+    var anchor=slug(label)||('blok-'+i);
+    if(map[anchor]) anchor=anchor+'-'+i;
+    map[anchor]=el;
+    el.setAttribute('data-note',anchor);
+    el.setAttribute('data-label',label);
+    el.addEventListener('click',function(e){ if(e.target.closest('.composer'))return; e.stopPropagation(); openComposer(el); });
+  });
+
+  var bar=document.createElement('div'); bar.className='ed-bar';
+  bar.innerHTML='<span class="l">✎ Redigeer-modus · klik enigiets om \'n nota te los</span><span class="r"><button id="edView">Notas (<span id="edCount">0</span>)</button><button class="ghost" id="edDone">Klaar</button></span>';
+  document.body.appendChild(bar);
+  document.getElementById('edDone').onclick=function(){ location.href=location.pathname; };
+
+  var panel=document.createElement('div'); panel.className='panel'; panel.innerHTML='<h4>Notas</h4><div id="edList"></div>';
+  document.body.appendChild(panel);
+  document.getElementById('edView').onclick=function(){ panel.classList.toggle('open'); };
+
+  var notes=[];
+  function render(){
+    document.getElementById('edCount').textContent=notes.length;
+    [].slice.call(document.querySelectorAll('.note-badge')).forEach(function(b){b.remove();});
+    var by={}; notes.forEach(function(n){ (by[n.anchor]=by[n.anchor]||[]).push(n); });
+    Object.keys(by).forEach(function(a){ var el=map[a]; if(!el) return; var b=document.createElement('div'); b.className='note-badge'; b.textContent=by[a].length; el.appendChild(b); });
+    var list=document.getElementById('edList');
+    list.innerHTML = notes.length ? '' : '<div style="color:var(--faint);font-size:13px">Nog geen notas nie. Klik op enige pakket of blok om een te los.</div>';
+    notes.slice().reverse().forEach(function(n){
+      var d=document.createElement('div'); d.className='pnote';
+      d.innerHTML='<div class="lab"></div><div class="txt"></div><div class="meta"></div>';
+      d.querySelector('.lab').textContent=n.label||n.anchor;
+      d.querySelector('.txt').textContent=n.note;
+      try{ d.querySelector('.meta').textContent=new Date(n.created_at).toLocaleString('af-ZA'); }catch(e){}
+      list.appendChild(d);
+    });
+  }
+  function load(){ fetch(FN+'?page='+PAGE,{headers:H}).then(function(r){return r.json();}).then(function(d){ notes=d.notes||[]; render(); }).catch(function(){}); }
+
+  var composer=null;
+  function openComposer(el){
+    if(composer){ composer.remove(); }
+    var label=el.getAttribute('data-label'); var anchor=el.getAttribute('data-note');
+    composer=document.createElement('div'); composer.className='composer';
+    composer.innerHTML='<div class="for">Nota vir: <b></b></div><textarea placeholder="Wat moet verander?"></textarea><div class="row"><button class="cancel">Kanselleer</button><button class="save">Stoor nota</button></div>';
+    composer.querySelector('.for b').textContent=label;
+    document.body.appendChild(composer);
+    var ta=composer.querySelector('textarea'); ta.focus();
+    composer.querySelector('.cancel').onclick=function(){ composer.remove(); composer=null; };
+    composer.querySelector('.save').onclick=function(){
+      var text=ta.value.trim(); if(!text){ ta.focus(); return; }
+      fetch(FN,{method:'POST',headers:H,body:JSON.stringify({page:PAGE,anchor:anchor,label:label,note:text})})
+        .then(function(r){return r.json();}).then(function(d){ if(d&&d.note){ notes.push(d.note); render(); } toast('Nota gestoor'); }).catch(function(){ toast('Kon nie stoor nie'); });
+      composer.remove(); composer=null;
+    };
+  }
+  function toast(m){ var t=document.createElement('div'); t.className='toast'; t.textContent=m; document.body.appendChild(t); setTimeout(function(){t.remove();},1800); }
+
+  load();
+})();
+</script>
 </body></html>
