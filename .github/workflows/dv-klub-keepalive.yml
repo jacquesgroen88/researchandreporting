@@ -1,0 +1,24 @@
+# Keeps the Die Veiling Klub Supabase project awake.
+# The free plan pauses a project after ~7 idle days, which would make the demo
+# links dead for ~45 minutes while it restores. This hits a read-only endpoint
+# twice a week (external traffic through the API gateway counts as activity).
+# Remove this once the project is on a paid plan. The anon key is public by
+# design (it reads nothing without a valid token), so it is safe to inline.
+name: DV Klub keep-alive
+
+on:
+  schedule:
+    - cron: "0 6 * * 1,4"   # Mondays and Thursdays, 06:00 UTC
+  workflow_dispatch:         # and runnable by hand from the Actions tab
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping the card endpoint
+        run: |
+          ANON="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBsaW54ZWFpYXBzc2trdmJsYmFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgzMzU1NTgsImV4cCI6MjEwMzkxMTU1OH0.-XYRj0hfJ15NhmnYcGgi_UOUNga2A2OSDmA8uCgiKJM"
+          URL="https://plinxeaiapsskkvblbar.supabase.co/functions/v1/card?t=5e1354ba-361e-44b8-a69d-32981b775449"
+          code=$(curl -sS -o /dev/null -w "%{http_code}" -H "Authorization: Bearer $ANON" "$URL")
+          echo "card endpoint responded: HTTP $code"
+          test "$code" = "200"
