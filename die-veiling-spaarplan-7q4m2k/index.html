@@ -1,0 +1,393 @@
+<!doctype html><html lang="af"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>Die Veiling Spaar Plan</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#06111f; --navy:#0a1c36; --navy2:#102a4e; --panel:#0e2748; --panel2:#143259; --line:rgba(150,195,255,.14); --line2:rgba(150,195,255,.26);
+  --green:#1aa64b; --green2:#13833a; --blue:#2f7ff0; --blue2:#1c56c4; --ice:#8fd0ff; --ice-soft:#d4edff;
+  --gold:#c99a35; --gold2:#9a7420; --bul:#1f8a46; --red:#ff3b4e;
+  --ink:#eef5ff; --dim:#a6c0e0; --faint:#6f8bad; --faint2:#4a6b8f;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:radial-gradient(900px 600px at 50% -5%,#0e2a4e,transparent),#05101d;background-color:#05101d;
+  color:var(--ink);font-family:Inter,-apple-system,'Segoe UI',sans-serif;-webkit-font-smoothing:antialiased;line-height:1.5;
+  min-height:100dvh;padding:18px 12px 60px}
+.disp{font-family:'Oswald',sans-serif}
+.lead{max-width:430px;margin:0 auto 14px;text-align:center}
+.lead h1{font-family:'Oswald';font-weight:700;font-size:20px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink)}
+.lead p{color:var(--faint);font-size:12.5px;margin-top:5px}
+
+/* screen picker */
+.picker{max-width:430px;margin:0 auto 16px;display:flex;gap:6px;overflow-x:auto;padding-bottom:4px}
+.picker button{flex:0 0 auto;background:var(--panel);border:1px solid var(--line);color:var(--dim);font-size:11.5px;font-weight:600;
+  padding:6px 11px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.picker button.on{background:var(--green);border-color:var(--green);color:#fff}
+
+/* phone */
+.phone{width:392px;max-width:100%;height:812px;margin:0 auto;position:relative;border-radius:46px;background:#000;
+  box-shadow:0 40px 90px -30px #000,0 0 0 11px #11161f,0 0 0 13px #273040;overflow:hidden}
+.notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:150px;height:30px;background:#000;border-radius:0 0 18px 18px;z-index:40}
+.statusbar{position:absolute;top:0;left:0;right:0;height:46px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 26px;font-size:13px;font-weight:600;color:#fff;z-index:30;pointer-events:none}
+.statusbar .r{display:flex;gap:6px;align-items:center;font-size:12px;opacity:.9}
+.screens{position:absolute;inset:0}
+.scr{position:absolute;inset:0;display:none;flex-direction:column;overflow-y:auto;background:
+  radial-gradient(520px 300px at 85% -6%,rgba(47,127,240,.18),transparent 60%),
+  linear-gradient(170deg,var(--navy) 0%,#07172c 60%,#050f1c 100%);padding:52px 18px 26px}
+.scr.on{display:flex;animation:in .32s ease}
+@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.scr::-webkit-scrollbar{width:0}
+
+/* brand bar */
+.brandbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.clite{display:inline-flex;align-items:center;gap:6px}
+.clite .flake{width:26px;height:26px}
+.clite .stack{display:flex;flex-direction:column;line-height:.92}
+.clite .ct{font-family:'Oswald';font-size:8.5px;font-weight:600;letter-spacing:.18em;color:#dbe9ff}
+.clite .cl{font-family:'Oswald';font-weight:700;font-size:15px;letter-spacing:.02em;color:#fff;background:var(--green);padding:0 6px;border-radius:3px}
+.dvlogo{height:34px;width:auto;filter:drop-shadow(0 2px 8px rgba(255,59,78,.5))}
+
+h2.scr-h{font-family:'Oswald';font-weight:700;font-size:25px;letter-spacing:.01em;margin:4px 0 14px}
+.muted{color:var(--dim);font-size:13.5px}
+
+/* buttons */
+.btn{display:block;width:100%;text-align:center;border:0;border-radius:13px;padding:14px;font-family:'Oswald';font-weight:600;
+  font-size:16px;letter-spacing:.02em;cursor:pointer;color:#fff;background:linear-gradient(180deg,var(--green),var(--green2));
+  box-shadow:0 10px 24px -10px rgba(26,166,75,.8)}
+.btn.sec{background:transparent;border:1px solid var(--line2);color:var(--ink);box-shadow:none}
+.btn.red{background:linear-gradient(180deg,#ff4357,#d31e31);box-shadow:0 10px 24px -10px rgba(255,59,78,.7)}
+.rowgap{height:10px}
+
+/* inputs */
+.inp{display:flex;align-items:center;gap:10px;background:#081c36;border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:11px}
+.inp svg{width:18px;height:18px;flex:0 0 auto;opacity:.7}
+.inp span{color:var(--faint);font-size:14px}
+.check{display:flex;gap:9px;align-items:flex-start;font-size:12px;color:var(--dim);margin:4px 0 14px}
+.check .bx{width:18px;height:18px;border-radius:5px;border:1px solid var(--line2);flex:0 0 auto;display:grid;place-items:center;color:var(--green);font-size:12px}
+.social{display:flex;gap:10px;justify-content:center;margin-top:12px}
+.social a{width:46px;height:46px;border-radius:12px;background:#0b2140;background-color:#0b1f3a;border:1px solid var(--line);display:grid;place-items:center;font-weight:800;font-size:17px;text-decoration:none;color:#fff}
+.sepor{text-align:center;color:var(--faint);font-size:11.5px;margin:12px 0}
+.tiny{text-align:center;color:var(--dim);font-size:12.5px;margin-top:12px}
+.tiny b{color:var(--ice)}
+
+/* branch cards */
+.branch{position:relative;border-radius:14px;overflow:hidden;margin-bottom:11px;border:1px solid var(--line);height:88px;display:flex;align-items:flex-end}
+.branch img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.branch .ov{position:absolute;inset:0;background:linear-gradient(90deg,rgba(5,16,29,.85) 10%,rgba(5,16,29,.1) 70%)}
+.branch .nm{position:relative;z-index:2;padding:14px;font-family:'Oswald';font-weight:700;font-size:18px;color:#fff;text-shadow:0 2px 6px #000}
+.branch .ch{position:absolute;right:14px;top:50%;transform:translateY(-50%);z-index:2;color:#fff;opacity:.85;font-size:20px}
+
+/* package cards */
+.pkg{display:flex;align-items:center;gap:13px;border-radius:15px;padding:14px 14px;margin-bottom:11px;position:relative;overflow:hidden}
+.pkg.bul{background:linear-gradient(135deg,#1f8a46,#0f5e2e)}
+.pkg.ram{background:linear-gradient(135deg,#2f7ff0,#163e86);outline:2px solid var(--ice);outline-offset:1px}
+.pkg.trop{background:linear-gradient(135deg,#caa23a,#8a6a18)}
+.pkg.beer{background:#0c2340;background-color:#0c2340;border:1px solid var(--line2)}
+.pkg .ic{width:52px;height:44px;flex:0 0 auto;display:grid;place-items:center}
+.pkg .ic svg{width:100%;height:100%}
+.pkg .mid{flex:1;min-width:0}
+.pkg .mid .n{font-family:'Oswald';font-weight:700;font-size:22px;color:#fff;line-height:1}
+.pkg .mid .d{font-size:12px;color:rgba(255,255,255,.85);margin-top:3px}
+.pkg .pr{flex:0 0 auto;display:flex;align-items:center;gap:7px;background:rgba(0,0,0,.28);border-radius:11px;padding:7px 10px;text-align:right}
+.pkg .pr .vanaf{font-size:9px;color:rgba(255,255,255,.75);text-transform:uppercase;letter-spacing:.06em}
+.pkg .pr .amt{font-family:'Oswald';font-weight:700;font-size:19px;color:#fff;line-height:1}
+.pkg .pr .per{font-size:9px;color:rgba(255,255,255,.75)}
+.pkg .pr .chev{color:#fff;opacity:.8;font-size:16px}
+
+/* payment rows */
+.pay{display:flex;align-items:center;gap:12px;background:#081c36;border:1px solid var(--line);border-radius:12px;padding:13px 14px;margin-bottom:10px}
+.pay.sel{border-color:var(--green)}
+.pay .pi{width:30px;height:30px;border-radius:8px;background:#0e2a4e;background-color:#0e2a4e;display:grid;place-items:center;flex:0 0 auto;font-size:13px}
+.pay .pn{flex:1;font-size:14.5px;color:var(--ink)}
+.pay .rd{width:20px;height:20px;border-radius:50%;border:2px solid var(--line2)}
+.pay.sel .rd{border-color:var(--green);background:radial-gradient(circle,var(--green) 40%,transparent 46%)}
+
+/* welcome + member card */
+.mcard{border-radius:18px;padding:16px;background:linear-gradient(150deg,#164a7e,#0c2340 60%,#0a1f3a);background-color:#0c2a4e;
+  border:1px solid rgba(143,208,255,.35);box-shadow:0 0 40px -16px rgba(47,127,240,.6);position:relative;overflow:hidden}
+.mcard::after{content:'';position:absolute;inset:0;background:
+  radial-gradient(120px 80px at 90% 8%,rgba(143,208,255,.22),transparent 60%),
+  radial-gradient(120px 90px at 6% 96%,rgba(143,208,255,.14),transparent 60%);pointer-events:none}
+.mcard .top{display:flex;justify-content:space-between;align-items:flex-start;position:relative;z-index:2}
+.mcard .bull{width:46px;height:40px;margin:12px auto 2px;display:block}
+.mcard .tier{text-align:center;font-family:'Oswald';font-weight:700;font-size:22px;color:#fff}
+.mcard .dae{text-align:center;color:var(--ice);font-size:12px;margin-top:1px}
+.qr{background:#fff;border-radius:12px;padding:10px;width:150px;margin:12px auto 0}
+.qr svg,.qr canvas{display:block;width:100%;height:auto}
+.mcard .who{text-align:center;margin-top:11px;position:relative;z-index:2}
+.mcard .who .nm{font-family:'Oswald';font-weight:700;font-size:16px;color:#fff}
+.mcard .who .ln{font-size:11.5px;color:var(--dim);margin-top:2px}
+.iconrow{display:flex;justify-content:space-around;margin:16px 0}
+.iconrow .it{text-align:center;font-size:10.5px;color:var(--dim)}
+.iconrow .it .b{width:44px;height:44px;border-radius:12px;background:#0e2a4e;background-color:#0e2a4e;border:1px solid var(--line);display:grid;place-items:center;margin:0 auto 5px;font-size:18px}
+
+/* dashboard */
+.dash-head{display:flex;align-items:center;gap:11px;margin-bottom:14px}
+.dash-head .av{width:42px;height:42px;border-radius:50%;background:#0e2a4e;border:1px solid var(--line);display:grid;place-items:center;font-size:18px}
+.dash-head .who{flex:1}
+.dash-head .who .n{font-family:'Oswald';font-weight:700;font-size:16px;color:#fff}
+.dash-head .who .s{font-size:11.5px;color:var(--ice)}
+.benefit{border-radius:15px;padding:15px;background:linear-gradient(135deg,#0e2a4e,#0b1f3a);background-color:#0e2a4e;border:1px solid rgba(143,208,255,.3);display:flex;align-items:center;gap:14px;box-shadow:0 0 34px -18px rgba(47,127,240,.7)}
+.benefit .beericon{width:56px;height:56px;flex:0 0 auto}
+.benefit .t{font-size:11px;color:var(--ice);text-transform:uppercase;letter-spacing:.05em}
+.benefit .big{font-family:'Oswald';font-weight:700;font-size:24px;color:#fff;line-height:1}
+.benefit .sm{font-size:11.5px;color:var(--dim);margin-top:2px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:13px}
+.tile{background:#0b2140;background-color:#0b2140;border:1px solid var(--line);border-radius:13px;padding:15px;text-align:center}
+.tile .b{width:38px;height:38px;border-radius:10px;background:#0e2a4e;display:grid;place-items:center;margin:0 auto 8px;font-size:17px}
+.tile .l{font-size:12.5px;color:var(--ink);font-weight:600}
+.event{margin-top:13px;border-radius:14px;overflow:hidden;border:1px solid var(--line);position:relative;height:118px;display:flex;align-items:flex-end}
+.event img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(.9)}
+.event .ov{position:absolute;inset:0;background:linear-gradient(0deg,rgba(5,16,29,.95),rgba(5,16,29,.2))}
+.event .c{position:relative;z-index:2;padding:12px;width:100%}
+.event .k{font-size:10px;color:var(--ice);text-transform:uppercase;letter-spacing:.08em}
+.event .nm{font-family:'Oswald';font-weight:700;font-size:17px;color:#fff}
+.event .dt{font-size:11px;color:var(--dim)}
+.event .btnm{position:absolute;right:12px;bottom:12px;z-index:3;background:linear-gradient(180deg,#ff4357,#d31e31);color:#fff;font-size:11px;font-weight:700;padding:7px 12px;border-radius:9px}
+
+/* bottom nav */
+.tabbar{position:sticky;bottom:0;margin:16px -18px -26px;background:rgba(6,17,31,.96);border-top:1px solid var(--line);
+  display:flex;justify-content:space-around;padding:9px 6px 16px}
+.tabbar .tb{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:9.5px;color:var(--faint)}
+.tabbar .tb.on{color:var(--ice)}
+.tabbar .tb svg{width:21px;height:21px}
+
+/* splash */
+.splash{justify-content:space-between;background:
+  radial-gradient(500px 300px at 20% 12%,rgba(47,127,240,.3),transparent 60%),
+  radial-gradient(420px 300px at 85% 22%,rgba(255,176,58,.18),transparent 60%),
+  linear-gradient(175deg,#0a2340,#071a33 55%,#050f1c)}
+.splash .mid{text-align:center;margin-top:6px}
+.splash .dvbig{height:92px;margin:0 auto;filter:drop-shadow(0 4px 20px rgba(255,59,78,.55))}
+.splash .title{font-family:'Oswald';font-weight:700;font-size:34px;line-height:.95;margin-top:14px;letter-spacing:.01em}
+.splash .title .r{color:var(--red)}
+.splash .tag{color:var(--ice);font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;margin-top:12px;line-height:1.9}
+.splash .beerwrap{display:flex;justify-content:center;margin:6px 0}
+.ice-row{display:flex;gap:8px;justify-content:center;opacity:.5;margin-top:4px}
+.frost{position:absolute;pointer-events:none;opacity:.5}
+.note{font-size:11.5px;color:var(--dim);margin-top:12px;text-align:center}
+.note b{color:var(--ice)}
+</style></head><body>
+
+<div class="lead">
+  <h1 class="disp">Die Veiling Spaar Plan — Konsep</h1>
+  <p>Fase 1 voorbeeld · Castle Lite mede-borg (stylvolle plekhouer) · tik deur die skerms</p>
+</div>
+
+<div class="picker" id="picker"></div>
+
+<div class="phone">
+  <div class="notch"></div>
+  <div class="statusbar"><span>9:41</span><span class="r">▮▮▮ &nbsp;📶 &nbsp;🔋</span></div>
+  <div class="screens" id="screens">
+
+    <!-- 1 SPLASH -->
+    <section class="scr splash on" id="s1">
+      <div class="brandbar"><span class="clite" id="cl1"></span></div>
+      <div class="mid">
+        <img class="dvbig" src="img/dv-logo.png" alt="Die Veiling">
+        <div class="title disp">DIE VEILING<br><span class="r">SPAAR PLAN</span></div>
+        <div class="tag">Lekker mense<br>Lekker tyd<br>Groter voordele</div>
+      </div>
+      <div>
+        <div class="beerwrap" id="beer1"></div>
+        <button class="btn" onclick="go('s2')">Begin</button>
+        <div class="tiny">Reeds 'n lid? <b>Teken in</b></div>
+      </div>
+    </section>
+
+    <!-- 2 REGISTER -->
+    <section class="scr" id="s2">
+      <div class="brandbar"><span class="clite"></span><img class="dvlogo" src="img/dv-logo.png"></div>
+      <h2 class="scr-h disp">Sluit aan by<br>Die Veiling Spaar Plan</h2>
+      <div class="inp"><svg viewBox="0 0 24 24" fill="none" stroke="#9fc" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><span>Naam en Van</span></div>
+      <div class="inp"><svg viewBox="0 0 24 24" fill="none" stroke="#9fc" stroke-width="2"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M11 18h2"/></svg><span>Selfoonnommer</span></div>
+      <div class="inp"><svg viewBox="0 0 24 24" fill="none" stroke="#9fc" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg><span>E-posadres</span></div>
+      <div class="inp"><svg viewBox="0 0 24 24" fill="none" stroke="#9fc" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg><span>Skep wagwoord</span></div>
+      <div class="check"><span class="bx">✓</span><span>Ek stem in tot die bepalings en voorwaardes</span></div>
+      <button class="btn" onclick="go('s3')">Registreer</button>
+      <div class="sepor">Of registreer met</div>
+      <div class="social"><a>G</a><a></a><a>f</a></div>
+      <div class="tiny">Reeds 'n lid? <b>Teken in</b></div>
+    </section>
+
+    <!-- 3 BRANCH -->
+    <section class="scr" id="s3">
+      <div class="brandbar"><span class="clite"></span><img class="dvlogo" src="img/dv-logo.png"></div>
+      <h2 class="scr-h disp">Kies jou tak</h2>
+      <div class="branch" onclick="go('s4')"><img src="img/venue-vander.jpg"><div class="ov"></div><div class="nm">Vanderbijlpark</div><div class="ch">›</div></div>
+      <div class="branch" onclick="go('s4')"><img src="img/venue-sasol.jpg"><div class="ov"></div><div class="nm">Sasolburg</div><div class="ch">›</div></div>
+      <div class="branch" onclick="go('s4')"><img src="img/venue-veren.jpg"><div class="ov"></div><div class="nm">Vereeniging</div><div class="ch">›</div></div>
+      <div class="branch" onclick="go('s4')"><img src="img/venue-meyer.jpg"><div class="ov"></div><div class="nm">Meyerton</div><div class="ch">›</div></div>
+    </section>
+
+    <!-- 4 PACKAGES -->
+    <section class="scr" id="s4">
+      <div class="brandbar"><span class="clite"></span><img class="dvlogo" src="img/dv-logo.png"></div>
+      <h2 class="scr-h disp">Kies jou Spaar Plan</h2>
+      <div class="pkg bul" onclick="go('s5')"><div class="ic" id="ic-bul"></div><div class="mid"><div class="n disp">BUL</div><div class="d">1 gratis draught elke dag</div></div><div class="pr"><div><div class="vanaf">Vanaf</div><div class="amt disp">R8</div><div class="per">p/dag</div></div><span class="chev">›</span></div></div>
+      <div class="pkg ram" onclick="go('s5')"><div class="ic" id="ic-ram"></div><div class="mid"><div class="n disp">RAM</div><div class="d">3 gratis draughts per week</div></div><div class="pr"><div><div class="vanaf">Vanaf</div><div class="amt disp">R10</div><div class="per">p/dag</div></div><span class="chev">›</span></div></div>
+      <div class="pkg trop" onclick="go('s5')"><div class="ic" id="ic-trop"></div><div class="mid"><div class="n disp">TROP</div><div class="d">1 gratis draught per week</div></div><div class="pr"><div><div class="vanaf">Vanaf</div><div class="amt disp">R6</div><div class="per">p/dag</div></div><span class="chev">›</span></div></div>
+      <div class="pkg beer" onclick="go('s5')"><div class="ic" id="ic-beer"></div><div class="mid"><div class="n disp">BEER</div><div class="d">Gratis lidmaatskap</div></div><div class="pr"><div><div class="amt disp">R0</div></div><span class="chev">›</span></div></div>
+      <div class="rowgap"></div>
+      <button class="btn sec">Vergelyk Pakette</button>
+    </section>
+
+    <!-- 5 PAYMENT -->
+    <section class="scr" id="s5">
+      <div class="brandbar"><span class="clite"></span><img class="dvlogo" src="img/dv-logo.png"></div>
+      <h2 class="scr-h disp">Veilige betaling</h2>
+      <div class="pay sel"><div class="pi">💳</div><div class="pn">Kaartbetaling</div><div class="rd"></div></div>
+      <div class="pay"><div class="pi">🏦</div><div class="pn">EFT / Bankoorplasing</div><div class="rd"></div></div>
+      <div class="pay"><div class="pi">📷</div><div class="pn">SnapScan</div><div class="rd"></div></div>
+      <div class="pay"><div class="pi">⚡</div><div class="pn">Zapper</div><div class="rd"></div></div>
+      <div class="pay"><div class="pi"></div><div class="pn">Apple Pay / Google Pay</div><div class="rd"></div></div>
+      <div class="check"><span class="bx">✓</span><span>Stoor my betaalmetode vir toekomstige betalings</span></div>
+      <button class="btn" onclick="go('s6')">Betaal R1 595</button>
+      <div class="tiny">🔒 Veilige betaling via gesertifiseerde verskaffer</div>
+    </section>
+
+    <!-- 6 WELCOME -->
+    <section class="scr" id="s6">
+      <div class="brandbar"><span class="clite"></span><img class="dvlogo" src="img/dv-logo.png"></div>
+      <h2 class="scr-h disp" style="text-align:center">Welkom by<br>Die Veiling Spaar Plan!</h2>
+      <div class="mcard">
+        <div class="top"><span class="clite"></span><img class="dvlogo" src="img/dv-logo.png" style="height:28px"></div>
+        <div class="bull" id="bull6"></div>
+        <div class="tier disp">BUL Lid</div>
+        <div class="dae">200 Dae</div>
+        <div class="qr" id="qr6"></div>
+        <div class="who"><div class="nm">Herman Pieterse</div><div class="ln">ID: DV001234</div></div>
+      </div>
+      <div class="iconrow">
+        <div class="it"><div class="b">🍺</div>Draughts</div>
+        <div class="it"><div class="b">★</div>Punte</div>
+        <div class="it"><div class="b">🎫</div>Events</div>
+        <div class="it"><div class="b">🏷️</div>Aanbiedinge</div>
+      </div>
+      <button class="btn" onclick="go('s7')">Gaan na my kaart</button>
+      <div class="rowgap"></div>
+      <button class="btn sec" onclick="go('s7')">Verken die app</button>
+    </section>
+
+    <!-- 7 DASHBOARD -->
+    <section class="scr" id="s7">
+      <div class="dash-head">
+        <div class="av">👤</div>
+        <div class="who"><div class="n">Herman</div><div class="s">BUL Lid · 243 Dae oor</div></div>
+        <div style="font-size:20px;opacity:.7">🔔</div>
+      </div>
+      <div class="benefit">
+        <div class="beericon" id="beer7"></div>
+        <div><div class="t">Jou vandag se voordeel</div><div class="big disp">1 Gratis draught</div><div class="sm">Beskikbaar</div></div>
+      </div>
+      <div class="grid2">
+        <div class="tile" onclick="go('s9')"><div class="b">🍔</div><div class="l">Bestel Kos</div></div>
+        <div class="tile"><div class="b">🎫</div><div class="l">Kry Kaartjies</div></div>
+        <div class="tile"><div class="b">🏆</div><div class="l">Kompetisies</div></div>
+        <div class="tile"><div class="b">⭐</div><div class="l">Spaar Plan Punte</div></div>
+      </div>
+      <div class="event">
+        <img src="img/seating.jpg"><div class="ov"></div>
+        <div class="c"><div class="k">Upcoming Event</div><div class="nm">Bok van Blerk</div><div class="dt">Sat, 26 Sept 2026</div></div>
+        <div class="btnm">Kry Kaartjies</div>
+      </div>
+      <div class="tabbar" id="tab7"></div>
+    </section>
+
+    <!-- 8 CARD -->
+    <section class="scr" id="s8">
+      <div class="brandbar"><span style="font-size:20px;cursor:pointer" onclick="go('s7')">‹</span><span style="font-family:'Oswald';font-weight:600;font-size:15px">My Spaar Plan Kaart</span><span style="width:16px"></span></div>
+      <div class="mcard" style="margin-top:6px">
+        <div class="top"><span class="clite"></span><img class="dvlogo" src="img/dv-logo.png" style="height:28px"></div>
+        <div class="bull" id="bull8"></div>
+        <div class="tier disp">BUL Lid</div>
+        <div class="dae">200 Dae</div>
+        <div class="qr" id="qr8"></div>
+        <div class="who">
+          <div class="nm">Herman Pieterse</div>
+          <div class="ln">Lid nr: DV001234</div>
+          <div class="ln">Geldig van: 1 Jan 2027</div>
+          <div class="ln">Tot: 20 Jul 2027</div>
+        </div>
+      </div>
+      <div class="rowgap"></div><div class="rowgap"></div>
+      <button class="btn sec"> Voeg by Apple Wallet</button>
+    </section>
+
+    <!-- 9 USE DRAUGHT -->
+    <section class="scr" id="s9">
+      <div class="brandbar"><span class="clite"></span><img class="dvlogo" src="img/dv-logo.png"></div>
+      <h2 class="scr-h disp" style="text-align:center">Vandag se voordeel</h2>
+      <div class="beerwrap" id="beer9"></div>
+      <div style="text-align:center;margin-top:4px">
+        <div class="disp" style="font-size:26px;font-weight:700">1 Gratis draught</div>
+        <div class="muted">Beskikbaar vandag</div>
+      </div>
+      <div class="rowgap"></div>
+      <button class="btn" onclick="alert('Wys hierdie kode by die kroeg (demo).')">Wys kode aan kroeg</button>
+      <div class="note">Geldig 10:00 – 00:00<br>Slegs op <b>huis draught (Castle Lite)</b></div>
+    </section>
+
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<script>
+/* Castle Lite stand-in logo */
+var FLAKE='<svg class="flake" viewBox="0 0 24 24" fill="none" stroke="#bfe3ff" stroke-width="1.6" stroke-linecap="round"><path d="M12 2v20M2 12h20M4.5 4.5l15 15M19.5 4.5l-15 15"/><path d="M12 5l-2 2M12 5l2 2M12 19l-2-2M12 19l2-2M5 12l2-2M5 12l2 2M19 12l-2-2M19 12l-2 2"/></svg>';
+function cliteHTML(){return FLAKE+'<span class="stack"><span class="ct">CASTLE</span><span class="cl">LITE</span></span>';}
+document.querySelectorAll('.clite').forEach(function(e){e.innerHTML=cliteHTML();});
+
+/* animal + beer icons */
+var BULL='<svg viewBox="0 0 72 52" fill="#fff"><path d="M9 4C3 0 0 5 2 11c2 6 9 8 13 8"/><path d="M63 4c6-4 9 1 7 7-2 6-9 8-13 8" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"/><path d="M9 4c-6-4-9 1-7 7 2 6 9 8 13 8" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"/><path d="M15 17c0 18 9 32 21 32s21-14 21-32c-6 3-14 4-21 4s-15-1-21-4z"/><circle cx="27" cy="30" r="3" fill="#0f5e2e"/><circle cx="45" cy="30" r="3" fill="#0f5e2e"/></svg>';
+var RAM='<svg viewBox="0 0 72 52" fill="#fff"><path d="M22 15c0 18 7 32 14 32s14-14 14-32z"/><path d="M22 17C9 17 4 28 11 34c7 6 13-3 10-11" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round"/><path d="M50 17c13 0 18 11 11 17-7 6-13-3-10-11" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round"/><circle cx="29" cy="28" r="2.6" fill="#163e86"/><circle cx="43" cy="28" r="2.6" fill="#163e86"/></svg>';
+var SHEEP='<svg viewBox="0 0 72 52" fill="#fff"><circle cx="26" cy="28" r="12"/><circle cx="40" cy="23" r="13"/><circle cx="53" cy="29" r="11"/><circle cx="32" cy="39" r="11"/><circle cx="47" cy="39" r="11"/><ellipse cx="16" cy="24" rx="8" ry="10"/><circle cx="14" cy="22" r="2.4" fill="#8a6a18"/></svg>';
+var MUG='<svg viewBox="0 0 64 60" fill="#fff"><path d="M14 20q4-10 15-5 11-5 15 5z"/><rect x="14" y="20" width="29" height="36" rx="4"/><path d="M43 27h7a8 8 0 018 8v3a8 8 0 01-8 8h-7" fill="none" stroke="#fff" stroke-width="5"/></svg>';
+document.getElementById('ic-bul').innerHTML=BULL;
+document.getElementById('ic-ram').innerHTML=RAM;
+document.getElementById('ic-trop').innerHTML=SHEEP;
+document.getElementById('ic-beer').innerHTML=MUG;
+['bull6','bull8'].forEach(function(id){document.getElementById(id).innerHTML=BULL;});
+
+/* frosty beer hero (SVG) */
+function beerSVG(h){return '<svg width="'+(h*0.7)+'" height="'+h+'" viewBox="0 0 160 230">\
+<defs>\
+<linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe08a"/><stop offset="0.5" stop-color="#f6b21e"/><stop offset="1" stop-color="#d98b00"/></linearGradient>\
+<linearGradient id="gl" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#cfeaff" stop-opacity=".55"/><stop offset="0.5" stop-color="#ffffff" stop-opacity=".12"/><stop offset="1" stop-color="#9ecbff" stop-opacity=".4"/></linearGradient>\
+</defs>\
+<path d="M118 70 h14 a22 22 0 0 1 22 22 v16 a22 22 0 0 1 -22 22 h-14" fill="none" stroke="url(#gl)" stroke-width="12"/>\
+<rect x="30" y="58" width="92" height="162" rx="12" fill="url(#bg)"/>\
+<rect x="30" y="58" width="92" height="162" rx="12" fill="url(#gl)"/>\
+<ellipse cx="76" cy="52" rx="50" ry="22" fill="#fff"/>\
+<circle cx="44" cy="44" r="13" fill="#fff"/><circle cx="68" cy="38" r="15" fill="#fff"/><circle cx="94" cy="43" r="13" fill="#fff"/><circle cx="110" cy="50" r="10" fill="#fff"/>\
+<g fill="#fff" opacity=".9"><circle cx="52" cy="92" r="3.5"/><circle cx="70" cy="130" r="4"/><circle cx="58" cy="170" r="3"/><circle cx="92" cy="110" r="3"/><circle cx="100" cy="150" r="3.5"/><circle cx="46" cy="140" r="2.6"/></g>\
+<g fill="#eaf6ff" opacity=".5"><circle cx="86" cy="120" r="5"/><circle cx="60" cy="150" r="6"/><circle cx="96" cy="185" r="5"/></g>\
+</svg>';}
+document.getElementById('beer1').innerHTML=beerSVG(210);
+document.getElementById('beer9').innerHTML=beerSVG(220);
+document.getElementById('beer7').innerHTML='<div style="transform:scale(.95)">'+beerSVG(70)+'</div>';
+
+/* QR */
+function drawQR(id,data){try{var q=qrcode(0,'M');q.addData(data);q.make();document.getElementById(id).innerHTML=q.createSvgTag({scalable:true,margin:0});}catch(e){}}
+drawQR('qr6','DV001234'); drawQR('qr8','DV001234');
+
+/* bottom nav */
+var ICONS={home:'<path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/>',menu:'<path d="M4 6h16M4 12h16M4 18h16"/>',cal:'<rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/>',bag:'<path d="M6 7h12l-1 14H7z"/><path d="M9 7a3 3 0 016 0"/>',more:'<circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/>'};
+function tab(name,label,on){return '<div class="tb '+(on?'on':'')+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+ICONS[name]+'</svg>'+label+'</div>';}
+document.getElementById('tab7').innerHTML=tab('home','Tuis',true)+tab('menu','Menu')+tab('cal','Events')+tab('bag','Winkel')+tab('more','Meer');
+
+/* screen switching + picker */
+var ORDER=[['s1','1 · Splash'],['s2','2 · Sluit aan'],['s3','3 · Kies tak'],['s4','4 · Pakket'],['s5','5 · Betaling'],['s6','6 · Welkom'],['s7','7 · Tuis'],['s8','8 · Kaart'],['s9','9 · Draught']];
+var pk=document.getElementById('picker');
+ORDER.forEach(function(o){var b=document.createElement('button');b.textContent=o[1];b.dataset.id=o[0];b.onclick=function(){go(o[0]);};pk.appendChild(b);});
+function go(id){
+  document.querySelectorAll('.scr').forEach(function(s){s.classList.toggle('on',s.id===id);});
+  document.querySelectorAll('#picker button').forEach(function(b){b.classList.toggle('on',b.dataset.id===id);});
+  document.querySelectorAll('.scr').forEach(function(s){if(s.id===id)s.scrollTop=0;});
+}
+go('s1');
+</script>
+</body></html>
