@@ -264,14 +264,15 @@ h2.scr-h{font-family:'Oswald';font-weight:700;font-size:25px;letter-spacing:.01e
 /* ── review / editor mode (only when ?editor) ── */
 body.editor{padding-top:46px}
 [data-note]:not(.splash-bottle):not(.tabbar):not(.scr){position:relative}
-body.editor .scr.on [data-note]{cursor:pointer}
-body.editor .scr.on [data-note]:hover{outline:2px dashed var(--ice);outline-offset:3px}
+body.note-mode .scr.on [data-note]{cursor:pointer}
+body.note-mode .scr.on [data-note]:hover{outline:2px dashed var(--ice);outline-offset:3px}
 .note-badge{position:absolute;top:-8px;left:-8px;min-width:20px;height:20px;padding:0 5px;border-radius:999px;background:var(--ice);color:#06213d;font-family:'Oswald';font-weight:700;font-size:11px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px -3px rgba(0,0,0,.7);z-index:35}
 .ed-bar{position:fixed;top:0;left:0;right:0;z-index:100;background:#071a30;border-bottom:1px solid var(--line2);display:flex;gap:10px;align-items:center;justify-content:space-between;padding:8px 16px}
 .ed-bar .l{color:var(--ice);font-family:'Oswald';letter-spacing:.05em;text-transform:uppercase;font-size:12px}
 .ed-bar .r{display:flex;gap:8px}
 .ed-bar button{background:var(--green);color:#fff;border:0;border-radius:8px;padding:6px 12px;font-weight:700;font-size:12.5px;cursor:pointer;font-family:Inter}
 .ed-bar button.ghost{background:transparent;color:var(--ice);border:1px solid var(--line2)}
+.ed-bar button.active{background:var(--ice);color:#06213d}
 .composer{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:110;width:min(520px,calc(100% - 32px));background:#0e2748;border:1px solid var(--ice);border-radius:14px;padding:16px;box-shadow:0 24px 70px -20px #000}
 .composer .for{font-size:12px;color:var(--ice);margin-bottom:8px}
 .composer .for b{color:var(--ink)}
@@ -723,8 +724,21 @@ go('s1');
   });
 
   var composer=null;
+  var noteMode=false;
+  function setNoteMode(on){
+    noteMode=!!on;
+    document.body.classList.toggle('note-mode',noteMode);
+    var b=document.getElementById('edNote');
+    if(b){ b.classList.toggle('active',noteMode); b.textContent=noteMode?'Klik \'n element…':'✎ Los \'n nota'; }
+    var h=document.getElementById('edHint');
+    if(h){ h.textContent=noteMode
+      ? 'Klik op enige skerm, blok of prent om jou nota te los'
+      : 'Redigeer-modus · klik deur die app soos normaal · druk “Los \'n nota” om terugvoer te los'; }
+    if(!noteMode && composer){ composer.remove(); composer=null; }
+  }
   document.addEventListener('click',function(e){
     if(e.target.closest('.ed-bar,.panel,.composer,.toast,#picker,.lead')) return;
+    if(!noteMode) return;                 /* browse mode: let the app handle the click */
     var scr=e.target.closest('.scr'); if(!scr) return;
     e.preventDefault(); e.stopPropagation();
     var el=e.target.closest('[data-note]')||scr;
@@ -732,8 +746,9 @@ go('s1');
   },true);
 
   var bar=document.createElement('div'); bar.className='ed-bar';
-  bar.innerHTML='<span class="l">✎ Redigeer-modus · klik enige skerm of prent om \'n nota te los · wissel skerms met die knoppies bo</span><span class="r"><button id="edView">Notas (<span id="edCount">0</span>)</button><button class="ghost" id="edDone">Klaar</button></span>';
+  bar.innerHTML='<span class="l" id="edHint">Redigeer-modus · klik deur die app soos normaal · druk “Los \'n nota” om terugvoer te los</span><span class="r"><button id="edNote">✎ Los \'n nota</button><button id="edView">Notas (<span id="edCount">0</span>)</button><button class="ghost" id="edDone">Klaar</button></span>';
   document.body.appendChild(bar);
+  document.getElementById('edNote').onclick=function(){ setNoteMode(!noteMode); };
   document.getElementById('edDone').onclick=function(){ location.href=location.pathname; };
   var panel=document.createElement('div'); panel.className='panel'; panel.innerHTML='<h4>Notas</h4><div id="edList"></div>';
   document.body.appendChild(panel);
@@ -766,12 +781,12 @@ go('s1');
     composer.querySelector('.for b').textContent=label;
     document.body.appendChild(composer);
     var ta=composer.querySelector('textarea'); ta.focus();
-    composer.querySelector('.cancel').onclick=function(){ composer.remove(); composer=null; };
+    composer.querySelector('.cancel').onclick=function(){ setNoteMode(false); };
     composer.querySelector('.save').onclick=function(){
       var text=ta.value.trim(); if(!text){ ta.focus(); return; }
       fetch(FN,{method:'POST',headers:H,body:JSON.stringify({page:PAGE,anchor:anchor,label:label,note:text})})
         .then(function(r){return r.json();}).then(function(d){ if(d&&d.note){ notes.push(d.note); render(); } toast('Nota gestoor'); }).catch(function(){ toast('Kon nie stoor nie'); });
-      composer.remove(); composer=null;
+      setNoteMode(false);
     };
   }
   function toast(m){ var t=document.createElement('div'); t.className='toast'; t.textContent=m; document.body.appendChild(t); setTimeout(function(){t.remove();},1800); }
