@@ -1,0 +1,562 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>The Answer · [Client]</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0b0d11; --ink2:#12151b; --line:#262b35;
+  --paper:#f2ede3; --dim:#a1a9b8; --dim2:#5d6574;
+  --lime:#d6ff3d; --cream:#f2ede3; --rust:#ff6b3d;
+  --serif:"Inter",-apple-system,"Segoe UI",sans-serif; --sans:"Inter",-apple-system,"Segoe UI",sans-serif; --mono:"Inter",-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--ink);color:var(--paper);font-family:var(--sans);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+::selection{background:var(--lime);color:var(--ink)}
+a{color:var(--lime)}
+.fill{background:var(--lime);color:var(--ink);padding:0 5px;border-radius:3px;font-style:normal;font-weight:500}
+.w{max-width:1180px;margin:0 auto;padding:0 32px}
+@media(max-width:640px){.w{padding:0 20px}}
+.mono{font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+section{padding:120px 0;border-top:1px solid var(--line);position:relative}
+@media(max-width:640px){section{padding:76px 0}}
+.kicker{display:flex;gap:14px;align-items:baseline;margin-bottom:34px}
+.kicker .n{font-family:var(--mono);font-weight:700;font-size:12px;color:var(--lime)}
+.kicker .t{font-family:var(--mono);font-weight:600;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+h2{font-family:var(--serif);font-weight:600;font-size:clamp(34px,4.8vw,64px);line-height:1.06;letter-spacing:-.03em;max-width:18ch}
+h2 em{font-style:normal;color:var(--lime)}
+.lead{font-size:clamp(17px,1.4vw,19.5px);color:#d9d4ca;max-width:62ch;margin-top:26px;line-height:1.55}
+.lead b{color:var(--paper);font-weight:500}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:space-between;padding:28px 0 40px;
+  background:radial-gradient(1100px 600px at 85% 20%,rgba(214,255,61,.08),transparent 60%),radial-gradient(900px 700px at 0% 100%,rgba(255,107,61,.06),transparent 60%),var(--ink)}
+.hero>.w{width:100%}
+.top{display:flex;justify-content:space-between;align-items:center;gap:16px}
+.brand{font-family:var(--mono);font-size:12px;letter-spacing:.2em}
+.brand b{color:var(--lime);font-weight:500}
+.hgrid{display:grid;grid-template-columns:1.05fr .95fr;gap:64px;align-items:center;margin:48px 0}
+@media(max-width:960px){.hgrid{grid-template-columns:1fr;gap:44px}}
+.hero h1{font-family:var(--serif);font-weight:700;font-size:clamp(42px,5.6vw,84px);line-height:1.02;letter-spacing:-.04em}
+.hero h1 em{font-style:normal;color:var(--lime)}
+.hero .sub{margin-top:28px;font-size:19px;color:#d9d4ca;max-width:44ch}
+.meta{display:flex;gap:30px;flex-wrap:wrap}
+.meta div{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.meta b{display:block;color:var(--paper);font-weight:400;margin-top:4px;letter-spacing:.01em;text-transform:none;font-family:var(--sans);font-size:15px}
+.chat{background:linear-gradient(180deg,#151922,#0f1218);border:1px solid #2a303c;border-radius:20px;box-shadow:0 40px 120px rgba(0,0,0,.55);overflow:hidden}
+.chat .bar{display:flex;align-items:center;gap:8px;padding:14px 18px;border-bottom:1px solid #232833}
+.chat .bar i{width:10px;height:10px;border-radius:50%;background:#2c323e;display:block}
+.chat .bar span{margin-left:auto;font-family:var(--mono);font-size:10.5px;color:var(--dim2);letter-spacing:.06em}
+.chat .body{padding:22px 22px 24px}
+.q{margin-left:auto;max-width:88%;background:#232a36;border-radius:16px 16px 4px 16px;padding:12px 16px;font-size:15.5px;min-height:48px}
+.caret{display:inline-block;width:2px;height:1.05em;background:var(--lime);vertical-align:-3px;margin-left:2px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.think{margin-top:20px;font-family:var(--mono);font-size:11.5px;color:var(--dim2);letter-spacing:.04em;margin-bottom:10px;opacity:0;transition:opacity .4s}
+.rank{list-style:none}
+.rank li{display:flex;align-items:center;gap:14px;padding:9px 12px;border-radius:10px;font-size:16px;opacity:0;transform:translateY(8px);transition:opacity .5s,transform .5s}
+.rank li .p{font-family:var(--mono);font-size:12px;color:var(--dim2);width:22px}
+.rank li.top1{background:rgba(242,237,227,.07)} .rank li.top1 .nm{font-weight:600}
+.rank li.you{outline:1.5px solid var(--lime);background:rgba(214,255,61,.07)}
+.rank li.you .nm{color:var(--lime);font-weight:600}
+.rank li .tag{margin-left:auto;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--lime);opacity:0;transition:opacity .6s .5s}
+.rank li.show{opacity:1;transform:none}
+.rank li.you.show .tag{opacity:1}
+.cap{margin-top:16px;font-family:var(--mono);font-size:10.5px;color:var(--dim2);letter-spacing:.05em;line-height:1.6}
+.scroll{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--dim);text-transform:uppercase}
+
+/* OBSERVED */
+.big3{display:grid;grid-template-columns:repeat(3,1fr);margin-top:70px;border-top:1px solid var(--line)}
+@media(max-width:800px){.big3{grid-template-columns:1fr}}
+.big3>div{padding:34px 28px 10px 0;border-right:1px solid var(--line)}
+.big3>div+div{padding-left:28px}
+.big3>div:last-child{border-right:0}
+@media(max-width:800px){.big3>div,.big3>div+div{border-right:0;border-bottom:1px solid var(--line);padding:30px 0}}
+.big3 .v{font-family:var(--serif);font-weight:600;font-size:clamp(64px,8vw,116px);line-height:.9;letter-spacing:-.04em}
+.big3 .v.y{color:var(--lime)}
+.big3 .v small{font-size:.38em;letter-spacing:0;color:var(--dim)}
+.big3 .l{margin-top:16px;color:#cfcabf;font-size:16px;max-width:30ch}
+.dots-wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:60px;margin-top:80px;align-items:center}
+@media(max-width:900px){.dots-wrap{grid-template-columns:1fr;gap:34px}}
+.dots-h{grid-column:1/-1;font-family:var(--serif);font-weight:600;font-size:clamp(26px,2.6vw,36px);line-height:1.15;max-width:30ch}
+.dots-h em{font-style:normal;color:var(--lime)}
+.dots{display:grid;grid-template-columns:repeat(10,1fr);gap:10px;max-width:520px}
+.dots i{aspect-ratio:1;border-radius:50%;background:#262b35;display:block;transform:scale(.2);opacity:0;transition:transform .5s cubic-bezier(.2,.9,.3,1.3),opacity .4s}
+.dots.on i{transform:scale(1);opacity:1}
+.c-OUT{background:var(--cream)!important}
+.c-YOU{background:var(--lime)!important;box-shadow:0 0 18px rgba(214,255,61,.55)}
+.c-none{background:transparent!important;border:1.5px dashed #6b7383}
+.c-other{background:#4a5263!important}
+.legend{list-style:none}
+.legend li{display:flex;align-items:baseline;gap:14px;padding:12px 0;border-bottom:1px solid var(--line)}
+.legend li:last-child{border-bottom:0}
+.legend .sw{width:12px;height:12px;border-radius:50%;flex:0 0 12px;display:inline-block}
+.legend .k{font-family:var(--serif);font-size:34px;font-weight:600;width:58px;line-height:1}
+.legend .d{color:#cfcabf;font-size:15px}
+.eng{margin-top:70px;display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+@media(max-width:800px){.eng{grid-template-columns:1fr}}
+.eng>div{border:1px solid var(--line);border-radius:16px;padding:22px}
+.eng h4{font-family:var(--mono);font-weight:400;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:16px}
+.br{display:grid;grid-template-columns:92px 1fr 58px;gap:12px;align-items:center;font-size:14px;margin:10px 0}
+.br .t{height:10px;background:#1f242d;border-radius:10px;overflow:hidden}
+.br .t span{display:block;height:100%;width:0;border-radius:10px;transition:width 1.4s cubic-bezier(.2,.8,.2,1)}
+.br.o .t span{background:var(--cream)} .br.y .t span{background:var(--lime)} .br.y{color:var(--lime)}
+.br .x{font-family:var(--mono);font-size:12px;color:var(--dim);text-align:right}
+.eng-note{margin-top:14px;font-size:14px;color:var(--dim)}
+
+/* BOXES */
+.boxes{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:64px}
+@media(max-width:860px){.boxes{grid-template-columns:1fr}}
+.box{border-radius:22px;padding:38px 34px}
+.box.out{background:var(--paper);color:var(--ink)}
+.box.you{background:var(--ink2);border:1px solid var(--line)}
+.box .who{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+.box.out .who{color:#6a6152} .box.you .who{color:var(--lime)}
+.box .own{font-family:var(--serif);font-weight:600;font-size:clamp(34px,3.6vw,52px);line-height:1.02;margin:14px 0 26px;letter-spacing:-.02em}
+.box .own em{font-style:normal;text-decoration:underline;text-decoration-thickness:3px;text-underline-offset:6px}
+.quote{padding:16px 0;border-top:1px solid rgba(11,13,17,.14)}
+.box.you .quote{border-top-color:var(--line)}
+.quote p{font-family:var(--serif);font-size:18px;line-height:1.5;font-weight:500}
+.quote p::before{content:"\201C"} .quote p::after{content:"\201D"}
+.quote span{display:block;margin-top:6px;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;opacity:.6}
+.quote.warn p{color:var(--rust)}
+.upside{margin-top:48px;display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:start;border-left:2px solid var(--lime);padding:6px 0 6px 24px;max-width:880px}
+@media(max-width:640px){.upside{grid-template-columns:1fr;gap:8px}}
+.upside .mono{color:var(--lime)} .upside p{color:#dcd7cd;font-size:17px}
+
+/* CALC */
+.calc{display:grid;grid-template-columns:1fr 1fr;gap:56px;margin-top:60px;align-items:start}
+@media(max-width:900px){.calc{grid-template-columns:1fr;gap:36px}}
+.sl{padding:16px 0;border-bottom:1px solid var(--line)}
+.sl .row{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.sl label{font-size:15px;color:#dcd7cd}
+.sl output{font-family:var(--mono);font-size:15px;color:var(--paper);white-space:nowrap}
+.tg{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:999px;margin-left:8px;vertical-align:2px;white-space:nowrap}
+.tg.you{border:1px solid var(--dim2);color:var(--dim)} .tg.obs{background:var(--lime);color:var(--ink)}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:4px;background:#262b35;border-radius:4px;margin-top:14px;outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--lime);border:4px solid var(--ink);box-shadow:0 0 0 1px var(--lime);cursor:pointer}
+input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:var(--lime);border:4px solid var(--ink);cursor:pointer}
+.res{position:sticky;top:30px;border-radius:24px;padding:40px 36px;background:linear-gradient(160deg,#1b2110,#11140c);border:1px solid #3a4520}
+.res .mono{color:var(--lime)}
+.res .v{font-family:var(--serif);font-weight:600;font-size:clamp(52px,6vw,88px);line-height:.95;letter-spacing:-.03em;margin:16px 0 8px;color:var(--lime);word-break:break-word}
+.res .per{font-size:16px;color:#cdd6b0}
+.res .chain{margin-top:26px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.res .chain div{border-top:1px solid #3a4520;padding-top:10px}
+.res .chain b{display:block;font-family:var(--serif);font-weight:600;font-size:28px;color:var(--paper)}
+.res .chain span{font-size:12.5px;color:#a9b38c}
+.res .yr{margin-top:22px;font-size:15px;color:#cdd6b0}
+.small{font-size:14px;color:var(--dim);margin-top:24px;max-width:62ch}
+
+/* OUTCOMES */
+.outs{margin-top:60px}
+.o{display:grid;grid-template-columns:110px 1fr 1fr;gap:36px;padding:38px 0;border-top:1px solid var(--line)}
+@media(max-width:860px){.o{grid-template-columns:1fr;gap:12px}}
+.o .num{font-family:var(--serif);font-weight:600;font-size:64px;line-height:.9;color:var(--lime)}
+.o h3{font-family:var(--serif);font-weight:600;font-size:28px;line-height:1.15;letter-spacing:-.01em}
+.o p{color:#cfcabf;font-size:16px}
+.o .ben{margin-top:14px;font-size:15px;color:var(--paper)}
+.o .ben b{font-family:var(--mono);font-weight:400;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--lime);display:block;margin-bottom:4px}
+
+/* SCOPE */
+.scope{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:56px}
+@media(max-width:860px){.scope{grid-template-columns:1fr}}
+.scope>div{border:1px solid var(--line);border-radius:20px;padding:30px}
+.scope h3{font-family:var(--mono);font-weight:400;font-size:12px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px}
+.scope .in h3{color:var(--lime)} .scope .out h3{color:var(--dim)}
+.scope ul{list-style:none}
+.scope li{padding:11px 0 11px 28px;border-bottom:1px solid var(--line);position:relative;font-size:15.5px;color:#d6d0c3}
+.scope li:last-child{border-bottom:0}
+.scope .in li::before{content:"+";position:absolute;left:0;color:var(--lime);font-family:var(--mono)}
+.scope .out li::before{content:"\2212";position:absolute;left:0;color:var(--dim2);font-family:var(--mono)}
+.scope .out li{color:var(--dim)}
+
+/* METHOD */
+.meth{display:grid;grid-template-columns:repeat(5,1fr);margin-top:56px;border-top:1px solid var(--line)}
+@media(max-width:1000px){.meth{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.meth{grid-template-columns:1fr}}
+.meth>div{padding:28px 22px 10px 0;border-right:1px solid var(--line)}
+.meth>div+div{padding-left:22px}
+.meth>div:last-child{border-right:0}
+@media(max-width:1000px){.meth>div,.meth>div+div{border-right:0;border-bottom:1px solid var(--line);padding:24px 0}}
+.meth .mono{color:var(--lime);margin-bottom:10px}
+.meth h4{font-family:var(--serif);font-weight:600;font-size:22px;line-height:1.15;margin-bottom:10px}
+.meth p{font-size:14.5px;color:var(--dim)}
+
+/* TIMELINE */
+.track{display:grid;grid-template-columns:repeat(3,1fr);margin-top:64px}
+@media(max-width:760px){.track{grid-template-columns:1fr}}
+.track>div{padding:30px 28px 0 0;position:relative}
+.track>div::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:#262b35}
+.track>div::after{content:"";position:absolute;top:-6px;left:0;width:15px;height:15px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 5px var(--ink)}
+.track .mono{color:var(--lime)}
+.track h4{font-family:var(--serif);font-weight:600;font-size:30px;margin:6px 0 8px}
+.track p{font-size:15px;color:var(--dim);max-width:34ch}
+@media(max-width:760px){.track>div{padding-bottom:34px}}
+.effort{margin-top:50px;display:flex;gap:44px;flex-wrap:wrap;padding:26px 30px;border:1px solid var(--line);border-radius:16px}
+.effort div{font-size:15px;color:#dcd7cd}
+.effort b{display:block;font-family:var(--serif);font-weight:600;font-size:42px;color:var(--paper);line-height:1;margin-bottom:4px}
+
+/* HONESTY */
+.honest{background:var(--paper);color:var(--ink);border-top:0}
+.honest .kicker .n{color:#a0441f} .honest .kicker .t{color:#6a6152}
+.honest h2 em{color:#c24b1e}
+.honest .lead{color:#4d463b}
+.hon{display:grid;grid-template-columns:1fr 1fr;margin-top:56px;border-top:1px solid rgba(11,13,17,.15)}
+@media(max-width:800px){.hon{grid-template-columns:1fr}}
+.hon>div{padding:30px 34px 30px 0;border-bottom:1px solid rgba(11,13,17,.15)}
+.hon>div:nth-child(odd){border-right:1px solid rgba(11,13,17,.15)}
+.hon>div:nth-child(even){padding-left:34px}
+@media(max-width:800px){.hon>div:nth-child(odd){border-right:0}.hon>div:nth-child(even){padding-left:0}}
+.hon .mono{color:#a0441f}
+.hon h4{font-family:var(--serif);font-weight:600;font-size:26px;line-height:1.15;margin:8px 0 10px}
+.hon p{color:#4d463b;font-size:15.5px}
+
+/* PRICE */
+.price{display:grid;grid-template-columns:1.15fr .85fr;gap:28px;margin-top:60px}
+@media(max-width:900px){.price{grid-template-columns:1fr}}
+.pc{border-radius:26px;padding:46px 42px;background:radial-gradient(600px 300px at 100% 0%,rgba(214,255,61,.14),transparent 60%),var(--ink2);border:1px solid #333a2a}
+@media(max-width:640px){.pc{padding:34px 26px}}
+.pc .mono{color:var(--lime)}
+.pc .amt{font-family:var(--serif);font-weight:600;font-size:clamp(72px,10vw,140px);line-height:.9;letter-spacing:-.045em;margin:16px 0 14px}
+.pc .amt sup{font-size:.28em;vertical-align:top;letter-spacing:0;color:var(--dim);margin-right:6px;position:relative;top:.5em}
+.pc .terms{color:#dcd7cd;font-size:15.5px;max-width:46ch}
+.pc .credit{margin-top:26px;padding-top:22px;border-top:1px solid var(--line);font-size:16px;color:#dcd7cd}
+.pc .credit b{color:var(--lime);font-weight:500}
+.ctx{border:1px solid var(--line);border-radius:26px;padding:34px}
+.ctx .r{display:flex;justify-content:space-between;align-items:center;gap:18px;padding:16px 0;border-bottom:1px solid var(--line);font-size:15px;color:#dcd7cd}
+.ctx .r:last-child{border-bottom:0}
+.ctx .r b{font-family:var(--serif);font-weight:600;font-size:22px;color:var(--paper);white-space:nowrap}
+.ctx .r b.y{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;color:var(--dim);border:1px solid var(--dim2);border-radius:999px;padding:3px 9px;text-transform:uppercase}
+.guar{margin-top:28px;display:grid;grid-template-columns:auto 1fr;gap:30px;align-items:center;padding:34px 38px;border-radius:26px;background:var(--lime);color:var(--ink)}
+@media(max-width:700px){.guar{grid-template-columns:1fr;gap:12px;padding:30px 26px}}
+.guar .seal{font-family:var(--serif);font-style:normal;font-size:42px;line-height:1;font-weight:400}
+.guar p{font-size:18px;line-height:1.45}
+
+/* PROGRAMME + TEAM */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:70px}
+@media(max-width:900px){.split{grid-template-columns:1fr;gap:56px}}
+.split p{color:#dcd7cd;margin-top:16px}
+.split p b{color:var(--paper);font-weight:500}
+.person{border-top:1px solid var(--line);padding:24px 0}
+.person h4{font-family:var(--serif);font-weight:600;font-size:30px}
+.person .mono{color:var(--lime);margin:4px 0 10px}
+.person p{color:var(--dim);font-size:15.5px;margin:0}
+
+/* NEXT */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:56px}
+@media(max-width:800px){.steps{grid-template-columns:1fr}}
+.steps .k{font-family:var(--serif);font-weight:600;font-size:90px;line-height:.85;color:transparent;-webkit-text-stroke:1px var(--lime)}
+.steps h4{font-family:var(--serif);font-weight:600;font-size:28px;margin:14px 0 8px}
+.steps p{color:var(--dim);font-size:15.5px}
+.why{margin-top:60px;font-family:var(--serif);font-weight:600;font-size:clamp(22px,2.4vw,30px);line-height:1.35;max-width:40ch;color:#d6d0c3}
+.sign{background:var(--paper);color:var(--ink);border-radius:30px;padding:56px 50px;margin-top:80px}
+@media(max-width:640px){.sign{padding:36px 24px}}
+.sign .mono{color:#6a6152}
+.sign h3{font-family:var(--serif);font-weight:600;font-size:clamp(34px,4vw,54px);line-height:1.02;letter-spacing:-.02em;margin-top:12px}
+.sign .t{margin-top:12px;color:#4d463b}
+.lines{display:grid;grid-template-columns:1fr 1fr;gap:40px 40px;margin-top:56px}
+@media(max-width:640px){.lines{grid-template-columns:1fr}}
+.lines div{border-top:1.5px solid var(--ink);padding-top:10px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#6a6152}
+footer{padding:60px 0 70px;text-align:center;font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--dim2);text-transform:uppercase}
+
+.rv{opacity:0;transform:translateY(24px);transition:opacity .9s ease,transform .9s cubic-bezier(.2,.8,.2,1)}
+.rv.on{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}.rv,.rank li,.dots i{opacity:1!important;transform:none!important}}
+@media print{.rv,.rank li,.dots i{opacity:1!important;transform:none!important}.hero{min-height:auto}section{break-inside:avoid}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="w top">
+    <div class="brand">AI <b>VISIBILITY</b> INDEX</div>
+    <div class="mono">Proposal · <span class="fill">[date]</span></div>
+  </div>
+  <div class="w hgrid">
+    <div>
+      <div class="mono" style="color:var(--lime);margin-bottom:22px">For <span class="fill">[Contact name, title]</span></div>
+      <h1><span class="fill">[Client]</span> is <em><span class="fill">[the finding, in five words]</span></em></h1>
+      <p class="sub">We asked ChatGPT, Claude and Google the questions your buyers ask when choosing <span class="fill">[category]</span>. This is a proposal to measure that properly, and to show <span class="fill">[Client]</span> how to move it.</p>
+    </div>
+    <div class="chat" role="img" aria-label="An observed AI answer to a buyer question">
+      <div class="bar"><i></i><i></i><i></i><span><span class="fill">[Engine]</span> · incognito · web search on</span></div>
+      <div class="body">
+        <div class="q" id="q" data-text="[The buyer question, exactly as asked]"></div>
+        <div class="think" id="think">Searched the web · insurers named, in order</div>
+        <ol class="rank" id="rank"><li class="top1"><span class="p">01</span><span class="nm"><span class="fill">[Competitor named first]</span></span></li><li class=""><span class="p">02</span><span class="nm"><span class="fill">[Competitor]</span></span></li><li class=""><span class="p">03</span><span class="nm"><span class="fill">[Competitor]</span></span></li><li class="you"><span class="p">04</span><span class="nm"><span class="fill">[Client]</span></span><span class="tag"><span class="fill">[position]</span></span></li></ol>
+        <div class="cap">[Date observed] · [engine], run [n] of 3 · names in the order the answer gave them</div>
+      </div>
+    </div>
+  </div>
+  <div class="w" style="display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap">
+    <div class="meta">
+      <div>Prepared for<b><span class="fill">[Client]</span></b></div>
+      <div>Engagement<b>AI Visibility Audit</b></div>
+      <div>Valid until<b><span class="fill">[date, 30 days out]</span></b></div>
+    </div>
+    <div class="scroll">Scroll</div>
+  </div>
+</header>
+
+<section>
+  <div class="w">
+    <div class="kicker rv"><span class="n">01</span><span class="t">The shift</span></div>
+    <h2 class="rv">Your customers stopped searching. <em>They ask.</em></h2>
+    <p class="lead rv">People choosing <span class="fill">[category]</span> no longer scroll through ten links. They type a whole question into ChatGPT, Claude or Google and get one answer back, usually a shortlist of three to five names. The first name gets the call. The rest mostly don't.</p>
+    <p class="lead rv">That answer can't be bought, and it isn't built from your website. The engine assembles it from what it trusts: press, review platforms, rankings and comparison sites. Since October 2026 ChatGPT also sells sponsored placements in South Africa, so the paid answer and the earned one now sit side by side. None of it shows up in your analytics. <b>Nobody at <span class="fill">[Client]</span> can see it today.</b></p>
+  </div>
+</section>
+
+<section>
+  <div class="w">
+    <div class="kicker rv"><span class="n">02</span><span class="t">What we already observed</span></div>
+    <h2 class="rv"><span class="fill">[Two-part finding,]</span> <em><span class="fill">[in six words]</span></em></h2>
+    <p class="lead rv">On <span class="fill">[snapshot date]</span> we asked AI engines <span class="fill">[n]</span> questions your buyers ask, three times each, in clean sessions. We didn't need anything from you to do it. For what a full measurement looks like, see our <a href="https://jcereports.netlify.app/ai-visibility-insurance-b900f0/">South African insurance index</a>.</p>
+    <div class="big3 rv"><div><div class="v"><span class="fill">[x%]</span></div><div class="l">of answers mention <span class="fill">[Client]</span></div></div><div><div class="v y"><span class="fill">[x/y]</span></div><div class="l">answers name <span class="fill">[Client]</span> first. <span class="fill">[Lead competitor]</span> is named first in <span class="fill">[n]</span>.</div></div><div><div class="v y"><span class="fill">[x/y]</span></div><div class="l">sources the engines quoted feature <span class="fill">[Client]</span></div></div></div>
+    <div class="dots-wrap">
+      <p class="dots-h rv"><span class="fill">[n]</span> answers to open buyer questions. Here's who each one <em>named first.</em> (Dots show an example. Set them in build.py.)</p>
+      <div class="dots rv" id="dots" data-d="OUT:10,YOU:3,other:20,none:7"></div>
+      <ul class="legend rv"><li><span class="sw c-OUT"></span><span class="k"><span class="fill">[n]</span></span><span class="d"><span class="fill">[Lead competitor]</span></span></li><li><span class="sw c-YOU"></span><span class="k"><span class="fill">[n]</span></span><span class="d"><span class="fill">[Client]</span></span></li><li><span class="sw c-other"></span><span class="k"><span class="fill">[n]</span></span><span class="d">Other brands</span></li><li><span class="sw c-none"></span><span class="k"><span class="fill">[n]</span></span><span class="d">No brand named</span></li></ul>
+    </div>
+    <div class="eng rv" id="eng"><div><h4><span class="fill">[Engine]</span> · runs</h4><div class="br o"><span><span class="fill">[Competitor]</span></span><div class="t"><span data-w="50"></span></div><span class="x"><span class="fill">[x/y]</span></span></div><div class="br y"><span><span class="fill">[Client]</span></span><div class="t"><span data-w="15"></span></div><span class="x"><span class="fill">[x/y]</span></span></div></div><div><h4><span class="fill">[Engine]</span> · runs</h4><div class="br o"><span><span class="fill">[Competitor]</span></span><div class="t"><span data-w="50"></span></div><span class="x"><span class="fill">[x/y]</span></span></div><div class="br y"><span><span class="fill">[Client]</span></span><div class="t"><span data-w="15"></span></div><span class="x"><span class="fill">[x/y]</span></span></div></div><div><h4><span class="fill">[Engine]</span> · runs</h4><div class="br o"><span><span class="fill">[Competitor]</span></span><div class="t"><span data-w="50"></span></div><span class="x"><span class="fill">[x/y]</span></span></div><div class="br y"><span><span class="fill">[Client]</span></span><div class="t"><span data-w="15"></span></div><span class="x"><span class="fill">[x/y]</span></span></div></div></div>
+    <p class="eng-note rv">Named first, on the questions that don't mention any brand.</p>
+  </div>
+</section>
+
+<section>
+  <div class="w">
+    <div class="kicker rv"><span class="n">03</span><span class="t">How the engines describe you</span></div>
+    <h2 class="rv">Two brands. <em>Two different boxes.</em></h2>
+    <div class="boxes">
+      <div class="box out rv"><div class="who"><span class="fill">[Lead competitor]</span>, as the engines describe it</div><div class="own">The <em><span class="fill">[word]</span></em> choice.</div><div class="quote"><p><span class="fill">[exact quote]</span></p><span>[Engine] · [question]</span></div><div class="quote"><p><span class="fill">[exact quote]</span></p><span>[Engine] · [question]</span></div></div>
+      <div class="box you rv"><div class="who"><span class="fill">[Client]</span>, as the engines describe it</div><div class="own">The <em><span class="fill">[word]</span></em> option.</div><div class="quote"><p><span class="fill">[exact quote]</span></p><span>[Engine] · [question]</span></div><div class="quote warn"><p><span class="fill">[exact quote, if there is a warning]</span></p><span>[Engine] · [how often]</span></div></div>
+    </div>
+    <div class="upside rv"><div class="mono">The upside</div><p><span class="fill">[One honest positive, and one question no brand owns yet.]</span></p></div>
+  </div>
+</section>
+
+<section>
+  <div class="w">
+    <div class="kicker rv"><span class="n">04</span><span class="t">What second place costs</span></div>
+    <h2 class="rv">Put in <em>your</em> numbers.</h2>
+    <p class="lead rv">An illustrative model, not a forecast. The two share figures are from the free snapshot of <span class="fill">[date]</span>. Everything else is yours to set, because you know your numbers better than we do.</p>
+    <div class="calc">
+      <div class="rv">
+        <div class="sl"><div class="row"><label>AI-assisted <span class="fill">[category]</span> questions a month<span class="tg you">You tell us</span></label><output id="ov"></output></div><input type="range" id="v" min="1000" max="200000" step="1000" value="10000" aria-label="AI-assisted questions a month"></div>
+        <div class="sl"><div class="row"><label><span class="fill">[Client]</span> recommended first<span class="tg obs">From snapshot</span></label><output id="oa"></output></div><input type="range" id="a" min="0" max="60" step="1" value="5" aria-label="Share recommended first"></div>
+        <div class="sl"><div class="row"><label><span class="fill">[Lead competitor]</span> recommended first<span class="tg obs">From snapshot</span></label><output id="ob"></output></div><input type="range" id="b" min="0" max="60" step="1" value="25" aria-label="Competitor share recommended first"></div>
+        <div class="sl"><div class="row"><label>Recommendations that become a quote request<span class="tg you">You tell us</span></label><output id="oq"></output></div><input type="range" id="q2" min="1" max="40" step="1" value="10" aria-label="Quote request rate"></div>
+        <div class="sl"><div class="row"><label>Quote requests that become customers<span class="tg you">You tell us</span></label><output id="oc"></output></div><input type="range" id="c" min="1" max="50" step="1" value="15" aria-label="Conversion rate"></div>
+        <div class="sl"><div class="row"><label>Lifetime value of one customer<span class="tg you">You tell us</span></label><output id="ol"></output></div><input type="range" id="l" min="1000" max="50000" step="500" value="10000" aria-label="Customer lifetime value"></div>
+      </div>
+      <div class="res rv">
+        <div class="mono">If you closed half the gap to <span class="fill">[Lead competitor]</span></div>
+        <div class="v" id="rv">R0</div>
+        <div class="per">a month, in customer lifetime value</div>
+        <div class="chain"><div><b id="r1">0</b><span>more first recommendations</span></div><div><b id="r2">0</b><span>quote requests</span></div><div><b id="r3">0</b><span>new customers</span></div></div>
+        <div class="yr" id="ry"></div>
+      </div>
+    </div>
+    <p class="small rv">Nobody can measure AI-driven sales cleanly yet, us included (see section 09). Use this to judge whether the question is worth R95,000 to answer, not to predict revenue.</p>
+  </div>
+</section>
+
+<section>
+  <div class="w">
+    <div class="kicker rv"><span class="n">05</span><span class="t">What you get</span></div>
+    <h2 class="rv">Five things you'll know <em>in three weeks.</em></h2>
+    <div class="outs">
+      <div class="o rv"><div class="num">1</div><div><h3>Exactly where <span class="fill">[Client]</span> stands, in numbers</h3></div><div><p>Your share of answers, how often you're named first and where you sit in the list, by engine and by type of question. Scored out of 100 with the arithmetic shown, so your team can check it.</p><p class="ben"><b>Benefit to <span class="fill">[Client]</span></b>A number your board can track, instead of a hunch about AI.</p></div></div>
+      <div class="o rv"><div class="num">2</div><div><h3>Who beats you, on which questions, and why</h3></div><div><p>The same measurement for your three strongest competitors, question by question. For every question you lose: who won it, and the evidence the engine used to pick them.</p><p class="ben"><b>Benefit to <span class="fill">[Client]</span></b>You see the exact moments buyers are sent somewhere else.</p></div></div>
+      <div class="o rv"><div class="num">3</div><div><h3>The sources the answers are built from</h3></div><div><p>A ranked map of every site the engines quote about your category: press, review platforms, comparison sites, rankings and competitor content. Marked by whether you're present on each.</p><p class="ben"><b>Benefit to <span class="fill">[Client]</span></b>Usually the surprise. Most of the answer comes from places your marketing has never touched.</p></div></div>
+      <div class="o rv"><div class="num">4</div><div><h3>What the engines get wrong about you</h3></div><div><p>Every outdated price, wrong product detail, old complaint or competitor claim the engines repeat about <span class="fill">[Client]</span>, with the source it came from.</p><p class="ben"><b>Benefit to <span class="fill">[Client]</span></b>The cheapest fixes on the list, and often the most urgent.</p></div></div>
+      <div class="o rv"><div class="num">5</div><div><h3>A ranked plan to move the number</h3></div><div><p>Every fix ranked by impact and effort, split into what you control, what you can influence and what has to be earned. Each one with an owner and a measure.</p><p class="ben"><b>Benefit to <span class="fill">[Client]</span></b>Your teams can start on day one, with or without us.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="w">
+    <div class="kicker rv"><span class="n">06</span><span class="t">Scope</span></div>
+    <h2 class="rv">A fixed price needs <em>a fixed scope.</em></h2>
+    <p class="lead rv">Anything outside this list is quoted separately, at a price you approve before any work starts.</p>
+    <div class="scope">
+      <div class="in rv"><h3>Included</h3><ul>
+        <li>Up to 50 buyer questions, written from how your customers really talk, signed off by you</li>
+        <li>Up to two product lines (<span class="fill">[product lines]</span>)</li>
+        <li>ChatGPT, Claude, Google AI Overviews and Perplexity</li>
+        <li>Three fresh runs of every question on every engine, about 600 in all</li>
+        <li><span class="fill">[Client]</span> plus three competitors, scored the same way</li>
+        <li>Source map, accuracy check and ranked fix plan</li>
+        <li>The full run log and frozen question set, yours to keep</li>
+        <li>A 90-minute readout with your leadership team</li>
+        <li>One follow-up session within 30 days</li>
+      </ul></div>
+      <div class="out rv"><h3>Not included</h3><ul>
+        <li>Making the fixes: that is the optional programme in section 11</li>
+        <li>Buying or managing media, including ChatGPT sponsored placements</li>
+        <li>Other engines, or languages other than English</li>
+        <li>More than two product lines or three competitors</li>
+        <li>Monthly re-measurement after the audit</li>
+        <li>Media mix modelling or sales attribution</li>
+      </ul></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="w">
+    <div class="kicker rv"><span class="n">07</span><span class="t">How we measure</span></div>
+    <h2 class="rv">Built to survive <em>your team checking it.</em></h2>
+    <div class="meth rv">
+      <div><div class="mono">i</div><h4>Counts, not screenshots</h4><p>AI answers change between runs. Every question runs three times and is reported as a count: "named first in 2 of 3".</p></div>
+      <div><div class="mono">ii</div><h4>Clean sessions</h4><p>Logged out or incognito, no memory, no history. We see what a stranger sees.</p></div>
+      <div><div class="mono">iii</div><h4>Rivals on the same day</h4><p>Your competitors get the same questions on the same day, scored the same way.</p></div>
+      <div><div class="mono">iv</div><h4>Dated and sourced</h4><p>Every finding carries the date observed and the source the engine quoted.</p></div>
+      <div><div class="mono">v</div><h4>Wins shown too</h4><p>Where you already win, we say so. A report that only finds problems isn't one to trust.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="w">
+    <div class="kicker rv"><span class="n">08</span><span class="t">Timeline</span></div>
+    <h2 class="rv">Sign-off to readout <em>in three weeks.</em></h2>
+    <div class="track rv">
+      <div><div class="mono">Week 1</div><h4>Questions</h4><p>A 60-minute kickoff with marketing and sales. We draft the questions from how your customers really ask, and you sign them off.</p></div>
+      <div><div class="mono">Week 2</div><h4>Measurement</h4><p>About 600 runs across four engines in one window, so every brand faces the same conditions.</p></div>
+      <div><div class="mono">Week 3</div><h4>Readout</h4><p>The scored report, source map and fix plan, presented to your leadership in 90 minutes.</p></div>
+    </div>
+    <div class="effort rv">
+      <div><b>~3 hrs</b>of your team's time, in total</div>
+      <div><b>0</b>system access, data or IT needed</div>
+      <div><b>1</b>fixed price, no hourly billing</div>
+    </div>
+  </div>
+</section>
+
+<section class="honest">
+  <div class="w">
+    <div class="kicker rv"><span class="n">09</span><span class="t">What we haven't proven</span></div>
+    <h2 class="rv">Four things <em>we won't promise.</em></h2>
+    <p class="lead rv">We could leave these out and you might never notice. We'd rather you hear them from us before you sign.</p>
+    <div class="hon">
+      <div class="rv"><div class="mono">One</div><h4>We can't tie AI answers to sales precisely.</h4><p>When someone reads an AI answer and later visits you, analytics mostly logs it as "direct". Nobody can measure this cleanly yet. What we can measure, honestly and repeatably, is your share of the answers.</p></div>
+      <div class="rv"><div class="mono">Two</div><h4>We can't buy you a place in the answer.</h4><p>Organic AI answers aren't for sale. We improve the evidence the engines use. The engines decide.</p></div>
+      <div class="rv"><div class="mono">Three</div><h4>The answers move.</h4><p>Engines update weekly. The audit is a dated snapshot, and its value is as a baseline you can measure against.</p></div>
+      <div class="rv"><div class="mono">Four</div><h4>Some fixes take quarters.</h4><p>Awards, rankings and press have to be earned. We'll mark which fixes are which, so nobody sells you a slow one as a quick one.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="w">
+    <div class="kicker rv"><span class="n">10</span><span class="t">Investment</span></div>
+    <h2 class="rv">One number. <em>Fixed.</em></h2>
+    <div class="price">
+      <div class="pc rv">
+        <div class="mono">AI Visibility Audit · once-off</div>
+        <div class="amt"><sup>R</sup>95,000</div>
+        <p class="terms">Excluding VAT. Half on signature, half when the readout is delivered. Fixed for the scope in section 06: no hourly billing, and no extras unless you approve a quote first.</p>
+        <p class="credit"><b>Credited in full</b> against the first month of the optional 90-day programme if you start it within 30 days of the readout.</p>
+      </div>
+      <div class="ctx rv">
+        <div class="mono" style="margin-bottom:6px">For context</div>
+        <div class="r"><span>A senior digital marketing hire, for one quarter</span><b>~R270,000</b></div>
+        <div class="r"><span>Your monthly search and media spend</span><b class="y">You tell us</b></div>
+        <div class="r"><span>Customers needed to recover the fee, at R10,000 lifetime value</span><b>10</b></div>
+      </div>
+    </div>
+    <div class="guar rv"><div class="seal">Check our work</div><p>Pick any five questions from the audit. Within 14 days of the readout, have your own team ask each one three times in a clean session. If fewer than four of the five give the same leader we reported, you don't pay the second half, and you keep the report.</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="w split">
+    <div>
+      <div class="kicker rv"><span class="n">11</span><span class="t">After the audit, optional</span></div>
+      <h2 class="rv" style="font-size:clamp(34px,4vw,54px)">The <em>90-day</em> programme.</h2>
+      <p class="rv" style="margin-top:26px">If the audit shows a gap worth closing, we close it with you: make the fixes, put the evidence where the engines read it, run and measure ChatGPT sponsored placements, and re-measure every month against the frozen question set.</p>
+      <p class="rv">A 90-day term, with fees partly linked to agreed results such as share of answers and cost per acquisition. Scoped and priced after the readout, once we both know the size of the gap. <b>Buying the audit commits you to nothing further.</b></p>
+    </div>
+    <div>
+      <div class="kicker rv"><span class="n">12</span><span class="t">Who you'd work with</span></div>
+      <div class="person rv"><h4>Marcus Stephens</h4><div class="mono">Commercial and media lead</div><p>Senior media and advertising leader in South Africa, previously at Mediamark. Owns the relationship, the commercial model and anything that touches media.</p></div>
+      <div class="person rv"><h4>Jacques Groenewald</h4><div class="mono">Measurement and technical lead</div><p>Runs the measurement system behind this audit, and builds the conversational sales tools, tracking and AI systems that act on it. Owns the method, the data and the fix plan.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="w">
+    <div class="kicker rv"><span class="n">13</span><span class="t">Next steps</span></div>
+    <h2 class="rv">Three steps to <em>a readout.</em></h2>
+    <div class="steps">
+      <div class="rv"><div class="k">01</div><h4>Say yes</h4><p>Sign below or reply to approve. We invoice the first half.</p></div>
+      <div class="rv"><div class="k">02</div><h4>Kickoff</h4><p>60 minutes to agree the product lines, the three competitors and the questions your sales team hears most.</p></div>
+      <div class="rv"><div class="k">03</div><h4>Readout</h4><p>Three weeks later: your scored report and fix plan, presented to your leadership.</p></div>
+    </div>
+    <p class="why rv">The price holds until <span class="fill">[date, 30 days out]</span>. More importantly, the snapshot of <span class="fill">[date]</span> is your before-picture. AI answers shift week to week, and the brands that set a baseline now are the ones that will be able to prove what their spend moved.</p>
+    <div class="sign rv">
+      <div class="mono">Acceptance</div>
+      <h3>Approve the AI Visibility Audit for <span class="fill">[Client]</span>.</h3>
+      <p class="t">R95,000 excluding VAT, for the scope in section 06, delivered within three weeks of kickoff.</p>
+      <div class="lines">
+        <div>Signed for <span class="fill">[Client]</span></div><div>Name, title and date</div>
+        <div>Signed for the AI Visibility Index team</div><div>Name and date</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>AI Visibility Index · Proposal for [Client] · [date]</footer>
+
+<script>
+(function(){
+  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var q=document.getElementById('q'),txt=q.getAttribute('data-text'),lis=[].slice.call(document.querySelectorAll('#rank li')),think=document.getElementById('think');
+  function reveal(){think.style.opacity=1;lis.forEach(function(li,i){setTimeout(function(){li.classList.add('show')},reduce?0:300+i*240)})}
+  if(reduce){q.textContent=txt;reveal()}else{
+    var tn=document.createTextNode(''),c=document.createElement('span'),i=0;c.className='caret';q.appendChild(tn);q.appendChild(c);
+    (function t(){if(i<=txt.length){tn.nodeValue=txt.slice(0,i);i++;setTimeout(t,i<2?600:24+Math.random()*34)}else{setTimeout(function(){c.remove();reveal()},450)}})();
+  }
+
+  var d=document.getElementById('dots'),k=0;
+  d.getAttribute('data-d').split(',').forEach(function(p){var kv=p.split(':');for(var j=0;j<+kv[1];j++){var e=document.createElement('i');e.className='c-'+kv[0];e.style.transitionDelay=(k++*16)+'ms';d.appendChild(e)}});
+
+  function on(el){el.classList.add('on');if(el.id==='eng')[].slice.call(el.querySelectorAll('.t span')).forEach(function(s){s.style.width=s.getAttribute('data-w')+'%'})}
+  var els=[].slice.call(document.querySelectorAll('.rv'));
+  if(reduce||!('IntersectionObserver' in window)){els.forEach(on)}else{
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){on(e.target);io.unobserve(e.target)}})},{threshold:.12});
+    els.forEach(function(el){io.observe(el)});
+  }
+  window.addEventListener('beforeprint',function(){els.forEach(on)});
+
+  function n(id){return +document.getElementById(id).value}
+  function N(x){return Math.round(x).toLocaleString('en-ZA').replace(/[,  ]/g,' ')}
+  function R(x){return 'R'+N(x)}
+  function calc(){
+    document.getElementById('ov').textContent=N(n('v'));
+    document.getElementById('oa').textContent=n('a')+'%';
+    document.getElementById('ob').textContent=n('b')+'%';
+    document.getElementById('oq').textContent=n('q2')+'%';
+    document.getElementById('oc').textContent=n('c')+'%';
+    document.getElementById('ol').textContent=R(n('l'));
+    var gap=Math.max(0,n('b')-n('a'))/200,recs=n('v')*gap,qs=recs*n('q2')/100,cu=qs*n('c')/100,val=cu*n('l');
+    document.getElementById('rv').textContent=R(val);
+    document.getElementById('r1').textContent=N(recs);
+    document.getElementById('r2').textContent=N(qs);
+    document.getElementById('r3').textContent=N(cu);
+    document.getElementById('ry').textContent=R(val*12)+' over a year.';
+  }
+  ['v','a','b','q2','c','l'].forEach(function(id){document.getElementById(id).addEventListener('input',calc)});
+  calc();
+})();
+</script>
+</body>
+</html>
