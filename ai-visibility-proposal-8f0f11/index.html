@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>AI Visibility Audit · MiWay Insurance</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f8fe; --card:#ffffff; --ink:#101a2e; --muted:#5b6b86; --line:#e7edf8;
+  --grad:linear-gradient(135deg,#2f6bf6,#6366f1,#8b5cf6);
+  --accent:#2f6bf6; --warm:linear-gradient(135deg,#ff6a45,#ffb020);
+  --good:#0f9d58; --warn:#e8a33d; --bad:#d64545;
+  --shadow:0 6px 18px rgba(38,66,120,.07);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+h1,h2,h3,.num{font-family:"Space Grotesk",Inter,sans-serif;font-weight:600;line-height:1.2}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px 80px}
+a{color:var(--accent)}
+.fill{background:#fff3b0;border-radius:4px;padding:0 4px;color:#7a5b00}
+
+/* cover */
+.hero{background:var(--grad);color:#fff;padding:64px 0 76px;margin-bottom:-44px}
+.hero .wrap{padding-bottom:0}
+.wordmark{font-family:"Space Grotesk";font-weight:700;letter-spacing:.12em;opacity:.9;font-size:13px}
+.hero h1{font-size:clamp(30px,5vw,48px);margin:20px 0 10px;color:#fff;max-width:760px}
+.hero .sub{opacity:.94;font-size:18px;margin:0;max-width:680px}
+.stamp{margin-top:22px;font-size:13px;opacity:.85;display:flex;gap:18px;flex-wrap:wrap}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:30px;margin:22px 0}
+.card h2{font-size:22px;margin:0 0 6px}
+.eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);font-weight:700;margin:0 0 6px}
+.lede{color:var(--muted);margin:0 0 20px;font-size:15.5px}
+p{margin:0 0 14px}
+
+/* big numbers */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:18px 0 6px}
+@media(max-width:640px){.stats{grid-template-columns:1fr}}
+.stat{border:1px solid var(--line);border-radius:14px;padding:18px;background:linear-gradient(180deg,#f7f9ff,#fff)}
+.stat .num{font-size:38px;line-height:1;margin-bottom:6px}
+.stat .num.bad{color:var(--bad)} .stat .num.good{color:var(--good)}
+.stat .l{font-size:13.5px;color:var(--muted)}
+
+.finding{background:linear-gradient(135deg,#fff7ed,#fffbf5);border:1px solid #ffe0c2;border-left:4px solid #ff8b45}
+.finding h2{color:#9a4a12}
+
+/* outcomes */
+.out{display:flex;gap:16px;padding:16px 0;border-bottom:1px solid var(--line)}
+.out:last-child{border-bottom:0}
+.out .n{flex:0 0 34px;height:34px;border-radius:50%;background:var(--grad);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-family:"Space Grotesk"}
+.out h3{font-size:17px;margin:3px 0 4px}
+.out p{margin:0;color:var(--muted);font-size:14.5px}
+.out .benefit{margin-top:6px;color:var(--ink);font-size:14.5px}
+
+/* tables */
+.tbl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-size:14.5px;min-width:560px}
+th{text-align:left;font-family:"Space Grotesk";font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding:10px 12px;border-bottom:2px solid var(--line)}
+td{padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+.inout{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:680px){.inout{grid-template-columns:1fr}}
+.inout ul{margin:0;padding-left:20px} .inout li{margin:6px 0;font-size:14.5px}
+.inout h3{font-size:15px;margin:0 0 8px}
+.in h3{color:var(--good)} .notin h3{color:var(--bad)}
+
+/* calculator */
+.calc{display:grid;grid-template-columns:1fr 1fr;gap:12px 18px;margin:16px 0}
+@media(max-width:640px){.calc{grid-template-columns:1fr}}
+.calc label{font-size:13.5px;color:var(--muted);display:block;margin-bottom:4px}
+.calc input{width:100%;font:inherit;font-size:16px;padding:9px 11px;border:1px solid #cdd8ee;border-radius:10px;background:#fbfcff}
+.tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.04em;padding:1px 7px;border-radius:999px;margin-left:6px;vertical-align:1px}
+.tag.you{background:#fdf3e0;color:#95651a} .tag.obs{background:#e6f6ed;color:#0f7a44}
+.result{border-radius:14px;padding:20px;background:var(--ink);color:#fff;margin-top:8px}
+.result .num{font-size:34px;color:#8fb4ff}
+.result p{margin:4px 0 0;color:#c9d4ea;font-size:14px}
+
+/* timeline */
+.tl{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:680px){.tl{grid-template-columns:1fr}}
+.tl>div{border:1px solid var(--line);border-radius:14px;padding:16px}
+.tl .w{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.08em}
+.tl h3{font-size:16px;margin:4px 0 6px} .tl p{font-size:14px;color:var(--muted);margin:0}
+
+/* honesty */
+.honest{border-left:4px solid var(--warn)}
+.honest li{margin:8px 0;font-size:14.5px}
+
+/* price */
+.price{display:grid;grid-template-columns:1.3fr 1fr;gap:18px;align-items:stretch}
+@media(max-width:680px){.price{grid-template-columns:1fr}}
+.pbox{border-radius:16px;padding:24px;border:2px solid var(--accent);background:linear-gradient(180deg,#f0f5ff,#fff)}
+.pbox .num{font-size:46px;line-height:1;margin:8px 0}
+.pbox .small{font-size:13.5px;color:var(--muted)}
+.anchor{border-radius:16px;padding:20px;border:1px solid var(--line)}
+.anchor div{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}
+.anchor div:last-child{border-bottom:0}
+.guar{background:#e9f8ef;border:1px solid #bfe8cf;border-radius:14px;padding:18px 20px;margin-top:18px}
+.guar h3{margin:0 0 6px;font-size:16px;color:#0f6b3d}
+.guar p{margin:0;font-size:14.5px}
+
+/* next */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:680px){.steps{grid-template-columns:1fr}}
+.steps>div{border-radius:14px;padding:18px;background:#f4f7ff}
+.steps .k{font-family:"Space Grotesk";font-size:28px;font-weight:700;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.steps h3{font-size:16px;margin:2px 0 6px} .steps p{font-size:14px;color:var(--muted);margin:0}
+
+.sign{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:10px}
+@media(max-width:640px){.sign{grid-template-columns:1fr}}
+.sign>div{border-top:1.5px solid var(--ink);padding-top:8px;font-size:13.5px;color:var(--muted);min-height:70px}
+.close{background:var(--ink);color:#fff;border:0}
+.close h2{color:#fff} .close p{color:#c9d4ea}
+.team{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:640px){.team{grid-template-columns:1fr}}
+.team>div{border:1px solid var(--line);border-radius:14px;padding:18px}
+.team h3{margin:0 0 2px;font-size:17px} .team .r{font-size:13px;color:var(--accent);font-weight:600;margin-bottom:8px}
+.team p{font-size:14px;color:var(--muted);margin:0}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 20px}
+@media print{.hero{-webkit-print-color-adjust:exact;print-color-adjust:exact}.card{break-inside:avoid}.calc input{border:0}}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="wrap">
+    <div class="wordmark">AI VISIBILITY INDEX</div>
+    <h1>When your customers ask AI who to choose, MiWay Insurance should be the answer.</h1>
+    <p class="sub">A proposal for an AI Visibility Audit of MiWay Insurance in car and home insurance, South Africa.</p>
+    <div class="stamp"><span>Prepared for MiWay marketing leadership</span><span>28 October 2026</span><span>Valid until 30 November 2026</span></div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="card">
+    <p class="eyebrow">The shift</p>
+    <h2>Your buyers have stopped searching. They ask.</h2>
+    <p class="lede">A growing share of people choosing car insurance no longer scroll through ten blue links. They type a full question into ChatGPT, Claude or Google and get back one answer, often with a shortlist of three to five names. The brand at the top of that shortlist gets the click. The others mostly get ignored.</p>
+    <p>That answer isn't bought, and it isn't built from your website alone. The engine assembles it from what it trusts: press coverage, review platforms, comparison sites, rankings, and whatever it can read about you. As of October 2026, OpenAI has also opened sponsored placements inside ChatGPT in South Africa, so the organic answer and the paid one now sit side by side.</p>
+    <p style="margin:0"><strong>Nobody at MiWay can see this today.</strong> It doesn't show up in Google Analytics, search rankings or your media reports. The audit makes it visible, measures it and shows you what moves it.</p>
+  </div>
+
+
+  <div class="card finding">
+    <p class="eyebrow" style="color:#9a4a12">What we already observed</p>
+    <h2>MiWay is in the answer. OUTsurance is the answer.</h2>
+    <p class="lede" style="color:#7a3d10">On 26 October 2026 we asked ChatGPT, Claude and Google 14 questions South Africans ask when choosing car insurance, 99 runs in total. We didn't need anything from you to do it, and the full results are <a href="https://jcereports.netlify.app/ai-visibility-insurance-b900f0/">published here</a>.</p>
+    <div class="stats">
+      <div class="stat"><div class="num good">60%</div><div class="l">of ChatGPT and Claude answers mention MiWay, more often than OUTsurance</div></div>
+      <div class="stat"><div class="num bad">4 of 70</div><div class="l">runs name MiWay first. OUTsurance is named first in 21. On Claude, MiWay was never first in 30 runs</div></div>
+      <div class="stat"><div class="num bad">0 of 6</div><div class="l">"OUTsurance vs MiWay" head-to-heads give MiWay the edge. OUTsurance gets it in 4</div></div>
+    </div>
+    <p style="margin-top:16px">The engines have put the two brands in different boxes. OUTsurance owns <strong>"best", "best reputation" and "good at paying claims"</strong>, and backs it with things the engines can quote: the News24 award, the DataEQ index and its ombud complaint record. MiWay owns <strong>"cheaper"</strong>. Asked which insurers are good at paying claims, Claude named OUTsurance first in 3 of 3 runs and never named MiWay. All three ChatGPT runs of "Is MiWay a good insurance company?" warned of "delays, rejected claims and problems coordinating repairs".</p>
+    <p style="margin:0">There's real upside too. Asked about MiWay directly, Claude calls it "one of South Africa's better-regarded short-term insurers". MiWay comes up on every engine for young drivers and for price. And when a customer asks what to do about an 18% premium increase, no engine recommends any insurer. <strong>That question is open ground.</strong> The audit measures all of this properly, across four engines and both product lines, and turns it into a plan.</p>
+  </div>
+
+
+  <div class="card">
+    <p class="eyebrow">What the gap could be worth</p>
+    <h2>Put your own numbers in</h2>
+    <p class="lede">An illustrative model, not a forecast. The two share figures are what we observed on 26 October 2026 (MiWay named first in 4 of 70 runs, OUTsurance in 21). Everything marked <span class="tag you">YOU TELL US</span> is yours to change, because you know your numbers far better than we do.</p>
+    <div class="calc">
+      <div><label>AI-assisted car insurance questions per month in South Africa <span class="tag you">YOU TELL US</span></label><input id="v" type="number" value="10000"></div>
+      <div><label>Share of answers that recommend MiWay first (%) <span class="tag obs">OBSERVED 26 OCT</span></label><input id="a" type="number" value="6"></div>
+      <div><label>Share that recommend OUTsurance first (%) <span class="tag obs">OBSERVED 26 OCT</span></label><input id="b" type="number" value="30"></div>
+      <div><label>Recommendations that lead to a quote request (%) <span class="tag you">YOU TELL US</span></label><input id="q" type="number" value="10"></div>
+      <div><label>Quote requests that become customers (%) <span class="tag you">YOU TELL US</span></label><input id="c" type="number" value="15"></div>
+      <div><label>Lifetime value of one customer (R) <span class="tag you">YOU TELL US</span></label><input id="l" type="number" value="10000"></div>
+    </div>
+    <div class="result">
+      <div style="font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#8fb4ff">If you closed half the gap to OUTsurance</div>
+      <div class="num" id="out">…</div>
+      <p id="out2"></p>
+    </div>
+    <p class="note" style="font-size:13px;color:var(--muted);margin:14px 0 0">Nobody can measure AI-driven sales cleanly yet, us included (see "What we haven't proven" below). Use this to judge whether the question is worth R95,000 to answer, not to predict revenue.</p>
+  </div>
+
+  <div class="card">
+    <p class="eyebrow">What you get</p>
+    <h2>Five things you'll know at the end of the audit</h2>
+    <div class="out"><div class="n">1</div><div><h3>Exactly where MiWay stands, with numbers</h3><p>Your share of answers, how often you're recommended first and where you sit in the list, on each engine and for each type of question. Scored out of 100 with the arithmetic shown, so your team can check it.</p><p class="benefit"><strong>Benefit to MiWay:</strong> a number your board can track, instead of a hunch about "AI".</p></div></div>
+    <div class="out"><div class="n">2</div><div><h3>Who is beating you, on which questions, and why</h3><p>The same measurement for your three strongest competitors, question by question. For every question you lose, we show who won it and the evidence the engine used to pick them.</p><p class="benefit"><strong>Benefit to MiWay:</strong> you see the exact moments buyers are being sent elsewhere.</p></div></div>
+    <div class="out"><div class="n">3</div><div><h3>The sources the answers are built from</h3><p>A ranked map of every site the engines quote when they talk about your category: press, review platforms, comparison sites, rankings, competitor content. Marked by whether you are present on each.</p><p class="benefit"><strong>Benefit to MiWay:</strong> this is usually the surprise. Most of the answer comes from places your marketing team has never touched.</p></div></div>
+    <div class="out"><div class="n">4</div><div><h3>What the engines get wrong about you</h3><p>Every outdated price, wrong product detail, old complaint or competitor's claim the engines repeat about MiWay, with the source it came from.</p><p class="benefit"><strong>Benefit to MiWay:</strong> the cheapest fixes on the list, and often the most urgent.</p></div></div>
+    <div class="out"><div class="n">5</div><div><h3>A prioritised plan to move the number</h3><p>Every fix ranked by impact and effort, and split three ways: what MiWay controls directly, what you can influence, and what has to be earned over time. Each one comes with an owner and a way to measure it.</p><p class="benefit"><strong>Benefit to MiWay:</strong> your teams can start on day one, with or without us.</p></div></div>
+  </div>
+
+  <div class="card">
+    <p class="eyebrow">Scope</p>
+    <h2>Exactly what is in, and what isn't</h2>
+    <p class="lede">A fixed price only works if the scope is fixed too. Anything outside this list is quoted separately, at a price you approve before any work starts.</p>
+    <div class="inout">
+      <div class="in"><h3>✓ Included</h3><ul>
+        <li>Up to 50 buyer questions, built from how your customers actually talk, signed off by you before we run them</li>
+        <li>Up to two product lines (for example car and home)</li>
+        <li>Four engines: ChatGPT, Claude, Google AI Overviews and Perplexity</li>
+        <li>Three fresh runs of every question on every engine, about 600 runs in all</li>
+        <li>MiWay plus three competitors, scored the same way</li>
+        <li>Full source map, accuracy check and prioritised fix plan</li>
+        <li>The complete run log and the frozen question set, yours to keep</li>
+        <li>A 90-minute readout with your leadership team</li>
+        <li>One follow-up session within 30 days to answer your team's questions</li>
+      </ul></div>
+      <div class="notin"><h3>✗ Not included</h3><ul>
+        <li>Making the fixes (content, PR, site changes): that is the optional programme below</li>
+        <li>Buying or managing media, including ChatGPT sponsored placements</li>
+        <li>Engines beyond the four named, or languages other than English</li>
+        <li>Product lines beyond two, or more than three competitors</li>
+        <li>Monthly re-measurement after the audit</li>
+        <li>Media mix modelling or sales attribution work</li>
+      </ul></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="eyebrow">How we measure</p>
+    <h2>Built to survive your own team checking it</h2>
+    <div class="tbl-scroll"><table>
+      <tr><th>Principle</th><th>What it means for you</th></tr>
+      <tr><td><strong>Frequency, never a screenshot</strong></td><td>AI answers change from one run to the next. Every question is run three times in a fresh session and reported as a count ("named first in 2 of 3"). When your team tries a question themselves and gets a different answer, the report already allows for that.</td></tr>
+      <tr><td><strong>Clean sessions</strong></td><td>Logged out or incognito, with no memory or history, so we see what a stranger sees, not what the engine has learnt about us.</td></tr>
+      <tr><td><strong>Competitors on the same page</strong></td><td>"You're at 14, they're at 47" says more than any paragraph. Your rivals are scored with the same questions on the same day.</td></tr>
+      <tr><td><strong>Every claim dated and sourced</strong></td><td>Each finding carries the date it was observed and the source the engine quoted. The report is a dated snapshot, not an opinion.</td></tr>
+      <tr><td><strong>Wins shown too</strong></td><td>Where you already win, we say so. A report that only finds problems isn't one you can trust.</td></tr>
+    </table></div>
+  </div>
+
+  <div class="card">
+    <p class="eyebrow">Timeline</p>
+    <h2>Three weeks from sign-off to readout</h2>
+    <div class="tl">
+      <div><div class="w">Week 1</div><h3>Questions</h3><p>A 60-minute kickoff with your marketing and sales leads. We draft the question set from how your customers really ask, and you sign it off.</p></div>
+      <div><div class="w">Week 2</div><h3>Measurement</h3><p>About 600 runs across four engines in a single window, so every brand is measured against the same conditions.</p></div>
+      <div><div class="w">Week 3</div><h3>Readout</h3><p>The scored report, source map and fix plan, presented to your leadership in a 90-minute session.</p></div>
+    </div>
+    <p style="margin:16px 0 0;font-size:14.5px"><strong>What it asks of your team:</strong> one 60-minute kickoff, about 30 minutes to approve the question set, and the 90-minute readout. Around three hours in total. We need no system access, no data and no IT involvement.</p>
+  </div>
+
+  <div class="card honest">
+    <p class="eyebrow" style="color:#95651a">What we haven't proven</p>
+    <h2>Four things we won't promise you</h2>
+    <p class="lede">We could leave these out and you might never notice. We'd rather you hear them from us before you sign.</p>
+    <ul>
+      <li><strong>We can't tie AI answers to sales precisely.</strong> When someone reads an AI answer and later visits your site, analytics mostly records that as "direct" traffic. No one can measure this cleanly yet. What we can measure, honestly and repeatably, is your share of the answers and where you rank in them.</li>
+      <li><strong>We can't buy you a place in the answer.</strong> Organic AI answers can't be paid for. We improve the evidence the engines use. The engines decide.</li>
+      <li><strong>The answers move.</strong> Engines update weekly. The audit is a dated snapshot, and its value is as a baseline you can re-measure against.</li>
+      <li><strong>Some fixes take quarters, not weeks.</strong> Industry awards, independent rankings and press coverage have to be earned. We'll tell you which fixes are which so nobody sells you a slow one as a quick one.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <p class="eyebrow">Investment</p>
+    <h2>One number, fixed</h2>
+    <div class="price">
+      <div class="pbox">
+        <div class="eyebrow" style="margin:0">AI Visibility Audit · once-off</div>
+        <div class="num">R95,000</div>
+        <div class="small">Excluding VAT. Half on signature, half on delivery of the readout. Fixed for the scope above: no hourly billing and no extras unless you approve a quote first.</div>
+        <p style="margin:14px 0 0;font-size:14.5px"><strong>Credited in full</strong> against the first month of the optional 90-day programme if you start it within 30 days of the readout.</p>
+      </div>
+      <div class="anchor">
+        <div class="eyebrow" style="margin:0 0 6px">For context</div>
+        <div><span>A senior digital marketing hire for one quarter</span><strong>about R270,000</strong></div>
+        <div><span>Your current monthly search and media spend</span><strong><span class="tag you">YOU TELL US</span></strong></div>
+        <div><span>Customers needed to recover the fee at R10,000 lifetime value</span><strong>10</strong></div>
+      </div>
+    </div>
+    <div class="guar">
+      <h3>The guarantee</h3>
+      <p>If the audit doesn't find at least five buyer questions where a competitor is recommended ahead of MiWay, each with the sources behind it, you don't pay the second half. You keep the report.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="eyebrow">Optional, after the audit</p>
+    <h2>The 90-day programme</h2>
+    <p>If the audit shows a gap worth closing, we can close it with you: make the fixes, place the evidence where the engines read it, run and measure ChatGPT sponsored placements, and re-measure every month against the frozen question set.</p>
+    <p style="margin:0">It runs on a 90-day term, with fees partly linked to agreed results such as share-of-answer and cost per acquisition. We scope and price it after the readout, once we both know the size of the gap. <strong>Buying the audit doesn't commit you to anything further.</strong></p>
+  </div>
+
+  <div class="card">
+    <p class="eyebrow">Who you'd work with</p>
+    <h2>Two people, both senior, both on the work</h2>
+    <div class="team">
+      <div><h3>Marcus Stephens</h3><div class="r">Commercial and media lead</div><p>Senior media and advertising leader in South Africa, previously at Mediamark. Owns the relationship, the commercial model and anything that touches media.</p></div>
+      <div><h3>Jacques Groenewald</h3><div class="r">Measurement and technical lead</div><p>Runs the measurement system behind this audit and builds the conversational sales tools, tracking and AI systems that act on it. Owns the method, the data and the fix plan.</p></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="eyebrow">Next steps</p>
+    <h2>Three steps to a readout in three weeks</h2>
+    <div class="steps">
+      <div><div class="k">01</div><h3>Say yes</h3><p>Sign below or reply to approve. We invoice the first half.</p></div>
+      <div><div class="k">02</div><h3>Kickoff</h3><p>A 60-minute session to agree the product lines, the three competitors and the questions your sales team hears most.</p></div>
+      <div><div class="k">03</div><h3>Readout</h3><p>Three weeks later, your scored report and fix plan, presented to your leadership.</p></div>
+    </div>
+    <p style="margin:18px 0 0;font-size:14.5px"><strong>Why the date matters:</strong> the price holds until 30 November 2026. More practically, the 26 October readings are your before-picture. ChatGPT opened sponsored placements in South Africa this month, and the brands that set a baseline now are the ones who will be able to prove what their spend moved.</p>
+  </div>
+
+  <div class="card">
+    <p class="eyebrow">Acceptance</p>
+    <h2>Approve the AI Visibility Audit</h2>
+    <p class="lede">R95,000 excluding VAT, for the scope on this page, delivered within three weeks of kickoff.</p>
+    <div class="sign">
+      <div>Signed for MiWay Insurance</div>
+      <div>Name, title and date</div>
+      <div>Signed for the AI Visibility Index team</div>
+      <div>Name and date</div>
+    </div>
+  </div>
+
+</div>
+<footer>AI Visibility Index · Proposal for MiWay Insurance · 28 October 2026</footer>
+
+<script>
+(function(){
+  var ids=['v','a','b','q','c','l'];
+  function n(id){var x=parseFloat(document.getElementById(id).value);return isFinite(x)?x:0}
+  function r(x){return 'R'+Math.round(x).toLocaleString('en-ZA').replace(/,/g,' ')}
+  function calc(){
+    var gap=Math.max(0,n('b')-n('a'))/2/100;
+    var recs=n('v')*gap, quotes=recs*n('q')/100, cust=quotes*n('c')/100, val=cust*n('l');
+    document.getElementById('out').textContent=r(val)+' a month';
+    document.getElementById('out2').textContent='In customer lifetime value. That is '+Math.round(recs).toLocaleString('en-ZA')+' more first recommendations, '+Math.round(quotes).toLocaleString('en-ZA')+' quote requests and '+Math.round(cust).toLocaleString('en-ZA')+' new customers a month, or '+r(val*12)+' over a year.';
+  }
+  ids.forEach(function(id){document.getElementById(id).addEventListener('input',calc)});
+  calc();
+})();
+</script>
+</body>
+</html>
