@@ -151,9 +151,11 @@ h2.scr-h{font-family:'Oswald';font-weight:700;font-size:25px;letter-spacing:.01e
 .event .dt{font-size:11px;color:var(--dim)}
 .event .btnm{position:absolute;right:12px;bottom:12px;z-index:3;background:linear-gradient(180deg,#ff4357,#d31e31);color:#fff;font-size:11px;font-weight:700;padding:7px 12px;border-radius:9px}
 
-/* bottom nav */
-.tabbar{position:sticky;bottom:0;margin:auto -18px -26px;background:rgba(6,17,31,.96);border-top:1px solid var(--line);
-  display:flex;justify-content:space-around;padding:9px 6px 16px}
+/* bottom nav (one bar pinned to the phone, shown on s6/s7/s8) */
+.tabbar{position:absolute;left:0;right:0;bottom:0;z-index:25;background:rgba(6,17,31,.97);border-top:1px solid var(--line);
+  display:none;justify-content:space-around;padding:9px 6px 16px}
+.phone.show-tab .tabbar{display:flex}
+.phone.show-tab .scr.on{padding-bottom:80px}
 .tabbar .tb{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:9.5px;color:var(--faint)}
 .tabbar .tb.on{color:var(--ice)}
 .tabbar .tb svg{width:21px;height:21px}
@@ -352,7 +354,6 @@ body.editor .scr.on [data-note]:hover{outline:2px dashed var(--ice);outline-offs
         <div class="it"><div class="b"><img src="img/ic/offers.png" alt="" style="width:24px;height:24px"></div>Aanbiedinge</div>
       </div>
       <button class="btn" onclick="go('s7')">Gaan na my kaart</button>
-      <div class="tabbar" id="tab6"></div>
     </section>
 
     <!-- 7 DASHBOARD -->
@@ -377,7 +378,6 @@ body.editor .scr.on [data-note]:hover{outline:2px dashed var(--ice);outline-offs
         <div class="c"><div class="k">Upcoming Event</div><div class="nm">Bok van Blerk</div><div class="dt">Sat, 26 Sept 2026</div></div>
         <div class="btnm">Kry Kaartjies</div>
       </div>
-      <div class="tabbar" id="tab7"></div>
     </section>
 
     <!-- 8 CARD -->
@@ -396,7 +396,6 @@ body.editor .scr.on [data-note]:hover{outline:2px dashed var(--ice);outline-offs
           <div class="ln">Tot: 20 Jul 2027</div>
         </div>
       </div>
-      <div class="tabbar" id="tab8"></div>
     </section>
 
     <!-- 9 USE DRAUGHT -->
@@ -414,6 +413,8 @@ body.editor .scr.on [data-note]:hover{outline:2px dashed var(--ice);outline-offs
     </section>
 
   </div>
+
+  <div class="tabbar" id="navbar"></div>
 
   <!-- SHEET: terms -->
   <div class="sheet" id="sheet-terms">
@@ -502,8 +503,8 @@ drawQR('qr6','DV001234'); drawQR('qr8','DV001234');
 
 /* bottom nav */
 function tab(name,label,on){return '<div class="tb '+(on?'on':'')+'"><img src="img/ic/'+name+'.png" alt="" style="width:21px;height:21px;display:block;margin:0 auto 3px">'+label+'</div>';}
-document.getElementById('tab7').innerHTML=tab('home','Tuis',true)+tab('menu','Menu')+tab('cal','Events')+tab('shop','Winkel')+tab('more','Meer');
-['tab6','tab8'].forEach(function(id){var e=document.getElementById(id);if(e)e.innerHTML=tab('home','Tuis',true)+tab('menu','Menu')+tab('cal','Events')+tab('shop','Winkel')+tab('more','Meer');});
+document.getElementById('navbar').innerHTML=tab('home','Tuis',true)+tab('menu','Menu')+tab('cal','Events')+tab('shop','Winkel')+tab('more','Meer');
+var TAB_SCREENS={s6:1,s7:1,s8:1};
 
 /* slide-up sheets */
 function openSheet(id){var e=document.getElementById(id);if(e)e.classList.add('open');}
@@ -532,6 +533,7 @@ var pk=document.getElementById('picker');
 ORDER.forEach(function(o){var b=document.createElement('button');b.textContent=o[1];b.dataset.id=o[0];b.onclick=function(){go(o[0]);};pk.appendChild(b);});
 function go(id){
   document.querySelectorAll('.sheet.open').forEach(function(s){s.classList.remove('open');});
+  document.querySelector('.phone').classList.toggle('show-tab',!!TAB_SCREENS[id]);
   document.querySelectorAll('.scr').forEach(function(s){s.classList.toggle('on',s.id===id);});
   document.querySelectorAll('#picker button').forEach(function(b){b.classList.toggle('on',b.dataset.id===id);});
   document.querySelectorAll('.scr').forEach(function(s){if(s.id===id)s.scrollTop=0;});
