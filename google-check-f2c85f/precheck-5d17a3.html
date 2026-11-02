@@ -50,6 +50,7 @@ th{font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--mu
 .toast.on{opacity:1}
 ol.how{margin:6px 0 0 18px;color:#2b3a48;font-size:14.5px}
 ol.how li{margin:3px 0}
+.runbtn{font:500 14.5px Inter;border-radius:8px;padding:10px 15px;background:var(--sea);color:#fff;text-decoration:none}
 .bm{display:inline-block;background:var(--gold);color:#fff;font-weight:600;text-decoration:none;padding:9px 14px;border-radius:8px;cursor:grab;margin:6px 0}
 .filled{background:var(--green-lt);border:1px solid #bcd9c6;border-radius:8px;padding:10px 14px;font-size:14px;margin-bottom:14px;display:none}
 @media (max-width:640px){.grid{grid-template-columns:1fr}.grid3{grid-template-columns:1fr 1fr}.grid3 .nm{grid-column:1/-1}}
@@ -81,7 +82,7 @@ ol.how li{margin:3px 0}
     <div><label for="biz">Guesthouse name</label><input id="biz" placeholder="Rockview Guest House"></div>
     <div><label for="town">Town</label><input id="town" placeholder="Port Edward"></div>
   </div>
-  <div class="btns" style="margin:4px 0 6px"><button type="button" id="run">Open Google Maps for the button</button></div>
+  <div class="btns" style="margin:4px 0 6px"><a class="runbtn" id="run" href="#" target="_blank" referrerpolicy="unsafe-url">Open Google Maps for the button</a></div>
   <p class="small" style="margin-bottom:10px">Google Maps opens in a new tab. Click <b>RT Google check</b> on your bookmarks bar and leave the tab alone for about a minute. Then click <b>Send to the check tool</b>: a filled-in copy of this page opens.</p>
   <p class="rowlbl">Or check by hand: open these</p>
   <div class="links" id="links"></div>
@@ -169,7 +170,7 @@ ol.how li{margin:3px 0}
   function close() { box.remove(); window.__rtBtn = 0; }
 
   var ctx = {};
-  try { if (window.name.indexOf('rtcheck:') === 0) ctx = JSON.parse(window.name.slice(8)); } catch (e) {}
+  try { if (/jcereports\.netlify\.app\/google-check-/.test(document.referrer)) ctx = Object.fromEntries(new URL(document.referrer).searchParams); } catch (e) {}
   var biz = ctx.biz, town = ctx.town;
   if (!biz || !town) {
     var h = document.querySelector('div[role=main][aria-label]');
@@ -364,7 +365,7 @@ ol.how li{margin:3px 0}
     }
   } catch (e) { say('Listing: ' + e.message + '. Fill the rest by hand.', 1); }
 
-  notes.push('Read by the Google button ' + VER + (window.name.indexOf('rtcheck:') === 0 ? '' : ' (signed-in browser? positions may be personalised)'));
+  notes.push('Read by the Google button ' + VER + (document.querySelector('a[aria-label^="Google Account"]') ? ' while signed in to Google, so positions may be personalised' : ''));
   R.notes = notes.join('. ');
 
   var qs = Object.keys(R).filter(function (k) { return R[k]; }).map(function (k) { return k + '=' + encodeURIComponent(R[k]); }).join('&');
@@ -498,9 +499,12 @@ ol.how li{margin:3px 0}
   // the button: install link built from the source block below, and a launcher that tells it who to check
   $('bm').href='javascript:'+encodeURIComponent($('bmsrc').textContent.trim()+'\nvoid 0;');
   $('bm').onclick=function(e){e.preventDefault();toast('Drag it to your bookmarks bar instead of clicking')};
-  $('run').onclick=function(){
-    if(!val('biz')||!val('town')){toast('Add the name and town first');return}
-    window.open('https://www.google.com/maps/search/'+encodeURIComponent('guest houses in '+val('town'))+'?hl=en','rtcheck:'+JSON.stringify({biz:val('biz'),town:val('town')}));
+  // The button reads biz and town from this page's URL, passed as the referrer
+  // (referrerpolicy="unsafe-url" on the link). Google strips anything added to its own URL.
+  $('run').onclick=function(e){
+    if(!val('biz')||!val('town')){e.preventDefault();toast('Add the name and town first');return}
+    history.replaceState(null,'','?biz='+encodeURIComponent(val('biz'))+'&town='+encodeURIComponent(val('town')));
+    this.href='https://www.google.com/maps/search/'+encodeURIComponent('guest houses in '+val('town'))+'?hl=en';
   };
   render();list();
 })();
