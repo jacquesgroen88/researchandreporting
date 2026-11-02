@@ -50,6 +50,8 @@ th{font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--mu
 .toast.on{opacity:1}
 ol.how{margin:6px 0 0 18px;color:#2b3a48;font-size:14.5px}
 ol.how li{margin:3px 0}
+.bm{display:inline-block;background:var(--gold);color:#fff;font-weight:600;text-decoration:none;padding:9px 14px;border-radius:8px;cursor:grab;margin:6px 0}
+.filled{background:var(--green-lt);border:1px solid #bcd9c6;border-radius:8px;padding:10px 14px;font-size:14px;margin-bottom:14px;display:none}
 @media (max-width:640px){.grid{grid-template-columns:1fr}.grid3{grid-template-columns:1fr 1fr}.grid3 .nm{grid-column:1/-1}}
 </style>
 </head>
@@ -57,10 +59,21 @@ ol.how li{margin:3px 0}
 <header class="top"><div class="wrap">
   <div class="eyebrow">ReviewTap · For Giorgio · Before every walkthrough</div>
   <h1>Pre-call Google check</h1>
-  <p>About 4 minutes per guesthouse, done the day before or the morning of the walkthrough. It tells you what to lead with, gives you a note to paste into GHL, and saves a row you export to Jacques so their page gets rebuilt with live numbers.</p>
+  <p>About a minute per guesthouse with the Google button (4 minutes by hand), done the day before or the morning of the walkthrough. It tells you what to lead with, gives you a note to paste into GHL, and saves a row you export to Jacques so their page gets rebuilt with live numbers.</p>
 </div></header>
 
 <main class="wrap">
+
+<section class="step">
+  <h2>The Google button (set up once)</h2>
+  <p class="hint">The button reads Google Maps for you: both searches, the top 3, rating, prices, the newest Google reviews and owner replies. Then it fills this page in.</p>
+  <ol class="how">
+    <li>Show your bookmarks bar: press <b>Ctrl+Shift+B</b> (Mac: Cmd+Shift+B).</li>
+    <li>Drag this onto the bookmarks bar: <a class="bm" id="bm" href="#" title="Drag me to your bookmarks bar">RT Google check</a></li>
+    <li>That's it. It works in incognito windows too. When Jacques says the button has changed, drag it again and delete the old one.</li>
+  </ol>
+  <p class="small">Clicking it on this page does nothing useful: it only works on Google Maps.</p>
+</section>
 
 <section class="step">
   <h2>1. Who are we checking?</h2>
@@ -68,19 +81,22 @@ ol.how li{margin:3px 0}
     <div><label for="biz">Guesthouse name</label><input id="biz" placeholder="Rockview Guest House"></div>
     <div><label for="town">Town</label><input id="town" placeholder="Port Edward"></div>
   </div>
-  <p class="rowlbl">Open these (they fill in from the two boxes above)</p>
+  <div class="btns" style="margin:4px 0 6px"><button type="button" id="run">Open Google Maps for the button</button></div>
+  <p class="small" style="margin-bottom:10px">Google Maps opens in a new tab. Click <b>RT Google check</b> on your bookmarks bar and leave the tab alone for about a minute. Then click <b>Send to the check tool</b>: a filled-in copy of this page opens.</p>
+  <p class="rowlbl">Or check by hand: open these</p>
   <div class="links" id="links"></div>
   <p class="small"><b>Use a private (incognito) window and stay signed out</b>, so your own history doesn't change the results. Use the full Google Maps website on a laptop: the review sort only shows in the full view.</p>
 </section>
 
 <section class="step">
   <h2>2. Where do they show up?</h2>
+  <div class="filled" id="filled"></div>
   <p class="hint">In each search, count down the results <b>ignoring anything marked "Sponsored"</b>. Write the position the guesthouse appears at. If you scroll to 20 and it's not there, pick "Not in top 20". Then note the three places at the top of the first search.</p>
   <div class="grid">
-    <div><label for="p1">Position for "guest house [town]"</label><select id="p1"></select></div>
-    <div><label for="p2">Position for "accommodation [town]"</label><select id="p2"></select></div>
+    <div><label for="p1">Position for "guest houses in [town]"</label><select id="p1"></select></div>
+    <div><label for="p2">Position for "accommodation in [town]"</label><select id="p2"></select></div>
   </div>
-  <p class="rowlbl">Top 3 in "guest house [town]" (not counting sponsored)</p>
+  <p class="rowlbl">Top 3 in "guest houses in [town]" (not counting sponsored)</p>
   <div id="tops"></div>
 </section>
 
@@ -121,7 +137,7 @@ ol.how li{margin:3px 0}
 <section class="step">
   <h2>Why we check this way</h2>
   <ol class="how">
-    <li><b>Searching with the town in the words</b> ("guest house Port Edward") gives the same results wherever you are, so checks are comparable. A guest searching from inside the town can still see a slightly different order.</li>
+    <li><b>Searching with the town in the words</b> ("guest houses in Port Edward") gives the same results wherever you are, so checks are comparable. A guest searching from inside the town can still see a slightly different order.</li>
     <li><b>Google Maps lets guests filter accommodation by guest rating</b> (3.5+, 4.0+, 4.5+). A place at 4.4 disappears for anyone who taps 4.5+. Checked live on 2 Nov 2026.</li>
     <li><b>Reviews from the last 3 months</b> are what 74% of people look for (BrightLocal 2026, an international survey; never call it South African).</li>
     <li><b>Don't promise rankings.</b> Google says local results are mainly based on relevance, distance and popularity, and that more reviews and positive ratings <i>can help</i>.</li>
@@ -129,6 +145,237 @@ ol.how li{margin:3px 0}
 </section>
 </main>
 <div class="toast" id="toast"></div>
+<script type="text/plain" id="bmsrc">
+(async function () {
+  var VER = '2026-11-02';
+  var TOOL = 'https://jcereports.netlify.app/google-check-f2c85f/precheck-5d17a3.html';
+  if (!/(^|\.)google\./.test(location.hostname) || location.pathname.indexOf('/maps') !== 0) {
+    alert('ReviewTap check: open Google Maps first, then click the button.');
+    return;
+  }
+  if (window.__rtBtn) return;
+  window.__rtBtn = 1;
+  var sl = function (ms) { return new Promise(function (r) { setTimeout(r, ms); }); };
+
+  var box = document.createElement('div');
+  box.style.cssText = 'position:fixed;top:12px;right:12px;z-index:2147483647;width:340px;max-height:85vh;overflow:auto;' +
+    'background:#fff;color:#132536;font:14px/1.45 Arial,sans-serif;border:2px solid #1d5a78;border-radius:10px;' +
+    'box-shadow:0 8px 30px rgba(0,0,0,.25);padding:14px';
+  function el(tag, txt, css) { var d = document.createElement(tag); if (txt) d.textContent = txt; if (css) d.style.cssText = css; return d; }
+  box.appendChild(el('div', 'ReviewTap Google check', 'font-weight:bold;font-size:16px;color:#1d5a78;margin-bottom:6px'));
+  var log = el('div'); box.appendChild(log);
+  document.body.appendChild(box);
+  function say(t, warn) { log.appendChild(el('div', t, 'margin:3px 0;' + (warn ? 'color:#b4483c' : ''))); }
+  function close() { box.remove(); window.__rtBtn = 0; }
+
+  var ctx = {};
+  try { if (window.name.indexOf('rtcheck:') === 0) ctx = JSON.parse(window.name.slice(8)); } catch (e) {}
+  var biz = ctx.biz, town = ctx.town;
+  if (!biz || !town) {
+    var h = document.querySelector('div[role=main][aria-label]');
+    var ans = prompt('Guesthouse name, town  (for example: Rockview Guest House, Port Edward)', h ? h.getAttribute('aria-label') + ', ' : '');
+    if (!ans || ans.indexOf(',') < 0) { close(); return; }
+    biz = ans.slice(0, ans.lastIndexOf(',')).trim(); town = ans.slice(ans.lastIndexOf(',') + 1).trim();
+  }
+  if (!biz || !town) { close(); return; }
+  say('Checking ' + biz + ', ' + town + '. Leave this tab alone for about a minute.');
+
+  var STOP = { the: 1, guest: 1, house: 1, guesthouse: 1, guesthouses: 1, b: 1, and: 1, bnb: 1, n: 1, accommodation: 1, self: 1, catering: 1 };
+  town.toLowerCase().split(/\s+/).forEach(function (w) { STOP[w] = 1; });
+  function toks(s) {
+    return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/&/g, ' and ')
+      .replace(/[^a-z0-9]+/g, ' ').trim().split(' ').filter(function (w) { return w && !STOP[w]; });
+  }
+  var want = toks(biz);
+  function same(name) {
+    var t = toks(name);
+    if (!t.length || !want.length) return false;
+    var hit = want.filter(function (w) { return t.indexOf(w) >= 0; }).length;
+    return hit === want.length || hit === t.length || hit / Math.max(want.length, t.length) >= 0.6;
+  }
+  function num(s) { return s ? s.replace(/[^\d.]/g, '') : ''; }
+  function place() { var m = document.querySelectorAll('div[role=main][aria-label]'); return m.length ? m[m.length - 1] : null; }
+
+  async function search(q) {
+    var inp = document.querySelector('input[name=q]') || document.querySelector('#searchboxinput');
+    var btn = document.querySelector('button[aria-label="Search"]') || document.querySelector('#searchbox-searchbutton');
+    if (!inp || !btn) throw new Error('search box not found');
+    Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set.call(inp, q);
+    inp.dispatchEvent(new Event('input', { bubbles: true }));
+    btn.click();
+    var lq = q.toLowerCase();
+    for (var i = 0; i < 30; i++) {
+      await sl(500);
+      var path = decodeURIComponent(location.pathname.replace(/\+/g, ' ')).toLowerCase();
+      if (path.indexOf('/maps/place/') === 0 && place()) break;
+      if (path.indexOf(lq) >= 0 && document.querySelector('div[role=feed] a.hfpxzc')) break;
+    }
+    if (/\/sorry\//.test(location.href)) throw new Error('Google is asking for a check. Stop and do this one by hand.');
+    await sl(1500);
+  }
+
+  function readList() {
+    var feed = document.querySelector('div[role=feed]');
+    if (!feed) {
+      var pl = place();
+      return pl ? [{ name: pl.getAttribute('aria-label'), single: true }] : [];
+    }
+    var out = [];
+    feed.querySelectorAll('a.hfpxzc').forEach(function (a) {
+      var card = a.parentElement, img = card.querySelector('span[role=img][aria-label*="star"]');
+      var m = img ? (img.getAttribute('aria-label').match(/([\d.]+)\s+stars?\s*([\d,]*)/i) || []) : [];
+      out.push({
+        name: (a.getAttribute('aria-label') || '').replace(/\s*·\s*Visited link$/i, '').trim(),
+        rating: m[1] || '', count: num(m[2] || ''), ad: /Sponsored/i.test(card.innerText), a: a
+      });
+    });
+    return out;
+  }
+  async function collect() {
+    var feed = document.querySelector('div[role=feed]');
+    for (var i = 0; feed && i < 10; i++) {
+      var org = readList().filter(function (x) { return !x.ad; });
+      if (org.length >= 20 || /reached the end of the list/i.test(feed.innerText)) break;
+      feed.scrollTop = feed.scrollHeight;
+      await sl(1500);
+    }
+    return readList();
+  }
+  function position(list) {
+    var org = list.filter(function (x) { return !x.ad; }).slice(0, 20);
+    for (var i = 0; i < org.length; i++) if (same(org[i].name)) return { p: i + 1, org: org };
+    return { p: 99, org: org };
+  }
+
+  var R = { biz: biz, town: town, src: 'button' }, notes = [], q1 = 'guest houses in ' + town, q2 = 'accommodation in ' + town;
+
+  try {
+    await search(q1);
+    var l1 = await collect(), s1 = position(l1);
+    R.p1 = String(s1.p);
+    s1.org.slice(0, 3).forEach(function (x, i) { R['t' + (i + 1) + 'n'] = x.name; R['t' + (i + 1) + 'r'] = x.rating; R['t' + (i + 1) + 'c'] = x.count; });
+    var ads1 = l1.filter(function (x) { return x.ad; }).map(function (x) { return x.name; });
+    say('"' + q1 + '": ' + (s1.p === 99 ? 'not in the top 20' : '#' + s1.p) + (ads1.length ? ' (skipped ' + ads1.length + ' sponsored)' : ''));
+    if (ads1.length) notes.push('Sponsored in "' + q1 + '": ' + ads1.join(', '));
+  } catch (e) { say('Search 1 failed: ' + e.message + ' Fill it by hand.', 1); }
+
+  var l2 = [];
+  try {
+    await search(q2);
+    l2 = await collect();
+    var s2 = position(l2);
+    R.p2 = String(s2.p);
+    say('"' + q2 + '": ' + (s2.p === 99 ? 'not in the top 20' : '#' + s2.p));
+  } catch (e) { say('Search 2 failed: ' + e.message + ' Fill it by hand.', 1); }
+
+  async function openListing() {
+    await search(biz + ' ' + town);
+    var l = readList();
+    if (!(l[0] && l[0].single)) {
+      var m = l.filter(function (x) { return !x.ad && same(x.name); })[0];
+      if (!m) throw new Error('could not find their listing');
+      await search(m.name + ' ' + town);
+      l = readList();
+      if (!(l[0] && l[0].single)) { m = l.filter(function (x) { return !x.ad && same(x.name); })[0]; if (m) m.a.click(); }
+    }
+    for (var i = 0; i < 24; i++) {
+      await sl(500);
+      var pl = place();
+      if (pl && same(pl.getAttribute('aria-label'))) { await sl(1500); return pl; }
+    }
+    throw new Error('listing did not open');
+  }
+  try {
+    var main = await openListing(), found = main.getAttribute('aria-label');
+    var star = [].filter.call(main.querySelectorAll('span[role=img]'), function (s) { return /^[\d.]+ stars?/i.test(s.getAttribute('aria-label') || ''); })[0];
+    if (star) R.rating = star.getAttribute('aria-label').match(/^([\d.]+)/)[1];
+    var cnt = [].filter.call(main.querySelectorAll('[aria-label]'), function (s) { return /^[\d,]+ reviews?$/i.test(s.getAttribute('aria-label')); })[0];
+    if (cnt) R.count = num(cnt.getAttribute('aria-label'));
+    say('Listing: ' + found + ', ' + (R.rating || '?') + ' from ' + (R.count || '?') + ' reviews');
+
+    var txt = main.innerText, a = txt.indexOf('Compare prices');
+    var site = main.querySelector('a[data-item-id="authority"]');
+    var host = site ? site.hostname.replace(/^www\./, '') : '';
+    if (a < 0) { R.price = 'none'; say('Prices: none on their listing'); }
+    else {
+      var seg = txt.slice(a), cut = seg.search(/More prices|Similar hotels|Location summary/);
+      var lines = (cut > 0 ? seg.slice(0, cut) : seg.slice(0, 800)).split('\n').map(function (x) { return x.trim(); }).filter(Boolean);
+      var offers = [];
+      for (var i = 1; i < lines.length; i++) {
+        if (/^R\s?[\d\s,]+$/.test(lines[i]) && !/^R\s?[\d\s,]+$/.test(lines[i - 1])) {
+          offers.push({ who: lines[i - 1], r: +lines[i].replace(/\D/g, '') });
+        }
+      }
+      var own = offers.filter(function (o) { return /official site/i.test(o.who) || (host && o.who.toLowerCase().indexOf(host.split('.')[0]) >= 0); });
+      if (!offers.length) { R.price = 'none'; say('Prices: none on their listing'); }
+      else {
+        R.price = own.length ? 'own' : 'ota';
+        var low = offers.slice().sort(function (x, y) { return x.r - y.r; })[0];
+        R.cheap = 'R' + low.r + ' on ' + low.who;
+        say('Prices: ' + (own.length ? 'their own price shows' : 'booking sites only') + ', cheapest ' + R.cheap);
+      }
+    }
+
+    var tab = [].filter.call(main.querySelectorAll('button[role=tab]'), function (b) { return /^Reviews$/i.test(b.innerText.trim()); })[0];
+    if (!tab) throw new Error('no Reviews tab');
+    tab.click(); await sl(2500);
+    var sortBtn = [].filter.call(main.querySelectorAll('button'), function (b) { return /Most relevant|Sort reviews/i.test(b.getAttribute('aria-label') || ''); })[0];
+    if (!sortBtn) throw new Error('no review sort button (use the full Maps site on a laptop)');
+    sortBtn.click(); await sl(1200);
+    var nw = [].filter.call(document.querySelectorAll('[role=menuitemradio],[role=menuitem]'), function (o) { return /^Newest$/i.test(o.innerText.trim()); })[0];
+    if (!nw) throw new Error('no Newest option');
+    nw.click(); await sl(2500);
+
+    function ageMonths(s) {
+      var m = s.match(/\b(a|an|\d+)\s+(day|week|month|year)s?\s+ago\b/i); if (!m) return null;
+      var n = /^an?$/i.test(m[1]) ? 1 : +m[1], u = m[2].toLowerCase();
+      return u === 'day' ? n / 30 : u === 'week' ? n / 4.3 : u === 'month' ? n : n * 12;
+    }
+    function readRevs() {
+      var seen = {}, out = [];
+      main.querySelectorAll('div[data-review-id][aria-label]').forEach(function (e) {
+        var id = e.getAttribute('data-review-id'); if (seen[id]) return; seen[id] = 1;
+        var t = e.innerText, src = (t.match(/ago\s+on\s+(\S+)/i) || [])[1] || 'Google';
+        out.push({ age: (t.match(/\b(a|an|\d+)\s+(day|week|month|year)s?\s+ago\b/i) || [''])[0], m: ageMonths(t), google: /^Google$/i.test(src), reply: /Response from the owner/i.test(t) });
+      });
+      return out;
+    }
+    var revs = readRevs(), first = main.querySelector('div[data-review-id]'), pane = first;
+    while (pane && !(pane.scrollHeight > pane.clientHeight + 20 && /auto|scroll/.test(getComputedStyle(pane).overflowY))) pane = pane.parentElement;
+    for (var k = 0; pane && k < 8; k++) {
+      var g = revs.filter(function (r) { return r.google; });
+      if (g.length >= 5 && revs.some(function (r) { return r.m !== null && r.m >= 12; })) break;
+      pane.scrollTop = pane.scrollHeight; await sl(1500);
+      var more = readRevs(); if (more.length === revs.length) break; revs = more;
+    }
+    var gr = revs.filter(function (r) { return r.google && r.m !== null; });
+    if (!gr.length) { R.newest = 'No Google reviews'; say('No Google reviews found', 1); }
+    else {
+      var m0 = gr[0].m;
+      R.newest = m0 < 1 ? 'Under 1 month ago' : m0 <= 3 ? '1 to 3 months ago' : m0 < 12 ? '3 to 12 months ago' : 'Over a year ago';
+      var five = gr.slice(0, 5);
+      R.replies = String(five.filter(function (r) { return r.reply; }).length);
+      var yr = gr.filter(function (r) { return r.m < 12; }).length, complete = revs.some(function (r) { return r.m !== null && r.m >= 12; });
+      say('Newest Google review: ' + gr[0].age + '. Owner replies on the last ' + five.length + ': ' + R.replies);
+      say('Google reviews in the last 12 months: ' + (complete ? '' : 'at least ') + yr);
+      notes.push('Google reviews in the last 12 months: ' + (complete ? '' : 'at least ') + yr + ' (newest ' + gr[0].age + ')');
+      var ta = revs.filter(function (r) { return !r.google; }).length;
+      if (ta) notes.push(ta + ' of the newest reviews shown are from Tripadvisor or other sites, not Google');
+    }
+  } catch (e) { say('Listing: ' + e.message + '. Fill the rest by hand.', 1); }
+
+  notes.push('Read by the Google button ' + VER + (window.name.indexOf('rtcheck:') === 0 ? '' : ' (signed-in browser? positions may be personalised)'));
+  R.notes = notes.join('. ');
+
+  var qs = Object.keys(R).filter(function (k) { return R[k]; }).map(function (k) { return k + '=' + encodeURIComponent(R[k]); }).join('&');
+  var go = el('button', 'Send to the check tool', 'margin-top:10px;width:100%;padding:10px;border:0;border-radius:8px;background:#1d5a78;color:#fff;font:bold 14px Arial;cursor:pointer');
+  go.onclick = function () { window.open(TOOL + '?' + qs, '_blank'); close(); };
+  var x = el('button', 'Close', 'margin-top:6px;width:100%;padding:8px;border:1px solid #ccc;border-radius:8px;background:#fff;color:#132536;font:14px Arial;cursor:pointer');
+  x.onclick = close;
+  box.appendChild(el('div', 'Check the price line by eye before the call. Google moves things around, so anything in red needs filling by hand.', 'margin-top:8px;font-size:12.5px;color:#6a7886'));
+  box.appendChild(go); box.appendChild(x);
+})();
+</script>
 
 <script>
 (function(){
@@ -160,8 +407,8 @@ ol.how li{margin:3px 0}
   function links(){
     var b=val('biz'),t=val('town'),q=function(s){return encodeURIComponent(s)};
     var L=[];
-    if(t){L.push(['Maps: guest house '+t,'https://www.google.com/maps/search/'+q('guest house '+t)+'?hl=en']);
-          L.push(['Maps: accommodation '+t,'https://www.google.com/maps/search/'+q('accommodation '+t)+'?hl=en'])}
+    if(t){L.push(['Maps: guest houses in '+t,'https://www.google.com/maps/search/'+q('guest houses in '+t)+'?hl=en']);
+          L.push(['Maps: accommodation in '+t,'https://www.google.com/maps/search/'+q('accommodation in '+t)+'?hl=en'])}
     if(b){L.push(['Their listing','https://www.google.com/maps/search/'+q(b+(t?' '+t:''))+'?hl=en'])}
     $('links').innerHTML=L.length?L.map(function(x){return '<a target="_blank" rel="noopener" href="'+x[1]+'">'+x[0]+' ↗</a>'}).join(''):'<span class="small">Type the name and town first.</span>';
   }
@@ -173,11 +420,11 @@ ol.how li{margin:3px 0}
     var tops=[1,2,3].map(function(i){return {n:val('t'+i+'n'),r:num('t'+i+'r'),c:num('t'+i+'c')}}).filter(function(x){return x.n});
     // Found
     if(p1){
-      if(p1<=3)P.push(['ok','Found','You come up '+posTxt(p1)+' for "guest house '+t+'". Being found is not the problem: lead with being picked.']);
-      else if(p1<=10)P.push(['mid','Found','You come up '+posTxt(p1)+' for "guest house '+t+'". Most guests decide from the first few, so '+(tops[0]?tops[0].n+' gets the first look.':'the top three get the first look.')]);
-      else P.push(['hi','Found','You are '+posTxt(p1)+' for "guest house '+t+'". Most guests never scroll that far. Lead with being found.']);
+      if(p1<=3)P.push(['ok','Found','You come up '+posTxt(p1)+' for "guest houses in '+t+'". Being found is not the problem: lead with being picked.']);
+      else if(p1<=10)P.push(['mid','Found','You come up '+posTxt(p1)+' for "guest houses in '+t+'". Most guests decide from the first few, so '+(tops[0]?tops[0].n+' gets the first look.':'the top three get the first look.')]);
+      else P.push(['hi','Found','You are '+posTxt(p1)+' for "guest houses in '+t+'". Most guests never scroll that far. Lead with being found.']);
     }
-    if(p2&&p1&&Math.abs(p2-p1)>=3)P.push(['mid','Found','For "accommodation '+t+'" you are '+posTxt(p2)+' instead of '+posTxt(p1)+'. Worth showing both.']);
+    if(p2&&p1&&Math.abs(p2-p1)>=3)P.push(['mid','Found','For "accommodation in '+t+'" you are '+posTxt(p2)+' instead of '+posTxt(p1)+'. Worth showing both.']);
     // Picked: compare to whoever is next to them in search
     var rival=tops.filter(function(x){return x.n.toLowerCase()!==(val('biz')||'').toLowerCase()&&x.c})[0];
     if(c!==null&&rival&&rival.c>c*1.5)P.push(['hi','Picked',rival.n+' sits right there in the same search with '+rival.c+' reviews'+(rival.r?' at '+rival.r:'')+', against your '+c+'. Guests compare the two side by side.']);
@@ -243,8 +490,19 @@ ol.how li{margin:3px 0}
   };
   $('clear').onclick=function(){if(!confirm('Clear every saved check on this computer?'))return;store([]);list();toast('List cleared')};
 
-  // prefill from ?biz=&town=
-  var qs=new URLSearchParams(location.search);if(qs.get('biz'))$('biz').value=qs.get('biz');if(qs.get('town'))$('town').value=qs.get('town');
+  // prefill from the query string: ?biz=&town= from the list, every field from the Google button
+  var qs=new URLSearchParams(location.search);
+  F.forEach(function(f){if(qs.get(f))$(f).value=qs.get(f)});
+  if(qs.get('src')==='button'){var fl=$('filled');fl.style.display='block';fl.textContent='Filled in by the Google button. Glance down each line against Google before the call, the price line especially. Then click Save to my list.'}
+
+  // the button: install link built from the source block below, and a launcher that tells it who to check
+  $('bm').href='javascript:'+encodeURIComponent($('bmsrc').textContent.trim()+'
+void 0;');
+  $('bm').onclick=function(e){e.preventDefault();toast('Drag it to your bookmarks bar instead of clicking')};
+  $('run').onclick=function(){
+    if(!val('biz')||!val('town')){toast('Add the name and town first');return}
+    window.open('https://www.google.com/maps/search/'+encodeURIComponent('guest houses in '+val('town'))+'?hl=en','rtcheck:'+JSON.stringify({biz:val('biz'),town:val('town')}));
+  };
   render();list();
 })();
 </script>
