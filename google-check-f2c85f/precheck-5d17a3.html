@@ -66,7 +66,16 @@ ol.how li{margin:3px 0}
 <main class="wrap">
 
 <section class="step">
-  <h2>The Google button (set up once)</h2>
+  <h2>Fastest: ask your Claude</h2>
+  <p class="hint">Your Claude can read Google Maps in your browser and fill this page in for you, for one guesthouse or a whole day's list. Put one guesthouse per line as <b>Name, Town</b>, copy the instructions, paste them into Claude in Chrome and let it run. When it's done, click <b>Export for Jacques</b> below.</p>
+  <label for="clist">Guesthouses to check (Name, Town)</label>
+  <textarea id="clist" placeholder="Rockview Guest House, Port Edward&#10;Arniston Lodge, Arniston"></textarea>
+  <div class="btns"><button type="button" id="ccopy">Copy instructions for Claude</button></div>
+  <p class="small">It takes Claude a minute or two per guesthouse. If Google asks it to prove it's human, it stops and tells you: do that one by hand.</p>
+</section>
+
+<section class="step">
+  <h2>Or: the Google button (set up once)</h2>
   <p class="hint">The button reads Google Maps for you: both searches, the top 3, rating, prices, the newest Google reviews and owner replies. Then it fills this page in.</p>
   <ol class="how">
     <li>Show your bookmarks bar: press <b>Ctrl+Shift+B</b> (Mac: Cmd+Shift+B).</li>
@@ -146,6 +155,36 @@ ol.how li{margin:3px 0}
 </section>
 </main>
 <div class="toast" id="toast"></div>
+<script type="text/plain" id="claudesrc">
+Please do a pre-call Google check for ReviewTap, using this browser. Read Google Maps only: don't sign in to anything, don't click adverts, don't message or book anything.
+
+Guesthouses to check (Name, Town):
+{{LIST}}
+
+For each guesthouse, one at a time:
+
+1. Open https://www.google.com/maps/search/guest+houses+in+TOWN?hl=en (put the town in, spaces as +). Scroll the list on the left until about 20 places show or it says you've reached the end.
+2. Count down the list, skipping anything marked "Sponsored". Note where the guesthouse comes (1 = first non-sponsored place). If it isn't in the first 20, use 99. Note the name, star rating and review count of the first 3 non-sponsored places, and the names of any sponsored ones.
+3. Do the same for https://www.google.com/maps/search/accommodation+in+TOWN?hl=en. Only their position is needed.
+4. Open their own listing by searching https://www.google.com/maps/search/NAME+TOWN?hl=en. Don't click it from the earlier lists: that view can hide the Reviews tab. If a list appears, open the one that matches.
+5. Note the star rating and number of reviews at the top of the listing.
+6. Under "Compare prices", if it's there, note each site and its price. Price is "own" if their own website or "Official site" shows a price, "ota" if only booking sites show (Booking.com, Bluepillow and so on), "none" if there are no prices. Note the cheapest, like "R936 on Bluepillow".
+7. Click the Reviews tab, open the sort menu ("Most relevant") and choose "Newest". Only count reviews "on Google"; skip ones on Tripadvisor or other sites. Note how old the newest Google review is, how many of the 5 newest Google reviews have a "Response from the owner", and how many Google reviews are under 12 months old (scroll until you pass 12 months).
+8. Open this link with the values filled in (URL-encode each one, leave a value empty if you couldn't find it):
+   https://jcereports.netlify.app/google-check-f2c85f/precheck-5d17a3.html?src=claude&biz=NAME&town=TOWN&p1=&p2=&t1n=&t1r=&t1c=&t2n=&t2r=&t2c=&t3n=&t3r=&t3c=&rating=&count=&newest=&replies=&price=&cheap=&notes=
+   - p1 = position in "guest houses in", p2 = position in "accommodation in". Numbers only, 99 = not in the top 20.
+   - t1n/t1r/t1c = name, rating, review count of the first place in "guest houses in"; t2 and t3 the same for the next two.
+   - newest must be exactly one of: Under 1 month ago / 1 to 3 months ago / 3 to 12 months ago / Over a year ago / No Google reviews
+   - replies = 0 to 5. price = own, ota or none.
+   - notes = the sponsored names, "Google reviews in the last 12 months: N", and anything odd (an unanswered bad review, old photos, wrong phone number).
+9. On that page, check the boxes match what you saw, then click "Save to my list". Copy the first point under "What to lead with".
+
+Rules:
+- If Google shows an "unusual traffic" or "I'm not a robot" page, stop and tell me. Never try to get past it.
+- Never guess a number. If you can't find something, leave it empty and say so.
+
+When all are done, give me a short table: guesthouse, position, rating and reviews, newest Google review, owner replies, prices, and the point to lead with. Then remind me to click "Export for Jacques" on the check tool and send him the file.
+</script>
 <script type="text/plain" id="bmsrc">
 (async function () {
   var VER = '2026-11-02';
@@ -494,7 +533,17 @@ ol.how li{margin:3px 0}
   // prefill from the query string: ?biz=&town= from the list, every field from the Google button
   var qs=new URLSearchParams(location.search);
   F.forEach(function(f){if(qs.get(f))$(f).value=qs.get(f)});
-  if(qs.get('src')==='button'){var fl=$('filled');fl.style.display='block';fl.textContent='Filled in by the Google button. Glance down each line against Google before the call, the price line especially. Then click Save to my list.'}
+  if(qs.get('src')==='button'||qs.get('src')==='claude'){var fl=$('filled');fl.style.display='block';fl.textContent='Filled in by '+(qs.get('src')==='claude'?'Claude':'the Google button')+'. Glance down each line against Google before the call, the price line especially. Then click Save to my list.'}
+
+  // instructions for Giorgio's own Claude (source: claude-prompt.txt, copied in by button.py)
+  if(val('biz')&&val('town'))$('clist').value=val('biz')+', '+val('town');
+  $('ccopy').onclick=function(){
+    var l=$('clist').value.split('\n').map(function(x){return x.trim()}).filter(Boolean);
+    if(!l.length){toast('Add at least one: Name, Town');return}
+    var txt=$('claudesrc').textContent.trim().replace('{{LIST}}',l.map(function(x){return '- '+x}).join('\n'));
+    function fb(){var ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');toast('Copied. Paste it into Claude.')}catch(e){toast('Copy failed')}ta.remove()}
+    if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(txt).then(function(){toast('Copied. Paste it into Claude.')},fb);else fb();
+  };
 
   // the button: install link built from the source block below, and a launcher that tells it who to check
   $('bm').href='javascript:'+encodeURIComponent($('bmsrc').textContent.trim()+'\nvoid 0;');
