@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Guesthouse Playbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#132536;--muted:#5f6d7b;--cream:#fbf8f2;--sand:#f3ece0;--line:#e7dfd1;--sea:#1d5a78;--sea-lt:#e8f0f4;--gold:#b48a52;--gold-lt:#f3e3c7;--red:#b4483c;--red-lt:#f6dcd8;--green:#3f7d5b;--green-lt:#e1efe6;--card:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-snap-type:y proximity;scroll-behavior:smooth}
+body{background:var(--cream);color:var(--ink);font-family:Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased;line-height:1.5;font-size:17px}
+h1,h2,.serif{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;letter-spacing:-.01em;line-height:1.05}
+a{color:var(--sea);word-break:break-word}
+.slide{min-height:100vh;scroll-snap-align:start;display:flex;align-items:center;padding:56px 16px;border-bottom:1px solid var(--line)}
+.in{max-width:980px;width:100%;margin:0 auto}
+.eyebrow{font:600 12px Inter;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+h1{font-size:clamp(44px,8vw,88px);font-weight:500}
+h2{font-size:clamp(34px,5.5vw,58px);font-weight:500;margin-bottom:18px}
+.lead{font-size:clamp(17px,2vw,21px);color:var(--muted);max-width:60ch;margin-bottom:22px}
+.dark{background:var(--sea);color:#fff}
+.dark .lead{color:rgba(255,255,255,.85)}.dark .eyebrow{color:var(--gold-lt)}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+.card h3{font-size:17px;font-weight:600;margin-bottom:6px}
+.card p,.card li{font-size:15.5px;color:var(--muted)}
+.card.sea{background:var(--sea-lt);border-color:#cfe0e9}.card.gold{background:var(--gold-lt);border-color:#ead3ae}
+.card.red{background:var(--red-lt);border-color:#ecc2bc}.card.green{background:var(--green-lt);border-color:#c5dfcf}
+.num{font-family:'Cormorant Garamond',serif;font-size:44px;line-height:1;color:var(--gold);font-weight:600}
+ol.steps{list-style:none;counter-reset:s;display:grid;gap:10px}
+ol.steps li{counter-increment:s;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 16px 12px 56px;position:relative}
+ol.steps li::before{content:counter(s);position:absolute;left:16px;top:10px;width:28px;height:28px;border-radius:50%;background:var(--sea);color:#fff;font-weight:600;font-size:14px;display:flex;align-items:center;justify-content:center}
+.say{background:var(--card);border-left:4px solid var(--gold);border-radius:0 10px 10px 0;padding:14px 18px;font-size:clamp(17px,2vw,20px);margin:10px 0 14px}
+.say small{display:block;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:4px}
+table{width:100%;border-collapse:collapse;background:var(--card);border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);font-size:15.5px;vertical-align:top}
+th{background:var(--sand);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+tr:last-child td{border-bottom:0}
+.big{font-family:'Cormorant Garamond',serif;font-size:clamp(30px,4vw,42px);font-weight:600;color:var(--sea);width:56px}
+.tag{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:4px}
+.tag.no{background:var(--red-lt);color:var(--red)}.tag.ok{background:var(--green-lt);color:var(--green)}
+.tpl{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;white-space:pre-wrap;font-size:15.5px;position:relative}
+.tpl b{color:var(--sea)}
+.copy{position:absolute;top:12px;right:12px;font:500 13px Inter;background:var(--sea);color:#fff;border:0;border-radius:6px;padding:6px 12px;cursor:pointer}
+.copy.done{background:var(--green)}
+.acro{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 22px}
+.acro span{font-family:'Cormorant Garamond',serif;font-size:clamp(56px,10vw,104px);font-weight:600;color:#fff;background:rgba(255,255,255,.1);border-radius:12px;width:clamp(70px,13vw,128px);text-align:center;line-height:1.25}
+.foot{font-size:14px;color:var(--muted);margin-top:16px}
+.dark .foot{color:rgba(255,255,255,.75)}
+#nav{position:fixed;right:14px;bottom:14px;display:flex;gap:6px;align-items:center;z-index:9;background:rgba(19,37,54,.86);color:#fff;border-radius:22px;padding:5px 6px 5px 12px;font-size:13px}
+#nav button{background:transparent;border:0;color:#fff;font-size:18px;width:30px;height:30px;border-radius:50%;cursor:pointer}
+#nav button:hover{background:rgba(255,255,255,.15)}
+@media (max-width:760px){.g2,.g3{grid-template-columns:1fr}.slide{padding:40px 16px 70px}th,td{padding:10px}body{font-size:16px}}
+</style>
+</head>
+<body>
+
+<section class="slide dark"><div class="in">
+  <div class="eyebrow">ReviewTap · Guesthouses · November 2026</div>
+  <h1>The guesthouse playbook</h1>
+  <p class="lead">Who to call, what to find before you dial, how to book the walkthrough, and what to send when nobody picks up.</p>
+  <p class="foot">For Giorgio, from Jacques · 3 November 2026 · Use the arrow keys or scroll</p>
+</div></section>
+
+<section class="slide"><div class="in">
+  <div class="eyebrow">This week</div>
+  <h2>Only three things matter</h2>
+  <div class="grid g3">
+    <div class="card"><div class="num">1</div><h3>Check before you call</h3><p>The day before, run the Google check on tomorrow's list. It gives you a real reason to call every place.</p></div>
+    <div class="card"><div class="num">2</div><h3>Book with SHOWS</h3><p>Search, Hook, Open question, Walkthrough, Send their page. Five steps, one call.</p></div>
+    <div class="card"><div class="num">3</div><h3>Book times I can join</h3><p>I'm doing the offer part on the next 10 walkthroughs. Send me the invite.</p></div>
+  </div>
+</div></section>
+
+<section class="slide"><div class="in">
+  <div class="eyebrow">Who we call</div>
+  <h2>Room count decides it</h2>
+  <p class="lead">Always find out how many rooms they have. If the sheet doesn't say, ask on the call.</p>
+  <table>
+    <tr><th>Size</th><th>What we do</th></tr>
+    <tr><td><b>8 to 20 rooms</b></td><td><span class="tag ok">Call first</span> &nbsp;The December Review Sprint. These are worth the most of your time.</td></tr>
+    <tr><td><b>5 to 7 rooms</b></td><td><span class="tag ok">Call</span> &nbsp;Reviews + WhatsApp. Same system, smaller package.</td></tr>
+    <tr><td><b>Over 20 rooms, or more than one property</b></td><td><span class="tag ok">Call</span> &nbsp;Book the walkthrough. I'll price it.</td></tr>
+    <tr><td><b>4 rooms or fewer</b></td><td><span class="tag no">Skip for now</span> &nbsp;Too small to be worth a walkthrough. Don't call.</td></tr>
+    <tr><td><b>300+ reviews and already strong on Google</b></td><td><span class="tag no">Parked</span> &nbsp;They don't need us yet.</td></tr>
+  </table>
+  <p class="foot">Your list already shows which group each guesthouse is in.</p>
+</div></section>
+
+<section class="slide dark"><div class="in">
+  <div class="eyebrow">What we sell</div>
+  <h2>Ask, answer, reply</h2>
+  <div class="grid g3">
+    <div class="card"><h3>Ask</h3><p>Every guest gets asked for a Google review the day they check out, plus a stand at reception.</p></div>
+    <div class="card"><h3>Answer</h3><p>Every review gets an answer, so the owner never has to write one again.</p></div>
+    <div class="card"><h3>Reply</h3><p>WhatsApp and website chat answer guests' questions, Sundays included.</p></div>
+  </div>
+  <p class="foot">That's the line for an owner: "We make sure every guest gets asked, every review gets answered and every WhatsApp gets a reply." The price, the guarantee and the extras are mine to present on the walkthrough, so you don't need to learn them.</p>
+</div></section>
+
+<section class="slide"><div class="in">
+  <div class="eyebrow">Two lines you can use</div>
+  <h2>Both are true, so say them</h2>
+  <div class="say"><small>Scarcity</small>"We're only taking two more guesthouses before mid-December."</div>
+  <div class="say"><small>Deadline</small>"To be live for December, we need to start by 13 November."</div>
+  <p class="foot">After 13 November the second line changes to: "Let's get you set up so February doesn't stay quiet."</p>
+</div></section>
+
+<section class="slide"><div class="in">
+  <div class="eyebrow">The Google check</div>
+  <h2>Why you check before you call</h2>
+  <p class="lead">The sheet guesses who the competitor is. Google Maps shows who's actually beating them.</p>
+  <div class="grid g2">
+    <div class="card red"><h3>What the sheet said about Rockview</h3><p>Competitor: The Edwardian, with 349 reviews.</p></div>
+    <div class="card green"><h3>What Google actually shows</h3><p>Search "guest houses in Port Edward": Rockview comes 4th. EIGHT PALMS is 1st, with 103 reviews. Rockview has had only 2 new Google reviews this year.</p></div>
+  </div>
+  <p class="foot">If you open with the wrong competitor, the owner can prove you wrong in one search. Always use what the check found.</p>
+</div></section>
+
+<section class="slide"><div class="in">
+  <div class="eyebrow">The Google check</div>
+  <h2>Let your Claude do it</h2>
+  <ol class="steps">
+    <li>Open the <a href="https://jcereports.netlify.app/google-check-f2c85f/precheck-5d17a3.html" target="_blank">check tool</a>.</li>
+    <li>In the first box, paste tomorrow's list, one per line: <b>Name, Town</b>.</li>
+    <li>Click <b>Copy instructions for Claude</b> and paste them into Claude in Chrome.</li>
+    <li>Claude searches Google Maps for each place and saves the results. At the end it gives you a table with the line to open each call with.</li>
+    <li>Click <b>Export for Jacques</b> and send me the file.</li>
+  </ol>
+  <p class="foot"><b>First time:</b> do one guesthouse and check it against Google yourself. If it matches, give it the whole list from then on. If Google shows "I'm not a robot", stop and do that one by hand. The check tool has the links.</p>
+</div></section>
+
+<section class="slide dark"><div class="in">
+  <div class="eyebrow">How to book the walkthrough</div>
+  <div class="acro"><span>S</span><span>H</span><span>O</span><span>W</span><span>S</span></div>
+  <p class="lead">What we want from every call is a walkthrough the owner actually shows up to. Don't call to sell. Call to tell them something about their own Google listing. An owner will give you two minutes for that.</p>
+  <p class="foot">After every call, ask yourself which letter went wrong. That's the one to work on.</p>
+</div></section>
+
+<section class="slide"><div class="in">
+  <table>
+    <tr><td class="big">S</td><td><b>Search</b><br>The day before, run the Google check. Before you dial, have three numbers ready: where they come up, who comes up first, and how many Google reviews they've had this year.</td></tr>
+    <tr><td class="big">H</td><td><b>Hook</b><br>Open with what you found on their listing.</td></tr>
+    <tr><td class="big">O</td><td><b>Open question</b><br>"What happens after a guest checks out?" Then stop talking.</td></tr>
+    <tr><td class="big">W</td><td><b>Walkthrough</b><br>Book it with two specific times, never "when suits you?"</td></tr>
+    <tr><td class="big">S</td><td><b>Send their page</b><br>WhatsApp the confirmation with their Google page, then a reminder on the morning of the call.</td></tr>
+  </table>
+</div></section>
+
+<section class="slide"><div class="in">
+  <div class="eyebrow">H · Hook</div>
+  <h2>Open with what you found</h2>
+  <div class="say"><small>Getting to the owner</small>"Hi, it's Giorgio. Could I speak to the owner, or whoever looks after your Google reviews? It's about how the guesthouse shows up on Google Maps. Two minutes."</div>
+  <div class="say"><small>The opener</small>"Hi [name], it's Giorgio from ReviewTap. I'll be quick. I was looking at guest houses in [town] on Google Maps and noticed something about [guesthouse]. Have you got two minutes?"</div>
+  <div class="say"><small>What you found (Rockview example)</small>"When someone searches 'guest houses in Port Edward', you come up fourth. EIGHT PALMS comes up first with 103 reviews. Your rating's great at 4.6, but you've had 2 new Google reviews this year. Google says more reviews can help your ranking, so the place that gets reviewed more gets seen first."</div>
+  <p class="foot">Only use the numbers from the check. Never round them up, and never say reviews are the only thing that counts. Google ranks on relevance, distance and popularity.</p>
+</div></section>
+
+<section class="slide"><div class="in">
+  <div class="eyebrow">O · Open question &nbsp;·&nbsp; W · Walkthrough</div>
+  <h2>Ask, listen, then book</h2>
+  <div class="say"><small>Open question</small>"What happens at the moment after a guest checks out? Does anyone ask them for a Google review?"</div>
+  <p class="foot" style="margin:0 0 14px">Let them answer. Most will say "sometimes". Then ask: "How many came in last month?" The gap between what they think happens and the real number does the selling for you. Somewhere in here, ask how many rooms they have.</p>
+  <div class="say"><small>Book it</small>"We set that up for guesthouses so every guest gets asked. I'd like to show you your Google listing next to [competitor] on a 20-minute call with Jacques, who runs the setup. Is Tuesday at 10 or Wednesday at 2 better for you?"</div>
+</div></section>
+
+<section class="slide"><div class="in">
+  <div class="eyebrow">S · Send their page</div>
+  <h2>Booked is not the same as showing up</h2>
+  <ol class="steps">
+    <li><b>Straight after the call,</b> WhatsApp them from your phone: the day and time, that Jacques is joining, and the link to their Google page. "Have a look before we chat."</li>
+    <li><b>Send the calendar invite</b> with me on it.</li>
+    <li><b>On the morning of the call,</b> send a short reminder.</li>
+  </ol>
+  <p class="foot">Their own page is the best thing we have for getting people to show up. It's about them, not about us. You can send a prospect their own page. Never send them your list.</p>
+</div></section>
+
+<section class="slide"><div class="in">
+  <div class="eyebrow">When they push back</div>
+  <h2>Six answers</h2>
+  <div class="grid g2">
+    <div class="card"><h3>"Send me some information."</h3><p>"Happy to. The most useful thing is your own Google page, and I'll WhatsApp it now. It makes more sense with someone walking you through it, though. Shall I pencil in Thursday at 10? If it's not useful, you can cancel."</p></div>
+    <div class="card"><h3>"How much is it?"</h3><p>"It depends on the size of your place. There's a once-off setup and then a monthly fee. Jacques will give you exact numbers on the call, and it only takes 20 minutes." Then back to the two times.</p></div>
+    <div class="card"><h3>"We're too busy, it's nearly December."</h3><p>"That's exactly why. December is when you have the most guests to ask. To be live for December we need to start by 13 November."</p></div>
+    <div class="card"><h3>"Most of our bookings come through Booking.com."</h3><p>"How many would you say? And what does that commission cost you in a year?" Let them work out the number. Don't promise to fix it.</p></div>
+    <div class="card"><h3>"We already ask for reviews."</h3><p>"Great. Google shows [N] new ones this year. Is that about what you'd expect?"</p></div>
+    <div class="card"><h3>"Not interested."</h3><p>"Fair enough. Can I ask, is it that reviews aren't a priority, or just the timing?" If it's the timing, ask when to call back and put it in GHL.</p></div>
+  </div>
+</div></section>
+
+<section class="slide"><div class="in">
+  <div class="eyebrow">Can't get hold of them</div>
+  <h2>Three calls, then write</h2>
+  <ol class="steps">
+    <li>Call three times, at different times of day (morning, after lunch, late afternoon).</li>
+    <li>After the third try, send <b>email 1</b> (next slide) and a short WhatsApp with the same link.</li>
+    <li>Four days later, if they haven't replied, send <b>email 2</b> as a reply in the same thread.</li>
+    <li>No reply after that? Mark it in GHL and move on. Don't chase a third time.</li>
+  </ol>
+  <div class="say"><small>The WhatsApp</small>"Hi [name], Giorgio from ReviewTap. I tried to call about how [guesthouse] shows up on Google Maps. Here's what I found: [their page link]. Worth a 20-minute chat?"</div>
+</div></section>
+
+<section class="slide"><div class="in">
+  <div class="eyebrow">Email templates</div>
+  <h2>Fill in the brackets from the check</h2>
+  <div class="grid">
+    <div class="tpl" id="t1"><button class="copy" data-t="t1">Copy</button><b>Email 1: after three missed calls</b>
+
+Subject: [Guesthouse] on Google Maps
+
+Hi [Name]
+
+I tried calling a couple of times, so I thought I'd send an email instead.
+
+I was looking at guest houses in [town] on Google Maps this week. [Guesthouse] comes up [position], and [competitor] comes up first with [N] reviews. Your rating is great at [rating], but Google shows [N] new reviews for you in the last year.
+
+I've put what I found on one page for you: [link to their page]
+
+Would you be open to a 20-minute call to go through it? I can do [day] at [time] or [day] at [time].
+
+Thanks
+Giorgio
+ReviewTap · [your number]</div>
+    <div class="tpl" id="t2"><button class="copy" data-t="t2">Copy</button><b>Email 2: four days later, reply in the same thread</b>
+
+Hi [Name]
+
+Just bringing this back to the top of your inbox. Are reviews something you'd like to sort out before December, or should I check back in the new year?
+
+Giorgio</div>
+    <div class="tpl" id="t3"><button class="copy" data-t="t3">Copy</button><b>The 63 old Facebook leads (one line, no link, no signature)</b>
+
+Subject: [Place]
+
+Are you still looking for more Google reviews for [place]?</div>
+  </div>
+</div></section>
+
+<section class="slide"><div class="in">
+  <div class="eyebrow">On the walkthrough</div>
+  <h2>Who does what</h2>
+  <table>
+    <tr><th>Part</th><th>Who</th><th>Time</th></tr>
+    <tr><td>Their Google page next to the place beating them. Share your screen.</td><td>You</td><td>10 min</td></tr>
+    <tr><td>Questions: how they get bookings, what Booking.com costs them, what happens after checkout</td><td>You</td><td>5 min</td></tr>
+    <tr><td>The offer, the guarantee and the ask</td><td>Jacques</td><td>15 min</td></tr>
+    <tr><td>Follow-up and GHL</td><td>You</td><td></td></tr>
+  </table>
+  <p class="foot">No more full decks for first walkthroughs. After 10 calls we go through the recordings together and write down the close that works, so you can run it yourself.</p>
+</div></section>
+
+<section class="slide"><div class="in">
+  <div class="eyebrow">Keep us honest</div>
+  <h2>Never say</h2>
+  <div class="grid g2">
+    <div class="card red"><h3>"We'll get your price showing on Google."</h3><p>We can't do that. If they ask: "That's set up through your booking system. We'll check yours as part of setup."</p></div>
+    <div class="card red"><h3>TO Strand's "8 reviews a week".</h3><p>That's a big resort. A 5-room guesthouse gets maybe 5 to 9 a month.</p></div>
+    <div class="card red"><h3>"Reviews are what Google ranks on."</h3><p>It's one of three things. Say "can help your ranking".</p></div>
+    <div class="card red"><h3>Anything from your internal list.</h3><p>Scores and offer groups stay with us. Prospects only ever see their own page.</p></div>
+  </div>
+</div></section>
+
+<section class="slide"><div class="in">
+  <div class="eyebrow">End of every day</div>
+  <h2>Three numbers in GHL</h2>
+  <div class="grid g3">
+    <div class="card"><div class="num">Calls</div><p>How many you dialled.</p></div>
+    <div class="card"><div class="num">Owners</div><p>How many owners you actually spoke to.</p></div>
+    <div class="card"><div class="num">Booked</div><p>How many walkthroughs you booked.</p></div>
+  </div>
+  <p class="foot">After two weeks, these three numbers will show us exactly which letter of SHOWS to work on.</p>
+  <h2 style="font-size:28px;margin-top:30px">Also find out on your calls</h2>
+  <ul style="padding-left:20px;color:var(--muted)">
+    <li><b>Squirrels Corner and John Montagu</b> share an @montagu.org.za email address. Is it the same owner?</li>
+    <li><b>Room count,</b> wherever the sheet doesn't have it.</li>
+    <li><b>How they take bookings:</b> NightsBridge, their own system, or email and phone.</li>
+  </ul>
+</div></section>
+
+<section class="slide dark"><div class="in">
+  <div class="eyebrow">Your links</div>
+  <h2>Keep these handy</h2>
+  <div class="grid">
+    <div class="card"><h3>The check tool</h3><p><a href="https://jcereports.netlify.app/google-check-f2c85f/precheck-5d17a3.html" target="_blank">jcereports.netlify.app/google-check-f2c85f/precheck-5d17a3.html</a></p></div>
+    <div class="card"><h3>Your list of all 100 <span class="tag no">Only for you</span></h3><p><a href="https://jcereports.netlify.app/google-check-f2c85f/list-8e048fc2.html" target="_blank">jcereports.netlify.app/google-check-f2c85f/list-8e048fc2.html</a></p></div>
+    <div class="card"><h3>A prospect's own page <span class="tag ok">OK to send them</span></h3><p><a href="https://jcereports.netlify.app/google-check-f2c85f/rockview-guest-house.html" target="_blank">Example: Rockview Guest House</a>. Every prospect has one, linked from your list.</p></div>
+  </div>
+  <p class="foot">Questions? WhatsApp me.</p>
+</div></section>
+
+<div id="nav"><span id="pos">1 / 1</span><button id="up" aria-label="Previous slide">&#8593;</button><button id="dn" aria-label="Next slide">&#8595;</button></div>
+
+<script>
+const S=[...document.querySelectorAll('.slide')];
+function cur(){let y=window.scrollY+window.innerHeight/3,i=0;S.forEach((s,k)=>{if(s.offsetTop<=y)i=k});return i}
+function go(d){const i=Math.max(0,Math.min(S.length-1,cur()+d));S[i].scrollIntoView({behavior:'smooth'})}
+function upd(){document.getElementById('pos').textContent=(cur()+1)+' / '+S.length}
+document.getElementById('up').onclick=()=>go(-1);document.getElementById('dn').onclick=()=>go(1);
+addEventListener('keydown',e=>{if(['ArrowDown','PageDown','ArrowRight',' '].includes(e.key)){e.preventDefault();go(1)}if(['ArrowUp','PageUp','ArrowLeft'].includes(e.key)){e.preventDefault();go(-1)}});
+addEventListener('scroll',upd,{passive:true});upd();
+document.querySelectorAll('.copy').forEach(b=>b.onclick=()=>{
+  const el=document.getElementById(b.dataset.t).cloneNode(true);el.querySelector('.copy').remove();el.querySelector('b').remove();
+  const txt=el.textContent.replace(/^\s+/,'').trim();
+  const done=()=>{b.textContent='Copied';b.classList.add('done');setTimeout(()=>{b.textContent='Copy';b.classList.remove('done')},1600)};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done,()=>fallback(txt,done))}else fallback(txt,done);
+});
+function fallback(t,done){const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy');done()}catch(e){}a.remove()}
+</script>
+</body>
+</html>
