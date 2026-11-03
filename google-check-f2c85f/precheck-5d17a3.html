@@ -55,12 +55,13 @@ ol.how li{margin:3px 0}
 .filled{background:var(--green-lt);border:1px solid #bcd9c6;border-radius:8px;padding:10px 14px;font-size:14px;margin-bottom:14px;display:none}
 @media (max-width:640px){.grid{grid-template-columns:1fr}.grid3{grid-template-columns:1fr 1fr}.grid3 .nm{grid-column:1/-1}}
 </style>
+<script src="prospects-data.js"></script>
 </head>
 <body>
 <header class="top"><div class="wrap">
   <div class="eyebrow">ReviewTap · For Giorgio · Before every walkthrough</div>
   <h1>Pre-call Google check</h1>
-  <p>About a minute per guesthouse with the Google button (4 minutes by hand), done the day before or the morning of the walkthrough. It tells you what to lead with, gives you a note to paste into GHL, and saves a row you export to Jacques so their page gets rebuilt with live numbers.</p>
+  <p>About a minute per guesthouse with the Google button (4 minutes by hand), done the day before or the morning of the walkthrough. It tells you what to lead with, gives you a note to paste into the CRM, and makes the ReviewTap page you send them.</p>
 </div></header>
 
 <main class="wrap">
@@ -131,7 +132,8 @@ ol.how li{margin:3px 0}
   <h2>What to lead with</h2>
   <ul class="pts" id="pts"><li>Fill in the steps above.</li></ul>
   <div class="btns">
-    <button type="button" id="copy">Copy GHL note</button>
+    <button type="button" id="mkpage">Make their page</button>
+    <button type="button" class="ghost" id="copy">Copy CRM note</button>
     <button type="button" class="ghost" id="save">Save to my list</button>
     <button type="button" class="ghost" id="reset">Start a new one</button>
   </div>
@@ -506,13 +508,33 @@ When all are done, give me a short table: guesthouse, position, rating and revie
 
   $('copy').onclick=function(){
     var txt=note();
-    function fb(){var ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');toast('Copied. Paste it into GHL.')}catch(e){toast('Copy failed')}ta.remove()}
-    if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(txt).then(function(){toast('Copied. Paste it into GHL.')},fb);else fb();
+    function fb(){var ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');toast('Copied. Paste it into the CRM.')}catch(e){toast('Copy failed')}ta.remove()}
+    if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(txt).then(function(){toast('Copied. Paste it into the CRM.')},fb);else fb();
   };
   $('save').onclick=function(){
     if(!val('biz')||!val('town')){toast('Add the name and town first');return}
     var l=load().filter(function(x){return !(x.biz.toLowerCase()===val('biz').toLowerCase()&&x.checked===today())});
     l.push(row());toast(store(l)?'Saved to your list':'Could not save in this browser');list();
+  };
+  // "Make their page": the prospect's ReviewTap page, rendered from this check plus their row in the hitlist
+  // (prospects-data.js, written by build.py). Everything travels in the link, so nothing needs rebuilding.
+  function slug(s){return String(s||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'')}
+  $('mkpage').onclick=function(){
+    if(!val('biz')||!val('town')){toast('Add the name and town first');return}
+    if(num('rating')===null||num('count')===null){toast('Add their rating and number of reviews first');return}
+    var sheet=(window.RT_PROSPECTS||{})[slug(val('biz'))]||{},meta=window.RT_SHEET||{};
+    var d={name:val('biz'),town:val('town'),checked:today(),by:meta.by||'',prices:meta.prices||''};
+    Object.keys(sheet).forEach(function(k){d[k]=sheet[k]});
+    delete d.given; // worked out from the sheet's old numbers; the page recalculates from this check
+    ['p1','p2','rating','count','newest','price','cheap'].forEach(function(f){if(val(f))d[f]=val(f)});
+    d.tops=[1,2,3].map(function(i){return [val('t'+i+'n'),val('t'+i+'r'),val('t'+i+'c')]}).filter(function(t){return t[0]});
+    var m=/last 12 months:\s*(\d+)/.exec(val('notes'));if(m)d.y12=m[1];
+    var b64=btoa(unescape(encodeURIComponent(JSON.stringify(d)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+    var url=new URL('page-3e9c41.html?d='+b64,location.href).href;
+    window.open(url,'_blank');
+    var msg=sheet.region?'Link copied. Check the page, then send it.':'Link copied. This place isn\'t on your hitlist, so the page has no room count from the sheet.';
+    function fb(){var ta=document.createElement('textarea');ta.value=url;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');toast(msg)}catch(e){toast('Page opened. Copy the address from the new tab.')}ta.remove()}
+    if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(url).then(function(){toast(msg)},fb);else fb();
   };
   $('reset').onclick=function(){F.forEach(function(f){$(f).value=''});render();window.scrollTo(0,0)};
   function list(){
