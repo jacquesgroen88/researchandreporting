@@ -220,6 +220,8 @@ table.t input.ovr{border-color:var(--gold);background:#FFFBF2;font-weight:600}
 .aiout .err{color:var(--bad)}
 .aiout .warnline{color:var(--warn)}
 .aibusy{opacity:.55;pointer-events:none}
+.btn.t{background:none;border:1px dashed var(--line);color:var(--muted)}
+.btn.t:hover{border-style:solid;color:var(--ink)}
 .keyrow{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:end}
 @media(max-width:640px){.keyrow{grid-template-columns:1fr}}
 
@@ -341,6 +343,7 @@ body.printing #doc{display:block}
         <button class="btn o sm" onclick="aiRead('acreage')">Read the enquiry</button>
         <button class="btn o sm" onclick="aiSuggest('acreage')">Suggest the items</button>
         <button class="btn o sm" onclick="aiDraft('acreage')">Draft the reply</button>
+        <button class="btn t sm" onclick="loadExample('acreage')">Example enquiry</button>
         <span class="hint" id="pasteOut"></span>
       </div>
       <div class="aiout" id="aiOutAcr" hidden></div>
@@ -436,6 +439,7 @@ body.printing #doc{display:block}
         <button class="btn o sm" onclick="aiRead('gp')">Read the brief</button>
         <button class="btn o sm" onclick="aiSuggest('gp')">Suggest the vendors</button>
         <button class="btn o sm" onclick="aiDraft('gp')">Draft the reply</button>
+        <button class="btn t sm" onclick="loadExample('gp')">Example enquiry</button>
         <span class="hint" id="gPasteOut"></span>
       </div>
       <div class="aiout" id="aiOutGp" hidden></div>
@@ -1746,6 +1750,23 @@ function aiCopy(id,btn){
     try{ document.execCommand("copy"); done(); }catch(e){}
     document.body.removeChild(ta);
   }
+}
+
+
+/* Two worked enquiries, so the desk can be shown and learned without waiting for a
+   real one to come in. Both are written the way clients actually write: a name at
+   the bottom, the date buried in a sentence, the guest count approximate. */
+var EXAMPLES = {
+  acreage: "Hi there, I got your details from Karen at Nology, they had their function with you last year and said good things.\n\nWe are looking at our year end function and I am hoping Friday 11 December is still open. We will be about 80, maybe 85 by then. Something relaxed and outdoors would be ideal, a braai if you do that, and we will definitely need a bar for the evening. Happy to run a tab rather than a cash bar.\n\nTwo of the team are vegetarian and one of our directors eats halaal. We are working on roughly R700 a head all in.\n\nCould you send something through this week? We are deciding Friday.\n\nMichelle van der Walt\n082 334 7761",
+  gp: "Morning Andrew, hope you are well.\n\nWe are planning our annual family day for Saturday 6 March at Riversands Farm Village in Midrand. Expecting around 1200 people and a lot of them will be kids.\n\nWe would want a proper spread of trucks, two mains per person, something sweet, and cold drinks running throughout. No alcohol at all, it is a family day. Coffee for the early arrivals would be good, say 300 cups.\n\nLast year we used one caterer and the queues were a disaster, so we would like several trucks serving at the same time.\n\nCan you put a proposal together for us?\n\nNicole Pretorius\nGroup HR\n083 222 4418"
+};
+function loadExample(mode){
+  var id = mode==="acreage" ? "aPaste" : "gPaste";
+  var box = mode==="acreage" ? "aiOutAcr" : "aiOutGp";
+  $(id).value = EXAMPLES[mode];
+  $(id).scrollTop = 0;
+  aiSay(box, '<h4>Example loaded</h4><p>Press <b>Read the enquiry</b> to pull the details out of it, '
+    + 'then <b>' + (mode==="acreage" ? "Suggest the items" : "Suggest the vendors") + '</b>.</p>');
 }
 
 /* ══════════════════ BOOT ══════════════════ */
