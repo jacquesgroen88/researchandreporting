@@ -4,6 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Acreage Quote Desk</title>
+
+<!-- Both brands' own typefaces, from the same Google Fonts their two live
+     sites load: Playfair Display SC and Figtree are The Acreage's, Jost is
+     Good & Proper's. Every rule names a system fallback, so the tool still
+     sets correctly on a laptop with no connection. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display+SC:wght@400;700&family=Figtree:wght@300;400;500;600;700&family=Jost:wght@400;500;600;700&display=swap">
 <style>
 :root{
   --forest:#0B4337; --forest-deep:#063028; --night:#04211B;
@@ -11,14 +19,28 @@
   --paper:#FCFBF7; --card:#FFFFFF; --ink:#1C1B18; --soft:#44443E; --muted:#6B6759;
   --line:#E2D9C6; --line-soft:#EFEAE0;
   --ok:#2F6B4F; --ok-bg:#E8F2EC; --warn:#8A5A12; --warn-bg:#FBF1DE; --bad:#A03226; --bad-bg:#FBEBE8;
-  --gp:#1C1B18; --gp-accent:#C4551F;
+  /* Good & Proper, sampled from goodandproperfoodtrucks.co.za and from their
+     own proposal letterhead rather than invented. Their mark is BLACK: the
+     green gp-logo on the Acreage website is a recolour made for that site.
+     Their ground is a warmer cream than The Acreage's, the accent is coral,
+     and the secondary is the blue their proposals box the structure in.
+     Coral on their cream measures 2.86:1, so, exactly as the Acreage site
+     splits its gold, --gp-coral is for rules and fills only and
+     --gp-coral-ink is the deepened tint for coral TEXT on light (4.58:1). */
+  --gp:#000000; --gp-cream:#FCF8EC;
+  --gp-coral:#FF5E3E; --gp-coral-ink:#C44830; --gp-blue:#204CE5;
+  --gp-accent:#C44830;
+
+  --font-head:'Playfair Display SC',Georgia,'Times New Roman',serif;
+  --font-body:'Figtree',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --font-gp:'Jost',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
   --r:10px; --sp:16px;
 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
 body{
   background:var(--paper); color:var(--ink);
-  font:15px/1.5 "Segoe UI",-apple-system,BlinkMacSystemFont,Roboto,Helvetica,Arial,sans-serif;
+  font:15px/1.55 var(--font-body);
   -webkit-text-size-adjust:100%;
 }
 h1,h2,h3,h4{margin:0;font-weight:600;letter-spacing:-.01em;text-wrap:balance}
@@ -32,10 +54,9 @@ button,input,select,textarea{font:inherit;color:inherit}
   position:sticky; top:0; z-index:40; box-shadow:0 1px 0 rgba(0,0,0,.18);
 }
 .brandmark{display:flex;align-items:center;gap:10px;margin-right:auto}
-.brandmark .mono{
-  width:30px;height:30px;border:1.5px solid var(--gold);border-radius:4px;
-  display:grid;place-items:center;color:var(--gold);font-weight:700;font-size:14px;flex:none;
-}
+/* the live brand mark, which swaps with the mode */
+.brandmark .blogo{height:30px;width:auto;display:block;flex:none}
+.brandmark .vr{width:1px;height:26px;background:rgba(255,255,255,.22);flex:none}
 .brandmark b{font-size:15px;font-weight:600;letter-spacing:.01em}
 .brandmark span{display:block;font-size:11px;color:var(--gold);letter-spacing:.09em;text-transform:uppercase}
 .modes{display:flex;background:rgba(255,255,255,.10);border-radius:8px;padding:3px;gap:3px}
@@ -186,6 +207,22 @@ table.t input.ovr{border-color:var(--gold);background:#FFFBF2;font-weight:600}
 .bal.ok{color:var(--ok)} .bal.no{color:var(--bad)}
 
 /* ───────── quote list ───────── */
+/* ───────── AI assist ───────── */
+.aidot{width:7px;height:7px;border-radius:50%;background:#C9705F;display:inline-block;margin-right:7px;vertical-align:1px}
+.aidot.on{background:#7FD1A8}
+.card.ai>h3{background:linear-gradient(90deg,rgba(195,173,132,.16),transparent)}
+.airow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.aiout{margin-top:12px;border:1px solid var(--line);border-radius:8px;padding:12px 14px;background:var(--paper);font-size:13.5px}
+.aiout h4{margin:0 0 6px;font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.aiout ul{margin:0 0 10px;padding-left:18px}
+.aiout li{margin:2px 0}
+.aiout .draft{white-space:pre-wrap;background:#fff;border:1px solid var(--line-soft);border-radius:6px;padding:10px 12px;margin:0 0 8px;font-size:13px;line-height:1.6}
+.aiout .err{color:var(--bad)}
+.aiout .warnline{color:var(--warn)}
+.aibusy{opacity:.55;pointer-events:none}
+.keyrow{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:end}
+@media(max-width:640px){.keyrow{grid-template-columns:1fr}}
+
 .sheet{position:fixed;inset:0;background:rgba(4,33,27,.45);z-index:60;display:none;padding:28px 16px;overflow:auto}
 .sheet.open{display:block}
 .sheetin{background:#fff;max-width:760px;margin:0 auto;border-radius:12px;overflow:hidden}
@@ -202,8 +239,23 @@ table.t input.ovr{border-color:var(--gold);background:#FFFBF2;font-weight:600}
 }
 .dochead{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;border-bottom:2px solid var(--forest);padding-bottom:18px;margin-bottom:22px}
 .dochead.gp{border-bottom-color:var(--gp-accent)}
-.dochead .co b{display:block;font-size:20px;letter-spacing:-.01em}
+.dochead .co img.dlogo{height:80px;width:auto;display:block}
+.dochead .co b{display:block;font-size:20px;letter-spacing:-.01em;font-family:var(--font-head)}
 .dochead .co span{display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-deep);margin-top:3px}
+
+/* The Acreage sets its headings in Playfair Display SC; the quote does the same,
+   so the document and the website Jade is reviewing read as one piece. */
+.docpage .docttl{font-family:var(--font-head);letter-spacing:.1em}
+
+/* A Good & Proper quote is THEIR document, not an Acreage one wearing their
+   name: their cream ground, their Jost, their coral rule, and the structure
+   boxed in their blue the way their own proposals box it. */
+.docpage.gp{background:var(--gp-cream);font-family:var(--font-gp)}
+.docpage.gp .docttl{font-family:var(--font-gp);font-weight:600;letter-spacing:.12em}
+.docpage.gp .dochead .co img.dlogo{height:66px}
+.dochead.gp{border-bottom-color:var(--gp-coral);border-bottom-width:2.5px}
+.docpage.gp .structbox{border:1.5px solid var(--gp-blue);border-radius:6px;padding:14px 16px 14px 34px;margin:0 0 20px}
+.docpage.gp .structbox li{margin:3px 0}
 .dochead .meta{text-align:right;font-size:12.5px;color:var(--soft);line-height:1.7}
 .dochead .meta b{color:var(--ink)}
 .docttl{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--forest);margin-bottom:14px;font-weight:600}
@@ -235,7 +287,10 @@ body.printing #doc{display:block}
   body{background:#fff}
   .docbar,.topbar{display:none !important}
   .docpage{border:0;margin:0;padding:0;max-width:none}
-  table.dt th{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  /* the brand grounds and the logos are the branding: print them */
+  .docpage,.docpage.gp,table.dt th,.docpage .structbox{
+    -webkit-print-color-adjust:exact;print-color-adjust:exact;
+  }
 }
 @media(max-width:640px){
   .wrap{padding:14px 12px 70px}
@@ -253,7 +308,8 @@ body.printing #doc{display:block}
 
 <header class="topbar">
   <div class="brandmark">
-    <div class="mono">A</div>
+    <img id="brandLogo" class="blogo" alt="The Acreage">
+    <div class="vr"></div>
     <div><b>Quote Desk</b><span id="brandsub">The Acreage</span></div>
   </div>
   <div class="modes" role="group" aria-label="Business">
@@ -261,6 +317,7 @@ body.printing #doc{display:block}
     <button id="mGp" aria-pressed="false" onclick="setMode('gp')">Good &amp; Proper</button>
   </div>
   <div class="topacts">
+    <button class="tbtn" onclick="openAi()"><span class="aidot" id="aiDot"></span>AI</button>
     <button class="tbtn" onclick="openList()">Saved quotes</button>
     <button class="tbtn" onclick="newQuote()">New</button>
   </div>
@@ -276,12 +333,17 @@ body.printing #doc{display:block}
   <div class="card">
     <h3>The enquiry <span class="tag" id="acrNo">ACR-0001</span></h3>
     <div class="pad">
-      <label class="f" style="margin-bottom:12px">
-        <span>Paste the WhatsApp message (optional)</span>
-        <textarea id="aPaste" placeholder="Paste what the client sent and press Read it. Anything it cannot find, you type."></textarea>
+      <label class="f" style="margin-bottom:10px">
+        <span>Paste the enquiry — WhatsApp, an email, a note from the phone</span>
+        <textarea id="aPaste" placeholder="Paste what the client sent. Read the enquiry fills in everything it can find; anything it cannot, you type."></textarea>
       </label>
-      <button class="btn o sm" onclick="readPaste()">Read it</button>
-      <span class="hint" id="pasteOut" style="margin-left:10px"></span>
+      <div class="airow">
+        <button class="btn o sm" onclick="aiRead('acreage')">Read the enquiry</button>
+        <button class="btn o sm" onclick="aiSuggest('acreage')">Suggest the items</button>
+        <button class="btn o sm" onclick="aiDraft('acreage')">Draft the reply</button>
+        <span class="hint" id="pasteOut"></span>
+      </div>
+      <div class="aiout" id="aiOutAcr" hidden></div>
 
       <div class="grid g2" style="margin-top:14px">
         <label class="f"><span>Client name</span><input type="text" id="aName" oninput="render()"></label>
@@ -363,6 +425,23 @@ body.printing #doc{display:block}
 <div class="cols">
 <div>
 
+  <div class="card ai">
+    <h3>Start from the brief</h3>
+    <div class="pad">
+      <label class="f" style="margin-bottom:10px">
+        <span>Paste the enquiry — the brief, the email thread, the call notes</span>
+        <textarea id="gPaste" placeholder="Paste what the client sent. Read the brief fills in the event and the per-head structure; Suggest the vendors splits the PAX across the real roster."></textarea>
+      </label>
+      <div class="airow">
+        <button class="btn o sm" onclick="aiRead('gp')">Read the brief</button>
+        <button class="btn o sm" onclick="aiSuggest('gp')">Suggest the vendors</button>
+        <button class="btn o sm" onclick="aiDraft('gp')">Draft the reply</button>
+        <span class="hint" id="gPasteOut"></span>
+      </div>
+      <div class="aiout" id="aiOutGp" hidden></div>
+    </div>
+  </div>
+
   <div class="card">
     <h3>The event <span class="tag" id="gpNo">GP-0001</span></h3>
     <div class="pad"><div class="grid g2">
@@ -439,6 +518,48 @@ body.printing #doc{display:block}
 </div><!-- /app -->
 
 <!-- saved quotes -->
+<div class="sheet" id="aisheet" onclick="if(event.target===this)closeAi()">
+  <div class="sheetin">
+    <h3>AI assist <button class="btn o sm" style="margin-left:auto" onclick="closeAi()">Close</button></h3>
+    <div class="pad">
+      <p style="margin:0 0 14px;font-size:13.5px;color:var(--soft)">
+        The assistant reads an enquiry and proposes what goes on the quote. It is never
+        allowed to produce a price: it returns menu items, quantities and words, and the
+        rate engine does every calculation. So it can put the wrong dish on a quote. It
+        cannot put the wrong rand on one.
+      </p>
+      <div class="keyrow" style="margin-bottom:12px">
+        <label class="f"><span>OpenRouter API key</span>
+          <input type="password" id="orKey" placeholder="sk-or-v1-..." autocomplete="off" spellcheck="false">
+        </label>
+        <button class="btn g" onclick="aiSaveKey()">Save</button>
+      </div>
+      <label class="f" style="margin-bottom:12px"><span>Model</span>
+        <input type="text" id="orModel" list="orModels" spellcheck="false">
+        <datalist id="orModels">
+          <option value="anthropic/claude-sonnet-5.5">Balanced, the default</option>
+          <option value="anthropic/claude-haiku-5.5">Cheapest, still good</option>
+          <option value="anthropic/claude-opus-5.5">Most careful, costs more</option>
+          <option value="openai/gpt-5.4-mini">
+          <option value="google/gemini-3.1-flash-lite">
+        </datalist>
+      </label>
+      <div class="airow" style="margin-bottom:12px">
+        <button class="btn o sm" onclick="aiTest()">Test the connection</button>
+        <button class="btn o sm" onclick="aiForget()">Forget the key</button>
+        <span class="hint" id="aiTestOut"></span>
+      </div>
+      <div class="note">
+        <b>Where the key lives.</b> In this browser only, under this one web address.
+        It is never written into the page, never committed, and never sent anywhere
+        except OpenRouter. Anyone else who opens the link enters their own, so one
+        person's key is never spent by another. Clearing site data, or a different
+        browser or laptop, means entering it again.
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="sheet" id="sheet" onclick="if(event.target===this)closeList()">
   <div class="sheetin">
     <h3>Saved quotes <button class="btn o sm" style="margin-left:auto" onclick="closeList()">Close</button></h3>
@@ -468,6 +589,17 @@ body.printing #doc{display:block}
    1 000 pax, Absa 2 200 pax). Nothing here is invented. Where they have
    no number on record the value is null and the tool asks.
    ══════════════════════════════════════════════════════════════════════ */
+
+/* Real brand marks, trimmed and embedded so the quote survives print,
+   PDF export and an offline laptop. Acreage green #0B4337 from the client's
+   own logo files; Good & Proper BLACK, which is how their own proposals are
+   branded (the green gp-logo on the website is a recolour for that site). */
+var LOGO = {
+  ACR_DARK:{w:229,h:150,src:"data:image/png;base64,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"},
+  ACR_LIGHT:{w:76,h:84,src:"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEwAAABUCAMAAAAfzCHvAAAAYFBMVEUAAAD///////////////////////////////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAw2ciRAAAAIHRSTlMA/ATQby6PsE8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB7YD0AAASGSURBVHjalVnblsMgCExA1P//4lXAiAZs1oc928aMXAYEel3uAoD+l2rKBfFuC7HkVAmeh1+XINXMKOvCUmHs+AoFtdzhYrxvcH1jwvu8EvDG31iQHp2wqMVcuF/CtefEb5dEYy8AJcd8WH8I107Lwyjq1LGf0suKGU5o7WF7I5PCGET+l/LuiQMaq4jkE4m/m+ZUVSlCa1giOpw4s0kXoDFWOruoP6TyG+0LlsKlX2jNJNixPgUIWaLgy8Ltc7mLIxeM9XL69OkuAjTZ8XM2aNusHzaF2GDVUb5xK/FaH7ZTc2Q2Nli5PHLVYZ5N0wVt0akreVOgJLlOW9GMog33dgWTl4QJeXvOLnvWFI0PiQTjk0QVh0xPzF8zxbS9IcWGBPRmABkf6FksWMxXaOGIt7cDTCyoaI2CccDKK9htjR5zptkkGzE+nhJTQvKDkA1kHSp2zGcwuF09raLsIDFjPYHlwuqUID2YMBDy0Qms5KtOs2wPq3WBYB+TebuHRE83m6PVk+4f9gdUtrvRO0Xr91C6w1iSo1PPc5GeRrR2j7LJjs4sSbl4VziJltsHn93WX3Cd9NTY7ba6IgpNYoibUqjnk4s0WEOwLliPYd1XXTB6PJBOYD2bFQ06jGwrj/io/ENNlOSigePrmUZ4HsD6DdctBlOZo55Zkkj2L5Na051IiwyI9VSqFdE32HM1jlHOXNWJ0xBco2UL5kdA4yP266kU4qIgqlMGb1HAMDDZzSjt4DqCwDXIBRYsYmOR9NnclU56Shg9YG5dRHod8oXbDFdjPYsFc+sMHDpB56UGYYojaoBl5x6r857uH1pSKEHqU9oOsNeWLscUl01MEOmp7izj5ts90O+kCxarpDB5K23KyB9b3uvZoi5gufMnuqQELA+wsld/i2Bi4jDYYWTFent6dsFgByNNfhCA1Sezbe92V+7Ob1RDV08Fowu8mnmQ/wXm6ylg/a5AR89G0rSBFQYj95ISB5RrFuG2Lr1gq6D56KqZq/hlX75m84K2LqW9HCela/ZJWfUSfkosS/i6S1YUw03ewhnYKg8wktnSHsQmECQ1Frg86XgVrYMtpT0LxlWChB/sFC/jMb0aDRbAtNXKCHiOrntjpgfY4i9N0UrXZTR086LW/3cS0vjKFuBTNOmwZcn70qTr5qUF4UKkKhi8W0e2AvbZhg5ycGTw/E6mffMwkW2p6pOo9Y7Adejw1BW0UvyxkK3mjaK2203XwEp7f6NfGlplq+hAu3RShXbsk8cyFF+6+1n8rf1Zn8aRjN+OPXZdulfr0OUQM+XbBwBgy7Mlw9vW0T7Z5waBYA7tPLQPUw7ArX9fFeXE9RVMq5q4436o8AGrenfCYrbjsGoLcW+2sppNxmgfsPAwpvqXcBwlpwHaPqGEQ4fW5aqH0R5u091w+MzNJZ47aNhGnj0ul6HonJH2JEbnceg2tuu2q+AEEqXzMNQb26m6iRbJZGb7gYwQTLbbBJ9HaW2k/w8mfhqUZ/oeI+cRPnvlX78IhD8uJPrPjwsmIfZ5e5/i8/r9s8cfeGMYE+2OBwEAAAAASUVORK5CYII="},
+  GP_DARK:{w:323,h:150,src:"data:image/png;base64,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"},
+  GP_LIGHT:{w:174,h:80,src:"data:image/png;base64,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"},
+};
 
 var RATES = {
   serviceCharge: 0.10,   // stated on all seven catering menus
@@ -1035,7 +1167,9 @@ function setMode(m){
   $("mAcr").setAttribute("aria-pressed", m==="acreage");
   $("mGp").setAttribute("aria-pressed", m!=="acreage");
   $("brandsub").textContent = m==="acreage" ? "The Acreage" : "Good & Proper";
-  document.querySelector(".brandmark .mono").textContent = m==="acreage" ? "A" : "G";
+  var bl=$("brandLogo");
+  bl.src = (m==="acreage" ? LOGO.ACR_LIGHT : LOGO.GP_LIGHT).src;
+  bl.alt = m==="acreage" ? "The Acreage" : "Good & Proper Food Trucks";
   render();
 }
 
@@ -1139,7 +1273,7 @@ function docAcr(){
   rows+='<tr class="tot"><td>Total'+(c.hireSet?"":" (excluding venue hire)")+'</td><td class="r num">'+money(c.total)+'</td></tr>';
 
   return '<div class="docpage">'
-   + '<div class="dochead"><div class="co"><b>The Acreage</b><span>Event Venue &amp; Restaurant</span></div>'
+   + '<div class="dochead"><div class="co"><img class="dlogo" src="'+LOGO.ACR_DARK.src+'" alt="The Acreage, Restaurant and Event Venue"></div>'
    +   '<div class="meta"><b>Quotation '+esc(quoteNo())+'</b><br>'+today()+'<br>Valid until '+validTo()+'</div></div>'
    + '<div class="docttl">Quotation</div>'
    + '<div class="docgrid">'
@@ -1190,8 +1324,8 @@ function docGp(){
                   : q+" x "+esc(l.n)+" per person")+'</li>';
   });
 
-  return '<div class="docpage">'
-   + '<div class="dochead gp"><div class="co"><b>Good &amp; Proper</b><span>Food Trucks &amp; Mobile Catering</span></div>'
+  return '<div class="docpage gp">'
+   + '<div class="dochead gp"><div class="co"><img class="dlogo" src="'+LOGO.GP_DARK.src+'" alt="Good &amp; Proper Food Trucks"></div>'
    +   '<div class="meta"><b>Proposal '+esc(quoteNo())+'</b><br>Proposal date: '+today()+'<br>Andrew 072 229 7122<br>Jade 084 766 4440</div></div>'
    + '<div class="docttl gp">Event Catering Proposal</div>'
    + '<div class="docgrid">'
@@ -1204,7 +1338,7 @@ function docGp(){
    + '</div>'
    + '<p style="font-size:13.5px;margin:0 0 14px">Good &amp; Proper Food Trucks is pleased to provide our quotation in respect of '
    +   'the aforementioned event, structured as follows:</p>'
-   + '<ul style="font-size:13.5px;margin:0 0 20px;padding-left:18px">'+struct+'</ul>'
+   + '<ul class="structbox" style="font-size:13.5px">'+struct+'</ul>'
    + '<p style="font-size:12.5px;color:#44443E;margin:0 0 18px">Price per head includes travel, set up, staff costs, logistics and the service times above. '
    +   'Total cost includes management of vendors, specification of all power requirements and management of logistics for set up, service and strike. '
    +   'Halaal, vegetarian, vegan and kosher guests are catered for. A cash bar is also available.</p>'
@@ -1237,10 +1371,388 @@ function docGp(){
    + '</div>';
 }
 
+/* ══════════════════ AI ASSIST ══════════════════
+
+   One rule governs this entire section: the model never returns a price.
+   It returns menu item names, quantities, vendor names and prose. Every name
+   it sends back is checked against RATES before it is applied, and the
+   deterministic engine above does all the arithmetic. So the worst an AI
+   mistake can do is put the wrong dish on a quote. It can never put the
+   wrong rand on one, which is the failure that actually costs money.
+
+   The key lives in this browser's localStorage and nowhere else. It is not
+   in the page source and not in the repository.                            */
+
+var AI = {
+  ep: "https://openrouter.ai/api/v1/chat/completions",
+  key: "",
+  model: "anthropic/claude-sonnet-5.5",
+  brief: "",
+  busy: false
+};
+
+function aiLoad(){
+  try{
+    AI.key   = localStorage.getItem("aqd.orKey")   || "";
+    AI.model = localStorage.getItem("aqd.orModel") || AI.model;
+  }catch(e){}
+  var k=$("orKey"), m=$("orModel");
+  if(k) k.value = AI.key;
+  if(m) m.value = AI.model;
+  aiPaint();
+}
+function aiPaint(){
+  var d=$("aiDot"); if(d) d.className = "aidot" + (AI.key ? " on" : "");
+}
+function openAi(){ aiLoad(); $("aisheet").classList.add("open"); }
+function closeAi(){ $("aisheet").classList.remove("open"); }
+
+function aiSaveKey(){
+  AI.key   = val("orKey").trim();
+  AI.model = val("orModel").trim() || "anthropic/claude-sonnet-5.5";
+  try{
+    localStorage.setItem("aqd.orKey", AI.key);
+    localStorage.setItem("aqd.orModel", AI.model);
+    $("aiTestOut").textContent = AI.key ? "Saved in this browser." : "Key cleared.";
+  }catch(e){
+    $("aiTestOut").textContent = "Held for this session only; this browser is blocking storage.";
+  }
+  aiPaint();
+}
+function aiForget(){
+  AI.key=""; $("orKey").value="";
+  try{ localStorage.removeItem("aqd.orKey"); }catch(e){}
+  $("aiTestOut").textContent = "Key removed from this browser.";
+  aiPaint();
+}
+function aiTest(){
+  $("aiTestOut").textContent = "Testing...";
+  aiJSON("Reply with JSON only.", 'Return exactly {"ok":true}.')
+    .then(function(){ $("aiTestOut").textContent = "Connected. " + AI.model + " answered."; })
+    .catch(function(e){ $("aiTestOut").textContent = "Failed: " + e.message; });
+}
+
+/* ───────── the call ───────── */
+function aiJSON(system, user){
+  if(!AI.key) return Promise.reject(new Error("no key yet, open AI in the top bar and paste one in"));
+  return fetch(AI.ep, {
+    method:"POST",
+    headers:{
+      "Authorization":"Bearer "+AI.key,
+      "Content-Type":"application/json",
+      "X-Title":"Acreage Quote Desk"
+    },
+    body: JSON.stringify({
+      model: AI.model,
+      temperature: 0.1,
+      max_tokens: 2000,
+      response_format: {type:"json_object"},
+      messages:[{role:"system",content:system},{role:"user",content:user}]
+    })
+  }).then(function(r){
+    return r.json().catch(function(){ throw new Error("OpenRouter returned "+r.status); })
+      .then(function(j){
+        if(!r.ok || (j && j.error)){
+          throw new Error((j && j.error && j.error.message) || ("OpenRouter returned "+r.status));
+        }
+        var t = j.choices && j.choices[0] && j.choices[0].message && j.choices[0].message.content;
+        if(!t) throw new Error("the model returned nothing");
+        return parseLoose(t);
+      });
+  });
+}
+
+/* models sometimes wrap JSON in prose or a fence, so take the outermost object */
+function parseLoose(t){
+  t = String(t).replace(/```(?:json)?/gi,"").trim();
+  var a=t.indexOf("{"), b=t.lastIndexOf("}");
+  if(a<0||b<a) throw new Error("could not read the answer as JSON");
+  return JSON.parse(t.slice(a,b+1));
+}
+
+/* ───────── the only things the model may choose from ───────── */
+function menuCatalogue(){
+  var out=[];
+  RATES.cats.forEach(function(c){
+    RATES.menu[c.k].forEach(function(it){
+      out.push({
+        cat: c.k,
+        name: it.n,
+        unit: c.serves===10 ? "one platter serves 10 guests"
+            : c.serves===1  ? "one portion per guest"
+            : (it.cup ? "per cup" : "charged per guest"),
+        price_zar: it.p,
+        min_pax: it.min || 0,
+        what: it.d || ""
+      });
+    });
+  });
+  return out;
+}
+function eventTypes(){
+  var t=$("aType"), out=[];
+  if(t) for(var i=0;i<t.options.length;i++) out.push(t.options[i].textContent);
+  return out;
+}
+
+function aiBusy(on, ids){
+  AI.busy = on;
+  ids.forEach(function(id){ var e=$(id); if(e) e.classList.toggle("aibusy", on); });
+}
+function aiSay(box, html){ var e=$(box); e.hidden=false; e.innerHTML=html; }
+function aiErr(box, e){ aiSay(box, '<h4>AI</h4><p class="err">'+esc(e.message||String(e))+'</p>'); }
+function noKey(box){
+  aiSay(box,'<h4>AI</h4><p class="err">No OpenRouter key yet. Open AI in the top bar and paste one in.</p>');
+}
+
+/* ═══════ 1. read the enquiry ═══════ */
+function aiRead(mode){
+  var acr = mode==="acreage";
+  var box = acr ? "aiOutAcr" : "aiOutGp";
+  var txt = val(acr ? "aPaste" : "gPaste").trim();
+  if(!txt){ aiSay(box,'<h4>AI</h4><p>Paste the enquiry first.</p>'); return; }
+  if(!AI.key){
+    if(acr){
+      readPaste();
+      aiSay(box,'<h4>Read without AI</h4><p>No OpenRouter key yet, so that used the plain reader, '
+        + 'which only finds a number, a date and a phone number. Add a key under AI in the top bar '
+        + 'and it will read the whole enquiry.</p>');
+    } else noKey(box);
+    return;
+  }
+  aiSay(box,'<h4>AI</h4><p>Reading the enquiry...</p>');
+  aiBusy(true,[box]);
+
+  var sys = "You read event catering enquiries for a South African business and return JSON only. "
+    + "Never invent a detail that is not in the message. Any field you cannot find, return null. "
+    + "Dates are written day first in South Africa and the current year is " + (new Date().getFullYear())
+    + "; return every date as YYYY-MM-DD. Guest counts are integers.";
+
+  var user = acr
+    ? 'Read this enquiry for The Acreage, a restaurant and event venue in Randjesfontein, Midrand.\n\n'
+      + 'Return JSON: {"name":string|null,"contact":string|null,"eventType":one of '
+      + JSON.stringify(eventTypes()) + '|null,"date":"YYYY-MM-DD"|null,"guests":int|null,'
+      + '"space":one of ' + JSON.stringify(RATES.spaces.map(function(s){return s.n;})) + '|null,'
+      + '"brief":"one or two sentences in plain English on what they actually asked for",'
+      + '"asks":["anything specific they requested: dietary needs, a budget, a time, a theme"],'
+      + '"questions":["what is missing that you would have to ask them"]}\n\n'
+      + 'Choose a space only if the message names one, or the guest count clearly rules out the others.'
+      + '\n\nENQUIRY:\n' + txt
+    : 'Read this enquiry for Good & Proper Food Trucks, who run multi vendor catering at large events.\n\n'
+      + 'Return JSON: {"client":string|null,"contact":string|null,"venue":string|null,'
+      + '"date":"YYYY-MM-DD"|null,"window":"for example 10:00 to 18:00"|null,"pax":int|null,'
+      + '"structure":{"popcorn":int,"bite":int,"main":int,"dessert":int,"cold":int,"alc":int,"bars":int,"coffee":int,"band":int},'
+      + '"brief":"one or two sentences on what they asked for","asks":[string],"questions":[string]}\n\n'
+      + 'structure is the quantity per guest of each service line, except coffee, which is a total '
+      + 'number of cups for the event, and bars, which is a flat per guest charge and is always 1. '
+      + 'Where the message does not state a structure use the house default: popcorn 1, bite 1, '
+      + 'main 2, dessert 1, cold 2, alc 3, bars 1, coffee 1000, band 2. Change only a number the '
+      + 'message actually justifies.\n\nENQUIRY:\n' + txt;
+
+  aiJSON(sys,user).then(function(d){
+    var miss=[];
+    function put(id,v){ if(v!==null&&v!==undefined&&v!==""){ var e=$(id); if(e) e.value=v; } }
+    if(acr){
+      put("aName",d.name); put("aContact",d.contact); put("aDate",d.date);
+      if(d.guests) put("aPax",d.guests);
+      if(d.eventType){
+        var t=$("aType");
+        if(t) for(var i=0;i<t.options.length;i++)
+          if(t.options[i].value===d.eventType||t.options[i].textContent===d.eventType) t.selectedIndex=i;
+      }
+      if(d.space){
+        var sp=$("aSpace");
+        for(var j=0;j<RATES.spaces.length;j++) if(RATES.spaces[j].n===d.space) sp.selectedIndex=j;
+      }
+      ["name","contact","date","guests"].forEach(function(k){ if(!d[k]) miss.push(k); });
+      render();
+    }else{
+      put("gName",d.client); put("gContact",d.contact); put("gDate",d.date);
+      put("gWindow",d.window); if(d.venue) put("gVenue",d.venue);
+      if(d.pax) put("gPax",d.pax);
+      if(d.structure) Object.keys(d.structure).forEach(function(k){
+        if(S.gp.qty.hasOwnProperty(k) && typeof d.structure[k]==="number")
+          S.gp.qty[k]=Math.max(0,Math.round(d.structure[k]));
+      });
+      ["client","contact","date","pax"].forEach(function(k){ if(!d[k]) miss.push(k); });
+      if(typeof onPax==="function") onPax(); else render();
+    }
+    AI.brief = d.brief || "";
+
+    var h = '<h4>What it read</h4><p>'+esc(d.brief||"-")+'</p>';
+    if(d.asks && d.asks.length)
+      h += '<h4>They asked for</h4><ul>'+d.asks.map(function(a){return '<li>'+esc(a)+'</li>';}).join("")+'</ul>';
+    if(miss.length)
+      h += '<p class="warnline">Not in the message, so still blank: '+esc(miss.join(", "))+'.</p>';
+    if(d.questions && d.questions.length)
+      h += '<h4>Worth asking them</h4><ul>'+d.questions.map(function(q){return '<li>'+esc(q)+'</li>';}).join("")+'</ul>';
+    aiSay(box,h);
+  }).catch(function(e){ aiErr(box,e); }).then(function(){ aiBusy(false,[box]); });
+}
+
+/* ═══════ 2. suggest what goes on the quote ═══════ */
+function aiSuggest(mode){
+  var acr = mode==="acreage";
+  var box = acr ? "aiOutAcr" : "aiOutGp";
+  if(!AI.key){ noKey(box); return; }
+  var brief = (AI.brief||"") + " " + val(acr?"aPaste":"gPaste");
+  if(!brief.trim()){ aiSay(box,'<h4>AI</h4><p>Paste the enquiry first, or press Read the enquiry.</p>'); return; }
+  aiSay(box,'<h4>AI</h4><p>Working out what to put on it...</p>');
+  aiBusy(true,[box]);
+
+  if(acr){
+    var pax = Math.max(1,num("aPax"));
+    var sys = "You build catering quotes for The Acreage from their real menu and return JSON only. "
+      + "You may ONLY choose items from the catalogue given to you, by their exact name. You never "
+      + "state a price or a total: the system prices whatever you choose.";
+    var user = 'Guests: ' + pax + '. Event type: ' + (val("aType")||"not stated") + '.\n'
+      + 'What the client asked for:\n' + brief.slice(0,2500) + '\n\n'
+      + 'MENU, the only things you may choose:\n' + JSON.stringify(menuCatalogue()) + '\n\n'
+      + 'BAR lines, quantity is per guest: ' + JSON.stringify(RATES.bar.map(function(b){return {key:b.k,name:b.n};})) + '\n\n'
+      + 'Return JSON: {"items":[{"cat":category key,"name":exact catalogue name,"qty":integer}],'
+      + '"bar":{"cold":int,"alc":int,"coffee":int,"setup":int},'
+      + '"why":"two or three sentences for the person sending the quote, explaining the choice",'
+      + '"questions":["anything you assumed that they should confirm"]}\n\n'
+      + 'Quantities: a platter serves 10, so a platter line for ' + pax + ' guests is '
+      + Math.ceil(pax/10) + '. A per portion item everybody gets is ' + pax + '. An item charged '
+      + 'per guest, which is the braais and the spit, is 1. Respect every min_pax. Quote what they '
+      + 'asked for and do not pad it.';
+
+    aiJSON(sys,user).then(function(d){
+      var ok=0, bad=[];
+      S.acr.items={}; S.acr.bar={cold:0,alc:0,coffee:0,setup:0};
+      (d.items||[]).forEach(function(it){
+        var cat = RATES.cats.filter(function(c){return c.k===it.cat;})[0];
+        if(!cat){ bad.push(String(it.name)+" (unknown section)"); return; }
+        var m = RATES.menu[cat.k].filter(function(x){return x.n===it.name;})[0];
+        if(!m){ bad.push(String(it.name)); return; }
+        var q = Math.max(0, Math.round(it.qty||0));
+        if(q){ S.acr.items[cat.k+"|"+m.n] = q; ok++; }
+      });
+      if(d.bar) ["cold","alc","coffee","setup"].forEach(function(k){
+        if(typeof d.bar[k]==="number") S.acr.bar[k]=Math.max(0,Math.round(d.bar[k]));
+      });
+      render();
+      var c = calcAcr();
+      var h = '<h4>It put '+ok+' line'+(ok===1?"":"s")+' on the quote</h4>'
+            + '<p>'+esc(d.why||"")+'</p>'
+            + '<p><b>'+money(c.total)+'</b> as it stands'+(c.hireSet?"":", before venue hire")
+            + '. The engine priced that, not the model. Read every line before it goes out.</p>';
+      if(bad.length)
+        h += '<p class="warnline">Dropped, because they are not on the real menu: '+esc(bad.join(", "))+'.</p>';
+      if(d.questions && d.questions.length)
+        h += '<h4>Confirm with them</h4><ul>'+d.questions.map(function(q){return '<li>'+esc(q)+'</li>';}).join("")+'</ul>';
+      aiSay(box,h);
+    }).catch(function(e){ aiErr(box,e); }).then(function(){ aiBusy(false,[box]); });
+
+  } else {
+    var gpax = Math.max(1,num("gPax"));
+    var need = {};
+    RATES.gpLines.forEach(function(l){
+      if(l.cups||l.flatPerHead) return;
+      var q=S.gp.qty[l.k];
+      if(q) need[l.k] = {line:l.n, total_pax_to_cover: gpax*q};
+    });
+    var sysG = "You allocate food and drink vendors across a large event for Good & Proper Food "
+      + "Trucks and return JSON only. You may ONLY use vendors from the roster given to you, by "
+      + "their exact name, and only on the service line the roster gives them. You never state a price.";
+    var userG = 'Event: ' + gpax + ' PAX at ' + (val("gVenue")||"The Acreage") + '.\n'
+      + 'Brief:\n' + brief.slice(0,2000) + '\n\n'
+      + 'ROSTER:\n' + JSON.stringify(RATES.vendors.map(function(v){return {name:v.n,line:v.s,serves:v.d};})) + '\n\n'
+      + 'Each service line must be covered EXACTLY, no more and no less:\n' + JSON.stringify(need) + '\n\n'
+      + 'Return JSON: {"alloc":[{"vendor":exact roster name,"line":service line key,"pax":int}],'
+      + '"why":"two or three sentences on the spread you chose","questions":[string]}\n\n'
+      + 'Spread every line across several vendors so no single truck carries an impossible queue. '
+      + 'Roughly 400 to 800 PAX per vendor on a main is sensible. For each line, the PAX you hand '
+      + 'out must sum to exactly the number above.';
+
+    aiJSON(sysG,userG).then(function(d){
+      var ok=0, bad=[];
+      S.gp.vendors=[];
+      (d.alloc||[]).forEach(function(a){
+        var v = RATES.vendors.filter(function(x){return x.n===a.vendor;})[0];
+        if(!v){ bad.push(String(a.vendor)); return; }
+        var line = RATES.gpLines.filter(function(l){return l.k===a.line;})[0];
+        if(!line){ bad.push(String(a.vendor)+" (unknown line)"); return; }
+        var p = Math.max(0,Math.round(a.pax||0));
+        if(p){ S.gp.vendors.push({n:v.n, s:a.line, d:v.d, pax:p}); ok++; }
+      });
+      render();
+      var bal = vendorBalance(), off = bal.filter(function(r){ return r.any && !r.ok; });
+      var h = '<h4>It allocated '+ok+' vendor booking'+(ok===1?"":"s")+'</h4><p>'+esc(d.why||"")+'</p>';
+      if(off.length)
+        h += '<p class="warnline">It did not balance these, so the proposal will not pass validation '
+           + 'until you fix them: '
+           + esc(off.map(function(r){return r.n+" is "+r.got+" against "+r.need;}).join("; ")) + '.</p>';
+      else
+        h += '<p>Every allocated line reconciles against the structure.</p>';
+      if(bad.length) h += '<p class="warnline">Dropped, not on the roster: '+esc(bad.join(", "))+'.</p>';
+      if(d.questions && d.questions.length)
+        h += '<h4>Confirm</h4><ul>'+d.questions.map(function(q){return '<li>'+esc(q)+'</li>';}).join("")+'</ul>';
+      aiSay(box,h);
+    }).catch(function(e){ aiErr(box,e); }).then(function(){ aiBusy(false,[box]); });
+  }
+}
+
+/* ═══════ 3. draft the reply ═══════ */
+function aiDraft(mode){
+  var acr = mode==="acreage";
+  var box = acr ? "aiOutAcr" : "aiOutGp";
+  if(!AI.key){ noKey(box); return; }
+  var c = acr ? calcAcr() : calcGp();
+  if(!c.total){ aiSay(box,'<h4>AI</h4><p>Build the quote first, there is nothing to write about yet.</p>'); return; }
+  aiSay(box,'<h4>AI</h4><p>Writing it...</p>');
+  aiBusy(true,[box]);
+
+  var who = acr ? "The Acreage, a restaurant and event venue in Randjesfontein, Midrand"
+                : "Good & Proper Food Trucks, multi vendor event catering";
+  var lines = acr ? c.lines.map(function(l){ return l.l; })
+                  : c.lines.map(function(l){ return l.n; });
+  var sys = "You write short, warm, professional replies for " + who + ", to a client who asked for "
+    + "a quote. South African English. No em dashes anywhere. No exclamation marks. Invent nothing "
+    + "that is not in the brief. State no price other than the total you are given. Return JSON only.";
+  var user = 'Client: ' + (val(acr?"aName":"gName")||"the client") + '.\n'
+    + 'Their enquiry: ' + String(AI.brief || val(acr?"aPaste":"gPaste") || "not recorded").slice(0,1200) + '\n'
+    + 'Guests: ' + c.pax + '. Date: ' + (val(acr?"aDate":"gDate")||"not set") + '.\n'
+    + 'On the quote: ' + lines.join("; ") + '\n'
+    + 'The total to give them: ' + money(c.total)
+    + (acr ? (c.hireSet ? "" : ", which excludes venue hire, still to be confirmed") : ", excluding VAT") + '\n\n'
+    + 'Return JSON: {"whatsapp":"a short WhatsApp reply, four or five lines, no greeting block",'
+    + '"subject":"an email subject line",'
+    + '"email":"a short email: greeting, three short paragraphs, signed off as the events team"}';
+
+  aiJSON(sys,user).then(function(d){
+    aiSay(box,
+      '<h4>WhatsApp</h4><div class="draft" id="dWa">'+esc(d.whatsapp||"")+'</div>'
+    + '<button class="btn o sm" onclick="aiCopy(&quot;dWa&quot;,this)">Copy</button>'
+    + '<h4 style="margin-top:14px">Email</h4>'
+    + '<div class="draft" id="dEm"><b>'+esc(d.subject||"")+'</b>\n\n'+esc(d.email||"")+'</div>'
+    + '<button class="btn o sm" onclick="aiCopy(&quot;dEm&quot;,this)">Copy</button>'
+    + '<p class="warnline" style="margin-top:12px">Read it before it goes. Nothing here sends itself.</p>');
+  }).catch(function(e){ aiErr(box,e); }).then(function(){ aiBusy(false,[box]); });
+}
+
+function aiCopy(id,btn){
+  var t = $(id).innerText;
+  var done = function(){
+    var o=btn.textContent; btn.textContent="Copied";
+    setTimeout(function(){ btn.textContent=o; },1400);
+  };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(t).then(done, function(){});
+  } else {
+    var ta=document.createElement("textarea");
+    ta.value=t; document.body.appendChild(ta); ta.select();
+    try{ document.execCommand("copy"); done(); }catch(e){}
+    document.body.removeChild(ta);
+  }
+}
+
 /* ══════════════════ BOOT ══════════════════ */
 (function(){
   try{ var s=JSON.parse(localStorage.getItem("acreageSeq")||"null"); if(s) S.seq=s; }catch(e){}
   setMode("acreage");
+  aiLoad();
 })();
 </script>
 </body>
