@@ -1437,6 +1437,14 @@ function aiTest(){
 }
 
 /* ───────── the call ───────── */
+
+/* appended to every system prompt. The parse failure seen in testing was the model
+   quoting the client back inside a sentence, which ends the JSON string early. */
+var JSON_RULE = "Output one JSON object and nothing else: no prose before or after, no "
+  + "markdown fence, no comments, no trailing commas. Inside a string value never use a "
+  + "double quote character; if you need to quote the client, use single quotes. Keep every "
+  + "string on one line.";
+
 function aiJSON(system, user){
   if(!AI.key) return Promise.reject(new Error("no key yet, open AI in the top bar and paste one in"));
   return fetch(AI.ep, {
@@ -1449,9 +1457,12 @@ function aiJSON(system, user){
     body: JSON.stringify({
       model: AI.model,
       temperature: 0.1,
-      max_tokens: 2000,
+      max_tokens: 3000,
       response_format: {type:"json_object"},
-      messages:[{role:"system",content:system},{role:"user",content:user}]
+      messages:[
+        {role:"system",content: system + " " + JSON_RULE},
+        {role:"user",content: user}
+      ]
     })
   }).then(function(r){
     return r.json().catch(function(){ throw new Error("OpenRouter returned "+r.status); })
@@ -1466,12 +1477,65 @@ function aiJSON(system, user){
   });
 }
 
-/* models sometimes wrap JSON in prose or a fence, so take the outermost object */
+/* models sometimes wrap JSON in prose or a fence, so take the outermost object.
+   they also quote the client back inside a sentence, which breaks the string and
+   is worth repairing rather than showing the person an error. Three attempts:
+   as sent, tidied, then with stray quotes escaped. */
 function parseLoose(t){
-  t = String(t).replace(/```(?:json)?/gi,"").trim();
-  var a=t.indexOf("{"), b=t.lastIndexOf("}");
-  if(a<0||b<a) throw new Error("could not read the answer as JSON");
-  return JSON.parse(t.slice(a,b+1));
+  var raw = String(t);
+  var s = raw.replace(/```(?:json)?/gi,"").trim();
+  var a = s.indexOf("{"), b = s.lastIndexOf("}");
+  if(a<0||b<a) throw aiRaw(new Error("the model did not return JSON at all"), raw);
+  s = s.slice(a,b+1);
+
+  var tidy = jsonTidy(s);
+  var tries = [s, tidy, jsonEscapeStrayQuotes(tidy)];
+  var last = null;
+  for(var i=0;i<tries.length;i++){
+    try{ return JSON.parse(tries[i]); }
+    catch(e){ last = e; }
+  }
+  throw aiRaw(new Error("the model's JSON would not parse, even after repair: "
+    + (last && last.message ? last.message : "unknown")), raw);
+}
+
+/* carry the raw reply on the error so the screen can show what actually came back */
+function aiRaw(err, raw){ try{ err.raw = raw; }catch(e){} return err; }
+
+/* smart quotes, line comments, trailing commas: all things models emit and JSON forbids */
+function jsonTidy(s){
+  return s
+    .replace(/[“”]/g, '"')
+    .replace(/[‘’]/g, "'")
+    .replace(/^\s*\/\/.*$/gm, "")
+    .replace(/,\s*([}\]])/g, "$1");
+}
+
+/* escape any double quote sitting inside a string value. A real closing quote is
+   followed, after whitespace, by : , } ] or the end. Anything else is the model
+   quoting a phrase mid sentence, so it gets escaped instead of ending the string. */
+function jsonEscapeStrayQuotes(s){
+  var out = "", inStr = false, i, c, j, nxt;
+  for(i=0;i<s.length;i++){
+    c = s.charAt(i);
+    if(!inStr){
+      out += c;
+      if(c === '"') inStr = true;
+      continue;
+    }
+    if(c === "\\"){ out += c + s.charAt(i+1); i++; continue; }
+    if(c === "\n" || c === "\r"){ out += "\\n"; continue; }
+    if(c !== '"'){ out += c; continue; }
+    j = i + 1;
+    while(j < s.length && /\s/.test(s.charAt(j))) j++;
+    nxt = s.charAt(j);
+    if(j >= s.length || nxt === ":" || nxt === "," || nxt === "}" || nxt === "]"){
+      out += c; inStr = false;
+    } else {
+      out += '\\"';
+    }
+  }
+  return out;
 }
 
 /* ───────── the only things the model may choose from ───────── */
@@ -1504,7 +1568,17 @@ function aiBusy(on, ids){
   ids.forEach(function(id){ var e=$(id); if(e) e.classList.toggle("aibusy", on); });
 }
 function aiSay(box, html){ var e=$(box); e.hidden=false; e.innerHTML=html; }
-function aiErr(box, e){ aiSay(box, '<h4>AI</h4><p class="err">'+esc(e.message||String(e))+'</p>'); }
+function aiErr(box, e){
+  var h = '<h4>AI</h4><p class="err">'+esc(e.message||String(e))+'</p>';
+  if(e && e.raw){
+    h += '<details style="margin-top:8px"><summary style="cursor:pointer;font-size:12px">'
+      + 'What the model actually sent</summary>'
+      + '<pre style="white-space:pre-wrap;font-size:11px;max-height:220px;overflow:auto;'
+      + 'margin:6px 0 0;padding:8px;background:rgba(0,0,0,.05);border-radius:4px">'
+      + esc(String(e.raw).slice(0,4000)) + '</pre></details>';
+  }
+  aiSay(box, h);
+}
 function noKey(box){
   aiSay(box,'<h4>AI</h4><p class="err">No OpenRouter key yet. Open AI in the top bar and paste one in.</p>');
 }
