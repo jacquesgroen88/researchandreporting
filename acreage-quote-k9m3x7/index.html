@@ -1,0 +1,1247 @@
+<!doctype html>
+<html lang="en-ZA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Acreage Quote Desk</title>
+<style>
+:root{
+  --forest:#0B4337; --forest-deep:#063028; --night:#04211B;
+  --gold:#C3AD84; --gold-deep:#7E5F22; --gold-soft:#EFE6D4;
+  --paper:#FCFBF7; --card:#FFFFFF; --ink:#1C1B18; --soft:#44443E; --muted:#6B6759;
+  --line:#E2D9C6; --line-soft:#EFEAE0;
+  --ok:#2F6B4F; --ok-bg:#E8F2EC; --warn:#8A5A12; --warn-bg:#FBF1DE; --bad:#A03226; --bad-bg:#FBEBE8;
+  --gp:#1C1B18; --gp-accent:#C4551F;
+  --r:10px; --sp:16px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--paper); color:var(--ink);
+  font:15px/1.5 "Segoe UI",-apple-system,BlinkMacSystemFont,Roboto,Helvetica,Arial,sans-serif;
+  -webkit-text-size-adjust:100%;
+}
+h1,h2,h3,h4{margin:0;font-weight:600;letter-spacing:-.01em;text-wrap:balance}
+button,input,select,textarea{font:inherit;color:inherit}
+.num{font-variant-numeric:tabular-nums}
+
+/* ───────── shell ───────── */
+.topbar{
+  background:var(--forest); color:#fff; padding:10px 16px;
+  display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+  position:sticky; top:0; z-index:40; box-shadow:0 1px 0 rgba(0,0,0,.18);
+}
+.brandmark{display:flex;align-items:center;gap:10px;margin-right:auto}
+.brandmark .mono{
+  width:30px;height:30px;border:1.5px solid var(--gold);border-radius:4px;
+  display:grid;place-items:center;color:var(--gold);font-weight:700;font-size:14px;flex:none;
+}
+.brandmark b{font-size:15px;font-weight:600;letter-spacing:.01em}
+.brandmark span{display:block;font-size:11px;color:var(--gold);letter-spacing:.09em;text-transform:uppercase}
+.modes{display:flex;background:rgba(255,255,255,.10);border-radius:8px;padding:3px;gap:3px}
+.modes button{
+  background:none;border:0;color:rgba(255,255,255,.72);padding:7px 14px;border-radius:6px;
+  cursor:pointer;font-size:13.5px;font-weight:600;white-space:nowrap;
+}
+.modes button[aria-pressed="true"]{background:var(--gold);color:var(--forest-deep)}
+.topacts{display:flex;gap:8px}
+.tbtn{
+  background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.2);color:#fff;
+  padding:7px 12px;border-radius:7px;cursor:pointer;font-size:13px;
+}
+.tbtn:hover{background:rgba(255,255,255,.2)}
+
+.wrap{max-width:1320px;margin:0 auto;padding:18px 16px 80px}
+.cols{display:grid;grid-template-columns:minmax(0,1fr) 352px;gap:18px;align-items:start}
+@media(max-width:1000px){.cols{grid-template-columns:minmax(0,1fr)}}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);margin-bottom:14px}
+.card>h3{
+  padding:12px 16px;border-bottom:1px solid var(--line-soft);font-size:13px;
+  text-transform:uppercase;letter-spacing:.08em;color:var(--forest);
+  display:flex;align-items:center;gap:10px;
+}
+.card>h3 .tag{
+  margin-left:auto;font-size:10.5px;letter-spacing:.06em;background:var(--gold-soft);
+  color:var(--gold-deep);padding:3px 8px;border-radius:20px;text-transform:none;font-weight:600;
+}
+.pad{padding:16px}
+
+.grid{display:grid;gap:12px}
+.g2{grid-template-columns:1fr 1fr}
+.g3{grid-template-columns:1fr 1fr 1fr}
+.g4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:700px){.g2,.g3,.g4{grid-template-columns:1fr}}
+
+label.f{display:block}
+label.f>span{display:block;font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+input[type=text],input[type=date],input[type=number],select,textarea{
+  width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:7px;background:#fff;
+}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--gold);outline-offset:-1px;border-color:var(--gold)}
+textarea{resize:vertical;min-height:70px}
+.hint{font-size:12px;color:var(--muted);margin-top:6px}
+
+.btn{
+  background:var(--forest);color:#fff;border:0;padding:10px 16px;border-radius:8px;
+  cursor:pointer;font-weight:600;font-size:14px;
+}
+.btn:hover{background:var(--forest-deep)}
+.btn.g{background:var(--gold);color:var(--forest-deep)}
+.btn.o{background:#fff;color:var(--forest);border:1px solid var(--line)}
+.btn.o:hover{background:var(--paper)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.sm{padding:6px 11px;font-size:13px}
+
+/* ───────── package chips ───────── */
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{
+  background:#fff;border:1px solid var(--line);border-radius:20px;padding:7px 14px;
+  cursor:pointer;font-size:13px;color:var(--forest);font-weight:500;
+}
+.chip:hover{border-color:var(--gold);background:var(--gold-soft)}
+
+/* ───────── menu picker ───────── */
+.cats{display:flex;gap:6px;flex-wrap:wrap;padding:12px 16px 0}
+.cats button{
+  background:none;border:1px solid var(--line);border-radius:7px;padding:6px 12px;
+  cursor:pointer;font-size:13px;color:var(--soft);
+}
+.cats button[aria-pressed="true"]{background:var(--forest);color:#fff;border-color:var(--forest)}
+.items{padding:12px 16px 16px;display:grid;gap:7px}
+.item{
+  display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center;
+  padding:9px 11px;border:1px solid var(--line-soft);border-radius:8px;
+}
+.item:hover{border-color:var(--line);background:var(--paper)}
+.item.on{border-color:var(--gold);background:var(--gold-soft)}
+.item .nm{min-width:0}
+.item .nm b{display:block;font-weight:600;font-size:14px}
+.item .nm small{display:block;color:var(--muted);font-size:12px;margin-top:2px}
+.item .pr{text-align:right;font-size:13.5px;white-space:nowrap}
+.item .pr small{display:block;color:var(--muted);font-size:11px}
+.fillbtn{background:none;border:0;padding:3px 0 0;margin:0;color:var(--gold-deep);
+  font-size:11.5px;text-decoration:underline;cursor:pointer;display:block}
+.fillbtn:hover{color:var(--forest)}
+.qty{display:flex;align-items:center;gap:0;border:1px solid var(--line);border-radius:7px;overflow:hidden;background:#fff}
+.qty button{width:30px;height:32px;border:0;background:#fff;cursor:pointer;color:var(--forest);font-size:16px;line-height:1}
+.qty button:hover{background:var(--gold-soft)}
+.qty input{width:46px;height:32px;border:0;border-left:1px solid var(--line);border-right:1px solid var(--line);text-align:center;padding:0;border-radius:0}
+
+/* ───────── summary ───────── */
+.sticky{position:sticky;top:76px}
+.sum{background:var(--forest);color:#fff;border-radius:var(--r);overflow:hidden}
+.sum h3{padding:13px 16px;font-size:12px;text-transform:uppercase;letter-spacing:.09em;color:var(--gold);border-bottom:1px solid rgba(255,255,255,.12)}
+.sumbody{padding:6px 16px 14px}
+.sline{display:flex;justify-content:space-between;gap:12px;padding:7px 0;font-size:14px;border-bottom:1px solid rgba(255,255,255,.08)}
+.sline:last-child{border:0}
+.sline .l{color:rgba(255,255,255,.80);min-width:0}
+.sline .l small{display:block;color:rgba(255,255,255,.5);font-size:11.5px}
+.sline .v{white-space:nowrap}
+.sline.tbc .v{color:var(--gold);font-size:12.5px;font-style:italic}
+.stotal{
+  display:flex;justify-content:space-between;align-items:baseline;gap:12px;
+  padding:14px 16px;background:var(--night);
+}
+.stotal .l{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--gold)}
+.stotal .v{font-size:25px;font-weight:600}
+.perhead{padding:9px 16px;background:rgba(0,0,0,.18);display:flex;justify-content:space-between;font-size:13px;color:rgba(255,255,255,.85)}
+.sumacts{padding:14px 16px;display:grid;gap:8px;background:var(--night)}
+
+/* ───────── validation ───────── */
+.vpanel{border:1px solid var(--line);border-radius:var(--r);background:#fff;margin-bottom:14px;overflow:hidden}
+.vhead{padding:11px 16px;font-size:12.5px;font-weight:600;display:flex;align-items:center;gap:9px}
+.vhead.pass{background:var(--ok-bg);color:var(--ok)}
+.vhead.fail{background:var(--bad-bg);color:var(--bad)}
+.vlist{list-style:none;margin:0;padding:0}
+.vlist li{padding:9px 16px;border-top:1px solid var(--line-soft);font-size:13px;display:flex;gap:9px;align-items:flex-start}
+.vlist li .ic{flex:none;width:16px;text-align:center;font-weight:700}
+.vlist li.e .ic{color:var(--bad)} .vlist li.w .ic{color:var(--warn)} .vlist li.o .ic{color:var(--ok)}
+.vlist li.w{background:var(--warn-bg)}
+
+.note{
+  background:var(--warn-bg);border:1px solid #E9D9B6;border-left:3px solid var(--warn);
+  border-radius:7px;padding:11px 13px;font-size:13px;color:#6B4407;margin-top:12px;
+}
+.note b{color:var(--warn)}
+
+/* ───────── tables ───────── */
+.tscroll{overflow-x:auto}
+table.t{width:100%;border-collapse:collapse;font-size:13.5px;min-width:560px}
+table.t th{
+  text-align:left;padding:9px 10px;background:var(--paper);border-bottom:1px solid var(--line);
+  font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;white-space:nowrap;
+}
+table.t td{padding:8px 10px;border-bottom:1px solid var(--line-soft);vertical-align:middle}
+table.t td.r,table.t th.r{text-align:right}
+table.t tr:last-child td{border-bottom:0}
+table.t input[type=number]{width:94px;padding:6px 8px;text-align:right}
+table.t input.ovr{border-color:var(--gold);background:#FFFBF2;font-weight:600}
+.ovrflag{font-size:10.5px;color:var(--gold-deep);display:block;margin-top:2px}
+.xbtn{background:none;border:0;cursor:pointer;color:var(--muted);font-size:17px;line-height:1;padding:2px 5px}
+.xbtn:hover{color:var(--bad)}
+
+.sub{font-size:12.5px;color:var(--muted)}
+.bal{font-weight:600}
+.bal.ok{color:var(--ok)} .bal.no{color:var(--bad)}
+
+/* ───────── quote list ───────── */
+.sheet{position:fixed;inset:0;background:rgba(4,33,27,.45);z-index:60;display:none;padding:28px 16px;overflow:auto}
+.sheet.open{display:block}
+.sheetin{background:#fff;max-width:760px;margin:0 auto;border-radius:12px;overflow:hidden}
+.sheetin>h3{padding:15px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;font-size:15px}
+.pill{font-size:11px;padding:3px 9px;border-radius:20px;background:var(--gold-soft);color:var(--gold-deep);font-weight:600}
+.pill.acr{background:#E6EEEA;color:var(--forest)}
+.pill.gp{background:#FBE9E0;color:var(--gp-accent)}
+
+/* ───────── printed quote ───────── */
+#doc{display:none}
+.docpage{
+  background:#fff;max-width:820px;margin:0 auto 24px;padding:46px 52px;
+  border:1px solid var(--line);color:#1C1B18;
+}
+.dochead{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;border-bottom:2px solid var(--forest);padding-bottom:18px;margin-bottom:22px}
+.dochead.gp{border-bottom-color:var(--gp-accent)}
+.dochead .co b{display:block;font-size:20px;letter-spacing:-.01em}
+.dochead .co span{display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-deep);margin-top:3px}
+.dochead .meta{text-align:right;font-size:12.5px;color:var(--soft);line-height:1.7}
+.dochead .meta b{color:var(--ink)}
+.docttl{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--forest);margin-bottom:14px;font-weight:600}
+.docttl.gp{color:var(--gp-accent)}
+.docgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px 28px;font-size:13.5px;margin-bottom:24px}
+.docgrid div{display:flex;gap:8px;border-bottom:1px solid var(--line-soft);padding-bottom:6px}
+.docgrid dt{color:var(--muted);min-width:96px}
+.docgrid dd{margin:0;font-weight:500}
+table.dt{width:100%;border-collapse:collapse;font-size:13.5px;margin-bottom:18px}
+table.dt th{text-align:left;padding:8px 9px;background:var(--forest);color:#fff;font-size:11px;letter-spacing:.07em;text-transform:uppercase;font-weight:600}
+table.dt.gp th{background:var(--gp)}
+table.dt td{padding:8px 9px;border-bottom:1px solid var(--line-soft)}
+table.dt td.r,table.dt th.r{text-align:right}
+table.dt tr.tot td{border-top:2px solid var(--forest);border-bottom:0;font-weight:700;font-size:15px;padding-top:11px}
+table.dt.gp tr.tot td{border-top-color:var(--gp)}
+.docnote{font-size:12px;color:var(--muted);border-left:2px solid var(--gold);padding-left:11px;margin:16px 0}
+.terms{font-size:11.5px;line-height:1.65;color:var(--soft);border-top:1px solid var(--line);padding-top:16px;margin-top:26px}
+.terms h4{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--forest);margin-bottom:8px}
+.terms.gp h4{color:var(--gp-accent)}
+.terms ul{margin:0 0 12px;padding-left:17px}
+.terms li{margin-bottom:4px}
+.docfoot{font-size:11px;color:var(--muted);text-align:center;border-top:1px solid var(--line);padding-top:12px;margin-top:20px;line-height:1.7}
+.docbar{position:sticky;top:0;background:var(--forest);padding:10px 16px;display:flex;gap:9px;justify-content:center;z-index:50;margin-bottom:24px}
+
+body.printing .app{display:none}
+body.printing #doc{display:block}
+
+@media print{
+  body{background:#fff}
+  .docbar,.topbar{display:none !important}
+  .docpage{border:0;margin:0;padding:0;max-width:none}
+  table.dt th{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+@media(max-width:640px){
+  .wrap{padding:14px 12px 70px}
+  .pad{padding:13px}
+  .docpage{padding:22px 18px}
+  .docgrid{grid-template-columns:1fr}
+  .item{grid-template-columns:1fr auto;grid-template-areas:"nm pr" "qty qty";gap:8px}
+  .item .nm{grid-area:nm}.item .pr{grid-area:pr}.item .qty{grid-area:qty;justify-self:start}
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+<header class="topbar">
+  <div class="brandmark">
+    <div class="mono">A</div>
+    <div><b>Quote Desk</b><span id="brandsub">The Acreage</span></div>
+  </div>
+  <div class="modes" role="group" aria-label="Business">
+    <button id="mAcr" aria-pressed="true" onclick="setMode('acreage')">The Acreage</button>
+    <button id="mGp" aria-pressed="false" onclick="setMode('gp')">Good &amp; Proper</button>
+  </div>
+  <div class="topacts">
+    <button class="tbtn" onclick="openList()">Saved quotes</button>
+    <button class="tbtn" onclick="newQuote()">New</button>
+  </div>
+</header>
+
+<div class="wrap">
+
+<!-- ══════════════════ ACREAGE ══════════════════ -->
+<div id="paneAcr">
+<div class="cols">
+<div>
+
+  <div class="card">
+    <h3>The enquiry <span class="tag" id="acrNo">ACR-0001</span></h3>
+    <div class="pad">
+      <label class="f" style="margin-bottom:12px">
+        <span>Paste the WhatsApp message (optional)</span>
+        <textarea id="aPaste" placeholder="Paste what the client sent and press Read it. Anything it cannot find, you type."></textarea>
+      </label>
+      <button class="btn o sm" onclick="readPaste()">Read it</button>
+      <span class="hint" id="pasteOut" style="margin-left:10px"></span>
+
+      <div class="grid g2" style="margin-top:14px">
+        <label class="f"><span>Client name</span><input type="text" id="aName" oninput="render()"></label>
+        <label class="f"><span>Contact (phone or email)</span><input type="text" id="aContact" oninput="render()"></label>
+        <label class="f"><span>Event type</span>
+          <select id="aType" onchange="render()">
+            <option>Year end function</option><option>Corporate breakfast</option>
+            <option>Family day</option><option>Team building</option>
+            <option>Birthday</option><option>Kiddies party</option>
+            <option>Baby or bridal shower</option><option>Wedding reception</option>
+            <option>Other</option>
+          </select></label>
+        <label class="f"><span>Event date</span><input type="date" id="aDate" oninput="render()"></label>
+        <label class="f"><span>Guests</span><input type="number" id="aPax" min="1" value="50" oninput="render()"></label>
+        <label class="f"><span>Space</span><select id="aSpace" onchange="render()"></select></label>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Start from a package</h3>
+    <div class="pad"><div class="chips" id="pkgs"></div>
+      <p class="hint">Every package is built only from items on their real menus. Change anything after loading it.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Catering <span class="tag">10% service charge applies</span></h3>
+    <div class="cats" id="cats"></div>
+    <div class="items" id="items"></div>
+  </div>
+
+  <div class="card">
+    <h3>Event bar</h3>
+    <div class="pad">
+      <div class="tscroll"><table class="t" id="barTbl"><thead><tr>
+        <th>Line</th><th class="r">Rate</th><th class="r">Per guest</th><th class="r">Total</th>
+      </tr></thead><tbody></tbody></table></div>
+      <p class="hint">A cash bar is offered alongside at no cost to the client, and is printed on the quote.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Venue hire</h3>
+    <div class="pad">
+      <div class="grid g2">
+        <label class="f"><span>Hire fee for the selected space</span>
+          <input type="number" id="aHire" min="0" placeholder="Leave blank if not yet set" oninput="render()"></label>
+        <label class="f"><span>Extra setup or strike days</span>
+          <input type="number" id="aHireExtra" min="0" placeholder="0" oninput="render()"></label>
+      </div>
+      <div class="note" id="hireNote"><b>No rate card yet.</b> The only two figures on record are
+        R5 000 for a private evening and R80 000 for the whole estate at 2 200 guests, a 16x spread with
+        nothing in between. Until Jade sets the card, leave this blank and the quote prints the venue
+        line as "To be confirmed" rather than a number nobody agreed to.</div>
+    </div>
+  </div>
+
+</div>
+
+<div><div class="sticky">
+  <div class="vpanel" id="aVal"></div>
+  <div class="sum">
+    <h3>Quote total</h3>
+    <div class="sumbody" id="aLines"></div>
+    <div class="stotal"><span class="l">Total</span><span class="v num" id="aTotal">R0.00</span></div>
+    <div class="perhead"><span>Per guest</span><span class="num" id="aPer">R0.00</span></div>
+    <div class="sumacts">
+      <button class="btn g" onclick="showDoc()">Produce the quote</button>
+      <button class="btn o" onclick="saveQuote()">Save</button>
+    </div>
+  </div>
+</div></div>
+</div>
+</div>
+
+<!-- ══════════════════ GOOD & PROPER ══════════════════ -->
+<div id="paneGp" hidden>
+<div class="cols">
+<div>
+
+  <div class="card">
+    <h3>The event <span class="tag" id="gpNo">GP-0001</span></h3>
+    <div class="pad"><div class="grid g2">
+      <label class="f"><span>Client</span><input type="text" id="gName" oninput="render()"></label>
+      <label class="f"><span>Contact</span><input type="text" id="gContact" oninput="render()"></label>
+      <label class="f"><span>Venue</span><input type="text" id="gVenue" value="The Acreage, Randjesfontein" oninput="render()"></label>
+      <label class="f"><span>Event date</span><input type="date" id="gDate" oninput="render()"></label>
+      <label class="f"><span>Service window</span><input type="text" id="gWindow" value="10:00 to 18:00" oninput="render()"></label>
+      <label class="f"><span>PAX</span><input type="number" id="gPax" min="1" value="2200" oninput="onPax()"></label>
+    </div>
+    <div class="note" id="bandNote"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Menu structure and rates</h3>
+    <div class="pad">
+      <div class="tscroll"><table class="t" id="gpTbl"><thead><tr>
+        <th>Service</th><th class="r">Per person</th><th class="r">Rate</th><th class="r">Total ex VAT</th>
+      </tr></thead><tbody></tbody></table></div>
+      <p class="hint">Rates pre-fill from the band above. Edit any of them and the line is flagged as overridden.
+        Coffee is a cup count, not a per person quantity.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Venue hire</h3>
+    <div class="pad"><div class="grid g2">
+      <label class="f"><span>Acreage venue hire (ex VAT)</span>
+        <input type="number" id="gHire" min="0" value="80000" oninput="render()"></label>
+      <label class="f"><span>Show on the proposal</span>
+        <select id="gHireOn" onchange="render()"><option value="1">Yes</option><option value="0">No</option></select></label>
+    </div></div>
+  </div>
+
+  <div class="card">
+    <h3>Vendor allocation</h3>
+    <div class="pad">
+      <div class="grid g3" style="margin-bottom:12px">
+        <label class="f"><span>Vendor</span><select id="vPick"></select></label>
+        <label class="f"><span>Service line</span><select id="vLine"></select></label>
+        <label class="f"><span>PAX</span>
+          <div style="display:flex;gap:8px"><input type="number" id="vPax" min="1" value="200">
+          <button class="btn sm" onclick="addVendor()">Add</button></div></label>
+      </div>
+      <div class="tscroll"><table class="t" id="vTbl"><thead><tr>
+        <th>Vendor</th><th>Service</th><th>Menu</th><th class="r">PAX</th><th></th>
+      </tr></thead><tbody></tbody></table></div>
+      <div id="vBal" style="margin-top:12px"></div>
+    </div>
+  </div>
+
+</div>
+
+<div><div class="sticky">
+  <div class="vpanel" id="gVal"></div>
+  <div class="sum">
+    <h3>Proposal total</h3>
+    <div class="sumbody" id="gLines"></div>
+    <div class="stotal"><span class="l">Total ex VAT</span><span class="v num" id="gTotal">R0.00</span></div>
+    <div class="perhead"><span>Per head</span><span class="num" id="gPer">R0.00</span></div>
+    <div class="perhead"><span>VAT at 15%</span><span class="num" id="gVat">R0.00</span></div>
+    <div class="perhead" style="font-weight:600;color:#fff"><span>Total incl VAT</span><span class="num" id="gIncl">R0.00</span></div>
+    <div class="sumacts">
+      <button class="btn g" onclick="showDoc()">Produce the proposal</button>
+      <button class="btn o" onclick="saveQuote()">Save</button>
+    </div>
+  </div>
+</div></div>
+</div>
+</div>
+
+</div><!-- /wrap -->
+</div><!-- /app -->
+
+<!-- saved quotes -->
+<div class="sheet" id="sheet" onclick="if(event.target===this)closeList()">
+  <div class="sheetin">
+    <h3>Saved quotes <button class="btn o sm" style="margin-left:auto" onclick="closeList()">Close</button></h3>
+    <div class="tscroll"><table class="t" id="listTbl"><thead><tr>
+      <th>No.</th><th>Client</th><th>Date</th><th class="r">Total</th><th></th>
+    </tr></thead><tbody></tbody></table></div>
+  </div>
+</div>
+
+<!-- printed document -->
+<div id="doc">
+  <div class="docbar">
+    <button class="btn g" onclick="window.print()">Save as PDF or print</button>
+    <button class="btn o" onclick="hideDoc()">Back to the builder</button>
+  </div>
+  <div id="docbody"></div>
+</div>
+
+<script>
+"use strict";
+
+/* ══════════════════════════════════════════════════════════════════════
+   RATE ENGINE
+   Every figure below is lifted from the client's own documents:
+   the seven Acreage catering menus and Corporate Hire info sheet (2026),
+   and the three Good & Proper proposals (CAB Foods 250 pax, SSQ Design
+   1 000 pax, Absa 2 200 pax). Nothing here is invented. Where they have
+   no number on record the value is null and the tool asks.
+   ══════════════════════════════════════════════════════════════════════ */
+
+var RATES = {
+  serviceCharge: 0.10,   // stated on all seven catering menus
+  vat: 0.15,
+
+  spaces: [
+    {n:"Restaurant indoor",  cap:150,  note:"106 seated"},
+    {n:"Restaurant lawns",   cap:450,  note:"38 outdoor seats, 11 umbrellas, permanent 10x12 stretch tent"},
+    {n:"Lakeside lapa",      cap:40,   note:"22 seated, own bar"},
+    {n:"Lakeside lawns",     cap:1000, note:"Lapa and bar overlooking the water"},
+    {n:"Entrance lawns",     cap:500,  note:"Established trees, shaded"},
+    {n:"Top lawns",          cap:1000, note:"Extension space, not hired standalone"},
+    {n:"Whole estate",       cap:3000, note:"All spaces combined"}
+  ],
+
+  cats: [
+    {k:"platters", t:"Platters", serves:10},
+    {k:"snacks",   t:"Starters & snacks", serves:1},
+    {k:"mains",    t:"Mains", serves:1},
+    {k:"braai",    t:"Braai & spit", serves:0},   // 0 = per head
+    {k:"desserts", t:"Desserts", serves:1},
+    {k:"kiddies",  t:"Kiddies", serves:10}
+  ],
+
+  menu: {
+    platters:[
+      {n:"Fruit Platter", p:850, d:"Seasonal fruit skewers"},
+      {n:"Breakfast Pastry Platter", p:850, d:"Muffins, scones, doughnuts, croissants, danishes, butter & jam"},
+      {n:"Sandwiches Platter (Option 1)", p:850, d:"Cocktail rolls: chicken mayo, cold meats, cheese, grilled veg"},
+      {n:"Sandwiches Platter (Option 2)", p:850, d:"Open sandwiches on French baguette"},
+      {n:"Sandwiches Platter (Option 3)", p:850, d:"Cold meats, cheese & grilled veg between Italian bread"},
+      {n:"Savoury Pastry Platter", p:850, d:"Samoosas, spanakopita, tiropita, quiches, spring rolls, sausage rolls"},
+      {n:"Finger Bites Platter", p:850, d:"Meatballs, chicken kebabs, mini pizzas, kebabs, croquettes"},
+      {n:"Sweet Pastries Platter", p:850, d:"Petit fours, biscuits, nut slices, Florentines, brownies, jam tartlets"},
+      {n:"Prego Slider Platter", p:870, d:"Beef & chicken prego sliders"},
+      {n:"Burger Slider Platter", p:950, d:"Beef cheese burger & crumbed ranch chicken sliders"},
+      {n:"Meat Platter", p:1050, d:"Beef meatballs, beef & chicken kebabs, bacon-wrapped sausages, rotisserie chicken"}
+    ],
+    snacks:[
+      {n:"Panko crumbed onion rings", p:68, d:"With siracha mayo"},
+      {n:"Panko crumbed button mushrooms", p:68, d:"With ranch sauce"},
+      {n:"Crispy chicken winglets (6)", p:80, d:"Peri-peri or BBQ"},
+      {n:"Chicken livers", p:80, d:"Rich peri-peri sauce, toasted sourdough"},
+      {n:"Trio of jalapeno poppers", p:80, d:""},
+      {n:"Asian chicken strips (4)", p:80, d:"Sesame seeds, spring onion, coleslaw"},
+      {n:"Grilled halloumi fingers", p:80, d:"Sweet chilli sauce"},
+      {n:"Nachos", p:110, d:"Beef bolognese, melted cheese, jalapenos, salsa, guacamole"}
+    ],
+    mains:[
+      {n:"Chicken prego roll", p:110, d:"Portuguese roll, balsamic onion, chips"},
+      {n:"Chicken burger", p:120, d:"Crumbed breast, rainbow slaw, ranch, chips"},
+      {n:"Chicken schnitzel", p:120, d:"Chips & salad, cheese or mushroom sauce"},
+      {n:"Chicken wings (5)", p:120, d:"BBQ or peri-peri, chips, coleslaw, ranch"},
+      {n:"Beef burger", p:135, d:"150g patty, brioche, mozzarella & cheddar, chips"},
+      {n:"Falafel burger", p:135, d:"Chickpea patty, hash brown, chips"},
+      {n:"Asian rainbow chicken salad", p:145, d:"Grilled strips, rainbow slaw, papaya, Asian dressing"},
+      {n:"Pork ribs 500g", p:165, d:"Smoky BBQ, coleslaw, chips, onion rings"},
+      {n:"Pork ribs 1kg", p:315, d:"Smoky BBQ, coleslaw, chips, onion rings"},
+      {n:"Greek salad or pan fried veg", p:45, d:"Add to any meal"}
+    ],
+    braai:[
+      {n:"Braai Option 2", p:280, min:20, d:"2 meats, 2 salads, garlic bread, flame grilled corn"},
+      {n:"Braai Option 1", p:330, min:20, d:"3 meats, 2 salads, garlic bread, flame grilled corn"},
+      {n:"Spit Braai", p:340, min:35, d:"A-grade whole lamb, roast chicken, baby potatoes, Greek salad, garlic loaves"},
+      {n:"Extra salad", p:40, min:0, d:"Added to a braai or spit"}
+    ],
+    desserts:[
+      {n:"Ice cream sandwich", p:35, d:""},
+      {n:"Ice cream sundae", p:55, d:""},
+      {n:"Chocolate brownie", p:65, d:"Served with berry coulis"},
+      {n:"Lemon meringue cup", p:75, cup:true, d:"One cup option per 10 guests or fewer"},
+      {n:"Chocolate mousse cup", p:75, cup:true, d:"One cup option per 10 guests or fewer"},
+      {n:"Peppermint crisp tart cup", p:75, cup:true, d:"One cup option per 10 guests or fewer"},
+      {n:"Baked cheesecake slice", p:75, cup:true, d:"One cup option per 10 guests or fewer"}
+    ],
+    kiddies:[
+      {n:"Hotdog Platter", p:600, d:"Chicken vienna or pork frankfurter hotdogs, chips"},
+      {n:"Burger Platter", p:700, d:"10 mini beef cheeseburgers, 10 mini crumbed chicken burgers"},
+      {n:"Chicken Strips Platter", p:700, d:"Panko crumbed strips, chips, dip"},
+      {n:"Mixed Platter 1", p:750, d:"Cocktail hotdogs, mini cheeseburgers, chicken strips, mini pizzas, chips"},
+      {n:"Mixed Platter 2", p:750, d:"Chicken nuggets, mini pizza, mini cheesegrillers, potato smileys"},
+      {n:"Mini Cupcakes Platter", p:850, d:"Variety of mini cupcakes"}
+    ]
+  },
+
+  // Event bar rates, from the Absa proposal of 17 Aug 2026
+  bar:[
+    {k:"cold",   n:"Cold drinks & water", p:25},
+    {k:"alc",    n:"Alcoholic drinks",    p:40, d:"Local bottled & draught beer, cider, coolers"},
+    {k:"coffee", n:"Artisan coffee",      p:40},
+    {k:"setup",  n:"Bar set up",          p:20, perGuest:true}
+  ],
+
+  // Packages assembled only from the real menu items above
+  packages:[
+    {n:"Spit braai",         cat:"braai",    items:[["Spit Braai",1]]},
+    {n:"Braai option 1",     cat:"braai",    items:[["Braai Option 1",1]]},
+    {n:"Braai option 2",     cat:"braai",    items:[["Braai Option 2",1]]},
+    {n:"Corporate breakfast",items:[["Breakfast Pastry Platter","pax10"],["Fruit Platter","pax10"]], bar:{coffee:1}},
+    {n:"Kiddies party",      items:[["Mixed Platter 1","pax10"],["Mini Cupcakes Platter","pax10"]]},
+    {n:"Bridal shower",      items:[["Sandwiches Platter (Option 2)","pax10"],["Sweet Pastries Platter","pax10"],["Fruit Platter","pax10"]]},
+    {n:"Year end function",  items:[["Braai Option 1",1],["Peppermint crisp tart cup",1]], bar:{cold:2,alc:3,setup:1}}
+  ],
+
+  /* Good & Proper. Rates observed across the three proposals:
+     CAB 250 pax, SSQ 1 000 pax, Absa 2 200 pax. Rates fall as volume rises
+     on every line. The under-500 and 500-1500 bands are interpolated where
+     a proposal did not carry that line, so Andrew sees them as defaults. */
+  gpLines:[
+    {k:"popcorn", n:"Popcorn",             qty:1, b:[25,25,20]},
+    {k:"bite",    n:"Light bite / snack",  qty:1, b:[80,75,50]},
+    {k:"main",    n:"Main",                qty:2, b:[180,175,165]},
+    {k:"dessert", n:"Dessert",             qty:1, b:[80,60,45]},
+    {k:"cold",    n:"Cold drinks / water", qty:2, b:[25,25,25]},
+    {k:"alc",     n:"Alcoholic drinks",    qty:3, b:[40,40,40]},
+    {k:"bars",    n:"Bar set ups",         qty:1, b:[20,20,20], flatPerHead:true},
+    {k:"coffee",  n:"Coffee",              qty:1000, b:[40,40,40], cups:true},
+    {k:"band",    n:"Wristbands",          qty:2, b:[20,20,15]}
+  ],
+  bands:[{t:"Under 500 PAX",i:0},{t:"500 to 1 500 PAX",i:1},{t:"Over 1 500 PAX",i:2}],
+
+  vendors:[
+    {n:"Joy Jukes", s:"popcorn", d:"Freshly popped popcorn with a selection of seasonings from multiple carnival carts"},
+    {n:"Purple Plate", s:"bite", d:"Chip n dip midi portions with a selection of sauces"},
+    {n:"Bootsbar", s:"bite", d:"Authentic Thai 5-piece platter: spring roll, prawn tempura, chicken satay, samosa, dumpling"},
+    {n:"Taylamade", s:"bite", d:"Original potato twisters with a selection of flavours"},
+    {n:"Amelia's Kitchen", s:"bite", d:"6-piece Indian platter: samoosas, chilli bites, spring rolls, sweet chilli sauce"},
+    {n:"The Wing Republic", s:"main", d:"Signature buffalo wings & chips, voted Best Wings in Jo'burg by 947FM in 2024"},
+    {n:"Seafood Guys", s:"main", d:"Traditional fish n chips: English style battered hake, twice cooked chips, tartare"},
+    {n:"Smoke Kings", s:"main", d:"Halaal certified smashed burgers, vegetarian option available"},
+    {n:"Meat My Kitchen", s:"main", d:"Gourmet beef cheeseburgers or chicken schnitzel burgers, boerewors rolls, chips"},
+    {n:"Engine 67", s:"main", d:"Gourmet beef cheeseburgers & chicken burgers with a side of chips"},
+    {n:"Firecraft", s:"main", d:"Wood fired artisan pizzas cooked to order, meat, chicken & vegetarian"},
+    {n:"El Hefe", s:"main", d:"Two hard shell tacos, grilled chicken or beef, guacamole, pico de gallo"},
+    {n:"Dumplings We Make", s:"main", d:"9-piece Chinese platter, dumplings & spring rolls, pork, beef, chicken, vegan"},
+    {n:"White Cocoa", s:"main", d:"Halaal certified Lebanese chicken boti or lamb kofta kebabs, garlic pitta & chips"},
+    {n:"Just Jo's", s:"main", d:"Goujon chicken with coleslaw and double fried hand cut chips"},
+    {n:"Griekse Boertjie", s:"main", d:"Real Greek shawarmas in pita with homemade tzatziki, chicken, pork belly or veg"},
+    {n:"Che", s:"main", d:"Authentic Argentinian beef sandwiches, chimichurri, mozzarella, wild rocket, fries"},
+    {n:"Wok 'n Grill", s:"main", d:"Halaal certified gourmet burgers, beef, chicken & veg options, with chips"},
+    {n:"High 5 Pizza", s:"main", d:"Artisan wood fired pizza, meat, chicken & vegetarian options"},
+    {n:"Hangry Chef", s:"main", d:"Gourmet burgers on a brioche bun with caramelised onions and a side of chips"},
+    {n:"Purple Plate (dessert)", s:"dessert", d:"Trays of mini doughnuts drizzled with chocolate & milky bar sauce"},
+    {n:"Ice Bombs", s:"dessert", d:"Handmade ice bombs, real fruit sorbet on a stick"},
+    {n:"Good & Proper", s:"dessert", d:"Handmade gourmet ice cream sundaes: choc nut, caramel cookies, Eaton mess"},
+    {n:"Sweet Scoops", s:"dessert", d:"Single scoop ice cream in a cone or cup with sauces & toppings"},
+    {n:"Everyday We Waffling", s:"dessert", d:"Belgian waffles with ice cream, sauces & toppings"},
+    {n:"The Pancake Pantry", s:"dessert", d:"Gourmet pancakes with a scoop of vanilla bean ice cream"},
+    {n:"The Acreage", s:"cold", d:"Popular cold drinks, still & sparkling water"},
+    {n:"The Acreage (bar)", s:"alc", d:"Local bottled & draught beers, ciders and coolers. Cash bar also available"},
+    {n:"The Acreage (coffee)", s:"coffee", d:"Selection of artisan coffees and other hot beverages"}
+  ]
+};
+
+var GP_MIN = 80;        // Good & Proper minimum, per the blueprint record
+var SPIT_SETUP_PAX = 100;
+
+/* ══════════════════ STATE ══════════════════ */
+var S = {
+  mode:"acreage",
+  acr:{ items:{}, bar:{cold:0,alc:0,coffee:0,setup:0} },
+  gp:{ qty:{}, rate:{}, ovr:{}, vendors:[] },
+  seq:{acr:1,gp:1}
+};
+RATES.gpLines.forEach(function(l){ S.gp.qty[l.k]=l.qty; });
+
+function money(n){
+  if(n===null||n===undefined||isNaN(n)) return "R0.00";
+  var neg=n<0; n=Math.abs(n);
+  var p=n.toFixed(2).split(".");
+  return (neg?"-R":"R")+p[0].replace(/\B(?=(\d{3})+(?!\d))/g," ")+"."+p[1];
+}
+function $(id){ return document.getElementById(id); }
+function val(id){ var e=$(id); return e?e.value:""; }
+function num(id){ var v=parseFloat(val(id)); return isNaN(v)?0:v; }
+function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g,function(c){
+  return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+function band(pax){ return pax<500?0:(pax<=1500?1:2); }
+
+/* ══════════════════ ACREAGE CALC ══════════════════ */
+function calcAcr(){
+  var pax = Math.max(1, num("aPax"));
+  var lines=[], catering=0;
+
+  RATES.cats.forEach(function(c){
+    RATES.menu[c.k].forEach(function(it){
+      var q = S.acr.items[c.k+"|"+it.n]||0;
+      if(!q) return;
+      var amt, label;
+      if(c.serves===0){                       // per head
+        amt = it.p*q*pax;
+        label = it.n+" x"+q+" per guest";
+      } else if(c.serves===10){               // platters
+        amt = it.p*q;
+        label = it.n+" x"+q+" (serves "+(q*10)+")";
+      } else {                                // per portion
+        amt = it.p*q;
+        label = it.n+" x"+q;
+      }
+      catering += amt;
+      lines.push({l:label, sub:money(it.p)+(c.serves===0?" per guest":c.serves===10?" per platter":" each"), v:amt});
+    });
+  });
+
+  var svc = catering*RATES.serviceCharge;
+
+  var bar=0;
+  RATES.bar.forEach(function(b){
+    var q=S.acr.bar[b.k]||0; if(!q) return;
+    var amt=b.p*q*pax;
+    bar+=amt;
+    lines.push({l:b.n+" x"+q+" per guest", sub:money(b.p)+" each", v:amt});
+  });
+
+  var hireSet = val("aHire")!=="";
+  var hire = hireSet ? num("aHire")*(1+Math.max(0,num("aHireExtra"))) : 0;
+
+  var total = catering+svc+bar+hire;
+  return {pax:pax, lines:lines, catering:catering, svc:svc, bar:bar,
+          hire:hire, hireSet:hireSet, total:total, per: total/pax};
+}
+
+function validAcr(c){
+  var out=[], pax=c.pax;
+  var sp = RATES.spaces[$("aSpace").selectedIndex]||RATES.spaces[0];
+
+  if(!val("aName").trim()) out.push({t:"e",m:"Client name is needed before this can be sent."});
+  if(!val("aDate")) out.push({t:"e",m:"Event date is needed."});
+  if(c.catering===0 && c.bar===0) out.push({t:"e",m:"Nothing has been added to the quote yet."});
+
+  if(pax>sp.cap) out.push({t:"e",m:pax+" guests is over the "+sp.cap+" capacity of the "+sp.n+"."});
+
+  RATES.menu.braai.forEach(function(it){
+    var q=S.acr.items["braai|"+it.n]||0;
+    if(q && it.min && pax<it.min)
+      out.push({t:"e",m:it.n+" has a "+it.min+" pax minimum and this quote is for "+pax+"."});
+  });
+  if((S.acr.items["braai|Spit Braai"]||0) && pax>SPIT_SETUP_PAX)
+    out.push({t:"w",m:"Above "+SPIT_SETUP_PAX+" guests the spit braai carries an additional setup charge. The amount is not on record, so confirm it with Jade and add it before sending."});
+
+  var cups=0;
+  RATES.menu.desserts.forEach(function(it){ if(it.cup && (S.acr.items["desserts|"+it.n]||0)) cups++; });
+  var allowed=Math.max(1,Math.ceil(pax/10));
+  if(cups>allowed) out.push({t:"e",m:"Cup desserts are one option per 10 guests or fewer. "+cups+" chosen, "+allowed+" allowed at "+pax+" guests."});
+
+  // Does each category actually cover the room? A single dessert portion on a
+  // 170 guest quote is the classic slip, and it leaves the table silently.
+  RATES.cats.forEach(function(cat){
+    if(cat.serves===0) return;
+    var portions=0;
+    RATES.menu[cat.k].forEach(function(it){
+      var q=S.acr.items[cat.k+"|"+it.n]||0;
+      if(q) portions += cat.serves===10 ? q*10 : q;
+    });
+    if(portions>0 && portions<pax)
+      out.push({t:"w",m:cat.t+" covers "+portions+" of "+pax+" guests. Use “Cover all” on the item if everybody should get one."});
+  });
+
+  if(pax<20) out.push({t:"w",m:"At "+pax+" guests this sits below the braai minimum. Policy is still undecided: surcharge, set a minimum spend, or decline. Accolades surcharges R3 000 and takes the booking."});
+  if(!c.hireSet) out.push({t:"w",m:"No venue hire fee set. The quote will print it as “To be confirmed” and say the total excludes it."});
+  if(!out.length) out.push({t:"o",m:"Everything checks out. Ready to send."});
+  return out;
+}
+
+/* ══════════════════ G&P CALC ══════════════════ */
+function calcGp(){
+  var pax=Math.max(1,num("gPax")), b=band(pax), lines=[], total=0;
+  RATES.gpLines.forEach(function(l){
+    var q = S.gp.qty[l.k]; if(q===undefined) q=l.qty;
+    var r = S.gp.ovr[l.k] ? S.gp.rate[l.k] : l.b[b];
+    S.gp.rate[l.k]=r;
+    if(!q||!r) return;
+    var units = l.cups ? q : (l.flatPerHead ? pax : pax*q);
+    var amt = units*r;
+    total+=amt;
+    lines.push({k:l.k, n:l.n+(l.cups?" ("+q+" cups)":(l.flatPerHead?"":(q>1?" (x"+q+" pp)":""))),
+                rate:r, qty:q, amt:amt, ovr:!!S.gp.ovr[l.k]});
+  });
+  var hire = $("gHireOn").value==="1" ? num("gHire") : 0;
+  if(hire){ lines.push({k:"hire", n:"Acreage venue hire", rate:null, amt:hire}); total+=hire; }
+  return {pax:pax, band:b, lines:lines, total:total, per:total/pax,
+          vat:total*RATES.vat, incl:total*(1+RATES.vat)};
+}
+
+function vendorBalance(){
+  var pax=Math.max(1,num("gPax")), rows=[];
+  RATES.gpLines.forEach(function(l){
+    if(l.cups||l.flatPerHead) return;
+    var q=S.gp.qty[l.k]; if(!q) return;
+    var need=pax*q;
+    var got=0;
+    S.gp.vendors.forEach(function(v){ if(v.s===l.k) got+=v.pax; });
+    rows.push({k:l.k,n:l.n,need:need,got:got,ok:got===need,any:got>0});
+  });
+  return rows;
+}
+
+function validGp(c){
+  var out=[], pax=c.pax;
+  if(!val("gName").trim()) out.push({t:"e",m:"Client name is needed."});
+  if(!val("gDate")) out.push({t:"e",m:"Event date is needed."});
+  if(pax<GP_MIN) out.push({t:"w",m:pax+" pax is below the "+GP_MIN+" pax minimum. Decide the policy before sending: surcharge, minimum spend, or decline."});
+  if(!c.total) out.push({t:"e",m:"No priced lines yet."});
+
+  c.lines.forEach(function(l){ if(l.k!=="hire" && l.rate===0)
+    out.push({t:"e",m:l.n+" has a quantity but no rate."}); });
+
+  var bal=vendorBalance(), unbal=bal.filter(function(r){ return r.any && !r.ok; });
+  var missing=bal.filter(function(r){ return !r.any; });
+  unbal.forEach(function(r){
+    out.push({t:"e",m:r.n+": vendor PAX comes to "+r.got+" but the structure needs "+r.need+". Out by "+Math.abs(r.need-r.got)+"."});
+  });
+  if(missing.length) out.push({t:"w",m:"No vendors allocated yet to: "+missing.map(function(r){return r.n;}).join(", ")+"."});
+
+  var ovr=Object.keys(S.gp.ovr).filter(function(k){return S.gp.ovr[k];});
+  if(ovr.length) out.push({t:"w",m:ovr.length+" rate"+(ovr.length>1?"s":"")+" overridden off the band default. Andrew should sign that off."});
+
+  if(!out.length) out.push({t:"o",m:"Everything reconciles. Ready to send."});
+  return out;
+}
+
+/* ══════════════════ RENDER ══════════════════ */
+var activeCat="braai";
+
+function render(){
+  if(S.mode==="acreage") renderAcr(); else renderGp();
+}
+
+function renderAcr(){
+  // space dropdown
+  var sp=$("aSpace");
+  if(!sp.options.length){
+    RATES.spaces.forEach(function(s){
+      var o=document.createElement("option");
+      o.textContent=s.n+" — up to "+s.cap+" pax";
+      sp.appendChild(o);
+    });
+    sp.selectedIndex=1;
+  }
+  // packages
+  if(!$("pkgs").children.length){
+    RATES.packages.forEach(function(p,i){
+      var b=document.createElement("button");
+      b.className="chip"; b.textContent=p.n;
+      b.onclick=function(){ loadPkg(i); };
+      $("pkgs").appendChild(b);
+    });
+  }
+  // categories
+  if(!$("cats").children.length){
+    RATES.cats.forEach(function(c){
+      var b=document.createElement("button");
+      b.textContent=c.t; b.setAttribute("aria-pressed", c.k===activeCat?"true":"false");
+      b.onclick=function(){ activeCat=c.k; renderAcr(); };
+      $("cats").appendChild(b);
+    });
+  } else {
+    Array.prototype.forEach.call($("cats").children,function(b,i){
+      b.setAttribute("aria-pressed", RATES.cats[i].k===activeCat?"true":"false"); });
+  }
+
+  // items
+  var cat=RATES.cats.filter(function(c){return c.k===activeCat;})[0];
+  var pax=Math.max(1,num("aPax"));
+  var h="";
+  RATES.menu[activeCat].forEach(function(it){
+    var key=activeCat+"|"+it.n, q=S.acr.items[key]||0;
+    var unit = cat.serves===0 ? money(it.p)+" <small>per guest</small>"
+             : cat.serves===10 ? money(it.p)+" <small>serves 10 · "+money(it.p/10)+" pp</small>"
+             : money(it.p)+" <small>each</small>";
+    // quick fill: set the quantity that covers every guest, so nobody sends
+    // a quote with one dessert on it for a hundred and seventy people
+    var need = cat.serves===10 ? Math.ceil(pax/10) : (cat.serves===1 ? pax : 0);
+    var fill = (need && q!==need)
+      ? '<button class="fillbtn" onclick="setQ(\''+esc(key)+'\','+need+')">Cover all '+pax+' guests ('+need+')</button>' : '';
+    h+='<div class="item'+(q?" on":"")+'">'
+      +  '<div class="nm"><b>'+esc(it.n)+(it.min?' <span class="sub">('+it.min+' pax min)</span>':'')+'</b>'
+      +    (it.d?'<small>'+esc(it.d)+'</small>':'')+fill+'</div>'
+      +  '<div class="pr num">'+unit+'</div>'
+      +  '<div class="qty"><button onclick="bump(\''+esc(key)+'\',-1)">−</button>'
+      +    '<input type="number" class="num" min="0" value="'+q+'" onchange="setQ(\''+esc(key)+'\',this.value)">'
+      +    '<button onclick="bump(\''+esc(key)+'\',1)">+</button></div>'
+      +'</div>';
+  });
+  if(cat.serves===10) h+='<p class="hint">Platters serve 10. At '+pax+' guests you need '+Math.ceil(pax/10)+' of a platter to cover everybody.</p>';
+  $("items").innerHTML=h;
+
+  // bar
+  var bt=$("barTbl").querySelector("tbody"), bh="";
+  RATES.bar.forEach(function(b){
+    var q=S.acr.bar[b.k]||0;
+    bh+='<tr><td><b>'+esc(b.n)+'</b>'+(b.d?'<div class="sub">'+esc(b.d)+'</div>':'')+'</td>'
+      + '<td class="r num">'+money(b.p)+'</td>'
+      + '<td class="r"><input type="number" class="num" min="0" value="'+q+'" onchange="setBar(\''+b.k+'\',this.value)"></td>'
+      + '<td class="r num">'+money(b.p*q*Math.max(1,num("aPax")))+'</td></tr>';
+  });
+  bt.innerHTML=bh;
+
+  // totals
+  var c=calcAcr();
+  var sl="";
+  c.lines.forEach(function(l){
+    sl+='<div class="sline"><span class="l">'+esc(l.l)+'<small>'+esc(l.sub||"")+'</small></span><span class="v num">'+money(l.v)+'</span></div>';
+  });
+  if(c.svc) sl+='<div class="sline"><span class="l">Service charge<small>10% on catering</small></span><span class="v num">'+money(c.svc)+'</span></div>';
+  if(c.hireSet) sl+='<div class="sline"><span class="l">Venue hire</span><span class="v num">'+money(c.hire)+'</span></div>';
+  else sl+='<div class="sline tbc"><span class="l">Venue hire</span><span class="v">To be confirmed</span></div>';
+  if(!sl) sl='<div class="sline"><span class="l">Nothing added yet</span><span class="v">—</span></div>';
+  $("aLines").innerHTML=sl;
+  $("aTotal").textContent=money(c.total);
+  $("aPer").textContent=money(c.per);
+  paintVal("aVal", validAcr(c));
+  $("acrNo").textContent=quoteNo();
+}
+
+function renderGp(){
+  // vendor pickers
+  if(!$("vPick").options.length){
+    RATES.vendors.forEach(function(v,i){
+      var o=document.createElement("option"); o.value=i; o.textContent=v.n; $("vPick").appendChild(o);
+    });
+    RATES.gpLines.forEach(function(l){
+      if(l.cups||l.flatPerHead) return;
+      var o=document.createElement("option"); o.value=l.k; o.textContent=l.n; $("vLine").appendChild(o);
+    });
+    $("vPick").onchange=function(){
+      var v=RATES.vendors[+this.value];
+      if(v && v.s) $("vLine").value=v.s;
+    };
+  }
+
+  var pax=Math.max(1,num("gPax")), b=band(pax);
+  $("bandNote").innerHTML='<b>'+RATES.bands[b].t+'.</b> Rates below are pre-filled from this band, '
+    +'derived from their three real proposals: CAB Foods at 250 pax, SSQ Design at 1 000 pax and Absa at 2 200 pax. '
+    +'Rates fall as volume rises on every line. Override anything.';
+
+  var tb=$("gpTbl").querySelector("tbody"), h="";
+  RATES.gpLines.forEach(function(l){
+    var q=S.gp.qty[l.k], r=S.gp.ovr[l.k]?S.gp.rate[l.k]:l.b[b];
+    var units = l.cups ? q : (l.flatPerHead ? pax : pax*q);
+    h+='<tr><td><b>'+esc(l.n)+'</b>'+(l.cups?'<div class="sub">cups, not per person</div>':(l.flatPerHead?'<div class="sub">per head, once</div>':''))+'</td>'
+     + '<td class="r"><input type="number" class="num" min="0" value="'+q+'" '+(l.flatPerHead?'disabled':'')+' onchange="setGq(\''+l.k+'\',this.value)"></td>'
+     + '<td class="r"><input type="number" class="num'+(S.gp.ovr[l.k]?' ovr':'')+'" min="0" value="'+r+'" onchange="setGr(\''+l.k+'\',this.value)">'
+     +   (S.gp.ovr[l.k]?'<span class="ovrflag">overridden from '+money(l.b[b])+'</span>':'')+'</td>'
+     + '<td class="r num">'+money(units*r)+'</td></tr>';
+  });
+  tb.innerHTML=h;
+
+  // vendors
+  var vt=$("vTbl").querySelector("tbody"), vh="";
+  S.gp.vendors.forEach(function(v,i){
+    var line=RATES.gpLines.filter(function(l){return l.k===v.s;})[0];
+    vh+='<tr><td><b>'+esc(v.n)+'</b></td><td>'+esc(line?line.n:v.s)+'</td>'
+      + '<td class="sub">'+esc(v.d)+'</td><td class="r num">'+v.pax+'</td>'
+      + '<td class="r"><button class="xbtn" onclick="delVendor('+i+')" title="Remove">×</button></td></tr>';
+  });
+  if(!vh) vh='<tr><td colspan="5" class="sub">No vendors allocated yet.</td></tr>';
+  vt.innerHTML=vh;
+
+  var bal=vendorBalance(), bh="";
+  bal.forEach(function(r){
+    bh+='<div class="sline" style="color:var(--ink);border-color:var(--line-soft)">'
+      + '<span class="l" style="color:var(--soft)">'+esc(r.n)+'</span>'
+      + '<span class="v num bal '+(r.ok?"ok":"no")+'">'+r.got+' / '+r.need+' pax'+(r.ok?' ✓':'')+'</span></div>';
+  });
+  $("vBal").innerHTML = bh || '<p class="hint">Allocation check appears once the structure has quantities.</p>';
+
+  var c=calcGp(), sl="";
+  c.lines.forEach(function(l){
+    sl+='<div class="sline"><span class="l">'+esc(l.n)+(l.ovr?'<small>rate overridden</small>':(l.rate!==null&&l.rate!==undefined?'<small>'+money(l.rate)+' each</small>':''))+'</span>'
+      + '<span class="v num">'+money(l.amt)+'</span></div>';
+  });
+  $("gLines").innerHTML = sl || '<div class="sline"><span class="l">Nothing priced yet</span><span class="v">—</span></div>';
+  $("gTotal").textContent=money(c.total);
+  $("gPer").textContent=money(c.per);
+  $("gVat").textContent=money(c.vat);
+  $("gIncl").textContent=money(c.incl);
+  paintVal("gVal", validGp(c));
+  $("gpNo").textContent=quoteNo();
+}
+
+function paintVal(id, list){
+  var bad=list.filter(function(r){return r.t==="e";}).length;
+  var h='<div class="vhead '+(bad?"fail":"pass")+'">'+(bad?"▲ "+bad+" to fix before sending":"✓ Checks pass")+'</div><ul class="vlist">';
+  list.forEach(function(r){
+    h+='<li class="'+r.t+'"><span class="ic">'+(r.t==="e"?"▲":r.t==="w"?"!":"✓")+'</span><span>'+esc(r.m)+'</span></li>';
+  });
+  $(id).innerHTML=h+'</ul>';
+}
+
+/* ══════════════════ INPUT HANDLERS ══════════════════ */
+function bump(k,d){ S.acr.items[k]=Math.max(0,(S.acr.items[k]||0)+d); render(); }
+function setQ(k,v){ S.acr.items[k]=Math.max(0,parseInt(v,10)||0); render(); }
+function setBar(k,v){ S.acr.bar[k]=Math.max(0,parseInt(v,10)||0); render(); }
+function setGq(k,v){ S.gp.qty[k]=Math.max(0,parseInt(v,10)||0); render(); }
+function setGr(k,v){
+  var l=RATES.gpLines.filter(function(x){return x.k===k;})[0];
+  var r=Math.max(0,parseFloat(v)||0);
+  S.gp.rate[k]=r;
+  S.gp.ovr[k] = r!==l.b[band(Math.max(1,num("gPax")))];
+  render();
+}
+function onPax(){ render(); }
+
+function addVendor(){
+  var v=RATES.vendors[+$("vPick").value];
+  var p=Math.max(1,parseInt($("vPax").value,10)||0);
+  S.gp.vendors.push({n:v.n, s:$("vLine").value, d:v.d, pax:p});
+  render();
+}
+function delVendor(i){ S.gp.vendors.splice(i,1); render(); }
+
+function loadPkg(i){
+  var p=RATES.packages[i], pax=Math.max(1,num("aPax"));
+  S.acr.items={}; S.acr.bar={cold:0,alc:0,coffee:0,setup:0};
+  p.items.forEach(function(pair){
+    var name=pair[0], q=pair[1];
+    var cat=null;
+    RATES.cats.forEach(function(c){
+      if(RATES.menu[c.k].some(function(it){return it.n===name;})) cat=c;
+    });
+    if(!cat) return;
+    S.acr.items[cat.k+"|"+name] = (q==="pax10") ? Math.ceil(pax/10) : q;
+    if(cat.k===activeCat) {} else activeCat=cat.k;
+  });
+  if(p.bar) Object.keys(p.bar).forEach(function(k){ S.acr.bar[k]=p.bar[k]; });
+  if(p.cat) activeCat=p.cat;
+  render();
+}
+
+function readPaste(){
+  var t=val("aPaste"); if(!t.trim()){ $("pasteOut").textContent="Nothing pasted."; return; }
+  var found=[];
+  var g=t.match(/(\d{1,5})\s*(?:guests?|people|pax|persons?|adults?)/i);
+  if(g){ $("aPax").value=g[1]; found.push(g[1]+" guests"); }
+  var ph=t.match(/(?:\+?27|0)\s*[1-8]\d(?:[\s-]?\d){7}/);
+  if(ph){ $("aContact").value=ph[0].trim(); found.push("a phone number"); }
+  var em=t.match(/[\w.+-]+@[\w-]+\.[\w.]+/);
+  if(em){ $("aContact").value=em[0]; found.push("an email"); }
+  var MM="jan feb mar apr may jun jul aug sep oct nov dec".split(" ");
+  var d=t.match(/(\d{1,2})\s*(?:st|nd|rd|th)?\s+(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\s*(\d{4})?/i);
+  if(d){
+    var y=d[3]||String(new Date().getFullYear());
+    var m=MM.indexOf(d[2].toLowerCase())+1;
+    $("aDate").value=y+"-"+("0"+m).slice(-2)+"-"+("0"+d[1]).slice(-2);
+    found.push("a date");
+  }
+  var iso=t.match(/\b(\d{4})-(\d{2})-(\d{2})\b/);
+  if(iso && !d){ $("aDate").value=iso[0]; found.push("a date"); }
+  var types={"year end":"Year end function","year-end":"Year end function","yef":"Year end function",
+    "breakfast":"Corporate breakfast","family day":"Family day","team build":"Team building",
+    "birthday":"Birthday","kiddies":"Kiddies party","kids party":"Kiddies party",
+    "baby shower":"Baby or bridal shower","bridal":"Baby or bridal shower","wedding":"Wedding reception"};
+  var lt=t.toLowerCase();
+  for(var k in types){ if(lt.indexOf(k)>-1){ $("aType").value=types[k]; found.push("the event type"); break; } }
+  $("pasteOut").textContent = found.length ? "Picked up "+found.join(", ")+". Check the rest." : "Could not find anything. Type it in.";
+  render();
+}
+
+/* ══════════════════ MODE ══════════════════ */
+function setMode(m){
+  S.mode=m;
+  $("paneAcr").hidden = m!=="acreage";
+  $("paneGp").hidden  = m==="acreage";
+  $("mAcr").setAttribute("aria-pressed", m==="acreage");
+  $("mGp").setAttribute("aria-pressed", m!=="acreage");
+  $("brandsub").textContent = m==="acreage" ? "The Acreage" : "Good & Proper";
+  document.querySelector(".brandmark .mono").textContent = m==="acreage" ? "A" : "G";
+  render();
+}
+
+function quoteNo(){
+  var p = S.mode==="acreage" ? "ACR" : "GP";
+  var n = S.mode==="acreage" ? S.seq.acr : S.seq.gp;
+  return p+"-"+("000"+n).slice(-4);
+}
+
+function newQuote(){
+  if(S.mode==="acreage"){
+    S.acr={items:{},bar:{cold:0,alc:0,coffee:0,setup:0}};
+    ["aName","aContact","aDate","aPaste","aHire","aHireExtra"].forEach(function(i){$(i).value="";});
+    $("aPax").value=50; $("pasteOut").textContent="";
+  } else {
+    S.gp={qty:{},rate:{},ovr:{},vendors:[]};
+    RATES.gpLines.forEach(function(l){ S.gp.qty[l.k]=l.qty; });
+    ["gName","gContact","gDate"].forEach(function(i){$(i).value="";});
+    $("gPax").value=2200;
+  }
+  render();
+}
+
+/* ══════════════════ STORAGE ══════════════════ */
+function store(){ try{ return JSON.parse(localStorage.getItem("acreageQuotes")||"[]"); }catch(e){ return []; } }
+function put(a){ try{ localStorage.setItem("acreageQuotes",JSON.stringify(a)); }catch(e){} }
+
+function saveQuote(){
+  var a=store();
+  var rec;
+  if(S.mode==="acreage"){
+    var c=calcAcr();
+    rec={no:quoteNo(),mode:"acreage",client:val("aName")||"(no name)",date:val("aDate"),
+         total:c.total, data:{acr:S.acr, f:grab(["aName","aContact","aType","aDate","aPax","aHire","aHireExtra"]), sp:$("aSpace").selectedIndex}};
+    S.seq.acr++;
+  } else {
+    var g=calcGp();
+    rec={no:quoteNo(),mode:"gp",client:val("gName")||"(no name)",date:val("gDate"),
+         total:g.total, data:{gp:S.gp, f:grab(["gName","gContact","gVenue","gDate","gWindow","gPax","gHire"])}};
+    S.seq.gp++;
+  }
+  a.unshift(rec); put(a);
+  try{ localStorage.setItem("acreageSeq",JSON.stringify(S.seq)); }catch(e){}
+  render();
+  alert("Saved as "+rec.no+".");
+}
+function grab(ids){ var o={}; ids.forEach(function(i){ o[i]=val(i); }); return o; }
+function fill(o){ if(!o) return; Object.keys(o).forEach(function(i){ if($(i)) $(i).value=o[i]; }); }
+
+function openList(){
+  var a=store(), tb=$("listTbl").querySelector("tbody"), h="";
+  a.forEach(function(r,i){
+    h+='<tr><td><span class="pill '+(r.mode==="gp"?"gp":"acr")+'">'+esc(r.no)+'</span></td>'
+     + '<td>'+esc(r.client)+'</td><td class="sub">'+esc(r.date||"—")+'</td>'
+     + '<td class="r num">'+money(r.total)+'</td>'
+     + '<td class="r"><button class="btn o sm" onclick="loadQuote('+i+')">Open</button></td></tr>';
+  });
+  $("listTbl").querySelector("tbody").innerHTML = h || '<tr><td colspan="5" class="sub">Nothing saved yet.</td></tr>';
+  $("sheet").classList.add("open");
+}
+function closeList(){ $("sheet").classList.remove("open"); }
+function loadQuote(i){
+  var r=store()[i]; if(!r) return;
+  setMode(r.mode);
+  if(r.mode==="acreage"){ S.acr=r.data.acr; fill(r.data.f); $("aSpace").selectedIndex=r.data.sp||0; }
+  else { S.gp=r.data.gp; fill(r.data.f); }
+  closeList(); render();
+}
+
+/* ══════════════════ DOCUMENT ══════════════════ */
+function showDoc(){
+  $("docbody").innerHTML = S.mode==="acreage" ? docAcr() : docGp();
+  document.body.classList.add("printing");
+  window.scrollTo(0,0);
+}
+function hideDoc(){ document.body.classList.remove("printing"); }
+
+function longDate(s){
+  if(!s) return "To be confirmed";
+  var d=new Date(s+"T00:00:00");
+  if(isNaN(d)) return s;
+  return d.toLocaleDateString("en-ZA",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+}
+function today(){ return new Date().toLocaleDateString("en-ZA",{day:"numeric",month:"long",year:"numeric"}); }
+function validTo(){
+  var d=new Date(); d.setDate(d.getDate()+14);
+  return d.toLocaleDateString("en-ZA",{day:"numeric",month:"long",year:"numeric"});
+}
+
+function docAcr(){
+  var c=calcAcr();
+  var sp=RATES.spaces[$("aSpace").selectedIndex]||RATES.spaces[0];
+  var rows="";
+  c.lines.forEach(function(l){
+    rows+='<tr><td>'+esc(l.l)+'<div class="sub">'+esc(l.sub||"")+'</div></td><td class="r num">'+money(l.v)+'</td></tr>';
+  });
+  if(c.svc) rows+='<tr><td>Service charge, 10% on catering</td><td class="r num">'+money(c.svc)+'</td></tr>';
+  rows+= c.hireSet
+    ? '<tr><td>Venue hire — '+esc(sp.n)+'</td><td class="r num">'+money(c.hire)+'</td></tr>'
+    : '<tr><td>Venue hire — '+esc(sp.n)+'</td><td class="r"><i>To be confirmed</i></td></tr>';
+  rows+='<tr class="tot"><td>Total'+(c.hireSet?"":" (excluding venue hire)")+'</td><td class="r num">'+money(c.total)+'</td></tr>';
+
+  return '<div class="docpage">'
+   + '<div class="dochead"><div class="co"><b>The Acreage</b><span>Event Venue &amp; Restaurant</span></div>'
+   +   '<div class="meta"><b>Quotation '+esc(quoteNo())+'</b><br>'+today()+'<br>Valid until '+validTo()+'</div></div>'
+   + '<div class="docttl">Quotation</div>'
+   + '<div class="docgrid">'
+   +   '<div><dt>Client</dt><dd>'+esc(val("aName")||"—")+'</dd></div>'
+   +   '<div><dt>Contact</dt><dd>'+esc(val("aContact")||"—")+'</dd></div>'
+   +   '<div><dt>Event</dt><dd>'+esc(val("aType"))+'</dd></div>'
+   +   '<div><dt>Date</dt><dd>'+longDate(val("aDate"))+'</dd></div>'
+   +   '<div><dt>Guests</dt><dd>'+c.pax+'</dd></div>'
+   +   '<div><dt>Space</dt><dd>'+esc(sp.n)+' (up to '+sp.cap+')</dd></div>'
+   + '</div>'
+   + '<table class="dt"><thead><tr><th>Item</th><th class="r">Amount</th></tr></thead><tbody>'+rows+'</tbody></table>'
+   + '<div class="docnote"><b>'+money(c.per)+' per guest.</b> '
+   +   (c.hireSet?"":"This total excludes venue hire, which is confirmed on booking. ")
+   +   'A cash bar is available at the event at no cost to you.</div>'
+   + '<div class="terms"><h4>Booking</h4><ul>'
+   +   '<li>This quotation is valid until '+validTo()+'.</li>'
+   +   '<li>Dates are held tentatively and released if the quotation lapses without confirmation.</li>'
+   +   '<li>A 10% service charge applies to all catering served at The Acreage and is shown above.</li>'
+   +   '<li>Final guest numbers are confirmed no later than seven days before the event.</li>'
+   + '</ul></div>'
+   + '<div class="docfoot">The Acreage Event Venue &amp; Restaurant<br>'
+   +   'Cnr Tlokwa &amp; Olievenhoutbosch Road, Randjesfontein, Midrand<br>'
+   +   '066 272 6862 &nbsp;·&nbsp; events@acreagevenue.co.za &nbsp;·&nbsp; Events: Letitia Purchase, 076 014 8081</div>'
+   + '</div>';
+}
+
+function docGp(){
+  var c=calcGp();
+  var rows="";
+  c.lines.forEach(function(l){
+    rows+='<tr><td>'+esc(l.n)+'</td><td class="r num">'+(l.rate===null||l.rate===undefined?"":money(l.rate))+'</td>'
+       + '<td class="r num">'+money(l.amt)+'</td></tr>';
+  });
+  rows+='<tr class="tot"><td>Total</td><td></td><td class="r num">'+money(c.total)+'</td></tr>';
+
+  var vrows="";
+  S.gp.vendors.forEach(function(v){
+    var line=RATES.gpLines.filter(function(l){return l.k===v.s;})[0];
+    vrows+='<tr><td><b>'+esc(v.n)+'</b></td><td>'+esc(line?line.n:v.s)+'</td>'
+        + '<td>'+esc(v.d)+'</td><td class="r num">'+v.pax+'</td></tr>';
+  });
+
+  var struct="";
+  RATES.gpLines.forEach(function(l){
+    var q=S.gp.qty[l.k]; if(!q) return;
+    struct+='<li>'+(l.cups ? q+" x "+esc(l.n)
+                  : l.flatPerHead ? esc(l.n)
+                  : q+" x "+esc(l.n)+" per person")+'</li>';
+  });
+
+  return '<div class="docpage">'
+   + '<div class="dochead gp"><div class="co"><b>Good &amp; Proper</b><span>Food Trucks &amp; Mobile Catering</span></div>'
+   +   '<div class="meta"><b>Proposal '+esc(quoteNo())+'</b><br>Proposal date: '+today()+'<br>Andrew 072 229 7122<br>Jade 084 766 4440</div></div>'
+   + '<div class="docttl gp">Event Catering Proposal</div>'
+   + '<div class="docgrid">'
+   +   '<div><dt>Client</dt><dd>'+esc(val("gName")||"—")+'</dd></div>'
+   +   '<div><dt>Contact</dt><dd>'+esc(val("gContact")||"—")+'</dd></div>'
+   +   '<div><dt>Venue</dt><dd>'+esc(val("gVenue"))+'</dd></div>'
+   +   '<div><dt>Date</dt><dd>'+longDate(val("gDate"))+'</dd></div>'
+   +   '<div><dt>Service</dt><dd>'+esc(val("gWindow"))+'</dd></div>'
+   +   '<div><dt>PAX</dt><dd>'+c.pax+'</dd></div>'
+   + '</div>'
+   + '<p style="font-size:13.5px;margin:0 0 14px">Good &amp; Proper Food Trucks is pleased to provide our quotation in respect of '
+   +   'the aforementioned event, structured as follows:</p>'
+   + '<ul style="font-size:13.5px;margin:0 0 20px;padding-left:18px">'+struct+'</ul>'
+   + '<p style="font-size:12.5px;color:#44443E;margin:0 0 18px">Price per head includes travel, set up, staff costs, logistics and the service times above. '
+   +   'Total cost includes management of vendors, specification of all power requirements and management of logistics for set up, service and strike. '
+   +   'Halaal, vegetarian, vegan and kosher guests are catered for. A cash bar is also available.</p>'
+   + '<div class="docttl gp">Costing for '+c.pax+' PAX</div>'
+   + '<table class="dt gp"><thead><tr><th>Service</th><th class="r">Rate</th><th class="r">Total cost (excluding VAT)</th></tr></thead>'
+   +   '<tbody>'+rows+'</tbody></table>'
+   + '<div class="docnote"><b>'+money(c.per)+' per head excluding VAT.</b> '
+   +   'VAT at 15%: '+money(c.vat)+'. Total including VAT: '+money(c.incl)+'.</div>'
+   + (vrows ? '<div class="docttl gp" style="margin-top:28px">Event vendors</div>'
+   +   '<table class="dt gp"><thead><tr><th>Vendor</th><th>Service</th><th>Menu</th><th class="r">PAX</th></tr></thead>'
+   +   '<tbody>'+vrows+'</tbody></table>'
+   +   '<p style="font-size:11.5px;color:#44443E">All vendors quoted have signed service level agreements with Good &amp; Proper, which ensures '
+   +   'a consistently high level of service. Vendors quoted in this proposal are contractually prohibited from engaging directly with the Client '
+   +   'for this event, or future events in circumstances where G&amp;P has introduced the Vendor to the Client by way of this proposal.</p>' : '')
+   + '<div class="terms gp"><h4>Terms &amp; conditions</h4>'
+   +   '<p><b>Cost and payment.</b> Price quoted includes a standard 4 hours of vendor service time in total. Any additional service time '
+   +   'required by the Client needs to be arranged and agreed upon in advance and may attract an increase to the price quoted.</p>'
+   +   '<ul><li>50% deposit is payable within 48 hours of invoice in order to secure the booking. Should proof of payment not be received '
+   +   'within 48 hours, this may result in the booking being released.</li>'
+   +   '<li>If the event is 14 days or less from date of invoice, 100% of the invoice shall be payable to secure the booking.</li>'
+   +   '<li>The balance is payable no later than 14 days prior to the event. <b>Funds are required to have actually been received into '
+   +   'G&amp;P’s account. Proof of payment will not be deemed as receipt of payment.</b></li></ul>'
+   +   '<p><b>Cancellation and reductions.</b> 30 days or more prior to the event: 35%. 15 to 30 days: 65%. 8 to 14 days: 85%. '
+   +   '7 days or less: 100%.</p>'
+   +   '<p><b>Banking details.</b> Good and Proper Events (Pty) Ltd, FNB, cheque account 62844400002. Reference: invoice number.</p>'
+   + '</div>'
+   + '<div class="docfoot">Good And Proper Events (Pty) Ltd T/A Good &amp; Proper Food Trucks &nbsp;·&nbsp; 2019/229890/07 &nbsp;·&nbsp; VAT 4200305003<br>'
+   +   '92 Chobe Sands, Alexander Avenue, Douglasdale, Johannesburg, Gauteng, 2191<br>'
+   +   'www.goodandproperfoodtrucks.co.za</div>'
+   + '</div>';
+}
+
+/* ══════════════════ BOOT ══════════════════ */
+(function(){
+  try{ var s=JSON.parse(localStorage.getItem("acreageSeq")||"null"); if(s) S.seq=s; }catch(e){}
+  setMode("acreage");
+})();
+</script>
+</body>
+</html>
