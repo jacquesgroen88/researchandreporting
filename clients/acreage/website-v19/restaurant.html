@@ -300,9 +300,21 @@
 
   /* full-screen mobile panel */
   .panel{position:fixed;inset:0;z-index:301;background:var(--forest-deep);display:flex;
-    flex-direction:column;justify-content:center;padding:var(--s6) var(--s4);
+    flex-direction:column;justify-content:flex-start;justify-content:safe center;
+    padding:var(--s6) var(--s4);
+    /* inset:0 resolves against the viewport WITHOUT the phone browser chrome,
+       so on a real handset the first and last links sit behind the address bar
+       and the toolbar. 100dvh is what the visitor can actually see. Anything
+       that still does not fit scrolls, and safe centring top-aligns when it
+       overflows instead of pushing the first link out of reach. */
+    height:100dvh;overflow-y:auto;overscroll-behavior:contain;
+    -webkit-overflow-scrolling:touch;
+    padding-top:max(var(--s6),calc(env(safe-area-inset-top) + 56px));
+    padding-bottom:max(var(--s6),calc(env(safe-area-inset-bottom) + 28px));
     clip-path:circle(0% at calc(100% - 46px) 44px);
     transition:clip-path .75s var(--ease);visibility:hidden}
+  /* Links must keep their height and scroll, never squash to fit. */
+  .panel>*{flex-shrink:0}
   body.nav-open .panel{clip-path:circle(150% at calc(100% - 46px) 44px);visibility:visible}
   .panel a.pl{font-family:'Playfair Display SC',Georgia,serif;font-size:clamp(1.9rem,9vw,2.9rem);
     color:var(--cream);padding:12px 0;border-bottom:1px solid rgba(255,255,255,.1);
@@ -317,6 +329,17 @@
   .panel .pfoot{margin-top:var(--s5);display:grid;gap:14px;opacity:0;transition:opacity .5s .58s}
   body.nav-open .panel .pfoot{opacity:1}
   .panel .pfoot a{color:var(--gold-lite);font-size:14.5px;letter-spacing:.04em}
+  /* Short handsets and landscape. Once the browser chrome is showing, the
+     visible area is around 620px on a common Android handset, and the menu
+     at full size needs about 700px. Tighten it so the whole menu including
+     the enquire button fits without scrolling; anything shorter still
+     scrolls safely because of the rule above. */
+  @media (max-height:720px){
+    .panel{padding-top:max(40px,calc(env(safe-area-inset-top) + 44px));
+      padding-bottom:max(24px,calc(env(safe-area-inset-bottom) + 18px))}
+    .panel a.pl{font-size:clamp(1.5rem,7.2vw,2.1rem);padding:7px 0}
+    .panel .pfoot{margin-top:14px;gap:10px}
+  }
 
   /* ── hero: pinned backdrop, content rides over it ───────────────────── */
   /* The drone footage is a STICKY layer inside .stage rather than a parallaxed
@@ -2077,6 +2100,10 @@
       document.body.classList.toggle('lock',on);
       btn.setAttribute('aria-expanded',on?'true':'false');
       btn.setAttribute('aria-label',on?'Close menu':'Open menu');
+      /* The panel keeps its scroll position between openings, so someone who
+         scrolled it last time would reopen it with the first link already off
+         the top. Always open at the top. */
+      if(on) panel.scrollTop=0;
     }
     btn.addEventListener('click',function(){
       setOpen(!document.body.classList.contains('nav-open'));
