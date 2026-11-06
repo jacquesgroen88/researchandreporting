@@ -1698,7 +1698,7 @@
     <div class="fwrap reveal d2">
       <div class="ferror" id="ferror" role="alert">We could not send that automatically, so we have opened your email app with the details already filled in. Just press send. If nothing opened, email <a href="mailto:events@acreagevenue.co.za">events@acreagevenue.co.za</a> or call <a href="tel:+27662726862">+27 66 272 6862</a>.</div>
 
-      <form id="enquiryForm" name="acreage-enquiry" method="POST" data-netlify="true" netlify-honeypot="company-website">
+      <form id="enquiryForm" name="acreage-enquiry" method="POST">
         <input type="hidden" name="form-name" value="acreage-enquiry">
         <input type="hidden" name="landing_page" value="">
         <p class="hp">
@@ -2392,12 +2392,22 @@
   })();
 
 
-  /* ════════════════════════════════════════════════════════════════════
+  /* ═════════════════════════════════════════════════════════════════════
      10. ENQUIRY SUBMIT
-     Posts to Netlify Forms. If form detection is off on the site that POST
-     404s, so the catch opens a prefilled mail draft rather than dropping
-     the enquiry on the floor.
-     ════════════════════════════════════════════════════════════════════ */
+
+     ENQUIRY_ENDPOINT below is the only line to change when enquiries move
+     to a new destination. Two rules hold whatever it points at.
+
+     First, the thank-you shows only on a reply that confirms receipt, and
+     confirmation means JSON carrying ok or success. This matters because
+     their live host answers POST / with its own homepage and a 200, which
+     satisfied the old r.ok check. The form reported success and threw the
+     enquiry away.
+
+     Second, with no endpoint set nothing is posted. The visitor goes
+     straight to a prefilled mail draft, so an unconfigured form is honest
+     rather than quietly lossy.
+     ═════════════════════════════════════════════════════════════════════ */
   (function(){
     var form=$('#enquiryForm');
     if(!form) return;
@@ -2414,30 +2424,61 @@
              encodeURIComponent('Event enquiry from '+(fd.get('name')||'the website'))+
              '&body='+encodeURIComponent(lines.join('\n'));
     }
+
+    /* Set this to the address that receives enquiries. Empty means none is
+       configured yet, and the form says so instead of pretending. */
+    var ENQUIRY_ENDPOINT = '';
+
+    function succeed(){
+      form.style.display='none';
+      thanks.classList.add('show');
+      thanks.scrollIntoView({behavior:'smooth',block:'center'});
+    }
+
+    function failOver(fd,original){
+      err.classList.add('show');
+      btn.disabled=false;
+      btn.innerHTML=original;
+      err.scrollIntoView({behavior:'smooth',block:'center'});
+      window.location.href=mailtoFallback(fd);
+    }
+
+    /* Receipt is confirmed by JSON that says so and by nothing else. An
+       HTML page, an empty body or a bare 200 all count as not delivered. */
+    function confirmed(r){
+      if(!r.ok) return Promise.resolve(false);
+      return r.text().then(function(body){
+        try{
+          var j=JSON.parse(body);
+          return !!(j && (j.ok===true || j.ok==='true' ||
+                          j.success===true || j.success==='true'));
+        }catch(e){ return false; }
+      },function(){ return false; });
+    }
     form.addEventListener('submit',function(ev){
       ev.preventDefault();
       err.classList.remove('show');
       if(!form.reportValidity()) return;
+
       var fd=new FormData(form);
-      btn.disabled=true;
+
+      /* Honeypot. A bot that fills it gets the thank-you and we send nothing. */
+      if((fd.get('company-website')||'').trim()){ succeed(); return; }
+
       var original=btn.innerHTML;
+
+      if(!ENQUIRY_ENDPOINT){ window.location.href=mailtoFallback(fd); return; }
+
+      btn.disabled=true;
       btn.innerHTML='<span>Sending&hellip;</span>';
-      fetch('/',{
+
+      fetch(ENQUIRY_ENDPOINT,{
         method:'POST',
         headers:{'Content-Type':'application/x-www-form-urlencoded'},
         body:new URLSearchParams(fd).toString()
-      }).then(function(r){
-        if(!r.ok) throw new Error('HTTP '+r.status);
-        form.style.display='none';
-        thanks.classList.add('show');
-        thanks.scrollIntoView({behavior:'smooth',block:'center'});
-      }).catch(function(){
-        err.classList.add('show');
-        btn.disabled=false;
-        btn.innerHTML=original;
-        err.scrollIntoView({behavior:'smooth',block:'center'});
-        window.location.href=mailtoFallback(fd);
-      });
+      }).then(confirmed).then(function(ok){
+        if(ok) succeed(); else failOver(fd,original);
+      }).catch(function(){ failOver(fd,original); });
     });
   })();
 
