@@ -327,7 +327,7 @@ footer{max-width:1080px;margin:0 auto;padding:30px 20px 60px;color:var(--dim);fo
 
 <section class="slide" id="copq">
   <div class="slide-label">Step 8b · Cost of poor quality</div>
-  <h2 class="slide-h1">What getting it wrong costs: about <span class="hr" id="copq-head">R58,000 a year</span></h2>
+  <h2 class="slide-h1">What getting it wrong costs: about <span class="hr" id="copq-head">R74,000 a year</span></h2>
   <p class="lede">The cost of poor quality (COPQ) adds up what each failure costs: everyone's time, the materials and courier, plus money refunded or sales lost. Each problem below follows the standard template: tasks, hours, cost per hour, materials, cost per incident, incidents per year, annual cost. Incidents come from the six months May to October 2026, doubled to a year. Rates, incident counts and the lost-sale rate can be edited, and every total updates.</p>
   <div class="card cyan-l small" style="display:flex;flex-wrap:wrap;gap:14px 26px;align-items:center">
     <label>Owner rate (R/hour) <input id="r-owner" type="number" value="400" min="0" step="10" style="width:80px"></label>
@@ -337,10 +337,16 @@ footer{max-width:1080px;margin:0 auto;padding:30px 20px 60px;color:var(--dim);fo
   </div>
   <div class="stats" id="copq-stats"></div>
   <div id="copq-tables"></div>
-  <h3>All five problems, ranked</h3>
+  <h3>All eight problems, ranked</h3>
   <div class="tw"><table id="copq-roll"></table></div>
-  <div class="card red-l"><b>What it says:</b> <span class="small">Only about R13,600 of this is cash out the door (replacements and refunds), and that is already low: about 1.7% of revenue. The expensive failures are the post-sale ones. <b>Chasing logos by hand</b> and <b>buyer messages nobody answered</b> together make up about two thirds of the total, and both are the gap the post-purchase blueprint closes. The <b>/setup</b> link in the order email (board card ab097) and the day-1 and day-3 logo chasers remove most logo chases. The speed-to-lead alert (#4 above) removes most unanswered messages. That is prevention spending of a few hours against a recurring ~R38,500 a year of failure cost. The email outage is counted once, at its direct cost. Its knock-on effect sits inside the logo and unanswered lines, because the logo-request emails were among the ones that failed.</span></div>
-  <p class="small">Evidence: zero-rand fix orders in Shopify (#1850 three additional boards, #1887 replacement Facebook stand, #1901 comp card order, #1913 order correction of two stands, #1930 card refund, #1942 re-ship); ShopifyQL returns of R2,096 May to October (R649, R998, R299 and R150 shipping, about four orders); 77 CRM conversations whose last message is about a logo; 59 conversations May to October whose last message is an unanswered inbound, including "approval link expired and you guys have been ignoring me", "I have not received my order" and a follow-up on order #1899; buyer notes such as "Please confirm that someone will contact me for the logo?" (#1935). Materials: stand R44.30 landed plus R26.40 print; courier R125. The lost-sale rate and the email outage's lost orders are estimates.</p>
+  <div class="card red-l"><b>What it says:</b> <span class="small">Only about R9,700 of this is cash out the door (materials, courier and refunds), about 1.2% of revenue. The rest is time and lost sales, and it clusters in three places.</span>
+    <ul class="small">
+      <li><b>Missing setup information, 42%.</b> Chasing logos (R21,560) and chasing Google review links (R9,620) are the same failure: the order arrives without what is needed to make it. The fix for both is the same page. The <b>/setup</b> link in the order email (board card ab097) should ask for the logo <i>and</i> the review link, with a "find my Google profile" search for buyers who do not know theirs, plus the day-1 and day-3 reminders from the post-purchase blueprint.</li>
+      <li><b>Unanswered messages, 23%.</b> Fixed by the speed-to-lead alert (#4 above).</li>
+      <li><b>Fulfilment errors, 19%.</b> Reprints (R8,196), missing items (R3,180) and wrong NFC programming (R2,448). The prevention is a three-line check before every parcel is sealed: hold the print against the approved mock-up, tick each line on the packing slip, and tap-test every NFC unit with a phone to confirm it opens the right review page. At about two minutes a parcel, roughly 750 orders a year cost around 25 hours, or R2,000 at the admin rate, against R13,800 of failures.</li>
+    </ul>
+    <p class="small">The email outage is counted once, at its direct cost. Its knock-on effect sits inside the logo and unanswered lines, because the logo-request emails were among the ones that failed.</p></div>
+  <p class="small">Evidence: Shopify zero-rand fix orders (#1887 replacement Facebook stand, #1901 comp card order and #1930 card, counted as reprints; #1850 three additional boards, #1913 order correction of two stands, #1942 and #1987 shipping-only re-sends, counted as missing items); ShopifyQL returns of R2,096 May to October (about four orders); 77 CRM conversations whose last message is about a logo; 59 conversations May to October ending on an unanswered inbound message, including "approval link expired and you guys have been ignoring me" and "I have not received my order"; buyer notes such as "Please confirm that someone will contact me for the logo?" (#1935). Frequencies for reprints (2 to 3 a month), missing items (about 1 a month) and Google profile chases (1 in 20 Google orders) are Jacques's own estimates, 7 Nov 2026. The NFC error rate (about 1 a month, 60% custom stands relinked remotely, 40% standard units the customer reprograms with instructions), the lost-sale rate and the email outage's lost orders are estimates. Materials: stand R44.30 landed plus R26.40 print; courier R125.</p>
 </section>
 <script>
 (function(){
@@ -350,20 +356,26 @@ footer{max-width:1080px;margin:0 auto;padding:30px 20px 60px;color:var(--dim);fo
      tasks:[['Send two chase messages (WhatsApp, email)',0.25,'a',0],['Find or rebuild the logo from the website or socials',0.25,'o',0],['Update the order and re-send the mock-up',0.25,'a',0]]},
     {id:'unans',name:'Buyer and prospect messages left unanswered',type:'External failure',inc:118,ev:'59 inbound-last conversations in 6 months',
      tasks:[['Late recovery attempt when finally seen',0.25,'a',0],['Expected lost gross profit (lost-sale rate x R828)',0,'o','lost']]},
-    {id:'repl',name:'Replacement and correction orders',type:'External failure',inc:12,ev:'6 zero-rand fix orders in 6 months',
-     tasks:[['Take the complaint and agree the fix',0.5,'o',0],['Check or redo the artwork',0.5,'o',0],['Draft order and reprint request',0.25,'a',0],['Pack and courier the replacement',0.25,'a',0],['Stand R44.30 + print R26.40',0,'a',70.7],['Courier',0,'a',125]]},
+    {id:'reprint',name:'Low-quality prints that need reprinting',type:'External failure',inc:30,ev:'Jacques: 2 to 3 a month; Shopify: #1887 replacement stand, #1901 comp card, #1930 card',
+     tasks:[['Inspect, reject or take the complaint',0.25,'o',0],['Send back to the printer and re-approve',0.25,'a',0],['Extra trip to collect the reprint',0.25,'a',0],['Stand R44.30 + print R26.40 redone',0,'a',70.7,1],['Courier for the half reported after delivery (50% x R125)',0,'a',62.5,1]]},
+    {id:'gbp',name:'Chasing buyers with no Google Business Profile or review link',type:'Internal failure',inc:37,ev:'Jacques: 1 in 20 Google orders, ~750 a year',
+     tasks:[['Chase the buyer for the link (two messages)',0.25,'a',0],['Find the profile on Maps and derive the review link, or walk them through setting one up',0.5,'o',0],['Test the link before programming',0.1,'o',0]]},
+    {id:'missing',name:'Missing item, courier the rest separately',type:'External failure',inc:12,ev:'Jacques: about 1 a month; Shopify: #1850, #1913, #1942, #1987',
+     tasks:[['Confirm what was left out',0.25,'o',0],['Apologise and update the customer',0.25,'a',0],['Pack and book the second courier',0.25,'a',0],['Second courier',0,'a',125,1]]},
+    {id:'nfc',name:'NFC programmed wrong',type:'External failure',inc:12,ev:'estimate ~1 a month; 60% custom, 40% standard',
+     tasks:[['Diagnose with the customer',0.25,'o',0],['Custom stand: relink remotely (60% of cases x 0.1h)',0.06,'o',0],['Standard unit: send reprogramming instructions and talk them through (40% x 0.5h)',0.2,'o',0]]},
     {id:'refund',name:'Refunds',type:'External failure',inc:8,ev:'R2,096 returned, ~4 orders in 6 months',
-     tasks:[['Handle the refund request',0.5,'o',0],['Process the refund in Shopify',0.25,'a',0],['Money refunded (average)',0,'a',524]]},
+     tasks:[['Handle the refund request',0.5,'o',0],['Process the refund in Shopify',0.25,'a',0],['Money refunded (average)',0,'a',524,1]]},
     {id:'email',name:'CRM email outage (19 Aug to 7 Nov)',type:'External failure',inc:1,ev:'every send failed for 11 weeks',
      tasks:[['Diagnose the failure',2,'o',0],['Reconnect the service and test',0.5,'o',0],['Rebuild and re-send the missed sequences',2,'o',0],['Lost reactivation orders (est. 5 x R828)',0,'o',4140]]}
   ];
   function R(n){return 'R'+Math.round(n).toLocaleString('en-ZA').replace(/ /g,',').replace(/\s/g,',')}
   function rates(){return{o:+document.getElementById('r-owner').value||0,a:+document.getElementById('r-admin').value||0,l:(+document.getElementById('r-lost').value||0)/100}}
-  function calc(p,r){var rows=p.tasks.map(function(t){var rate=t[2]==='o'?r.o:r.a;var labour=t[1]*rate;var mat=t[3]==='lost'?r.l*GP:t[3];return{n:t[0],h:t[1],rate:t[1]?rate:0,labour:labour,mat:mat,tot:labour+mat}});var per=rows.reduce(function(s,x){return s+x.tot},0);return{rows:rows,per:per,yr:per*p.inc}}
+  function calc(p,r){var rows=p.tasks.map(function(t){var rate=t[2]==='o'?r.o:r.a;var labour=t[1]*rate;var mat=t[3]==='lost'?r.l*GP:t[3];return{n:t[0],h:t[1],rate:t[1]?rate:0,labour:labour,mat:mat,tot:labour+mat,cash:t[4]?mat:0}});var per=rows.reduce(function(s,x){return s+x.tot},0),cp=rows.reduce(function(s,x){return s+x.cash},0);return{rows:rows,per:per,yr:per*p.inc,cash:cp*p.inc}}
   function render(){
-    var r=rates(),tot=0,cash=0,out='',res=P.map(function(p){var c=calc(p,r);tot+=c.yr;if(p.id==='repl'||p.id==='refund')cash+=c.yr;return{p:p,c:c}});
+    var r=rates(),tot=0,cash=0,out='',res=P.map(function(p){var c=calc(p,r);tot+=c.yr;cash+=c.cash;return{p:p,c:c}});
     res.forEach(function(x,i){var p=x.p,c=x.c;
-      out+='<div class="card '+(i<2?'red-l':'amber-l')+'"><div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px"><b>'+p.name+'</b><span><span class="tag '+(p.type[0]==='I'?'a':'r')+'">'+p.type+'</span></span></div><div class="tw"><table><tr><th>#</th><th>Task</th><th class="n">Hours</th><th class="n">Cost/hour</th><th class="n">Cost/task</th><th class="n">Materials / money</th><th class="n">Total</th></tr>';
+      out+='<div class="card '+(p.type[0]==='I'?'amber-l':'red-l')+'"><div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px"><b>'+p.name+'</b><span><span class="tag '+(p.type[0]==='I'?'a':'r')+'">'+p.type+'</span></span></div><div class="tw"><table><tr><th>#</th><th>Task</th><th class="n">Hours</th><th class="n">Cost/hour</th><th class="n">Cost/task</th><th class="n">Materials / money</th><th class="n">Total</th></tr>';
       c.rows.forEach(function(t,j){out+='<tr><td>'+(j+1)+'</td><td>'+t.n+'</td><td class="n">'+(t.h||'')+'</td><td class="n">'+(t.rate?R(t.rate):'')+'</td><td class="n">'+R(t.labour)+'</td><td class="n">'+R(t.mat)+'</td><td class="n">'+R(t.tot)+'</td></tr>'});
       out+='<tr><td></td><td><b>Cost per incident</b></td><td></td><td></td><td></td><td></td><td class="n"><b>'+R(c.per)+'</b></td></tr><tr><td></td><td>Incidents per year <span class="small">('+p.ev+')</span></td><td></td><td></td><td></td><td></td><td class="n"><input type="number" min="0" data-inc="'+p.id+'" value="'+p.inc+'" style="width:70px;text-align:right"></td></tr><tr><td></td><td><b>Total annual cost</b></td><td></td><td></td><td></td><td></td><td class="n"><b class="hr">'+R(c.yr)+'</b></td></tr></table></div></div>';});
     document.getElementById('copq-tables').innerHTML=out;
@@ -372,7 +384,7 @@ footer{max-width:1080px;margin:0 auto;padding:30px 20px 60px;color:var(--dim);fo
     roll+='<tr><td><b>Total cost of poor quality</b></td><td></td><td></td><td></td><td class="n"><b class="hr">'+R(tot)+'</b></td><td></td></tr>';
     document.getElementById('copq-roll').innerHTML=roll;
     var rev=804730;
-    document.getElementById('copq-stats').innerHTML='<div class="stat"><div class="big g-red">'+R(tot)+'</div><div class="lbl">Cost of poor quality per year</div></div><div class="stat"><div class="big g-amber">'+(tot/rev*100).toFixed(1)+'%</div><div class="lbl">of annual store revenue (R804,730, May to Oct x 2)</div></div><div class="stat"><div class="big g-blue">'+R(cash)+'</div><div class="lbl">of it is cash out the door (replacements, refunds)</div></div><div class="stat"><div class="big g-purple">'+R(tot/12)+'</div><div class="lbl">per month</div></div>';
+    document.getElementById('copq-stats').innerHTML='<div class="stat"><div class="big g-red">'+R(tot)+'</div><div class="lbl">Cost of poor quality per year</div></div><div class="stat"><div class="big g-amber">'+(tot/rev*100).toFixed(1)+'%</div><div class="lbl">of annual store revenue (R804,730, May to Oct x 2)</div></div><div class="stat"><div class="big g-blue">'+R(cash)+'</div><div class="lbl">of it is cash out the door (materials, courier, refunds)</div></div><div class="stat"><div class="big g-purple">'+R(tot/12)+'</div><div class="lbl">per month</div></div>';
     document.getElementById('copq-head').textContent=R(Math.round(tot/1000)*1000)+' a year';
     Array.prototype.forEach.call(document.querySelectorAll('[data-inc]'),function(el){el.addEventListener('change',function(){P.forEach(function(p){if(p.id===el.dataset.inc)p.inc=+el.value||0});render()})});
   }
