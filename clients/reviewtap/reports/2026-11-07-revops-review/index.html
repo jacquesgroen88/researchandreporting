@@ -82,6 +82,7 @@ footer{max-width:1080px;margin:0 auto;padding:30px 20px 60px;color:var(--dim);fo
     <div class="small" style="text-transform:uppercase;letter-spacing:.12em;color:var(--accent);font-weight:700">The verdict</div>
     <div class="big g-blue">LTV:CAC 2.7 : 1</div>
     <p style="margin:10px 0 0">The store motion pays for itself on the first order (paid CAC of <b>R382</b> against about <b>R828</b> gross profit per order), but it sits just under HubSpot's 3:1 line because only <b>11.3%</b> of buyers ever buy again. The sales-led motion has closed <b>4 of 160</b> corporate opportunities. The biggest problem is not demand. It is that the three teams' systems (store, CRM, billing) do not talk to each other, so <b>nobody can see a customer's whole lifecycle</b>. That is the exact problem RevOps exists to fix.</p>
+    <p style="margin:10px 0 0"><b class="hr">Live fault found during this review:</b> every email the CRM has tried to send since <b>19 August 2026</b> has failed with "Configured email service is expired". The buyer base has had one email in its lifetime (18 Aug, about 63% opened) and no broadcast. The low repeat rate is an <b>untried</b> channel, not a failed one.</p>
   </div>
   <p class="small">Internal working document. Gross margin, close-rate and lift figures marked "estimate" are labelled assumptions, not pulled numbers. Currency ZAR.</p>
 </section>
@@ -194,7 +195,7 @@ footer{max-width:1080px;margin:0 auto;padding:30px 20px 60px;color:var(--dim);fo
     <div class="card amber-l"><span class="tag a">ENGAGE</span>
       <p class="small">Session to add-to-cart <b>6.8%</b>, to checkout <b>5.9%</b>, to purchase <b>2.17%</b>. Of everyone who reached checkout, only <b>37%</b> paid. Sales-led: 160 corporate opportunities, <b>4 won</b>.</p></div>
     <div class="card red-l"><span class="tag r">DELIGHT</span>
-      <p class="small">Only <b>95 of 840</b> buyers (11.3%) have bought twice. RT Pro (the recurring upsell) has <b>0 paying subscribers</b> as at 2 Nov. About 40 public reviews of ReviewTap itself across Google and Facebook, from 840 buyers who run a review business.</p></div>
+      <p class="small">Only <b>95 of 840</b> buyers (11.3%) have bought twice. RT Pro (the recurring upsell) has <b>0 paying subscribers</b> as at 2 Nov. About 40 public reviews of ReviewTap itself across Google and Facebook, from 840 buyers who run a review business. <b>Context:</b> the buyers have received one marketing email ever, and no WhatsApp broadcast. Delight has not been run yet, so this stage is upside, not a verdict.</p></div>
   </div>
   <h3>Store funnel, 1 May to 31 Oct 2026 (Shopify sessions)</h3>
   <div class="funnel">
@@ -244,7 +245,7 @@ footer{max-width:1080px;margin:0 auto;padding:30px 20px 60px;color:var(--dim);fo
   </div>
   <div class="grid2">
     <div class="card green-l"><b>What is strong</b><p class="small">Payback is instant. Hardware margins are very high (custom stand roughly R72 landed and printed against R649; card roughly R30 against R299). Every new customer covers their own acquisition cost on day one. In HubSpot's terms this is a business that can afford to buy growth, provided it holds the 2.5x ROAS floor.</p></div>
-    <div class="card red-l"><b>What holds it under 3:1</b><p class="small">LTV is almost entirely the first order. Lifetime revenue per buyer (R1,319) is only 24% above AOV (R1,062). The fix is not cheaper acquisition; it is a second purchase. Lifting repeat rate from 11% to 20% at the same AOV adds roughly R95 of LTV per buyer and takes LTV:CAC past 3:1 (estimate).</p></div>
+    <div class="card red-l"><b>What holds it under 3:1</b><p class="small">LTV is almost entirely the first order. Lifetime revenue per buyer (R1,319) is only 24% above AOV (R1,062). The fix is not cheaper acquisition; it is a second purchase. Lifting repeat rate from 11% to 20% at the same AOV adds roughly R95 of LTV per buyer and takes LTV:CAC past 3:1 (estimate). Nobody has asked these buyers for a second purchase yet: the one campaign (Smart Card, 18 Aug) lost emails 2 and 3 to the expired email service.</p></div>
   </div>
   <h3>Recurring revenue (MRR)</h3>
   <div class="tw"><table>
@@ -309,6 +310,7 @@ footer{max-width:1080px;margin:0 auto;padding:30px 20px 60px;color:var(--dim);fo
   <h2 class="slide-h1">Ranked by rand, <span class="hl">smallest effort first</span> where tied</h2>
   <div class="tw"><table>
     <tr><th>#</th><th>Friction</th><th>Fix</th><th>Evidence</th><th class="n">Rand at stake</th><th>Effort</th></tr>
+    <tr style="background:rgba(255,92,92,0.06)"><td>0</td><td><b>CRM email is dead</b> (all stages)</td><td>Reconnect the email service in the CRM: Settings, Email Services. Either re-authenticate the GoDaddy SMTP for support@reviewtap.co.za (smtpout.secureserver.net) or set up a dedicated sending domain with its SPF and DKIM records (the domain's DMARC is p=reject, so a shared sender will bounce). Then send one test and re-run Smart Card emails 2 and 3 with a fresh code</td><td>Every sampled send since 19 Aug failed "Configured email service is expired": 60 of 60 campaign emails 2 and 3, plus 79 automation emails through 2 Nov</td><td class="n">Unblocks #3, #5 and every nurture flow</td><td><span class="tag g">S, needs Jacques</span></td></tr>
     <tr><td>1</td><td><b>Checkout abandonment</b> (Engage)</td><td>Publish the cart upsell theme (167330185286: free-delivery bar, card and second-stand offers) so more baskets cross R1,000 and the R125 fee disappears for them</td><td>63% of checkout sessions abandon; AOV R1,062</td><td class="n">~R22k/mo if completion rises 37% → 50% (estimate)</td><td><span class="tag g">S</span></td></tr>
     <tr><td>2</td><td><b>Buyers invisible to the CRM</b> (Delight)</td><td>Make scenario Shopify → CRM (lifecycle Customer, value, product). Then backfill the 840 buyers</td><td>840 buyers vs 437 tagged conversations</td><td class="n">Enables #3 and #5</td><td><span class="tag g">S</span></td></tr>
     <tr><td>3</td><td><b>One-and-done customers</b> (Delight)</td><td>Second-purchase sequence: day 14 "how is it working", day 45 card top-up or second stand, day 90 RT Pro trial. Run on WhatsApp</td><td>11.3% repeat rate</td><td class="n">~R80k/yr if repeat reaches 20% (estimate)</td><td><span class="tag a">M</span></td></tr>
@@ -319,7 +321,7 @@ footer{max-width:1080px;margin:0 auto;padding:30px 20px 60px;color:var(--dim);fo
     <tr><td>8</td><td><b>Paid force uneven</b> (Attract)</td><td>Hold Meta at the 2.5x floor, judged weekly on blended ROAS. Keep Google non-brand paused (R5,138 spent Aug to Oct, 0 conversions)</td><td>ROAS 1.78x in Sep, 3.42x in Oct, 1.59x in Nov so far</td><td class="n">Protects the R382 CAC</td><td><span class="tag g">S</span></td></tr>
     <tr><td>9</td><td><b>Silent churn on recurring</b> (Delight)</td><td>Payfast → CRM via Make, plus the monthly not-billed check. Verify TPI and Clarkys billing</td><td>~R3,350/mo went quiet unnoticed; two won deals not on the rail</td><td class="n">Up to R15,498/mo to verify</td><td><span class="tag g">S</span></td></tr>
   </table></div>
-  <div class="card blue-l"><b>The one move that matters most:</b> <span class="small">#2 then #3. Connecting Shopify to the CRM costs an afternoon in Make and turns 840 buyers into a reachable Delight audience. Every other Delight lever (repeat sales, RT Pro, reviews, referrals) depends on it, and Delight is the only stage where ReviewTap's flywheel is not turning. #1 is the fastest cash and the theme is already built, so publish it in the same week.</span></div>
+  <div class="card blue-l"><b>The one move that matters most:</b> <span class="small">#0 first, today: nothing sent by email reaches anyone until the email service is reconnected. Then #2 and #3. Connecting Shopify to the CRM costs an afternoon in Make and turns 840 buyers into a reachable Delight audience. Every other Delight lever (repeat sales, RT Pro, reviews, referrals) depends on it, and Delight is the only stage where ReviewTap's flywheel is not turning. #1 is the fastest cash and the theme is already built, so publish it in the same week.</span></div>
 </section>
 
 <section class="slide" id="cadence">
@@ -346,6 +348,7 @@ footer{max-width:1080px;margin:0 auto;padding:30px 20px 60px;color:var(--dim);fo
     <li><b>Speed to lead</b> could not be measured to the minute: the conversation search API returns only the last message. The inbound-last count is the proxy.</li>
     <li><b>MRR</b> is read from Payfast confirmation emails and the CRM, not the Payfast dashboard. TPI and Clarkys billing need verification before quoting.</li>
     <li><b>Meta</b> has one staged draft (re-enabling a deleted ad set) that cannot publish. Harmless, but worth discarding in Ads Manager.</li>
+    <li><b>Email failure</b> is measured on a random sample of 60 Smart Card recipients (email 1: 59 sent, 38 opened, 2 clicked; emails 2 and 3: 120 of 120 failed) plus every outbound email in the 80 most recent conversations (79 of 79 failed, Sep to 2 Nov). Three Smart Card orders landed in the three weeks after 18 Aug (R3,245); attribution to email 1 is not provable.</li>
     <li><b>Lifetime buyers (840)</b> and repeat rate come from Shopify's customer counts since the store began (first orders Q1 2025).</li>
   </ul>
 </section>
