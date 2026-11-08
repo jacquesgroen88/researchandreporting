@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Growth Diagnostic</title>
+<meta name="description" content="Put in your monthly marketing numbers and see where the funnel leaks, what a customer really costs, where to move budget, and a 90-day plan. Built by Jacques Groenewald.">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#141d33; --navy-2:#1d2843; --gold:#c9a86a; --gold-dk:#a8853f;
+  --cream:#faf8f4; --panel:#ffffff; --ink:#2b3346; --soft:#5b6478; --rule:#e2ddd3;
+  --good:#2f7d5b; --good-bg:#e6f2ec; --warn:#a8691b; --warn-bg:#fbf0de; --bad:#b0413e; --bad-bg:#f8e5e4;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{font-family:Inter,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;background:var(--cream);color:var(--ink);font-size:15px;line-height:1.55}
+a{color:var(--gold-dk)}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+
+/* header */
+header{background:var(--navy);color:#fff;padding:28px 0 26px}
+.kick{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);font-weight:600}
+h1{font-family:'Playfair Display',Georgia,serif;font-size:clamp(28px,5vw,42px);line-height:1.1;margin:10px 0 10px}
+h1 span{color:var(--gold)}
+.lede{color:#c3cadb;max-width:720px;font-size:15.5px}
+.lede b{color:#fff;font-weight:600}
+.modes{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px;align-items:center}
+.modes .lbl{font-size:12px;color:#a9b2c7;margin-right:4px}
+.mode{border:1px solid rgba(201,168,106,.5);background:transparent;color:#fff;border-radius:20px;padding:7px 15px;font:inherit;font-size:13.5px;cursor:pointer}
+.mode.on{background:var(--gold);border-color:var(--gold);color:var(--navy);font-weight:600}
+.cur{margin-left:auto;display:flex;gap:6px;align-items:center;font-size:12px;color:#a9b2c7}
+.cur select{font:inherit;font-size:13px;padding:5px 8px;border-radius:6px;border:1px solid rgba(255,255,255,.25);background:var(--navy-2);color:#fff}
+
+/* layout */
+.grid{display:grid;grid-template-columns:380px 1fr;gap:24px;padding:24px 0 40px;align-items:start}
+@media (max-width:900px){.grid{grid-template-columns:1fr}.cur{margin-left:0}.results{order:-1}}
+.card{background:var(--panel);border:1px solid var(--rule);border-radius:10px;padding:18px 18px 16px}
+.card + .card{margin-top:16px}
+h2{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--navy);font-weight:700;display:flex;align-items:center;gap:10px;margin-bottom:12px}
+h2::before{content:"";width:9px;height:9px;background:var(--gold);flex:none}
+h2 small{margin-left:auto;font-size:11px;letter-spacing:0;text-transform:none;color:var(--soft);font-weight:500}
+.hint{font-size:12.5px;color:var(--soft);margin:-4px 0 12px}
+
+/* inputs */
+.field{display:grid;grid-template-columns:1fr 132px;gap:10px;align-items:center;margin-bottom:8px}
+.field label{font-size:13.5px}
+.field label i{display:block;font-style:normal;font-size:11.5px;color:var(--soft)}
+input[type=number]{width:100%;font:inherit;font-size:14px;padding:7px 9px;border:1px solid #d6cfc0;border-radius:6px;background:#fff;color:var(--ink);text-align:right;font-variant-numeric:tabular-nums}
+input[type=number]:focus{outline:2px solid var(--gold);outline-offset:0;border-color:var(--gold)}
+.ch{display:grid;grid-template-columns:1fr 104px 76px;gap:8px;align-items:center;margin-bottom:7px}
+.ch.head{font-size:11px;color:var(--soft);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.ch.head span:not(:first-child){text-align:right}
+.ch .nm{font-size:13.5px}
+details{margin-top:10px;font-size:13px}
+summary{cursor:pointer;color:var(--gold-dk);font-weight:600}
+details .field{margin-top:8px}
+
+/* results */
+.verdict{background:var(--navy);color:#fff;border-radius:10px;padding:20px 22px;border:0}
+.verdict .kick{margin-bottom:8px}
+.verdict p{font-size:17px;line-height:1.5}
+.verdict p b{color:var(--gold);font-weight:600}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media (max-width:640px){.kpis{grid-template-columns:repeat(2,1fr)}}
+.kpi{border:1px solid var(--rule);border-radius:8px;padding:12px;background:#fff}
+.kpi .v{font-size:22px;font-weight:700;color:var(--navy);font-variant-numeric:tabular-nums;line-height:1.1}
+.kpi .k{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--soft);margin-top:6px}
+.kpi .s{font-size:12px;margin-top:6px;display:inline-block;padding:2px 8px;border-radius:12px;font-weight:600}
+.good{color:var(--good);background:var(--good-bg)} .warn{color:var(--warn);background:var(--warn-bg)} .bad{color:var(--bad);background:var(--bad-bg)}
+
+/* funnel */
+.stage{display:grid;grid-template-columns:150px 1fr;gap:12px;align-items:center;margin-bottom:6px}
+@media (max-width:640px){.stage{grid-template-columns:1fr}}
+.stage .nm{font-size:13px}
+.stage .nm b{display:block;font-size:15px;color:var(--navy);font-variant-numeric:tabular-nums}
+.bar{height:26px;background:#efebe2;border-radius:5px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--navy-2);border-radius:5px;min-width:3px}
+.step{margin:2px 0 8px 162px;font-size:12.5px;color:var(--soft);display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+@media (max-width:640px){.step{margin-left:0}}
+.step .pill{font-weight:600;padding:1px 8px;border-radius:12px;font-variant-numeric:tabular-nums}
+.step.leak{color:var(--bad);font-weight:600}
+.leaktag{background:var(--bad);color:#fff;padding:1px 8px;border-radius:12px;font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+
+/* tables */
+table{width:100%;border-collapse:collapse;font-size:13.5px;font-variant-numeric:tabular-nums}
+th{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--soft);text-align:right;font-weight:600;padding:6px 8px;border-bottom:1px solid var(--rule)}
+th:first-child,td:first-child{text-align:left}
+td{text-align:right;padding:8px;border-bottom:1px solid #f0ece4}
+.tablewrap{overflow-x:auto}
+
+/* actions */
+.alert{border-left:4px solid var(--bad);background:var(--bad-bg);padding:10px 14px;border-radius:0 8px 8px 0;font-size:14px;margin-bottom:10px}
+.alert.amber{border-color:var(--warn);background:var(--warn-bg)}
+.act{display:grid;grid-template-columns:34px 1fr auto;gap:12px;padding:12px 0;border-bottom:1px solid #f0ece4;align-items:start}
+.act:last-child{border-bottom:0}
+.act .n{width:30px;height:30px;border-radius:50%;background:var(--navy);color:var(--gold);display:grid;place-items:center;font-weight:700}
+.act h3{font-size:15px;color:var(--navy)}
+.act p{font-size:13.5px;color:var(--ink);margin-top:3px}
+.act .val{font-weight:700;color:var(--good);white-space:nowrap;font-variant-numeric:tabular-nums;text-align:right;font-size:14px}
+.act .val small{display:block;font-weight:500;color:var(--soft);font-size:11px}
+@media (max-width:640px){.act{grid-template-columns:34px 1fr}.act .val{grid-column:2;text-align:left}}
+.plan{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media (max-width:760px){.plan{grid-template-columns:1fr}}
+.phase{border:1px solid var(--rule);border-radius:8px;padding:14px;background:#fff}
+.phase .d{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-dk);font-weight:700}
+.phase h3{font-size:15px;color:var(--navy);margin:4px 0 8px}
+.phase ul{padding-left:18px;font-size:13.5px}
+.phase li{margin-bottom:5px}
+.btns{display:flex;gap:10px;flex-wrap:wrap}
+.btn{font:inherit;font-size:14px;padding:9px 16px;border-radius:7px;border:1px solid var(--navy);background:var(--navy);color:#fff;cursor:pointer;font-weight:600}
+.btn.ghost{background:#fff;color:var(--navy)}
+.note{font-size:12.5px;color:var(--soft)}
+
+footer{background:var(--navy);color:#a9b2c7;padding:26px 0;font-size:14px}
+footer b{color:#fff}
+footer a{color:var(--gold)}
+.fgrid{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:center}
+
+@media print{
+  @page{size:A4;margin:12mm}
+  body{background:#fff;font-size:12px}
+  header{padding:14px 0}
+  .modes,.inputs,.btns,footer .noprint{display:none!important}
+  .grid{grid-template-columns:1fr;padding:12px 0}
+  .card,.verdict{break-inside:avoid}
+  .verdict{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  header,footer,.act .n,.bar i,.leaktag{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="kick">A working tool by Jacques Groenewald</div>
+    <h1>Growth <span>Diagnostic</span></h1>
+    <p class="lede">Enter one month of marketing numbers. In two minutes you will see <b>where the funnel leaks</b>,
+      <b>what a customer really costs</b>, <b>which channel deserves more budget</b>, and a <b>90-day plan</b> ranked by
+      value. It loads with example numbers so you can see the output first. Nothing you type leaves your browser.</p>
+    <div class="modes" id="modes">
+      <span class="lbl">Business type:</span>
+      <button class="mode" data-mode="saas">B2B SaaS</button>
+      <button class="mode" data-mode="services">B2B services</button>
+      <button class="mode" data-mode="ecom">eCommerce</button>
+      <label class="cur">Currency
+        <select id="cur">
+          <option value="R">ZAR (R)</option><option value="$">USD ($)</option>
+          <option value="£">GBP (£)</option><option value="€">EUR (€)</option>
+        </select>
+      </label>
+    </div>
+  </div>
+</header>
+
+<main class="wrap grid">
+  <section class="inputs">
+    <div class="card">
+      <h2>1. Your funnel <small>last 30 days</small></h2>
+      <p class="hint">Volume at each stage for one month.</p>
+      <div id="funnelIn"></div>
+    </div>
+    <div class="card">
+      <h2>2. Customer economics</h2>
+      <div id="econIn"></div>
+    </div>
+    <div class="card">
+      <h2>3. Channels <small>monthly spend</small></h2>
+      <p class="hint" id="chHint"></p>
+      <div class="ch head"><span>Channel</span><span>Spend</span><span id="chUnit">Customers</span></div>
+      <div id="chIn"></div>
+      <details>
+        <summary>Benchmarks used (edit to your own targets)</summary>
+        <p class="note" style="margin-top:8px">Typical stage conversion rates drawn from widely published industry
+          ranges. They are a starting point, not a verdict. Replace them with your own targets for a sharper read.</p>
+        <div id="benchIn"></div>
+      </details>
+    </div>
+  </section>
+
+  <section class="results">
+    <div class="card verdict">
+      <div class="kick">The short version</div>
+      <p id="verdict"></p>
+    </div>
+    <div class="card">
+      <h2>What a customer is worth vs what one costs</h2>
+      <div class="kpis" id="kpis"></div>
+    </div>
+    <div class="card">
+      <h2>Where the funnel leaks</h2>
+      <div id="funnelOut"></div>
+    </div>
+    <div class="card">
+      <h2>Channel efficiency</h2>
+      <div class="tablewrap"><table id="chOut"></table></div>
+      <p class="note" id="chNote" style="margin-top:10px"></p>
+    </div>
+    <div class="card">
+      <h2>Priorities, ranked by value</h2>
+      <div id="alerts"></div>
+      <div id="actions"></div>
+    </div>
+    <div class="card">
+      <h2>The first 90 days</h2>
+      <div class="plan" id="plan"></div>
+    </div>
+    <div class="card">
+      <div class="btns">
+        <button class="btn" onclick="window.print()">Save as PDF</button>
+        <button class="btn ghost" id="share">Copy a link with these numbers</button>
+        <button class="btn ghost" id="reset">Reset to example</button>
+      </div>
+      <p class="note" id="shareNote" style="margin-top:8px">The link stores your numbers in the address itself. No server, no database.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap fgrid">
+    <div><b>Jacques Groenewald</b> &nbsp;·&nbsp; Senior marketing leader, 17 years B2B and consumer.<br>
+      This is the first-week exercise I run on any business, with your real numbers instead of these.</div>
+    <div class="noprint"><a href="mailto:jacquesgroenewald88@gmail.com?subject=Growth%20Diagnostic">jacquesgroenewald88@gmail.com</a> &nbsp;·&nbsp; +27 79 512 4292 &nbsp;·&nbsp;
+      <a href="https://linkedin.com/in/jacquesgroenewald">LinkedIn</a></div>
+  </div>
+</footer>
+
+<script>
+const MODES = {
+  saas: {
+    type: 'b2b', unit: 'Customers',
+    stages: ['Website visitors', 'Leads', 'Qualified leads', 'Sales opportunities', 'New customers'],
+    bench: [2.0, 30, 30, 22],
+    econ: { arpa: 1800, gm: 80, churn: 3.0, other: 60000 },
+    funnel: [20000, 380, 57, 17, 4],
+    channels: [['Google Ads', 35000, 2], ['LinkedIn Ads', 40000, 1], ['Meta Ads', 15000, 0], ['Organic & referral', 0, 1]],
+    fixes: [
+      ['Turn more visitors into leads', 'One clear offer per page, a lead magnet built for the ideal customer, shorter forms, and landing pages that match each ad.'],
+      ['Attract the right leads, not just more', 'Tighten the ideal customer profile and ad targeting, score leads, and retire lead magnets that pull in people who will never buy.'],
+      ['Move qualified leads into sales conversations', 'Respond inside five minutes, run a nurture sequence for not-yet-ready leads, and agree a hand-off rule with sales.'],
+      ['Close more of the deals already in play', 'Arm sales with case studies, objection-handling content, a clear pricing page and proposal templates.']
+    ]
+  },
+  services: {
+    type: 'b2b', unit: 'Clients',
+    stages: ['Website visitors', 'Enquiries', 'Qualified enquiries', 'Proposals sent', 'New clients'],
+    bench: [2.5, 35, 40, 30],
+    econ: { arpa: 15000, gm: 45, churn: 6.0, other: 40000 },
+    funnel: [8000, 160, 56, 14, 3],
+    channels: [['Google Ads', 25000, 1], ['LinkedIn Ads', 12000, 1], ['Meta Ads', 10000, 0], ['Organic & referral', 0, 1]],
+    fixes: [
+      ['Turn more visitors into enquiries', 'Service pages built around the buyer problem, proof above the fold, a low-friction first step such as an audit or call.'],
+      ['Attract better-fit enquiries', 'Sharper positioning and targeting, plus a qualifying question on the form so weak fits sort themselves out.'],
+      ['Get qualified enquiries to a proposal', 'Same-day follow-up, a discovery call script, and a short nurture for enquiries that go quiet.'],
+      ['Win more of the proposals you send', 'Case studies matched to each sector, priced options instead of one number, and a follow-up cadence after sending.']
+    ]
+  },
+  ecom: {
+    type: 'ecom', unit: 'Orders',
+    stages: ['Sessions', 'Product views', 'Added to cart', 'Checkouts started', 'Orders'],
+    bench: [45, 14, 50, 55],
+    econ: { aov: 650, gm: 45, repeat: 1.6, newShare: 70, other: 30000 },
+    funnel: [60000, 24000, 2400, 1500, 600],
+    channels: [['Meta Ads', 90000, 260], ['Google Ads', 45000, 190], ['TikTok Ads', 15000, 20], ['Organic & email', 0, 130]],
+    fixes: [
+      ['Get more visitors to a product', 'Landing and collection pages that match the ad promise, with best sellers one tap away.'],
+      ['Turn product views into add-to-carts', 'Better photos and video, reviews near the price, delivery time and returns stated above the fold.'],
+      ['Move carts into checkout', 'Show delivery cost early, add trust signals in the cart, and recover abandoned carts by email and WhatsApp.'],
+      ['Stop losing people at checkout', 'Guest checkout, more payment options, no surprise fees on the last step.']
+    ]
+  }
+};
+
+let mode = 'saas';
+let cur = 'R';
+let state = null;
+const $ = id => document.getElementById(id);
+
+function clone(o) { return JSON.parse(JSON.stringify(o)); }
+function load(m) {
+  mode = m;
+  const d = MODES[m];
+  state = { funnel: d.funnel.slice(), bench: d.bench.slice(), econ: clone(d.econ), channels: clone(d.channels) };
+}
+
+function money(v) {
+  if (!isFinite(v)) return 'n/a';
+  const a = Math.abs(v), s = v < 0 ? '-' : '';
+  if (a >= 1e6) return s + cur + (a / 1e6).toFixed(a >= 1e7 ? 0 : 1) + 'M';
+  if (a >= 1e4) return s + cur + Math.round(a / 1e3) + 'k';
+  return s + cur + Math.round(a).toLocaleString('en-US');
+}
+function num(v) { return isFinite(v) ? Math.round(v).toLocaleString('en-US') : 'n/a'; }
+function pct(v) { return isFinite(v) ? (v === 0 ? '0' : v < 10 ? v.toFixed(1) : Math.round(v)) + '%' : 'n/a'; }
+function lc(t) { return t.charAt(0).toLowerCase() + t.slice(1); }
+function n(v) { const x = parseFloat(v); return isFinite(x) ? x : 0; }
+
+function field(id, label, value, sub) {
+  return `<div class="field"><label for="${id}">${label}${sub ? `<i>${sub}</i>` : ''}</label>` +
+    `<input type="number" min="0" step="any" id="${id}" value="${value}"></div>`;
+}
+
+function renderInputs() {
+  const d = MODES[mode];
+  document.querySelectorAll('.mode').forEach(b => b.classList.toggle('on', b.dataset.mode === mode));
+  $('funnelIn').innerHTML = d.stages.map((s, i) => field('f' + i, s, state.funnel[i])).join('');
+  const e = state.econ;
+  if (d.type === 'b2b') {
+    $('econIn').innerHTML =
+      field('arpa', 'Revenue per ' + d.unit.toLowerCase().replace(/s$/, '') + ' per month', e.arpa, cur) +
+      field('gm', 'Gross margin', e.gm, '%') +
+      field('churn', 'Monthly churn', e.churn, '% of ' + d.unit.toLowerCase() + ' lost each month') +
+      field('other', 'Other monthly marketing and sales cost', e.other, 'people, tools, agencies (' + cur + ')');
+  } else {
+    $('econIn').innerHTML =
+      field('aov', 'Average order value', e.aov, cur) +
+      field('gm', 'Gross margin', e.gm, '% after product cost and delivery') +
+      field('repeat', 'Orders per customer, lifetime', e.repeat, '1 = nobody comes back') +
+      field('newShare', 'Orders from new customers', e.newShare, '%') +
+      field('other', 'Other monthly marketing cost', e.other, 'people, tools, agencies (' + cur + ')');
+  }
+  $('chUnit').textContent = d.unit;
+  $('chHint').textContent = 'Spend and the ' + d.unit.toLowerCase() + ' each channel brought in. Leave spend at 0 for organic.';
+  $('chIn').innerHTML = state.channels.map((c, i) =>
+    `<div class="ch"><span class="nm">${c[0]}</span>` +
+    `<input type="number" min="0" step="any" id="cs${i}" value="${c[1]}" aria-label="${c[0]} spend">` +
+    `<input type="number" min="0" step="any" id="cc${i}" value="${c[2]}" aria-label="${c[0]} ${d.unit}"></div>`).join('');
+  $('benchIn').innerHTML = d.stages.slice(1).map((s, i) =>
+    field('b' + i, d.stages[i] + ' &rarr; ' + s, state.bench[i], '%')).join('');
+  document.querySelectorAll('.inputs input').forEach(el => el.addEventListener('input', readAndRun));
+}
+
+function readAndRun() {
+  const d = MODES[mode];
+  state.funnel = d.stages.map((_, i) => n($('f' + i).value));
+  state.bench = d.bench.map((_, i) => n($('b' + i).value));
+  Object.keys(state.econ).forEach(k => { if ($(k)) state.econ[k] = n($(k).value); });
+  state.channels = state.channels.map((c, i) => [c[0], n($('cs' + i).value), n($('cc' + i).value)]);
+  run();
+}
+
+function run() {
+  const d = MODES[mode], e = state.econ, f = state.funnel, b = state.bench;
+  const last = f[f.length - 1];
+  const adSpend = state.channels.reduce((s, c) => s + c[1], 0);
+  const totalCost = adSpend + e.other;
+
+  // unit economics
+  let newCust, ltv, cac, payback, unitMargin;
+  if (d.type === 'b2b') {
+    newCust = last;
+    unitMargin = e.arpa * e.gm / 100;
+    ltv = e.churn > 0 ? unitMargin / (e.churn / 100) : Infinity;
+    cac = newCust > 0 ? totalCost / newCust : Infinity;
+    payback = unitMargin > 0 ? cac / unitMargin : Infinity;
+  } else {
+    newCust = last * e.newShare / 100;
+    unitMargin = e.aov * e.gm / 100;
+    ltv = unitMargin * Math.max(e.repeat, 1);
+    cac = newCust > 0 ? totalCost / newCust : Infinity;
+    payback = unitMargin > 0 ? cac / unitMargin : Infinity; // in orders
+  }
+  const ratio = cac > 0 && isFinite(cac) ? ltv / cac : (isFinite(ltv) ? Infinity : NaN);
+
+  // funnel
+  const rates = f.slice(1).map((v, i) => f[i] > 0 ? v / f[i] * 100 : 0);
+  const gaps = rates.map((r, i) => b[i] > 0 ? r / b[i] : 1);
+  let leak = -1, worst = 0.95;
+  gaps.forEach((g, i) => { if (g < worst) { worst = g; leak = i; } });
+  let extra = 0;
+  if (leak >= 0) {
+    const fixed = f.slice();
+    for (let i = leak + 1; i < fixed.length; i++) {
+      fixed[i] = i === leak + 1 ? fixed[i - 1] * b[leak] / 100 : fixed[i - 1] * (f[i - 1] > 0 ? f[i] / f[i - 1] : 0);
+    }
+    extra = fixed[fixed.length - 1] - last;
+  }
+  const valuePerResult = d.type === 'b2b' ? ltv : unitMargin;
+  const leakValue = extra * (isFinite(valuePerResult) ? valuePerResult : 0);
+
+  // channels
+  const paid = state.channels.filter(c => c[1] > 0).map(c => ({ name: c[0], spend: c[1], res: c[2], cpa: c[2] > 0 ? c[1] / c[2] : Infinity }));
+  const totalRes = state.channels.reduce((s, c) => s + c[2], 0);
+  let realloc = null;
+  if (paid.length >= 2) {
+    const sorted = paid.slice().sort((a, c) => a.cpa - c.cpa);
+    const best = sorted[0], worstC = sorted[sorted.length - 1];
+    if (isFinite(best.cpa) && best !== worstC && worstC.cpa > best.cpa * 1.25) {
+      const shift = worstC.spend * (isFinite(worstC.cpa) ? 0.25 : 0.5);
+      const lost = isFinite(worstC.cpa) ? shift / worstC.cpa : 0;
+      const gained = shift / (best.cpa * 1.3);
+      const net = gained - lost;
+      if (net > 0) {
+        const perRes = d.type === 'b2b' ? ltv : unitMargin;
+        realloc = { best, worst: worstC, shift, net, value: net * (isFinite(perRes) ? perRes : 0) };
+      }
+    }
+  }
+  const trackGap = last > 0 ? totalRes / last : 1;
+
+  // retention lever
+  let retValue = 0, retText = '';
+  if (d.type === 'b2b' && e.churn > 0) {
+    const newLtv = unitMargin / (e.churn * 0.75 / 100);
+    retValue = newCust * (newLtv - ltv);
+    retText = `Cut monthly churn from ${pct(e.churn)} to ${pct(e.churn * 0.75)} with onboarding, a 90-day success plan and a save play for at-risk accounts. Each ${d.unit.toLowerCase().replace(/s$/, '')} becomes worth ${money(newLtv)} instead of ${money(ltv)}.`;
+  } else if (d.type === 'ecom') {
+    retValue = newCust * unitMargin * 0.2;
+    retText = `Lift lifetime orders per customer from ${e.repeat} to ${(e.repeat + 0.2).toFixed(1)} with a post-purchase email and WhatsApp flow, a second-order offer and replenishment reminders.`;
+  }
+
+  // ---- render KPIs
+  const ratioCls = !isFinite(ratio) ? 'warn' : ratio < 1 ? 'bad' : ratio < 3 ? 'warn' : 'good';
+  const ratioTxt = !isFinite(ratio) ? 'Check inputs' : ratio < 1 ? 'Losing money per customer' : ratio < 3 ? 'Thin, fix before scaling' : ratio > 5 ? 'Healthy, room to spend more' : 'Healthy';
+  let pbCls, pbTxt, pbVal;
+  if (d.type === 'b2b') {
+    pbVal = isFinite(payback) ? payback.toFixed(1) + ' mo' : 'n/a';
+    pbCls = payback <= 12 ? 'good' : payback <= 18 ? 'warn' : 'bad';
+    pbTxt = payback <= 12 ? 'Under 12 months' : payback <= 18 ? '12 to 18 months' : 'Over 18 months';
+  } else {
+    pbVal = isFinite(payback) ? payback.toFixed(1) + ' orders' : 'n/a';
+    pbCls = payback <= 1 ? 'good' : payback <= Math.max(e.repeat, 1) ? 'warn' : 'bad';
+    pbTxt = payback <= 1 ? 'First order pays back' : payback <= Math.max(e.repeat, 1) ? 'Needs repeat orders' : 'Never pays back';
+  }
+  $('kpis').innerHTML = [
+    ['Lifetime value', money(ltv), d.type === 'b2b' ? 'Gross profit per ' + d.unit.toLowerCase().replace(/s$/, '') : 'Gross profit per customer', ''],
+    ['Cost to acquire', money(cac), 'All-in, incl. people and tools', ''],
+    ['Value to cost', isFinite(ratio) ? ratio.toFixed(1) + ' : 1' : 'n/a', ratioTxt, ratioCls],
+    ['Payback', pbVal, pbTxt, pbCls]
+  ].map(k => `<div class="kpi"><div class="v">${k[1]}</div><div class="k">${k[0]}</div>` +
+    (k[3] ? `<span class="s ${k[3]}">${k[2]}</span>` : `<div class="note" style="margin-top:6px">${k[2]}</div>`) + '</div>').join('');
+
+  // ---- render funnel
+  const max = Math.max(...f, 1);
+  let fh = '';
+  d.stages.forEach((s, i) => {
+    const w = Math.max(Math.sqrt(f[i] / max) * 100, 0.8);
+    fh += `<div class="stage"><div class="nm">${s}<b>${num(f[i])}</b></div><div class="bar"><i style="width:${w}%"></i></div></div>`;
+    if (i < rates.length) {
+      const g = gaps[i], cls = g >= 0.95 ? 'good' : g >= 0.7 ? 'warn' : 'bad';
+      fh += `<div class="step ${i === leak ? 'leak' : ''}"><span class="pill ${cls}">${pct(rates[i])}</span>` +
+        `<span>converted, against a typical ${pct(b[i])}</span>${i === leak ? '<span class="leaktag">Biggest leak</span>' : ''}</div>`;
+    }
+  });
+  if (leak >= 0) {
+    fh += `<p class="note" style="margin-top:10px">Bringing <b>${d.stages[leak]} &rarr; ${d.stages[leak + 1]}</b> up to a typical rate, with every other stage unchanged, adds about <b>${num(extra)} ${d.unit.toLowerCase()} a month</b>.</p>`;
+  } else {
+    fh += `<p class="note" style="margin-top:10px">Every stage is at or near a typical rate. The growth lever here is volume at the top, or better economics.</p>`;
+  }
+  $('funnelOut').innerHTML = fh;
+
+  // ---- render channels
+  const avgCpa = paid.length ? paid.reduce((s, c) => s + c.spend, 0) / Math.max(paid.reduce((s, c) => s + c.res, 0), 1e-9) : Infinity;
+  $('chOut').innerHTML = `<tr><th>Channel</th><th>Spend</th><th>${d.unit}</th><th>Cost per ${d.unit.toLowerCase().replace(/s$/, '')}</th><th>Share of spend</th><th>Share of ${d.unit.toLowerCase()}</th></tr>` +
+    state.channels.map(c => {
+      const cpa = c[1] > 0 ? (c[2] > 0 ? c[1] / c[2] : Infinity) : 0;
+      const cls = c[1] === 0 ? 'good' : !isFinite(cpa) ? 'bad' : cpa <= avgCpa * 0.85 ? 'good' : cpa >= avgCpa * 1.25 ? 'bad' : 'warn';
+      const cpaTxt = c[1] === 0 ? 'free' : isFinite(cpa) ? money(cpa) : 'none won';
+      return `<tr><td>${c[0]}</td><td>${money(c[1])}</td><td>${num(c[2])}</td><td><span class="s ${cls}" style="padding:2px 8px;border-radius:12px;font-weight:600">${cpaTxt}</span></td>` +
+        `<td>${adSpend > 0 ? pct(c[1] / adSpend * 100) : 'n/a'}</td><td>${totalRes > 0 ? pct(c[2] / totalRes * 100) : 'n/a'}</td></tr>`;
+    }).join('');
+  let cn = '';
+  if (realloc) cn = `Moving ${isFinite(realloc.worst.cpa) ? 'a quarter' : 'half'} of the ${realloc.worst.name} budget (${money(realloc.shift)}) to ${realloc.best.name} nets roughly <b>${realloc.net.toFixed(1)} more ${d.unit.toLowerCase()} a month</b>. That assumes the extra spend on ${realloc.best.name} costs 30% more per result than today, because the cheapest results are always bought first.`;
+  else if (paid.length >= 2) cn = 'Paid channels are close in efficiency. No strong case to move budget between them on these numbers.';
+  else cn = 'Add a second paid channel to compare efficiency.';
+  const dead = paid.filter(c => c.res === 0);
+  if (dead.length) cn = dead.map(c => `<b>${money(c.spend)} on ${c.name} won no ${d.unit.toLowerCase()} this month.</b> `).join('') + cn;
+  $('chNote').innerHTML = cn;
+
+  // ---- alerts + actions
+  let al = '';
+  if (last > 0 && (trackGap < 0.85 || trackGap > 1.15)) {
+    al += `<div class="alert amber"><b>Fix measurement first.</b> Your channels account for ${num(totalRes)} ${d.unit.toLowerCase()}, but the funnel shows ${num(last)}. ` +
+      `Until those match, every budget decision is partly a guess. Week one: tracking audit, UTMs, and CRM source fields.</div>`;
+  }
+  if (isFinite(ratio) && ratio < 1) {
+    al += `<div class="alert"><b>Do not scale spend yet.</b> Each new ${d.type === 'b2b' ? d.unit.toLowerCase().replace(/s$/, '') : 'customer'} costs ${money(cac)} and returns ${money(ltv)} in gross profit. More budget would grow losses. Fix the leak and the economics below first.</div>`;
+  }
+  $('alerts').innerHTML = al;
+
+  const acts = [];
+  if (leak >= 0) acts.push({ t: d.fixes[leak][0], p: d.fixes[leak][1] + ` Target: ${pct(rates[leak])} to ${pct(b[leak])}.`, v: leakValue, u: `+${num(extra)} ${d.unit.toLowerCase()}/mo` });
+  if (realloc) acts.push({ t: `Shift budget from ${realloc.worst.name} to ${realloc.best.name}`, p: `Move ${money(realloc.shift)} a month in two steps, watch cost per result weekly, and stop if it rises more than 30%.`, v: realloc.value, u: `+${realloc.net.toFixed(1)} ${d.unit.toLowerCase()}/mo` });
+  if (retValue > 0) acts.push({ t: d.type === 'b2b' ? 'Keep the ' + d.unit.toLowerCase() + ' you already won' : 'Earn the second order', p: retText, v: retValue, u: d.type === 'b2b' ? 'more lifetime value' : 'gross profit/mo' });
+  acts.sort((a, c) => c.v - a.v);
+  const valLabel = d.type === 'b2b' ? 'lifetime gross profit, per month of new business' : 'gross profit a month';
+  $('actions').innerHTML = acts.length ? acts.map((a, i) =>
+    `<div class="act"><div class="n">${i + 1}</div><div><h3>${a.t}</h3><p>${a.p}</p></div>` +
+    `<div class="val">${money(a.v)}<small>${a.u}</small></div></div>`).join('') +
+    `<p class="note" style="margin-top:8px">Values are ${valLabel}. They are estimates to rank the work, not promises.</p>`
+    : '<p class="note">No clear lever on these numbers. Add channel data or adjust the benchmarks.</p>';
+
+  // ---- 90-day plan
+  const p1 = [], p2 = [], p3 = [];
+  if (al.includes('measurement')) p1.push('Tracking audit: UTMs, conversion events and CRM source on every lead');
+  p1.push('Agree the three numbers the business is judged on and a weekly report');
+  if (acts[0]) p1.push('Start on priority 1: ' + lc(acts[0].t));
+  if (acts[1]) p2.push('Priority 2: ' + lc(acts[1].t));
+  p2.push('Run two controlled tests a month on the biggest leak, one change at a time');
+  if (isFinite(ratio) && ratio < 1) p2.push('Hold total spend flat until value to cost passes 1.5 : 1');
+  else p2.push('Re-forecast budget against cost to acquire, not last year\'s spend');
+  if (acts[2]) p3.push('Priority 3: ' + lc(acts[2].t));
+  p3.push(isFinite(ratio) && ratio >= 3 ? 'Scale the winning channel in 20% steps while cost per result holds' : 'Scale only the channels that now pay back');
+  p3.push('Present a 12-month plan with the funnel, budget and targets agreed');
+  const ph = [['Days 1 to 30', 'Measure and stop the bleed', p1], ['Days 31 to 60', 'Fix and reallocate', p2], ['Days 61 to 90', 'Scale what works', p3]];
+  $('plan').innerHTML = ph.map(x => `<div class="phase"><div class="d">${x[0]}</div><h3>${x[1]}</h3><ul>${x[2].map(t => `<li>${t}</li>`).join('')}</ul></div>`).join('');
+
+  // ---- verdict
+  let v = '';
+  const noun = d.type === 'b2b' ? d.unit.toLowerCase().replace(/s$/, '') : 'customer';
+  if (isFinite(ratio)) v += `Every new ${noun} costs <b>${money(cac)}</b> and is worth <b>${money(ltv)}</b> in gross profit, a ratio of <b>${ratio.toFixed(1)} : 1</b>. `;
+  if (leak >= 0) v += `The biggest leak is <b>${d.stages[leak].toLowerCase()} to ${d.stages[leak + 1].toLowerCase()}</b> at ${pct(rates[leak])} against a typical ${pct(b[leak])}. `;
+  if (acts[0]) v += `The highest-value move is to <b>${lc(acts[0].t)}</b>, worth about <b>${money(acts[0].v)}</b>.`;
+  $('verdict').innerHTML = v || 'Enter your numbers on the left to see the diagnosis.';
+}
+
+// sharing via URL hash
+function encodeState() { return btoa(unescape(encodeURIComponent(JSON.stringify({ m: mode, c: cur, s: state })))); }
+function decodeState(h) {
+  try {
+    const o = JSON.parse(decodeURIComponent(escape(atob(h))));
+    if (!MODES[o.m] || !o.s) return false;
+    mode = o.m; cur = o.c || 'R'; state = o.s; return true;
+  } catch (e) { return false; }
+}
+
+$('modes').addEventListener('click', ev => {
+  const m = ev.target.dataset && ev.target.dataset.mode;
+  if (!m) return;
+  load(m); renderInputs(); run();
+});
+$('cur').addEventListener('change', ev => { cur = ev.target.value; renderInputs(); run(); });
+$('reset').addEventListener('click', () => { load(mode); renderInputs(); run(); history.replaceState(null, '', location.pathname); });
+$('share').addEventListener('click', async () => {
+  const url = location.origin + location.pathname + '#' + encodeState();
+  history.replaceState(null, '', url);
+  try { await navigator.clipboard.writeText(url); $('shareNote').textContent = 'Link copied. Anyone who opens it sees these exact numbers.'; }
+  catch (e) { $('shareNote').textContent = 'The address bar now holds a shareable link. Copy it from there.'; }
+});
+
+if (!(location.hash.length > 1 && decodeState(location.hash.slice(1)))) load('saas');
+$('cur').value = cur;
+renderInputs();
+run();
+</script>
+</body>
+</html>

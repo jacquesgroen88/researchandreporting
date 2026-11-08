@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Conversion Audit</title>
+<meta name="description" content="An eCommerce conversion model and the full audit process behind it.">
+<meta name="theme-color" content="#0e1c17">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#eeede8; --surface:#e4e2db; --surface-2:#d9d7cf;
+  --ink:#0e1c17; --muted:#4c5853;
+  --dark:#0e1c17; --dark-2:#16291f; --on-dark:#e8eee9; --muted-dark:#9db0a6;
+  --accent:#19c37d; --accent-ink:#0e1c17; --accent-deep:#0b6b42; --accent-tint:#bfe6d1;
+  --drag:#b42318; --drag-tint:#f3d9d6; --hold:#7a5a00; --hold-tint:#ece0bd;
+  --m:clamp(16px,2.6vw,32px);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{font-family:'Schibsted Grotesk',system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:16px;line-height:1.5}
+input,td.c,td.rk{font-variant-numeric:tabular-nums}
+::selection{background:var(--accent);color:var(--accent-ink)}
+:focus-visible{outline:2px solid var(--accent-deep);outline-offset:2px}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+.wrap{max-width:1360px;margin:0 auto;padding:0 var(--m)}
+
+/* term tooltips */
+.t{text-decoration:underline;text-decoration-thickness:2px;text-decoration-color:var(--accent);text-underline-offset:3px;cursor:help;white-space:nowrap}
+.on-dark .t{text-decoration-color:var(--accent)}
+#tip{position:fixed;z-index:50;max-width:320px;background:var(--dark);color:var(--on-dark);padding:12px 14px;font-size:14px;line-height:1.45;pointer-events:none;opacity:0;transform:translateY(4px);transition:opacity .15s,transform .15s;box-shadow:0 10px 30px rgba(14,28,23,.25)}
+#tip.show{opacity:1;transform:none}
+#tip b{display:block;color:var(--accent);font-weight:700;margin-bottom:3px}
+
+/* top bar */
+.bar{display:flex;align-items:center;gap:28px;padding:18px 0}
+.mark{font-weight:800;font-size:19px;letter-spacing:-.02em;margin-right:auto}
+.mark span{color:var(--accent-deep)}
+.nav{display:flex;gap:24px}
+.nav button{font-size:16px;font-weight:600;color:var(--muted);padding:6px 0;border-bottom:4px solid transparent}
+.nav button.on{color:var(--ink);border-bottom-color:var(--accent)}
+.nav button:hover{color:var(--ink)}
+.curpick select{font:inherit;font-weight:600;font-size:15px;background:var(--surface);border:0;padding:8px 10px;color:var(--ink)}
+@media (max-width:640px){.bar{flex-wrap:wrap;gap:12px 20px}.mark{width:100%}}
+
+.view{display:none}
+.view.on{display:block;animation:in .4s ease both}
+@keyframes in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* ===== hero: the A/B split ===== */
+.h1row{padding:clamp(28px,5vw,64px) 0 clamp(20px,3vw,34px);display:grid;grid-template-columns:1.6fr 1fr;gap:clamp(20px,4vw,64px);align-items:end}
+@media (max-width:900px){.h1row{grid-template-columns:1fr}}
+h1{font-size:clamp(40px,5.6vw,84px);line-height:.95;letter-spacing:-.045em;font-weight:800;max-width:15ch}
+.lead{font-size:clamp(18px,1.8vw,24px);line-height:1.35;max-width:30ch}
+.lead b{font-weight:700}
+.split{display:grid;grid-template-columns:1fr 1fr}
+@media (max-width:760px){.split{grid-template-columns:1fr}}
+.arm{padding:clamp(22px,3.4vw,44px) clamp(20px,3vw,44px) clamp(24px,3vw,40px);min-height:330px;display:flex;flex-direction:column}
+.arm.a{background:var(--surface)}
+.arm.b{background:var(--dark);color:var(--on-dark)}
+.arm .who{font-size:18px;font-weight:700}
+.arm .who small{display:block;font-size:15px;font-weight:400;color:var(--muted)}
+.arm.b .who small{color:var(--muted-dark)}
+.arm .num{font-size:clamp(64px,9.5vw,150px);font-weight:800;letter-spacing:-.055em;line-height:.9;margin-top:auto;padding-top:28px}
+.arm.b .num{color:var(--accent)}
+.arm .per{font-size:18px;font-weight:600;margin-top:6px}
+.arm .facts{display:flex;flex-wrap:wrap;gap:6px 26px;margin-top:22px;font-size:15.5px;color:var(--muted)}
+.arm.b .facts{color:var(--muted-dark)}
+.arm .facts b{color:var(--ink);font-weight:700}
+.arm.b .facts b{color:var(--on-dark)}
+.uplift{background:var(--accent);color:var(--accent-ink);display:flex;flex-wrap:wrap;gap:10px 40px;align-items:baseline;padding:18px clamp(20px,3vw,44px)}
+.uplift .big{font-size:clamp(28px,3.4vw,46px);font-weight:800;letter-spacing:-.035em;line-height:1}
+.uplift span{font-size:17px;font-weight:500}
+
+/* ===== model body ===== */
+.mgrid{display:grid;grid-template-columns:340px 1fr;gap:clamp(24px,4vw,64px);padding:clamp(48px,7vw,110px) 0 0;align-items:start}
+@media (max-width:1000px){.mgrid{grid-template-columns:1fr}}
+.inputs{position:sticky;top:16px;background:var(--surface);padding:22px 22px 18px}
+@media (max-width:1000px){.inputs{position:static;order:2}}
+.inputs h3{font-size:20px;letter-spacing:-.02em;margin-bottom:4px}
+.inputs .sub{font-size:14px;color:var(--muted);margin-bottom:14px}
+.inputs .grp + .grp{margin-top:26px}
+.f{display:grid;grid-template-columns:1fr 108px;gap:10px;align-items:center;margin-bottom:6px}
+.f label{font-size:15px}
+.f label i{display:block;font-style:normal;font-size:13px;color:var(--muted)}
+.f input{width:100%;font:inherit;font-size:15.5px;font-weight:600;padding:8px 10px;border:0;background:var(--bg);color:var(--ink);text-align:right}
+.f input:focus{outline:2px solid var(--accent-deep);outline-offset:0}
+.scen{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-bottom:12px}
+.scen button{font-size:14.5px;font-weight:600;padding:9px 4px;background:var(--bg);color:var(--muted)}
+.scen button.on{background:var(--ink);color:var(--on-dark)}
+.scen button:hover:not(.on){color:var(--ink)}
+.inputs .fine{font-size:13.5px;color:var(--muted);margin-top:10px}
+
+.blocks > section + section{margin-top:clamp(64px,8vw,120px)}
+h2{font-size:clamp(28px,3.4vw,48px);line-height:1;letter-spacing:-.04em;font-weight:800}
+.intro{display:grid;grid-template-columns:1.15fr 1fr;gap:20px 48px;align-items:end;margin-bottom:28px}
+@media (max-width:760px){.intro{grid-template-columns:1fr}}
+.intro p{font-size:17px;color:var(--muted);max-width:44ch}
+.intro p b{color:var(--ink)}
+.fine{font-size:14px;color:var(--muted)}
+
+/* chart */
+.chart{background:var(--surface);padding:20px 20px 12px}
+svg text{font-family:'Schibsted Grotesk',system-ui,sans-serif}
+
+/* funnel */
+.fn{display:grid;gap:4px}
+.fr{display:grid;grid-template-columns:180px 1fr 170px;align-items:center;gap:18px;background:var(--surface);padding:14px 18px}
+@media (max-width:760px){.fr{grid-template-columns:1fr;gap:8px}}
+.fr .nm{font-size:15px;color:var(--muted)}
+.fr .nm b{display:block;font-size:24px;color:var(--ink);letter-spacing:-.02em;line-height:1.1}
+.track{height:34px;position:relative;background:var(--bg)}
+.track .pot{position:absolute;inset:0 auto 0 0;background:var(--accent-tint);transition:width .6s cubic-bezier(.2,.7,.2,1)}
+.track .cur{position:absolute;inset:0 auto 0 0;background:var(--ink);transition:width .6s cubic-bezier(.2,.7,.2,1)}
+.fr .opp{text-align:right;font-size:14px;color:var(--muted);line-height:1.3}
+.fr .opp b{display:block;font-size:20px;color:var(--accent-deep);letter-spacing:-.02em}
+@media (max-width:760px){.fr .opp{text-align:left}}
+.fstep{padding:8px 18px 10px 216px;font-size:14.5px;color:var(--muted)}
+@media (max-width:760px){.fstep{padding-left:18px}}
+.fstep b{font-weight:700}
+.lo{color:var(--drag)} .mid{color:var(--hold)} .ok{color:var(--accent-deep)}
+
+/* mobile gap */
+.gap{display:grid;grid-template-columns:1fr 1fr 1.3fr}
+@media (max-width:860px){.gap{grid-template-columns:1fr}}
+.gap > div{padding:24px 24px 26px}
+.gap .g1{background:var(--surface)}
+.gap .g2{background:var(--surface-2)}
+.gap .g3{background:var(--accent-tint)}
+.gap .lab{font-size:16px;font-weight:700}
+.gap .lab small{display:block;font-weight:400;color:var(--muted);font-size:14.5px}
+.gap .val{font-size:clamp(40px,4.6vw,64px);font-weight:800;letter-spacing:-.05em;line-height:1;margin:22px 0 10px}
+.gap .g3 .val{color:var(--accent-deep)}
+.gap p{font-size:15px}
+
+/* backlog table */
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th{text-align:left;font-size:14px;font-weight:600;color:var(--muted);padding:10px 12px;border-bottom:2px solid var(--ink);white-space:nowrap}
+th.c,td.c{text-align:center}
+td{padding:16px 12px;border-bottom:1px solid var(--surface-2);vertical-align:top}
+tr:hover td{background:var(--surface)}
+td.rk{font-size:22px;font-weight:800;letter-spacing:-.03em;width:44px}
+.hy b{display:block;font-size:17px;letter-spacing:-.01em;margin-bottom:4px}
+.hy p{font-size:14.5px;color:var(--muted);max-width:68ch}
+.hy p em{font-style:normal;color:var(--ink);font-weight:600}
+.pg{font-size:14px;font-weight:600;white-space:nowrap}
+.sc{font-size:22px;font-weight:800;letter-spacing:-.03em;color:var(--accent-deep)}
+.mini{display:block;height:4px;background:var(--surface-2);margin-top:6px;width:44px;margin-left:auto;margin-right:auto}
+.mini i{display:block;height:100%;background:var(--ink)}
+
+/* planner (dark field) */
+.planner{background:var(--dark);color:var(--on-dark);padding:clamp(24px,3.4vw,44px)}
+.planner h2{color:var(--on-dark)}
+.planner .intro p{color:var(--muted-dark)}
+.planner .intro p b{color:var(--on-dark)}
+.pl{display:grid;grid-template-columns:1fr 1.4fr;gap:clamp(20px,4vw,56px)}
+@media (max-width:860px){.pl{grid-template-columns:1fr}}
+.planner .f label{color:var(--on-dark)}
+.planner .f label i{color:var(--muted-dark)}
+.planner .f input,.planner select{background:var(--dark-2);color:var(--on-dark)}
+.planner select{width:100%;font:inherit;font-weight:600;font-size:15px;border:0;padding:9px 10px}
+.pbig{display:flex;gap:clamp(20px,4vw,52px);flex-wrap:wrap}
+.pbig .n{font-size:clamp(48px,6vw,88px);font-weight:800;letter-spacing:-.05em;line-height:.95;color:var(--accent)}
+.pbig .l{font-size:15px;color:var(--muted-dark);margin-top:6px}
+.pverd{font-size:17px;margin:20px 0 18px;max-width:52ch}
+.pverd b{color:var(--accent)}
+.mdeg{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+.mdeg div{background:var(--dark-2);padding:12px 14px}
+.mdeg .w{font-size:14px;color:var(--muted-dark)}
+.mdeg .x{font-size:26px;font-weight:800;letter-spacing:-.03em;margin-top:4px}
+.mdeg .x small{font-size:13px;font-weight:500;color:var(--muted-dark);letter-spacing:0}
+
+/* ===== process ===== */
+.ptop{padding:clamp(28px,5vw,64px) 0 clamp(36px,5vw,64px);display:grid;grid-template-columns:1.6fr 1fr;gap:clamp(20px,4vw,64px);align-items:end}
+@media (max-width:900px){.ptop{grid-template-columns:1fr}}
+.ptop p{font-size:clamp(17px,1.5vw,20px);max-width:46ch}
+.rules{display:grid;grid-template-columns:repeat(4,1fr);background:var(--dark);color:var(--on-dark)}
+@media (max-width:980px){.rules{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.rules{grid-template-columns:1fr}}
+.rules div{padding:26px 24px 28px}
+.rules div:nth-child(2n){background:var(--dark-2)}
+.rules b{display:block;font-size:20px;letter-spacing:-.02em;line-height:1.15;margin-bottom:8px;color:var(--accent)}
+.rules span{font-size:15px;color:var(--on-dark)}
+
+.psec{padding-top:clamp(64px,8vw,120px)}
+.track-ph{list-style:none;display:grid;grid-template-columns:repeat(10,1fr);gap:4px;margin:26px 0 30px}
+@media (max-width:1000px){.track-ph{grid-template-columns:repeat(5,1fr)}}
+@media (max-width:560px){.track-ph{grid-template-columns:repeat(2,1fr)}}
+.track-ph button{width:100%;text-align:left;padding:12px 12px 14px;background:var(--surface);min-height:96px;display:flex;flex-direction:column;transition:background .2s}
+.track-ph button:hover{background:var(--accent-tint)}
+.track-ph .w{font-size:13px;color:var(--muted)}
+.track-ph .tt{font-size:15px;font-weight:700;line-height:1.2;margin-top:auto;letter-spacing:-.01em}
+.phases{list-style:none;display:grid;gap:4px}
+.ph{background:var(--surface);scroll-margin-top:16px}
+.ph-h{width:100%;display:grid;grid-template-columns:150px 1fr 40px;gap:20px;align-items:center;padding:20px 24px;text-align:left}
+@media (max-width:760px){.ph-h{grid-template-columns:1fr 32px}.ph-h .when{grid-column:1/-1;order:-1}}
+.ph-h .when{font-size:15px;font-weight:600;color:var(--accent-deep)}
+.ph-h h3{font-size:clamp(20px,2.2vw,28px);letter-spacing:-.03em;line-height:1.1}
+.ph-h .q{font-size:15.5px;color:var(--muted);margin-top:3px}
+.ph-h .tg{width:36px;height:36px;border-radius:50%;background:var(--bg);display:grid;place-items:center;font-size:22px;font-weight:600;transition:transform .25s,background .2s}
+.ph.open .ph-h .tg{transform:rotate(45deg);background:var(--accent)}
+.ph-b{display:none;grid-template-columns:150px 1.5fr 1fr;gap:20px;padding:0 24px 28px}
+.ph.open .ph-b{display:grid}
+@media (max-width:860px){.ph-b{grid-template-columns:1fr}.ph-b .sp{display:none}}
+.ph-b h4{font-size:16px;font-weight:700;margin-bottom:8px}
+.ph-b ul{padding-left:18px;font-size:15.5px}
+.ph-b li{margin-bottom:7px}
+.ph-b li b{font-weight:700}
+.deliv{background:var(--dark);color:var(--on-dark);padding:16px 18px;margin-bottom:18px}
+.deliv h4{color:var(--accent)}
+.deliv p{font-size:15.5px}
+.fwlist{font-size:15px;color:var(--muted)}
+.fwlist b{color:var(--ink)}
+
+.fws{display:grid;gap:4px;margin-top:30px}
+.fw{display:grid;grid-template-columns:minmax(220px,1fr) 2fr;gap:clamp(16px,3vw,48px);padding:28px 26px;background:var(--surface)}
+.fw:nth-child(2n){background:var(--surface-2)}
+@media (max-width:820px){.fw{grid-template-columns:1fr}}
+.fw h3{font-size:clamp(28px,3.4vw,46px);letter-spacing:-.045em;line-height:1;font-weight:800}
+.fw .role{font-size:15px;color:var(--muted);margin-top:8px}
+.fw p{font-size:16.5px;margin-bottom:10px;max-width:62ch}
+.fw ul{padding-left:18px;font-size:15.5px;columns:2;column-gap:32px}
+@media (max-width:620px){.fw ul{columns:1}}
+.fw li{margin-bottom:6px;break-inside:avoid}
+.see{display:grid;grid-template-columns:repeat(3,1fr) 1.4fr repeat(2,1fr);gap:4px;margin-top:16px}
+@media (max-width:620px){.see{grid-template-columns:1fr 1fr}}
+.see div{padding:14px 12px;font-size:14px}
+.see b{display:block;font-size:17px;letter-spacing:-.01em}
+.see .up{background:var(--accent-tint)} .see .vp{background:var(--dark);color:var(--on-dark)} .see .vp b{color:var(--accent)} .see .dn{background:var(--drag-tint)}
+.see .dn b{color:var(--drag)}
+
+.ckw{display:grid;grid-template-columns:260px 1fr;margin-top:30px;background:var(--surface)}
+@media (max-width:760px){.ckw{grid-template-columns:1fr}}
+.cktabs{background:var(--dark);display:flex;flex-direction:column;padding:8px 0}
+@media (max-width:760px){.cktabs{flex-direction:row;overflow-x:auto}}
+.cktabs button{color:var(--muted-dark);text-align:left;padding:14px 22px;font-size:16.5px;font-weight:600;display:flex;justify-content:space-between;gap:10px;white-space:nowrap;border-left:4px solid transparent}
+.cktabs button.on{color:var(--on-dark);border-left-color:var(--accent);background:var(--dark-2)}
+.cktabs button span{color:var(--muted-dark);font-weight:500}
+.cktabs button.on span{color:var(--accent)}
+.ckpane{padding:22px 28px 26px}
+.ckpane h3{font-size:clamp(24px,2.6vw,34px);letter-spacing:-.035em;margin-bottom:14px}
+.ckpane label{display:grid;grid-template-columns:26px 1fr;gap:12px;padding:11px 0;font-size:16.5px;cursor:pointer;align-items:start}
+.ckpane input{appearance:none;width:22px;height:22px;background:var(--bg);margin-top:2px;cursor:pointer;display:grid;place-items:center;transition:background .15s}
+.ckpane input:checked{background:var(--accent)}
+.ckpane input:checked::after{content:"";width:6px;height:11px;border:solid var(--accent-ink);border-width:0 3px 3px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.ckpane label:has(input:checked) span{color:var(--muted);text-decoration:line-through;text-decoration-thickness:2px}
+
+footer{margin-top:clamp(80px,10vw,140px);background:var(--dark);color:var(--on-dark);padding:clamp(40px,6vw,80px) 0 28px}
+footer .end{font-size:clamp(36px,6vw,88px);font-weight:800;letter-spacing:-.05em;line-height:.95;max-width:14ch}
+footer .end span{color:var(--accent)}
+footer .meta{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:36px;font-size:15px;color:var(--muted-dark)}
+footer a{color:var(--on-dark);font-weight:600}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+@media print{
+  .bar .nav,.bar .curpick,.inputs{display:none!important}
+  .view{display:block!important}
+  .mgrid{grid-template-columns:1fr}
+  .ph .ph-b{display:grid!important}
+  .arm.b,.uplift,.planner,.rules,.deliv,footer,.cktabs{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="bar">
+    <div class="mark">Conversion <span>Audit</span></div>
+    <nav class="nav" role="tablist">
+      <button class="on" data-view="model" role="tab">Impact model</button>
+      <button data-view="process" role="tab">Audit process</button>
+    </nav>
+    <label class="curpick"><span class="sr" style="position:absolute;left:-9999px">Currency</span>
+      <select id="cur"><option value="$">USD $</option><option value="£">GBP £</option><option value="€">EUR €</option><option value="R">ZAR R</option></select>
+    </label>
+  </header>
+</div>
+
+<!-- ======================= MODEL ======================= -->
+<main class="view on" id="v-model">
+  <div class="wrap">
+    <div class="h1row">
+      <h1>What testing is worth to a store</h1>
+      <p class="lead" id="lead"></p>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="split">
+      <div class="arm a">
+        <div class="who">Control<small>The store as it runs today</small></div>
+        <div class="num" id="aNum"></div>
+        <div class="per">revenue a month</div>
+        <div class="facts" id="aFacts"></div>
+      </div>
+      <div class="arm b on-dark">
+        <div class="who">Variant<small>After twelve months of structured testing</small></div>
+        <div class="num" id="bNum"></div>
+        <div class="per">revenue a month</div>
+        <div class="facts" id="bFacts"></div>
+      </div>
+    </div>
+    <div class="uplift"><div class="big" id="upBig"></div><span id="upTxt"></span></div>
+  </div>
+
+  <div class="wrap mgrid">
+    <aside class="inputs" aria-label="Store numbers">
+      <h3>The store&rsquo;s numbers</h3>
+      <p class="sub">Last 30 days. Change any figure and the whole page recalculates.</p>
+      <div class="grp">
+        <div class="f"><label for="i_s">Sessions</label><input type="number" id="i_s" min="0" value="80000"></div>
+        <div class="f"><label for="i_pv">Product page views<i>sessions that saw a product</i></label><input type="number" id="i_pv" min="0" value="34000"></div>
+        <div class="f"><label for="i_atc">Added to cart</label><input type="number" id="i_atc" min="0" value="4000"></div>
+        <div class="f"><label for="i_co">Checkouts started</label><input type="number" id="i_co" min="0" value="2200"></div>
+        <div class="f"><label for="i_o">Orders</label><input type="number" id="i_o" min="0" value="1150"></div>
+        <div class="f"><label for="i_aov"><span class="t" data-t="AOV">AOV</span><i>average order value</i></label><input type="number" id="i_aov" min="0" value="78"></div>
+        <div class="f"><label for="i_gm">Gross margin %</label><input type="number" id="i_gm" min="0" max="100" value="55"></div>
+      </div>
+      <div class="grp">
+        <div class="f"><label for="i_ms">Mobile share %<i>of sessions</i></label><input type="number" id="i_ms" min="0" max="100" value="78"></div>
+        <div class="f"><label for="i_mc">Mobile <span class="t" data-t="CR">CR</span> %</label><input type="number" id="i_mc" min="0" step="0.01" value="1.1"></div>
+        <div class="f"><label for="i_dc">Desktop <span class="t" data-t="CR">CR</span> %</label><input type="number" id="i_dc" min="0" step="0.01" value="2.6"></div>
+      </div>
+      <div class="grp">
+        <div class="scen" id="scen"><button data-s="con">Cautious</button><button data-s="exp" class="on">Expected</button><button data-s="str">Strong</button></div>
+        <div class="f"><label for="i_tpm">Tests a month</label><input type="number" id="i_tpm" min="0" step="1" value="4"></div>
+        <div class="f"><label for="i_wr"><span class="t" data-t="Win rate">Win rate</span> %</label><input type="number" id="i_wr" min="0" max="100" value="25"></div>
+        <div class="f"><label for="i_lift">Lift per win %<i>sitewide conversion</i></label><input type="number" id="i_lift" min="0" step="0.1" value="3"></div>
+        <p class="fine">Most tests lose or tie. One win in four is a healthy programme, and only winners are counted.</p>
+      </div>
+    </aside>
+
+    <div class="blocks">
+      <section>
+        <div class="intro">
+          <h2>Every win compounds</h2>
+          <p id="chartTxt"></p>
+        </div>
+        <div class="chart"><svg id="chart" viewBox="0 0 820 300" width="100%" role="img" aria-label="Monthly revenue, with and without testing"></svg></div>
+        <p class="fine" style="margin-top:12px">Month one is research and tracking fixes, so no lift is counted. Seasonality is left out on purpose so the effect of testing is visible on its own.</p>
+      </section>
+
+      <section>
+        <div class="intro">
+          <h2>Where the money leaks</h2>
+          <p id="funTxt"></p>
+        </div>
+        <div class="fn" id="funnel"></div>
+      </section>
+
+      <section>
+        <div class="intro">
+          <h2>Mobile is most of the traffic</h2>
+          <p>Mobile usually converts at half to two thirds of desktop. The gap between the two is the cheapest revenue in the store, because the visitors are already there.</p>
+        </div>
+        <div class="gap" id="device"></div>
+      </section>
+
+      <section>
+        <div class="intro">
+          <h2>What to test first</h2>
+          <p>Every idea is written as a full hypothesis and scored with <span class="t" data-t="PIE">PIE</span>. The order changes as you change the numbers, because the scores come from where this store actually leaks.</p>
+        </div>
+        <div class="tw"><table id="backlog"></table></div>
+      </section>
+
+      <section class="planner on-dark">
+        <div class="intro">
+          <h2>Size the test before it runs</h2>
+          <p>Stopping a test when the dashboard turns green is how programmes fool themselves. The run length is fixed <b>before</b> launch, from the traffic and the smallest lift worth detecting.</p>
+        </div>
+        <div class="pl">
+          <div>
+            <div class="f"><label for="p_m">Primary metric</label>
+              <select id="p_m"><option value="atc">Add-to-cart rate</option><option value="co">Checkout completion</option><option value="cr">Purchase conversion</option></select></div>
+            <div class="f"><label for="p_mde"><span class="t" data-t="MDE">MDE</span> %<i>smallest lift worth detecting</i></label><input type="number" id="p_mde" min="1" step="1" value="10"></div>
+            <div class="f"><label for="p_v">Variants<i>including control</i></label><input type="number" id="p_v" min="2" max="5" step="1" value="2"></div>
+            <p class="fine" style="color:var(--muted-dark);margin-top:12px"><span class="t" data-t="95% confidence">95% confidence</span>, <span class="t" data-t="80% power">80% power</span>, two-sided. Full weeks only, minimum two.</p>
+          </div>
+          <div>
+            <div class="pbig">
+              <div><div class="n" id="p_n"></div><div class="l">visitors per variant</div></div>
+              <div><div class="n" id="p_w"></div><div class="l">to a reliable result</div></div>
+            </div>
+            <p class="pverd" id="p_txt"></p>
+            <div class="mdeg" id="p_tab"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+
+<!-- ======================= PROCESS ======================= -->
+<main class="view" id="v-process">
+  <div class="wrap">
+    <div class="ptop">
+      <h1>From first leak to lasting wins</h1>
+      <p>Most conversion work fails at the start: tests picked from opinion, run on broken tracking, and stopped the moment the dashboard turns green. This process is built to prevent all three. Research takes the first two to three weeks, then the programme runs on a weekly rhythm.</p>
+    </div>
+    <div class="rules on-dark">
+      <div><b>Revenue per visitor leads</b><span>Conversion rate alone can lie. A test that lifts conversion and cuts order value loses money. <span class="t" data-t="RPV">RPV</span> catches it.</span></div>
+      <div><b>Two sources or it waits</b><span>A problem must show up in two of three places: the numbers, recorded behaviour, and what customers say.</span></div>
+      <div><b>Fix bugs, test doubts</b><span>Something broken is not a hypothesis. Ship the fix and save test traffic for real questions.</span></div>
+      <div><b>Losers are lessons</b><span>Every result is logged, because a losing test tells you what customers do not care about.</span></div>
+    </div>
+
+    <section class="psec">
+      <div class="intro">
+        <h2>Ten phases, in order</h2>
+        <p>Open any phase for what happens in it, the questions it answers and what the team receives at the end.</p>
+      </div>
+      <ol class="track-ph" id="tl"></ol>
+      <ol class="phases" id="phases"></ol>
+    </section>
+
+    <section class="psec">
+      <div class="intro">
+        <h2>The thinking tools</h2>
+        <p>Frameworks keep the audit consistent from store to store and make the reasoning visible. None of them replaces data; each one structures a different part of the job.</p>
+      </div>
+      <div class="fws" id="fws"></div>
+    </section>
+
+    <section class="psec">
+      <div class="intro">
+        <h2>Page-by-page review</h2>
+        <p>The expert review in phase five, done on mobile first. Tick items off during a live walkthrough of a store.</p>
+      </div>
+      <div class="ckw"><div class="cktabs" id="cktabs"></div><div class="ckpane" id="ckpane"></div></div>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="end">Find the revenue the store <span>already paid for.</span></p>
+    <div class="meta">
+      <span>Projections are modelled from the inputs and typical industry ranges. They rank the work; they are not promises.</span>
+      <a href="mailto:jacquesgroenewald88@gmail.com?subject=Conversion%20audit">jacquesgroenewald88@gmail.com</a>
+    </div>
+  </div>
+</footer>
+
+<div id="tip" role="tooltip"></div>
+
+<script>
+// ---------- glossary for tooltips ----------
+const G = {
+  'CR': ['Conversion rate', 'The share of sessions that end in an order. 1,150 orders from 80,000 sessions is a 1.44% conversion rate.'],
+  'AOV': ['Average order value', 'Revenue divided by the number of orders. Raising it with bundles or thresholds grows revenue without more traffic.'],
+  'RPV': ['Revenue per visitor', 'Revenue divided by sessions. It combines conversion rate and order value, so it is the most honest single measure of whether a change made money.'],
+  'PIE': ['PIE scoring', 'Potential, Importance and Ease, each scored out of 10 and averaged. A quick, shared way to decide which test goes first.'],
+  'P': ['Potential', 'How much room the step has to improve. Steps far below typical rates score high.'],
+  'I': ['Importance', 'How much revenue flows through the page or step. A small lift on a busy step beats a big lift on a quiet one.'],
+  'E': ['Ease', 'How cheap and quick the change is to build and launch. Copy changes score 10; a checkout rebuild scores 2.'],
+  'PXL': ['PXL framework', 'A prioritisation model from CXL that swaps opinion for yes-or-no questions: is it above the fold, noticeable in five seconds, backed by research, and how hard is it to build.'],
+  'ICE': ['ICE scoring', 'Impact, Confidence and Ease. Similar to PIE, but asks how sure we are that the idea will work.'],
+  'LIFT': ['LIFT model', 'Judges a page by its value proposition, three factors that lift conversion (relevance, clarity, urgency) and two that drag it (anxiety, distraction).'],
+  'MDE': ['Minimum detectable effect', 'The smallest lift a test can reliably detect with the traffic available. Less traffic means only bigger changes can be detected.'],
+  'SRM': ['Sample ratio mismatch', 'When a 50/50 test does not actually split 50/50. It means the setup is broken, so the result is thrown out, however good it looks.'],
+  '95% confidence': ['95% confidence', 'If the change truly did nothing, there would be only a 5% chance of seeing a result this strong by luck.'],
+  '80% power': ['80% statistical power', 'If the change really works, the test has an 80% chance of detecting it. Underpowered tests miss real winners.'],
+  'Win rate': ['Win rate', 'The share of tests that beat the control. Healthy programmes win roughly one test in four or five.'],
+  'KPI': ['Key performance indicator', 'The handful of numbers the business is judged on. Agreed before any testing starts.'],
+  'LCP': ['Largest Contentful Paint', 'How long the biggest element on screen takes to appear. Under 2.5 seconds is good.'],
+  'INP': ['Interaction to Next Paint', 'How quickly the page responds when someone taps or clicks. Under 200 milliseconds is good.'],
+  'CLS': ['Cumulative Layout Shift', 'How much the page jumps around while loading. Under 0.1 is good; jumps cause mis-taps.'],
+  'Core Web Vitals': ['Core Web Vitals', "Google's three measures of real-user experience: loading (LCP), responsiveness (INP) and visual stability (CLS)."],
+  'UTM': ['UTM tags', 'Labels added to links so analytics knows which campaign, source and ad sent each visitor.'],
+  'VoC': ['Voice of customer', 'What customers say in surveys, reviews and support tickets, in their own words.'],
+  'JTBD': ['Jobs to be done', 'Frames a purchase as a job the customer is hiring the product to do, which explains what they really compare it against.'],
+  'Holdout': ['Holdout group', 'A small share of visitors kept on the original site to measure the total effect of the whole programme.'],
+  'Guardrails': ['Guardrail metrics', 'Numbers a test must not harm while it lifts the main metric, such as order value, refunds or revenue per visitor.'],
+  'ResearchXL': ['ResearchXL', 'A research method from CXL that runs six lenses in parallel: technical, heuristic, analytics, mouse tracking, surveys and user testing.'],
+  'Fogg': ['Fogg behaviour model', 'Behaviour happens when motivation, ability and a prompt meet at the same moment. B = MAP.'],
+  'A/B test': ['A/B test', 'Visitors are split at random between the current page (control) and a changed page (variant), so any difference in results is caused by the change.'],
+  'Novelty': ['Novelty effect', 'Returning visitors react to anything new for a few days. The effect fades, which is why tests run in full weeks.'],
+  'Peeking': ['Peeking', 'Checking results daily and stopping when they look good. Early results swing wildly, so it produces false winners.']
+};
+const T = (k, label) => `<span class="t" tabindex="0" data-t="${k}">${label || k}</span>`;
+
+const tip = document.getElementById('tip');
+function showTip(el) {
+  const g = G[el.dataset.t]; if (!g) return;
+  tip.innerHTML = `<b>${g[0]}</b>${g[1]}`;
+  tip.classList.add('show');
+  const r = el.getBoundingClientRect(), tw = tip.offsetWidth, th = tip.offsetHeight;
+  let x = r.left + r.width / 2 - tw / 2;
+  x = Math.max(10, Math.min(x, window.innerWidth - tw - 10));
+  let y = r.top - th - 10;
+  if (y < 8) y = r.bottom + 10;
+  tip.style.left = x + 'px'; tip.style.top = y + 'px';
+}
+function hideTip() { tip.classList.remove('show'); }
+document.addEventListener('mouseover', e => { const el = e.target.closest('.t'); if (el) showTip(el); });
+document.addEventListener('mouseout', e => { if (e.target.closest('.t')) hideTip(); });
+document.addEventListener('focusin', e => { const el = e.target.closest('.t'); if (el) showTip(el); });
+document.addEventListener('focusout', hideTip);
+window.addEventListener('scroll', hideTip, { passive: true });
+document.querySelectorAll('.t').forEach(el => el.tabIndex = 0);
+
+// ---------- model ----------
+const $ = id => document.getElementById(id);
+const v = id => { const x = parseFloat($(id).value); return isFinite(x) ? x : 0; };
+let C = '$';
+const STAGES = ['Sessions', 'Product views', 'Added to cart', 'Checkouts started', 'Orders'];
+const STEPS = ['Session to product view', 'Product view to cart', 'Cart to checkout', 'Checkout to order'];
+const BENCH = [45, 14, 50, 55];
+const SCEN = { con: [3, 20, 2], exp: [4, 25, 3], str: [5, 30, 4] };
+
+function money(x, exact) {
+  if (!isFinite(x)) return 'n/a';
+  const a = Math.abs(x), s = x < 0 ? '-' : '';
+  if (!exact && a >= 1e6) return s + C + (a / 1e6).toFixed(2) + 'M';
+  if (!exact && a >= 1e4) return s + C + (a / 1e3).toFixed(a >= 1e5 ? 0 : 1) + 'k';
+  if (exact && a < 100) return s + C + a.toFixed(2);
+  return s + C + Math.round(a).toLocaleString('en-US');
+}
+const int = x => isFinite(x) ? Math.round(x).toLocaleString('en-US') : 'n/a';
+const pc = (x, d) => isFinite(x) ? x.toFixed(d === undefined ? (x < 10 ? 1 : 0) : d) + '%' : 'n/a';
+
+// count-up: final value is set first, so the number is right even if frames never run
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+function roll(el, to, fmt) {
+  const from = parseFloat(el.dataset.v || 0);
+  el.dataset.v = to; el.textContent = fmt(to);
+  if (reduce || from === to) return;
+  const t0 = performance.now(), d = 650;
+  const step = t => {
+    const p = Math.min((t - t0) / d, 1), e = 1 - Math.pow(1 - p, 3);
+    el.textContent = fmt(from + (to - from) * e);
+    if (p < 1) requestAnimationFrame(step); else el.textContent = fmt(to);
+  };
+  requestAnimationFrame(step);
+}
+
+const LIB = [
+  { st: 0, ease: 4, page: 'Landing pages', t: 'Match landing pages to the ad that sent the visitor', ch: 'repeat the ad headline, offer and product image at the top of each campaign landing page', au: 'paid traffic', eff: 'more visitors click through to a product' },
+  { st: 0, ease: 5, page: 'Homepage', t: 'Lead the mobile homepage with best sellers', ch: 'replace the hero banner with a scrollable best-seller row and a one-line value proposition', au: 'mobile visitors', eff: 'more sessions reach a product page' },
+  { st: 1, ease: 5, page: 'Product page', t: 'Sticky add-to-cart bar on mobile', ch: 'keep price and Add to cart pinned to the bottom of the screen while shoppers scroll', au: 'mobile shoppers', eff: 'more product views turn into add-to-carts' },
+  { st: 1, ease: 5, page: 'Product page', t: 'Delivery date and free returns under the button', ch: 'show "Get it by [date]" and the returns promise directly under Add to cart', au: 'all shoppers', eff: 'purchase anxiety drops and add-to-cart rises' },
+  { st: 1, ease: 4, page: 'Product page', t: 'Reviews and star rating beside the price', ch: 'move the rating, review count and two short review quotes next to the price', au: 'first-time visitors', eff: 'trust rises at the moment of decision' },
+  { st: 1, ease: 3, page: 'Product page', t: 'Scale, lifestyle and video in the gallery', ch: 'add in-hand scale shots, lifestyle images and a 15-second product video', au: 'all shoppers', eff: 'fewer people leave unsure what they are buying' },
+  { st: 2, ease: 4, page: 'Cart', t: 'Free-shipping progress bar and shipping cost upfront', ch: 'show shipping cost and a "you are X away from free shipping" bar in the cart drawer', au: 'carts under the threshold', eff: 'fewer carts are abandoned and order value rises' },
+  { st: 2, ease: 4, page: 'Cart', t: 'Express checkout buttons in the cart drawer', ch: 'surface Shop Pay, Apple Pay and Google Pay in the slide-out cart', au: 'mobile shoppers', eff: 'more carts reach checkout' },
+  { st: 3, ease: 4, page: 'Checkout', t: 'Guest checkout as the default path', ch: 'remove the account wall and offer account creation after purchase', au: 'new customers', eff: 'more started checkouts complete' },
+  { st: 3, ease: 5, page: 'Checkout', t: 'Payment and security reassurance at the pay step', ch: 'add accepted payment logos and a short security line beside the Pay button', au: 'new customers', eff: 'last-step drop-off falls' },
+  { st: 3, ease: 3, page: 'Checkout', t: 'Shorter form with address autocomplete', ch: 'cut optional fields and add address autocomplete', au: 'mobile shoppers', eff: 'checkout takes less time and more orders complete' },
+  { st: 'm', ease: 3, page: 'Sitewide', t: 'Thumb-friendly mobile navigation and search', ch: 'move search and key categories into thumb reach and enlarge tap targets', au: 'mobile visitors', eff: 'mobile conversion closes some of the gap to desktop' }
+];
+
+function readInputs() {
+  return { f: [v('i_s'), v('i_pv'), v('i_atc'), v('i_co'), v('i_o')], aov: v('i_aov'), gm: v('i_gm') / 100,
+    ms: v('i_ms') / 100, mc: v('i_mc') / 100, dc: v('i_dc') / 100, tpm: v('i_tpm'), wr: v('i_wr') / 100, lift: v('i_lift') / 100 };
+}
+
+function run() {
+  const I = readInputs(), f = I.f, S = f[0], O = f[4];
+  const cr = S > 0 ? O / S : 0, rev = O * I.aov, rpv = S > 0 ? rev / S : 0;
+  const rates = f.slice(1).map((x, i) => f[i] > 0 ? x / f[i] * 100 : 0);
+  const stepOpp = rates.map((r, i) => r > 0 && r < BENCH[i] ? O * (BENCH[i] / r - 1) : 0);
+  const allMult = rates.reduce((m, r, i) => m * (r > 0 && r < BENCH[i] ? BENCH[i] / r : 1), 1);
+  const funOrders = O * (allMult - 1);
+  const target = 0.6, mcT = Math.max(I.mc, I.dc * target), devOrders = S * I.ms * (mcT - I.mc);
+  const wins = I.tpm * I.wr, months = [], base = [];
+  let added = 0;
+  for (let m = 1; m <= 12; m++) { const fct = m === 1 ? 1 : Math.pow(1 + I.lift, wins * (m - 1)); months.push(rev * fct); base.push(rev); added += rev * (fct - 1); }
+  const endF = Math.pow(1 + I.lift, wins * 11), crEnd = cr * endF;
+
+  // hero
+  $('lead').innerHTML = `Structured ${T('A/B test', 'A/B testing')} takes this store from <b>${pc(cr * 100, 2)}</b> to <b>${pc(crEnd * 100, 2)}</b> conversion inside a year, on the traffic it already has.`;
+  roll($('aNum'), rev, x => money(x));
+  roll($('bNum'), months[11], x => money(x));
+  $('aFacts').innerHTML = `<span><b>${pc(cr * 100, 2)}</b> ${T('CR', 'conversion')}</span><span><b>${money(rpv, true)}</b> ${T('RPV', 'per visitor')}</span><span><b>${int(O)}</b> orders</span>`;
+  $('bFacts').innerHTML = `<span><b>${pc(crEnd * 100, 2)}</b> ${T('CR', 'conversion')}</span><span><b>${money(rpv * endF, true)}</b> ${T('RPV', 'per visitor')}</span><span><b>+${pc((endF - 1) * 100, 0)}</b> on control</span>`;
+  roll($('upBig'), added, x => '+' + money(x));
+  $('upTxt').innerHTML = `added revenue in year one, about <b>${money(added * I.gm)}</b> gross profit, from ${(wins * 11).toFixed(1)} winning tests`;
+  $('chartTxt').innerHTML = `At <b>${I.tpm} tests a month</b> and a <b>${pc(I.wr * 100, 0)}</b> ${T('Win rate', 'win rate')}, the store banks about one improvement a month. Each one raises the base the next one builds on.`;
+  drawChart(base, months);
+
+  // funnel
+  const max = Math.max(...f, 1);
+  let fh = '';
+  STAGES.forEach((s, i) => {
+    const w = Math.max(Math.pow(f[i] / max, 0.42) * 100, 1);
+    let pw = w;
+    if (i > 0) { const pot = f[i] * rates.slice(0, i).reduce((m, r, j) => m * (r > 0 && r < BENCH[j] ? BENCH[j] / r : 1), 1); pw = Math.min(Math.max(Math.pow(pot / max, 0.42) * 100, 1), 100); }
+    const opp = i > 0 && stepOpp[i - 1] > 0 ? `<b>+${money(stepOpp[i - 1] * I.aov)} a month</b>if the step before hits typical` : (i > 0 ? `<span class="ok">Healthy step</span>` : 'Starting traffic');
+    fh += `<div class="fr"><div class="nm">${s}<b>${int(f[i])}</b></div><div class="track"><div class="pot" style="width:${pw}%"></div><div class="cur" style="width:${w}%"></div></div><div class="opp">${opp}</div></div>`;
+    if (i < rates.length) {
+      const g = BENCH[i] > 0 ? rates[i] / BENCH[i] : 1, cls = g >= 0.97 ? 'ok' : g >= 0.8 ? 'mid' : 'lo';
+      fh += `<div class="fstep"><b class="${cls}">${pc(rates[i])}</b> ${STEPS[i].toLowerCase()}, against a typical ${pc(BENCH[i])}</div>`;
+    }
+  });
+  $('funnel').innerHTML = fh;
+  $('funTxt').innerHTML = `Dark bars are today. The green extension is each stage at typical rates: <b>${int(funOrders)} more orders</b> and <b>${money(funOrders * I.aov)}</b> a month before a single test is run.`;
+
+  // mobile
+  const ratio = I.dc > 0 ? I.mc / I.dc : 0;
+  $('device').innerHTML =
+    `<div class="g1"><div class="lab">Mobile<small>${pc(I.ms * 100, 0)} of sessions</small></div><div class="val">${pc(I.mc * 100, 2)}</div><p>Converts at ${pc(ratio * 100, 0)} of desktop.</p></div>` +
+    `<div class="g2"><div class="lab">Desktop<small>${pc((1 - I.ms) * 100, 0)} of sessions</small></div><div class="val">${pc(I.dc * 100, 2)}</div><p>The benchmark already inside the store.</p></div>` +
+    `<div class="g3"><div class="lab">Mobile at ${target * 100}% of desktop<small>a realistic target, not a stretch</small></div><div class="val">+${money(devOrders * I.aov)}</div><p>${devOrders > 0 ? `${int(devOrders)} more orders a month from the same visitors.` : 'Mobile already holds its own. Keep it there with mobile-first QA on every test.'}</p></div>`;
+
+  // backlog
+  const maxOpp = Math.max(...stepOpp, devOrders, 1);
+  const rows = LIB.map(h => {
+    let gap, oppO, evid;
+    if (h.st === 'm') { gap = Math.max(0, 1 - ratio / target); oppO = devOrders; evid = `mobile converts at ${pc(ratio * 100, 0)} of desktop on ${pc(I.ms * 100, 0)} of traffic`; }
+    else { gap = Math.max(0, 1 - rates[h.st] / BENCH[h.st]); oppO = stepOpp[h.st]; evid = `${STEPS[h.st].toLowerCase()} is ${pc(rates[h.st])} against a typical ${pc(BENCH[h.st])}`; }
+    const P = Math.round(Math.min(10, 4 + 6 * Math.min(gap / 0.3, 1))), Im = Math.round(Math.min(10, 4 + 6 * (oppO / maxOpp))), E = h.ease * 2;
+    return Object.assign({}, h, { P, Im, E, score: (P + Im + E) / 3, evid, metric: h.st === 'm' ? 'mobile conversion rate' : ['product view rate', 'add-to-cart rate', 'checkout start rate', 'checkout completion'][h.st] });
+  }).sort((a, b) => b.score - a.score);
+  const mini = x => `<span class="mini"><i style="width:${x * 10}%"></i></span>`;
+  $('backlog').innerHTML = `<thead><tr><th>Rank</th><th>Hypothesis</th><th>Page</th><th class="c">${T('P')}</th><th class="c">${T('I')}</th><th class="c">${T('E')}</th><th class="c">${T('PIE')}</th></tr></thead><tbody>` +
+    rows.slice(0, 8).map((r, i) => `<tr><td class="rk">${i + 1}</td><td class="hy"><b>${r.t}</b><p>Because <em>${r.evid}</em>, we believe that if we <em>${r.ch}</em> for <em>${r.au}</em>, ${r.eff}. We will know when <em>${r.metric}</em> rises without ${T('RPV', 'revenue per visitor')} falling.</p></td>` +
+      `<td class="pg">${r.page}</td><td class="c">${r.P}${mini(r.P)}</td><td class="c">${r.Im}${mini(r.Im)}</td><td class="c">${r.E}${mini(r.E)}</td><td class="c"><span class="sc">${r.score.toFixed(1)}</span></td></tr>`).join('') + '</tbody>';
+
+  planner(I);
+}
+
+function nPer(p1, mde) {
+  const p2 = p1 * (1 + mde);
+  if (p1 <= 0 || p2 >= 1) return Infinity;
+  const z = 1.959964 + 0.841621;
+  return z * z * (p1 * (1 - p1) + p2 * (1 - p2)) / Math.pow(p2 - p1, 2);
+}
+function planner(I) {
+  const f = I.f, m = $('p_m').value, mde = v('p_mde') / 100, k = Math.max(2, Math.round(v('p_v')));
+  let p, traffic, label;
+  if (m === 'atc') { p = f[1] > 0 ? f[2] / f[1] : 0; traffic = f[1]; label = 'product page viewers'; }
+  else if (m === 'co') { p = f[3] > 0 ? f[4] / f[3] : 0; traffic = f[3]; label = 'shoppers starting checkout'; }
+  else { p = f[0] > 0 ? f[4] / f[0] : 0; traffic = f[0]; label = 'sessions'; }
+  const weekly = traffic / 4.345, n = nPer(p, mde);
+  const weeks = weekly > 0 ? Math.max(2, Math.ceil(n * k / weekly)) : Infinity;
+  roll($('p_n'), isFinite(n) ? n : 0, x => int(x));
+  $('p_w').textContent = isFinite(weeks) ? weeks + ' weeks' : 'n/a';
+  let t = `Baseline ${pc(p * 100, 1)} across about ${int(weekly)} ${label} a week. `;
+  if (weeks <= 4) t += `<b>Very testable.</b> A clean answer inside a month.`;
+  else if (weeks <= 8) t += `<b>Testable, slowly.</b> Worth it for a top-ranked idea, or make the change bolder to detect a bigger lift sooner.`;
+  else t += `<b>Too slow on this metric.</b> Test a higher-traffic step such as add-to-cart, or make the change bolder.`;
+  $('p_txt').innerHTML = t;
+  $('p_tab').innerHTML = [2, 4, 6, 8].map(w => {
+    const per = weekly * w / k; let lo = 0.001, hi = 3;
+    for (let i = 0; i < 60; i++) { const mid = (lo + hi) / 2; if (nPer(p, mid) > per) lo = mid; else hi = mid; }
+    return `<div><div class="w">${w} weeks detects</div><div class="x">${hi >= 2.99 ? 'n/a' : pc(hi * 100, 0)} <small>lift</small></div></div>`;
+  }).join('');
+}
+
+function drawChart(base, proj) {
+  const W = 820, H = 300, L = 66, R = 20, Tp = 26, B = 34;
+  const all = base.concat(proj), maxV = Math.max(...all) * 1.08, minV = Math.min(...all) * 0.9;
+  const x = i => L + (W - L - R) * i / 11, y = val => Tp + (H - Tp - B) * (1 - (val - minV) / (maxV - minV || 1));
+  let g = '';
+  for (let t = 0; t <= 4; t++) { const val = minV + (maxV - minV) * t / 4; g += `<text x="${L - 10}" y="${y(val) + 4}" text-anchor="end" font-size="12" fill="#4c5853">${money(val)}</text>`; }
+  for (let i = 0; i < 12; i++) g += `<text x="${x(i)}" y="${H - 10}" text-anchor="middle" font-size="12" fill="#4c5853">M${i + 1}</text>`;
+  const pts = a => a.map((val, i) => `${x(i)},${y(val)}`).join(' ');
+  const area = `${pts(proj)} ${base.map((_, i) => `${x(11 - i)},${y(base[11 - i])}`).join(' ')}`;
+  g += `<polygon points="${area}" fill="#bfe6d1"/>`;
+  g += `<polyline points="${pts(base)}" fill="none" stroke="#4c5853" stroke-width="3"/>`;
+  g += `<polyline points="${pts(proj)}" fill="none" stroke="#0e1c17" stroke-width="4" stroke-linejoin="round"/>`;
+  proj.forEach((val, i) => { if (i) g += `<circle cx="${x(i)}" cy="${y(val)}" r="${i === 11 ? 7 : 4}" fill="${i === 11 ? '#19c37d' : '#0e1c17'}"/>`; });
+  g += `<text x="${x(11) - 12}" y="${y(proj[11]) - 14}" text-anchor="end" font-size="15" font-weight="800" fill="#0e1c17">${money(proj[11])} a month</text>`;
+  g += `<text x="${x(1)}" y="${y(base[0]) + 22}" font-size="13" fill="#4c5853">Control stays at ${money(base[0])}</text>`;
+  $('chart').innerHTML = g;
+}
+
+// ---------- process content ----------
+const PHASES = [
+  { t: 'Commercial kickoff', w: 'Days 1 to 2', q: 'What does a win actually mean for this business?',
+    do: [`Agree the north star: <b>${T('RPV', 'revenue per visitor')}</b>, with conversion rate, ${T('AOV', 'order value')} and margin as the levers beneath it`, 'Map margin by product and category, so we push what makes money, not just what sells', 'Collect constraints: stock, shipping promises, brand rules, developer capacity, peak trading dates', 'Review every past test and redesign, including the ones that "did not work"', 'List the stack: platform, theme, apps, analytics, testing tool, email and SMS'],
+    ans: ['Which number moves the business?', 'What is off-limits?', 'What has already been tried?'], del: `Goals brief and ${T('KPI')} tree: revenue per visitor broken into the levers we will test.`, fw: [T('KPI', 'KPI tree'), 'Unit economics'] },
+  { t: 'Tracking audit', w: 'Days 2 to 4', q: 'Can we trust the numbers we are about to use?',
+    do: ['Check every eCommerce event fires once and in order: <b>view item, add to cart, begin checkout, purchase</b>', 'Reconcile analytics revenue against the store backend; more than about 5% apart is a finding', 'Confirm checkout and payment pages are not breaking sessions or attribution', `Check consent mode, bot and internal-traffic filters, and ${T('UTM')} tagging`, 'Confirm the testing tool can target pages and segments without flicker'],
+    ans: ['Is every order counted once?', 'Can we split results by device and source?', 'Will a test result be believable?'], del: 'Tracking health score with a prioritised fix list. Nothing is tested until the critical items are fixed.', fw: ['Measurement plan', 'Event QA'] },
+  { t: 'Quantitative analysis', w: 'Days 3 to 7', q: 'Where exactly is the money leaking, and for whom?',
+    do: ['Build the funnel by <b>device, source, new versus returning, and landing page</b>; averages hide leaks', 'Rank landing and product pages by revenue lost against their potential, not by traffic', 'Analyse site search: zero-result terms, search exits and how searchers convert', `Measure speed on real mobile users with ${T('Core Web Vitals')}: ${T('LCP')} under 2.5s, ${T('INP')} under 200ms, ${T('CLS')} under 0.1`, 'Put a money value on every leak, so priorities are commercial, not cosmetic'],
+    ans: ['Which step and segment loses the most?', 'Is mobile further behind desktop than it should be?', 'Is speed a factor?'], del: 'Leak map: every funnel step and segment with its revenue value, the view on the impact model tab.', fw: ['Funnel analysis', 'Segmentation'] },
+  { t: 'Qualitative research', w: 'Days 5 to 10', q: 'Why are people leaving at those points?',
+    do: ['Watch <b>50 to 100 session recordings</b> filtered to the leak pages and segments from phase three', 'Read heatmaps, scroll maps and rage-click reports for those templates', 'Run a one-question exit poll on the biggest leak: "What is stopping you from buying today?"', 'Post-purchase survey: "What nearly stopped you?" and "Why did you choose us?"', 'Mine reviews, support tickets and competitor reviews for objections and the words customers use', 'Five moderated usability sessions on mobile with real target customers'],
+    ans: ['What are shoppers confused or worried about?', 'Which words do customers use?', 'What almost lost the sale?'], del: `${T('VoC', 'Voice-of-customer')} report: ranked objections with quotes and the recordings that show them.`, fw: [T('JTBD', 'Jobs to be done'), T('VoC', 'Voice of customer')] },
+  { t: 'Expert review', w: 'Days 6 to 10', q: 'What would an expert fix on sight?',
+    do: [`Review every template on mobile first, using the ${T('LIFT')} model and the page checklists below`, 'Walk the full purchase path as a new customer, including errors, empty states and a slow connection', 'Score each page on value proposition clarity, trust, friction and distraction', 'Tear down three competitors and two category leaders for patterns customers already expect', 'Sort findings into broken (fix now), unclear (test) and opportunity (bigger bet)'],
+    ans: ['What is plainly broken?', 'Where is the value proposition unclear?', 'What do customers expect that is missing?'], del: 'Annotated screenshots of every key page, each finding tagged fix, test or bet.', fw: [T('LIFT', 'LIFT model'), 'Cialdini', T('Fogg', 'Fogg model')] },
+  { t: 'Hypotheses', w: 'Days 10 to 12', q: 'Which problems are real, and what will fix them?',
+    do: ['Keep only findings that appear in <b>at least two of three sources</b>: data, behaviour and customer voice', 'Write each one as: <b>Because</b> [evidence], <b>we believe</b> [change] for [audience] <b>will</b> [outcome]. <b>We will know</b> when [metric] moves', 'Send the broken list straight to development; bugs do not need a test', 'Group ideas into themes, so tests build on each other rather than scatter'],
+    ans: ['What is the evidence for each idea?', 'What exactly will change?', 'How will we measure it?'], del: 'Hypothesis backlog, plus a quick-fix list for immediate release.', fw: ['Hypothesis format', T('ResearchXL')] },
+  { t: 'Prioritisation', w: 'Days 12 to 14', q: 'What do we test first, and in what order?',
+    do: [`Score every hypothesis with ${T('PIE')}; use ${T('PXL')} when the team wants objective, yes-or-no scoring`, 'Check each test is <b>feasible on the traffic</b>, using the planner before it enters the roadmap', 'Avoid overlapping tests on the same page and audience', 'Balance quick iterations with one or two bolder bets each quarter'],
+    ans: ['What is the order of play for 90 days?', 'Which tests can run side by side?', 'What can the traffic actually support?'], del: '90-day testing roadmap with owners, dates and the expected value of each test.', fw: [T('PIE'), T('ICE'), T('PXL')] },
+  { t: 'Test design and build', w: 'Week 3 onwards', q: 'Will this test give a clean, trustworthy answer?',
+    do: [`Set the ${T('MDE')}, sample size and run time before launch, at ${T('95% confidence')} and ${T('80% power')}`, `Name one primary metric and its ${T('Guardrails', 'guardrails')}: revenue per visitor, order value, refunds`, 'Brief design and development: user story, wireframe, acceptance criteria, tracking spec', 'QA every variant across devices and browsers, check for flicker, confirm events fire', 'Launch to a small share first, check for errors, then ramp to the full split'],
+    ans: ['How long must it run?', 'What counts as a win?', 'Is the variant built exactly as briefed?'], del: 'A test brief per experiment and a signed-off QA checklist.', fw: ['Statistical power', T('Guardrails', 'Guardrail metrics')] },
+  { t: 'Run and decide', w: '2 to 6 weeks per test', q: 'Did it work, for whom, and why?',
+    do: [`<b>No ${T('Peeking', 'peeking')}:</b> the test runs its planned length in full weeks, whatever the dashboard says on day three`, `Check for ${T('SRM')} before reading anything; an uneven split means the test is broken, not won`, 'Read the primary metric, then the guardrails, then segments, treating segment wins as new hypotheses', `Watch for the ${T('Novelty', 'novelty effect')} on returning visitors`, 'Decide: ship, iterate or kill, and write down what we learned either way'],
+    ans: ['Is the result real?', 'Did it make money, not just conversions?', 'What do we test next because of it?'], del: 'Test report with the decision, the revenue impact and the lesson.', fw: [T('SRM', 'SRM check'), 'Segment analysis'] },
+  { t: 'Roll out and compound', w: 'Monthly, ongoing', q: 'Are wins reaching customers and adding up?',
+    do: ['Hand winners to development as production tickets fast; a winner left in the testing tool decays', 'Keep a <b>learning library</b> of every test, searchable by page, theme and result', 'Re-test big wins after major site or seasonal changes', `Hold back a small ${T('Holdout', 'control group')} periodically to measure the whole programme`, 'Monthly review with leadership: revenue added, tests run, win rate, next quarter\'s bets'],
+    ans: ['How much has the programme added?', 'How fast do winners ship?', 'What have we learned about customers?'], del: 'Monthly programme report and an up-to-date learning library.', fw: [T('Holdout', 'Holdout testing'), 'Learning library'] }
+];
+
+const FWS = [
+  { t: 'LIFT', k: 'LIFT', role: 'Diagnosing a page', p: 'Every page is judged on its value proposition: why buy this, here, now. Three factors lift it and two drag it down. Most product pages do not fail on the product; they fail on anxiety, such as a hidden shipping cost or no visible returns policy.', lift: true },
+  { t: 'PIE and PXL', k: 'PIE', role: 'Choosing what to test first', p: 'PIE scores Potential, Importance and Ease out of ten for a fast first rank. PXL replaces gut feel with yes-or-no questions, so every idea earns its place with evidence:', ul: ['Is the change above the fold?', 'Is it noticeable within five seconds?', 'Does it add or remove information?', 'Is it backed by analytics, recordings or surveys?', 'Did it come from user testing?', 'How hard is it to build?'] },
+  { t: 'ResearchXL', k: 'ResearchXL', role: 'Finding the problems', p: 'Six lenses run in parallel, so no single source drives the roadmap. Analytics says where people leave; recordings and surveys say why.', ul: ['Technical: bugs and speed', 'Heuristic: expert review', 'Web analytics', 'Recordings and heatmaps', 'Customer surveys', 'User testing'] },
+  { t: 'Fogg', k: 'Fogg', role: 'Why people act', p: 'A purchase happens when motivation, ability and a prompt meet at the same moment. Motivation is mostly set before the visitor arrives, by the ad and the brand. On the site, the levers are ability (less friction: guest checkout, express pay, a sticky button) and a sharper prompt (a clear next step). That is why most winning tests remove friction rather than add persuasion.' },
+  { t: 'Cialdini', k: null, role: 'Persuading honestly', p: 'The principles that make people say yes, used only when they are true. Fake countdown timers or invented stock levels may lift one test and lose the customer, and in the UK and EU they can breach consumer law.', ul: ['Social proof: real reviews, buyer counts', 'Authority: press, certifications', 'Scarcity: only genuine low stock', 'Reciprocity: guides, samples, a size quiz', 'Commitment: small first steps', 'Liking and unity: a voice customers recognise'] },
+  { t: 'Testing rigour', k: null, role: 'Trusting the result', p: 'What separates a programme from a guessing game:', ul: [`${T('MDE')} and sample size set before launch`, `${T('95% confidence')} and ${T('80% power')}`, 'Full weeks, minimum two', `No ${T('Peeking', 'peeking')}`, `${T('SRM')} check on every test`, `${T('Guardrails', 'Guardrail metrics')} and periodic ${T('Holdout', 'holdouts')}`] }
+];
+
+const CHECKS = [
+  ['Homepage', ['Value proposition clear within five seconds on mobile', 'Best sellers or top categories one tap from the top', 'Social proof above the fold: rating, reviews, press', 'Search visible and forgiving of typos and synonyms', 'The hero earns its space or gives way to product']],
+  ['Collection pages', ['Filters that match how customers choose: size, price, use', 'Sort defaults to what sells, not newest', 'Price, rating and key variant on every product card', 'Sold-out products moved down, not hidden', 'Images load quickly and lazily']],
+  ['Product page', ['Price, rating and Add to cart visible without scrolling on mobile', 'Delivery date, shipping cost and returns stated by the button', 'Gallery shows scale, detail, lifestyle and ideally video', 'Benefits before specifications, specifications easy to find', 'Reviews with photos, sortable, negative ones answered', 'Variant choice is obvious and errors are clear']],
+  ['Cart', ['Shipping cost or free-shipping threshold shown before checkout', 'Express payment buttons present', 'Quantities easy to change or remove', 'One relevant add-on, not a wall of upsells', 'Trust and returns reassurance repeated']],
+  ['Checkout', ['Guest checkout available and the default', 'Only essential fields, with address autocomplete', 'No surprise costs at the final step', 'Payment options match the market', 'Errors explained inline, entered data never lost', 'Security and payment logos beside the Pay button']],
+  ['Mobile and speed', ['Tap targets at least 44px and within thumb reach', `${T('LCP')} under 2.5 seconds on 4G`, `No layout shift while loading (${T('CLS')})`, 'Pop-ups delayed and easy to dismiss', 'Contact details, policies and real business details easy to find']]
+];
+
+function renderProcess() {
+  $('tl').innerHTML = PHASES.map((p, i) => `<li><button data-go="ph${i}"><span class="w">${p.w}</span><span class="tt">${p.t}</span></button></li>`).join('');
+  $('phases').innerHTML = PHASES.map((p, i) => `<li class="ph${i === 0 ? ' open' : ''}" id="ph${i}">
+    <button class="ph-h" aria-expanded="${i === 0}"><span class="when">${p.w}</span><span><h3>${p.t}</h3><span class="q">${p.q}</span></span><span class="tg" aria-hidden="true">+</span></button>
+    <div class="ph-b"><div class="sp"></div><div><h4>What happens</h4><ul>${p.do.map(x => `<li>${x}</li>`).join('')}</ul></div>
+    <div><div class="deliv"><h4>The team receives</h4><p>${p.del}</p></div><h4>Questions it answers</h4><ul>${p.ans.map(x => `<li>${x}</li>`).join('')}</ul>
+    <p class="fwlist" style="margin-top:14px"><b>Tools:</b> ${p.fw.join(', ')}</p></div></div></li>`).join('');
+  $('fws').innerHTML = FWS.map(f => `<div class="fw"><div><h3>${f.k ? T(f.k, f.t) : f.t}</h3><div class="role">${f.role}</div></div><div><p>${f.p}</p>` +
+    (f.lift ? `<div class="see"><div class="up"><b>Relevance</b>lifts</div><div class="up"><b>Clarity</b>lifts</div><div class="up"><b>Urgency</b>lifts</div><div class="vp"><b>Value proposition</b>the engine</div><div class="dn"><b>Anxiety</b>drags</div><div class="dn"><b>Distraction</b>drags</div></div>` : '') +
+    (f.ul ? `<ul>${f.ul.map(x => `<li>${x}</li>`).join('')}</ul>` : '') + '</div></div>').join('');
+  const done = CHECKS.map(c => c[1].map(() => false));
+  let cur = 0;
+  const tabs = () => { $('cktabs').innerHTML = CHECKS.map((c, i) => `<button class="${i === cur ? 'on' : ''}" data-i="${i}">${c[0]}<span>${done[i].filter(Boolean).length}/${c[1].length}</span></button>`).join(''); };
+  const pane = () => { $('ckpane').innerHTML = `<h3>${CHECKS[cur][0]}</h3>` + CHECKS[cur][1].map((x, j) => `<label><input type="checkbox" data-j="${j}" ${done[cur][j] ? 'checked' : ''}><span>${x}</span></label>`).join(''); };
+  tabs(); pane();
+  $('cktabs').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; cur = +b.dataset.i; tabs(); pane(); });
+  $('ckpane').addEventListener('change', e => { if (e.target.dataset.j === undefined) return; done[cur][+e.target.dataset.j] = e.target.checked; tabs(); });
+  document.querySelectorAll('.ph-h').forEach(h => h.addEventListener('click', e => { if (e.target.closest('.t')) return; const li = h.parentElement; li.classList.toggle('open'); h.setAttribute('aria-expanded', li.classList.contains('open')); }));
+  document.querySelectorAll('#tl button').forEach(b => b.addEventListener('click', () => { const el = $(b.dataset.go); el.classList.add('open'); el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' }); }));
+}
+
+// ---------- wiring ----------
+function show(view) {
+  document.querySelectorAll('.nav button').forEach(t => t.classList.toggle('on', t.dataset.view === view));
+  document.querySelectorAll('.view').forEach(x => x.classList.toggle('on', x.id === 'v-' + view));
+  history.replaceState(null, '', '#' + view);
+  hideTip();
+}
+document.querySelectorAll('.nav button').forEach(t => t.addEventListener('click', () => show(t.dataset.view)));
+document.querySelectorAll('.inputs input, #p_m, #p_mde, #p_v').forEach(el => el.addEventListener('input', run));
+$('cur').addEventListener('change', () => { C = $('cur').value; run(); });
+$('scen').addEventListener('click', e => {
+  const s = e.target.dataset && e.target.dataset.s; if (!s) return;
+  document.querySelectorAll('#scen button').forEach(b => b.classList.toggle('on', b === e.target));
+  [$('i_tpm').value, $('i_wr').value, $('i_lift').value] = SCEN[s];
+  run();
+});
+['i_tpm', 'i_wr', 'i_lift'].forEach(id => $(id).addEventListener('input', () => document.querySelectorAll('#scen button').forEach(b => b.classList.remove('on'))));
+
+renderProcess();
+run();
+document.querySelectorAll('.t').forEach(el => el.tabIndex = 0);
+if (location.hash === '#process') show('process');
+</script>
+</body>
+</html>
