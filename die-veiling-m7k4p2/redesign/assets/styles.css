@@ -546,26 +546,28 @@ footer .fl{margin-bottom:15px;line-height:1.5}
 .fbot a:hover{color:var(--cream)}
 .fbot .lk{display:flex;gap:20px;flex-wrap:wrap}
 
-/* ---------- floating WhatsApp ---------- */
+/* ---------- floating WhatsApp (round icon that gently hovers) ---------- */
 .float{
   position:fixed;right:22px;bottom:22px;z-index:150;
-  display:inline-flex;align-items:center;gap:11px;
-  background:#25d366;color:#052b13;padding:0 22px 0 15px;height:56px;border-radius:100px;
-  font-size:13.5px;font-weight:700;letter-spacing:.04em;
-  box-shadow:0 10px 24px rgba(0,0,0,.35),0 4px 14px rgba(37,211,102,.45);
-  transition:transform .3s var(--ease),box-shadow .3s,background .25s;
-}
-.float:hover{background:#1fbe5b;transform:translateY(-3px);
-  box-shadow:0 16px 34px rgba(0,0,0,.4),0 6px 20px rgba(37,211,102,.6)}
-.float:active{transform:translateY(-1px)}
-/* the glyph sits in its own white disc so it reads as the WhatsApp mark
-   rather than a shape cut out of the pill */
-.float .ic{
-  flex:0 0 auto;width:34px;height:34px;border-radius:50%;background:#fff;
+  width:60px;height:60px;border-radius:50%;
   display:flex;align-items:center;justify-content:center;
+  background:#25d366;color:#fff;
+  box-shadow:0 10px 24px rgba(0,0,0,.3),0 6px 18px rgba(37,211,102,.5);
+  transition:box-shadow .25s,background .25s;
+  animation:wa-bob 3.2s ease-in-out infinite;
 }
-.float .ic svg{width:21px;height:21px;fill:#25d366;display:block}
-.float .lbl{white-space:nowrap}
+@keyframes wa-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.float:hover{background:#1fbe5b;animation-play-state:paused;
+  box-shadow:0 20px 40px rgba(0,0,0,.42),0 10px 26px rgba(37,211,102,.65)}
+.float .ic{
+  flex:0 0 auto;background:none;display:flex;align-items:center;justify-content:center;
+  transition:transform .25s var(--ease);
+}
+.float:hover .ic{transform:scale(1.12)}
+.float:active .ic{transform:scale(1.04)}
+.float .ic svg{width:30px;height:30px;fill:#fff;display:block}
+.float .lbl{display:none}
+@media (prefers-reduced-motion:reduce){.float{animation:none}}
 
 /* ---------- inner page hero ---------- */
 .phero{position:relative;min-height:66vh;display:flex;align-items:flex-end;overflow:hidden}
@@ -624,10 +626,8 @@ footer .fl{margin-bottom:15px;line-height:1.5}
 @media(max-width:680px){
   .bgrid,.evgrid{grid-template-columns:1fr}
   /* icon-only pill on a phone, sized as a proper touch target */
-  .float{padding:0;width:60px;height:60px;justify-content:center;right:16px;bottom:16px}
-  .float .lbl{display:none}
-  .float .ic{width:38px;height:38px}
-  .float .ic svg{width:23px;height:23px}
+  .float{width:56px;height:56px;right:16px;bottom:16px}
+  .float .ic svg{width:28px;height:28px}
   .fbrand img{width:clamp(140px,42vw,170px)}
   .sec-head h2{font-size:clamp(30px,8.8vw,44px)}
   .hours,.people,.form .fr{grid-template-columns:1fr}
