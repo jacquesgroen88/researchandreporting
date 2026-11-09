@@ -374,6 +374,18 @@
     83%{transform:scale(1.06) translate(.15%,-.25%)}
     100%{transform:scale(1.055) translate(0,0)}
   }
+  /* Phones and small tablets get the frame straight: no overscan, no drift.
+     At 100svh on a portrait screen object-fit:cover already crops this 16:9
+     clip to roughly a third of its width, and the 14% overscan plus the
+     1.055-1.11 drift scale pushed that under a quarter, costing about 20% of
+     the detail that reaches the screen. With the drift off the overscan has
+     no moving edge left to hide, so the two come off together. The clip is
+     already aerial movement; on a small screen the drift was motion on top
+     of motion. Desktop keeps both. (Client feedback, 9 Nov 2026.) */
+  @media(max-width:1000px){
+    .scan{inset:0}
+    .drift{animation:none;will-change:auto;transform:none}
+  }
   .bgfix .veil{position:absolute;inset:0;z-index:1;
     background:
       radial-gradient(120% 92% at 22% 56%, rgba(8,13,8,.52) 0%, rgba(8,13,8,.24) 42%, transparent 72%),
@@ -1316,11 +1328,11 @@
 
 <!--
   Pinned backdrop. The poster is painted as a CSS background on .bgfix AND as a
-  still inside the overscan, so there is never a blank frame before the video
-  decodes. Sources are attached by JS (see the hero block at the end of the
-  file) rather than written here: a browser fetches a <video> that has a src
-  even when CSS hides it, so writing them inline would spend the file on every
-  visitor before we have decided which one they should get.
+  still in the layer above it, so there is never a blank frame before the video
+  decodes. The src is attached by JS (see the hero block at the end of the file)
+  rather than written here: a browser fetches a <video> that has a src even when
+  CSS hides it, so writing it inline would spend the file on every visitor,
+  including the ones the gates there decide should not pay for it.
 -->
 <div class="bgfix" id="bgfix" aria-hidden="true">
   <div class="scan">
@@ -1328,8 +1340,7 @@
     <video id="herovid" class="drift" muted loop playsinline preload="none"
            poster="assets/drone-poster.webp" tabindex="-1"
            disablepictureinpicture disableremoteplayback
-           data-desktop="assets/drone-hero.mp4"
-           data-mobile="assets/drone-hero-m.mp4"></video>
+           data-src="assets/drone-hero.mp4"></video>
   </div>
   <div class="veil"></div>
   <div class="bloom"></div>
@@ -2261,12 +2272,12 @@
 
   /* ════════════════════════════════════════════════════════════════════
      8. HERO DRONE BACKDROP
-     Everyone gets motion now, but not the same file: phones get a 1.3MB
-     960-wide encode, desktops a 3.7MB 1600-wide one. The choice is made here
-     rather than with <source media> in the markup because a browser fetches
-     a <video> that has a src even when CSS hides it — so writing both inline
-     would spend a file on every visitor before we picked. Reduced motion
-     still gets no video at all, just the poster.
+     Every device gets the same 3.7MB 1600-wide encode. The src is attached
+     here rather than written into the markup because a browser fetches a
+     <video> that has a src even when CSS hides it, and the two gates below
+     (reduced motion, and Data Saver or a 2g/3g connection) decide that some
+     visitors should never pay for the file at all. Those visitors keep the
+     poster, which is a full 1600-wide still, so the hero still reads.
      ════════════════════════════════════════════════════════════════════ */
   (function(){
     var v=$('#herovid');
@@ -2280,12 +2291,13 @@
        poster, which is the same thing the reduced-motion path gets. */
     var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
     if(conn && (conn.saveData || /(^|-)2g$|^3g$/.test(conn.effectiveType||''))){ v.remove(); return; }
-    // Measure rather than match a media query. A viewport can legitimately
-    // report 0 before first layout (background tab, hidden pane, some embeds),
-    // and a bare max-width query treats 0 as "small" — which would pin a
-    // desktop visitor to the 960px encode for the rest of the session.
-    var w = window.innerWidth || document.documentElement.clientWidth || screen.width || 1280;
-    v.setAttribute('data-src', v.getAttribute(w <= 1000 ? 'data-mobile' : 'data-desktop'));
+    // One encode for every device. The 960x540 mobile file was dropped on
+    // 9 Nov 2026: at 100svh on a phone, cover crops this clip to about a third
+    // of its width, so 960 source pixels landed roughly 230 across a 390pt
+    // screen, softer than the 1600px poster it faded in over. The small encode
+    // was buying nothing a metered visitor could feel either, because the
+    // saveData and 2g/3g gate above already withholds the video outright and
+    // the poster, not the video, carries first paint.
     // preload="none" in the markup is what keeps phones from fetching this at
     // all. Once we have decided a desktop DOES want it, that has to be lifted:
     // left at "none" the browser never buffers, so canplay never fires, so the
