@@ -85,6 +85,7 @@ footer{margin-top:56px;padding-top:16px;border-top:1px solid var(--line);font-si
   <a href="#delegate">Handing work over</a>
   <a href="#approve">Approvals</a>
   <a href="#waiting">Waiting and chasing</a>
+  <a href="#mcp">From Claude or Codex</a>
   <a href="#fields">What a task holds</a>
   <a href="#rhythm">The weekly rhythm</a>
   <a href="#data">Where the data comes from</a>
@@ -95,12 +96,18 @@ footer{margin-top:56px;padding-top:16px;border-top:1px solid var(--line);font-si
 <header>
   <p class="eyebrow">JCE Media · Internal guide</p>
   <h1>How the Client Planner works</h1>
-  <p class="lede">One live list of every client, what we owe each of them, by when, and who is doing it. Jacques and Diane work from the same page, and Claude keeps it loaded.</p>
-  <div class="cta"><a href="https://claude.ai/artifact/JmcMoAfZzQc5pwEYw2ERe4" rel="noopener">Open the planner</a><span>Opens on claude.ai. You need to be signed in and to have been given access.</span></div>
+  <p class="lede">One live list of every client, what we owe each of them, by when, and who is doing it. Jacques and Diane work from the same page, and both of your Claude assistants can read and change it too.</p>
+  <div class="cta"><a href="https://jcereports.netlify.app/client-planner-499d8c/" rel="noopener">Open the planner</a><span>Needs your personal planner key the first time on each device.</span></div>
 </header>
 
 <h2 id="what">What it is</h2>
-<p>The planner is a single page on claude.ai with a small shared database behind it. When either of you ticks a task, hands one over or answers a question, the other person's screen updates within seconds. Nobody has to save, sync or refresh.</p>
+<p>The planner has three parts:</p>
+<ul>
+  <li><strong>The database.</strong> A Supabase project called <code>jce-client-planner</code> holds every client, task and label, plus a record of every change.</li>
+  <li><strong>The planner page.</strong> A private web page that works on any browser or phone.</li>
+  <li><strong>The planner connector (MCP).</strong> It lets Claude or Codex read and update the same list in conversation.</li>
+</ul>
+<p>All three use the same data. A change from the page, from your Claude or from Diane's shows up for the other person within about 30 seconds, or straight away when they switch back to the tab.</p>
 <p>It holds two kinds of record:</p>
 <ul>
   <li><strong>Clients.</strong> One card per client, carrying the engagement in a line, the fee and term from the agreement, the main contact, the last invoice and the next billing event. Ended clients are kept but folded away at the bottom.</li>
@@ -110,13 +117,20 @@ footer{margin-top:56px;padding-top:16px;border-top:1px solid var(--line);font-si
 
 <h2 id="access">Getting in</h2>
 <ol class="steps">
-  <li><strong>Jacques shares it with Diane.</strong> In the planner, open the Share menu and add Diane with at least Contributor access. Viewer access lets her read it but not tick or hand anything over.</li>
-  <li><strong>Say who you are, once per browser.</strong> The first time the page opens it asks "Who's using this browser?" Pick your name. That sets your default view to your own tasks and signs every hand-over you make. You can switch it later with the link under the title.</li>
+  <li><strong>Get your planner key.</strong> Jacques and Diane each have a personal key starting <code>jcep_</code>. It tells the planner who you are, so every tick, hand-over and answer is signed with your name. Jacques holds both keys and passes Diane hers privately. Never paste a key into email or a group chat.</li>
+  <li><strong>Open the page and paste your key.</strong> That browser remembers it. "Sign out of this browser", under the title, forgets it.</li>
   <li><strong>Bookmark it.</strong> The planner works on a phone too. The filter bar stops sticking to the top on small screens so the list gets the room.</li>
 </ol>
+<div class="callout"><strong>If a key leaks</strong>Tell Claude "revoke Diane's planner key and issue a new one". The old key stops working at once and nothing else changes.</div>
 
 <h2 id="views">Reading the page</h2>
-<p>Across the top sit six counters: clients, open tasks, overdue, due today, waiting on Jacques, and with Diane. Under them are two switches. <strong>By date</strong> is the day-to-day view. <strong>By client</strong> is for account reviews and calls.</p>
+<p>Across the top sit six counters: clients, open tasks, overdue, due today, waiting on Jacques, and with Diane. Under them are three views:</p>
+<ul>
+  <li><strong>By date</strong> is the day-to-day view.</li>
+  <li><strong>Calendar</strong> shows what's coming up.</li>
+  <li><strong>By client</strong> is for account reviews and calls.</li>
+</ul>
+<p>A label dropdown narrows any view to one category.</p>
 <h3>By date</h3>
 <p>Tasks fall into groups in this order. A task appears in only one group.</p>
 <div class="table-wrap"><table>
@@ -132,6 +146,21 @@ footer{margin-top:56px;padding-top:16px;border-top:1px solid var(--line);font-si
 <tr><td>Waiting, next chase later</td><td>Folded away. Tasks that are with a client or a supplier and don't need touching until their chase date.</td></tr>
 </tbody></table></div>
 <p>The owner switch defaults to <strong>Mine</strong>. <strong>Everyone</strong> shows the whole business. On the Jacques filter, anything that needs his answer shows even when Diane owns the task.</p>
+<h3>Calendar</h3>
+<p>A month grid. Each task sits on its due date, coloured by owner: blue for Jacques, pink for Diane, grey for unassigned. A waiting task sits on its next chase date instead and is marked ⟳. Busy days show their first four tasks and a "+ more" link. Use Prev and Next to move between months. Under the grid, the next 14 days are listed in full, which is easier to read on a phone. Owner and label filters apply here too, so "Diane + Finance" shows her billing month at a glance.</p>
+<h3>Labels</h3>
+<p>Labels are categories, and a task can carry several. The planner started with eight:</p>
+<ul>
+  <li>Finance</li>
+  <li>Delivery</li>
+  <li>Client input</li>
+  <li>Admin</li>
+  <li>Renewal</li>
+  <li>Sales</li>
+  <li>Build / tech</li>
+  <li>ReviewTap</li>
+</ul>
+<p>Tick labels inside any task. To make a new one, type a name, pick a colour and press <em>Add label</em> in the same box. It's available to both of you straight away.</p>
 <h3>By client</h3>
 <p>Each card opens with a one-line health check: how many tasks are open, how many are overdue, and the next one due. The fee, term, contact and billing details sit behind a fold so the cards stay short. Each card shows its three nearest tasks with a link to see the rest, and an <em>Add task</em> button that pre-fills the client.</p>
 
@@ -181,7 +210,7 @@ footer{margin-top:56px;padding-top:16px;border-top:1px solid var(--line);font-si
 <tr><td>Due</td><td>The real deadline: a contract date, an invoice due date, a promise made on a call. Where a date is only a target, the notes say so.</td></tr>
 <tr><td>Owner</td><td>The one person doing it. Unassigned is allowed but should be rare.</td></tr>
 <tr><td>Status</td><td>To do, Doing, Waiting on someone else, Done.</td></tr>
-<tr><td>Type</td><td>Delivery, Billing, Client input, Admin, Renewal. Billing tasks are tagged green so money stands out.</td></tr>
+<tr><td>Labels</td><td>One or more categories: Finance, Delivery, Client input, and so on. Finance is green so money stands out. Add your own any time.</td></tr>
 <tr><td>Next chase</td><td>For waiting tasks only. Hides the task until then.</td></tr>
 <tr><td>Needs Jacques to</td><td>Approve, Decide or Sign, with a one-line question and an optional rand value.</td></tr>
 <tr><td>Detail</td><td>Enough context to act without asking. Approvals and decisions are added here with dates.</td></tr>
@@ -196,6 +225,41 @@ footer{margin-top:56px;padding-top:16px;border-top:1px solid var(--line);font-si
   <li><strong>Month start, Diane.</strong> Filter on Billing and run the invoicing sweep from the cards' "Next bill" lines.</li>
 </ul>
 
+<h2 id="mcp">Working the planner from Claude or Codex</h2>
+<p>The planner connector gives your AI assistant the same powers you have on the page. Once it's added, you can say things like:</p>
+<ul>
+  <li>"What's on my plate today?"</li>
+  <li>"Show me everything labelled Finance due this month."</li>
+  <li>"Hand the Reptilia invoice to Diane and tell her it's approved."</li>
+  <li>"Mark the Acreage function pack done: sent to Jade this morning."</li>
+  <li>"What's waiting on my approval?"</li>
+  <li>"Add a task for Clarky's: chase the Facebook invite, due Thursday, label Client input."</li>
+</ul>
+<p>The assistant acts as whoever owns the key. Only Jacques's key can answer approvals.</p>
+<h3>Adding it</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>Where</th><th>How</th></tr></thead>
+<tbody>
+<tr><td>Claude (claude.ai or the app)</td><td>Settings, then Connectors, then Add custom connector. Name it "JCE Planner" and paste your personal connector address. That address contains your key, so treat it like a password.</td></tr>
+<tr><td>Claude Code</td><td>Add an HTTP MCP server with the planner address and the header <code>Authorization: Bearer &lt;your key&gt;</code>.</td></tr>
+<tr><td>Codex</td><td>Add a remote MCP server in Codex's settings with the same address and header.</td></tr>
+</tbody></table></div>
+<p>Jacques has both connector addresses in a private file that isn't stored in git. Ask him for yours.</p>
+<h3>What it can do</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>Tool</th><th>Does</th></tr></thead>
+<tbody>
+<tr><td>my_day</td><td>Your new hand-overs, approvals, overdue, today and next 7 days</td></tr>
+<tr><td>list_tasks</td><td>Search by owner, client, label, status, dates or text</td></tr>
+<tr><td>calendar</td><td>Tasks grouped by date over any range</td></tr>
+<tr><td>create_task, update_task, complete_task, delete_task</td><td>Add, change, finish or remove tasks, including labels</td></tr>
+<tr><td>hand_over, acknowledge</td><td>Give a task to the other person with a note; clear "new for you"</td></tr>
+<tr><td>request_approval, answer_approval</td><td>Put a question to Jacques; Jacques answers it</td></tr>
+<tr><td>list_clients, get_client, upsert_client</td><td>Read and update client records: fee, term, contact, billing</td></tr>
+<tr><td>list_labels, create_label</td><td>See categories and their counts; add new ones</td></tr>
+<tr><td>get_task, task_history</td><td>One task in full, with who changed what and when</td></tr>
+</tbody></table></div>
+
 <h2 id="data">Where the data comes from and how it stays fresh</h2>
 <p>Claude filled the planner by reading:</p>
 <ul>
@@ -205,7 +269,7 @@ footer{margin-top:56px;padding-top:16px;border-top:1px solid var(--line);font-si
   <li>two months of Jacques's email.</li>
 </ul>
 <p>Where those sources disagreed, the newer one won and the conflict was written into the task's notes.</p>
-<p>Claude can read and write the planner's database directly. That means a session can be asked to "update the planner from my email", "add what came out of today's call with the client", or "close everything the bank shows as paid". The changes appear on both your screens straight away.</p>
+<p>Through the connector, any Claude session can be asked to "update the planner from my email", "add what came out of today's call with the client" or "close everything the bank shows as paid". The changes appear on both your screens within seconds, signed with the name of whoever's key was used.</p>
 <div class="callout warn"><strong>One list, not four</strong>Mission Control already tracks work in the action board, the waiting-on register and the scoreboard. If all of them keep tracking client work, they will drift apart. The reviewers recommended this split:
 <ul>
   <li>The planner becomes the one record for client tasks.</li>
@@ -242,9 +306,11 @@ That change is waiting on Jacques's go-ahead.</div>
 <h2 id="limits">Known limits</h2>
 <ul>
   <li>The planner doesn't send notifications. You see new work when you open the page.</li>
-  <li>Client cards (fee, term, contact, billing) can be changed by Claude but not yet from the page itself. Tell Claude when a fee or term changes.</li>
-  <li>"Who are you" is remembered per browser. On a new device, pick your name again.</li>
-  <li>The page works only inside claude.ai, for people the planner is shared with.</li>
+  <li>Client cards (fee, term, contact, billing) can't be edited on the page yet. Ask Claude through the connector, for example "update Acreage's next billing to 9 Dec".</li>
+  <li>Your key is remembered per browser. On a new device, paste it again.</li>
+  <li>Updates from the other person arrive within about 30 seconds, not instantly. Switching back to the tab refreshes at once.</li>
+  <li>The database lives in the Supabase organisation that also holds the Die Veiling Klub project. Only Jacques's Supabase login can see it.</li>
+  <li>The first version of the planner, a claude.ai page, is retired. Its link now points here.</li>
 </ul>
 
 <footer>Internal to JCE Media. Written 10 November 2026. Unlisted: please don't forward outside the team.</footer>
