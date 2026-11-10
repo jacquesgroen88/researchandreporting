@@ -65,6 +65,10 @@
   var MAIL = { bucketlist: 'info@clarkysbucketlist.co.za', lakeside: 'clarkyslakesiderestaurant@gmail.com', pride: '' };
   var LABEL = { bucketlist: "Clarky's Bucketlist", lakeside: 'Clarkys Lakeside Restaurant', pride: "Clarky's Pride Lodge" };
   var MAXG = { bucketlist: 6, lakeside: 30, pride: 14 };
+  var PHONE = { bucketlist: '078 571 9280', lakeside: '061 506 6214', pride: '072 922 8530' };
+  var TEL = { bucketlist: '+27785719280', lakeside: '+27615066214', pride: '+27729228530' };
+  // Per-cottage caps. Woodland Whisper sleeps 2; the others are held at 6 until Val confirms layouts.
+  function cap(d) { if (d.property === 'bucketlist' && /^Woodland/.test(d.cottage || '')) return 2; return MAXG[d.property]; }
 
   // Local date (not UTC), so late-night SAST visitors are not offered yesterday.
   function today() { var d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 10); }
@@ -76,7 +80,10 @@
     if (d.arrive) lines.push((d.property === 'lakeside' ? 'Date: ' : 'Arrive: ') + nice(d.arrive));
     if (d.depart) lines.push('Depart: ' + nice(d.depart));
     if (d.time) lines.push('Sitting: ' + d.time);
-    if (d.guests) lines.push('Guests: ' + d.guests);
+    if (d.guests) lines.push('Adults: ' + d.guests);
+    if (+d.kids) lines.push('Children: ' + d.kids);
+    if (d.dog) lines.push('Bringing a dog: yes');
+    if (d.dinner) lines.push('Please also book a dinner table at the Lakeside Restaurant');
     if (d.name) lines.push('Name: ' + d.name);
     if (d.phone) lines.push('Phone: ' + d.phone);
     if (d.message) lines.push(d.message);
@@ -87,6 +94,7 @@
     var arrive = function () { return f.querySelector('input[name=arrive]:not([disabled])'); };
     var depart = f.querySelector('input[name=depart]');
     var guests = f.querySelector('input[name=guests]');
+    var kids = f.querySelector('input[name=kids]');
     var phone = f.querySelector('input[name=phone]');
     f.querySelectorAll('input[type=date]').forEach(function (d) {
       d.min = today();
@@ -105,7 +113,10 @@
       if (a && a.value && a.value < today()) { a.setCustomValidity('Please choose today or a later date.'); }
       if (a && depart && !depart.disabled && depart.value && a.value && depart.value <= a.value) { depart.setCustomValidity('Departure must be after arrival.'); }
       var prop = (f.querySelector('[name=property]') || {}).value;
-      if (guests && MAXG[prop] && +guests.value > MAXG[prop]) guests.setCustomValidity('For more than ' + MAXG[prop] + ' guests, please call us.');
+      var cot = (f.querySelector('select[name=cottage]:not([disabled])') || {}).value;
+      var max = cap({ property: prop, cottage: cot });
+      var total = (+(guests && guests.value) || 0) + (+(kids && kids.value) || 0);
+      if (guests && max && total > max) guests.setCustomValidity(max === 2 ? 'Woodland Whisper sleeps 2. Pick another cottage, or call us.' : 'For more than ' + max + ' guests, please call us.');
       if (phone && phone.value && (phone.value.replace(/\D/g, '').length < 9)) phone.setCustomValidity('Please enter a phone number we can reach you on.');
       ok = f.reportValidity();
       return ok;
@@ -131,11 +142,19 @@
     window.open('https://wa.me/' + (WA[d.property] || WA.bucketlist) + '?text=' + encodeURIComponent(message(d)), '_blank', 'noopener');
   }
   // Confirmation in place of the form, with an email fallback for desktop visitors without WhatsApp.
+  // After sending, the confirmation is scrolled into view and focused, so phone visitors see it when they come back from WhatsApp.
+  function esc(t) { return String(t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function done(f, d, viaWA) {
     var mail = MAIL[d.property];
-    var alt = mail ? ' <a href="mailto:' + mail + '?subject=' + encodeURIComponent('Enquiry: ' + (LABEL[d.property] || '')) + '&body=' + encodeURIComponent(message(d)) + '">Email it to us instead</a>.' : '';
-    f.innerHTML = '<div class="done" role="status"><h3>' + (viaWA ? 'Your enquiry is ready in WhatsApp.' : 'Thank you, we have your enquiry.') + '</h3><p>' +
-      (viaWA ? 'Press send in WhatsApp and we will reply personally. WhatsApp did not open?' + alt : 'We will be in touch shortly.') + '</p></div>';
+    var alt = mail
+      ? ' <a href="mailto:' + mail + '?subject=' + encodeURIComponent('Enquiry: ' + (LABEL[d.property] || '')) + '&body=' + encodeURIComponent(message(d)) + '">Email it to us instead</a>, or call <a href="tel:' + TEL[d.property] + '">' + PHONE[d.property] + '</a>.'
+      : ' Call or WhatsApp us on <a href="tel:' + TEL[d.property] + '">' + PHONE[d.property] + '</a>.';
+    f.innerHTML = '<div class="done" role="status"><h3 tabindex="-1">' + (viaWA ? 'Your enquiry is ready in WhatsApp.' : 'Thank you, we have your enquiry.') + '</h3><p>' +
+      (viaWA ? 'Press send in WhatsApp and we will reply personally. WhatsApp did not open?' + alt : 'We will be in touch shortly.') + '</p>' +
+      '<p class="sent">' + esc(message(d)) + '</p></div>';
+    var h = f.querySelector('.done h3');
+    h.scrollIntoView({ block: 'center' });
+    h.focus({ preventScroll: true });
   }
 
   // Property select drives which fields (and which contact block) show on the group form.
@@ -158,7 +177,8 @@
     a.addEventListener('click', function () {
       var sel = document.querySelector('form.booking select[name=cottage]');
       if (!sel) return;
-      [].forEach.call(sel.options, function (o) { if (o.text.indexOf(a.dataset.cottage) === 0) sel.value = o.value; });
+      var hit = [].filter.call(sel.options, function (o) { return o.text.indexOf(a.dataset.cottage) === 0; })[0];
+      if (hit) sel.value = hit.value;
     });
   });
 
