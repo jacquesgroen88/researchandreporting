@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Client Planner Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: single reading column with a sticky contents rail on wide screens. Same palette as the planner so the two read as one system. */
+:root{
+  --bg:#f5f6f8; --surface:#ffffff; --surface-2:#eef0f4; --line:#dde1e8; --fg:#151a24; --muted:#5d6676; --faint:#8a92a1;
+  --accent:#2f5bd3; --accent-soft:#e3eafb; --jac:#2f5bd3; --jac-soft:#e3eafb; --dia:#b0457a; --dia-soft:#f8e4ee;
+  --ask:#6a3fc1; --ask-soft:#efe8fb; --warn:#a86a06; --warn-soft:#fcf0d9; --bad:#c23b2e; --bad-soft:#fbe6e3; --ok:#2d7d4f; --ok-soft:#e1f2e8;
+  --f-display:"Space Grotesk",system-ui,sans-serif; --f-body:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif; --f-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root{
+  --bg:#0f131a; --surface:#171c25; --surface-2:#1f2531; --line:#2b3240; --fg:#e7eaf0; --muted:#a2aaba; --faint:#717a8b;
+  --accent:#7d9cf0; --accent-soft:#1f2b4a; --jac:#7d9cf0; --jac-soft:#1f2b4a; --dia:#e58ab6; --dia-soft:#3b2030;
+  --ask:#b79cf5; --ask-soft:#2a2240; --warn:#e6b25a; --warn-soft:#3a2d14; --bad:#f0857a; --bad-soft:#3d1f1c; --ok:#6fcf97; --ok-soft:#173326; color-scheme:dark}}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.65 var(--f-body);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 64px}
+.shell{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:220px minmax(0,1fr);gap:48px}
+@media (max-width:860px){.shell{grid-template-columns:1fr;gap:0}nav.toc{display:none}}
+nav.toc{position:sticky;top:24px;align-self:start;padding-top:56px;font-size:13.5px}
+nav.toc p{font:600 11px var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin:0 0 8px}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:4px 0}
+nav.toc a:hover{color:var(--accent)}
+main{min-width:0;max-width:720px}
+header{padding-block:56px 24px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.eyebrow{font:600 12px var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:0 0 10px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;line-height:1.2}
+h1{font-size:clamp(30px,5vw,42px);margin:0;letter-spacing:-.015em}
+.lede{font-size:18px;color:var(--muted);margin:14px 0 0}
+h2{font-size:24px;margin:48px 0 12px;padding-top:8px}
+h3{font-size:17px;margin:28px 0 8px}
+p{margin:0 0 14px}
+a{color:var(--accent)}
+ul,ol{padding-left:22px;margin:0 0 16px} li{margin-bottom:6px}
+code,.mono{font-family:var(--f-mono);font-size:.88em;background:var(--surface-2);padding:1px 5px;border-radius:4px}
+.cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.cta a{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;text-decoration:none;font-weight:600;padding:10px 16px;border-radius:8px}
+@media (prefers-color-scheme: dark){.cta a{color:#0f131a}}
+.cta span{font-size:13px;color:var(--faint);align-self:center}
+.callout{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:14px 16px;margin:18px 0}
+.callout strong{display:block;margin-bottom:4px}
+.callout.warn{background:var(--warn-soft);border-color:transparent;color:var(--fg)}
+.pill{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:1px 9px;font-size:13px;font-weight:600;white-space:nowrap}
+.pill::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.pill.j{background:var(--jac-soft);color:var(--jac)} .pill.d{background:var(--dia-soft);color:var(--dia)} .pill.a{background:var(--ask-soft);color:var(--ask)} .pill.w{background:var(--warn-soft);color:var(--warn)}
+.pill.a::before,.pill.w::before{display:none}
+.table-wrap{overflow-x:auto;margin:12px 0 18px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14.5px;min-width:520px}
+th,td{text-align:left;padding:9px 12px;border-top:1px solid var(--line);vertical-align:top}
+thead th{border-top:0;font:600 11.5px var(--f-body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:var(--surface-2)}
+td:first-child{font-weight:600;white-space:nowrap}
+.flow{margin:18px 0;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:14px;overflow-x:auto}
+.flow svg{display:block;width:100%;min-width:560px;height:auto}
+.flow text{font-family:var(--f-body);font-size:13px;fill:var(--fg)}
+.flow .sub{font-size:11.5px;fill:var(--muted)}
+.flow .boxj{fill:var(--jac-soft);stroke:var(--jac)} .flow .boxd{fill:var(--dia-soft);stroke:var(--dia)} .flow .boxa{fill:var(--ask-soft);stroke:var(--ask)}
+.flow .arrow{stroke:var(--faint);fill:none;stroke-width:1.5}
+.flow .head{fill:var(--faint)}
+.steps{counter-reset:s;list-style:none;padding:0}
+.steps li{counter-increment:s;position:relative;padding-left:36px;margin-bottom:12px}
+.steps li::before{content:counter(s);position:absolute;left:0;top:1px;width:24px;height:24px;border-radius:50%;background:var(--accent-soft);color:var(--accent);font:600 12.5px/24px var(--f-body);text-align:center}
+.scores{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin:14px 0}
+.score{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:12px 14px}
+.score b{display:block;font:600 26px/1.1 var(--f-display);font-variant-numeric:tabular-nums}
+.score span{font-size:13px;color:var(--muted)}
+footer{margin-top:56px;padding-top:16px;border-top:1px solid var(--line);font-size:13px;color:var(--faint)}
+</style>
+</head>
+<body>
+<div class="shell">
+<nav class="toc" aria-label="Contents">
+  <p>Contents</p>
+  <a href="#what">What it is</a>
+  <a href="#access">Getting in</a>
+  <a href="#views">Reading the page</a>
+  <a href="#delegate">Handing work over</a>
+  <a href="#approve">Approvals</a>
+  <a href="#waiting">Waiting and chasing</a>
+  <a href="#fields">What a task holds</a>
+  <a href="#rhythm">The weekly rhythm</a>
+  <a href="#data">Where the data comes from</a>
+  <a href="#tested">How it was tested</a>
+  <a href="#limits">Known limits</a>
+</nav>
+<main>
+<header>
+  <p class="eyebrow">JCE Media · Internal guide</p>
+  <h1>How the Client Planner works</h1>
+  <p class="lede">One live list of every client, what we owe each of them, by when, and who is doing it. Jacques and Diane work from the same page, and Claude keeps it loaded.</p>
+  <div class="cta"><a href="https://claude.ai/artifact/JmcMoAfZzQc5pwEYw2ERe4" rel="noopener">Open the planner</a><span>Opens on claude.ai. You need to be signed in and to have been given access.</span></div>
+</header>
+
+<h2 id="what">What it is</h2>
+<p>The planner is a single page on claude.ai with a small shared database behind it. When either of you ticks a task, hands one over or answers a question, the other person's screen updates within seconds. Nobody has to save, sync or refresh.</p>
+<p>It holds two kinds of record:</p>
+<ul>
+  <li><strong>Clients.</strong> One card per client, carrying the engagement in a line, the fee and term from the agreement, the main contact, the last invoice and the next billing event. Ended clients are kept but folded away at the bottom.</li>
+  <li><strong>Tasks.</strong> Each task belongs to a client, or to "General" for things like a bank check. It has a due date, an owner, a status, a priority and a short hand-over note written so the owner can act without asking.</li>
+</ul>
+<p>It was first filled on 10 November 2026 from the signed agreements, the invoice records and the last two months of email, then checked by three independent reviewers. That's covered further down.</p>
+
+<h2 id="access">Getting in</h2>
+<ol class="steps">
+  <li><strong>Jacques shares it with Diane.</strong> In the planner, open the Share menu and add Diane with at least Contributor access. Viewer access lets her read it but not tick or hand anything over.</li>
+  <li><strong>Say who you are, once per browser.</strong> The first time the page opens it asks "Who's using this browser?" Pick your name. That sets your default view to your own tasks and signs every hand-over you make. You can switch it later with the link under the title.</li>
+  <li><strong>Bookmark it.</strong> The planner works on a phone too. The filter bar stops sticking to the top on small screens so the list gets the room.</li>
+</ol>
+
+<h2 id="views">Reading the page</h2>
+<p>Across the top sit six counters: clients, open tasks, overdue, due today, waiting on Jacques, and with Diane. Under them are two switches. <strong>By date</strong> is the day-to-day view. <strong>By client</strong> is for account reviews and calls.</p>
+<h3>By date</h3>
+<p>Tasks fall into groups in this order. A task appears in only one group.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Group</th><th>What lands there</th></tr></thead>
+<tbody>
+<tr><td>New for you</td><td>Tasks someone else has just handed you, with their note. Tap <em>Got it</em> to clear the flag.</td></tr>
+<tr><td>Needs Jacques</td><td>Anything waiting on a yes, a decision or a signature. Jacques sees an answer box and a one-tap button.</td></tr>
+<tr><td>Overdue</td><td>Past its date and still open.</td></tr>
+<tr><td>Today</td><td>Due today, or a waiting task whose next chase is today.</td></tr>
+<tr><td>High priority, no date</td><td>Important but undated. Give these a date when you see them.</td></tr>
+<tr><td>Next 7 days, Later</td><td>Everything else with a date.</td></tr>
+<tr><td>No date</td><td>Folded away. Open it on a quiet afternoon.</td></tr>
+<tr><td>Waiting, next chase later</td><td>Folded away. Tasks that are with a client or a supplier and don't need touching until their chase date.</td></tr>
+</tbody></table></div>
+<p>The owner switch defaults to <strong>Mine</strong>. <strong>Everyone</strong> shows the whole business. On the Jacques filter, anything that needs his answer shows even when Diane owns the task.</p>
+<h3>By client</h3>
+<p>Each card opens with a one-line health check: how many tasks are open, how many are overdue, and the next one due. The fee, term, contact and billing details sit behind a fold so the cards stay short. Each card shows its three nearest tasks with a link to see the rest, and an <em>Add task</em> button that pre-fills the client.</p>
+
+<h2 id="delegate">Handing work over</h2>
+<p>Every task shows its owner as a coloured pill: <span class="pill j">Jacques</span> <span class="pill d">Diane</span>. Tap the pill to hand the task over.</p>
+<ol class="steps">
+  <li>Pick who it goes to.</li>
+  <li>Optionally write one line they need to know, for example "Draft it, I'll approve before it goes".</li>
+  <li>Tap <em>Hand over</em>. The task moves to their list with a <strong>New for you</strong> flag and your note at the top.</li>
+</ol>
+<p>The page records who handed it over and when, so later you can see where a task came from. Nothing is reassigned by accident. The pill opens a choice; it never cycles on a stray tap.</p>
+<div class="callout"><strong>Who owns what</strong>Diane decides on sending anything already approved, chasing any invoice or overdue commitment, client updates on delivery dates, and closing a task once she has tested it end to end. Jacques decides on pricing, scope, contracts and anything that moves money out of the business. This follows Diane's role charter, and the planner's first load was split along this line.</div>
+
+<h2 id="approve">Approvals: Diane prepares, Jacques says yes</h2>
+<p>Most of what used to sit on Jacques's list was paperwork that only needed his yes. The planner splits those into two halves. Diane does the work. Jacques answers one line.</p>
+<div class="flow" role="img" aria-label="Approval flow: Diane prepares the task and asks a one-line question, it appears in the Needs Jacques lane, Jacques answers and taps approve, and the task returns to Diane flagged New for you with his answer.">
+<svg viewBox="0 0 680 150" xmlns="http://www.w3.org/2000/svg">
+  <rect class="boxd" x="6" y="30" width="190" height="84" rx="10" stroke-width="1.5"/>
+  <text x="22" y="58" font-weight="600">Diane prepares</text>
+  <text class="sub" x="22" y="80">Drafts the invoice or reply,</text>
+  <text class="sub" x="22" y="97">sets "Needs Jacques" + question</text>
+  <rect class="boxa" x="245" y="30" width="190" height="84" rx="10" stroke-width="1.5"/>
+  <text x="261" y="58" font-weight="600">Needs Jacques lane</text>
+  <text class="sub" x="261" y="80">Question, rand value,</text>
+  <text class="sub" x="261" y="97">answer box, one tap</text>
+  <rect class="boxd" x="484" y="30" width="190" height="84" rx="10" stroke-width="1.5"/>
+  <text x="500" y="58" font-weight="600">Back with Diane</text>
+  <text class="sub" x="500" y="80">"New for you" with his answer,</text>
+  <text class="sub" x="500" y="97">she sends and closes it</text>
+  <path class="arrow" d="M196 72 H239"/><path class="head" d="M245 72 l-8 -4.5 v9 z"/>
+  <path class="arrow" d="M435 72 H478"/><path class="head" d="M484 72 l-8 -4.5 v9 z"/>
+</svg>
+</div>
+<p>To ask for an approval, open the task and set <strong>Needs Jacques to</strong> Approve, Decide or Sign. Write the question so it can be answered in a few words, add the rand value if there is one, and save. The task stays in Diane's name.</p>
+<p>Jacques sees the question in the <span class="pill a">Needs Jacques</span> lane. He can type an answer or a condition ("R9,499 now, rest at go-live") and tap <em>Approve</em>, or <em>Send answer</em> for a decision. His answer is written into the task's notes with the date, and the task goes back to Diane as New for you.</p>
+
+<h2 id="waiting">Waiting and chasing</h2>
+<p>Lots of client work stalls on the client: an access invite, a logo, a yes. Mark those <span class="pill w">Waiting</span> and set a <strong>Next chase</strong> date. Until that date the task stays folded away under "Waiting, next chase later". On the chase date it comes back into Today on its own.</p>
+<p>After each nudge, push the next chase date forward three to five days. A Diane-owned waiting task shows as "Chase" and a Jacques-owned one as "Waiting", because for her it's an action and for him it's a blocker.</p>
+
+<h2 id="fields">What a task holds</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Field</th><th>Use it for</th></tr></thead>
+<tbody>
+<tr><td>Task</td><td>An instruction, short, starting with a verb: "Send October invoice", not "October invoice".</td></tr>
+<tr><td>Client</td><td>Which card it belongs to, or General.</td></tr>
+<tr><td>Due</td><td>The real deadline: a contract date, an invoice due date, a promise made on a call. Where a date is only a target, the notes say so.</td></tr>
+<tr><td>Owner</td><td>The one person doing it. Unassigned is allowed but should be rare.</td></tr>
+<tr><td>Status</td><td>To do, Doing, Waiting on someone else, Done.</td></tr>
+<tr><td>Type</td><td>Delivery, Billing, Client input, Admin, Renewal. Billing tasks are tagged green so money stands out.</td></tr>
+<tr><td>Next chase</td><td>For waiting tasks only. Hides the task until then.</td></tr>
+<tr><td>Needs Jacques to</td><td>Approve, Decide or Sign, with a one-line question and an optional rand value.</td></tr>
+<tr><td>Detail</td><td>Enough context to act without asking. Approvals and decisions are added here with dates.</td></tr>
+<tr><td>Source</td><td>The email subject and date, or the file the task came from, so anyone can check it.</td></tr>
+</tbody></table></div>
+
+<h2 id="rhythm">The weekly rhythm</h2>
+<ul>
+  <li><strong>Every morning, five minutes each.</strong> Open on Mine. Clear New for you. Jacques clears the Needs Jacques lane. Work Overdue, then Today.</li>
+  <li><strong>Mondays and Thursdays, Diane.</strong> Open "Waiting, next chase later" on Everyone. Chase whatever is due, then move each chase date forward.</li>
+  <li><strong>Fridays, Diane.</strong> In By client, check every card has nothing overdue and that anything finished was actually sent and tested.</li>
+  <li><strong>Month start, Diane.</strong> Filter on Billing and run the invoicing sweep from the cards' "Next bill" lines.</li>
+</ul>
+
+<h2 id="data">Where the data comes from and how it stays fresh</h2>
+<p>Claude filled the planner by reading:</p>
+<ul>
+  <li>every client folder's agreements, invoices, proposals and handover notes;</li>
+  <li>the invoice registers;</li>
+  <li>the existing waiting-on and board files;</li>
+  <li>two months of Jacques's email.</li>
+</ul>
+<p>Where those sources disagreed, the newer one won and the conflict was written into the task's notes.</p>
+<p>Claude can read and write the planner's database directly. That means a session can be asked to "update the planner from my email", "add what came out of today's call with the client", or "close everything the bank shows as paid". The changes appear on both your screens straight away.</p>
+<div class="callout warn"><strong>One list, not four</strong>Mission Control already tracks work in the action board, the waiting-on register and the scoreboard. If all of them keep tracking client work, they will drift apart. The reviewers recommended this split:
+<ul>
+  <li>The planner becomes the one record for client tasks.</li>
+  <li>The waiting-on register keeps only non-client dependencies, such as the accountant, Payfast and suppliers.</li>
+  <li>The action board keeps internal and product work.</li>
+  <li>The morning brief, the chase routine and the session wrap-up read from and write to the planner.</li>
+</ul>
+That change is waiting on Jacques's go-ahead.</div>
+
+<h2 id="tested">How it was tested</h2>
+<p>Before the planner went to Diane, three reviewers worked through it separately, each with the code and data but not each other's conclusions:</p>
+<ul>
+  <li>a usability reviewer, playing a Monday morning as each user;</li>
+  <li>a chief-of-staff reviewer, asking whether it actually takes work off Jacques;</li>
+  <li>an auditor, cross-checking every task against the source files.</li>
+</ul>
+<div class="scores">
+  <div class="score"><b>5/10</b><span>Day-to-day usefulness, first version</span></div>
+  <div class="score"><b>3 → 7</b><span>Load taken off Jacques, before and after the fixes</span></div>
+  <div class="score"><b>5/10</b><span>Tracking accuracy, first version</span></div>
+</div>
+<p>Changes made from their findings:</p>
+<ul>
+  <li>A <strong>Mine</strong> default view, plus a <strong>Today</strong> group and a group for high-priority work with no date.</li>
+  <li>Hand-overs now ask who it goes to and record a note, instead of cycling owners on a tap. Diane gets a <strong>New for you</strong> flag.</li>
+  <li>The <strong>Needs Jacques</strong> lane with an answer box, so roughly 20 clerical items moved to Diane with a one-tap approval left for Jacques.</li>
+  <li>Waiting tasks got chase dates and fold away until they're due.</li>
+  <li>Detail text is clamped to two lines, client facts sit behind a fold, and tap targets are bigger on phones.</li>
+  <li>Saving a task only writes the fields that changed, so two people editing at once don't overwrite each other.</li>
+  <li>Duplicates were merged, one wrongly described payment was corrected, an invoice date was aligned with the onboarding plan, and about ten missing items were added (small debts, unconfirmed bookings, a never-sent pro forma).</li>
+</ul>
+<p>After the fixes, Jacques owns about 26 open tasks and Diane about 72, many of them chases. If her list proves too long, the first thing to change is the chase dates, not the owners.</p>
+
+<h2 id="limits">Known limits</h2>
+<ul>
+  <li>The planner doesn't send notifications. You see new work when you open the page.</li>
+  <li>Client cards (fee, term, contact, billing) can be changed by Claude but not yet from the page itself. Tell Claude when a fee or term changes.</li>
+  <li>"Who are you" is remembered per browser. On a new device, pick your name again.</li>
+  <li>The page works only inside claude.ai, for people the planner is shared with.</li>
+</ul>
+
+<footer>Internal to JCE Media. Written 10 November 2026. Unlisted: please don't forward outside the team.</footer>
+</main>
+</div>
+</body>
+</html>
