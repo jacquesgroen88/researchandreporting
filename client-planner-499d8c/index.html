@@ -196,12 +196,116 @@ dialog h2{font-size:18px}
   .owner{padding:6px 12px 6px 10px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* ---------- visual layer v2: softer surfaces, clearer hierarchy, avatars, metric tiles ---------- */
+:root{--r:10px;--bg:#f2f4f8;--shadow:0 1px 2px rgba(16,24,40,.05),0 6px 16px rgba(16,24,40,.05)}
+@media (prefers-color-scheme: dark){:root{--bg:#0c1016;--shadow:0 1px 2px rgba(0,0,0,.45),0 8px 20px rgba(0,0,0,.28)}}
+body{font-size:14.5px}
+.wrap{max-width:1240px}
+header.top{align-items:center;padding-block:26px 18px}
+header.top h1,.login h1{display:flex;align-items:center;gap:10px}
+header.top h1{font-size:26px}
+.mark{display:inline-grid;place-items:center;height:32px;padding:0 9px;border-radius:9px;background:var(--accent);color:var(--on-accent);font:700 12.5px var(--f-display);letter-spacing:.05em}
+.stats{gap:10px}
+.stat{appearance:none;text-align:left;font:inherit;color:inherit;cursor:pointer;min-width:116px;padding:11px 14px;border-radius:12px;box-shadow:var(--shadow);position:relative;transition:transform .12s ease,border-color .12s ease}
+.stat:hover{border-color:var(--accent);transform:translateY(-1px)}
+.stat b{font-size:24px}
+.stat::after{content:"";position:absolute;right:12px;top:13px;width:8px;height:8px;border-radius:50%;background:var(--dot,var(--line))}
+.stat.cli{--dot:var(--accent)} .stat.open{--dot:var(--ok)} .stat.bad{--dot:var(--bad)} .stat.tod{--dot:var(--warn)} .stat.ask{--dot:var(--ask)} .stat.dia{--dot:var(--dia)}
+.stat.zero b{color:var(--faint)} .stat.zero::after{background:var(--line)}
+.btn{border-radius:9px} .btn.primary{font-weight:600}
+.bar{background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);padding-block:12px;gap:10px}
+.seg{background:var(--surface);border:1px solid var(--line);border-radius:10px}
+.seg button{border-radius:7px;padding:6px 12px}
+.seg button:hover{color:var(--fg)}
+.seg button[aria-pressed="true"]{box-shadow:none}
+#viewSeg button[aria-pressed="true"]{background:var(--accent);color:var(--on-accent)}
+#ownerSeg button[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent)}
+.bar input[type=search],.bar select{border-radius:10px;padding:8px 11px}
+
+.group{margin-top:28px}
+.group h2{font:600 15.5px var(--f-display);letter-spacing:0;text-transform:none;color:var(--fg);margin-bottom:10px}
+.group h2 .n{font:600 11.5px var(--f-mono);background:var(--surface-2);color:var(--muted);padding:2px 8px;border-radius:999px}
+.group.overdue h2,.group.needs h2,.group.newfor h2{color:var(--fg)}
+.group.overdue h2 .n{background:var(--bad-soft);color:var(--bad)} .group.needs h2 .n{background:var(--ask-soft);color:var(--ask)}
+.group.newfor h2 .n{background:var(--dia-soft);color:var(--dia)} .group.today h2 .n{background:var(--accent-soft);color:var(--accent)}
+.list{border-radius:12px;box-shadow:var(--shadow)}
+.task{padding:13px 16px;gap:12px;transition:background .12s ease}
+.task:hover{background:color-mix(in srgb,var(--surface-2) 45%,var(--surface))}
+.t-title{font-weight:600;line-height:1.35}
+.t-meta{margin-top:6px}
+.chip{border-radius:6px;padding:2px 8px}
+.chip.client{border:0;background:var(--surface-2);font-weight:500}
+.t-detail{-webkit-line-clamp:1;font-size:12.5px;color:var(--faint)}
+.t-side{gap:8px}
+.due{font:600 11.5px var(--f-mono);padding:3px 8px;border-radius:6px;background:var(--surface-2);color:var(--muted)}
+.due.late{background:var(--bad-soft);color:var(--bad)} .due.soon{background:var(--warn-soft);color:var(--warn)}
+.due.none{background:transparent;color:var(--faint);font-weight:400;padding-inline:0}
+.owner{padding:3px 10px 3px 3px;gap:6px}
+.owner::before{display:none}
+.av{width:20px;height:20px;flex:none;border-radius:50%;display:inline-grid;place-items:center;font:700 10.5px/1 var(--f-body);color:var(--on-accent);background:var(--none)}
+.av.jacques{background:var(--jac)} .av.diane{background:var(--dia)} .av.giorgio{background:var(--ok)}
+.lead{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--muted);white-space:nowrap}
+.t-ask{border-radius:10px;padding:10px 12px;border:1px solid color-mix(in srgb,var(--ask) 22%,transparent)}
+.t-ask p{font-weight:500}
+
+.clients{gap:16px;grid-template-columns:repeat(auto-fill,minmax(360px,1fr))}
+.client{border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
+.c-head{padding:16px 16px 14px}
+.c-title{min-width:0}
+.c-head h3{font-size:18px;line-height:1.25}
+.c-full{margin:2px 0 0;font-size:12px;color:var(--faint);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.c-eng{margin-top:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.c-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:12px}
+.metric{background:var(--surface-2);border-radius:9px;padding:7px 9px;min-width:0}
+.metric b{display:block;font:600 18px/1.2 var(--f-display);font-variant-numeric:tabular-nums}
+.metric span{display:block;font-size:10px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.metric.bad{background:var(--bad-soft)} .metric.bad b{color:var(--bad)} .metric.ask{background:var(--ask-soft)} .metric.ask b{color:var(--ask)}
+.metric.zero b{color:var(--faint)}
+.c-sum{margin-top:12px;display:flex;gap:8px;align-items:center;font-size:12.5px;color:var(--muted)}
+.c-sum .t{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.status{border-radius:999px;padding:3px 10px;font-size:10.5px}
+details.facts-wrap{margin-top:10px}
+.c-tasks .task{padding:10px 16px}
+.c-more{padding:9px 16px}
+.c-foot{padding:10px 16px}
+
+.bd-wrap{border-radius:12px;box-shadow:var(--shadow)}
+.bd th,.bd td{padding:10px 12px;vertical-align:middle}
+.bd .pill{display:inline-block;min-width:24px;text-align:center;padding:1px 8px;border-radius:999px}
+.bd td.num.late .pill{background:var(--bad-soft)} .bd td.num.ask .pill{background:var(--ask-soft)} .bd td.num.tod .pill{background:var(--warn-soft);color:var(--warn)}
+.bd .load{display:inline-flex;align-items:center;gap:8px;justify-content:flex-end;color:var(--fg);font-weight:600}
+.bd .track{display:block;width:64px;height:6px;border-radius:3px;background:var(--surface-2);overflow:hidden}
+.bd .track i{display:block;height:100%;border-radius:3px;background:var(--accent)}
+.bd-next .due{margin-right:4px}
+
+.cal-wrap{border-radius:12px;box-shadow:var(--shadow)}
+.cal-head h2{font-size:22px}
+.day{min-height:124px;padding:8px}
+.ev{padding:3px 7px;border-radius:5px;font-size:12px}
+.legend{margin-top:10px}
+
+.login{box-shadow:var(--shadow);border-radius:16px;padding:28px;gap:14px}
+.login input{border-radius:9px;padding:10px 12px}
+dialog{border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,.28)}
+.field input,.field select,.field textarea{border-radius:8px}
+.empty{border-radius:12px;background:var(--surface)}
+@media (max-width:560px){
+  .stat{min-width:104px}
+  .seg{max-width:100%;overflow-x:auto;scrollbar-width:none}
+  .seg button{white-space:nowrap;flex:none}
+  .bar input[type=search]{flex:1 1 100%}
+  .bar select{flex:1 1 auto}
+  .c-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .clients{grid-template-columns:1fr}
+  .task{padding:12px}
+}
 </style>
 </head>
 <body>
 <div class="wrap">
   <section id="loginView" class="login" hidden>
-    <h1>JCE Client Planner</h1>
+    <h1><span class="mark">JCE</span>Client Planner</h1>
     <p id="loginMsg">Paste your personal planner key. Jacques gives you this once; this browser remembers it.</p>
     <form id="loginForm" style="display:grid;gap:10px">
       <input id="email" type="password" required placeholder="jcep_…" autocomplete="off" aria-label="Planner key">
@@ -212,7 +316,7 @@ dialog h2{font-size:18px}
   <section id="appView" hidden>
   <header class="top">
     <div>
-      <h1>JCE Client Planner</h1>
+      <h1><span class="mark">JCE</span>Client Planner</h1>
       <p>Every client, what we owe them and by when. Jacques and Diane, one list.</p>
       <div class="whoami" id="whoami"></div>
     </div>
@@ -356,14 +460,16 @@ function renderStats(){
   const late=open.filter(t=>eff(t)&&daysTo(eff(t))<0).length;
   const tod=open.filter(t=>eff(t)&&daysTo(eff(t))===0).length;
   const act=[...S.clients.values()].filter(c=>c.status!=="ended").length;
+  const tile=(n,label,cls,v,o)=>el("button",{class:"stat "+cls+(n?"":" zero"),title:"Show "+label.toLowerCase(),onclick:()=>{S.view=v;S.owner=o;savePrefs();render();window.scrollTo(0,0)}},el("b",null,n),el("span",null,label));
   $("#stats").replaceChildren(
-    el("button",{class:"stat link",title:"See what's due per client",onclick:()=>{S.view="client";S.owner="all";savePrefs();render()}},el("b",null,act),el("span",null,"Clients")),
-    el("div",{class:"stat"},el("b",null,open.length),el("span",null,"Open")),
-    el("div",{class:"stat bad"},el("b",null,late),el("span",null,"Overdue")),
-    el("div",{class:"stat"},el("b",null,tod),el("span",null,"Due today")),
-    el("div",{class:"stat ask"},el("b",null,open.filter(t=>t.needs).length),el("span",null,"Needs Jacques")),
-    el("div",{class:"stat dia"},el("b",null,open.filter(t=>t.owner==="diane").length),el("span",null,"With Diane")));
+    tile(act,"Clients","cli","client","all"),
+    tile(open.length,"Open","open","date","all"),
+    tile(late,"Overdue","bad","date","all"),
+    tile(tod,"Due today","tod","date","all"),
+    tile(open.filter(t=>t.needs).length,"Needs Jacques","ask","date","jacques"),
+    tile(open.filter(t=>t.owner==="diane").length,"With Diane","dia","date","diane"));
 }
+const av=p=>el("span",{class:"av "+(p||"unassigned"),"aria-hidden":"true"},p&&p!=="unassigned"?p[0].toUpperCase():"?");
 function labelChip(l){return el("span",{class:"chip label",style:"--lc:"+l.color},l.name)}
 
 function taskRow(t,showClient){
@@ -382,8 +488,8 @@ function taskRow(t,showClient){
         t.priority==="high"&&!done?el("span",{class:"chip high"},"High"):null,
         labelsOf(t).map(labelChip))),
     el("div",{class:"t-side"},
-      el("span",{class:"due"+(!done&&n!=null&&n<0?" late":!done&&n!=null&&n<=2?" soon":"")},fmtDue(t.due)),
-      el("button",{class:"owner "+owner,"aria-label":"Owner "+OWNERS[owner]+". Hand over",onclick:()=>openHand(t.id)},OWNERS[owner])));
+      el("span",{class:"due"+(n==null?" none":!done&&n<0?" late":!done&&n<=2?" soon":"")},fmtDue(t.due)),
+      el("button",{class:"owner "+owner,"aria-label":"Owner "+OWNERS[owner]+". Hand over",onclick:()=>openHand(t.id)},av(owner),OWNERS[owner])));
   if(t.needs&&!done&&S.me==="jacques"){const ans=el("input",{class:"ans",maxlength:"300",placeholder:"Your answer or condition (optional)","aria-label":"Your answer"});
     row.append(el("div",{class:"t-ask"},el("p",null,t.ask||"Needs your "+NEEDS[t.needs].toLowerCase()),ans,
       el("span",{style:"display:flex;gap:6px"},el("button",{class:"btn sm ask",onclick:()=>approve(t,ans.value.trim())},t.needs==="decide"?"Send answer":"Approve"),el("button",{class:"btn sm",onclick:()=>openEdit(t.id)},"Open"))))}
@@ -448,18 +554,21 @@ function openDay(k,items){$("#dayTitle").textContent=parseD(k).toLocaleDateStrin
 function clientCard(c,tasks){
   const fact=(k,v)=>v?[el("dt",null,k),el("dd",null,v)]:[];
   const open=tasks.filter(isOpen);const late=open.filter(t=>eff(t)&&daysTo(eff(t))<0).length;const next=open.find(t=>eff(t));
+  const week=open.filter(t=>eff(t)&&daysTo(eff(t))>=0&&daysTo(eff(t))<=7).length,needs=open.filter(t=>t.needs).length;
+  const metric=(n,label,cls)=>el("div",{class:"metric"+(n?(cls?" "+cls:""):" zero")},el("b",null,n),el("span",null,label));
   const expanded=S.openClients.has(c.id);const shown=expanded?tasks:tasks.slice(0,3);
   return el("article",{class:"client",id:"c-"+c.id},
     el("div",{class:"c-head"},
-      el("div",{class:"c-row"},el("h3",null,c.name),el("span",{class:"status "+c.status},c.status)),
-      c.engagement?el("p",{class:"c-eng"},c.engagement):null,
-      el("p",{class:"c-sum"},el("b",null,open.length+" open"),late?[" · ",el("span",{class:"late"},late+" overdue")]:null,next?" · next: "+fmtDue(eff(next))+", "+next.title:null),
+      el("div",{class:"c-row"},el("div",{class:"c-title"},el("h3",null,shortClient(c.id)),c.name!==shortClient(c.id)?el("p",{class:"c-full",title:c.name},c.name):null),el("span",{class:"status "+c.status},c.status.replace("-"," "))),
+      c.engagement?el("p",{class:"c-eng",title:c.engagement},c.engagement):null,
+      el("div",{class:"c-metrics"},metric(open.length,"Open"),metric(late,"Overdue","bad"),metric(week,"This week"),metric(needs,"Approvals","ask")),
+      next?el("p",{class:"c-sum"},el("span",{class:"due"+(daysTo(eff(next))<0?" late":daysTo(eff(next))<=2?" soon":"")},fmtDue(eff(next))),el("span",{class:"t"},next.title)):null,
       el("details",{class:"facts-wrap"},el("summary",null,"Fee, term, contact and billing"),
         el("dl",{class:"facts"},fact("Fee",c.fee),fact("Term",c.term),fact("Contact",c.contact),fact("Invoiced",c.last_invoice),fact("Next bill",c.next_billing),fact("Entity",c.entity)),
         c.notes?el("p",{class:"c-notes"},c.notes):null)),
     el("div",{class:"c-tasks"},tasks.length?shown.map(t=>taskRow(t,false)):el("div",{class:"task"},el("span"),el("span",{class:"t-meta"},"Nothing open"),el("span"))),
     tasks.length>3?el("button",{class:"c-more",onclick:()=>{expanded?S.openClients.delete(c.id):S.openClients.add(c.id);render()}},expanded?"Show fewer":"Show all "+tasks.length+" tasks"):null,
-    el("div",{class:"c-foot"},el("span",{class:"muted"},"Account lead: "+(LEADS[c.lead]||"—")),el("button",{class:"btn sm",onclick:()=>openEdit(null,c.id)},"Add task")));
+    el("div",{class:"c-foot"},el("span",{class:"lead"},av(c.lead),(LEADS[c.lead]||"No lead")+" leads"),el("button",{class:"btn sm",onclick:()=>openEdit(null,c.id)},"Add task")));
 }
 function breakdown(live,byC){
   const rows=live.map(c=>{const open=byC(c.id).filter(isOpen);const d=t=>eff(t)?daysTo(eff(t)):null;
@@ -467,14 +576,16 @@ function breakdown(live,byC){
     return {c,open:open.length,late:open.filter(t=>d(t)!=null&&d(t)<0).length,today:open.filter(t=>d(t)===0).length,week:open.filter(t=>d(t)!=null&&d(t)>0&&d(t)<=7).length,needs:open.filter(t=>t.needs).length,next}})
     .filter(r=>r.open).sort((a,b)=>b.late-a.late||(eff(a.next||{})||"9999").localeCompare(eff(b.next||{})||"9999"));
   if(!rows.length)return null;
-  const num=(n,cls)=>el("td",{class:"num"+(n&&cls?" "+cls:"")},n||"·");
+  const num=(n,cls)=>el("td",{class:"num"+(n&&cls?" "+cls:"")},n?(cls?el("span",{class:"pill"},n):n):"·");
+  const maxOpen=Math.max(...rows.map(r=>r.open));
+  const load=n=>el("td",{class:"num"},el("span",{class:"load"},el("span",{class:"track"},el("i",{style:"width:"+Math.round(n/maxOpen*100)+"%"})),n));
   const go=id=>{S.openClients.add(id);render();const e=document.getElementById("c-"+id);if(e)e.scrollIntoView({block:"start"})};
   const tot=k=>rows.reduce((s,r)=>s+r[k],0);
   return el("section",{class:"group"},el("h2",null,"What's due per client",el("span",{class:"n"},rows.length),el("span",{class:"hint"},"click a client to jump to its tasks")),
     el("div",{class:"bd-wrap"},el("table",{class:"bd"},
       el("thead",null,el("tr",null,el("th",null,"Client"),el("th",null,"Lead"),el("th",{class:"num"},"Overdue"),el("th",{class:"num"},"Today"),el("th",{class:"num"},"Next 7 days"),el("th",{class:"num"},"Needs Jacques"),el("th",{class:"num"},"Open"),el("th",null,"Next due"))),
       el("tbody",null,rows.map(r=>el("tr",{tabindex:"0",role:"button",onclick:()=>go(r.c.id),onkeydown:e=>{if(e.key==="Enter")go(r.c.id)}},
-        el("td",{class:"bd-name"},shortClient(r.c.id)),el("td",null,LEADS[r.c.lead]||"—"),num(r.late,"late"),num(r.today,"tod"),num(r.week),num(r.needs,"ask"),num(r.open),
+        el("td",{class:"bd-name"},shortClient(r.c.id)),el("td",null,el("span",{class:"lead"},av(r.c.lead),LEADS[r.c.lead]||"—")),num(r.late,"late"),num(r.today,"tod"),num(r.week),num(r.needs,"ask"),load(r.open),
         el("td",{class:"bd-next"},r.next?[el("span",{class:"due"+(daysTo(eff(r.next))<0?" late":"")},fmtDue(eff(r.next)))," ",r.next.title]:"No dated tasks")))),
       el("tfoot",null,el("tr",null,el("td",null,"Total"),el("td"),num(tot("late"),"late"),num(tot("today")),num(tot("week")),num(tot("needs"),"ask"),num(tot("open")),el("td"))))));
 }
