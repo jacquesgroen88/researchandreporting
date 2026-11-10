@@ -44,6 +44,19 @@ header.top p{margin:4px 0 0;color:var(--muted)}
 .stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:8px 12px;min-width:92px}
 .stat b{display:block;font:600 20px/1.1 var(--f-display);font-variant-numeric:tabular-nums}
 .stat span{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+button.stat.link{text-align:left;cursor:pointer;border-color:var(--accent)}
+button.stat.link span{color:var(--accent)}
+.bd-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+table.bd{border-collapse:collapse;width:100%;min-width:720px;font-size:13px}
+.bd th,.bd td{padding:8px 10px;border-top:1px solid var(--line);text-align:left;vertical-align:top}
+.bd thead th{border-top:0;font:600 11px var(--f-body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:var(--surface-2);white-space:nowrap}
+.bd .num{text-align:right;font-family:var(--f-mono);font-variant-numeric:tabular-nums;color:var(--muted)}
+.bd td.num.late{color:var(--bad);font-weight:600} .bd td.num.tod{color:var(--fg);font-weight:600} .bd td.num.ask{color:var(--ask);font-weight:600}
+.bd tbody tr{cursor:pointer} .bd tbody tr:hover{background:var(--surface-2)}
+.bd-name{font-weight:600;white-space:nowrap}
+.bd-next{color:var(--muted);min-width:220px}
+.bd tfoot td{font-weight:600;background:var(--surface-2)}
+.client{scroll-margin-top:70px}
 .stat.bad b{color:var(--bad)} .stat.dia b{color:var(--dia)} .stat.ask b{color:var(--ask)}
 
 .bar{position:sticky;top:0;z-index:5;background:var(--bg);padding-block:10px;border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;gap:8px;align-items:center}
@@ -302,6 +315,7 @@ async function api(name,args){
 }
 const OWNERS={jacques:"Jacques",diane:"Diane",unassigned:"Unassigned"};
 const NEEDS={approve:"Approve",decide:"Decide",sign:"Sign"};
+const LEADS={jacques:"Jacques",diane:"Diane",giorgio:"Giorgio"};
 const S={view:"date",owner:"mine",label:"",me:null,q:"",showDone:false,clients:new Map(),tasks:new Map(),labels:new Map(),tl:new Map(),editing:null,handing:null,handTo:null,openClients:new Set(),calMonth:null};
 const $=s=>document.querySelector(s);
 const el=(tag,attrs,...kids)=>{const e=document.createElement(tag);if(attrs)for(const k in attrs){const v=attrs[k];if(v==null||v===false)continue;if(k==="class")e.className=v;else if(k==="style")e.setAttribute("style",v);else if(k.startsWith("on"))e.addEventListener(k.slice(2),v);else e.setAttribute(k,v===true?"":v)}for(const c of kids.flat()){if(c==null||c===false)continue;e.append(c.nodeType?c:document.createTextNode(String(c)))}return e};
@@ -343,7 +357,7 @@ function renderStats(){
   const tod=open.filter(t=>eff(t)&&daysTo(eff(t))===0).length;
   const act=[...S.clients.values()].filter(c=>c.status!=="ended").length;
   $("#stats").replaceChildren(
-    el("div",{class:"stat"},el("b",null,act),el("span",null,"Clients")),
+    el("button",{class:"stat link",title:"See what's due per client",onclick:()=>{S.view="client";S.owner="all";savePrefs();render()}},el("b",null,act),el("span",null,"Clients")),
     el("div",{class:"stat"},el("b",null,open.length),el("span",null,"Open")),
     el("div",{class:"stat bad"},el("b",null,late),el("span",null,"Overdue")),
     el("div",{class:"stat"},el("b",null,tod),el("span",null,"Due today")),
@@ -435,7 +449,7 @@ function clientCard(c,tasks){
   const fact=(k,v)=>v?[el("dt",null,k),el("dd",null,v)]:[];
   const open=tasks.filter(isOpen);const late=open.filter(t=>eff(t)&&daysTo(eff(t))<0).length;const next=open.find(t=>eff(t));
   const expanded=S.openClients.has(c.id);const shown=expanded?tasks:tasks.slice(0,3);
-  return el("article",{class:"client"},
+  return el("article",{class:"client",id:"c-"+c.id},
     el("div",{class:"c-head"},
       el("div",{class:"c-row"},el("h3",null,c.name),el("span",{class:"status "+c.status},c.status)),
       c.engagement?el("p",{class:"c-eng"},c.engagement):null,
@@ -445,20 +459,36 @@ function clientCard(c,tasks){
         c.notes?el("p",{class:"c-notes"},c.notes):null)),
     el("div",{class:"c-tasks"},tasks.length?shown.map(t=>taskRow(t,false)):el("div",{class:"task"},el("span"),el("span",{class:"t-meta"},"Nothing open"),el("span"))),
     tasks.length>3?el("button",{class:"c-more",onclick:()=>{expanded?S.openClients.delete(c.id):S.openClients.add(c.id);render()}},expanded?"Show fewer":"Show all "+tasks.length+" tasks"):null,
-    el("div",{class:"c-foot"},el("span",{class:"muted"},"Account lead: "+(OWNERS[c.lead]||"—")),el("button",{class:"btn sm",onclick:()=>openEdit(null,c.id)},"Add task")));
+    el("div",{class:"c-foot"},el("span",{class:"muted"},"Account lead: "+(LEADS[c.lead]||"—")),el("button",{class:"btn sm",onclick:()=>openEdit(null,c.id)},"Add task")));
+}
+function breakdown(live,byC){
+  const rows=live.map(c=>{const open=byC(c.id).filter(isOpen);const d=t=>eff(t)?daysTo(eff(t)):null;
+    const next=open.find(t=>eff(t));
+    return {c,open:open.length,late:open.filter(t=>d(t)!=null&&d(t)<0).length,today:open.filter(t=>d(t)===0).length,week:open.filter(t=>d(t)!=null&&d(t)>0&&d(t)<=7).length,needs:open.filter(t=>t.needs).length,next}})
+    .filter(r=>r.open).sort((a,b)=>b.late-a.late||(eff(a.next||{})||"9999").localeCompare(eff(b.next||{})||"9999"));
+  if(!rows.length)return null;
+  const num=(n,cls)=>el("td",{class:"num"+(n&&cls?" "+cls:"")},n||"·");
+  const go=id=>{S.openClients.add(id);render();const e=document.getElementById("c-"+id);if(e)e.scrollIntoView({block:"start"})};
+  const tot=k=>rows.reduce((s,r)=>s+r[k],0);
+  return el("section",{class:"group"},el("h2",null,"What's due per client",el("span",{class:"n"},rows.length),el("span",{class:"hint"},"click a client to jump to its tasks")),
+    el("div",{class:"bd-wrap"},el("table",{class:"bd"},
+      el("thead",null,el("tr",null,el("th",null,"Client"),el("th",null,"Lead"),el("th",{class:"num"},"Overdue"),el("th",{class:"num"},"Today"),el("th",{class:"num"},"Next 7 days"),el("th",{class:"num"},"Needs Jacques"),el("th",{class:"num"},"Open"),el("th",null,"Next due"))),
+      el("tbody",null,rows.map(r=>el("tr",{tabindex:"0",role:"button",onclick:()=>go(r.c.id),onkeydown:e=>{if(e.key==="Enter")go(r.c.id)}},
+        el("td",{class:"bd-name"},shortClient(r.c.id)),el("td",null,LEADS[r.c.lead]||"—"),num(r.late,"late"),num(r.today,"tod"),num(r.week),num(r.needs,"ask"),num(r.open),
+        el("td",{class:"bd-next"},r.next?[el("span",{class:"due"+(daysTo(eff(r.next))<0?" late":"")},fmtDue(eff(r.next)))," ",r.next.title]:"No dated tasks")))),
+      el("tfoot",null,el("tr",null,el("td",null,"Total"),el("td"),num(tot("late"),"late"),num(tot("today")),num(tot("week")),num(tot("needs"),"ask"),num(tot("open")),el("td"))))));
 }
 function renderClient(){
   const ts=visibleTasks().sort(sortTasks);const q=S.q.trim().toLowerCase();
-  const cs=[...S.clients.values()].sort((a,b)=>(a.sort_order??99)-(b.sort_order??99)||a.name.localeCompare(b.name));
+  const cs=[...S.clients.values()].filter(c=>c.status!=="ended").sort((a,b)=>(a.sort_order??99)-(b.sort_order??99)||a.name.localeCompare(b.name));
+  const liveIds=new Set(cs.map(c=>c.id));
   const byC=id=>ts.filter(t=>t.client_id===id);
   const filtered=ownerKey()!=="all"||q||S.label;
-  const live=cs.filter(c=>c.status!=="ended").filter(c=>!filtered||byC(c.id).length||(q&&c.name.toLowerCase().includes(q)));
-  const ended=cs.filter(c=>c.status==="ended");
+  const live=cs.filter(c=>!filtered||byC(c.id).length||(q&&c.name.toLowerCase().includes(q)));
   if(!cs.length)return emptyState();
-  const out=[el("div",{class:"clients"},live.map(c=>clientCard(c,byC(c.id))))];
-  const orphan=ts.filter(t=>!t.client_id||!S.clients.has(t.client_id));
-  if(orphan.length)out.push(group("general","General",orphan,{showClient:false}));
-  if(ended.length)out.push(el("details",{class:"ended-wrap"},el("summary",null,"Ended clients ("+ended.length+")"),el("div",{class:"clients"},ended.map(c=>clientCard(c,byC(c.id))))));
+  const out=[breakdown(live,byC),el("div",{class:"clients"},live.map(c=>clientCard(c,byC(c.id))))].filter(Boolean);
+  const orphan=ts.filter(t=>!t.client_id||!liveIds.has(t.client_id));
+  if(orphan.length)out.push(group("general","General",orphan,{showClient:true}));
   return out;
 }
 function emptyState(){return el("div",{class:"empty"},S.tasks.size?"Nothing matches these filters.":"No tasks yet. Add one with Add task.")}
