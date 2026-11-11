@@ -28,12 +28,16 @@
   var lb = document.createElement('div');
   lb.className = 'lb';
   lb.setAttribute('role', 'dialog'); lb.setAttribute('aria-modal', 'true'); lb.setAttribute('aria-label', 'Photo viewer');
-  lb.innerHTML = '<button class="x" aria-label="Close">&times;</button><button class="prev" aria-label="Previous photo">&#8249;</button><img alt=""><button class="next" aria-label="Next photo">&#8250;</button>';
+  lb.innerHTML = '<button class="x" aria-label="Close">&times;</button><button class="prev" aria-label="Previous photo">&#8249;</button><img alt=""><button class="next" aria-label="Next photo">&#8250;</button><p class="lb-count" aria-live="polite"></p>';
   document.body.appendChild(lb);
-  var lbImg = lb.querySelector('img'), set = [], at = 0, opener = null;
-  function show(i) { at = (i + set.length) % set.length; lbImg.src = set[at].full; lbImg.alt = set[at].alt; }
-  function openLb(b, items, i) { opener = b; set = items; show(i); lb.classList.add('open'); document.body.style.overflow = 'hidden'; lb.querySelector('.x').focus(); }
-  function closeLb() { lb.classList.remove('open'); document.body.style.overflow = ''; if (opener) opener.focus(); }
+  var lbImg = lb.querySelector('img'), lbCount = lb.querySelector('.lb-count'), set = [], at = 0, opener = null;
+  var behind = function () { return document.querySelectorAll('.site-head, main, .site-foot, .mbar, .wa, .skip'); };
+  function show(i) { at = (i + set.length) % set.length; lbImg.src = set[at].full; lbImg.alt = set[at].alt; lbCount.textContent = 'Photo ' + (at + 1) + ' of ' + set.length; }
+  function openLb(b, items, i) { opener = b; set = items; show(i); lb.classList.add('open'); document.body.style.overflow = 'hidden'; behind().forEach(function (el) { el.inert = true; }); lb.querySelector('.x').focus(); }
+  function closeLb() { lb.classList.remove('open'); document.body.style.overflow = ''; behind().forEach(function (el) { el.inert = false; }); if (opener) opener.focus(); }
+  var tx = null;
+  lb.addEventListener('touchstart', function (e) { tx = e.touches[0].clientX; }, { passive: true });
+  lb.addEventListener('touchend', function (e) { if (tx === null) return; var dx = e.changedTouches[0].clientX - tx; if (Math.abs(dx) > 40) show(at + (dx < 0 ? 1 : -1)); tx = null; });
   document.querySelectorAll('.gallery, .pgrid').forEach(function (g) {
     var btns = [].slice.call(g.querySelectorAll('button'));
     var items = btns.map(function (b) { var im = b.querySelector('img'); return { full: b.dataset.full || im.src, alt: im.alt }; });
@@ -62,9 +66,9 @@
   // When the ReviewTap system endpoint is set on the form (data-booking-endpoint), the enquiry posts there.
   // Until then it opens WhatsApp with the details filled in, so no enquiry is lost.
   var WA = { bucketlist: '27785719280', lakeside: '27615066214', pride: '27729228530' };
-  var MAIL = { bucketlist: 'info@clarkysbucketlist.co.za', lakeside: 'clarkyslakesiderestaurant@gmail.com', pride: '' };
+  var MAIL = { bucketlist: 'info@clarkysbucketlist.co.za', lakeside: '', pride: '' };
   var LABEL = { bucketlist: "Clarky's Bucketlist", lakeside: 'Clarkys Lakeside Restaurant', pride: "Clarky's Pride Lodge" };
-  var MAXG = { bucketlist: 6, lakeside: 30, pride: 14 };
+  var MAXG = { bucketlist: 6, lakeside: 30, pride: 12 };
   var PHONE = { bucketlist: '078 571 9280', lakeside: '061 506 6214', pride: '072 922 8530' };
   var TEL = { bucketlist: '+27785719280', lakeside: '+27615066214', pride: '+27729228530' };
   // Per-cottage caps. Woodland Whisper sleeps 2; the others are held at 6 until Val confirms layouts.
@@ -79,11 +83,13 @@
     if (d.cottage && d.cottage !== 'No preference') lines.push('Cottage: ' + d.cottage);
     if (d.arrive) lines.push((d.property === 'lakeside' ? 'Date: ' : 'Arrive: ') + nice(d.arrive));
     if (d.depart) lines.push('Depart: ' + nice(d.depart));
-    if (d.time) lines.push('Sitting: ' + d.time);
+    if (d.time) lines.push('Meal: ' + d.time + (d.clock ? ' at ' + d.clock : ''));
+    if (d.seat && d.seat !== 'No preference') lines.push('Seating: ' + d.seat);
     if (d.guests) lines.push('Adults: ' + d.guests);
     if (+d.kids) lines.push('Children: ' + d.kids);
     if (d.dog) lines.push('Bringing a dog: yes');
     if (d.dinner) lines.push('Please also book a dinner table at the Lakeside Restaurant');
+    if (d.pub) lines.push('Please keep us a table at the pub');
     if (d.name) lines.push('Name: ' + d.name);
     if (d.phone) lines.push('Phone: ' + d.phone);
     if (d.message) lines.push(d.message);
@@ -118,9 +124,28 @@
       var total = (+(guests && guests.value) || 0) + (+(kids && kids.value) || 0);
       if (guests && max && total > max) guests.setCustomValidity(max === 2 ? 'Woodland Whisper sleeps 2. Pick another cottage, or call us.' : 'For more than ' + max + ' guests, please call us.');
       if (phone && phone.value && (phone.value.replace(/\D/g, '').length < 9)) phone.setCustomValidity('Please enter a phone number we can reach you on.');
-      ok = f.reportValidity();
+      // Inline, announced errors tied to each field (browser bubbles vanish and are missed on phones).
+      f.querySelectorAll('.err').forEach(function (p) { p.remove(); });
+      var first = null;
+      f.querySelectorAll('input,select,textarea').forEach(function (el) {
+        if (el.disabled || el.type === 'hidden') return;
+        if (el.checkValidity()) { el.removeAttribute('aria-invalid'); el.removeAttribute('aria-describedby'); return; }
+        var id = 'err-' + el.name + '-' + Math.random().toString(36).slice(2, 6);
+        var p = document.createElement('p'); p.className = 'err'; p.id = id; p.textContent = el.validationMessage;
+        el.insertAdjacentElement('afterend', p);
+        el.setAttribute('aria-invalid', 'true'); el.setAttribute('aria-describedby', id);
+        if (!first) first = el;
+      });
+      if (first) { first.focus(); ok = false; }
       return ok;
     }
+
+    // Clear a field's error as soon as it is fixed.
+    f.addEventListener('input', function (e) {
+      var el = e.target; if (el.getAttribute('aria-invalid') !== 'true') return;
+      el.setCustomValidity('');
+      if (el.checkValidity()) { var p = document.getElementById(el.getAttribute('aria-describedby')); if (p) p.remove(); el.removeAttribute('aria-invalid'); el.removeAttribute('aria-describedby'); }
+    });
 
     f.addEventListener('submit', function (e) {
       e.preventDefault();
@@ -150,7 +175,7 @@
       ? ' <a href="mailto:' + mail + '?subject=' + encodeURIComponent('Enquiry: ' + (LABEL[d.property] || '')) + '&body=' + encodeURIComponent(message(d)) + '">Email it to us instead</a>, or call <a href="tel:' + TEL[d.property] + '">' + PHONE[d.property] + '</a>.'
       : ' Call or WhatsApp us on <a href="tel:' + TEL[d.property] + '">' + PHONE[d.property] + '</a>.';
     f.innerHTML = '<div class="done" role="status"><h3 tabindex="-1">' + (viaWA ? 'Your enquiry is ready in WhatsApp.' : 'Thank you, we have your enquiry.') + '</h3><p>' +
-      (viaWA ? 'Press send in WhatsApp and we will reply personally. WhatsApp did not open?' + alt : 'We will be in touch shortly.') + '</p>' +
+      (viaWA ? 'Press send in WhatsApp. This is a request, not a confirmed booking yet: we reply personally with availability and the rate. WhatsApp did not open?' + alt : 'This is a request, not a confirmed booking yet. We will be in touch with availability and the rate.') + '</p>' +
       '<p class="sent">' + esc(message(d)) + '</p></div>';
     var h = f.querySelector('.done h3');
     h.scrollIntoView({ block: 'center' });
