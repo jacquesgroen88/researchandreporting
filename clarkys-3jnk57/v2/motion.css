@@ -1,0 +1,145 @@
+/* Clarky's v2: motion and visual layer on top of styles.css.
+   Everything that hides content sits under html.m, which is only set when the visitor has not asked for reduced motion,
+   and is removed again if motion.js fails to load. Decorative loops are switched off for reduced motion at the bottom. */
+
+/* Page-to-page fade */
+@view-transition{navigation:auto}
+::view-transition-old(root){animation:vt-out .28s ease both}
+::view-transition-new(root){animation:vt-in .5s ease both}
+@keyframes vt-out{to{opacity:0}}
+@keyframes vt-in{from{opacity:0}}
+
+/* Scroll progress */
+.progress{position:fixed;top:0;left:0;width:100%;height:3px;background:linear-gradient(90deg,var(--gold),#e8cf8f);transform-origin:0 50%;transform:scaleX(0);z-index:80;pointer-events:none}
+
+/* Header tightens once you scroll */
+.site-head{transition:box-shadow .35s ease,background .35s ease}
+.site-head .wrap{transition:height .35s ease}
+.site-head.scrolled{box-shadow:0 10px 30px rgba(15,18,20,.08);background:rgba(251,250,246,.97)}
+.site-head.scrolled .wrap{height:62px}
+@media(max-width:760px){.site-head.scrolled .nav{top:62px}}
+
+/* Gold buttons: a light sweep on hover */
+.btn-gold{position:relative;overflow:hidden;isolation:isolate}
+.btn-gold::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.55) 50%,transparent 70%);translate:-120% 0;transition:translate .8s ease;z-index:-1}
+.btn-gold:hover::after{translate:120% 0}
+.btn{transition:background .2s,transform .2s,box-shadow .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn-gold:hover{box-shadow:0 10px 26px rgba(180,143,58,.35)}
+
+/* Hero: slow settle on load, then parallax (motion.js sets translate) */
+.hero img.bg{will-change:transform,translate}
+.m .hero img.bg{animation:kb 2.8s cubic-bezier(.2,.7,.2,1) both}
+@keyframes kb{from{scale:1.22}to{scale:1.06}}
+.m .hero h1{opacity:0}
+.m .hero.go h1{opacity:1}
+.m .hero .wrap>:not(h1){opacity:0;translate:0 18px;transition:opacity .9s ease,translate .9s cubic-bezier(.2,.8,.2,1)}
+.m .hero.go .wrap>:not(h1){opacity:1;translate:0 0}
+.m .hero.go .wrap>:nth-child(1){transition-delay:.05s}
+.m .hero.go .wrap>:nth-child(3){transition-delay:.55s}
+.m .hero.go .wrap>:nth-child(4){transition-delay:.7s}
+.m .hero.go .wrap>:nth-child(5){transition-delay:.85s}
+.hero .eyebrow{position:relative}
+.cue{display:none}
+@media(min-width:901px){
+  .cue{display:block;position:absolute;left:50%;bottom:26px;z-index:3;width:26px;height:42px;margin-left:-13px;border:2px solid rgba(255,255,255,.7);border-radius:14px}
+  .cue span{position:absolute;left:50%;top:8px;width:4px;height:8px;margin-left:-2px;border-radius:2px;background:#fff;animation:cue 1.8s ease-in-out infinite}
+}
+@keyframes cue{0%{opacity:0;translate:0 0}30%{opacity:1}80%{opacity:0;translate:0 14px}100%{opacity:0}}
+
+/* Words rise into place (motion.js wraps each word) */
+.sw .w{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.1em;margin-bottom:-.1em}
+.sw .w>span{display:inline-block}
+.m .sw .w>span{translate:0 110%;transition:translate 1s cubic-bezier(.2,.8,.2,1);transition-delay:calc(var(--i) * 55ms)}
+.m .sw.in .w>span{translate:0 0}
+
+/* Photos uncover from the bottom while settling from a slight zoom */
+.wipe{overflow:hidden}
+.wipe.frame{border-radius:var(--radius)}
+.m .wipe>img{clip-path:inset(100% 0 0 0);scale:1.18;transition:clip-path 1.25s cubic-bezier(.7,0,.2,1) var(--d,0s),scale 1.8s cubic-bezier(.2,.7,.2,1) var(--d,0s),transform .5s ease}
+.m .wipe.in>img{clip-path:inset(0 0 0 0);scale:1}
+
+/* Staggered cards */
+.m .reveal{transition-delay:var(--d,0s)}
+
+/* Marquee */
+.marquee{background:var(--slate-2);color:#f3efe6;overflow:hidden;padding:20px 0;border-block:1px solid rgba(255,255,255,.06)}
+.marquee .track{display:flex;align-items:center;width:max-content;animation:mq 42s linear infinite}
+.marquee span{font-family:var(--serif);font-style:italic;font-weight:500;font-size:clamp(1.5rem,3.2vw,2.5rem);line-height:1.2;white-space:nowrap;padding:0 .7em}
+.marquee i{color:var(--gold);font-style:normal;font-size:1rem}
+.marquee:hover .track{animation-play-state:paused}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* Numbers band */
+.stats{background:var(--slate)}
+.stats .wrap{display:grid;grid-template-columns:repeat(4,1fr)}
+.stat{padding:60px 18px;text-align:center;border-left:1px solid rgba(255,255,255,.1)}
+.stat:first-child{border-left:0}
+.stat b{display:block;font-family:var(--serif);font-weight:600;font-size:clamp(3rem,6.4vw,5.4rem);line-height:1;color:#e8cf8f;font-variant-numeric:tabular-nums}
+.stat span{display:block;margin-top:12px;font-size:.76rem;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:#c9ced3}
+@media(max-width:700px){
+  .stats .wrap{grid-template-columns:1fr 1fr;padding:0}
+  .stat{padding:34px 10px}
+  .stat:nth-child(3){border-left:0}
+  .stat:nth-child(n+3){border-top:1px solid rgba(255,255,255,.1)}
+}
+
+/* Moving photo strip (home) */
+.strip{display:grid;gap:12px;overflow:hidden;padding-top:4px}
+.strip .row{display:flex;width:max-content;animation:mq 70s linear infinite}
+.strip .row.rev{animation-direction:reverse;animation-duration:80s}
+.strip img{height:clamp(140px,17vw,230px);width:auto;aspect-ratio:4/3;object-fit:cover;border-radius:12px;margin-right:12px}
+.strip:hover .row{animation-play-state:paused}
+
+/* Full-bleed statement bands */
+.band{position:relative;min-height:min(76vh,700px);display:grid;place-items:center;text-align:center;color:#fff;overflow:hidden;isolation:isolate}
+.band-bg{position:absolute;left:0;top:-12%;width:100%;height:124%;object-fit:cover;z-index:-2;will-change:translate}
+.band::after{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse at center,rgba(15,18,20,.35),rgba(15,18,20,.7))}
+.band .sky{z-index:0}
+.band.dusk::after{background:linear-gradient(180deg,rgba(14,22,40,.82),rgba(20,30,52,.55) 55%,rgba(15,18,20,.75))}
+.band.warm::after{background:linear-gradient(180deg,rgba(40,18,8,.55),rgba(120,52,18,.42) 50%,rgba(20,10,6,.8))}
+.band .wrap{position:relative;z-index:2;padding:110px 24px}
+.band-line{font-family:var(--serif);font-weight:600;font-size:clamp(2.3rem,5.6vw,4.8rem);line-height:1.04;max-width:17ch;margin:0 auto;text-wrap:balance;text-shadow:0 4px 30px rgba(0,0,0,.4)}
+.band-sub{margin-top:20px;font-size:.78rem;letter-spacing:.22em;text-transform:uppercase;font-weight:700;color:#e8cf8f}
+.ripple{position:absolute;left:0;bottom:10%;width:200%;height:60px;z-index:1;fill:none;stroke:rgba(255,255,255,.4);stroke-width:1.4;animation:rip 16s linear infinite}
+.ripple path+path{stroke:rgba(255,255,255,.22);animation:rip 11s linear infinite reverse}
+@keyframes rip{to{transform:translateX(-50%)}}
+@media(max-width:600px){.band{min-height:62vh}.band .wrap{padding:80px 20px}}
+
+/* Night canvases (stars over the cottages, embers at the pub) */
+.fx{position:relative;overflow:hidden;isolation:isolate}
+.sky{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+.fx>.wrap{position:relative;z-index:1}
+.dark.fx::before{content:"";position:absolute;inset:-20%;z-index:0;pointer-events:none;background:radial-gradient(circle at 20% 30%,rgba(180,143,58,.16),transparent 45%),radial-gradient(circle at 85% 80%,rgba(31,51,84,.45),transparent 50%)}
+.m .dark.fx::before{animation:glow 18s ease-in-out infinite alternate}
+@keyframes glow{to{transform:translate(4%,-3%) scale(1.08)}}
+
+/* Property cards: tilt and light (motion.js sets --rx, --ry, --mx, --my on fine pointers) */
+.prop{position:relative;transform:perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateY(var(--ty,0px));transition:transform .5s cubic-bezier(.2,.8,.2,1),box-shadow .4s}
+.prop:hover{--ty:-6px;transform:perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateY(-6px)}
+.prop::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .4s;background:radial-gradient(500px circle at var(--mx,50%) var(--my,0%),rgba(255,255,255,.35),transparent 45%)}
+.prop:hover::after{opacity:1}
+.prop .media img.photo{transition:transform 1.2s cubic-bezier(.2,.8,.2,1)}
+.prop:hover .media img.photo{transform:scale(1.07)}
+
+/* Cottages carry a big outline number */
+#cottages .wrap{counter-reset:cot}
+.cottage{counter-increment:cot}
+.cottage>div:last-child::before{content:"0" counter(cot);content:"0" counter(cot) / "";display:block;font-family:var(--serif);font-weight:600;font-size:clamp(3.6rem,7vw,5.6rem);line-height:.9;color:transparent;-webkit-text-stroke:1.2px var(--gold);margin-bottom:6px}
+
+/* "View" bubble that follows the cursor over photos */
+.cursor{position:fixed;left:0;top:0;width:86px;height:86px;margin:-43px 0 0 -43px;border-radius:50%;background:var(--gold);color:var(--ink);display:grid;place-items:center;font-weight:700;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;pointer-events:none;z-index:90;scale:0;transition:scale .35s cubic-bezier(.2,.8,.2,1);box-shadow:0 10px 30px rgba(0,0,0,.2)}
+.cursor.on{scale:1}
+@media(hover:hover) and (pointer:fine){.m .gallery button,.m .pgrid button{cursor:none}}
+
+/* Lightbox fades in */
+.lb.open{animation:vt-in .3s ease}
+.lb.open img{animation:lbimg .45s cubic-bezier(.2,.8,.2,1)}
+@keyframes lbimg{from{opacity:0;scale:.96}}
+
+@media(prefers-reduced-motion:reduce){
+  .marquee .track,.strip .row,.ripple,.ripple path+path,.cue span{animation:none}
+  .strip{overflow-x:auto}
+  ::view-transition-old(root),::view-transition-new(root){animation:none}
+  .prop,.prop .media img.photo,.btn,.btn-gold::after{transition:none}
+}
