@@ -580,6 +580,33 @@ input.sel{width:18px;height:18px;accent-color:var(--accent);margin:0}
 .dash-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:16px}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px;box-shadow:var(--shadow);min-width:0}
 .card.wide{grid-column:1 / -1}
+.dn{all:unset;box-sizing:border-box;cursor:pointer;font-variant-numeric:tabular-nums;border-radius:6px;padding:1px 5px;margin:-1px -5px;font-weight:600}
+.dn:hover:not(:disabled){background:var(--accent-soft);color:var(--accent);text-decoration:underline;text-underline-offset:3px}
+.dn:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.dn:disabled{cursor:default;color:var(--muted);font-weight:500}
+.dn.bad{color:var(--bad)} .dn.warn{color:var(--warn)} .dn.ask{color:var(--ask)}
+.metric .dn{display:block;width:fit-content;font:600 18px/1.2 var(--f-display);margin:-1px -5px}
+.dash-stats .metric .dn{font-size:24px}
+.metric.bad .dn{color:var(--bad)} .metric.ask .dn{color:var(--ask)}
+.rt-wrap{overflow-x:auto;margin-top:12px;-webkit-overflow-scrolling:touch}
+.rtable{width:100%;border-collapse:collapse;font-size:13.5px;min-width:640px}
+.rtable th{font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);font-weight:600;text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+.rtable td{padding:8px;border-bottom:1px solid var(--line);white-space:nowrap}
+.rtable tr:last-child td{border-bottom:0}
+.rtable .num{text-align:right;font-variant-numeric:tabular-nums}
+.rtable td.num .dn{margin:0}
+.rt-who{display:inline-flex;align-items:center;gap:8px;font-weight:600}
+.rt-cl{font-weight:600;white-space:normal;text-align:left}
+.r-period{font:inherit;font-size:13px;padding:5px 8px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:inherit}
+.cp-report{margin:18px 0 6px}
+.rp-act{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.rp-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:12px}
+.rp-h{font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:16px 0 0;font-weight:600}
+.line.pickable{cursor:pointer}
+.tip-hint{font-size:11px;color:var(--muted);margin-top:3px}
+.dr-sub{margin:0 0 8px}
+.dr-when{font-size:12px;white-space:nowrap;margin-left:auto;padding-left:8px;align-self:center}
+@media (max-width:600px){.rp-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.card-h{flex-wrap:wrap}}
 .card h3{font:600 15.5px var(--f-display);margin:0}
 .card-sub{margin:4px 0 0;font-size:12.5px;color:var(--muted)}
 .card-h{display:flex;justify-content:space-between;align-items:center;gap:10px}
@@ -1505,11 +1532,11 @@ function donut(rows,total){
   g.append(sv("text",{x:cx,y:cy-4,"text-anchor":"middle",class:"d-big"},total),sv("text",{x:cx,y:cy+16,"text-anchor":"middle",class:"d-sm"},"open tasks"));
   return g;
 }
-function lineChart(weeks,series){
-  const W=640,H=240,L=34,Rr=74,T=14,B=30;const iw=W-L-Rr,ih=H-T-B;
+function lineChart(weeks,series,onPick,aria){
+  const W=640,H=240,L=34,Rr=104,T=14,B=30;const iw=W-L-Rr,ih=H-T-B;
   const max=Math.max(4,...series.flatMap(s=>s.vals));const nice=Math.ceil(max/4)*4;
   const x=i=>L+(weeks.length===1?iw/2:i*iw/(weeks.length-1)),y=v=>T+ih-(v/nice)*ih;
-  const g=sv("svg",{viewBox:`0 0 ${W} ${H}`,class:"line",role:"img","aria-label":"Tasks completed per week"});
+  const g=sv("svg",{viewBox:`0 0 ${W} ${H}`,class:"line"+(onPick?" pickable":""),role:"img","aria-label":aria||"Tasks completed per week"});
   for(let k=0;k<=4;k++){const v=nice*k/4;g.append(sv("line",{x1:L,x2:L+iw,y1:y(v),y2:y(v),class:k?"grid":"axis"}),sv("text",{x:L-8,y:y(v)+4,"text-anchor":"end",class:"tick-l"},v))}
   weeks.forEach((w,i)=>{if(i%2===weeks.length%2||i===weeks.length-1)g.append(sv("text",{x:x(i),y:H-8,"text-anchor":"middle",class:"tick-l"},w.label))});
   const ends=series.map(s=>y(s.vals[s.vals.length-1]));if(ends.length===2&&Math.abs(ends[0]-ends[1])<14){const m=(ends[0]+ends[1])/2;const up=ends[0]<=ends[1]?0:1;ends[up]=m-7;ends[1-up]=m+7}
@@ -1518,12 +1545,163 @@ function lineChart(weeks,series){
     const li=s.vals.length-1;g.append(sv("circle",{cx:x(li),cy:y(s.vals[li]),r:4,fill:s.color,class:"ring"}),sv("text",{x:x(li)+10,y:ends[si]+4,class:"end-l"},s.name+" "+s.vals[li]))});
   const cross=sv("line",{y1:T,y2:T+ih,class:"cross",visibility:"hidden"});g.append(cross);
   const hit=sv("rect",{x:L,y:T,width:iw,height:ih,fill:"transparent"});
-  hit.addEventListener("mousemove",e=>{const bb=g.getBoundingClientRect();const px=(e.clientX-bb.left)*W/bb.width;const i=Math.max(0,Math.min(weeks.length-1,Math.round((px-L)/(iw/(weeks.length-1||1)))));
+  const idxAt=e=>{const bb=g.getBoundingClientRect();const px=(e.clientX-bb.left)*W/bb.width;return Math.max(0,Math.min(weeks.length-1,Math.round((px-L)/(iw/(weeks.length-1||1)))))};
+  if(onPick)hit.addEventListener("click",e=>{tipOff();onPick(idxAt(e))});
+  hit.addEventListener("mousemove",e=>{const i=idxAt(e);
     cross.setAttribute("x1",x(i));cross.setAttribute("x2",x(i));cross.setAttribute("visibility","visible");
-    tipOn(e,[el("b",null,"Week of "+weeks[i].full),...series.map(s=>el("div",{class:"tip-row"},el("i",{style:"background:"+s.color}),s.name+": "+s.vals[i]))])});
+    tipOn(e,[el("b",null,"Week of "+weeks[i].full),...series.map(s=>el("div",{class:"tip-row"},el("i",{style:"background:"+s.color}),s.name+": "+s.vals[i])),...(onPick?[el("div",{class:"tip-hint"},"Click for the tasks")]:[])])});
   hit.addEventListener("mouseleave",()=>{cross.setAttribute("visibility","hidden");tipOff()});
   g.append(hit);return g;
 }
+// ---------- report metrics (shared by the dashboard and client pages) ----------
+const DAYMS=864e5;
+const tsD=s=>s?new Date(s):null;
+const dueEnd=s=>{const d=parseD(s);return d?new Date(d.getFullYear(),d.getMonth(),d.getDate()+1):null};
+const pctTxt=r=>r==null?"–":r+"%";
+const avgTxt=a=>a==null?"–":a<1?"<1 day":Math.round(a)===1?"1 day":Math.round(a)+" days";
+function rStats(ts,from,to){
+  const inR=d=>d&&d>=from&&d<to;
+  const done=ts.filter(t=>t.status==="done"&&inR(tsD(t.done_at))).sort((a,b)=>tsD(b.done_at)-tsD(a.done_at));
+  const dated=done.filter(t=>t.due),ontime=dated.filter(t=>tsD(t.done_at)<dueEnd(t.due)),lateDone=dated.filter(t=>tsD(t.done_at)>=dueEnd(t.due));
+  const days=done.filter(t=>t.created_at).map(t=>Math.max(0,(tsD(t.done_at)-tsD(t.created_at))/DAYMS));
+  return {done,created:ts.filter(t=>inR(tsD(t.created_at))),dated,ontime,lateDone,
+    rate:dated.length?Math.round(ontime.length/dated.length*100):null,avg:days.length?days.reduce((a,b)=>a+b,0)/days.length:null};
+}
+function rOpen(ts){
+  const open=ts.filter(t=>t.status!=="done");const now=new Date();
+  const oldest=open.filter(t=>t.created_at).sort((a,b)=>tsD(a.created_at)-tsD(b.created_at));
+  return {open,late:open.filter(t=>{const d=eff(t);return d&&daysTo(d)<0}),nodate:open.filter(t=>!eff(t)),needs:open.filter(t=>t.needs),oldest,
+    oldestAge:oldest.length?Math.floor((now-tsD(oldest[0].created_at))/DAYMS):null};
+}
+function rWeeks(n){const w0=today();w0.setDate(w0.getDate()-((w0.getDay()+6)%7));const out=[];
+  for(let i=n-1;i>=0;i--){const s=new Date(w0);s.setDate(s.getDate()-7*i);const e=new Date(s);e.setDate(e.getDate()+7);
+    out.push({start:s,end:e,label:s.toLocaleDateString("en-ZA",{day:"numeric",month:"short"}),full:s.toLocaleDateString("en-ZA",{day:"numeric",month:"long"})})}return out}
+function rTrend(ts,weeks){const now=new Date();
+  return weeks.map(w=>{const end=w.end>now?now:w.end;
+    const created=ts.filter(t=>{const c=tsD(t.created_at);return c&&c>=w.start&&c<w.end});
+    const done=ts.filter(t=>{const d=tsD(t.done_at);return t.status==="done"&&d&&d>=w.start&&d<w.end});
+    const open=ts.filter(t=>{const c=tsD(t.created_at);const d=t.status==="done"?tsD(t.done_at):null;return c&&c<end&&(!d||d>=end)});
+    const late=open.filter(t=>{const de=t.due&&dueEnd(t.due);return de&&de<=end});
+    return {created,done,open,late}})}
+function periodRange(k){const t=today(),tm=new Date(+t+DAYMS);
+  if(k==="month")return[new Date(t.getFullYear(),t.getMonth(),1),tm,"This month"];
+  if(k==="last")return[new Date(t.getFullYear(),t.getMonth()-1,1),new Date(t.getFullYear(),t.getMonth(),1),new Date(t.getFullYear(),t.getMonth()-1,1).toLocaleDateString("en-ZA",{month:"long",year:"numeric"})];
+  const n=k==="90"?90:k==="7"?7:30;return[new Date(+t-(n-1)*DAYMS),tm,"Last "+n+" days"]}
+const PERIODS=[["7","Last 7 days"],["30","Last 30 days"],["90","Last 90 days"],["month","This month"],["last","Last month"]];
+function periodPick(key,onch){return el("select",{class:"r-period","aria-label":"Period",onchange:e=>onch(e.target.value)},PERIODS.map(([v,l])=>el("option",{value:v,selected:v===key},l)))}
+
+// drill-down: any number opens the tasks behind it
+function drill(title,items,sub){
+  $("#dayTitle").textContent=title;
+  const list=items.length?items.map(t=>{const r=taskRow(t,true);if(t.status==="done"&&t.done_at)r.append(el("span",{class:"faint dr-when"},"done "+new Date(t.done_at).toLocaleDateString("en-ZA",{day:"numeric",month:"short"})));return r}):[el("div",{class:"empty sm"},"Nothing here.")];
+  $("#dayList").replaceChildren(...(sub?[el("p",{class:"card-sub dr-sub"},sub)]:[]),...list);
+  if(!$("#dayDlg").open)$("#dayDlg").showModal();
+}
+const dn=(val,title,items,cls,sub)=>el("button",{class:"dn"+(cls?" "+cls:""),disabled:!items||!items.length,title:items&&items.length?"Show these tasks":"",onclick:()=>drill(title,items,sub)},val);
+
+// trends: added vs completed, and open vs overdue at each week's end
+function trendCards(ts,scope){
+  const weeks=rWeeks(12),tr=rTrend(ts,weeks),pal=isDark()?CAT_D:CAT,css=getComputedStyle(document.documentElement),bad=css.getPropertyValue("--bad").trim();
+  const flow=lineChart(weeks,[{name:"Added",color:pal[0],vals:tr.map(x=>x.created.length)},{name:"Completed",color:pal[2],vals:tr.map(x=>x.done.length)}],
+    i=>drill(scope+": week of "+weeks[i].full,[...tr[i].done,...tr[i].created.filter(t=>!tr[i].done.includes(t))],tr[i].created.length+" added, "+tr[i].done.length+" completed. Completed tasks are listed first."),"Tasks added and completed per week");
+  const back=lineChart(weeks,[{name:"Open",color:pal[6],vals:tr.map(x=>x.open.length)},{name:"Overdue",color:bad,vals:tr.map(x=>x.late.length)}],
+    i=>drill(scope+": open at the end of the week of "+weeks[i].full,[...tr[i].late,...tr[i].open.filter(t=>!tr[i].late.includes(t))],tr[i].open.length+" open, "+tr[i].late.length+" overdue. Overdue tasks are listed first."),"Open and overdue tasks at the end of each week");
+  const sum=a=>a.reduce((x,y)=>x+y,0);const add=sum(tr.map(x=>x.created.length)),fin=sum(tr.map(x=>x.done.length));
+  const net=add-fin;
+  return [
+    el("section",{class:"card"},el("h3",null,"Added vs completed"),el("p",{class:"card-sub"},"Per week, last 12 weeks. "+(add||fin?(net>0?net+" more added than completed: the pile is growing.":net<0?(-net)+" more completed than added: the pile is shrinking.":"Added and completed are level."):"No activity yet.")+" Click a week for its tasks."),el("div",{class:"chart-x"},flow)),
+    el("section",{class:"card"},el("h3",null,"Open and overdue"),el("p",{class:"card-sub"},"How many tasks were open, and how many past their due date, at the end of each week. Click a week for the list."),el("div",{class:"chart-x"},back))];
+}
+
+// per person
+function peopleCard(all,key){
+  const [from,to,label]=periodRange(key);
+  const rows=["jacques","diane","unassigned"].map(p=>{const ts=all.filter(t=>(t.owner||"unassigned")===p);return {p,o:rOpen(ts),s:rStats(ts,from,to)}}).filter(r=>r.p!=="unassigned"||r.o.open.length||r.s.done.length);
+  const N=OWNERS;
+  const head=["Person","Open","Overdue","No date","Waiting on Jacques","Completed","On time","Avg. days to finish","Oldest open"];
+  return el("section",{class:"card wide"},
+    el("div",{class:"card-h"},el("div",null,el("h3",null,"By person"),el("p",{class:"card-sub"},"Open work now, and what was finished in the period. On time = completed on or before the due date. Click any number for the tasks.")),periodPick(key,v=>{S.rPeriod=v;render()})),
+    el("div",{class:"rt-wrap"},el("table",{class:"rtable"},el("thead",null,el("tr",null,head.map((h,i)=>el("th",{class:i?"num":""},h)))),
+      el("tbody",null,rows.map(({p,o,s})=>el("tr",null,
+        el("td",null,el("span",{class:"rt-who"},av(p),N[p])),
+        el("td",{class:"num"},dn(o.open.length,N[p]+": open tasks",o.open)),
+        el("td",{class:"num"},dn(o.late.length,N[p]+": overdue",o.late,o.late.length?"bad":"")),
+        el("td",{class:"num"},dn(o.nodate.length,N[p]+": open with no date",o.nodate,o.nodate.length?"warn":"")),
+        el("td",{class:"num"},dn(o.needs.length,N[p]+"'s tasks waiting on Jacques",o.needs,o.needs.length?"ask":"")),
+        el("td",{class:"num"},dn(s.done.length,N[p]+": completed, "+label.toLowerCase(),s.done)),
+        el("td",{class:"num"},dn(pctTxt(s.rate),N[p]+": completed late, "+label.toLowerCase(),s.lateDone,s.rate!=null&&s.rate<70?"bad":"",s.dated.length?s.ontime.length+" of "+s.dated.length+" dated tasks were done on time. These were late:":"")),
+        el("td",{class:"num"},avgTxt(s.avg)),
+        el("td",{class:"num"},dn(o.oldestAge==null?"–":o.oldestAge+" d",N[p]+": oldest open tasks",o.oldest.slice(0,20)))))))));
+}
+
+// per client (dashboard table)
+function clientsCard(all,key){
+  const [from,to,label]=periodRange(key);
+  const ids=[...new Set(all.map(t=>t.client_id).filter(id=>id&&S.clients.has(id)))];
+  const rows=ids.map(id=>{const ts=all.filter(t=>t.client_id===id);return {id,o:rOpen(ts),s:rStats(ts,from,to)}}).filter(r=>r.o.open.length||r.s.done.length)
+    .sort((a,b)=>b.o.late.length-a.o.late.length||b.o.open.length-a.o.open.length);
+  const head=["Client","Open","Overdue","No date","Completed","On time","Avg. days to finish","Oldest open"];
+  return el("section",{class:"card wide"},
+    el("div",{class:"card-h"},el("div",null,el("h3",null,"By client"),el("p",{class:"card-sub"},"Worst first: most overdue, then most open. Click a client for its page and full report, or a number for the tasks.")),periodPick(key,v=>{S.rPeriod=v;render()})),
+    rows.length?el("div",{class:"rt-wrap"},el("table",{class:"rtable"},el("thead",null,el("tr",null,head.map((h,i)=>el("th",{class:i?"num":""},h)))),
+      el("tbody",null,rows.map(({id,o,s})=>{const nm=shortClient(id);return el("tr",null,
+        el("td",null,el("button",{class:"linkish rt-cl",onclick:()=>openClient(id)},nm)),
+        el("td",{class:"num"},dn(o.open.length,nm+": open tasks",o.open)),
+        el("td",{class:"num"},dn(o.late.length,nm+": overdue",o.late,o.late.length?"bad":"")),
+        el("td",{class:"num"},dn(o.nodate.length,nm+": open with no date",o.nodate,o.nodate.length?"warn":"")),
+        el("td",{class:"num"},dn(s.done.length,nm+": completed, "+label.toLowerCase(),s.done)),
+        el("td",{class:"num"},dn(pctTxt(s.rate),nm+": completed late, "+label.toLowerCase(),s.lateDone,s.rate!=null&&s.rate<70?"bad":"",s.dated.length?s.ontime.length+" of "+s.dated.length+" dated tasks were done on time. These were late:":"")),
+        el("td",{class:"num"},avgTxt(s.avg)),
+        el("td",{class:"num"},dn(o.oldestAge==null?"–":o.oldestAge+" d",nm+": oldest open tasks",o.oldest.slice(0,20))))})))):el("div",{class:"empty sm"},"No client work yet."));
+}
+
+// per client (client page report)
+function clientReport(c){
+  if(!S.dash){loadReports();return el("section",{class:"card cp-report"},el("h3",null,"Report"),el("div",{class:"empty sm"},"Loading…"))}
+  if(S.dash.err)return el("section",{class:"card cp-report"},el("h3",null,"Report"),el("div",{class:"empty sm"},"Couldn't load: "+S.dash.err));
+  const key=S.cpPeriod||"month";const [from,to,label]=periodRange(key);
+  const ts=S.dash.tasks.filter(t=>t.client_id===c.id);const s=rStats(ts,from,to),o=rOpen(ts);const nm=shortClient(c.id);
+  const tile=(val,lab,items,cls,sub,title)=>el("div",{class:"metric rp-m"},dn(val,title||nm+": "+lab.toLowerCase(),items,cls,sub),el("span",null,lab));
+  const weeks=rWeeks(12),tr=rTrend(ts,weeks),pal=isDark()?CAT_D:CAT;
+  const chart=lineChart(weeks,[{name:"Added",color:pal[0],vals:tr.map(x=>x.created.length)},{name:"Completed",color:pal[2],vals:tr.map(x=>x.done.length)}],
+    i=>drill(nm+": week of "+weeks[i].full,[...tr[i].done,...tr[i].created.filter(t=>!tr[i].done.includes(t))],tr[i].created.length+" added, "+tr[i].done.length+" completed."),"Tasks added and completed per week for "+nm);
+  return el("section",{class:"card cp-report"},
+    el("div",{class:"card-h"},el("div",null,el("h3",null,"Report"),el("p",{class:"card-sub"},label+". Click a number for the tasks behind it.")),
+      el("div",{class:"rp-act"},periodPick(key,v=>{S.cpPeriod=v;render()}),el("button",{class:"btn sm",onclick:()=>printClientReport(c,key)},"Print / PDF"))),
+    el("div",{class:"rp-grid"},
+      tile(s.done.length,"Completed",s.done,"",null,nm+": completed, "+label.toLowerCase()),
+      tile(s.created.length,"Added",s.created,"",null,nm+": added, "+label.toLowerCase()),
+      tile(pctTxt(s.rate),"On time",s.lateDone,s.rate!=null&&s.rate<70?"bad":"",s.dated.length?s.ontime.length+" of "+s.dated.length+" dated tasks were done on time. These were late:":"",nm+": completed late"),
+      el("div",{class:"metric rp-m"},el("b",{class:"dn static"},avgTxt(s.avg)),el("span",null,"Avg. to finish")),
+      tile(o.open.length,"Open now",o.open),
+      tile(o.late.length,"Overdue now",o.late,o.late.length?"bad":""),
+      tile(o.nodate.length,"Open, no date",o.nodate,o.nodate.length?"warn":""),
+      tile(o.oldestAge==null?"–":o.oldestAge+" d","Oldest open",o.oldest.slice(0,20),"",null,nm+": oldest open tasks")),
+    el("h4",{class:"rp-h"},"Added vs completed, last 12 weeks"),el("div",{class:"chart-x"},chart));
+}
+function printClientReport(c,key){
+  const [from,to,label]=periodRange(key);const ts=S.dash.tasks.filter(t=>t.client_id===c.id);const s=rStats(ts,from,to),o=rOpen(ts);
+  const e=x=>String(x??"").replace(/[&<>"]/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[ch]));
+  const d=x=>x?new Date(x.length>10?x:x+"T00:00:00").toLocaleDateString("en-ZA",{day:"numeric",month:"short",year:"numeric"}):"";
+  const soon=o.open.filter(t=>eff(t)&&daysTo(eff(t))>=0&&daysTo(eff(t))<=14).sort((a,b)=>eff(a).localeCompare(eff(b)));
+  const rows=(list,cols)=>list.length?"<table>"+list.map(t=>"<tr>"+cols.map(f=>"<td>"+f(t)+"</td>").join("")+"</tr>").join("")+"</table>":"<p class=m>None.</p>";
+  const html=`<!doctype html><html><head><meta charset="utf-8"><title>${e(shortClient(c.id))}: work report, ${e(label)}</title><style>
+body{font:14px/1.5 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#151a24;max-width:760px;margin:32px auto;padding:0 20px}
+h1{font-size:22px;margin:0}h2{font-size:15px;margin:26px 0 6px;text-transform:uppercase;letter-spacing:.05em;color:#5d6676}
+.m{color:#5d6676}.k{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:16px}.k div{border:1px solid #dde1e8;border-radius:8px;padding:8px 10px}.k b{display:block;font-size:20px}
+table{width:100%;border-collapse:collapse}td{padding:6px 0;border-bottom:1px solid #eef0f4;vertical-align:top}td+td{text-align:right;white-space:nowrap;color:#5d6676;padding-left:12px}
+@media print{body{margin:0}button{display:none}}</style></head><body>
+<button onclick="print()" style="float:right">Print or save as PDF</button>
+<h1>${e(c.name)}</h1><p class=m>Work report: ${e(label)} (${d(from.toISOString())} to ${d(new Date(+to-DAYMS).toISOString())}). Prepared ${d(new Date().toISOString())}.</p>
+<div class=k><div><b>${s.done.length}</b>completed</div><div><b>${pctTxt(s.rate)}</b>on time</div><div><b>${o.open.length}</b>open now</div><div><b>${o.late.length}</b>overdue now</div></div>
+<h2>Completed in this period</h2>${rows(s.done,[t=>e(t.title),t=>d(t.done_at)])}
+<h2>Coming up in the next 14 days</h2>${rows(soon,[t=>e(t.title),t=>d(eff(t))])}
+<h2>Still open</h2>${rows(o.open.filter(t=>!soon.includes(t)),[t=>e(t.title),t=>eff(t)?(daysTo(eff(t))<0?"overdue, was due "+d(eff(t)):"due "+d(eff(t))):"no date"])}
+<p class=m style="margin-top:28px;font-size:12px">Internal working report from the JCE Project Planner. Check task wording before sending it to a client.</p></body></html>`;
+  const w=window.open("","_blank");if(!w){toast("Allow pop-ups to print the report");return}
+  w.document.open();w.document.write(html);w.document.close();
+}
+
 function renderDashboard(){
   if(!S.dash)return [el("div",{class:"empty"},"Loading the dashboard…")];
   if(S.dash.err)return [el("div",{class:"empty"},"Couldn't load the dashboard: "+S.dash.err)];
@@ -1547,7 +1725,10 @@ function renderDashboard(){
   // stats
   const d7=done.filter(t=>daysTo(t.done_at.slice(0,10))>=-7).length,d30=done.filter(t=>daysTo(t.done_at.slice(0,10))>=-30).length;
   const late=open.filter(t=>{const d=(t.status==="waiting"&&t.chase_by)?t.chase_by:t.due;return d&&daysTo(d)<0}).length;
-  const stat=(n,l,cls)=>el("div",{class:"metric"+(cls?" "+cls:"")},el("b",null,n),el("span",null,l));
+  const stat=(n,l,cls,items,title)=>el("div",{class:"metric"+(cls?" "+cls:"")},items?dn(n,title||l,items):el("b",null,n),el("span",null,l));
+  const lateL=open.filter(t=>{const d=(t.status==="waiting"&&t.chase_by)?t.chase_by:t.due;return d&&daysTo(d)<0});
+  const d7L=done.filter(t=>daysTo(t.done_at.slice(0,10))>=-7).sort((a,b)=>tsD(b.done_at)-tsD(a.done_at)),d30L=done.filter(t=>daysTo(t.done_at.slice(0,10))>=-30).sort((a,b)=>tsD(b.done_at)-tsD(a.done_at));
+  const rk=S.rPeriod||"30";
   // labels bar
   const byL={};for(const t of open)for(const l of (tl.get(t.id)||[]))byL[l]=(byL[l]||0)+1;
   const lrows=Object.entries(byL).filter(([l])=>S.labels.has(l)).sort((a,b)=>b[1]-a[1]);const lmax=Math.max(1,...lrows.map(r=>r[1]));
@@ -1558,19 +1739,20 @@ function renderDashboard(){
   const msUp=msAll.filter(t=>t.status!=="done").sort((a,b)=>(a.due||"9999").localeCompare(b.due||"9999"));
   const legend=el("div",{class:"d-legend"},rows.map(r=>el("button",{class:"lg-i",onclick:()=>r.id&&openClient(r.id)},el("i",{style:"background:"+r.color}),el("span",{class:"lg-n"},r.label),el("span",{class:"lg-v"},r.n),el("span",{class:"lg-p"},Math.round(r.n/totalOpen*100)+"%"))));
   return [
-    el("div",{class:"dash-stats"},stat(totalOpen,"Open tasks"),stat(late,"Overdue",late?"bad":""),stat(d7,"Completed in 7 days"),stat(d30,"Completed in 30 days"),stat(msUp.length,"Open milestones","ask")),
+    el("div",{class:"dash-stats"},stat(totalOpen,"Open tasks","",open,"All open tasks"),stat(late,"Overdue",late?"bad":"",lateL,"Overdue tasks"),stat(d7,"Completed in 7 days","",d7L,"Completed in the last 7 days"),stat(d30,"Completed in 30 days","",d30L,"Completed in the last 30 days"),stat(msUp.length,"Open milestones","ask",msUp,"Open milestones")),
     el("div",{class:"dash-grid"},
       el("section",{class:"card"},el("h3",null,"Open tasks by client"),el("p",{class:"card-sub"},"Where the open work sits. Click a slice or a name to open the client."),
         totalOpen?el("div",{class:"donut-wrap"},donut(rows,totalOpen),legend):el("div",{class:"empty sm"},"No open tasks.")),
-      el("section",{class:"card"},el("h3",null,"Tasks completed per week"),el("p",{class:"card-sub"},"Last 12 weeks, by who completed them. Hover for the numbers."),
-        el("div",{class:"chart-x"},lineChart(weeks,series)),
+      el("section",{class:"card"},el("h3",null,"Tasks completed per week"),el("p",{class:"card-sub"},"Last 12 weeks, by who completed them. Hover for the numbers, click a week for the tasks."),
+        el("div",{class:"chart-x"},lineChart(weeks,series,i=>drill("Completed in the week of "+weeks[i].full,done.filter(t=>wIdx(t.done_at)===i).sort((a,b)=>tsD(b.done_at)-tsD(a.done_at))),"Tasks completed per week by person")),
         el("div",{class:"d-legend row"},series.map(s=>el("span",{class:"lg-i"},el("i",{style:"background:"+s.color}),s.name+": "+s.vals.reduce((a,b)=>a+b,0)+" in 12 weeks")))),
       el("section",{class:"card"},el("h3",null,"Open tasks by owner"),
-        el("div",{class:"bars"},own.map(([p,n])=>el("div",{class:"bar-r"},el("span",{class:"bar-l"},av(p),OWNERS[p]),el("span",{class:"bar-t"},el("i",{class:"bar-f "+p,style:"width:"+(n/omax*100)+"%"})),el("span",{class:"bar-v"},n))))),
+        el("div",{class:"bars"},own.map(([p,n])=>el("button",{class:"bar-r btnlike",onclick:()=>drill(OWNERS[p]+": open tasks",open.filter(t=>t.owner===p))},el("span",{class:"bar-l"},av(p),OWNERS[p]),el("span",{class:"bar-t"},el("i",{class:"bar-f "+p,style:"width:"+(n/omax*100)+"%"})),el("span",{class:"bar-v"},n))))),
       el("section",{class:"card"},el("h3",null,"Open tasks by label"),
         lrows.length?el("div",{class:"bars"},lrows.map(([l,n])=>{const lab=S.labels.get(l);return el("button",{class:"bar-r btnlike",onclick:()=>{S.label=l;go("all")}},el("span",{class:"bar-l"},el("i",{class:"sw",style:"background:"+lab.color}),lab.name),el("span",{class:"bar-t"},el("i",{class:"bar-f",style:"width:"+(n/lmax*100)+"%"})),el("span",{class:"bar-v"},n))})):el("div",{class:"empty sm"},"No labels on open tasks.")),
       el("section",{class:"card wide"},el("div",{class:"card-h"},el("h3",null,"Milestones"),el("button",{class:"btn sm",onclick:()=>openMilestone(null)},"+ Add milestone")),
-        msList(msUp.slice(0,12),"No milestones yet. Add one for things like a site going live, a contract signed or a renewal date."))),
+        msList(msUp.slice(0,12),"No milestones yet. Add one for things like a site going live, a contract signed or a renewal date.")),
+      ...trendCards(all,"Everyone"),peopleCard(all,rk),clientsCard(all,rk)),
   ];
 }
 function renameClient(id,h){
@@ -1621,6 +1803,7 @@ function renderClientPage(){
         el("div",{class:"card-h cp-ms-h"},el("h3",{class:"cp-h"},"Milestones"),el("button",{class:"btn sm",onclick:()=>openMilestone(c.id)},"+ Add milestone")),
         msList([...S.tasks.values()].filter(t=>t.client_id===c.id&&isMs(t)).sort((a,b)=>(a.due||"9999").localeCompare(b.due||"9999")).concat((ex?ex.done:[]).filter(t=>(t.labels||[]).includes(MS))),"No milestones for this client yet."),
         el("h3",{class:"cp-h"},"Open work"),secs,
+        clientReport(c),
         el("details",{class:"sec",open:false},el("summary",null,el("span",{class:"caret"}),el("span",{class:"sec-t"},"Completed"),el("span",{class:"n"},ex?ex.done.length:"…")),
           ex?(ex.done.length?el("div",{class:"done-list"},ex.done.map(t=>el("div",{class:"done-i"},el("span",{class:"tick-d","aria-hidden":"true"},"✓"),el("button",{class:"linkish",onclick:()=>openPanel(t.id)},t.title),el("span",{class:"faint"},OWNERS[t.owner]||"")))):el("div",{class:"empty"},"No completed tasks yet.")):el("div",{class:"empty"},"Loading…"))),
       el("aside",{class:"cp-side"},
@@ -1671,6 +1854,7 @@ $("#fileIn").addEventListener("change",async e=>{
 // ---------- task side panel ----------
 const panel=$("#panel");
 async function openPanel(id){
+  if($("#dayDlg").open)$("#dayDlg").close();
   if(!S.tasks.has(id)){try{const t=await api("get_task",{id});const{labels,history,...row}=t;S.tasks.set(id,row);S.tl.set(id,labels||[])}catch(e){toast("Couldn't open that task");return}}
   S.panel=id;S.panelData=null;S.panelFiles=null;loadFiles(id);panel.hidden=false;document.body.classList.add("panel-open");renderPanel();
   try{const [comments,hist]=await Promise.all([api("list_comments",{task_id:id}),api("task_history",{id})]);
