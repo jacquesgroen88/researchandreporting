@@ -82,6 +82,7 @@ footer{margin-top:56px;padding-top:16px;border-top:1px solid var(--line);font-si
   <a href="#what">What it is</a>
   <a href="#access">Getting in</a>
   <a href="#views">Reading the page</a>
+  <a href="#working">Working on tasks</a>
   <a href="#delegate">Handing work over</a>
   <a href="#approve">Approvals</a>
   <a href="#waiting">Waiting and chasing</a>
@@ -163,6 +164,45 @@ footer{margin-top:56px;padding-top:16px;border-top:1px solid var(--line);font-si
 <p>Tick labels inside any task. To make a new one, type a name, pick a colour and press <em>Add label</em> in the same box. It's available to both of you straight away.</p>
 <h3>By client</h3>
 <p>Each card opens with a one-line health check: how many tasks are open, how many are overdue, and the next one due. The fee, term, contact and billing details sit behind a fold so the cards stay short. Each card shows its three nearest tasks with a link to see the rest, and an <em>Add task</em> button that pre-fills the client.</p>
+
+<h2 id="working">Working on tasks</h2>
+<p>The sidebar holds every view: My tasks, Everything, Approvals, Calendar, Clients and History. Your labels are listed underneath it; click one to filter, click it again to clear. Click your photo at the bottom of the sidebar to change it.</p>
+<h3>The task panel and comments</h3>
+<p>Click a task name and its panel opens on the right. Every field saves as soon as you change it: name, assignee, due date, status, priority, client, labels, the question for Jacques, the description and the source. There's no Save button. Underneath are two tabs:</p>
+<ul>
+  <li><strong>Comments.</strong> Use these for client replies, decisions and questions for each other. Ctrl+Enter sends. Tasks with comments show a speech-bubble count in the list.</li>
+  <li><strong>Activity.</strong> Every change to the task, with who made it and when.</li>
+</ul>
+<h3>Changing things in the list</h3>
+<ul>
+  <li><strong>Due date:</strong> click it and pick a new day.</li>
+  <li><strong>Assignee:</strong> click the name to hand the task over.</li>
+  <li><strong>Several tasks at once:</strong> press <em>Select</em>, tick the tasks, then use the bar at the bottom to change the date, owner, label or priority, or mark them all done.</li>
+  <li><strong>Calendar:</strong> drag a task to another day to reschedule it.</li>
+</ul>
+<h3>Quick add</h3>
+<p>Every section ends with an "Add a task…" line. Type the task and press Enter. These shortcuts fill in the details:</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Type</th><th>Sets</th></tr></thead>
+<tbody>
+<tr><td>@diane, @jacques, @me</td><td>Who owns it. Without one, it goes to you.</td></tr>
+<tr><td>#finance, #delivery…</td><td>A label. The first few letters are enough.</td></tr>
+<tr><td>+acreage, +clarkys…</td><td>The client. The first few letters are enough.</td></tr>
+<tr><td>today, tomorrow, thu, 13 nov, 13/11</td><td>The due date</td></tr>
+<tr><td>!high, !low</td><td>Priority</td></tr>
+</tbody></table></div>
+<p>Example: <code>Chase Val for the Facebook invite thu @diane #client-input +clarkys</code></p>
+<h3>Client pages</h3>
+<p>Click any client in the Clients table, or a client name in a task row, to open that client's own page. It shows:</p>
+<ul>
+  <li>the open work, with an "Add a task" line already linked to the client;</li>
+  <li>recently completed tasks;</li>
+  <li>a client activity feed;</li>
+  <li>an editable details card (status, account lead, fee, term, contact, billing and notes).</li>
+</ul>
+<p>Each client page has its own address, so you can bookmark it.</p>
+<h3>History</h3>
+<p>History lists every update with a photo, a time and a link to the task. Filter it by person, by type (work completed, comments, hand-overs, approvals answered, date changes, new tasks) or by client. A summary at the top shows how many tasks each of you completed in the last seven days.</p>
 
 <h2 id="delegate">Handing work over</h2>
 <p>Every task shows its owner as a coloured pill: <span class="pill j">Jacques</span> <span class="pill d">Diane</span>. Tap the pill to hand the task over.</p>
@@ -265,6 +305,10 @@ Accept the warning and choose <em>Create as a plugin</em>, then install it. In a
 <tr><td>list_clients, get_client, upsert_client</td><td>Read and update client records: fee, term, contact, billing</td></tr>
 <tr><td>list_labels, create_label</td><td>See categories and their counts; add new ones</td></tr>
 <tr><td>get_task, task_history</td><td>One task in full, with who changed what and when</td></tr>
+<tr><td>add_comment, list_comments</td><td>Post to or read a task's comment thread</td></tr>
+<tr><td>history</td><td>Recent updates and completed work, filtered by person, client or type</td></tr>
+<tr><td>bulk_update</td><td>Change the date, owner, status, priority or labels on several tasks at once</td></tr>
+<tr><td>people, set_avatar</td><td>Who uses the planner; set your profile photo</td></tr>
 </tbody></table></div>
 
 <h2 id="data">Where the data comes from and how it stays fresh</h2>
@@ -313,7 +357,7 @@ That change is waiting on Jacques's go-ahead.</div>
 <h2 id="limits">Known limits</h2>
 <ul>
   <li>The planner doesn't send notifications. You see new work when you open the page.</li>
-  <li>Client cards (fee, term, contact, billing) can't be edited on the page yet. Ask Claude through the connector, for example "update Acreage's next billing to 9 Dec".</li>
+  <li>Comments have no editing or deleting yet, so check a comment before you send it.</li>
   <li>Your key is remembered per browser. On a new device, paste it again.</li>
   <li>Updates from the other person arrive within about 30 seconds, not instantly. Switching back to the tab refreshes at once.</li>
   <li>The database lives in the Supabase organisation that also holds the Die Veiling Klub project. Only Jacques's Supabase login can see it.</li>
