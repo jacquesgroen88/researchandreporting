@@ -422,7 +422,7 @@ header.top h1{font-size:24px}
   .brand{padding:0 6px 0 0}.brand span:last-child{display:none}
   .nav{display:flex;gap:2px}
   .nav button{width:auto;white-space:nowrap;padding:7px 10px;font-size:13px}
-  .side-h,.side-labels{display:none}
+  .side-h,.side-labels,.side-clients{display:none}
   .side-foot{margin:0 0 0 auto;padding:0;border:0}
   .side-foot .lead{display:none}
   .content{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
@@ -630,6 +630,19 @@ input.sel{width:18px;height:18px;accent-color:var(--accent);margin:0}
 .ev[data-ms="1"]{--oc:var(--ask)!important;font-weight:600}
 @media (max-width:1100px){.dash-grid{grid-template-columns:1fr}.dash-stats{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media (max-width:560px){.dash-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.donut-wrap{grid-template-columns:1fr;justify-items:center}.d-legend{width:100%}.bar-r,.btnlike{grid-template-columns:110px minmax(0,1fr) 30px}}
+
+/* ---------- v7: sidebar clients, rename ---------- */
+.side-clients{display:grid;gap:1px;max-height:42vh;overflow:auto;scrollbar-width:thin}
+.scl .scl-dot{width:7px;height:7px;border-radius:50%;background:var(--side-mut);flex:none}
+.scl .scl-dot.late{background:var(--bad)} .scl .scl-dot.pipe{background:transparent;box-shadow:inset 0 0 0 1.5px var(--side-mut)}
+.slab-n{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.pencil{all:unset;cursor:pointer;display:inline-grid;place-items:center;width:28px;height:28px;border-radius:7px;color:var(--muted);font-size:15px;flex:none}
+.pencil:hover{background:var(--surface-2);color:var(--accent)}
+.pencil:focus-visible{outline:2px solid var(--accent)}
+.c-h3{display:flex;align-items:center;gap:4px}
+.c-h3 .pencil{width:24px;height:24px;font-size:13px}
+.rename-in{font:600 20px var(--f-display);border:1px solid var(--accent);border-radius:8px;padding:4px 8px;background:var(--surface);color:var(--fg);box-shadow:0 0 0 3px var(--accent-soft);min-width:0;width:min(520px,100%)}
+.rename-in:focus{outline:none}
 </style>
 </head>
 <body>
@@ -655,6 +668,8 @@ input.sel{width:18px;height:18px;accent-color:var(--accent);margin:0}
       <button data-nav="client"><span class="ic" aria-hidden="true">◫</span>Clients<span class="badge" id="nb-client"></span></button>
       <button data-nav="reports"><span class="ic" aria-hidden="true">◔</span>Reports</button>
     </nav>
+    <div class="side-h">Clients</div>
+    <div class="side-clients" id="sideClients"></div>
     <div class="side-h">Labels</div>
     <div class="side-labels" id="sideLabels"></div>
     <div class="side-foot" id="whoami"></div>
@@ -993,7 +1008,7 @@ function clientCard(c,tasks){
   const expanded=S.openClients.has(c.id);const shown=expanded?tasks:tasks.slice(0,3);
   return el("article",{class:"client",id:"c-"+c.id},
     el("div",{class:"c-head"},
-      el("div",{class:"c-row"},el("div",{class:"c-title"},el("h3",null,el("button",{class:"linkish",onclick:()=>openClient(c.id)},shortClient(c.id))),c.name!==shortClient(c.id)?el("p",{class:"c-full",title:c.name},c.name):null),el("span",{class:"status "+c.status},c.status.replace("-"," "))),
+      el("div",{class:"c-row"},el("div",{class:"c-title"},el("h3",{class:"c-h3"},el("button",{class:"linkish",onclick:()=>openClient(c.id)},shortClient(c.id)),pencil(c.id,e=>e.currentTarget.closest(".c-h3"))),c.name!==shortClient(c.id)?el("p",{class:"c-full",title:c.name},c.name):null),el("span",{class:"status "+c.status},c.status.replace("-"," "))),
       c.engagement?el("p",{class:"c-eng",title:c.engagement},c.engagement):null,
       el("div",{class:"c-metrics"},metric(open.length,"Open"),metric(late,"Overdue","bad"),metric(week,"This week"),metric(needs,"Approvals","ask")),
       next?el("p",{class:"c-sum"},el("span",{class:"due"+(daysTo(eff(next))<0?" late":daysTo(eff(next))<=2?" soon":"")},fmtDue(eff(next))),el("span",{class:"t"},next.title)):null,
@@ -1205,6 +1220,16 @@ function renderDashboard(){
         msList(msUp.slice(0,12),"No milestones yet. Add one for things like a site going live, a contract signed or a renewal date."))),
   ];
 }
+function renameClient(id,h){
+  const c=S.clients.get(id);if(!c)return;
+  const inp=el("input",{class:"rename-in",value:c.name,maxlength:"120","aria-label":"Client name"});
+  let done=false;
+  const finish=async ok=>{if(done)return;done=true;const v=inp.value.trim();if(ok&&v&&v!==c.name){await saveClient(id,{name:v},"Renamed")}else render()};
+  inp.addEventListener("keydown",e=>{if(e.key==="Enter")finish(true);if(e.key==="Escape")finish(false)});
+  inp.addEventListener("blur",()=>finish(true));
+  h.replaceWith(inp);inp.focus();inp.select();
+}
+const pencil=(id,getH)=>el("button",{class:"pencil","aria-label":"Rename client",title:"Rename client",onclick:e=>{e.stopPropagation();renameClient(id,getH(e))}},"✎");
 function openClient(id){if(!S.clients.has(id))return;S.view="clientpage";S.clientId=id;if(location.hash!=="#client/"+id)history.pushState(null,"","#client/"+id);render();window.scrollTo(0,0);loadClientExtra(id)}
 async function loadClientExtra(id){
   try{const [done,hist]=await Promise.all([api("list_tasks",{client_id:id,status:"done",limit:40}),api("history",{client_id:id,limit:60})]);S.clientExtra[id]={done,hist}}
@@ -1235,8 +1260,7 @@ function renderClientPage(){
   return [
     el("button",{class:"back linkish",onclick:()=>{history.pushState(null,"",location.pathname);go("client")}},"← All clients"),
     el("div",{class:"cp-head"},
-      el("div",{class:"cp-title"},el("h2",null,shortClient(c.id)),el("span",{class:"status "+c.status},c.status.replace("-"," ")),el("span",{class:"lead"},av(c.lead),(LEADS[c.lead]||"No lead")+" leads")),
-      c.name!==shortClient(c.id)?el("p",{class:"c-full"},c.name):null,
+      el("div",{class:"cp-title"},el("h2",{id:"cp-name"},c.name),pencil(c.id,()=>$("#cp-name")),el("span",{class:"status "+c.status},c.status.replace("-"," ")),el("span",{class:"lead"},av(c.lead),(LEADS[c.lead]||"No lead")+" leads")),
       c.engagement?el("p",{class:"cp-eng"},c.engagement):null,
       el("div",{class:"c-metrics cp-metrics"},metric(open.length,"Open"),metric(late,"Overdue","bad"),metric(week,"This week"),metric(needs,"Approvals","ask"),metric(ex?ex.done.length:"…","Completed"))),
     el("div",{class:"cp-grid"},
@@ -1355,6 +1379,11 @@ function renderNav(){
   setB("#nb-approvals",open.filter(t=>t.needs).length);
   setB("#nb-all",0);setB("#nb-client",0);
   const counts={};for(const t of open)for(const l of (S.tl.get(t.id)||[]))counts[l]=(counts[l]||0)+1;
+  const oc={};for(const t of open)if(t.client_id)oc[t.client_id]=(oc[t.client_id]||0)+1;
+  const lateC={};for(const t of open)if(t.client_id&&eff(t)&&daysTo(eff(t))<0)lateC[t.client_id]=(lateC[t.client_id]||0)+1;
+  $("#sideClients").replaceChildren(...[...S.clients.values()].filter(c=>c.status!=="ended").sort((a,b)=>(oc[b.id]||0)-(oc[a.id]||0)||shortClient(a.id).localeCompare(shortClient(b.id))).map(c=>
+    el("button",{class:"slab scl"+(S.view==="clientpage"&&S.clientId===c.id?" on":""),title:c.name,onclick:()=>openClient(c.id)},
+      el("span",{class:"scl-dot"+(lateC[c.id]?" late":c.status==="pipeline"?" pipe":"")}),el("span",{class:"slab-n"},shortClient(c.id)),el("span",{class:"slab-c"},oc[c.id]||""))));
   $("#sideLabels").replaceChildren(...[...S.labels.values()].sort((a,b)=>(a.sort_order??99)-(b.sort_order??99)).map(l=>
     el("button",{class:"slab"+(S.label===l.id?" on":""),style:"--lc:"+l.color,onclick:()=>{S.label=S.label===l.id?"":l.id;savePrefs();render()}},el("span",{class:"sw"}),el("span",{class:"slab-n"},l.name),el("span",{class:"slab-c"},counts[l.id]||""))));
   $("#ownerSeg").hidden=S.view==="approvals";
