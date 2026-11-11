@@ -604,6 +604,15 @@ input.sel{width:18px;height:18px;accent-color:var(--accent);margin:0}
 .rp-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:12px}
 .rp-h{font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:16px 0 0;font-weight:600}
 .line.pickable{cursor:pointer}
+.chip.blocked{background:var(--bad-soft);color:var(--bad);font-weight:600}
+.dep-list{display:grid;gap:4px;margin-bottom:6px}
+.dep-i{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:8px;align-items:center;font-size:13.5px}
+.dep-i.ok .dep-t{color:var(--muted);text-decoration:line-through}
+.dep-s{color:var(--bad);font-weight:700;width:14px;text-align:center}.dep-i.ok .dep-s{color:var(--ok)}
+.dep-t{text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dep-x{all:unset;cursor:pointer;color:var(--muted);padding:0 5px;border-radius:4px}.dep-x:hover{color:var(--bad);background:var(--bad-soft)}
+.dep-none{font-size:13px;margin-bottom:6px}
+.dep-in{width:100%;font:inherit;font-size:13px;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:inherit}
 .lay-bar{display:flex;align-items:center;gap:12px;margin:0 0 12px}.lay-bar .hint{font-size:12.5px;color:var(--muted)}
 .lay-seg button{padding:5px 12px}
 .board-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -4px;padding:0 4px 10px;scroll-snap-type:x proximity}
@@ -1209,6 +1218,26 @@ const av=(p,big)=>{const ph=S.people.get(p)?.avatar;const c="av "+(p||"unassigne
   return ph?el("img",{class:c+" ph",src:ph,alt:"","aria-hidden":"true"}):el("span",{class:c,"aria-hidden":"true"},p&&p!=="unassigned"&&p!=="claude"?p[0].toUpperCase():p==="claude"?"C":"?")};
 function labelChip(l){return el("span",{class:"chip label",style:"--lc:"+l.color},l.name)}
 
+// ---------- dependencies ----------
+const depInfo=id=>{const t=S.tasks.get(id);const d=(S.depT||{})[id]||{};return {id,title:t?.title||d.title||id,status:t?t.status:d.status,owner:t?.owner||d.owner}};
+const waitsOn=id=>(S.deps||[]).filter(d=>d.task_id===id).map(d=>depInfo(d.depends_on));
+const blocksList=id=>(S.deps||[]).filter(d=>d.depends_on===id).map(d=>depInfo(d.task_id));
+const openWaits=id=>waitsOn(id).filter(x=>x.status!=="done");
+function blockChip(t){if(t.status==="done")return null;const ow=openWaits(t.id);if(!ow.length)return null;
+  return el("span",{class:"chip blocked",title:"Waiting on: "+ow.map(x=>x.id+" "+x.title).join("; ")},"⛔ Waits on "+(ow.length===1?ow[0].title.slice(0,38)+(ow[0].title.length>38?"…":""):ow.length+" tasks"))}
+async function depChange(tool,task_id,depends_on,msg){
+  try{await api(tool,{task_id,depends_on});await load();toast(msg);render();if(S.panel)renderPanel(true)}catch(e){toast(e.message.replace(/^Error:\s*/,""))}}
+function depEditor(t){
+  const w=waitsOn(t.id);
+  const list=w.length?el("div",{class:"dep-list"},w.map(x=>el("div",{class:"dep-i"+(x.status==="done"?" ok":"")},
+    el("span",{class:"dep-s"},x.status==="done"?"✓":"○"),
+    el("button",{class:"linkish dep-t",onclick:()=>openPanel(x.id)},x.title),
+    el("button",{class:"dep-x","aria-label":"Stop waiting on "+x.title,title:"Remove",onclick:()=>depChange("remove_dependency",t.id,x.id,"Removed")},"×")))):el("div",{class:"faint dep-none"},"Nothing. This task can be done any time.");
+  const dl="dl-"+t.id;const cands=[...S.tasks.values()].filter(x=>x.id!==t.id&&x.status!=="done"&&!w.some(y=>y.id===x.id)).sort((a,b)=>(a.client_id===t.client_id?0:1)-(b.client_id===t.client_id?0:1)||a.id.localeCompare(b.id));
+  const inp=el("input",{class:"dep-in",list:dl,placeholder:"+ Add a task this waits on (type to search)","aria-label":"Add a task this waits on",
+    onchange:e=>{const m=e.target.value.match(/^(t\d+)\b/);if(!m){toast("Pick a task from the list");return}depChange("add_dependency",t.id,m[1],"Now waiting on "+m[1])}});
+  return el("div",null,list,inp,el("datalist",{id:dl},cands.slice(0,300).map(x=>el("option",{value:x.id+" · "+x.title+(x.client_id?" ("+shortClient(x.client_id)+")":"")}))));
+}
 function taskRow(t,showClient){
   const done=t.status==="done";const n=t.due?daysTo(t.due):null;const owner=t.owner||"unassigned";
   const row=el("div",{class:"task"+(done?" done":"")});
@@ -1218,6 +1247,7 @@ function taskRow(t,showClient){
       el("div",{class:"t-title"},t.title),
       el("div",{class:"t-meta"},
         isNewFor(t)?el("span",{class:"chip new"},"New for you"):null,
+        blockChip(t),
         showClient&&t.client_id?el("span",{class:"chip client"},shortClient(t.client_id)):null,
         t.needs&&!done?el("span",{class:"chip ask"},"Needs Jacques: "+NEEDS[t.needs]+(t.value?" · "+t.value:"")):null,
         t.status==="waiting"?el("span",{class:"chip waiting"},(owner==="diane"?"Chase":"Waiting")+(t.chase_by?" "+short(t.chase_by):"")):null,
@@ -1245,6 +1275,7 @@ function listRow(t){
       el("span",{class:"l-title"},isMs(t)?el("span",{class:"ms-dia sm","aria-label":"Milestone"},"◆ "):null,t.title),
       el("span",{class:"l-tags"},
         fresh?el("span",{class:"chip new"},"New"):null,
+        blockChip(t),
         t.needs&&!done?el("span",{class:"chip ask"},"Awaiting Jacques"):null,
         t.status==="waiting"?el("span",{class:"chip waiting"},owner==="diane"?"Chase":"Waiting"):null,
         t.status==="doing"?el("span",{class:"chip doing"},"Doing"):null,
@@ -1359,6 +1390,7 @@ function bcard(t,showClient,tint){
     onclick:()=>{if(!touchDrag.moved)openPanel(t.id)},onkeydown:e=>{if(e.key==="Enter")openPanel(t.id)}},
     el("div",{class:"bc-t"},t.needs?el("span",{class:"bc-ask",title:"Waiting on Jacques"},"?"):null,t.title),
     el("div",{class:"bc-m"},
+      blockChip(t),
       showClient&&t.client_id?el("span",{class:"bc-cl"},shortClient(t.client_id)):null,
       eff(t)?el("span",{class:"bc-due"+(t.status!=="done"&&n<0?" late":n===0?" tod":"")},(t.status==="waiting"&&t.chase_by?"Chase ":"")+fmtDue(eff(t))):null,
       ...labs.slice(0,3).map(l=>el("i",{class:"bc-lab",style:"background:"+l.color,title:l.name})),
@@ -2002,7 +2034,7 @@ function renderClientPage(){
       el("div",{class:"cp-title"},el("h2",{id:"cp-name"},clientName(c.id)),pencil(c.id,()=>$("#cp-name")),el("span",{class:"status "+c.status},c.status.replace("-"," ")),el("span",{class:"lead"},av(c.lead),(LEADS[c.lead]||"No lead")+" leads")),
       c.private_to?el("p",{class:"cp-priv"},"Only you can see this project. Nobody else sees these tasks, their comments, files or history, or wiki pages filed here. Tasks here stay yours: to share one, move it to another project first."):c.engagement?el("p",{class:"cp-eng"},c.engagement):null,
       el("div",{class:"c-metrics cp-metrics"},metric(open.length,"Open"),metric(late,"Overdue","bad"),metric(week,"This week"),metric(needs,"Approvals","ask"),metric(ex?ex.done.length:"…","Completed"))),
-    cpLay(c)==="board"?el("div",{class:"cp-board"},owHead(c),renderBoard([...S.tasks.values()].filter(t=>t.client_id===c.id&&isOpen(t)),c,t=>t.client_id===c.id)):null,
+    ...(cpLay(c)==="board"?[el("div",{class:"cp-board"},owHead(c),renderBoard([...S.tasks.values()].filter(t=>t.client_id===c.id&&isOpen(t)),c,t=>t.client_id===c.id))]:[]),
     el("div",{class:"cp-grid"},
       el("div",{class:"cp-main"},
         el("div",{class:"card-h cp-ms-h"},el("h3",{class:"cp-h"},"Milestones"),el("button",{class:"btn sm",onclick:()=>openMilestone(c.id)},"+ Add milestone")),
@@ -2121,6 +2153,8 @@ function renderPanel(keepFocus){
         row("Client",select("p-client",t.client_id||"",[["","General (no client)"],...[...S.clients.values()].filter(c=>c.status!=="ended"||c.id===t.client_id).sort((a,b)=>a.name.localeCompare(b.name)).map(c=>[c.id,shortClient(c.id)])],v=>psave({client_id:v||null},"Saved"))),
         ...(S.clients.get(t.client_id)?.stages?.length?[row("Column",select("p-stage",t.stage||"",[["","No column yet"],...S.clients.get(t.client_id).stages.map(x=>[x,x])],v=>psave({stage:v||null},"Moved")))]:[]),
         row("Labels",labels),
+        row("Waits on",depEditor(t)),
+        ...(blocksList(t.id).length?[row("Holds up",el("div",{class:"dep-list"},blocksList(t.id).map(x=>el("div",{class:"dep-i"+(x.status==="done"?" ok":"")},el("span",{class:"dep-s"},x.status==="done"?"✓":"○"),el("button",{class:"linkish dep-t",onclick:()=>openPanel(x.id)},x.title)))))]:[]),
         row("Needs Jacques",el("div",{class:"pf-needs"},select("p-needs",t.needs||"",[["","Nothing"],["approve","Approve"],["decide","Decide"],["sign","Sign"]],v=>psave(v?{needs:v,prepared_by:t.prepared_by||(t.owner!=="jacques"?t.owner:S.me)}:{needs:null},"Saved")),
           t.needs?text("p-ask",t.ask,"Question for Jacques",v=>psave({ask:v},"Saved")):null,t.needs?text("p-value",t.value,"Rand value",v=>psave({value:v},"Saved")):null))),
       t.needs&&S.me==="jacques"&&!done?(()=>{const ans=el("input",{class:"ans",placeholder:"Your answer or condition (optional)"});return el("div",{class:"t-ask"},el("p",null,t.ask||"Needs your "+NEEDS[t.needs].toLowerCase()),ans,el("button",{class:"btn sm ask",onclick:async()=>{await approve(t,ans.value.trim());renderPanel()}},t.needs==="decide"?"Send answer":"Approve"))})():null,
@@ -2645,7 +2679,7 @@ async function load(){
     const d=await api("snapshot",{include_done:S.showDone});
     S.clients=new Map(d.clients.map(x=>[x.id,x]));S.tasks=new Map(d.tasks.map(x=>[x.id,x]));S.labels=new Map(d.labels.map(x=>[x.id,x]));
     S.tl=new Map();for(const r of d.task_labels){if(!S.tl.has(r.task_id))S.tl.set(r.task_id,[]);S.tl.get(r.task_id).push(r.label_id)}
-    S.people=new Map((d.people||[]).map(x=>[x.person,x]));S.cc=d.comment_counts||{};S.fc=d.file_counts||{};S.unread=d.unread||0;S.views=d.views||[];S.fin=d.finance||null;
+    S.people=new Map((d.people||[]).map(x=>[x.person,x]));S.cc=d.comment_counts||{};S.fc=d.file_counts||{};S.unread=d.unread||0;S.views=d.views||[];S.fin=d.finance||null;S.deps=d.deps||[];S.depT=d.dep_tasks||{};
     note("");return true;
   }catch(e){if(e.auth)throw e;note("Couldn't reach the planner just now. What you see may be out of date.");return false}
 }
