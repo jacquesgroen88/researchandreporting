@@ -597,12 +597,27 @@ input.sel{width:18px;height:18px;accent-color:var(--accent);margin:0}
 .rtable td.num .dn{margin:0}
 .rt-who{display:inline-flex;align-items:center;gap:8px;font-weight:600}
 .rt-cl{font-weight:600;white-space:normal;text-align:left}
+.rtable td:first-child{min-width:190px;white-space:normal}
 .r-period{font:inherit;font-size:13px;padding:5px 8px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:inherit}
 .cp-report{margin:18px 0 6px}
 .rp-act{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
 .rp-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:12px}
 .rp-h{font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:16px 0 0;font-weight:600}
 .line.pickable{cursor:pointer}
+.only-you{font:500 10.5px var(--f-body,inherit);letter-spacing:.04em;text-transform:uppercase;color:var(--ask);background:var(--ask-soft);border-radius:999px;padding:2px 8px;margin-left:6px;vertical-align:middle}
+.cp-money .cf input,.cp-money .cf select{width:100%}
+.mny-m{grid-template-columns:repeat(2,minmax(0,1fr))}
+.pay-add{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:8px 0}
+.pay-add input{font:inherit;font-size:13px;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:inherit;min-width:0}
+.pay-add .btn{justify-self:start}
+.pay-list{display:grid;gap:2px;margin-top:4px}
+.pay-i{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;gap:8px;align-items:center;font-size:13px;padding:5px 0;border-bottom:1px solid var(--line)}
+.pay-d{color:var(--muted);white-space:nowrap}.pay-r{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted)}.pay-a{font-variant-numeric:tabular-nums}
+.pay-x{all:unset;cursor:pointer;color:var(--muted);padding:0 4px;border-radius:4px}.pay-x:hover{color:var(--bad);background:var(--bad-soft)}
+.old-bill{margin-top:10px;font-size:13px}.old-bill summary{cursor:pointer;color:var(--muted)}
+.rtable .pill{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.rtable .pill.bad{background:var(--bad-soft);color:var(--bad)}.rtable .pill.ok{background:var(--ok-soft);color:var(--ok)}
+.mny-foot{margin-top:10px}
 .tip-hint{font-size:11px;color:var(--muted);margin-top:3px}
 .dr-sub{margin:0 0 8px}
 .dr-when{font-size:12px;white-space:nowrap;margin-left:auto;padding-left:8px;align-self:center}
@@ -1502,6 +1517,11 @@ function msList(items,empty){
       el("span",{class:"ms-d"},done?"Reached":d?fmtDue(d):"No date"),av(t.owner))}));
 }
 // ---------- reports: dashboard + history ----------
+async function loadDash(){
+  if(S.dashLoading)return;S.dashLoading=true;
+  try{const d=await api("snapshot",{include_done:true});S.dash=d;if(d.finance)S.fin=d.finance}catch(e){if(!S.dash)S.dash={err:e.message}}
+  S.dashLoading=false;render();
+}
 async function loadReports(){
   if(S.rtab==="history"){loadHistory();return}
   try{S.dash=await api("snapshot",{include_done:true})}catch(e){S.dash={err:e.message}}
@@ -1657,7 +1677,7 @@ function clientsCard(all,key){
 
 // per client (client page report)
 function clientReport(c){
-  if(!S.dash){loadReports();return el("section",{class:"card cp-report"},el("h3",null,"Report"),el("div",{class:"empty sm"},"Loading…"))}
+  if(!S.dash){loadDash();return el("section",{class:"card cp-report"},el("h3",null,"Report"),el("div",{class:"empty sm"},"Loading…"))}
   if(S.dash.err)return el("section",{class:"card cp-report"},el("h3",null,"Report"),el("div",{class:"empty sm"},"Couldn't load: "+S.dash.err));
   const key=S.cpPeriod||"month";const [from,to,label]=periodRange(key);
   const ts=S.dash.tasks.filter(t=>t.client_id===c.id);const s=rStats(ts,from,to),o=rOpen(ts);const nm=shortClient(c.id);
@@ -1700,6 +1720,81 @@ table{width:100%;border-collapse:collapse}td{padding:6px 0;border-bottom:1px sol
 <p class=m style="margin-top:28px;font-size:12px">Internal working report from the JCE Project Planner. Check task wording before sending it to a client.</p></body></html>`;
   const w=window.open("","_blank");if(!w){toast("Allow pop-ups to print the report");return}
   w.document.open();w.document.write(html);w.document.close();
+}
+
+// ---------- money (Jacques only: the server sends finance data to nobody else) ----------
+const isMoney=()=>S.me==="jacques";
+const fmtR=n=>(n<0?"-":"")+"R"+Math.round(Math.abs(n)).toString().replace(/\B(?=(\d{3})+(?!\d))/g,",");
+const FIN_T=[["retainer","Retainer"],["project","Project"],["hourly","Hourly"],["rev-share","Revenue share"],["internal","Internal"],["none","No fee"]];
+function finData(){return (S.dash&&S.dash.finance)||S.fin||null}
+function collected(fin,clientId,from,to){return fin.payments.filter(p=>p.client_id===clientId&&parseD(p.paid_on)>=from&&parseD(p.paid_on)<to).reduce((s,p)=>s+Number(p.amount),0)}
+async function moneyReload(){try{const d=await api("snapshot",{include_done:true});S.dash=d;S.fin=d.finance||null}catch(e){toast("Couldn't refresh: "+e.message)}render()}
+async function finSave(clientId,patch){try{await api("finance_save",{client_id:clientId,...patch});toast("Saved");await moneyReload()}catch(e){toast("Couldn't save: "+e.message)}}
+
+// client page: private money card
+function moneyCard(c){
+  if(!isMoney())return null;
+  const fin=finData();if(!fin)return el("section",{class:"cp-card"},el("h3",{class:"cp-h"},"Money (only you)"),el("div",{class:"empty sm"},"Loading…"));
+  const f=fin.fees.find(x=>x.client_id===c.id)||{};const pays=fin.payments.filter(p=>p.client_id===c.id);
+  const t=today(),tm=new Date(+t+DAYMS),m0=new Date(t.getFullYear(),t.getMonth(),1);
+  const sumFrom=d=>collected(fin,c.id,d,tm);
+  const d90=new Date(+t-89*DAYMS);const ts=(S.dash&&S.dash.tasks?S.dash.tasks:[...S.tasks.values()]).filter(x=>x.client_id===c.id);
+  const done90=ts.filter(x=>x.status==="done"&&x.done_at&&tsD(x.done_at)>=d90).length;const c90=sumFrom(d90);
+  const feeIn=el("input",{type:"number",min:"0",step:"1",inputmode:"decimal",value:f.monthly_fee??"",placeholder:"—",id:"mf-fee",onchange:e=>finSave(c.id,{monthly_fee:e.target.value===""?null:Number(e.target.value)})});
+  const typeSel=el("select",{id:"mf-type",onchange:e=>finSave(c.id,{billing_type:e.target.value})},[el("option",{value:""},"—"),...FIN_T.map(([v,l])=>el("option",{value:v,selected:f.billing_type===v},l))]);
+  const notes=el("textarea",{id:"mf-notes",rows:"3",placeholder:"Private billing notes",onchange:e=>finSave(c.id,{billing_notes:e.target.value})});notes.value=f.billing_notes||"";
+  const pd=el("input",{type:"date",value:iso(t),"aria-label":"Date received"}),pa=el("input",{type:"number",step:"0.01",inputmode:"decimal",placeholder:"Amount (R)","aria-label":"Amount in rand"}),pr=el("input",{placeholder:"Invoice or bank ref","aria-label":"Reference",maxlength:"80"});
+  const add=el("button",{class:"btn sm",type:"button",onclick:async()=>{const amount=Number(pa.value);if(!amount||!pd.value){toast("Add a date and an amount");return}
+    try{await api("payment_add",{client_id:c.id,paid_on:pd.value,amount,ref:pr.value.trim()});toast("Payment recorded");await moneyReload()}catch(e){toast("Couldn't save: "+e.message)}}},"Add");
+  const stat=(v,l)=>el("div",{class:"metric"},el("b",null,v),el("span",null,l));
+  return el("section",{class:"cp-card cp-money"},
+    el("h3",{class:"cp-h"},"Money ",el("span",{class:"only-you"},"only you see this")),
+    el("div",{class:"cf"},el("label",{for:"mf-fee"},"Monthly fee (R)"),feeIn),
+    el("div",{class:"cf"},el("label",{for:"mf-type"},"Billing type"),typeSel),
+    el("div",{class:"c-metrics mny-m"},stat(fmtR(sumFrom(m0)),"This month"),stat(fmtR(c90),"Last 90 days"),stat(fmtR(sumFrom(new Date(+t-364*DAYMS))),"Last 12 months"),stat(done90?fmtR(c90/done90):"–","Per task done (90d)")),
+    el("div",{class:"cf"},el("label",{for:"mf-notes"},"Billing notes"),notes),
+    el("h4",{class:"rp-h"},"Payments received"),
+    el("div",{class:"pay-add"},pd,pa,pr,add),
+    pays.length?el("div",{class:"pay-list"},pays.slice(0,24).map(p=>el("div",{class:"pay-i"},
+      el("span",{class:"pay-d"},new Date(p.paid_on+"T00:00:00").toLocaleDateString("en-ZA",{day:"numeric",month:"short",year:"numeric"})),
+      el("span",{class:"pay-r"},p.ref||""),el("b",{class:"pay-a"},fmtR(Number(p.amount))),
+      el("button",{class:"pay-x","aria-label":"Remove payment",title:"Remove (entered by mistake)",onclick:async()=>{if(!confirm("Remove this "+fmtR(Number(p.amount))+" payment?"))return;try{await api("payment_delete",{id:p.id});toast("Removed");await moneyReload()}catch(e){toast("Couldn't remove: "+e.message)}}},"×")))):el("div",{class:"empty sm"},"No payments recorded yet."),
+    c.fee||c.last_invoice||c.next_billing?el("details",{class:"old-bill"},el("summary",null,"Billing record (text)"),el("dl",{class:"facts"},
+      ...[["Fee",c.fee],["Last invoice",c.last_invoice],["Next billing",c.next_billing],["Entity",c.entity]].filter(([,v])=>v).flatMap(([k,v])=>[el("dt",null,k),el("dd",null,v)]))):null);
+}
+
+// dashboard: money against work
+function moneyVsWork(all,key){
+  if(!isMoney())return null;
+  const fin=finData();if(!fin)return null;
+  const [from,to,label]=periodRange(key);
+  const ids=[...new Set([...fin.fees.map(f=>f.client_id),...fin.payments.map(p=>p.client_id)])].filter(id=>S.clients.has(id));
+  let rows=ids.map(id=>{const f=fin.fees.find(x=>x.client_id===id)||{};const ts=all.filter(t=>t.client_id===id);const s=rStats(ts,from,to);
+    return {id,fee:f.monthly_fee!=null?Number(f.monthly_fee):null,type:f.billing_type,col:collected(fin,id,from,to),done:s.done,open:ts.filter(t=>t.status!=="done").length}})
+    .filter(r=>r.col||r.done.length||r.fee);
+  const totCol=rows.reduce((s,r)=>s+r.col,0),totDone=rows.reduce((s,r)=>s+r.done.length,0);
+  const live=[...S.clients.values()].filter(c=>c.status!=="ended").map(c=>c.id);
+  const totFee=rows.filter(r=>live.includes(r.id)).reduce((s,r)=>s+(r.fee||0),0);
+  rows=rows.map(r=>({...r,ms:totCol?r.col/totCol:0,ws:totDone?r.done.length/totDone:0})).sort((a,b)=>(b.ws-b.ms)-(a.ws-a.ms)||b.col-a.col);
+  const pct=x=>Math.round(x*100)+"%";
+  const flag=r=>["internal","none"].includes(r.type)?null:r.ws>=0.1&&r.ws>r.ms*1.5?el("span",{class:"pill bad"},"More work than money"):r.ms>=0.1&&r.ms>r.ws*1.5?el("span",{class:"pill ok"},"Good value"):null;
+  const head=["Client","Monthly fee","Collected","Share of money","Tasks done","Share of work","Per task done","Open",""];
+  return el("section",{class:"card wide"},
+    el("div",{class:"card-h"},el("div",null,el("h3",null,"Money vs work ",el("span",{class:"only-you"},"only you see this")),
+      el("p",{class:"card-sub"},`${label}: ${fmtR(totCol)} collected across ${totDone} completed tasks. Monthly fees on live clients add up to ${fmtR(totFee)}. Clients doing more work than they pay for are listed first.`)),
+      periodPick(key,v=>{S.rPeriod=v;render()})),
+    el("div",{class:"rt-wrap"},el("table",{class:"rtable"},el("thead",null,el("tr",null,head.map((h,i)=>el("th",{class:i&&i<8?"num":""},h)))),
+      el("tbody",null,rows.map(r=>{const nm=shortClient(r.id);return el("tr",null,
+        el("td",null,el("button",{class:"linkish rt-cl",onclick:()=>openClient(r.id)},nm)),
+        el("td",{class:"num"},r.fee!=null?fmtR(r.fee):(r.type?FIN_T.find(x=>x[0]===r.type)?.[1]||"–":"–")),
+        el("td",{class:"num"},r.col?fmtR(r.col):"–"),
+        el("td",{class:"num"},pct(r.ms)),
+        el("td",{class:"num"},dn(r.done.length,nm+": completed, "+label.toLowerCase(),r.done)),
+        el("td",{class:"num"},pct(r.ws)),
+        el("td",{class:"num"},r.done.length&&r.col?fmtR(r.col/r.done.length):"–"),
+        el("td",{class:"num"},r.open),
+        el("td",null,flag(r)))})))),
+    el("p",{class:"card-sub mny-foot"},"Collected = payments recorded on each client's page. Payments were seeded from the billing notes on 11 Nov and are not complete yet; add the rest as money lands."));
 }
 
 function renderDashboard(){
@@ -1752,7 +1847,7 @@ function renderDashboard(){
         lrows.length?el("div",{class:"bars"},lrows.map(([l,n])=>{const lab=S.labels.get(l);return el("button",{class:"bar-r btnlike",onclick:()=>{S.label=l;go("all")}},el("span",{class:"bar-l"},el("i",{class:"sw",style:"background:"+lab.color}),lab.name),el("span",{class:"bar-t"},el("i",{class:"bar-f",style:"width:"+(n/lmax*100)+"%"})),el("span",{class:"bar-v"},n))})):el("div",{class:"empty sm"},"No labels on open tasks.")),
       el("section",{class:"card wide"},el("div",{class:"card-h"},el("h3",null,"Milestones"),el("button",{class:"btn sm",onclick:()=>openMilestone(null)},"+ Add milestone")),
         msList(msUp.slice(0,12),"No milestones yet. Add one for things like a site going live, a contract signed or a renewal date.")),
-      ...trendCards(all,"Everyone"),peopleCard(all,rk),clientsCard(all,rk)),
+      moneyVsWork(all,rk),...trendCards(all,"Everyone"),peopleCard(all,rk),clientsCard(all,rk)),
   ];
 }
 function renameClient(id,h){
@@ -1765,7 +1860,7 @@ function renameClient(id,h){
   h.replaceWith(inp);inp.focus();inp.select();
 }
 const pencil=(id,getH)=>el("button",{class:"pencil","aria-label":"Rename client",title:"Rename client",onclick:e=>{e.stopPropagation();renameClient(id,getH(e))}},"✎");
-function openClient(id){if(!S.clients.has(id))return;S.view="clientpage";S.clientId=id;if(location.hash!=="#client/"+id)history.pushState(null,"","#client/"+id);render();window.scrollTo(0,0);loadClientExtra(id);if(S.wiki===null)loadWiki()}
+function openClient(id){if(!S.clients.has(id))return;S.view="clientpage";S.clientId=id;if(location.hash!=="#client/"+id)history.pushState(null,"","#client/"+id);render();window.scrollTo(0,0);loadClientExtra(id);loadDash();if(S.wiki===null)loadWiki()}
 async function loadClientExtra(id){
   try{const [done,hist]=await Promise.all([api("list_tasks",{client_id:id,status:"done",limit:40}),api("history",{client_id:id,limit:60})]);S.clientExtra[id]={done,hist}}
   catch(e){S.clientExtra[id]={done:[],hist:[],err:e.message}}
@@ -1807,10 +1902,11 @@ function renderClientPage(){
         el("details",{class:"sec",open:false},el("summary",null,el("span",{class:"caret"}),el("span",{class:"sec-t"},"Completed"),el("span",{class:"n"},ex?ex.done.length:"…")),
           ex?(ex.done.length?el("div",{class:"done-list"},ex.done.map(t=>el("div",{class:"done-i"},el("span",{class:"tick-d","aria-hidden":"true"},"✓"),el("button",{class:"linkish",onclick:()=>openPanel(t.id)},t.title),el("span",{class:"faint"},OWNERS[t.owner]||"")))):el("div",{class:"empty"},"No completed tasks yet.")):el("div",{class:"empty"},"Loading…"))),
       el("aside",{class:"cp-side"},
+        moneyCard(c),
         el("section",{class:"cp-card"},el("h3",{class:"cp-h"},"Details"),
           pickF("status","Status",[["active","Active"],["onboarding","Onboarding"],["pipeline","Pipeline"],["paused","Paused"],["winding-down","Winding down"],["ended","Ended"]]),
           pickF("lead","Account lead",[["jacques","Jacques"],["diane","Diane"],["giorgio","Giorgio"]]),
-          fld("fee","Fee"),fld("term","Term"),fld("contact","Contact"),fld("last_invoice","Last invoice"),fld("next_billing","Next billing"),fld("entity","Billing entity"),fld("engagement","What we do",true),fld("notes","Notes",true)),
+          ...(isMoney()?[fld("fee","Fee")]:[]),fld("term","Term"),fld("contact","Contact"),...(isMoney()?[fld("last_invoice","Last invoice"),fld("next_billing","Next billing"),fld("entity","Billing entity")]:[]),fld("engagement","What we do",true),fld("notes","Notes",true)),
         el("section",{class:"cp-card cp-wk"},el("div",{class:"card-h"},el("h3",{class:"cp-h"},"Wiki"),el("button",{class:"btn sm",onclick:()=>openLinkEdit(null,null)},"+ Add link")),wikiMini(c.id)),
         el("section",{class:"cp-card"},el("h3",{class:"cp-h"},"Activity"),ex?feedList(ex.hist.slice(0,40),false):el("div",{class:"empty"},"Loading…"))))];
 }
@@ -2437,7 +2533,7 @@ async function load(){
     const d=await api("snapshot",{include_done:S.showDone});
     S.clients=new Map(d.clients.map(x=>[x.id,x]));S.tasks=new Map(d.tasks.map(x=>[x.id,x]));S.labels=new Map(d.labels.map(x=>[x.id,x]));
     S.tl=new Map();for(const r of d.task_labels){if(!S.tl.has(r.task_id))S.tl.set(r.task_id,[]);S.tl.get(r.task_id).push(r.label_id)}
-    S.people=new Map((d.people||[]).map(x=>[x.person,x]));S.cc=d.comment_counts||{};S.fc=d.file_counts||{};S.unread=d.unread||0;S.views=d.views||[];
+    S.people=new Map((d.people||[]).map(x=>[x.person,x]));S.cc=d.comment_counts||{};S.fc=d.file_counts||{};S.unread=d.unread||0;S.views=d.views||[];S.fin=d.finance||null;
     note("");return true;
   }catch(e){if(e.auth)throw e;note("Couldn't reach the planner just now. What you see may be out of date.");return false}
 }
