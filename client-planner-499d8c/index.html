@@ -604,6 +604,35 @@ input.sel{width:18px;height:18px;accent-color:var(--accent);margin:0}
 .rp-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:12px}
 .rp-h{font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:16px 0 0;font-weight:600}
 .line.pickable{cursor:pointer}
+.lay-bar{display:flex;align-items:center;gap:12px;margin:0 0 12px}.lay-bar .hint{font-size:12.5px;color:var(--muted)}
+.lay-seg button{padding:5px 12px}
+.board-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -4px;padding:0 4px 10px;scroll-snap-type:x proximity}
+.board{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(250px,1fr);gap:12px;align-items:start;min-width:min-content}
+.bcol{background:var(--surface-2);border:1px solid var(--line);border-top:4px solid var(--tint);border-radius:12px;padding:10px;min-height:140px;scroll-snap-align:start;display:flex;flex-direction:column;gap:8px}
+.bcol.drop{outline:2px dashed var(--accent);outline-offset:-4px;background:var(--accent-soft)}
+.bcol-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.bcol-h h3{font:600 14px var(--f-display);margin:0}
+.bcol-n,.bcol-sub{font-size:12px;color:var(--muted)}.bcol-sub{margin:0}
+.bc-add{all:unset;cursor:pointer;font-size:13px;color:var(--accent);padding:2px 4px;border-radius:6px;width:fit-content}.bc-add:hover{background:var(--accent-soft)}
+.bc-add-in{display:none;font:inherit;font-size:13.5px;padding:7px 9px;border:1px solid var(--accent);border-radius:8px;background:var(--surface);color:inherit}
+.bcol.adding .bc-add-in{display:block}.bcol.adding .bc-add{display:none}
+.bcol-list{display:flex;flex-direction:column;gap:8px}
+.bcol-empty{font-size:12.5px;color:var(--muted);text-align:center;padding:18px 6px;border:1px dashed var(--line);border-radius:9px;margin:0}
+.bcard{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--tint);border-radius:9px;padding:9px 10px;cursor:grab;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:7px;-webkit-user-select:none;user-select:none}
+.bcard:hover{border-color:var(--accent);border-left-color:var(--tint)}.bcard:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.bcard.lifting{opacity:.45}.bcard.done .bc-t{text-decoration:line-through;color:var(--muted)}
+.bc-t{font-size:14px;font-weight:500;line-height:1.35;overflow-wrap:anywhere}
+.bc-ask{display:inline-grid;place-items:center;width:17px;height:17px;border-radius:50%;background:var(--ask-soft);color:var(--ask);font-size:11px;font-weight:700;margin-right:6px;vertical-align:1px}
+.bc-m{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+.bc-cl{background:var(--surface-2);border-radius:5px;padding:1px 6px;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bc-due.late{color:var(--bad);font-weight:600}.bc-due.tod{color:var(--warn);font-weight:600}
+.bc-lab{width:8px;height:8px;border-radius:50%;display:inline-block}
+.bc-av{margin-left:auto;display:inline-flex}.bc-av img,.bc-av .av{width:20px;height:20px;font-size:10px}
+.drag-ghost.bcard{position:fixed;z-index:999;width:220px;pointer-events:none;opacity:.9}
+.cp-ow-h{margin-top:6px}
+.cp-main,.cp-grid>*{min-width:0}
+.cp-board{margin:14px 0 18px;min-width:0}
+@media (max-width:700px){.board{grid-auto-columns:82vw}}
 .only-you{font:500 10.5px var(--f-body,inherit);letter-spacing:.04em;text-transform:uppercase;color:var(--ask);background:var(--ask-soft);border-radius:999px;padding:2px 8px;margin-left:6px;vertical-align:middle}
 .cp-money .cf input,.cp-money .cf select{width:100%}
 .mny-m{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -1114,8 +1143,8 @@ const LEADS={jacques:"Jacques",diane:"Diane",giorgio:"Giorgio"};
 const S={view:"date",owner:"mine",label:"",me:null,q:"",showDone:false,clients:new Map(),tasks:new Map(),labels:new Map(),tl:new Map(),editing:null,handing:null,handTo:null,openClients:new Set(),calMonth:null,people:new Map(),cc:{},panel:null,panelTab:"comments",selectMode:false,sel:new Set(),clientId:null,clientExtra:{},hist:null,histF:{person:"",kind:"all",client:""},rtab:"dashboard",dash:null,group:"date",sort:"due",fc:{},unread:0,views:[],inbox:null,calMode:"month",calWeek:null,panelFiles:null};
 const $=s=>document.querySelector(s);
 const el=(tag,attrs,...kids)=>{const e=document.createElement(tag);if(attrs)for(const k in attrs){const v=attrs[k];if(v==null||v===false)continue;if(k==="class")e.className=v;else if(k==="style")e.setAttribute("style",v);else if(k.startsWith("on"))e.addEventListener(k.slice(2),v);else e.setAttribute(k,v===true?"":v)}for(const c of kids.flat()){if(c==null||c===false)continue;e.append(c.nodeType?c:document.createTextNode(String(c)))}return e};
-try{const p=JSON.parse(localStorage.getItem("jce-planner")||"{}");if(p.group)S.group=p.group;if(p.sort)S.sort=p.sort;if(p.calMode)S.calMode=p.calMode;Object.assign(S,{view:p.view||S.view,owner:p.owner||S.owner,label:p.label||""})}catch(e){}
-const savePrefs=()=>{try{localStorage.setItem("jce-planner",JSON.stringify({view:S.view,owner:S.owner,label:S.label,group:S.group,sort:S.sort,calMode:S.calMode}))}catch(e){}};
+try{const p=JSON.parse(localStorage.getItem("jce-planner")||"{}");if(p.group)S.group=p.group;if(p.sort)S.sort=p.sort;if(p.calMode)S.calMode=p.calMode;if(p.layout)S.layout=p.layout;Object.assign(S,{view:p.view||S.view,owner:p.owner||S.owner,label:p.label||""})}catch(e){}
+const savePrefs=()=>{try{localStorage.setItem("jce-planner",JSON.stringify({view:S.view,owner:S.owner,label:S.label,group:S.group,sort:S.sort,calMode:S.calMode,layout:S.layout}))}catch(e){}};
 
 
 function iso(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
@@ -1136,6 +1165,13 @@ function isPriv(id){return !!S.clients.get(id)?.private_to}
 function clientName(id){const c=S.clients.get(id);return c?(c.private_to?"🔒 ":"")+c.name:(id||"General")}
 function shortClient(id){return clientName(id).split(/ \(| - | \+ /)[0]}
 
+function passes(t){
+  const q=S.q.trim().toLowerCase();const o=ownerKey();
+    if(S.view!=="approvals"&&o!=="all"&&t.owner!==o)return false;
+    if(S.label&&!(S.tl.get(t.id)||[]).includes(S.label))return false;
+    if(q){const hay=(t.title+" "+(t.detail||"")+" "+(t.ask||"")+" "+clientName(t.client_id)).toLowerCase();if(!hay.includes(q))return false}
+    return true;
+}
 function visibleTasks(){
   const q=S.q.trim().toLowerCase();const o=ownerKey();
   return [...S.tasks.values()].filter(t=>{
@@ -1273,7 +1309,7 @@ function parseQuick(text,def){
 }
 async function quickCreate(text,def){
   const q=parseQuick(text,def);if(!q.title){toast("Add a few words for the task name");return false}
-  const row={title:q.title,owner:q.owner,client_id:q.client_id,due:q.due,priority:q.priority,status:"todo"};if(q.repeat)row.repeat=q.repeat;
+  const row={title:q.title,owner:q.owner,client_id:q.client_id,due:q.due,priority:q.priority,status:def.status||"todo"};if(q.repeat)row.repeat=q.repeat;if(def.stage)row.stage=def.stage;
   if(q.owner!==S.me)Object.assign(row,{handed_by:S.me,handed_at:new Date().toISOString(),ack:false});
   try{const data=await api("insert_task",{row,labels:q.labels});S.tasks.set(data.id,data);S.tl.set(data.id,q.labels);render();
     toast("Added"+(q.due?" for "+fmtDue(q.due).toLowerCase():"")+(q.owner!==S.me?" for "+OWNERS[q.owner]:"")+(q.repeat?", repeats "+repeatText(q.repeat).replace(/^./,c=>c.toLowerCase()):""));return true}
@@ -1299,11 +1335,81 @@ function renderGrouped(ts){
   const keys=[...buckets.keys()].sort((a,b)=>typeof a==="number"&&typeof b==="number"?a-b:String(a).localeCompare(String(b),undefined,{numeric:true}));
   return keys.map(k=>{const b=buckets.get(k);return section("g-"+String(k).replace(/[^a-z0-9]/gi,""),b.label,b.ts,{addClient:g==="client"?[...S.clients.values()].find(c=>shortClient(c.id)===b.label)?.id:null})});
 }
+// ---------- board (kanban) ----------
+// Columns are the project's own stages when it has them (client.stages), otherwise the four statuses.
+const STATUS_COLS=[["todo","To do"],["doing","Doing"],["waiting","Waiting"]];
+const COL_TINTS=["#a78bfa","#e879f9","#06b6d4","#67e8f9","#f59e0b","#34d399","#fb7185","#60a5fa","#a3e635","#f472b6","#2dd4bf","#c084fc"];
+function boardSync(id){const t=S.tasks.get(id);if(S.dash&&S.dash.tasks&&t){const i=S.dash.tasks.findIndex(x=>x.id===id);if(i>=0)S.dash.tasks[i]=t;else S.dash.tasks.push(t)}}
+async function boardMove(id,k){
+  const t=S.tasks.get(id)||(S.dash&&S.dash.tasks||[]).find(x=>x.id===id);if(!t)return;
+  let patch={},msg="";
+  if(k==="done"){if(t.status==="done")return;patch={status:"done"};msg="Marked done"}
+  else if(k.startsWith("stage:")){const s=k.slice(6)||null;if((t.stage||null)===s&&t.status!=="done")return;patch={stage:s};if(t.status==="done")patch.status="todo";msg=s?"Moved to "+s:"Moved out of the columns"}
+  else{if(t.status===k)return;patch={status:k};
+    if(k==="waiting"){const def=iso(new Date(+today()+3*864e5));const v=prompt("Waiting on someone. When should it be chased? (YYYY-MM-DD)",t.chase_by||def);if(v===null)return;if(!/^\d{4}-\d{2}-\d{2}$/.test(v.trim())){toast("Use a date like "+def);return}patch.chase_by=v.trim()}
+    msg="Moved to "+(STATUS_COLS.find(x=>x[0]===k)||[0,k])[1]}
+  if(!S.tasks.has(id))S.tasks.set(id,t);
+  const ok=await save(id,patch,msg);if(ok)boardSync(id);render();
+}
+const boardDrop=k=>({"data-k":k,ondragover:e=>{e.preventDefault();e.currentTarget.classList.add("drop")},ondragleave:e=>{if(!e.currentTarget.contains(e.relatedTarget))e.currentTarget.classList.remove("drop")},ondrop:e=>{e.preventDefault();e.currentTarget.classList.remove("drop");boardMove(e.dataTransfer.getData("text/plain"),k)}});
+function bcard(t,showClient,tint){
+  const n=eff(t)?daysTo(eff(t)):null;const labs=(S.tl.get(t.id)||[]).map(l=>S.labels.get(l)).filter(Boolean).filter(l=>l.id!==MS);
+  const c=el("div",{class:"bcard"+(t.status==="done"?" done":""),draggable:"true",tabindex:"0",role:"button","aria-label":"Open "+t.title,style:"--tint:"+tint,
+    ondragstart:e=>{e.dataTransfer.setData("text/plain",t.id);e.dataTransfer.effectAllowed="move";c.classList.add("lifting")},ondragend:()=>c.classList.remove("lifting"),
+    onclick:()=>{if(!touchDrag.moved)openPanel(t.id)},onkeydown:e=>{if(e.key==="Enter")openPanel(t.id)}},
+    el("div",{class:"bc-t"},t.needs?el("span",{class:"bc-ask",title:"Waiting on Jacques"},"?"):null,t.title),
+    el("div",{class:"bc-m"},
+      showClient&&t.client_id?el("span",{class:"bc-cl"},shortClient(t.client_id)):null,
+      eff(t)?el("span",{class:"bc-due"+(t.status!=="done"&&n<0?" late":n===0?" tod":"")},(t.status==="waiting"&&t.chase_by?"Chase ":"")+fmtDue(eff(t))):null,
+      ...labs.slice(0,3).map(l=>el("i",{class:"bc-lab",style:"background:"+l.color,title:l.name})),
+      (S.cc[t.id]||0)?el("span",{class:"bc-n",title:"Comments"},"💬 "+S.cc[t.id]):null,
+      el("span",{class:"bc-av"},av(t.owner))));
+  c.addEventListener("touchstart",e=>{touchDrag.drop=boardMove;touchStart(e,t.id,c)},{passive:true});
+  return c;
+}
+function boardColumns(client){
+  const st=client&&Array.isArray(client.stages)&&client.stages.length?client.stages:null;
+  return st?st.map((s,i)=>({k:"stage:"+s,label:s,tint:COL_TINTS[i%COL_TINTS.length],has:t=>t.status!=="done"&&t.stage===s,def:{stage:s}}))
+    :STATUS_COLS.map(([k,l],i)=>({k,label:l,tint:["#94a3b8","#60a5fa","#f59e0b"][i],has:t=>t.status===k,def:{status:k}}));
+}
+function renderBoard(open,client,scope){
+  const cols=boardColumns(client);const staged=cols[0].k.startsWith("stage:");
+  if(staged){const known=new Set(cols.map(c=>c.k.slice(6)));const loose=open.filter(t=>!t.stage||!known.has(t.stage));
+    if(loose.length)cols.unshift({k:"stage:",label:"No column yet",tint:"#94a3b8",has:t=>t.status!=="done"&&(!t.stage||!known.has(t.stage)),def:{}})}
+  const wk=+today()-7*864e5;
+  const doneSrc=(S.dash&&S.dash.tasks?S.dash.tasks:[...S.tasks.values()]).filter(t=>t.status==="done"&&t.done_at&&tsD(t.done_at)>=wk&&scope(t)).sort((a,b)=>tsD(b.done_at)-tsD(a.done_at));
+  if(!S.dash)loadDash();
+  const addBox=col=>{const inp=el("input",{class:"bc-add-in",placeholder:"Task name, then Enter",maxlength:"240","aria-label":"Add a task to "+col.label,
+      onkeydown:async e=>{if(e.key==="Escape"){inp.closest(".bcol").classList.remove("adding");return}if(e.key!=="Enter")return;const v=inp.value.trim();if(!v)return;inp.disabled=true;
+        const ok=await quickCreate(v,{client_id:client?client.id:null,due:null,...col.def});inp.disabled=false;if(ok){inp.value="";inp.focus()}}});return inp};
+  const colEl=(col,items,isDone)=>{const inp=isDone?null:addBox(col);
+    return el("section",{class:"bcol"+(isDone?" bdone":""),style:"--tint:"+col.tint,...boardDrop(col.k)},
+      el("header",{class:"bcol-h"},el("h3",null,col.label),el("span",{class:"bcol-n"},items.length+(items.length===1?" task":" tasks"))),
+      isDone?el("p",{class:"bcol-sub"},"Finished in the last 7 days"):el("button",{class:"bc-add",onclick:e=>{const s=e.currentTarget.closest(".bcol");s.classList.add("adding");inp.focus()}},"+ Task"),
+      inp,
+      el("div",{class:"bcol-list"},items.length?items.map(t=>bcard(t,!client,col.tint)):el("p",{class:"bcol-empty"},isDone?"Nothing finished yet.":"Drop tasks here")))};
+  return el("div",{class:"board-wrap"},el("div",{class:"board"},
+    ...cols.map(col=>colEl(col,open.filter(col.has).sort(sorter()),false)),
+    colEl({k:"done",label:"Done",tint:"#34d399"},doneSrc,true)));
+}
+function layoutToggle(cur,set){return el("div",{class:"seg lay-seg",role:"group","aria-label":"Layout"},[["list","List"],["board","Board"]].map(([v,l])=>el("button",{"aria-pressed":String(cur===v),onclick:()=>set(v)},l)))}
+async function editStages(c){
+  const old=Array.isArray(c.stages)?c.stages:[];
+  const v=prompt("Board columns for "+shortClient(c.id)+", in order, separated by commas.\nLeave empty to use To do / Doing / Waiting.",old.join(", "));if(v===null)return;
+  const next=[...new Set(v.split(",").map(x=>x.trim()).filter(Boolean))].slice(0,12);
+  try{const row=await api("upsert_client",{id:c.id,stages:next});S.clients.set(c.id,{...S.clients.get(c.id),...row});
+    if(old.length===next.length){const ren=old.map((o,i)=>[o,next[i]]).filter(([a,b])=>a!==b);
+      for(const [a,b] of ren)for(const t of [...S.tasks.values()].filter(t=>t.client_id===c.id&&t.stage===a)){await save(t.id,{stage:b});boardSync(t.id)}}
+    toast("Columns saved");render()}catch(e){toast("Couldn't save: "+e.message)}
+}
+
 function renderDate(){
-  const ts=visibleTasks().sort(sorter());if(!ts.length)return [emptyState(),el("div",{class:"ltable solo"},quickAdd(iso(today())))];
-  if(S.group!=="date")return renderGrouped(ts);
+  const lay=el("div",{class:"lay-bar"},layoutToggle(S.layout||"list",v=>{S.layout=v;savePrefs();render()}),S.layout==="board"?el("span",{class:"hint"},"Drag cards between columns. Group and Sort apply to the list."):null);
+  if(S.layout==="board")return [lay,renderBoard(visibleTasks().filter(isOpen),null,passes)];
+  const ts=visibleTasks().sort(sorter());if(!ts.length)return [lay,emptyState(),el("div",{class:"ltable solo"},quickAdd(iso(today())))];
+  if(S.group!=="date")return [lay,...[renderGrouped(ts)].flat()];
   const used=new Set();const take=fn=>{const g=ts.filter(t=>!used.has(t.id)&&fn(t));g.forEach(t=>used.add(t.id));return g};
-  const out=[];
+  const out=[lay];
   out.push(section("newfor","New for you",take(isNewFor),{hint:"handed to you",noAdd:true}));
   const parkedTs=take(t=>isOpen(t)&&parked(t));
   out.push(section("overdue","Overdue",take(t=>isOpen(t)&&eff(t)&&daysTo(eff(t))<0),{noAdd:true}));
@@ -1342,13 +1448,13 @@ function evBtn(t,extra){
   b.addEventListener("touchstart",e=>touchStart(e,t.id,b),{passive:true});return b;
 }
 // touch drag: hold an event for half a second, then drag it to another day
-const touchDrag={id:null,timer:null,ghost:null,over:null,moved:false,x:0,y:0};
+const touchDrag={id:null,timer:null,ghost:null,over:null,moved:false,x:0,y:0,drop:null};
 function touchStart(e,id,b){const p=e.touches[0];touchDrag.moved=false;touchDrag.x=p.clientX;touchDrag.y=p.clientY;clearTimeout(touchDrag.timer);
   touchDrag.timer=setTimeout(()=>{touchDrag.id=id;b.classList.add("lifting");const g=b.cloneNode(true);g.className="ev drag-ghost "+b.className.replace("lifting","");document.body.append(g);touchDrag.ghost=g;moveGhost(touchDrag.x,touchDrag.y);if(navigator.vibrate)navigator.vibrate(15)},450)}
 function moveGhost(x,y){const g=touchDrag.ghost;if(!g)return;g.style.left=(x-60)+"px";g.style.top=(y-18)+"px";const d=document.elementFromPoint(x,y)?.closest("[data-k]");if(touchDrag.over&&touchDrag.over!==d)touchDrag.over.classList.remove("drop");if(d){d.classList.add("drop");touchDrag.over=d}}
 document.addEventListener("touchmove",e=>{const p=e.touches[0];if(touchDrag.id){e.preventDefault();touchDrag.moved=true;moveGhost(p.clientX,p.clientY)}else if(touchDrag.timer&&(Math.abs(p.clientX-touchDrag.x)>8||Math.abs(p.clientY-touchDrag.y)>8)){clearTimeout(touchDrag.timer);touchDrag.timer=null}},{passive:false});
 document.addEventListener("touchend",()=>{clearTimeout(touchDrag.timer);touchDrag.timer=null;if(!touchDrag.id)return;const k=touchDrag.over?.dataset.k;touchDrag.over?.classList.remove("drop");touchDrag.ghost?.remove();
-  document.querySelectorAll(".ev.lifting").forEach(x=>x.classList.remove("lifting"));const id=touchDrag.id;Object.assign(touchDrag,{id:null,ghost:null,over:null});if(k)dropOn(id,k);setTimeout(()=>touchDrag.moved=false,50)});
+  document.querySelectorAll(".ev.lifting,.bcard.lifting").forEach(x=>x.classList.remove("lifting"));const id=touchDrag.id;const fn=touchDrag.drop||dropOn;Object.assign(touchDrag,{id:null,ghost:null,over:null,drop:null});if(k)fn(id,k);setTimeout(()=>touchDrag.moved=false,50)});
 const dropAttrs=k=>({"data-k":k,ondragover:e=>{e.preventDefault();e.currentTarget.classList.add("drop")},ondragleave:e=>e.currentTarget.classList.remove("drop"),ondrop:e=>{e.preventDefault();e.currentTarget.classList.remove("drop");dropOn(e.dataTransfer.getData("text/plain"),k)}});
 function calToggle(){return el("div",{class:"seg cal-mode"},[["month","Month"],["week","Week"]].map(([m,l])=>el("button",{"aria-pressed":String(S.calMode===m),onclick:()=>{S.calMode=m;savePrefs();render()}},l)))}
 function renderWeek(){
@@ -1869,6 +1975,9 @@ async function loadClientExtra(id){
 async function saveClient(id,patch,msg){
   try{const row=await api("upsert_client",{id,...patch});S.clients.set(id,row);if(msg)toast(msg);render()}catch(e){toast("Couldn't save: "+e.message)}
 }
+S.cpLay=S.cpLay||{};
+const owHead=c=>el("div",{class:"card-h cp-ow-h"},el("h3",{class:"cp-h"},"Open work"),el("div",{class:"rp-act"},cpLay(c)==="board"?el("button",{class:"btn sm",onclick:()=>editStages(c)},"Edit columns"):null,layoutToggle(cpLay(c),v=>{S.cpLay[c.id]=v;render()})));
+const cpLay=c=>S.cpLay[c.id]||(Array.isArray(c.stages)&&c.stages.length?"board":(S.layout||"list"));
 function renderClientPage(){
   const c=S.clients.get(S.clientId);if(!c)return emptyState();
   const ts=visibleTasks().filter(t=>t.client_id===c.id).sort(sortTasks);const open=ts.filter(isOpen);
@@ -1893,11 +2002,13 @@ function renderClientPage(){
       el("div",{class:"cp-title"},el("h2",{id:"cp-name"},clientName(c.id)),pencil(c.id,()=>$("#cp-name")),el("span",{class:"status "+c.status},c.status.replace("-"," ")),el("span",{class:"lead"},av(c.lead),(LEADS[c.lead]||"No lead")+" leads")),
       c.private_to?el("p",{class:"cp-priv"},"Only you can see this project. Nobody else sees these tasks, their comments, files or history, or wiki pages filed here. Tasks here stay yours: to share one, move it to another project first."):c.engagement?el("p",{class:"cp-eng"},c.engagement):null,
       el("div",{class:"c-metrics cp-metrics"},metric(open.length,"Open"),metric(late,"Overdue","bad"),metric(week,"This week"),metric(needs,"Approvals","ask"),metric(ex?ex.done.length:"…","Completed"))),
+    cpLay(c)==="board"?el("div",{class:"cp-board"},owHead(c),renderBoard([...S.tasks.values()].filter(t=>t.client_id===c.id&&isOpen(t)),c,t=>t.client_id===c.id)):null,
     el("div",{class:"cp-grid"},
       el("div",{class:"cp-main"},
         el("div",{class:"card-h cp-ms-h"},el("h3",{class:"cp-h"},"Milestones"),el("button",{class:"btn sm",onclick:()=>openMilestone(c.id)},"+ Add milestone")),
         msList([...S.tasks.values()].filter(t=>t.client_id===c.id&&isMs(t)).sort((a,b)=>(a.due||"9999").localeCompare(b.due||"9999")).concat((ex?ex.done:[]).filter(t=>(t.labels||[]).includes(MS))),"No milestones for this client yet."),
-        el("h3",{class:"cp-h"},"Open work"),secs,
+        cpLay(c)==="board"?null:owHead(c),
+        cpLay(c)==="board"?null:secs,
         clientReport(c),
         el("details",{class:"sec",open:false},el("summary",null,el("span",{class:"caret"}),el("span",{class:"sec-t"},"Completed"),el("span",{class:"n"},ex?ex.done.length:"…")),
           ex?(ex.done.length?el("div",{class:"done-list"},ex.done.map(t=>el("div",{class:"done-i"},el("span",{class:"tick-d","aria-hidden":"true"},"✓"),el("button",{class:"linkish",onclick:()=>openPanel(t.id)},t.title),el("span",{class:"faint"},OWNERS[t.owner]||"")))):el("div",{class:"empty"},"No completed tasks yet.")):el("div",{class:"empty"},"Loading…"))),
@@ -2008,6 +2119,7 @@ function renderPanel(keepFocus){
         t.status==="waiting"?row("Next chase",date("p-chase",t.chase_by,v=>psave({chase_by:v},"Saved"))):null,
         row("Priority",select("p-pri",t.priority,[["high","High"],["med","Medium"],["low","Low"]],v=>psave({priority:v},"Saved"))),
         row("Client",select("p-client",t.client_id||"",[["","General (no client)"],...[...S.clients.values()].filter(c=>c.status!=="ended"||c.id===t.client_id).sort((a,b)=>a.name.localeCompare(b.name)).map(c=>[c.id,shortClient(c.id)])],v=>psave({client_id:v||null},"Saved"))),
+        ...(S.clients.get(t.client_id)?.stages?.length?[row("Column",select("p-stage",t.stage||"",[["","No column yet"],...S.clients.get(t.client_id).stages.map(x=>[x,x])],v=>psave({stage:v||null},"Moved")))]:[]),
         row("Labels",labels),
         row("Needs Jacques",el("div",{class:"pf-needs"},select("p-needs",t.needs||"",[["","Nothing"],["approve","Approve"],["decide","Decide"],["sign","Sign"]],v=>psave(v?{needs:v,prepared_by:t.prepared_by||(t.owner!=="jacques"?t.owner:S.me)}:{needs:null},"Saved")),
           t.needs?text("p-ask",t.ask,"Question for Jacques",v=>psave({ask:v},"Saved")):null,t.needs?text("p-value",t.value,"Rand value",v=>psave({value:v},"Saved")):null))),
