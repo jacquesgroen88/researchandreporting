@@ -633,6 +633,7 @@ input.sel{width:18px;height:18px;accent-color:var(--accent);margin:0}
 
 /* ---------- v7: sidebar clients, rename ---------- */
 .side-clients{display:grid;gap:1px;max-height:42vh;overflow:auto;scrollbar-width:thin}
+.cp-priv{margin:6px 0 0;padding:9px 12px;border-radius:10px;background:var(--accent-soft);color:var(--muted);font-size:13.5px;max-width:70ch}
 .scl .scl-dot{width:7px;height:7px;border-radius:50%;background:var(--side-mut);flex:none}
 .scl .scl-dot.late{background:var(--bad)} .scl .scl-dot.pipe{background:transparent;box-shadow:inset 0 0 0 1.5px var(--side-mut)}
 .slab-n{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
@@ -1089,7 +1090,8 @@ const eff=t=>(t.status==="waiting"&&t.chase_by)?t.chase_by:t.due;
 const parked=t=>t.status==="waiting"&&t.chase_by&&daysTo(t.chase_by)>0;
 const isNewFor=t=>S.me&&isOpen(t)&&t.owner===S.me&&t.handed_by&&t.handed_by!==S.me&&!t.ack;
 const labelsOf=t=>(S.tl.get(t.id)||[]).map(id=>S.labels.get(id)).filter(Boolean).sort((a,b)=>(a.sort_order??99)-(b.sort_order??99));
-function clientName(id){return S.clients.get(id)?.name||id||"General"}
+function isPriv(id){return !!S.clients.get(id)?.private_to}
+function clientName(id){const c=S.clients.get(id);return c?(c.private_to?"🔒 ":"")+c.name:(id||"General")}
 function shortClient(id){return clientName(id).split(/ \(| - | \+ /)[0]}
 
 function visibleTasks(){
@@ -1115,7 +1117,7 @@ function renderStats(){
   const open=[...S.tasks.values()].filter(isOpen);
   const late=open.filter(t=>eff(t)&&daysTo(eff(t))<0).length;
   const tod=open.filter(t=>eff(t)&&daysTo(eff(t))===0).length;
-  const act=[...S.clients.values()].filter(c=>c.status!=="ended").length;
+  const act=[...S.clients.values()].filter(c=>c.status!=="ended"&&!c.private_to).length;
   const tile=(n,label,cls,v,o)=>el("button",{class:"stat "+cls+(n?"":" zero"),title:"Show "+label.toLowerCase(),onclick:()=>{S.view=v;S.owner=o;savePrefs();render();window.scrollTo(0,0)}},el("b",null,n),el("span",null,label));
   $("#stats").replaceChildren(
     tile(act,"Clients","cli","client","all"),
@@ -1359,7 +1361,7 @@ function clientCard(c,tasks){
   const expanded=S.openClients.has(c.id);const shown=expanded?tasks:tasks.slice(0,3);
   return el("article",{class:"client",id:"c-"+c.id},
     el("div",{class:"c-head"},
-      el("div",{class:"c-row"},el("div",{class:"c-title"},el("h3",{class:"c-h3"},el("button",{class:"linkish",onclick:()=>openClient(c.id)},shortClient(c.id)),pencil(c.id,e=>e.currentTarget.closest(".c-h3"))),c.name!==shortClient(c.id)?el("p",{class:"c-full",title:c.name},c.name):null),el("span",{class:"status "+c.status},c.status.replace("-"," "))),
+      el("div",{class:"c-row"},el("div",{class:"c-title"},el("h3",{class:"c-h3"},el("button",{class:"linkish",onclick:()=>openClient(c.id)},shortClient(c.id)),pencil(c.id,e=>e.currentTarget.closest(".c-h3"))),c.name!==shortClient(c.id).replace(/^🔒 /,"")?el("p",{class:"c-full",title:c.name},c.name):null),el("span",{class:"status "+c.status},c.status.replace("-"," "))),
       c.engagement?el("p",{class:"c-eng",title:c.engagement},c.engagement):null,
       el("div",{class:"c-metrics"},metric(open.length,"Open"),metric(late,"Overdue","bad"),metric(week,"This week"),metric(needs,"Approvals","ask")),
       next?el("p",{class:"c-sum"},el("span",{class:"due"+(daysTo(eff(next))<0?" late":daysTo(eff(next))<=2?" soon":"")},fmtDue(eff(next))),el("span",{class:"t"},next.title)):null,
@@ -1611,8 +1613,8 @@ function renderClientPage(){
   return [
     el("button",{class:"back linkish",onclick:()=>{history.pushState(null,"",location.pathname);go("client")}},"← All clients"),
     el("div",{class:"cp-head"},
-      el("div",{class:"cp-title"},el("h2",{id:"cp-name"},c.name),pencil(c.id,()=>$("#cp-name")),el("span",{class:"status "+c.status},c.status.replace("-"," ")),el("span",{class:"lead"},av(c.lead),(LEADS[c.lead]||"No lead")+" leads")),
-      c.engagement?el("p",{class:"cp-eng"},c.engagement):null,
+      el("div",{class:"cp-title"},el("h2",{id:"cp-name"},clientName(c.id)),pencil(c.id,()=>$("#cp-name")),el("span",{class:"status "+c.status},c.status.replace("-"," ")),el("span",{class:"lead"},av(c.lead),(LEADS[c.lead]||"No lead")+" leads")),
+      c.private_to?el("p",{class:"cp-priv"},"Only you can see this project. Nobody else sees these tasks, their comments, files or history, or wiki pages filed here. Tasks here stay yours: to share one, move it to another project first."):c.engagement?el("p",{class:"cp-eng"},c.engagement):null,
       el("div",{class:"c-metrics cp-metrics"},metric(open.length,"Open"),metric(late,"Overdue","bad"),metric(week,"This week"),metric(needs,"Approvals","ask"),metric(ex?ex.done.length:"…","Completed"))),
     el("div",{class:"cp-grid"},
       el("div",{class:"cp-main"},
@@ -2108,7 +2110,7 @@ function renderNav(){
   const counts={};for(const t of open)for(const l of (S.tl.get(t.id)||[]))counts[l]=(counts[l]||0)+1;
   const oc={};for(const t of open)if(t.client_id)oc[t.client_id]=(oc[t.client_id]||0)+1;
   const lateC={};for(const t of open)if(t.client_id&&eff(t)&&daysTo(eff(t))<0)lateC[t.client_id]=(lateC[t.client_id]||0)+1;
-  $("#sideClients").replaceChildren(...[...S.clients.values()].filter(c=>c.status!=="ended").sort((a,b)=>(oc[b.id]||0)-(oc[a.id]||0)||shortClient(a.id).localeCompare(shortClient(b.id))).map(c=>
+  $("#sideClients").replaceChildren(...[...S.clients.values()].filter(c=>c.status!=="ended").sort((a,b)=>(!!b.private_to-!!a.private_to)||(oc[b.id]||0)-(oc[a.id]||0)||shortClient(a.id).localeCompare(shortClient(b.id))).map(c=>
     el("button",{class:"slab scl"+(S.view==="clientpage"&&S.clientId===c.id?" on":""),title:c.name,onclick:()=>openClient(c.id)},
       el("span",{class:"scl-dot"+(lateC[c.id]?" late":c.status==="pipeline"?" pipe":"")}),el("span",{class:"slab-n"},shortClient(c.id)),el("span",{class:"slab-c"},oc[c.id]||""))));
   $("#sideLabels").replaceChildren(...[...S.labels.values()].sort((a,b)=>(a.sort_order??99)-(b.sort_order??99)).map(l=>
@@ -2160,7 +2162,7 @@ function paintLabelPick(){
 }
 async function openEdit(id,clientId){
   S.editing=id;const t=id?S.tasks.get(id):{owner:S.me||"jacques",status:"todo",priority:"med",client_id:clientId||null};
-  $("#f-client").replaceChildren(el("option",{value:""},"General (no client)"),...[...S.clients.values()].sort((a,b)=>a.name.localeCompare(b.name)).map(c=>el("option",{value:c.id},c.name)));
+  $("#f-client").replaceChildren(el("option",{value:""},"General (no client)"),...[...S.clients.values()].sort((a,b)=>(!!b.private_to-!!a.private_to)||a.name.localeCompare(b.name)).map(c=>el("option",{value:c.id},clientName(c.id))));
   $("#dlgTitle").textContent=id?"Edit task":"New task";
   for(const k in F)$(F[k]).value=t[k]??(k==="owner"?"unassigned":k==="status"?"todo":"");
   pickedLabels=new Set(id?(S.tl.get(id)||[]):(S.label?[S.label]:[]));paintLabelPick();
