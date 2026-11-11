@@ -772,6 +772,122 @@ a.chip{text-decoration:none;color:var(--fg)}
 @media (max-width:860px){.wk-doc{padding:16px}}
 @media (max-width:600px){.wk-grid{grid-template-columns:minmax(0,1fr)}}
 @media (min-width:601px) and (max-width:860px){.wk-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* ---------- v11: Notion-style wiki ---------- */
+.wk-shell{display:grid;grid-template-columns:252px minmax(0,1fr);margin:14px 0 0;min-height:calc(100vh - 190px);background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.wk-tree{border-right:1px solid var(--line);background:color-mix(in srgb,var(--surface-2) 60%,var(--surface));padding:10px 8px 18px;overflow-y:auto;max-height:calc(100vh - 120px);position:sticky;top:0;align-self:start;min-height:100%}
+.wk-tree input[type=search]{width:100%;box-sizing:border-box;border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:7px;padding:6px 9px;font-size:13px;margin-bottom:6px}
+.wk-tl{font:600 11px var(--f-body);letter-spacing:.06em;text-transform:uppercase;color:var(--faint);padding:14px 8px 4px}
+.tr{display:flex;align-items:center;padding-left:calc(var(--d,0)*14px);border-radius:6px}
+.tr:hover{background:var(--surface-2)}.tr.on{background:var(--accent-soft)}
+.tr-c{all:unset;cursor:pointer;width:20px;height:26px;display:grid;place-items:center;color:var(--faint);font-size:10px;flex:none;border-radius:4px}
+.tr-c:hover{background:color-mix(in srgb,var(--fg) 8%,transparent)}.tr-c.none{visibility:hidden}
+.tr-n{all:unset;cursor:pointer;box-sizing:border-box;flex:1;min-width:0;display:flex;gap:7px;align-items:center;padding:4px 4px;color:var(--fg);font-size:13.5px;border-radius:6px}
+.tr-n .tt{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tr-i{flex:none;width:18px;text-align:center;font-size:14px}
+.tr-a{all:unset;cursor:pointer;opacity:0;color:var(--muted);width:22px;height:22px;display:grid;place-items:center;border-radius:4px;flex:none;font-size:15px}
+.tr-a:hover{background:color-mix(in srgb,var(--fg) 8%,transparent)}
+.tr:hover .tr-a,.tr-a:focus-visible{opacity:1}
+.wk-home.on{background:var(--accent-soft)}.wk-home:hover,.wk-newp:hover{background:var(--surface-2)}
+.wk-newp{color:var(--muted);margin-top:6px}
+.wk-main{min-width:0;padding:30px clamp(18px,5vw,72px) 90px}
+.wk-page{max-width:760px;margin:0 auto}
+.wk-top{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);margin-bottom:26px;flex-wrap:wrap}
+.wk-crumb{display:flex;gap:2px;flex-wrap:wrap;align-items:center;min-width:0;flex:1}
+.wk-crumb button{all:unset;cursor:pointer;color:var(--muted);padding:2px 5px;border-radius:4px;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.wk-crumb button:hover{background:var(--surface-2);color:var(--fg)}
+.wk-save{font-size:12px;color:var(--faint);min-width:56px;text-align:right}
+.wk-ico{all:unset;cursor:pointer;font-size:54px;line-height:1.1;padding:4px;border-radius:8px;margin-left:-4px;display:inline-block}
+.wk-ico:hover{background:var(--surface-2)}
+.wk-ico.add{font-size:13px;color:var(--faint);padding:4px 8px;opacity:.0}
+.wk-page:hover .wk-ico.add,.wk-ico.add:focus-visible{opacity:1}
+.wk-title{font:700 36px/1.2 var(--f-body);margin:6px 0 12px;outline:none;letter-spacing:-.015em;overflow-wrap:anywhere;color:var(--fg)}
+.wk-title:empty::before{content:attr(data-ph);color:var(--faint)}
+.wk-sub{color:var(--muted);margin:-4px 0 18px;max-width:62ch}
+.wk-props{display:flex;gap:18px;flex-wrap:wrap;align-items:center;font-size:13px;color:var(--muted);padding-bottom:14px;border-bottom:1px solid var(--line);margin-bottom:14px}
+.wk-prop{display:flex;gap:8px;align-items:center}
+.wk-props select{border:1px solid transparent;background:transparent;color:var(--fg);border-radius:6px;padding:3px 4px;font-size:13px}
+.wk-props select:hover,.wk-props select:focus{border-color:var(--line)}
+.wk-ed{font-size:15.5px;line-height:1.6;position:relative}
+.bk{position:relative;display:flex;align-items:flex-start;gap:4px;border-radius:4px;margin:1px 0}
+.bk-h,.bk-p{all:unset;cursor:pointer;position:absolute;top:4px;width:20px;height:24px;display:grid;place-items:center;color:var(--faint);border-radius:4px;opacity:0;font-size:12px;letter-spacing:-2px}
+.bk-p{left:-46px;font-size:16px;letter-spacing:0}.bk-h{left:-24px;cursor:grab}
+.bk:hover>.bk-h,.bk:hover>.bk-p,.bk:focus-within>.bk-h{opacity:1}
+.bk-h:hover,.bk-p:hover{background:var(--surface-2);color:var(--muted)}
+.bk-x{flex:1;min-width:0;outline:none;padding:3px 2px;white-space:pre-wrap;overflow-wrap:anywhere;min-height:1.6em;caret-color:var(--fg)}
+.bk-x:focus:empty::before,.wk-ed.empty .bk-x:empty::before{content:attr(data-ph);color:var(--faint);pointer-events:none}
+.bt-h1>.bk-x{font-size:29px;font-weight:700;line-height:1.25;margin-top:20px}
+.bt-h2>.bk-x{font-size:23px;font-weight:650;line-height:1.3;margin-top:16px}
+.bt-h3>.bk-x{font-size:18.5px;font-weight:600;line-height:1.35;margin-top:10px}
+.bt-h1>.bk-h,.bt-h1>.bk-p{top:26px}.bt-h2>.bk-h,.bt-h2>.bk-p{top:20px}.bt-h3>.bk-h,.bt-h3>.bk-p{top:13px}
+.bk-dot,.bk-num{flex:none;min-width:22px;text-align:center;padding-top:3px;color:var(--fg);user-select:none}
+.bk-num{font-variant-numeric:tabular-nums;text-align:right;padding-right:5px}
+.bk-ck{flex:none;width:17px;height:17px;margin:6px 5px 0 3px;accent-color:var(--accent);cursor:pointer}
+.bt-todo.on>.bk-x{color:var(--faint);text-decoration:line-through}
+.bt-quote{background:var(--surface-2);border-radius:8px;padding:8px 12px 8px 10px;margin:6px 0}
+.bt-quote>.bk-h{left:-24px}.bt-quote>.bk-p{left:-46px}
+.bk-qi{flex:none;padding:3px 6px 0 0;user-select:none}
+.bk-hrw{flex:1;padding:11px 0;outline:none;border-radius:4px;cursor:pointer}.bk-hrw:focus{background:var(--accent-soft)}
+.bk-hrw hr{border:0;border-top:1px solid var(--line);margin:0}
+.bk-x a{color:var(--accent);text-decoration:underline;text-decoration-color:color-mix(in srgb,var(--accent) 40%,transparent);text-underline-offset:3px;cursor:pointer}
+.bk-x code{font:13px var(--f-mono);background:var(--surface-2);color:#c2410c;padding:1px 5px;border-radius:4px}
+@media (prefers-color-scheme: dark){.bk-x code{color:#fdba74}}
+.wk-ed-tail{min-height:70px;cursor:text}
+.pop{position:fixed;z-index:300;background:var(--surface);border:1px solid var(--line);border-radius:10px;box-shadow:0 12px 32px rgba(15,19,26,.18),0 2px 6px rgba(15,19,26,.08);padding:6px;min-width:230px;max-width:min(320px,calc(100vw - 16px));max-height:min(360px,calc(100vh - 16px));overflow-y:auto}
+.pop-i{all:unset;cursor:pointer;box-sizing:border-box;display:flex;gap:10px;align-items:center;width:100%;padding:5px 8px;border-radius:6px;color:var(--fg);font-size:13.5px}
+.pop-i:hover,.pop-i.sel{background:var(--surface-2)}
+.pop-ic{width:26px;height:26px;display:grid;place-items:center;border:1px solid var(--line);border-radius:6px;font-size:12px;flex:none;background:var(--surface);font-weight:600}
+.pop-l{font:600 11px var(--f-body);text-transform:uppercase;letter-spacing:.06em;color:var(--faint);padding:8px 8px 3px}
+.pop-i.danger{color:#c23b2e}
+.emo{display:grid;grid-template-columns:repeat(8,34px);gap:2px;padding:4px}
+.emo button{all:unset;cursor:pointer;width:34px;height:34px;display:grid;place-items:center;border-radius:6px;font-size:20px}
+.emo button:hover{background:var(--surface-2)}
+.wk-h3{font:600 13.5px var(--f-body);color:var(--muted);margin:30px 0 10px;display:flex;gap:8px;align-items:center}
+.wk-h3 .n{font:600 11px var(--f-mono);background:var(--surface-2);color:var(--muted);padding:1px 7px;border-radius:999px}
+.wk-bms{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px}
+.wk-bm{position:relative;border:1px solid var(--line);border-radius:9px;background:var(--surface);transition:background .12s,border-color .12s;min-width:0}
+.wk-bm:hover{background:color-mix(in srgb,var(--surface-2) 70%,var(--surface));border-color:color-mix(in srgb,var(--fg) 18%,var(--line))}
+.wk-bm-a{display:flex;gap:11px;padding:11px 12px;text-decoration:none;color:var(--fg);min-width:0}
+.wk-bm-ic{font-size:20px;flex:none;line-height:1.25}
+.wk-bm-b{display:flex;flex-direction:column;min-width:0;gap:1px;padding-right:30px}
+.wk-bm-t{font-weight:600;font-size:14px;line-height:1.35}
+.wk-bm-u{font:11.5px var(--f-mono);color:var(--faint);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.wk-bm-n{font-size:12.5px;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-top:3px;line-height:1.4}
+.wk-bm-act{position:absolute;top:7px;right:7px;display:flex;flex-direction:column;gap:3px;opacity:0;transition:opacity .12s}
+.wk-bm:hover .wk-bm-act,.wk-bm:focus-within .wk-bm-act{opacity:1}
+.wk-bm-act button{all:unset;cursor:pointer;width:24px;height:24px;display:grid;place-items:center;border:1px solid var(--line);background:var(--surface);border-radius:6px;font-size:12px;color:var(--muted)}
+.wk-bm-act button:hover{color:var(--fg)}
+.wk-add{all:unset;cursor:pointer;box-sizing:border-box;border:1px dashed var(--line);border-radius:9px;color:var(--muted);padding:11px 12px;font-size:13.5px;min-height:50px;display:flex;align-items:center}
+.wk-add:hover{background:var(--surface-2);color:var(--fg)}
+.wk-rows{display:flex;flex-direction:column;gap:1px}
+.wk-row{all:unset;cursor:pointer;box-sizing:border-box;display:flex;gap:10px;align-items:center;padding:6px 8px;border-radius:6px;color:var(--fg);font-size:14.5px;width:100%;text-decoration:none}
+.wk-row:hover{background:var(--surface-2)}
+.wk-row .ri{font-size:18px;width:24px;text-align:center;flex:none}
+.wk-row .rt{text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:4px;font-weight:500}
+.wk-row .sub{margin-left:auto;font-size:12px;color:var(--faint);white-space:nowrap}
+.wk-rb{display:flex;flex-direction:column;min-width:0;gap:2px}.wk-rb .sub2{font-size:12.5px;color:var(--faint);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.wk-addrow{color:var(--muted)}
+.wk-foot{display:flex;gap:6px;flex-wrap:wrap;margin-top:26px;padding-top:12px;border-top:1px solid var(--line)}
+.wk-foot button{all:unset;cursor:pointer;color:var(--muted);font-size:13px;padding:5px 9px;border-radius:6px}.wk-foot button:hover{background:var(--surface-2);color:var(--fg)}
+.wk-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(176px,1fr));gap:10px}
+.wk-hc{all:unset;cursor:pointer;box-sizing:border-box;border:1px solid var(--line);border-radius:11px;background:var(--surface);padding:14px;display:flex;flex-direction:column;gap:8px;color:var(--fg);min-height:110px;box-shadow:var(--shadow);text-decoration:none}
+.wk-hc:hover{background:color-mix(in srgb,var(--surface-2) 70%,var(--surface))}
+.wk-hc .hi{font-size:30px;line-height:1}.wk-hc .ht{font-weight:600;line-height:1.3}.wk-hc .hs{font-size:12px;color:var(--faint);margin-top:auto}
+.wk-hc.new{border-style:dashed;box-shadow:none;color:var(--muted);align-items:flex-start;justify-content:center}
+.wk-mbar{display:none}
+.slash{min-width:250px}
+@media (max-width:860px){
+  .wk-shell{grid-template-columns:minmax(0,1fr);margin-top:12px;min-height:0}
+  .wk-tree{display:none;position:static;max-height:none;border-right:0;border-bottom:1px solid var(--line);min-height:0}
+  .wk-shell.tree-open .wk-tree{display:block}
+  .wk-mbar{display:flex;gap:10px;align-items:center;padding:8px 10px;border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--surface-2) 60%,var(--surface))}
+  .wk-mt{font-size:13.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .wk-main{padding:20px 14px 60px}
+  .wk-ed{padding-left:22px}.bk-p{display:none}.bk-h{left:-24px;opacity:.45}
+  .wk-title{font-size:28px}.wk-ico{font-size:44px}
+  .wk-bm-act{opacity:1}
+}
+@media (hover:none){.tr-a{opacity:.55}.wk-bm-act{opacity:1}.wk-ico.add{opacity:1}}
 </style>
 </head>
 <body>
@@ -865,15 +981,17 @@ a.chip{text-decoration:none;color:var(--fg)}
   </form>
 </dialog>
 <dialog id="wikiDlg"><form id="wikiForm" method="dialog"><h2 id="wk-h">New link</h2>
-  <div class="field"><span class="flabel">Type</span><div class="seg" id="wk-kind" role="group" aria-label="Type"><button type="button" data-k="link" aria-pressed="true">Link</button><button type="button" data-k="page" aria-pressed="false">SOP / page</button></div></div>
-  <div class="field"><label for="wk-title">Title</label><input id="wk-title" required maxlength="160" placeholder="e.g. ReviewTap Shopify orders"></div>
-  <div class="field" id="wk-url-f"><label for="wk-url">Link</label><input id="wk-url" inputmode="url" autocomplete="off" placeholder="https://…"></div>
+  <div class="field"><label for="wk-title">Name</label><input id="wk-title" required maxlength="160" placeholder="e.g. ReviewTap fulfilment console"></div>
+  <div class="field"><label for="wk-url">Link</label><input id="wk-url" inputmode="url" autocomplete="off" placeholder="https://…"></div>
+  <div class="field"><label for="wk-body">Note (optional)</label><textarea id="wk-body" rows="3" maxlength="2000" placeholder="What it's for, who uses it. Never passwords or keys."></textarea></div>
   <div class="grid2">
-    <div class="field"><label for="wk-cat">Category</label><input id="wk-cat" list="wk-catlist" maxlength="40" placeholder="e.g. SOPs, Finance, Tools"><datalist id="wk-catlist"></datalist></div>
+    <div class="field"><label for="wk-parent">Inside page</label><select id="wk-parent"></select></div>
     <div class="field"><label for="wk-client">Client</label><select id="wk-client"></select></div>
   </div>
-  <div class="field"><label for="wk-body" id="wk-body-l">Notes</label><textarea id="wk-body" rows="4" maxlength="20000"></textarea><span class="faint sm" id="wk-help"></span></div>
-  <label class="tog"><input type="checkbox" id="wk-pin"><span><b>Pin to the top</b><br><span class="faint">For the few things you open every day.</span></span></label>
+  <div class="grid2">
+    <div class="field"><label for="wk-icon">Icon (one emoji)</label><input id="wk-icon" maxlength="8" placeholder="🔗"></div>
+    <label class="tog" style="align-self:end"><input type="checkbox" id="wk-pin"><span><b>Favourite</b></span></label>
+  </div>
   <div class="actions"><button type="button" class="btn danger" id="wkDel">Delete</button><div class="r"><button type="button" class="btn" id="wkCancel">Cancel</button><button type="submit" class="btn primary">Save</button></div></div></form></dialog>
 <div id="bulk" class="bulk" hidden></div>
 <input type="file" id="photoIn" accept="image/*" hidden>
@@ -1508,7 +1626,7 @@ function renderClientPage(){
           pickF("status","Status",[["active","Active"],["onboarding","Onboarding"],["pipeline","Pipeline"],["paused","Paused"],["winding-down","Winding down"],["ended","Ended"]]),
           pickF("lead","Account lead",[["jacques","Jacques"],["diane","Diane"],["giorgio","Giorgio"]]),
           fld("fee","Fee"),fld("term","Term"),fld("contact","Contact"),fld("last_invoice","Last invoice"),fld("next_billing","Next billing"),fld("entity","Billing entity"),fld("engagement","What we do",true),fld("notes","Notes",true)),
-        el("section",{class:"cp-card cp-wk"},el("div",{class:"card-h"},el("h3",{class:"cp-h"},"Wiki"),el("button",{class:"btn sm",onclick:()=>openWikiEdit(null,"link")},"+ Add")),wikiMini(c.id)),
+        el("section",{class:"cp-card cp-wk"},el("div",{class:"card-h"},el("h3",{class:"cp-h"},"Wiki"),el("button",{class:"btn sm",onclick:()=>openLinkEdit(null,null)},"+ Add link")),wikiMini(c.id)),
         el("section",{class:"cp-card"},el("h3",{class:"cp-h"},"Activity"),ex?feedList(ex.hist.slice(0,40),false):el("div",{class:"empty"},"Loading…"))))];
 }
 // ---------- mentions, links, files ----------
@@ -1674,10 +1792,22 @@ function repeatCtl(t){
   if(r)kids.push(el("span",{class:"rep-note"},"When it's completed, the next one is created"+(t.due?" for "+short(nextDue(r,t.due)):"")+", with the same owner, client and labels."));
   return el("div",{class:"rep-pick"},kids);
 }
-// ---------- wiki: important links + SOPs (separate from tasks) ----------
-S.wiki=null;S.wikiCat="";S.wikiQ="";S.wikiDoc=null;let wkEditing=null,wkKind="link";
+// ---------- wiki (Notion-style): page tree, inline block editor, link galleries ----------
+S.wiki=null;S.wikiQ="";S.wikiDoc=null;S.wikiTree=false;
+let wkOpen=new Set();try{wkOpen=new Set(JSON.parse(localStorage.getItem("jce-wiki-open")||"[]"))}catch(e){}
+const saveOpen=()=>{try{localStorage.setItem("jce-wiki-open",JSON.stringify([...wkOpen]))}catch(e){}};
+let wkEditing=null;
+const ED={id:null,blocks:[],timer:null,pending:false,titleTimer:null,titlePending:false,paint:null};
 async function loadWiki(){try{S.wiki=await api("wiki_list",{full:true})}catch(e){if(S.wiki===null)S.wiki=[];toast("Couldn't load the wiki")}if(S.view==="wiki"||S.view==="clientpage")render()}
 const wkDomain=u=>{try{return new URL(u).hostname.replace(/^www\./,"")}catch(e){return u||""}};
+const wkById=id=>id?(S.wiki||[]).find(x=>x.id===id):null;
+const wkKids=(pid,kind)=>(S.wiki||[]).filter(x=>(x.parent_id||null)===(pid||null)&&(!kind||x.kind===kind)).sort((a,b)=>(a.sort_order||0)-(b.sort_order||0)||a.title.localeCompare(b.title));
+const wkPath=id=>{const out=[];let w=wkById(id);let g=0;while(w&&g++<50){out.unshift(w);w=wkById(w.parent_id)}return out};
+const wkDesc=id=>{const out=[];const walk=p=>{for(const c of (S.wiki||[]).filter(x=>x.parent_id===p)){out.push(c);walk(c.id)}};walk(id);return out};
+const wkIcon=w=>w.icon||(w.kind==="link"?"🔗":"📄");
+const wkName=w=>w.title&&w.title!=="Untitled"?w.title:"Untitled";
+const wkWhen=ts=>{const d=new Date(ts);return d.toLocaleDateString("en-ZA",{day:"numeric",month:"short"})+", "+d.toLocaleTimeString("en-ZA",{hour:"2-digit",minute:"2-digit"})};
+function wkFlat(excl){const out=[];const walk=(pid,d)=>{for(const p of wkKids(pid,"page")){if(excl&&excl.has(p.id))continue;out.push([p,d]);walk(p.id,d+1)}};walk(null,0);return out}
 function mdInline(s){const out=[];const re=/\*\*(.+?)\*\*|`([^`]+)`|\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)|(https?:\/\/[^\s)<]+)/g;let last=0,m;
   while((m=re.exec(s))){out.push(s.slice(last,m.index));
     if(m[1]!=null)out.push(el("b",null,mdInline(m[1])));
@@ -1686,98 +1816,279 @@ function mdInline(s){const out=[];const re=/\*\*(.+?)\*\*|`([^`]+)`|\[([^\]]+)\]
     else{const u=m[5].replace(/[.,;:]+$/,"");out.push(el("a",{href:u,target:"_blank",rel:"noopener"},u.replace(/^https?:\/\//,"")));out.push(m[5].slice(u.length))}
     last=m.index+m[0].length}
   out.push(s.slice(last));return out}
-function md(text){const root=el("div",{class:"md"});let list=null,para=[];
-  const flush=()=>{if(para.length){root.append(el("p",null,mdInline(para.join(" "))));para=[]}};
-  const li=(tag,node)=>{if(!list||list.tagName!==tag){list=el(tag.toLowerCase());root.append(list)}list.append(node)};
-  for(const raw of String(text||"").split(/\r?\n/)){const line=raw.replace(/\s+$/,"");let m;
-    if(!line.trim()){flush();list=null;continue}
-    if((m=line.match(/^(#{1,3})\s+(.*)$/))){flush();list=null;root.append(el("h"+(m[1].length+1),null,mdInline(m[2])));continue}
-    if(/^\s*(-{3,}|\*{3,})\s*$/.test(line)){flush();list=null;root.append(el("hr"));continue}
-    if((m=line.match(/^\s*>\s?(.*)$/))){flush();list=null;root.append(el("blockquote",null,mdInline(m[1])));continue}
-    if((m=line.match(/^\s*[-*]\s+\[( |x|X)\]\s+(.*)$/))){flush();li("UL",el("li",{class:"ck"},el("input",{type:"checkbox",checked:m[1]!==" ","aria-label":m[2]}),el("span",null,mdInline(m[2]))));continue}
-    if((m=line.match(/^\s*[-*]\s+(.*)$/))){flush();li("UL",el("li",null,mdInline(m[1])));continue}
-    if((m=line.match(/^\s*\d+[.)]\s+(.*)$/))){flush();li("OL",el("li",null,mdInline(m[1])));continue}
-    list=null;para.push(line.trim())}
-  flush();return root}
-const wkClientChip=w=>w.client_id&&S.clients.has(w.client_id)?el("button",{class:"chip client linkish",onclick:()=>openClient(w.client_id)},shortClient(w.client_id)):null;
-function wikiCard(w){
-  const isLink=w.kind==="link";
-  const snip=(w.body||"").replace(/\[([^\]]*)\]\([^)]*\)/g,"$1").replace(/- \[[ xX]\]|[#>*`]/g," ").replace(/\s+/g," ").trim();
-  const title=isLink?el("a",{class:"wk-t",href:w.url,target:"_blank",rel:"noopener"},el("span",{class:"wk-ic","aria-hidden":"true"},"🔗"),el("span",{class:"wk-tt"},w.title)):
-    el("button",{class:"wk-t",onclick:()=>openWikiDoc(w.id)},el("span",{class:"wk-ic","aria-hidden":"true"},"📄"),el("span",{class:"wk-tt"},w.title));
-  return el("div",{class:"wk-card"},title,isLink?el("span",{class:"wk-dom"},wkDomain(w.url)):null,snip?el("span",{class:"wk-sn"},snip):null,
-    el("div",{class:"wk-f"},w.pinned?el("span",{class:"chip wk-pin"},"★ Pinned"):null,el("span",{class:"chip"},w.category||"General"),wkClientChip(w),
-      el("span",{class:"r"},isLink?el("button",{class:"btn sm",onclick:()=>{(navigator.clipboard?navigator.clipboard.writeText(w.url):Promise.reject()).then(()=>toast("Link copied"),()=>toast("Couldn't copy"))}},"Copy"):el("button",{class:"btn sm",onclick:()=>openWikiDoc(w.id)},"Open"),
-        el("button",{class:"btn sm",onclick:()=>openWikiEdit(w)},"Edit"))));
+// ---- markdown <-> blocks (markdown stays the stored format, so Claude/ChatGPT can read and write pages) ----
+function mdToBlocks(md){const bs=[];
+  for(const raw of String(md||"").split(/\r?\n/)){const l=raw.replace(/\s+$/,"");let m;
+    if((m=l.match(/^(#{1,3})(?:\s+(.*))?$/)))bs.push({t:"h"+m[1].length,x:m[2]||""});
+    else if(/^\s*(-{3,}|\*{3,})$/.test(l))bs.push({t:"hr",x:""});
+    else if((m=l.match(/^\s*[-*]\s+\[( |x|X)\](?:\s(.*))?$/)))bs.push({t:"todo",x:m[2]||"",c:m[1]!==" "});
+    else if((m=l.match(/^\s*[-*](?:\s+(.*))?$/)))bs.push({t:"ul",x:m[1]||""});
+    else if((m=l.match(/^\s*\d+[.)](?:\s+(.*))?$/)))bs.push({t:"ol",x:m[1]||""});
+    else if((m=l.match(/^\s*>\s?(.*)$/)))bs.push({t:"quote",x:m[1]});
+    else bs.push({t:"p",x:l.trim()})}
+  while(bs.length>1&&bs[bs.length-1].t==="p"&&!bs[bs.length-1].x)bs.pop();
+  if(!bs.length)bs.push({t:"p",x:""});return bs}
+function blocksToMd(bs){let n=0;const out=bs.map(b=>{if(b.t!=="ol")n=0;
+  switch(b.t){case"h1":return"# "+b.x;case"h2":return"## "+b.x;case"h3":return"### "+b.x;case"ul":return"- "+b.x;case"ol":return(++n)+". "+b.x;
+    case"todo":return"- ["+(b.c?"x":" ")+"] "+b.x;case"quote":return"> "+b.x;case"hr":return"---";default:return b.x}});
+  while(out.length&&!out[out.length-1].trim())out.pop();return out.map(x=>x.replace(/\s+$/,"")).join("\n")}
+// ---- caret helpers ----
+function caretOf(x){const s=getSelection();if(!s.rangeCount||!x.contains(s.anchorNode))return x.textContent.length;const r0=s.getRangeAt(0);const r=document.createRange();r.selectNodeContents(x);r.setEnd(r0.startContainer,r0.startOffset);return r.toString().length}
+function selEndOf(x){const s=getSelection();if(!s.rangeCount)return caretOf(x);const r0=s.getRangeAt(0);const r=document.createRange();r.selectNodeContents(x);r.setEnd(r0.endContainer,r0.endOffset);return r.toString().length}
+function placeCaret(x,off){const s=getSelection();const r=document.createRange();const w=document.createTreeWalker(x,NodeFilter.SHOW_TEXT);let rem=off,t;
+  while((t=w.nextNode())){if(rem<=t.length){r.setStart(t,rem);r.collapse(true);s.removeAllRanges();s.addRange(r);return}rem-=t.length}
+  r.selectNodeContents(x);r.collapse(false);s.removeAllRanges();s.addRange(r)}
+function setCaret(x,off){x.focus();placeCaret(x,off==null?1e9:off)}
+const editable=x=>{x.setAttribute("contenteditable","plaintext-only");if(x.contentEditable!=="plaintext-only")x.setAttribute("contenteditable","true");return x};
+// ---- popovers (block menu, page menu, icon picker) ----
+let popEl=null;
+function closePop(){if(popEl){popEl.remove();popEl=null;document.removeEventListener("mousedown",popOutside,true)}}
+function popOutside(e){if(popEl&&!popEl.contains(e.target))closePop()}
+function popMenu(anchor,content){closePop();const r=anchor.getBoundingClientRect();popEl=el("div",{class:"pop",role:"menu"},content);document.body.append(popEl);
+  const w=popEl.offsetWidth,h=popEl.offsetHeight;let top=r.bottom+4;if(top+h>innerHeight-8)top=Math.max(8,r.top-h-4);
+  popEl.style.left=Math.max(8,Math.min(r.left,innerWidth-w-8))+"px";popEl.style.top=top+"px";
+  setTimeout(()=>document.addEventListener("mousedown",popOutside,true));const f=popEl.querySelector("button");if(f&&!anchor.closest(".bk"))f.focus({preventScroll:true});return popEl}
+const popItem=(icon,label,run,cls)=>el("button",{type:"button",class:"pop-i"+(cls?" "+cls:""),role:"menuitem",onmousedown:e=>e.preventDefault(),onclick:()=>{closePop();run()}},el("span",{class:"pop-ic","aria-hidden":"true"},icon),label);
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&popEl){closePop();e.stopPropagation()}},true);
+// ---- saving ----
+const setSave=t=>{const n=$("#wk-save");if(n)n.textContent=t};
+function changed(now){ED.pending=true;setSave("Editing…");clearTimeout(ED.timer);ED.timer=setTimeout(flushWiki,now?120:700);const r=$(".wk-ed");if(r)r.classList.toggle("empty",ED.blocks.length===1&&ED.blocks[0].t==="p"&&!ED.blocks[0].x)}
+async function flushWiki(){clearTimeout(ED.timer);if(!ED.id||!ED.pending)return;const w=wkById(ED.id);ED.pending=false;if(!w)return;
+  const body=blocksToMd(ED.blocks);if(body===(w.body||"")){setSave("Saved");return}
+  w.body=body;setSave("Saving…");
+  try{const r=await api("wiki_save",{id:w.id,body});w.updated_at=r.updated_at;w.updated_by=r.updated_by;if(!ED.pending)setSave("Saved")}
+  catch(e){w.body="";ED.pending=true;setSave("Couldn't save, retrying…");clearTimeout(ED.timer);ED.timer=setTimeout(flushWiki,4000)}}
+async function flushTitle(){clearTimeout(ED.titleTimer);if(!ED.titlePending)return;ED.titlePending=false;const w=wkById(ED.id);if(!w)return;
+  setSave("Saving…");try{await api("wiki_save",{id:w.id,title:w.title});setSave("Saved");renderTreeOnly()}catch(e){ED.titlePending=true;setSave("Couldn't save the title")}}
+function flushAll(){flushWiki();flushTitle()}
+window.addEventListener("beforeunload",e=>{if(ED.pending||ED.titlePending){flushAll();e.preventDefault();e.returnValue=""}});
+async function wkSet(w,patch,msg){await flushWiki();try{const r=await api("wiki_save",{id:w.id,...patch});Object.assign(w,r);render();if(msg)toast(msg)}catch(e){toast("Couldn't save: "+e.message)}}
+// ---- slash menu ----
+const SLASH=[["p","Text","¶","text paragraph"],["h1","Heading 1","H1","title big"],["h2","Heading 2","H2","subtitle"],["h3","Heading 3","H3","small"],["todo","To-do list","☑","checklist checkbox task"],["ul","Bulleted list","•","bullet"],["ol","Numbered list","1.","steps number"],["quote","Callout","💡","note tip quote"],["hr","Divider","—","line separator"],["link","Link / bookmark","🔗","url web bookmark"],["page","Page inside","📄","sub-page child"]];
+const slash={open:false,box:null,list:[],idx:0,ctx:null,
+  show(x,b,i,start){this.ctx={x,b,i,start};this.open=true;this.filter("")},
+  filter(q){const ql=q.toLowerCase();this.list=SLASH.filter(s=>!ql||s[1].toLowerCase().includes(ql)||s[3].includes(ql)||s[0]===ql);
+    if(!this.list.length&&q.length>3){this.close();return}this.idx=0;this.paint()},
+  paint(){if(!this.box){this.box=el("div",{class:"pop slash",role:"listbox","aria-label":"Insert a block"});document.body.append(this.box)}
+    this.box.replaceChildren(el("div",{class:"pop-l"},this.list.length?"Turn into or insert":"No match"),...this.list.map((s,k)=>el("button",{type:"button",class:"pop-i"+(k===this.idx?" sel":""),role:"option",onmousedown:e=>{e.preventDefault();this.pick(s)}},el("span",{class:"pop-ic","aria-hidden":"true"},s[2]),s[1])));
+    const r=this.ctx.x.getBoundingClientRect();const h=this.box.offsetHeight;let top=r.bottom+4;if(top+h>innerHeight-8)top=Math.max(8,r.top-h-4);
+    this.box.style.left=Math.max(8,Math.min(r.left,innerWidth-this.box.offsetWidth-8))+"px";this.box.style.top=top+"px";
+    const sel=this.box.querySelector(".sel");if(sel)sel.scrollIntoView({block:"nearest"})},
+  key(e){const n=Math.max(1,this.list.length);
+    if(e.key==="ArrowDown"){e.preventDefault();this.idx=(this.idx+1)%n;this.paint();return true}
+    if(e.key==="ArrowUp"){e.preventDefault();this.idx=(this.idx-1+n)%n;this.paint();return true}
+    if(e.key==="Enter"||e.key==="Tab"){if(!this.list.length){this.close();return false}e.preventDefault();this.pick(this.list[this.idx]);return true}
+    if(e.key==="Escape"){e.preventDefault();this.close();return true}return false},
+  close(){this.open=false;this.ctx=null;if(this.box){this.box.remove();this.box=null}},
+  pick(s){const{x,b,i,start}=this.ctx;const t=x.textContent;const c=caretOf(x);b.x=t.slice(0,start)+t.slice(Math.max(c,start+1));this.close();edApply(s[0],b,i,start)}};
+function slashCheck(x,b,i){const t=x.textContent;const c=caretOf(x);
+  if(slash.open&&slash.ctx&&slash.ctx.x===x){const st=slash.ctx.start;if(c<=st||t[st]!=="/"){slash.close();return}const q=t.slice(st+1,c);if(/\s\s/.test(q)||q.length>24){slash.close();return}slash.filter(q);return}
+  const m=t.slice(0,c).match(/(^|\s)\/([^\s\/]{0,24})$/);if(m){const st=c-m[2].length-1;slash.show(x,b,i,st);if(m[2])slash.filter(m[2])}}
+function edApply(ty,b,i,off){
+  if(ty==="link"){ED.paint(i,off);changed(true);openLinkEdit(null,ED.id);return}
+  if(ty==="page"){ED.paint(i,off);changed(true);newPage(ED.id);return}
+  if(ty==="hr"){if(!b.x){b.t="hr";ED.blocks.splice(i+1,0,{t:"p",x:""});ED.paint(i+1,0)}else{ED.blocks.splice(i+1,0,{t:"hr",x:""},{t:"p",x:""});ED.paint(i+2,0)}changed();return}
+  b.t=ty;if(ty==="todo")b.c=false;ED.paint(i,off);changed()}
+function blockMenu(anchor,i){const b=ED.blocks[i];if(!b)return;
+  const turn=[["p","Text","¶"],["h1","Heading 1","H1"],["h2","Heading 2","H2"],["h3","Heading 3","H3"],["todo","To-do list","☑"],["ul","Bulleted list","•"],["ol","Numbered list","1."],["quote","Callout","💡"]];
+  const sw=j=>{const t=ED.blocks[i];ED.blocks[i]=ED.blocks[j];ED.blocks[j]=t;ED.paint(j);changed()};
+  popMenu(anchor,[b.t==="hr"?null:el("div",{class:"pop-l"},"Turn into"),...(b.t==="hr"?[]:turn.map(([t,l,ic])=>popItem(ic,l,()=>{b.t=t;if(t==="todo"&&b.c==null)b.c=false;ED.paint(i);changed()},b.t===t?"sel":""))),
+    el("div",{class:"pop-l"},"Block"),
+    popItem("↑","Move up",()=>{if(i>0)sw(i-1)}),popItem("↓","Move down",()=>{if(i<ED.blocks.length-1)sw(i+1)}),
+    popItem("⧉","Duplicate",()=>{ED.blocks.splice(i+1,0,{...b});ED.paint(i+1);changed()}),
+    popItem("🗑","Delete",()=>{ED.blocks.splice(i,1);if(!ED.blocks.length)ED.blocks.push({t:"p",x:""});ED.paint(Math.max(0,i-1));changed()},"danger")])}
+// ---- the block editor ----
+const PH={p:"Type '/' for commands",h1:"Heading 1",h2:"Heading 2",h3:"Heading 3",ul:"List",ol:"List",todo:"To-do",quote:"Callout"};
+function wkEditor(page){
+  if(ED.id!==page.id||(!ED.pending&&blocksToMd(ED.blocks)!==blocksToMd(mdToBlocks(page.body)))){ED.id=page.id;ED.blocks=mdToBlocks(page.body)}
+  const root=el("div",{class:"wk-ed"});
+  const focusB=(i,off)=>{const n=root.children[i];if(!n)return;const x=n.querySelector(".bk-x");if(x)setCaret(x,off);else{const h=n.querySelector(".bk-hrw");if(h)h.focus()}};
+  const paint=(fi,off)=>{slash.close();root.replaceChildren(...ED.blocks.map((b,i)=>blockEl(b,i)),el("div",{class:"wk-ed-tail",onclick:()=>{const L=ED.blocks[ED.blocks.length-1];if(L.t==="p"&&!L.x)focusB(ED.blocks.length-1,0);else{ED.blocks.push({t:"p",x:""});paint(ED.blocks.length-1,0);changed()}}}));
+    root.classList.toggle("empty",ED.blocks.length===1&&ED.blocks[0].t==="p"&&!ED.blocks[0].x);if(fi!=null)focusB(fi,off)};
+  ED.paint=paint;
+  const blockEl=(b,i)=>{
+    const plus=el("button",{class:"bk-p",type:"button","aria-label":"Add a block below",title:"Add a block below",tabindex:"-1",onclick:()=>{ED.blocks.splice(i+1,0,{t:"p",x:""});paint(i+1,0);changed()}},"+");
+    const handle=el("button",{class:"bk-h",type:"button","aria-label":"Block options",title:"Move, turn into, delete",tabindex:"-1",onclick:e=>blockMenu(e.currentTarget,i)},"⋮⋮");
+    if(b.t==="hr")return el("div",{class:"bk bt-hr"},plus,handle,el("div",{class:"bk-hrw",tabindex:"0","aria-label":"Divider",onkeydown:e=>{
+      if(e.key==="Backspace"||e.key==="Delete"){e.preventDefault();ED.blocks.splice(i,1);if(!ED.blocks.length)ED.blocks.push({t:"p",x:""});paint(Math.max(0,i-1));changed()}
+      else if(e.key==="Enter"){e.preventDefault();ED.blocks.splice(i+1,0,{t:"p",x:""});paint(i+1,0);changed()}
+      else if(e.key==="ArrowUp"&&i>0){e.preventDefault();focusB(i-1)}else if(e.key==="ArrowDown"&&i<ED.blocks.length-1){e.preventDefault();focusB(i+1,0)}}},el("hr")));
+    let num=1;if(b.t==="ol")for(let j=i-1;j>=0&&ED.blocks[j].t==="ol";j--)num++;
+    const pre=b.t==="ul"?el("span",{class:"bk-dot","aria-hidden":"true"},"•"):b.t==="ol"?el("span",{class:"bk-num","aria-hidden":"true"},num+"."):
+      b.t==="todo"?el("input",{type:"checkbox",class:"bk-ck",checked:!!b.c,"aria-label":"Done",onchange:e=>{b.c=e.target.checked;e.target.closest(".bk").classList.toggle("on",b.c);changed(true)}}):
+      b.t==="quote"?el("span",{class:"bk-qi","aria-hidden":"true"},"💡"):null;
+    const x=editable(el("div",{class:"bk-x","data-ph":PH[b.t]||"",role:"textbox","aria-label":({p:"Text",h1:"Heading 1",h2:"Heading 2",h3:"Heading 3",ul:"List item",ol:"Numbered item",todo:"To-do",quote:"Callout"})[b.t]||"Text"}));
+    x.append(...mdInline(b.x));
+    x.addEventListener("mousedown",e=>{const a=e.target.closest("a");if(a&&document.activeElement!==x){e.preventDefault();window.open(a.href,"_blank","noopener")}});
+    x.addEventListener("focus",()=>{if(x.childNodes.length!==1||x.firstChild.nodeType!==3||x.textContent!==b.x){const c=caretOf(x);x.textContent=b.x;placeCaret(x,Math.min(c,b.x.length))}});
+    x.addEventListener("blur",()=>{setTimeout(()=>{if(slash.ctx&&slash.ctx.x===x)slash.close()},120);if(x.isConnected)x.replaceChildren(...mdInline(b.x))});
+    x.addEventListener("input",()=>{const t=x.textContent.replace(/\n/g," ");
+      if(b.t==="p"){const sc=[[/^### /,"h3"],[/^## /,"h2"],[/^# /,"h1"],[/^[-*] \[[ xX]?\] /,"todo"],[/^\[ ?\] /,"todo"],[/^[-*] /,"ul"],[/^1[.)] /,"ol"],[/^> /,"quote"]];
+        for(const[re,ty] of sc){const m=t.match(re);if(m){b.t=ty;b.x=t.slice(m[0].length);b.c=false;setTimeout(()=>paint(i,0));changed();return}}
+        if(t==="---"){b.t="hr";b.x="";ED.blocks.splice(i+1,0,{t:"p",x:""});setTimeout(()=>paint(i+1,0));changed();return}}
+      if(b.t==="ul"){const m=t.match(/^\[ ?\] /);if(m){b.t="todo";b.c=false;b.x=t.slice(m[0].length);setTimeout(()=>paint(i,0));changed();return}}
+      b.x=t;changed();slashCheck(x,b,i)});
+    x.addEventListener("keydown",e=>{
+      if(slash.open&&slash.ctx&&slash.ctx.x===x&&slash.key(e))return;
+      if(e.isComposing)return;
+      const txt=x.textContent,c=caretOf(x),len=txt.length,coll=getSelection().isCollapsed;
+      if(e.key===" "&&coll&&(b.t==="p"||b.t==="ul")){const pre=txt.slice(0,c)+" ";
+        const SC=b.t==="ul"?[[/^\[ ?\] $/,"todo"]]:[[/^### $/,"h3"],[/^## $/,"h2"],[/^# $/,"h1"],[/^[-*] \[[ xX]?\] $/,"todo"],[/^\[ ?\] $/,"todo"],[/^[-*] $/,"ul"],[/^1[.)] $/,"ol"],[/^> $/,"quote"]];
+        for(const[re,ty] of SC)if(re.test(pre)){e.preventDefault();b.t=ty;b.c=false;b.x=txt.slice(c);paint(i,0);changed();return}}
+      if(e.key==="Enter"){e.preventDefault();
+        if(b.t==="p"&&txt.trim()==="---"){b.t="hr";b.x="";ED.blocks.splice(i+1,0,{t:"p",x:""});paint(i+1,0);changed();return}
+        if(!txt&&["ul","ol","todo","quote"].includes(b.t)){b.t="p";paint(i,0);changed();return}
+        if(c===0&&txt){ED.blocks.splice(i,0,{t:"p",x:""});paint(i+1,0);changed();return}
+        const end=coll?c:selEndOf(x);b.x=txt.slice(0,c);const nt=["ul","ol","todo"].includes(b.t)?b.t:"p";
+        ED.blocks.splice(i+1,0,{t:nt,x:txt.slice(end),c:false});paint(i+1,0);changed();return}
+      if(e.key==="Backspace"&&coll&&c===0){
+        if(b.t!=="p"){e.preventDefault();b.t="p";paint(i,0);changed();return}
+        if(i>0){e.preventDefault();const pv=ED.blocks[i-1];if(pv.t==="hr"){ED.blocks.splice(i-1,1);paint(i-1,0);changed();return}
+          const off=pv.x.length;pv.x+=txt;ED.blocks.splice(i,1);paint(i-1,off);changed();return}}
+      if(e.key==="Delete"&&coll&&c===len&&i<ED.blocks.length-1){e.preventDefault();const nx=ED.blocks[i+1];b.x=txt+(nx.t==="hr"?"":nx.x);ED.blocks.splice(i+1,1);paint(i,len);changed();return}
+      if(e.key==="ArrowUp"&&c===0&&i>0){e.preventDefault();focusB(i-1);return}
+      if(e.key==="ArrowDown"&&c===len&&i<ED.blocks.length-1){e.preventDefault();focusB(i+1,0);return}
+      if(e.key==="Escape"){x.blur();return}
+      if((e.ctrlKey||e.metaKey)&&!e.shiftKey&&e.key.toLowerCase()==="b"){e.preventDefault();const en=selEndOf(x);if(en>c){b.x=txt.slice(0,c)+"**"+txt.slice(c,en)+"**"+txt.slice(en);x.textContent=b.x;placeCaret(x,en+4);changed()}}
+    });
+    x.addEventListener("paste",e=>{e.preventDefault();const txt=(e.clipboardData.getData("text/plain")||"").replace(/\r/g,"");if(!txt)return;
+      const lines=txt.split("\n");const cur=x.textContent,c=caretOf(x),en=selEndOf(x);const before=cur.slice(0,c),after=cur.slice(en);
+      if(lines.length===1){b.x=before+lines[0]+after;x.textContent=b.x;placeCaret(x,(before+lines[0]).length);changed();return}
+      b.x=before+lines[0];const nb=mdToBlocks(lines.slice(1).join("\n"));const last=nb[nb.length-1];const lo=last.x.length;last.x+=after;
+      ED.blocks.splice(i+1,0,...nb);paint(i+nb.length,lo);changed()});
+    return el("div",{class:"bk bt-"+b.t+(b.t==="todo"&&b.c?" on":"")},plus,handle,pre,x);
+  };
+  paint();return root;
 }
+// ---- pages ----
+async function newPage(pid){flushAll();
+  const sort_order=wkKids(pid).reduce((m,x)=>Math.max(m,x.sort_order||0),0)+1;
+  try{const w=await api("wiki_save",{kind:"page",title:"Untitled",parent_id:pid||null,body:"",sort_order});S.wiki.push(w);if(pid){wkOpen.add(pid);saveOpen()}
+    openWikiDoc(w.id);setTimeout(()=>{const t=$(".wk-title");if(t)t.focus()},40)}
+  catch(e){toast("Couldn't add a page: "+e.message)}}
+function openWikiHome(){flushAll();S.wikiDoc=null;S.wikiQ="";S.wikiTree=false;if(S.view!=="wiki"){S.view="wiki";savePrefs()}if(location.hash)history.pushState(null,"",location.pathname);render();window.scrollTo(0,0);if(S.wiki===null)loadWiki()}
+function openWikiDoc(id){const w=wkById(id);if(w&&w.kind==="link"){if(!w.parent_id){openWikiHome();return}id=w.parent_id}
+  flushAll();ED.id=null;S.wikiDoc=id;S.wikiTree=false;S.wikiQ="";
+  for(const p of wkPath(id))if(p.id!==id)wkOpen.add(p.id);saveOpen();
+  if(S.view!=="wiki"){S.view="wiki";savePrefs()}if(location.hash!=="#wiki/"+id)history.pushState(null,"","#wiki/"+id);render();window.scrollTo(0,0);if(S.wiki===null)loadWiki()}
+function treeItem(w,d,flat){const kids=flat?[]:wkKids(w.id,"page");const open=!flat&&wkOpen.has(w.id);
+  const row=el("div",{class:"tr"+(w.id===S.wikiDoc&&!S.wikiQ?" on":""),style:"--d:"+d,"data-tree":w.id},
+    el("button",{class:"tr-c"+(kids.length?"":" none"),"aria-label":(open?"Collapse ":"Expand ")+wkName(w),"aria-expanded":kids.length?String(open):null,tabindex:kids.length?null:"-1",onclick:()=>{open?wkOpen.delete(w.id):wkOpen.add(w.id);saveOpen();render()}},kids.length?(open?"▼":"▶"):""),
+    el("button",{class:"tr-n",onclick:()=>openWikiDoc(w.id)},el("span",{class:"tr-i","aria-hidden":"true"},wkIcon(w)),el("span",{class:"tt"},wkName(w))),
+    flat?null:el("button",{class:"tr-a","aria-label":"Add a page inside "+wkName(w),title:"Add a page inside",onclick:()=>newPage(w.id)},"+"));
+  return [row,...(open?kids.flatMap(k=>treeItem(k,d+1)):[])]}
+function wkTree(){
+  const q=el("input",{type:"search",id:"wk-q",placeholder:"Search the wiki",value:S.wikiQ,"aria-label":"Search the wiki",oninput:e=>{S.wikiQ=e.target.value;const pos=e.target.selectionStart;render();const n=$("#wk-q");if(n){n.focus();try{n.setSelectionRange(pos,pos)}catch(_){}}}});
+  const favs=(S.wiki||[]).filter(w=>w.pinned&&w.kind==="page").sort((a,b)=>a.title.localeCompare(b.title));
+  return el("aside",{class:"wk-tree","aria-label":"Wiki pages"},q,
+    el("button",{class:"tr-n wk-home"+(!S.wikiDoc&&!S.wikiQ?" on":""),onclick:openWikiHome},el("span",{class:"tr-i","aria-hidden":"true"},"🏠"),el("span",{class:"tt"},"Wiki home")),
+    favs.length?[el("div",{class:"wk-tl"},"Favourites"),...favs.flatMap(f=>treeItem(f,0,true))]:null,
+    el("div",{class:"wk-tl"},"Pages"),...wkKids(null,"page").flatMap(p=>treeItem(p,0)),
+    el("button",{class:"tr-n wk-newp",onclick:()=>newPage(null)},el("span",{class:"tr-i","aria-hidden":"true"},"＋"),el("span",{class:"tt"},"New page")));
+}
+function renderTreeOnly(){const t=$(".wk-tree");if(t&&!t.contains(document.activeElement))t.replaceWith(wkTree())}
+function linkCard(w){
+  const path=w.url.replace(/^https?:\/\/[^/]+/,"").replace(/\/$/,"");
+  return el("div",{class:"wk-bm"},el("a",{class:"wk-bm-a",href:w.url,target:"_blank",rel:"noopener"},el("span",{class:"wk-bm-ic","aria-hidden":"true"},wkIcon(w)),
+    el("span",{class:"wk-bm-b"},el("span",{class:"wk-bm-t"},w.title),el("span",{class:"wk-bm-u"},wkDomain(w.url)+(path?path.slice(0,48):"")),w.body?el("span",{class:"wk-bm-n"},w.body.replace(/\*\*|`/g,"")):null)),
+    el("div",{class:"wk-bm-act"},el("button",{type:"button","aria-label":"Copy link to "+w.title,title:"Copy link",onclick:()=>{(navigator.clipboard?navigator.clipboard.writeText(w.url):Promise.reject()).then(()=>toast("Link copied"),()=>toast("Couldn't copy"))}},"⧉"),
+      el("button",{type:"button","aria-label":"Edit "+w.title,title:"Edit",onclick:()=>openLinkEdit(w)},"✎")))}
+function pageRow(p){const n=wkKids(p.id).length;return el("button",{class:"wk-row",onclick:()=>openWikiDoc(p.id)},el("span",{class:"ri","aria-hidden":"true"},wkIcon(p)),el("span",{class:"rt"},wkName(p)),n?el("span",{class:"sub"},n+" inside"):null)}
+const EMO="📄 📌 ⭐ 🧭 🟧 🟦 🟩 🟪 🧰 🛠️ ⚙️ 📦 🚚 🏷️ 🧾 💳 💰 📊 📈 📣 🎯 🧠 💡 📝 ✅ 📅 ⏰ 🔗 🌐 📱 💬 🏢 🏨 🍽️ 👶 🛍️ 🗂️ 📚 🧪 🤝 🎨 🖨️ 📸 🔍 ⚡ 🔥".split(" ");
+function emojiMenu(anchor,w){popMenu(anchor,[el("div",{class:"pop-l"},"Icon"),el("div",{class:"emo"},EMO.map(e=>el("button",{type:"button","aria-label":e,onclick:()=>{closePop();wkSet(w,{icon:e})}},e))),w.icon?popItem("✕","Remove icon",()=>wkSet(w,{icon:null})):null])}
+function pageMenu(anchor,w){
+  popMenu(anchor,[
+    popItem("⧉","Copy link to this page",()=>{(navigator.clipboard?navigator.clipboard.writeText(location.origin+location.pathname+"#wiki/"+w.id):Promise.reject()).then(()=>toast("Link copied"),()=>toast("Couldn't copy"))}),
+    popItem(w.pinned?"★":"☆",w.pinned?"Remove from favourites":"Add to favourites",()=>wkSet(w,{pinned:!w.pinned})),
+    popItem("📄","Add a page inside",()=>newPage(w.id)),popItem("🔗","Add a link",()=>openLinkEdit(null,w.id)),
+    popItem("↪","Move to…",()=>{const ex=new Set([w.id,...wkDesc(w.id).map(x=>x.id)]);
+      popMenu(anchor,[el("div",{class:"pop-l"},"Move “"+wkName(w)+"” to"),popItem("🏠","Top level",()=>wkSet(w,{parent_id:null},"Moved")),
+        ...wkFlat(ex).map(([p,d])=>popItem(wkIcon(p)," ".repeat(d*3)+wkName(p),()=>{wkOpen.add(p.id);saveOpen();wkSet(w,{parent_id:p.id},"Moved into "+wkName(p))}))])}),
+    popItem("🗑","Delete page",async()=>{const inside=wkDesc(w.id);
+      if(!confirm("Delete “"+wkName(w)+"”"+(inside.length?" and the "+inside.length+" pages and links inside it":"")+"? This can't be undone."))return;
+      try{ED.pending=false;ED.titlePending=false;await api("wiki_delete",{id:w.id});const gone=new Set([w.id,...inside.map(x=>x.id)]);S.wiki=S.wiki.filter(x=>!gone.has(x.id));toast("Deleted");
+        if(w.parent_id)openWikiDoc(w.parent_id);else openWikiHome()}catch(e){toast("Couldn't delete: "+e.message)}},"danger")])}
+function wkPage(w){
+  const path=wkPath(w.id);
+  const crumb=el("nav",{class:"wk-crumb","aria-label":"Breadcrumb"},el("button",{onclick:openWikiHome},"Wiki"),
+    ...path.flatMap(p=>[el("span",{class:"faint","aria-hidden":"true"},"/"),el("button",{onclick:()=>openWikiDoc(p.id),"aria-current":p.id===w.id?"page":null,"data-crumb":p.id},wkIcon(p)+" "+wkName(p))]));
+  const top=el("div",{class:"wk-top"},crumb,el("span",{class:"wk-save",id:"wk-save","aria-live":"polite"},""),
+    el("button",{class:"btn sm",title:w.pinned?"Remove from favourites":"Add to favourites",onclick:()=>wkSet(w,{pinned:!w.pinned},w.pinned?"Removed from favourites":"Added to favourites")},w.pinned?"★ Favourite":"☆ Favourite"),
+    el("button",{class:"icon-btn","aria-label":"Page options",title:"Page options",onclick:e=>pageMenu(e.currentTarget,w)},"⋯"));
+  const ico=el("button",{class:"wk-ico"+(w.icon?"":" add"),"aria-label":"Change the page icon",onclick:e=>emojiMenu(e.currentTarget,w)},w.icon||"☺ Add icon");
+  const ttl=editable(el("h1",{class:"wk-title","data-ph":"Untitled",role:"textbox","aria-label":"Page title"}));ttl.textContent=w.title==="Untitled"?"":w.title;
+  ttl.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();const x=document.querySelector(".wk-ed .bk-x");if(x)setCaret(x,0)}});
+  ttl.addEventListener("input",()=>{const t=ttl.textContent.replace(/\s+/g," ").trim()||"Untitled";w.title=t;
+    document.querySelectorAll('[data-tree="'+w.id+'"] .tt').forEach(n=>n.textContent=wkName(w));document.querySelectorAll('[data-crumb="'+w.id+'"]').forEach(n=>n.textContent=wkIcon(w)+" "+wkName(w));
+    ED.titlePending=true;setSave("Editing…");clearTimeout(ED.titleTimer);ED.titleTimer=setTimeout(flushTitle,700)});
+  ttl.addEventListener("paste",e=>{e.preventDefault();const t=(e.clipboardData.getData("text/plain")||"").replace(/\s+/g," ");document.execCommand("insertText",false,t)});
+  const csel=el("select",{"aria-label":"Client",onchange:e=>wkSet(w,{client_id:e.target.value||null},"Saved")},el("option",{value:""},"None"),
+    ...[...S.clients.values()].filter(c=>c.status!=="ended"||c.id===w.client_id).sort((a,b)=>shortClient(a.id).localeCompare(shortClient(b.id))).map(c=>el("option",{value:c.id,selected:c.id===w.client_id},shortClient(c.id))));
+  const props=el("div",{class:"wk-props"},el("span",{class:"wk-prop"},el("span",null,"Client"),csel),
+    el("span",{class:"wk-prop"},"Edited "+wkWhen(w.updated_at)+(w.updated_by?" by "+(OWNERS[w.updated_by]||w.updated_by):"")));
+  const links=wkKids(w.id,"link"),pages=wkKids(w.id,"page");
+  return el("article",{class:"wk-page"},top,ico,ttl,props,wkEditor(w),
+    links.length?[el("h3",{class:"wk-h3"},"Links",el("span",{class:"n"},links.length)),el("div",{class:"wk-bms"},links.map(linkCard),el("button",{class:"wk-add",onclick:()=>openLinkEdit(null,w.id)},"＋ Add a link"))]:null,
+    pages.length?[el("h3",{class:"wk-h3"},"Pages inside",el("span",{class:"n"},pages.length)),el("div",{class:"wk-rows"},pages.map(pageRow),el("button",{class:"wk-row wk-addrow",onclick:()=>newPage(w.id)},el("span",{class:"ri","aria-hidden":"true"},"＋"),"Add a page inside"))]:null,
+    links.length&&pages.length?null:el("div",{class:"wk-foot"},links.length?null:el("button",{onclick:()=>openLinkEdit(null,w.id)},"🔗 Add a link"),pages.length?null:el("button",{onclick:()=>newPage(w.id)},"📄 Add a page inside")));
+}
+function homeCard(w){const n=wkKids(w.id).length;
+  const inner=[el("span",{class:"hi","aria-hidden":"true"},wkIcon(w)),el("span",{class:"ht"},wkName(w)),el("span",{class:"hs"},w.kind==="link"?wkDomain(w.url):(n?n+" inside":"Page"))];
+  return w.kind==="link"?el("a",{class:"wk-hc",href:w.url,target:"_blank",rel:"noopener"},inner):el("button",{class:"wk-hc",onclick:()=>openWikiDoc(w.id)},inner)}
+function wkHome(){const all=S.wiki||[];
+  const out=[el("h1",{class:"wk-title"},"Wiki"),el("p",{class:"wk-sub"},"Our important links and how-we-do-it pages, kept apart from tasks. Click into any page to write. Type / for headings, checklists, callouts, links and sub-pages. Never put passwords or keys here.")];
+  const fav=all.filter(w=>w.pinned).sort((a,b)=>a.title.localeCompare(b.title));
+  if(fav.length)out.push(el("h3",{class:"wk-h3"},"★ Favourites"),el("div",{class:"wk-cards"},fav.map(homeCard)));
+  out.push(el("h3",{class:"wk-h3"},"Pages"),el("div",{class:"wk-cards"},wkKids(null,"page").map(homeCard),el("button",{class:"wk-hc new",onclick:()=>newPage(null)},el("span",{class:"hi","aria-hidden":"true"},"＋"),el("span",{class:"ht"},"New page"))));
+  const loose=wkKids(null,"link");if(loose.length)out.push(el("h3",{class:"wk-h3"},"Links not in a page",el("span",{class:"n"},loose.length)),el("div",{class:"wk-bms"},loose.map(linkCard)));
+  const rec=all.filter(w=>w.kind==="page").sort((a,b)=>String(b.updated_at).localeCompare(String(a.updated_at))).slice(0,6);
+  if(rec.length)out.push(el("h3",{class:"wk-h3"},"Recently edited"),el("div",{class:"wk-rows"},rec.map(w=>el("button",{class:"wk-row",onclick:()=>openWikiDoc(w.id)},el("span",{class:"ri","aria-hidden":"true"},wkIcon(w)),el("span",{class:"rt"},wkName(w)),el("span",{class:"sub"},wkWhen(w.updated_at)+(w.updated_by?" · "+(OWNERS[w.updated_by]||w.updated_by):""))))));
+  return el("div",{class:"wk-page"},out)}
+function wkSearch(){const ql=S.wikiQ.trim().toLowerCase();
+  const hits=(S.wiki||[]).filter(w=>[w.title,w.body,w.url,w.client_id?shortClient(w.client_id):""].join(" ").toLowerCase().includes(ql))
+    .sort((a,b)=>(b.title.toLowerCase().includes(ql)-a.title.toLowerCase().includes(ql))||a.title.localeCompare(b.title));
+  const snip=w=>{const t=String(w.body||"").replace(/[#>*`]|- \[[ xX]\]/g,"").replace(/\s+/g," ");const k=t.toLowerCase().indexOf(ql);return k<0?"":(k>40?"…":"")+t.slice(Math.max(0,k-40),k+80)};
+  return el("div",{class:"wk-page"},el("h1",{class:"wk-title"},"Search"),el("p",{class:"wk-sub"},hits.length+" result"+(hits.length===1?"":"s")+" for “"+S.wikiQ.trim()+"”"),
+    hits.length?el("div",{class:"wk-rows"},hits.map(w=>{const where=[wkPath(w.parent_id).map(wkName).join(" / "),w.kind==="link"?wkDomain(w.url):""].filter(Boolean).join(" · ");const sn=snip(w);
+      const inner=[el("span",{class:"ri","aria-hidden":"true"},wkIcon(w)),el("span",{class:"wk-rb"},el("span",{class:"rt"},wkName(w)),where?el("span",{class:"sub2"},where):null,sn?el("span",{class:"sub2"},sn):null)];
+      return w.kind==="link"?el("a",{class:"wk-row",href:w.url,target:"_blank",rel:"noopener"},inner):el("button",{class:"wk-row",onclick:()=>openWikiDoc(w.id)},inner)})):el("div",{class:"empty"},"Nothing matches."))}
 function renderWiki(){
-  if(S.wikiDoc)return renderWikiDoc();
-  const all=S.wiki;
-  const q=el("input",{type:"search",id:"wk-q",placeholder:"Search links and SOPs…","aria-label":"Search the wiki",value:S.wikiQ,
-    oninput:e=>{S.wikiQ=e.target.value;const pos=e.target.selectionStart;render();const n=$("#wk-q");if(n){n.focus();try{n.setSelectionRange(pos,pos)}catch(_){}}}});
-  const out=[el("p",{class:"view-intro"},"Important links and how-we-do-it SOPs, shared by Jacques and Diane and kept apart from tasks. Never put passwords or keys in here."),
-    el("div",{class:"wk-head"},q,el("button",{class:"btn",onclick:()=>openWikiEdit(null,"link")},"＋ Link"),el("button",{class:"btn primary",onclick:()=>openWikiEdit(null,"page")},"＋ SOP / page"))];
-  if(all===null)return [...out,el("div",{class:"empty"},"Loading…")];
-  if(!all.length)return [...out,el("div",{class:"empty"},"Nothing here yet. Add the links you keep hunting for, and write down how recurring jobs are done.")];
-  const cats=[...new Set(all.map(w=>w.category||"General"))].sort((a,b)=>a.localeCompare(b));
-  if(S.wikiCat&&!cats.includes(S.wikiCat))S.wikiCat="";
-  out.push(el("div",{class:"wk-cats",role:"group","aria-label":"Filter by category"},["",...cats].map(c=>el("button",{"aria-pressed":String(S.wikiCat===c),onclick:()=>{S.wikiCat=c;render()}},c||"All ("+all.length+")"))));
-  const ql=S.wikiQ.trim().toLowerCase();
-  const ws=all.filter(w=>(!S.wikiCat||(w.category||"General")===S.wikiCat)&&(!ql||[w.title,w.body,w.url,w.category,w.client_id?shortClient(w.client_id):""].join(" ").toLowerCase().includes(ql)));
-  if(!ws.length)return [...out,el("div",{class:"empty"},"Nothing matches.")];
-  const pinned=S.wikiCat||ql?[]:ws.filter(w=>w.pinned);
-  if(pinned.length)out.push(el("section",{class:"wk-sec"},el("h3",null,"★ Pinned"),el("div",{class:"wk-grid"},pinned.map(wikiCard))));
-  const byCat=new Map();for(const w of ws){if(pinned.includes(w))continue;const c=w.category||"General";if(!byCat.has(c))byCat.set(c,[]);byCat.get(c).push(w)}
-  for(const c of [...byCat.keys()].sort((a,b)=>a.localeCompare(b))){const g=byCat.get(c).sort((a,b)=>(a.kind===b.kind?0:a.kind==="page"?-1:1)||a.title.localeCompare(b.title));
-    out.push(el("section",{class:"wk-sec"},el("h3",null,c,el("span",{class:"n"},g.length)),el("div",{class:"wk-grid"},g.map(wikiCard))))}
-  return out;
-}
-function openWikiDoc(id){S.wikiDoc=id;if(S.view!=="wiki"){S.view="wiki";savePrefs()}if(location.hash!=="#wiki/"+id)history.pushState(null,"","#wiki/"+id);render();window.scrollTo(0,0);if(S.wiki===null)loadWiki()}
-function renderWikiDoc(){
-  const w=(S.wiki||[]).find(x=>x.id===S.wikiDoc);
-  const back=el("button",{class:"back linkish",onclick:()=>{S.wikiDoc=null;history.pushState(null,"",location.pathname);render()}},"← Wiki");
-  if(!w)return [back,el("div",{class:"empty"},S.wiki===null?"Loading…":"That page isn't in the wiki any more.")];
-  const hasCk=/^\s*[-*]\s+\[[ xX]\]/m.test(w.body||"");
-  return [back,el("article",{class:"wk-doc"},
-    el("div",{class:"wk-doc-h"},el("h2",null,w.title),
-      el("button",{class:"btn sm",onclick:()=>{(navigator.clipboard?navigator.clipboard.writeText(location.origin+location.pathname+"#wiki/"+w.id):Promise.reject()).then(()=>toast("Link to this page copied"),()=>toast("Couldn't copy"))}},"Copy link"),
-      el("button",{class:"btn sm primary",onclick:()=>openWikiEdit(w)},"Edit")),
-    el("div",{class:"wk-f"},w.pinned?el("span",{class:"chip wk-pin"},"★ Pinned"):null,el("span",{class:"chip"},w.category||"General"),wkClientChip(w),w.url?el("a",{class:"chip",href:w.url,target:"_blank",rel:"noopener"},"🔗 "+wkDomain(w.url)):null),
-    w.body?md(w.body):el("p",{class:"faint"},"Nothing written yet. Press Edit."),
-    hasCk?el("p",{class:"faint sm"},"Tick the boxes to work through it. Ticks aren't saved, so the list is fresh next time."):null,
-    el("div",{class:"wk-meta"},"Last updated "+new Date(w.updated_at).toLocaleDateString("en-ZA",{day:"numeric",month:"short",year:"numeric"})+(w.updated_by?" by "+(OWNERS[w.updated_by]||w.updated_by):"")))];
+  if(S.wiki===null)return [el("div",{class:"empty"},"Loading the wiki…")];
+  const cur=S.wikiDoc?wkById(S.wikiDoc):null;if(S.wikiDoc&&!cur)S.wikiDoc=null;
+  const mbar=el("div",{class:"wk-mbar"},el("button",{class:"btn sm","aria-expanded":String(S.wikiTree),onclick:()=>{S.wikiTree=!S.wikiTree;render()}},S.wikiTree?"✕ Close":"☰ Pages"),el("span",{class:"wk-mt"},cur?wkIcon(cur)+" "+wkName(cur):"Wiki home"));
+  const main=el("section",{class:"wk-main"},S.wikiQ.trim()?wkSearch():cur?wkPage(cur):wkHome());
+  return [el("div",{class:"wk-shell"+(S.wikiTree?" tree-open":"")},mbar,wkTree(),main)];
 }
 function wikiMini(cid){
   if(S.wiki===null)return el("div",{class:"faint sm"},"Loading…");
   const ws=S.wiki.filter(w=>w.client_id===cid).sort((a,b)=>(b.pinned-a.pinned)||a.title.localeCompare(b.title));
-  if(!ws.length)return el("div",{class:"faint sm"},"No links or SOPs for this client yet.");
-  return el("div",{class:"att-list"},ws.map(w=>el("div",{class:"att"},el("span",{class:"att-ic","aria-hidden":"true"},w.kind==="link"?"🔗":"📄"),
-    w.kind==="link"?el("a",{class:"att-n",href:w.url,target:"_blank",rel:"noopener"},w.title):el("button",{class:"att-n linkish",onclick:()=>openWikiDoc(w.id)},w.title))));
+  if(!ws.length)return el("div",{class:"faint sm"},"No links or pages for this client yet.");
+  return el("div",{class:"att-list"},ws.map(w=>el("div",{class:"att"},el("span",{class:"att-ic","aria-hidden":"true"},wkIcon(w)),
+    w.kind==="link"?el("a",{class:"att-n",href:w.url,target:"_blank",rel:"noopener"},w.title):el("button",{class:"att-n linkish",onclick:()=>openWikiDoc(w.id)},wkName(w)))));
 }
-function setWkKind(k){wkKind=k;document.querySelectorAll("#wk-kind button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.k===k)));
-  $("#wk-url-f").querySelector("label").textContent=k==="link"?"Link":"Link (optional)";
-  $("#wk-body-l").textContent=k==="link"?"Notes (optional)":"Steps and notes";$("#wk-body").rows=k==="link"?4:16;
-  $("#wk-help").textContent=k==="link"?"What it's for and who has access. Never passwords or keys.":"One step per line.  # Heading   - bullet   - [ ] checklist step   **bold**   [text](https://link).  Never passwords or keys.";
-  if(!wkEditing)$("#wk-h").textContent=k==="link"?"New link":"New SOP / page"}
-function openWikiEdit(w,kind){wkEditing=w?w.id:null;
-  $("#wk-title").value=w?w.title:"";$("#wk-url").value=w&&w.url||"";$("#wk-body").value=w?w.body||"":"";$("#wk-pin").checked=!!(w&&w.pinned);
-  $("#wk-cat").value=w?w.category||"General":(S.wikiCat||(kind==="page"?"SOPs":"Tools"));
-  $("#wk-catlist").replaceChildren(...[...new Set(["SOPs","Tools","Finance","Clients","ReviewTap","MyForeverBaby",...(S.wiki||[]).map(x=>x.category)])].filter(Boolean).map(c=>el("option",{value:c})));
+// ---- link dialog ----
+function openLinkEdit(w,pid){wkEditing=w?w.id:null;
+  $("#wk-h").textContent=w?"Edit link":"New link";$("#wk-title").value=w?w.title:"";$("#wk-url").value=w&&w.url||"";$("#wk-body").value=w?w.body||"":"";
+  $("#wk-icon").value=w?w.icon||"":"";$("#wk-pin").checked=!!(w&&w.pinned);
+  $("#wk-parent").replaceChildren(el("option",{value:""},"Not in a page"),...wkFlat().map(([p,d])=>el("option",{value:p.id}," ".repeat(d*3)+wkIcon(p)+" "+wkName(p))));
+  $("#wk-parent").value=w?w.parent_id||"":(pid||(S.view==="wiki"&&S.wikiDoc)||"");
   $("#wk-client").replaceChildren(el("option",{value:""},"None"),...[...S.clients.values()].filter(c=>c.status!=="ended"||(w&&c.id===w.client_id)).sort((a,b)=>shortClient(a.id).localeCompare(shortClient(b.id))).map(c=>el("option",{value:c.id},shortClient(c.id))));
   $("#wk-client").value=w?w.client_id||"":(S.view==="clientpage"?S.clientId:"");
-  $("#wk-h").textContent=w?"Edit "+(w.kind==="link"?"link":"SOP / page"):"";setWkKind(w?w.kind:(kind||"link"));
-  $("#wkDel").hidden=!w;$("#wkDel").dataset.armed="";$("#wkDel").textContent="Delete";$("#wikiDlg").showModal();$("#wk-title").focus()}
-document.querySelectorAll("#wk-kind button").forEach(b=>b.onclick=()=>setWkKind(b.dataset.k));
+  $("#wkDel").hidden=!w;$("#wkDel").dataset.armed="";$("#wkDel").textContent="Delete";
+  if(S.wiki===null)loadWiki();$("#wikiDlg").showModal();$(w?"#wk-title":"#wk-url").focus()}
 $("#wkCancel").onclick=()=>$("#wikiDlg").close();
+$("#wk-url").addEventListener("change",()=>{if(!$("#wk-title").value.trim()){const d=wkDomain(/^https?:/i.test($("#wk-url").value)?$("#wk-url").value:"https://"+$("#wk-url").value);if(d)$("#wk-title").value=d}});
 $("#wikiForm").addEventListener("submit",async e=>{e.preventDefault();
   let url=$("#wk-url").value.trim();if(url&&!/^https?:\/\//i.test(url))url="https://"+url;
-  const row={kind:wkKind,title:$("#wk-title").value.trim(),url:url||null,category:$("#wk-cat").value.trim()||"General",client_id:$("#wk-client").value||null,body:$("#wk-body").value.replace(/\s+$/,""),pinned:$("#wk-pin").checked};
-  if(!row.title){toast("Give it a title");return}if(wkKind==="link"&&!url){toast("Paste the link");$("#wk-url").focus();return}
-  try{const saved=await api("wiki_save",wkEditing?{id:wkEditing,...row}:row);S.wiki=[...(S.wiki||[]).filter(x=>x.id!==saved.id),saved];$("#wikiDlg").close();render();toast(wkEditing?"Saved":"Added to the wiki")}
+  if(!url){toast("Paste the link");$("#wk-url").focus();return}
+  const title=$("#wk-title").value.trim()||wkDomain(url);
+  const row={kind:"link",title,url,body:$("#wk-body").value.trim(),parent_id:$("#wk-parent").value||null,client_id:$("#wk-client").value||null,icon:$("#wk-icon").value.trim()||null,pinned:$("#wk-pin").checked};
+  try{await flushWiki();const saved=await api("wiki_save",wkEditing?{id:wkEditing,...row}:row);S.wiki=[...(S.wiki||[]).filter(x=>x.id!==saved.id),saved];
+    if(saved.parent_id){wkOpen.add(saved.parent_id);saveOpen()}$("#wikiDlg").close();render();toast(wkEditing?"Saved":"Link added")}
   catch(err){toast("Couldn't save: "+err.message)}});
 $("#wkDel").onclick=async e=>{const b=e.currentTarget;if(b.dataset.armed!=="1"){b.dataset.armed="1";b.textContent="Click again to delete";setTimeout(()=>{b.dataset.armed="";b.textContent="Delete"},3000);return}
-  const id=wkEditing;try{await api("wiki_delete",{id});S.wiki=(S.wiki||[]).filter(x=>x.id!==id);if(S.wikiDoc===id){S.wikiDoc=null;history.pushState(null,"",location.pathname)}$("#wikiDlg").close();render();toast("Deleted")}catch(err){toast("Couldn't delete")}};
-function go(k){if(k==="wiki")S.wikiDoc=null;if(location.hash)history.pushState(null,"",location.pathname);if(k==="mine"){S.view="date";S.owner="mine"}else if(k==="all"){S.view="date";S.owner="all"}else{S.view=k;if(k==="approvals")S.owner="all"}savePrefs();render();window.scrollTo(0,0);if(k==="reports")loadReports();if(k==="inbox")loadInbox();if(k==="wiki")loadWiki()}
+  const id=wkEditing;try{await api("wiki_delete",{id});S.wiki=(S.wiki||[]).filter(x=>x.id!==id);$("#wikiDlg").close();render();toast("Deleted")}catch(err){toast("Couldn't delete")}};
+function go(k){flushAll();if(k==="wiki"){S.wikiDoc=null;S.wikiQ=""}if(location.hash)history.pushState(null,"",location.pathname);if(k==="mine"){S.view="date";S.owner="mine"}else if(k==="all"){S.view="date";S.owner="all"}else{S.view=k;if(k==="approvals")S.owner="all"}savePrefs();render();window.scrollTo(0,0);if(k==="reports")loadReports();if(k==="inbox")loadInbox();if(k==="wiki")loadWiki()}
 function applyView(v){const c=v.config||{};if(location.hash)history.pushState(null,"",location.pathname);
   S.view=c.view||"date";S.owner=c.owner||"all";S.label=c.label||"";S.group=c.group||"date";S.sort=c.sort||"due";S.q=c.q||"";$("#q").value=S.q;
   if(c.showDone!==undefined&&c.showDone!==S.showDone){S.showDone=!!c.showDone;$("#showDone").checked=S.showDone;load().then(render)}savePrefs();render();window.scrollTo(0,0);toast("View: "+v.name)}
@@ -1814,7 +2125,7 @@ function render(){
   renderStats();renderLabelFilter();renderNav();
   document.querySelectorAll("#ownerSeg button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.o===S.owner)));
   if(S.view==="clientpage")$("#viewTitle").textContent=shortClient(S.clientId);
-  $(".bar").hidden=S.view==="reports"||S.view==="inbox"||S.view==="wiki";
+  $(".bar").hidden=S.view==="reports"||S.view==="inbox"||S.view==="wiki";$("#stats").hidden=S.view==="wiki";
   const listy=S.view==="date"||S.view==="clientpage";document.querySelectorAll(".bar-sel,#saveViewBtn").forEach(e=>e.hidden=!listy);
   $("#groupSel").value=S.group;$("#sortSel").value=S.sort;
   const out=S.view==="client"?renderClient():S.view==="clientpage"?renderClientPage():S.view==="calendar"?renderCalendar():S.view==="approvals"?renderApprovals():S.view==="reports"?renderReports():S.view==="inbox"?renderInbox():S.view==="wiki"?renderWiki():renderDate();
@@ -1931,7 +2242,7 @@ $("#setCancel").onclick=()=>$("#setDlg").close();
 $("#setPhoto").onclick=()=>{$("#setDlg").close();$("#photoIn").click()};
 $("#setForm").addEventListener("submit",async e=>{e.preventDefault();try{const r=await api("notification_settings",{digest:$("#set-digest").checked,alerts:$("#set-alerts").checked});S.people.set(S.me,{...(S.people.get(S.me)||{}),...r});$("#setDlg").close();toast("Email settings saved")}catch(err){toast("Couldn't save: "+err.message)}});
 $("#selectBtn").onclick=()=>{S.selectMode=!S.selectMode;S.sel.clear();render();renderBulk()};
-function routeHash(){const wm=location.hash.match(/^#wiki\/([0-9a-f-]{36})$/);if(wm){openWikiDoc(wm[1]);return}const tm=location.hash.match(/^#task\/(t\d+)$/);if(tm){history.replaceState(null,"",location.pathname);openPanel(tm[1]);return}const m=location.hash.match(/^#client\/(.+)$/);if(m&&S.clients.has(m[1])){openClient(m[1]);return}if(S.view==="clientpage"){S.view="client";render()}if(S.view==="wiki"&&S.wikiDoc){S.wikiDoc=null;render()}}
+function routeHash(){const wm=location.hash.match(/^#wiki\/([0-9a-f-]{36})$/);if(wm){openWikiDoc(wm[1]);return}const tm=location.hash.match(/^#task\/(t\d+)$/);if(tm){history.replaceState(null,"",location.pathname);openPanel(tm[1]);return}const m=location.hash.match(/^#client\/(.+)$/);if(m&&S.clients.has(m[1])){openClient(m[1]);return}if(S.view==="clientpage"){S.view="client";render()}if(S.view==="wiki"&&S.wikiDoc&&!location.hash){flushAll();S.wikiDoc=null;render()}}
 window.addEventListener("popstate",routeHash);
 
 // ---- data ----
@@ -1945,8 +2256,8 @@ async function load(){
   }catch(e){if(e.auth)throw e;note("Couldn't reach the planner just now. What you see may be out of date.");return false}
 }
 // Other person's changes arrive by polling: every 30 s while the tab is visible, and on return to the tab.
-async function refresh(){const a=document.activeElement;if(document.hidden||dlg.open||hand.open||a?.classList?.contains("ans")||a?.classList?.contains("qa-in")||$("#wikiDlg").open||a?.id==="wk-q"||(S.panel&&panel.contains(a)&&/INPUT|TEXTAREA|SELECT/.test(a.tagName)))return;
-  if(await load()){render();if((S.view==="wiki"&&!S.wikiDoc)||S.view==="clientpage")loadWiki();if(S.panel){try{const comments=await api("list_comments",{task_id:S.panel});if(S.panelData)S.panelData.comments=comments}catch(e){}renderPanel(true)}}}
+async function refresh(){const a=document.activeElement;if(document.hidden||dlg.open||hand.open||a?.classList?.contains("ans")||a?.classList?.contains("qa-in")||$("#wikiDlg").open||a?.id==="wk-q"||a?.isContentEditable||ED.pending||ED.titlePending||!!popEl||slash.open||(S.panel&&panel.contains(a)&&/INPUT|TEXTAREA|SELECT/.test(a.tagName)))return;
+  if(await load()){render();if(S.view==="wiki"||S.view==="clientpage")loadWiki();if(S.panel){try{const comments=await api("list_comments",{task_id:S.panel});if(S.panelData)S.panelData.comments=comments}catch(e){}renderPanel(true)}}}
 
 function showLogin(msg){$("#loginView").hidden=false;$("#appView").hidden=true;if(msg)$("#loginMsg").textContent=msg}
 async function start(){
