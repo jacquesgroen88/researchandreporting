@@ -300,6 +300,46 @@ dialog{border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,.28)}
   .clients{grid-template-columns:1fr}
   .task{padding:12px}
 }
+
+/* ---------- visual layer v3: greeting, calendar density, editor, sign-in ---------- */
+#greet{font-size:14.5px;color:var(--muted);max-width:62ch}
+.day.past.empty{min-height:58px}
+.day.past .dn{color:var(--faint)}
+.day.past:not(.today){background:color-mix(in srgb,var(--surface-2) 30%,var(--surface))}
+.day.today{background:color-mix(in srgb,var(--accent-soft) 55%,var(--surface));box-shadow:inset 0 0 0 2px var(--accent)}
+.ev{box-shadow:0 1px 0 rgba(16,24,40,.04)}
+.ev:hover{filter:brightness(.97)}
+.cal .dow{padding:9px 10px;font-size:11px}
+
+dialog{width:min(660px,calc(100vw - 32px));padding:0}
+dialog form{padding:22px 24px 0;gap:14px}
+dialog h2{font-size:20px;display:flex;align-items:center;gap:10px}
+dialog h2::before{content:"";width:8px;height:22px;border-radius:4px;background:var(--accent)}
+.field>label{font-weight:600;letter-spacing:.05em}
+.field input,.field select,.field textarea{background:var(--surface);padding:9px 11px;transition:border-color .12s ease,box-shadow .12s ease}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+#f-title{font:600 16px var(--f-body)}
+.label-pick{gap:8px}
+.label-pick label.lp{position:relative;white-space:nowrap;padding:5px 12px 5px 10px;border-radius:999px;background:var(--surface);transition:background .12s ease,border-color .12s ease;user-select:none}
+.label-pick label.lp input{position:absolute;opacity:0;pointer-events:none}
+.label-pick label.lp:has(input:checked){background:color-mix(in srgb,var(--lc) 16%,var(--surface));border-color:var(--lc);color:var(--fg);font-weight:600}
+.label-pick label.lp:has(input:focus-visible){outline:2px solid var(--accent);outline-offset:2px}
+.label-pick .sw{width:9px;height:9px;border-radius:3px}
+.new-label{margin-top:6px}
+.hist{border-radius:10px;background:var(--surface-2);padding:10px 12px;border:0;line-height:1.6}
+dialog .actions{position:sticky;bottom:0;margin:4px -24px 0;padding:14px 24px;background:var(--surface);border-top:1px solid var(--line)}
+#hand .who-btns button{border-radius:12px;padding:14px}
+
+.login{max-width:420px;padding:34px 30px;text-align:left}
+.login h1{font-size:24px}
+.login p{line-height:1.55}
+.login::before{content:"";display:block;height:4px;border-radius:2px;background:linear-gradient(90deg,var(--jac),var(--dia));margin:-6px 0 10px;width:64px}
+.login .btn.primary{padding:11px 14px}
+@media (max-width:560px){
+  dialog form{padding:18px 16px 0}
+  dialog .actions{margin:4px -16px 0;padding:12px 16px}
+  #greet{font-size:13.5px}
+}
 </style>
 </head>
 <body>
@@ -317,7 +357,7 @@ dialog{border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,.28)}
   <header class="top">
     <div>
       <h1><span class="mark">JCE</span>Client Planner</h1>
-      <p>Every client, what we owe them and by when. Jacques and Diane, one list.</p>
+      <p id="greet">Every client, what we owe them and by when.</p>
       <div class="whoami" id="whoami"></div>
     </div>
     <div class="stats" id="stats"></div>
@@ -534,7 +574,7 @@ function renderCalendar(){
     const d=new Date(start);d.setDate(start.getDate()+i);const k=iso(d);const items=byDay.get(k)||[];
     if(i>=35&&d.getMonth()!==base.getMonth())break;
     const shown=items.slice(0,4);
-    cells.push(el("div",{class:"day"+(d.getMonth()!==base.getMonth()?" out":"")+(k===tIso?" today":"")+(i%7>=5?" weekend":"")},
+    cells.push(el("div",{class:"day"+(d.getMonth()!==base.getMonth()?" out":"")+(k===tIso?" today":"")+(k<tIso?" past":"")+(i%7>=5?" weekend":"")+(items.length?"":" empty")},
       el("div",{class:"dn"},el("span",null,d.getDate()),items.length>4?el("span",null,items.length):null),
       shown.map(t=>el("button",{class:"ev "+t.owner+(t.status==="waiting"?" waiting":"")+(isOpen(t)&&daysTo(eff(t))<0?" late":""),title:t.title+" · "+OWNERS[t.owner]+(t.client_id?" · "+shortClient(t.client_id):""),onclick:()=>openEdit(t.id)},(t.status==="waiting"?"⟳ ":"")+t.title)),
       items.length>4?el("button",{class:"more",onclick:()=>openDay(k,items)},"+"+(items.length-4)+" more"):null));
@@ -609,6 +649,11 @@ function renderLabelFilter(){
   sel.value=S.labels.has(cur)?cur:"";
 }
 function render(){
+  {const h=new Date().getHours();const open=[...S.tasks.values()].filter(isOpen);
+   const mineToday=open.filter(t=>t.owner===S.me&&eff(t)&&daysTo(eff(t))<=0).length;
+   const nj=S.me==="jacques"?open.filter(t=>t.needs).length:0;
+   const bits=[mineToday?mineToday+" of yours due or overdue":"nothing of yours due today",nj?nj+" waiting on your yes":null].filter(Boolean);
+   $("#greet").textContent=(h<12?"Good morning":h<17?"Good afternoon":"Good evening")+", "+(OWNERS[S.me]||"")+". "+new Date().toLocaleDateString("en-ZA",{weekday:"long",day:"numeric",month:"long"})+": "+bits.join(", ")+".";}
   $("#whoami").replaceChildren("Signed in as "+(OWNERS[S.me]||"?")+". ",el("button",{onclick:()=>{try{localStorage.removeItem("jce-planner-key")}catch(e){}location.reload()}},"Sign out of this browser"));
   renderStats();renderLabelFilter();
   document.querySelectorAll("#viewSeg button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.v===S.view)));
@@ -640,7 +685,7 @@ let pickedLabels=new Set();
 function paintLabelPick(){
   $("#f-labels").replaceChildren(...[...S.labels.values()].sort((a,b)=>(a.sort_order??99)-(b.sort_order??99)).map(l=>{
     const cb=el("input",{type:"checkbox",checked:pickedLabels.has(l.id),onchange:e=>{e.target.checked?pickedLabels.add(l.id):pickedLabels.delete(l.id)}});
-    return el("label",{style:"--lc:"+l.color},cb,el("span",{class:"sw"}),l.name)}));
+    return el("label",{class:"lp",style:"--lc:"+l.color},cb,el("span",{class:"sw"}),l.name)}));
 }
 async function openEdit(id,clientId){
   S.editing=id;const t=id?S.tasks.get(id):{owner:S.me||"jacques",status:"todo",priority:"med",client_id:clientId||null};
