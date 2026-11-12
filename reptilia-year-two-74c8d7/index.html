@@ -1,0 +1,560 @@
+<title>Reptilia Year Two</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=PT+Sans:ital,wght@0,400;0,700;1,400&display=swap">
+<style>
+/* Layout: a presentation that scrolls. Full-bleed chapter bands alternate light and dark; each chapter has one visual (chart, diagram or map) and one idea. Reptilia yellow + coral on near-black, the palette Willem knows from every report. */
+:root{
+  --yellow:#FFC400; --coral:#D9532F; --leaf:#2F7D5B;
+  --ink:#151511; --body:#3c3b35; --muted:#7a766b; --line:#e6e2d7; --wash:#f6f3ec; --bg:#fffefb; --card:#ffffff;
+  --night:#121210; --nighttext:#e9e6de; --nightmuted:#a9a497; --nightline:#2d2c27; --nightcard:#1b1a17;
+  --display:"Archivo","Arial Narrow",Arial,sans-serif; --text:"PT Sans","Segoe UI",Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --ink:#f3f1ea; --body:#d7d4cb; --muted:#a39f94; --line:#2f2e29; --wash:#1a1916; --bg:#11110f; --card:#181815; --coral:#F07A55; --leaf:#5cc489;
+  --night:#0a0a09; --nightcard:#151513; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --ink:#f3f1ea; --body:#d7d4cb; --muted:#a39f94; --line:#2f2e29; --wash:#1a1916; --bg:#11110f; --card:#181815; --coral:#F07A55; --leaf:#5cc489;
+  --night:#0a0a09; --nightcard:#151513; color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--body);font:17px/1.62 var(--text);-webkit-font-smoothing:antialiased}
+.wrap{max-width:1040px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--display);color:var(--ink);line-height:1.08;margin:0;text-wrap:balance}
+p{margin:0 0 14px}
+a{color:var(--coral)}
+.chap{padding-block:72px 64px;border-top:1px solid var(--line)}
+.chap.dark{background:var(--night);color:var(--nighttext);border-top:0}
+.chap.dark h2,.chap.dark h3{color:#fff}
+.chap.dark .muted{color:var(--nightmuted)}
+.chap.wash{background:var(--wash)}
+.eyebrow{display:flex;align-items:center;gap:12px;font:700 12.5px/1 var(--text);letter-spacing:.16em;text-transform:uppercase;color:var(--coral);margin-bottom:16px}
+.eyebrow b{display:inline-grid;place-items:center;min-width:30px;height:30px;padding:0 8px;border-radius:15px;background:var(--yellow);color:#111;font-size:13px;letter-spacing:0}
+h2{font-size:clamp(28px,4.4vw,46px);font-weight:900;letter-spacing:-.01em;max-width:24ch}
+.sub{font-size:19px;max-width:62ch;margin-top:16px;color:inherit}
+.muted{color:var(--muted)}
+.src{font-size:12.5px;color:var(--muted);margin-top:10px}
+.chap.dark .src{color:var(--nightmuted)}
+
+/* hero */
+.hero{background:var(--night);color:var(--nighttext);padding-block:56px 0;overflow:hidden;position:relative}
+.hero .k{font:700 12.5px/1 var(--text);letter-spacing:.18em;text-transform:uppercase;color:var(--yellow)}
+.hero h1{color:#fff;font-size:clamp(36px,6.6vw,74px);font-weight:900;letter-spacing:-.02em;margin-top:18px;max-width:15ch}
+.hero h1 em{font-style:normal;color:var(--yellow)}
+.hero .lead{font-size:20px;max-width:56ch;margin-top:22px;color:var(--nighttext)}
+.hero .meta{color:var(--nightmuted);font-size:14.5px;margin-top:18px}
+.scales{height:16px;margin-top:48px;background:
+  radial-gradient(circle at 10px 0,transparent 9px,var(--yellow) 10px) 0 0/20px 16px repeat-x;opacity:.95}
+.herostats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--nightline);border:1px solid var(--nightline);border-radius:10px;overflow:hidden;margin-top:40px}
+.herostats div{background:var(--nightcard);padding:18px 18px 16px;min-width:0}
+.herostats b{display:block;font:900 clamp(26px,3.4vw,38px)/1 var(--display);color:#fff;font-variant-numeric:tabular-nums}
+.herostats span{display:block;font-size:13.5px;color:var(--nightmuted);margin-top:8px;line-height:1.4}
+.herostats .up b{color:var(--yellow)}
+
+/* foundation */
+.layers{display:grid;gap:10px;margin-top:34px}
+.layer{display:grid;grid-template-columns:52px 1fr auto;gap:18px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 20px}
+.layer .ic{width:52px;height:52px;border-radius:12px;background:var(--wash);display:grid;place-items:center}
+.layer .ic svg{width:28px;height:28px;stroke:var(--coral);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.layer h3{font-size:18px;margin-bottom:3px}
+.layer p{margin:0;font-size:15.5px}
+.layer .proof{font:800 22px/1.05 var(--display);color:var(--ink);text-align:right;white-space:nowrap}
+.layer .proof small{display:block;font:400 12.5px/1.3 var(--text);color:var(--muted);margin-top:4px;white-space:normal;max-width:16ch;margin-left:auto}
+.ready{margin-top:28px;border:2px dashed var(--yellow);border-radius:10px;padding:20px 22px;background:var(--card)}
+.ready h3{font-size:18px;margin-bottom:10px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-size:14px;border:1px solid var(--line);background:var(--wash);border-radius:20px;padding:6px 12px;color:var(--ink)}
+.chip.owe{border-color:var(--coral);color:var(--coral);background:transparent}
+
+/* charts */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:34px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px 22px 16px;min-width:0}
+.chap.dark .panel{background:var(--nightcard);border-color:var(--nightline)}
+.panel h3{font-size:17px;margin-bottom:4px}
+.panel .muted{font-size:14px;margin:0 0 10px}
+svg.chart{width:100%;height:auto;display:block}
+.ax{stroke:var(--line);stroke-width:1}
+.chap.dark .ax{stroke:var(--nightline)}
+.lbl{font:12px var(--text);fill:var(--muted)}
+.chap.dark .lbl{fill:var(--nightmuted)}
+.val{font:700 12.5px var(--text);fill:var(--ink)}
+.chap.dark .val{fill:#fff}
+.bar{fill:var(--yellow)}
+.bar.low{fill:var(--coral)}
+.bar.tgt{fill:none;stroke:var(--leaf);stroke-width:2;stroke-dasharray:5 4}
+.ln{fill:none;stroke:var(--yellow);stroke-width:3;stroke-linejoin:round}
+.area{fill:var(--yellow);opacity:.13}
+.dot{fill:var(--yellow);stroke:var(--night);stroke-width:2}
+.ref{stroke:var(--nightmuted);stroke-width:1.5;stroke-dasharray:4 4}
+.tg{stroke:var(--leaf);stroke-width:2;stroke-dasharray:5 4;fill:none}
+.tgdot{fill:var(--leaf)}
+
+/* the gap */
+.gap{display:grid;grid-template-columns:1.1fr .9fr;gap:30px;align-items:center;margin-top:34px}
+.versus{display:grid;gap:14px}
+.vs{border-radius:12px;padding:20px 22px}
+.vs.a{background:var(--yellow);color:#151511}
+.vs.b{background:var(--nightcard);border:1px solid var(--nightline)}
+.vs b{display:block;font:900 clamp(42px,6vw,64px)/1 var(--display)}
+.vs.b b{color:var(--coral)}
+.vs span{font-size:15.5px}
+.qtable{width:100%;border-collapse:collapse;font-size:15px}
+.qtable td,.qtable th{padding:9px 8px;border-bottom:1px solid var(--nightline);text-align:left}
+.qtable th{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--nightmuted)}
+.qtable td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.qbar{display:block;height:6px;border-radius:3px;background:var(--yellow);margin-top:5px}
+
+/* reservation flow */
+.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin-top:36px;counter-reset:s}
+.step{position:relative;padding:0 14px 0 0;min-width:0}
+.step .node{width:58px;height:58px;border-radius:50%;background:var(--ink);display:grid;place-items:center;position:relative;z-index:1}
+.step .node svg{width:28px;height:28px;stroke:var(--yellow);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.step::before{content:"";position:absolute;top:28px;left:58px;right:0;height:3px;background:repeating-linear-gradient(90deg,var(--yellow) 0 10px,transparent 10px 16px)}
+.step:last-child::before{display:none}
+.step h3{font-size:16.5px;margin:14px 0 4px}
+.step p{font-size:14.5px;margin:0}
+.phone{margin-top:34px;display:grid;grid-template-columns:300px 1fr;gap:30px;align-items:center}
+.mock{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:14px;box-shadow:0 20px 50px -30px rgba(0,0,0,.35)}
+.mock .img{height:150px;border-radius:12px;background:linear-gradient(135deg,#e9d9a6,#c99b4a 55%,#8a5a2b);position:relative;overflow:hidden}
+.mock .img::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 30% 40%,rgba(255,255,255,.35),transparent 40%)}
+.mock .badge{position:absolute;top:10px;left:10px;z-index:1;background:var(--leaf);color:#fff;font:700 11px/1 var(--text);padding:6px 9px;border-radius:12px;letter-spacing:.04em}
+.mock h4{font:800 18px/1.2 var(--display);color:var(--ink);margin:12px 4px 2px}
+.mock .price{font:800 20px var(--display);color:var(--coral);margin:0 4px}
+.mock ul{margin:8px 4px 10px;padding-left:16px;font-size:13px;color:var(--body)}
+.mock .wa{display:block;text-align:center;background:#1f9d55;color:#fff;font:700 15px var(--text);padding:12px;border-radius:12px}
+.mock .alt{display:block;text-align:center;font-size:12.5px;color:var(--muted);margin-top:8px}
+.why ul{margin:0;padding-left:20px}
+.why li{margin-bottom:10px}
+.why li b{color:var(--ink)}
+
+/* plan cards */
+.jobs{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:34px}
+.job{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:24px;min-width:0}
+.job .t{font:700 12px/1 var(--text);letter-spacing:.14em;text-transform:uppercase;color:var(--coral)}
+.job h3{font-size:22px;margin:10px 0 12px}
+.job ol{margin:0;padding-left:20px}
+.job li{margin-bottom:10px;font-size:15.5px}
+.job li b{color:var(--ink)}
+
+/* ads */
+.budget{display:flex;height:46px;border-radius:10px;overflow:hidden;margin:30px 0 8px;font:700 13.5px var(--text)}
+.budget div{display:flex;align-items:center;padding:0 14px;color:#111;white-space:nowrap;overflow:hidden}
+.camps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px}
+.camp{background:var(--nightcard);border:1px solid var(--nightline);border-radius:12px;padding:20px;min-width:0}
+.camp .sw{width:14px;height:14px;border-radius:4px;display:inline-block;vertical-align:-1px;margin-right:8px}
+.camp h3{font-size:18px;margin:8px 0 10px}
+.camp dl{margin:0;font-size:14.5px}
+.camp dt{font:700 11px/1 var(--text);letter-spacing:.1em;text-transform:uppercase;color:var(--nightmuted);margin-top:12px}
+.camp dd{margin:4px 0 0}
+.kw{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.kw span{font-size:12.5px;background:#26251f;border:1px solid var(--nightline);border-radius:12px;padding:3px 9px;color:var(--nighttext)}
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px}
+.rule{border-top:3px solid var(--yellow);padding-top:12px;font-size:15px}
+.rule b{display:block;color:#fff;font:800 16px var(--display);margin-bottom:4px}
+
+/* timeline */
+.tl{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:34px}
+.wk{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;border-top:5px solid var(--yellow);min-width:0}
+.wk:nth-child(2){border-top-color:#f5a623}.wk:nth-child(3){border-top-color:var(--coral)}.wk:nth-child(4){border-top-color:var(--leaf)}
+.wk .w{font:700 12px/1 var(--text);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.wk h3{font-size:18px;margin:8px 0 10px}
+.wk ul{margin:0;padding-left:18px;font-size:14.5px}
+.wk li{margin-bottom:6px}
+
+/* scoreboard */
+.score{width:100%;border-collapse:collapse;margin-top:28px;font-size:15.5px}
+.score th,.score td{padding:13px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+.score th{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.score td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;font-weight:700;color:var(--ink)}
+.score td.goal{color:var(--leaf)}
+.scroll{overflow-x:auto}
+.money{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:30px}
+.big{border-radius:12px;padding:24px;background:var(--card);border:1px solid var(--line)}
+.big .n{font:900 44px/1 var(--display);color:var(--ink)}
+.big .n small{font-size:18px;font-weight:700;color:var(--muted)}
+.big ul{margin:14px 0 0;padding-left:18px;font-size:15px}
+.big li{margin-bottom:6px}
+.big.hl{border:2px solid var(--yellow)}
+.math{font-size:15px;background:var(--wash);border-radius:10px;padding:16px 18px;margin-top:22px}
+.math b{color:var(--ink)}
+
+/* asks */
+.asks{counter-reset:a;list-style:none;margin:30px 0 0;padding:0;display:grid;gap:12px}
+.asks li{counter-increment:a;display:grid;grid-template-columns:48px 1fr;gap:16px;align-items:start;background:var(--nightcard);border:1px solid var(--nightline);border-radius:12px;padding:16px 18px}
+.asks li::before{content:counter(a);display:grid;place-items:center;width:48px;height:48px;border-radius:50%;background:var(--yellow);color:#111;font:900 20px var(--display)}
+.asks b{color:#fff;font-size:17px;display:block;margin-bottom:2px}
+.asks span{color:var(--nightmuted);font-size:15px}
+footer{padding-block:26px 44px;font-size:13.5px;color:var(--nightmuted);background:var(--night)}
+
+@media (max-width:860px){
+  .herostats{grid-template-columns:1fr 1fr}
+  .grid2,.gap,.jobs,.money,.phone{grid-template-columns:1fr}
+  .camps,.rules{grid-template-columns:1fr}
+  .tl{grid-template-columns:1fr 1fr}
+  .flow{grid-template-columns:1fr;gap:18px}
+  .step{display:grid;grid-template-columns:58px 1fr;column-gap:16px;padding:0}
+  .step::before{display:none}
+  .step h3{margin:4px 0}
+  .mock{max-width:320px}
+}
+@media (max-width:560px){
+  .tl{grid-template-columns:1fr}
+  .layer{grid-template-columns:44px 1fr}
+  .layer .ic{width:44px;height:44px}
+  .layer .proof{grid-column:2;text-align:left}
+  .layer .proof small{margin-left:0}
+  .budget{font-size:11.5px}
+}
+</style>
+
+<!-- HERO -->
+<header class="hero"><div class="wrap">
+  <div class="k">Reptilia · Year two proposal · 12 November 2026</div>
+  <h1>Year one built the shop online. Year two brings people <em>through the door.</em></h1>
+  <p class="lead">The new store, the Google recovery and the reviews system are in place. The next step is to turn the people searching Google for animals into customers at your counter, and to grow the online orders that come back every month.</p>
+  <div class="herostats">
+    <div class="up"><b>86/day</b><span>Google clicks now, up from 40 at the low in August</span></div>
+    <div><b>4.6★</b><span>from 497 Google reviews, the most of any pet shop nearby</span></div>
+    <div class="up"><b>26</b><span>online orders in October, up from 16 in September</span></div>
+    <div><b>~890</b><span>Google clicks a month on animal pages, with about one animal a month sold online</span></div>
+  </div>
+  <div class="meta">Prepared for Willem van der Westhuizen by JCE Media · from Reptilia's own orders and Google Search Console, pulled 12 November 2026</div>
+</div>
+<div class="scales" aria-hidden="true"></div>
+</header>
+
+<main>
+
+<!-- 1 FOUNDATION -->
+<section class="chap">
+<div class="wrap">
+  <div class="eyebrow"><b>1</b>Year one</div>
+  <h2>The foundation is laid</h2>
+  <p class="sub">In November 2025 we agreed on Phase 1: a proper website, reviews, content, automation and e-commerce basics. These are the layers now in place, from the bottom up.</p>
+
+  <div class="layers">
+    <div class="layer">
+      <div class="ic"><svg viewBox="0 0 24 24"><path d="M3 9l1-5h16l1 5"/><path d="M4 9v11h16V9"/><path d="M3 9h18"/><path d="M9 20v-6h6v6"/></svg></div>
+      <div><h3>A real online store</h3><p>New WooCommerce store live since 5 August, PayFast payments, collection or courier at checkout, about 930 products online. Pages compressed and the logo made 94% lighter.</p></div>
+      <div class="proof">Live<small>since 5 Aug 2026</small></div>
+    </div>
+    <div class="layer">
+      <div class="ic"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.5-4.5"/><path d="M8 11l2 2 4-4"/></svg></div>
+      <div><h3>Google traffic rescued after the move</h3><p>Moving any website costs Google traffic. We redirected 590 old links, bridged the old site's link format, restored the care-sheet PDFs, and fixed the sitemap.</p></div>
+      <div class="proof">40 → 86<small>clicks a day, low point to now</small></div>
+    </div>
+    <div class="layer">
+      <div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M7 20h10"/><path d="M8 9h5"/><path d="M8 12h8"/></svg></div>
+      <div><h3>Site search that finds things</h3><p>Rebuilt so typos, plurals and categories work. "Leapard gecko" now finds geckos, and "snake" went from 11 results to 76.</p></div>
+      <div class="proof">41% → 14%<small>of searches finding nothing</small></div>
+    </div>
+    <div class="layer">
+      <div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.5 6 .8-4.4 4.2 1.1 6L12 16.6 6.7 19.5l1.1-6L3.4 9.3l6-.8z"/></svg></div>
+      <div><h3>Reviews and reputation</h3><p>Review requests to new and past customers running since January, plus 79 posts to your Facebook page and Google profile. The nearest rivals: Pic a Pet 3.9★ from 162, Pet Food Warehouse 4.8★ from 169.</p></div>
+      <div class="proof">4.6★<small>from 497 Google reviews</small></div>
+    </div>
+    <div class="layer">
+      <div class="ic"><svg viewBox="0 0 24 24"><path d="M4 19V5"/><path d="M4 19h16"/><path d="M8 15l3-4 3 2 5-6"/></svg></div>
+      <div><h3>We know where the money is</h3><p>Five years of orders analysed. We know who the best customers are, which products bring people back, which 440 past customers have never been contacted, and which 2,912 POS items belong on the site.</p></div>
+      <div class="proof">5 years<small>of orders mapped</small></div>
+    </div>
+  </div>
+
+  <div class="ready">
+    <h3>Built and ready to switch on the day you say yes</h3>
+    <div class="chips">
+      <span class="chip">Species pages: leopard gecko, hamster, bearded dragon</span>
+      <span class="chip">Faster homepage (2× quicker in testing)</span>
+      <span class="chip">"We miss you" email to past customers</span>
+      <span class="chip">Feeder reorder reminders</span>
+      <span class="chip">40-product "goes well with" map</span>
+      <span class="chip owe">Still owed by us: sales tracking, WhatsApp auto-replies, cart recovery, Instagram and TikTok</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- 2 WHERE WE ARE -->
+<section class="chap dark">
+<div class="wrap">
+  <div class="eyebrow"><b>2</b>Where things stand</div>
+  <h2>Traffic is coming back. The big orders are not.</h2>
+  <p class="sub">Orders recovered in October, but the average basket has fallen to R374. Most of what sells online now is crickets and frozen mice. The animals, cages and setups that used to lift orders above R1,000 are missing.</p>
+
+  <div class="grid2">
+    <div class="panel">
+      <h3>Online sales by month, 2026</h3>
+      <p class="muted">Paid orders, test orders removed. The dashed bar is the February target.</p>
+      <svg class="chart" viewBox="0 0 440 240" role="img" aria-label="Monthly online sales: June R15,591, July R15,663, August R15,366, September R7,523, October R9,724, February target R15,000">
+        <line class="ax" x1="40" y1="200" x2="430" y2="200"/>
+        <line class="ax" x1="40" y1="120" x2="430" y2="120" stroke-dasharray="2 4"/>
+        <line class="ax" x1="40" y1="40" x2="430" y2="40" stroke-dasharray="2 4"/>
+        <text class="lbl" x="34" y="204" text-anchor="end">0</text>
+        <text class="lbl" x="34" y="124" text-anchor="end">10k</text>
+        <text class="lbl" x="34" y="44" text-anchor="end">20k</text>
+        <!-- scale: 160px = R20,000 -->
+        <rect class="bar" x="52" y="75.3" width="44" height="124.7" rx="3"/><text class="val" x="74" y="69" text-anchor="middle">15.6k</text><text class="lbl" x="74" y="218" text-anchor="middle">Jun</text>
+        <rect class="bar" x="114" y="74.7" width="44" height="125.3" rx="3"/><text class="val" x="136" y="68" text-anchor="middle">15.7k</text><text class="lbl" x="136" y="218" text-anchor="middle">Jul</text>
+        <rect class="bar" x="176" y="77.1" width="44" height="122.9" rx="3"/><text class="val" x="198" y="71" text-anchor="middle">15.4k</text><text class="lbl" x="198" y="218" text-anchor="middle">Aug</text>
+        <rect class="bar low" x="238" y="139.8" width="44" height="60.2" rx="3"/><text class="val" x="260" y="133" text-anchor="middle">7.5k</text><text class="lbl" x="260" y="218" text-anchor="middle">Sep</text>
+        <rect class="bar low" x="300" y="122.2" width="44" height="77.8" rx="3"/><text class="val" x="322" y="116" text-anchor="middle">9.7k</text><text class="lbl" x="322" y="218" text-anchor="middle">Oct</text>
+        <rect class="bar tgt" x="372" y="80" width="44" height="120" rx="3"/><text class="val" x="394" y="74" text-anchor="middle">15k</text><text class="lbl" x="394" y="218" text-anchor="middle">Feb goal</text>
+      </svg>
+    </div>
+    <div class="panel">
+      <h3>Google clicks per day</h3>
+      <p class="muted">The old site did 120 a day. The move cut that to 40; it is back to 86.</p>
+      <svg class="chart" viewBox="0 0 440 240" role="img" aria-label="Google clicks per day: old site 120, August low 39.6, late August 55.2, September 68.5, October 74.9, last 14 days 85.6, target 110">
+        <line class="ax" x1="40" y1="200" x2="430" y2="200"/>
+        <!-- scale: 160px = 130 clicks, y = 200 - v*160/130 -->
+        <line class="ref" x1="40" y1="52.3" x2="430" y2="52.3"/>
+        <text class="lbl" x="426" y="46" text-anchor="end">old site: 120</text>
+        <text class="lbl" x="34" y="204" text-anchor="end">0</text>
+        <text class="lbl" x="34" y="127" text-anchor="end">60</text>
+        <line class="ax" x1="40" y1="126.2" x2="430" y2="126.2" stroke-dasharray="2 4"/>
+        <path class="area" d="M60 151.3 L125 132.1 L190 115.7 L255 107.8 L320 94.6 L320 200 L60 200 Z"/>
+        <polyline class="ln" points="60,151.3 125,132.1 190,115.7 255,107.8 320,94.6"/>
+        <line class="tg" x1="320" y1="94.6" x2="405" y2="64.6"/>
+        <circle class="dot" cx="60" cy="151.3" r="5"/><text class="val" x="60" y="141" text-anchor="middle">40</text>
+        <circle class="dot" cx="125" cy="132.1" r="5"/><text class="val" x="125" y="122" text-anchor="middle">55</text>
+        <circle class="dot" cx="190" cy="115.7" r="5"/><text class="val" x="190" y="106" text-anchor="middle">69</text>
+        <circle class="dot" cx="255" cy="107.8" r="5"/><text class="val" x="255" y="98" text-anchor="middle">75</text>
+        <circle class="dot" cx="320" cy="94.6" r="6"/><text class="val" x="320" y="84" text-anchor="middle">86</text>
+        <circle class="tgdot" cx="405" cy="64.6" r="5"/><text class="val" x="405" y="88" text-anchor="middle">110</text>
+        <text class="lbl" x="60" y="218" text-anchor="middle">Aug low</text>
+        <text class="lbl" x="125" y="218" text-anchor="middle">late Aug</text>
+        <text class="lbl" x="190" y="218" text-anchor="middle">Sep</text>
+        <text class="lbl" x="255" y="218" text-anchor="middle">Oct</text>
+        <text class="lbl" x="320" y="218" text-anchor="middle">now</text>
+        <text class="lbl" x="405" y="218" text-anchor="middle">Feb goal</text>
+      </svg>
+    </div>
+  </div>
+  <p class="src">Sources: Reptilia WooCommerce orders (completed, test orders removed), Google Search Console. "Now" is the 14 days to 10 Nov.</p>
+</div>
+</section>
+
+<!-- 3 THE GAP -->
+<section class="chap dark" style="padding-top:8px">
+<div class="wrap">
+  <div class="eyebrow"><b>3</b>The opportunity</div>
+  <h2>Google sends you animal buyers every day. The site asks them to pay for a courier.</h2>
+  <div class="gap">
+    <div>
+      <table class="qtable">
+        <thead><tr><th>What people search, last 30 days</th><th style="text-align:right">Shown</th><th style="text-align:right">Your rank</th></tr></thead>
+        <tbody>
+          <tr><td>teddy bear hamster<span class="qbar" style="width:100%"></span></td><td class="n">960</td><td class="n">#1</td></tr>
+          <tr><td>hamster(s) for sale<span class="qbar" style="width:52.9%"></span></td><td class="n">508</td><td class="n">#3–5</td></tr>
+          <tr><td>ball python for sale<span class="qbar" style="width:47.3%"></span></td><td class="n">454</td><td class="n">#7</td></tr>
+          <tr><td>bearded dragon for sale<span class="qbar" style="width:44%"></span></td><td class="n">422</td><td class="n">#6</td></tr>
+          <tr><td>guinea pig(s) for sale<span class="qbar" style="width:39.9%"></span></td><td class="n">383</td><td class="n">#3–4</td></tr>
+          <tr><td>leopard gecko for sale<span class="qbar" style="width:22.4%"></span></td><td class="n">215</td><td class="n">#6</td></tr>
+          <tr><td>chameleon for sale<span class="qbar" style="width:22.1%"></span></td><td class="n">212</td><td class="n">#7</td></tr>
+          <tr><td>reptile shop(s) near me<span class="qbar" style="width:16.3%"></span></td><td class="n">156</td><td class="n">#3–4</td></tr>
+        </tbody>
+      </table>
+      <p class="src">Google Search Console, 12 Oct to 10 Nov 2026. "Shown" means how many times Reptilia appeared in Google results for that search.</p>
+    </div>
+    <div class="versus">
+      <div class="vs a"><b>~890</b><span>clicks a month from Google onto an animal page: 37% of all your Google clicks</span></div>
+      <div class="vs b"><b>1</b><span>animal sold online in October, and one so far in November. People want to see an animal before they take it home. They need a reason to come in, not a courier fee.</span></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- 4 THE BIG MOVE -->
+<section class="chap">
+<div class="wrap">
+  <div class="eyebrow"><b>4</b>The main move</div>
+  <h2>"Reserve it, meet it, take it home"</h2>
+  <p class="sub">Every live animal page becomes a reservation for the shop instead of a courier checkout. You asked in June for animals to come off online sale, and this does that without losing the Google traffic they bring in.</p>
+
+  <div class="flow">
+    <div class="step"><div class="node"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.5-4.5"/></svg></div><div><h3>They search</h3><p>"bearded dragon for sale", "hamster near me"</p></div></div>
+    <div class="step"><div class="node"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6M9 11h6M9 15h3"/></svg></div><div><h3>The page answers</h3><p>Price, real photo, care basics and the setup it needs</p></div></div>
+    <div class="step"><div class="node"><svg viewBox="0 0 24 24"><path d="M4 20l1.5-4A8 8 0 1 1 9 19z"/></svg></div><div><h3>They reserve</h3><p>One tap opens WhatsApp with the animal's name already filled in</p></div></div>
+    <div class="step"><div class="node"><svg viewBox="0 0 24 24"><path d="M5 12l4 4 10-10"/></svg></div><div><h3>You hold it</h3><p>Your team confirms and agrees a collection time</p></div></div>
+    <div class="step"><div class="node"><svg viewBox="0 0 24 24"><path d="M3 9l1-5h16l1 5"/><path d="M4 9v11h16V9"/></svg></div><div><h3>They come in</h3><p>Collect with a cage, heat, food and a care chat</p></div></div>
+  </div>
+
+  <div class="phone">
+    <div class="mock" aria-label="Example of a reservation page on a phone">
+      <div class="img"><span class="badge">IN STORE · VANDERBIJLPARK</span></div>
+      <h4>Leopard Gecko <span style="font:400 12px var(--text);color:var(--muted)">(example layout)</span></h4>
+      <div class="price">R695</div>
+      <ul><li>Easy first reptile, lives 15+ years</li><li>Needs: enclosure, heat mat, hide, calcium</li><li>Starter setup available in store</li></ul>
+      <span class="wa">Reserve on WhatsApp</span>
+      <span class="alt">Collect in store · we confirm within the hour</span>
+    </div>
+    <div class="why">
+      <h3 style="font-size:21px;margin-bottom:12px">Why this works for a shop like yours</h3>
+      <ul>
+        <li><b>No live animals in a courier box.</b> Nothing needs a permit check at an online checkout, and nothing arrives stressed.</li>
+        <li><b>Every animal leaves with a conversation.</b> That is what your staff are good at, and it is how a new keeper becomes a regular.</li>
+        <li><b>Every visit is a full basket.</b> The page lists the setup the animal needs, so the customer arrives expecting to buy it.</li>
+        <li><b>Sold-out animals still earn.</b> "Ask us when the next ones arrive" collects a WhatsApp number instead of a dead page.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- 5 TWO JOBS -->
+<section class="chap wash">
+<div class="wrap">
+  <div class="eyebrow"><b>5</b>The plan</div>
+  <h2>Two jobs for year two</h2>
+  <div class="jobs">
+    <div class="job">
+      <div class="t">Job 1 · Store visits</div>
+      <h3>Bring animal searchers to the counter</h3>
+      <ol>
+        <li><b>Reservation pages for every animal in stock,</b> kept in line with the POS stock so nobody reserves something already sold.</li>
+        <li><b>Rewrite the 10 animal pages Google already sends people to,</b> starting with teddy bear hamster: shown first on Google 960 times a month, clicked 8 times. Publish the three species pages that are ready.</li>
+        <li><b>Google Business Profile tuned for "near me":</b> weekly new-arrival photo posts, animals in stock listed, correct hours, and review requests to counter customers too.</li>
+        <li><b>Local Google Ads</b> on the searches that bring people in (see chapter 6).</li>
+      </ol>
+    </div>
+    <div class="job">
+      <div class="t">Job 2 · Online sales</div>
+      <h3>Sell more of what people come back for</h3>
+      <ol>
+        <li><b>Sales tracking fixed first.</b> Ready to install now, so every rand of ad spend can be measured from day one.</li>
+        <li><b>Feeder reorder reminders.</b> Frozen mice, rats, crickets and mealworms were October's top sellers by volume. A nudge when a customer is due to run out.</li>
+        <li><b>Starter setups as one product.</b> Hamster, leopard gecko and bearded dragon setups at one price each. This is how the average order gets back above R550.</li>
+        <li><b>Win back past customers:</b> about 440 people with roughly R640,000 of past spending, once you confirm we may contact them.</li>
+      </ol>
+    </div>
+  </div>
+  <div class="math"><b>The December push, from 16 November.</b> December 2025 took R14,200 online. We sell what makes a good gift and a good first week: <b>gift vouchers</b> (bought online, spent in store), <b>starter setups</b> with the animal reserved for collection after the family has spoken to your team, and a <b>holiday feeder stock-up</b> for existing keepers. No surprise pets; those are the ones that come back in January.</div>
+</div>
+</section>
+
+<!-- 6 GOOGLE ADS -->
+<section class="chap dark">
+<div class="wrap">
+  <div class="eyebrow"><b>6</b>Google Ads</div>
+  <h2>Three small campaigns, each with one job</h2>
+  <p class="sub">There is no Google Ads account for Reptilia yet, so this is a fresh start in your name, on your card, under our management. It goes live only once sales tracking is confirmed. Every campaign is paid for by a result we can count: a call, directions to the shop, a reservation or an order.</p>
+
+  <div class="budget" role="img" aria-label="Daily budget split: R70 store visits, R50 animal reservations, R30 feeders online, R150 a day in total">
+    <div style="flex:70;background:var(--yellow)">Store visits R70/day</div>
+    <div style="flex:50;background:#f5a623">Reservations R50</div>
+    <div style="flex:30;background:var(--coral);color:#fff">Feeders R30</div>
+  </div>
+  <p class="src">R150 a day, about R4,500 a month, paid by you directly to Google. Starting late November.</p>
+
+  <div class="camps">
+    <div class="camp">
+      <span class="sw" style="background:var(--yellow)"></span><b style="color:#fff">Campaign 1</b>
+      <h3>Pet shop near me</h3>
+      <dl>
+        <dt>Who sees it</dt><dd>People within about 40 km: Vanderbijlpark, Vereeniging, Sasolburg, Meyerton, Parys</dd>
+        <dt>Searches</dt><dd><div class="kw"><span>pet shop near me</span><span>reptile shop</span><span>exotic pet shop</span><span>pet shop vanderbijlpark</span><span>pet shop vereeniging</span></div></dd>
+        <dt>What counts</dt><dd>Calls, directions to the shop, visits to the contact page</dd>
+        <dt>Shows</dt><dd>Your address, hours, phone and star rating in the ad</dd>
+      </dl>
+    </div>
+    <div class="camp">
+      <span class="sw" style="background:#f5a623"></span><b style="color:#fff">Campaign 2</b>
+      <h3>Animals for sale</h3>
+      <dl>
+        <dt>Who sees it</dt><dd>Within about 100 km, because animal buyers already come from Joburg, Kroonstad and Parys</dd>
+        <dt>Searches</dt><dd><div class="kw"><span>hamster for sale</span><span>guinea pig for sale</span><span>bearded dragon for sale</span><span>leopard gecko for sale</span><span>ball python for sale</span></div></dd>
+        <dt>What counts</dt><dd>WhatsApp reservations</dd>
+        <dt>Rule</dt><dd>An animal's ads pause automatically when it is out of stock</dd>
+      </dl>
+    </div>
+    <div class="camp">
+      <span class="sw" style="background:var(--coral)"></span><b style="color:#fff">Campaign 3</b>
+      <h3>Feeders delivered</h3>
+      <dl>
+        <dt>Who sees it</dt><dd>South Africa, wherever you courier frozen and live feeders</dd>
+        <dt>Searches</dt><dd><div class="kw"><span>frozen mice for snakes</span><span>live crickets for sale</span><span>mealworms for sale</span><span>frozen rats</span><span>superworms</span></div></dd>
+        <dt>What counts</dt><dd>Paid online orders</dd>
+        <dt>Why</dt><dd>Feeder buyers reorder every few weeks, so each one is worth far more than the first order</dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class="rules">
+    <div class="rule"><b>Words we block</b>free, adoption, rescue, SPCA, "how to care", jobs, and anything for species you do not stock</div>
+    <div class="rule"><b>The stop rule</b>Over R300 of ads per order or confirmed reservation, and not improving after two weeks, we pause that campaign</div>
+    <div class="rule"><b>You own it</b>The account is in Reptilia's name. Spend goes from your card to Google; we never handle it</div>
+  </div>
+</div>
+</section>
+
+<!-- 7 TIMELINE -->
+<section class="chap">
+<div class="wrap">
+  <div class="eyebrow"><b>7</b>The first 90 days</div>
+  <h2>What happens when</h2>
+  <div class="tl">
+    <div class="wk"><div class="w">Week of 16 Nov</div><h3>Switch on</h3><ul><li>Sales tracking live and tested</li><li>Reserve button on all animal pages</li><li>Courier checkout off for animals</li><li>Gift vouchers live</li><li>Hosting options and prices to you</li></ul></div>
+    <div class="wk"><div class="w">23 Nov – 6 Dec</div><h3>Pages and ads</h3><ul><li>Top 10 animal pages rewritten</li><li>Species pages published</li><li>Three starter setups</li><li>Hosting move, before ads go live</li><li>Google Ads live</li></ul></div>
+    <div class="wk"><div class="w">December</div><h3>Christmas push</h3><ul><li>Vouchers and setups campaign</li><li>Feeder stock-up email</li><li>Weekly WhatsApp update to you</li></ul></div>
+    <div class="wk"><div class="w">Jan – 12 Feb</div><h3>Reorders and win-back</h3><ul><li>Reorder reminders running</li><li>"We miss you" to past customers</li><li>Day-90 review</li></ul></div>
+  </div>
+  <p class="src">If the answer on animals comes after this week, the review date moves with it, so the plan is judged on 90 days of actually running.</p>
+</div>
+</section>
+
+<!-- 8 SCOREBOARD + MONEY -->
+<section class="chap wash">
+<div class="wrap">
+  <div class="eyebrow"><b>8</b>How we judge it</div>
+  <h2>Numbers we agree today</h2>
+  <div class="scroll"><table class="score">
+    <thead><tr><th>Measure</th><th style="text-align:right">Now</th><th style="text-align:right">By 12 Feb 2027</th><th>Counted in</th></tr></thead>
+    <tbody>
+      <tr><td>Online sales per month</td><td class="n">R9,724</td><td class="n goal">R15,000</td><td>Your store's orders</td></tr>
+      <tr><td>Average online order</td><td class="n">R374</td><td class="n goal">R550</td><td>Your store's orders</td></tr>
+      <tr><td>Animal reservations per month</td><td class="n">not counted</td><td class="n goal">30</td><td>WhatsApp reservation log</td></tr>
+      <tr><td>Calls and directions from Google</td><td class="n">baseline in week 1</td><td class="n goal">+30%</td><td>Google Business Profile</td></tr>
+      <tr><td>Google clicks per day</td><td class="n">86</td><td class="n goal">110</td><td>Search Console</td></tr>
+      <tr><td>Google reviews</td><td class="n">497 · 4.6★</td><td class="n goal">560+</td><td>Google Maps</td></tr>
+    </tbody>
+  </table></div>
+  <div class="math"><b>Why the counter matters most.</b> When animals did sell online, an order with an animal in it averaged R1,213, about three times a feeder order. Thirty reservations a month at that value is roughly <b>R36,000 of counter sales</b>, before the feeders those new keepers buy every few weeks. To count it we track every reservation, and your till staff ask one question for 90 days: <b>"Did you find us online?"</b></div>
+
+  <div class="eyebrow" style="margin-top:56px"><b>9</b>The terms</div>
+  <h2>Same fee, more of it working on sales</h2>
+  <div class="money">
+    <div class="big">
+      <div class="muted" style="font-size:14px;margin-bottom:8px">Year one, as agreed in November 2025</div>
+      <div class="n">R6,500<small> / month</small></div>
+      <ul><li>R2,500 of it was the website build and management for 12 months, then R500 for hosting and support</li><li>The rest: content, reviews system, WhatsApp automation, e-commerce work</li></ul>
+    </div>
+    <div class="big hl">
+      <div class="muted" style="font-size:14px;margin-bottom:8px">Year two, proposed</div>
+      <div class="n">R6,500<small> / month</small></div>
+      <ul><li>The website line drops to R500 as agreed. The R2,000 it frees up moves into <b>Google Ads management and the reservation programme</b></li><li>Everything else continues: site, search, reviews, content, emails, weekly WhatsApp update</li><li>90 days, then month to month. Either side can stop with one month's notice if the numbers do not move</li><li>Google Ads budget optional and separate: about R4,500 a month, paid by you to Google</li></ul>
+    </div>
+  </div>
+  <div class="math"><b>One fix outside the fee: the hosting itself.</b> The site sits on a shared plan that switches off server power when it is busy. Every large stock import from the POS (more than 900 products) pushes it over that line, and for the next while shoppers get slow pages or "service unavailable" errors. We hit the same wall twice in August. More traffic from Google and ads makes it worse, not better. Until the move, we run imports after hours and in smaller batches. The lasting fix is a stronger plan with its own dedicated resources, and we handle the move.</div>
+</div>
+</section>
+
+<!-- 10 ASKS -->
+<section class="chap dark">
+<div class="wrap">
+  <div class="eyebrow"><b>10</b>For today</div>
+  <h2>Six answers that start it</h2>
+  <ol class="asks">
+    <li><div><b>Animals: reserve and collect in store, no courier?</b><span>Everything in job 1 depends on this.</span></div></li>
+    <li><div><b>Who answers reservation WhatsApps in the shop, and how fast?</b><span>A reservation that waits a day is a sale lost to the next shop on Google.</span></div></li>
+    <li><div><b>May we email past customers?</b><span>If they were offered a way to opt out when they bought, a short note about similar products is generally allowed. If you are unsure, we start only with people who opt in from now on.</span></div></li>
+    <li><div><b>What does one courier parcel cost you?</b><span>This settles whether a free-delivery level makes or loses money.</span></div></li>
+    <li><div><b>Google Ads: yes or no on about R4,500 a month,</b><span>and manager access to your Google Business Profile so we can measure calls and directions.</span></div></li>
+    <li><div><b>Hosting: may we move the site to a stronger plan?</b><span>The current shared plan has a hard limit on server power. A big stock import from the POS uses up that allowance, and while it runs, shoppers get slow pages or "service unavailable" errors. We bring you two or three priced options this month; the hosting bill stays in your name.</span></div></li>
+  </ol>
+  <p style="margin-top:24px;color:var(--nightmuted)">And one number, if you are willing to share it: roughly what the counter takes in a normal month. From now on the website's job is the counter as much as the checkout.</p>
+</div>
+</section>
+</main>
+<footer><div class="wrap">JCE Media · 12 November 2026 · Built from Reptilia's own store data, Google Search Console and Google Maps. Private, not indexed.</div></footer>
