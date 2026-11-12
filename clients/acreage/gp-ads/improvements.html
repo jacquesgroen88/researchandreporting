@@ -1,0 +1,278 @@
+<title>Good &amp; Proper Ads Improvements</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one reading column; summary first, then four phases in the order they should happen, then the working detail (copy, negatives, page spec) and the decisions needed */
+:root{
+  --bg:#f6f7f4; --surface:#ffffff; --fg:#1d2420; --muted:#5d6a62; --line:#dde2dc;
+  --accent:#1f6b4f; --accent-soft:#e3efe8;
+  --warn:#9a6400; --warn-soft:#f6ecd6; --bad:#b3261e; --bad-soft:#f8e4e1;
+  --o1:#2f5d8a; --o1-soft:#e2ebf4; --o2:#7a4b8c; --o2-soft:#efe6f3;
+  --display:"Archivo",system-ui,sans-serif; --body:"Source Sans 3",system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#121614; --surface:#1a201d; --fg:#e6ebe7; --muted:#9aa8a0; --line:#2c3531;
+  --accent:#5cc59a; --accent-soft:#1d3329;
+  --warn:#e2b45a; --warn-soft:#352a16; --bad:#f08a80; --bad-soft:#3a1f1c;
+  --o1:#8cb8e6; --o1-soft:#1c2a38; --o2:#cfa3e0; --o2-soft:#2c2133; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121614; --surface:#1a201d; --fg:#e6ebe7; --muted:#9aa8a0; --line:#2c3531;
+  --accent:#5cc59a; --accent-soft:#1d3329;
+  --warn:#e2b45a; --warn-soft:#352a16; --bad:#f08a80; --bad-soft:#3a1f1c;
+  --o1:#8cb8e6; --o1-soft:#1c2a38; --o2:#cfa3e0; --o2-soft:#2c2133; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:17px;line-height:1.55}
+.wrap{max-width:900px;margin:0 auto;padding-block:40px 80px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:44px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.15;margin:0}
+h1{font-size:clamp(30px,5vw,44px);font-weight:800;letter-spacing:-.01em}
+h2{font-size:24px;font-weight:700}
+h3{font-size:18px;font-weight:700}
+p{margin:0;max-width:68ch}
+section{display:flex;flex-direction:column;gap:14px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.meta{display:flex;flex-wrap:wrap;gap:6px 18px;font-family:var(--mono);font-size:13px;color:var(--muted)}
+.lede{font-size:19px;max-width:64ch}
+.note{font-size:14.5px;color:var(--muted)}
+.big3{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.big3 div{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:16px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.big3 b{font-family:var(--display);font-size:17px}
+.big3 span{font-size:15px;color:var(--muted)}
+.phase{display:flex;flex-direction:column;gap:12px;border-top:2px solid var(--accent);padding-top:14px}
+.phase-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px}
+.when{font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+.items{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.items li{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.items .top{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
+.items .top h3{flex:1 1 260px}
+.items p{font-size:16px}
+.why{font-size:15px;color:var(--muted)}
+.why b{color:var(--fg);font-weight:600}
+.tag{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:3px 8px;border-radius:3px;white-space:nowrap}
+.own-ads{background:var(--o1-soft);color:var(--o1)}
+.own-web{background:var(--o2-soft);color:var(--o2)}
+.own-gp{background:var(--warn-soft);color:var(--warn)}
+.eff{background:var(--accent-soft);color:var(--accent)}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14.5px;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:8px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--mono);font-size:11.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);background:var(--bg);white-space:nowrap}
+td.n,th.n{text-align:right;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:1px 7px;border-radius:3px;white-space:nowrap}
+.pill.ok{background:var(--accent-soft);color:var(--accent)} .pill.warn{background:var(--warn-soft);color:var(--warn)} .pill.bad{background:var(--bad-soft);color:var(--bad)}
+ul.tight{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;max-width:70ch}
+ol.qs{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:10px;max-width:70ch}
+ol.qs li::marker{font-family:var(--mono);font-weight:600;color:var(--accent)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips code{font-family:var(--mono);font-size:13px;background:var(--surface);border:1px solid var(--line);padding:3px 8px;border-radius:3px}
+code{font-family:var(--mono);font-size:.88em;background:var(--accent-soft);padding:1px 5px;border-radius:3px}
+.ad{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:16px;display:flex;flex-direction:column;gap:4px;max-width:620px}
+.ad .sp{font-size:13px;color:var(--muted)}
+.ad .hl{font-family:var(--display);font-size:19px;color:var(--o1);line-height:1.25}
+.ad .ds{font-size:15px}
+.legend{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;font-size:14px;color:var(--muted)}
+hr{border:0;border-top:1px solid var(--line);margin:0}
+</style>
+
+<div class="wrap">
+
+<header style="display:flex;flex-direction:column;gap:12px">
+  <div class="eyebrow">Google Ads · Improvements and suggestions</div>
+  <h1>Good &amp; Proper Ads Improvements</h1>
+  <div class="meta"><span>Account 455-376-7888</span><span>10 Nov 2026</span><span>Companion to the audit of the same date</span></div>
+  <p style="margin:2px 0 0"><a href="./" style="color:#C44830;font-weight:600;text-decoration:none;border-bottom:1px solid currentColor">← Back to the audit and the findings</a></p>
+  <p class="lede">The audit found an account that is tidy but aimed at the wrong target. This document sets out what to change, in the order it should change, who does each part, and how to tell whether it worked. Nothing here asks for more budget until the measurement is fixed.</p>
+</header>
+
+<section>
+  <h2>The three changes that matter most</h2>
+  <div class="big3">
+    <div><b>Count real enquiries, not taps</b><span>The bidding currently learns mostly from taps on the phone number. Until it learns from submitted forms and real calls, every other change is judged against the wrong number.</span></div>
+    <div><b>Sell catering for 80+ guests</b><span>The ads say "hire". The business sells catering with a guest minimum. Saying so in the ads stops paying for clicks the website then turns away.</span></div>
+    <div><b>Give corporate its own page</b><span>Corporate events are the most valuable bookings and have no page of their own. Both current pages take about 15 seconds to show on a phone.</span></div>
+  </div>
+  <div class="legend"><span>Who does it:</span><span class="tag own-ads">Ads manager</span><span class="tag own-web">Web developer</span><span class="tag own-gp">Good &amp; Proper</span><span class="tag eff">Effort</span></div>
+</section>
+
+<hr>
+
+<section class="phase">
+  <div class="phase-head"><span class="when">Phase 1 · Week 1</span><h2>Fix the measurement</h2></div>
+  <p>Everything after this depends on the account counting the right thing. These changes are small and should be done together.</p>
+  <ul class="items">
+    <li><div class="top"><h3>Reconcile 90 days of enquiries</h3><span class="tag own-gp">Good &amp; Proper</span><span class="tag eff">1 hour</span></div>
+      <p>Export every enquiry received from 12 Aug to 9 Nov (form, phone, WhatsApp, email), with date, source if known, guest count, and whether it booked.</p>
+      <p class="why"><b>Why:</b> GA4 recorded 60 form submissions and the Google Ads tag recorded 17 for the same period. The real list settles which one is right and gives the first true cost per enquiry.</p></li>
+    <li><div class="top"><h3>Change which conversions the bidding learns from</h3><span class="tag own-ads">Ads manager</span><span class="tag eff">30 min</span></div>
+      <p>Make primary: the website form (counted once per person), calls from ads of 60 seconds or more, and calls to the website forwarding number of 60 seconds or more. Move to secondary: the phone-link tap, the GA4 form event, and the individual staff call-click events.</p>
+      <p class="why"><b>Why:</b> 112 of the 172 primary conversions in 90 days were taps on a phone link. Google's own call tracking logged 1 call from ads in the same period. The setup counts every tap, so one person tapping twice is two conversions.</p></li>
+    <li><div class="top"><h3>Add a thank-you page and fire the form conversion on it</h3><span class="tag own-web">Web developer</span><span class="tag eff">2 hours</span></div>
+      <p>Send every form submission to a <code>/thank-you/</code> page and trigger the Google Ads conversion from that page load. Then submit one test enquiry and confirm it appears in Google Ads within 24 hours.</p>
+      <p class="why"><b>Why:</b> The form currently shows an inline message, which is harder to track reliably and is the likely reason the two form counts disagree.</p></li>
+    <li><div class="top"><h3>Add a WhatsApp button and track it as secondary</h3><span class="tag own-web">Web developer</span><span class="tag eff">1 hour</span></div>
+      <p>A floating WhatsApp button on every page, wired to the WhatsApp event already set up in the tag manager.</p>
+      <p class="why"><b>Why:</b> Many South African buyers prefer WhatsApp to a form. The tracking for it already exists and is waiting for a button.</p></li>
+    <li><div class="top"><h3>Move the conversion goals into this account</h3><span class="tag own-ads">Ads manager</span><span class="tag own-gp">Good &amp; Proper</span><span class="tag eff">1 hour</span></div>
+      <p>The account shows its conversion goals are managed from a manager account. Ask for them to be set at the account level, so the setup belongs to Good &amp; Proper.</p>
+      <p class="why"><b>Why:</b> If the manager account is ever unlinked, the conversion setup and the learning the bidding has built on it go with it.</p></li>
+  </ul>
+</section>
+
+<section class="phase">
+  <div class="phase-head"><span class="when">Phase 2 · Weeks 1 to 3</span><h2>Point the ads at the right buyer</h2></div>
+  <ul class="items">
+    <li><div class="top"><h3>Rewrite the ads around catering for events of 80+ guests</h3><span class="tag own-ads">Ads manager</span><span class="tag eff">Half a day</span></div>
+      <p>Put the guest minimum and "catering" in at least one pinned headline or the first description. Keep the word "hire" in some headlines, because buyers use it loosely to mean catering. Let the copy do the filtering. Example copy is further down.</p>
+      <p class="why"><b>Why:</b> "Food truck hire" is the biggest keyword the account has ever had (R67.7k). The website says Good &amp; Proper only does catering, does not hire out trucks on their own, and needs at least 80 guests (150 from October to December). A searcher planning a 30-person party pays for nothing and costs a click.</p></li>
+    <li><div class="top"><h3>Add a negative keyword list for searches that can never book</h3><span class="tag own-ads">Ads manager</span><span class="tag eff">1 hour</span></div>
+      <p>Shared list across both campaigns: rental, buying and building trucks, weddings, small private parties, single-product trucks and out-of-area places. Starting list further down.</p>
+      <p class="why"><b>Why:</b> In 90 days, 128 search terms with no conversion cost R6,148, about R2,000 a month. That is only the visible part; Google hides about a third of search-term spend.</p></li>
+    <li><div class="top"><h3>Keep the corporate campaign to corporate searches</h3><span class="tag own-ads">Ads manager</span><span class="tag eff">1 hour</span></div>
+      <p>Add the generic hire and food-truck terms as negatives in the corporate campaign, so those searches go to the main campaign. Add corporate keywords: year-end function catering, company family day catering, conference catering Johannesburg, team building catering, product launch catering.</p>
+      <p class="why"><b>Why:</b> The corporate campaign's biggest search term is "food truck for hire" (R1,558 in 90 days, about R36 a click). The main campaign buys the same search for about R20. Searches that say "corporate" cost only R123 in the same period.</p></li>
+    <li><div class="top"><h3>Let Google pick the better ads</h3><span class="tag own-ads">Ads manager</span><span class="tag eff">15 min</span></div>
+      <p>Change ad rotation from "rotate indefinitely" to "optimise". Replace the four ads rated Poor, three of which are in the corporate campaign. Remove the age, gender, device and schedule bid adjustments that Maximize Conversions mostly ignores. Keep the location exclusions.</p>
+      <p class="why"><b>Why:</b> The Poor-rated corporate ads spent R3,732 in 90 days. Forced even rotation stops the bidding from favouring the ads that work.</p></li>
+    <li><div class="top"><h3>Fill out the ad assets</h3><span class="tag own-ads">Ads manager</span><span class="tag eff">1 hour</span></div>
+      <p>Sitelinks to Corporate events, Menus, Our trucks and Request a quote (once those pages exist). Callouts such as "Minimum 80 guests", "Gauteng-wide" and "Full-service catering". A structured snippet listing event types. Check what is already live first; the audit did not review assets in detail.</p>
+      <p class="why"><b>Why:</b> Assets make the ad bigger and pre-qualify the click at no extra cost.</p></li>
+  </ul>
+</section>
+
+<section class="phase">
+  <div class="phase-head"><span class="when">Phase 3 · Weeks 2 to 6</span><h2>Build landing pages that match the search</h2></div>
+  <ul class="items">
+    <li><div class="top"><h3>Speed up the two existing pages now</h3><span class="tag own-web">Web developer</span><span class="tag eff">1 day</span></div>
+      <p>Compress and resize images, serve them in a modern format, defer non-essential scripts in the tag manager, and remove render-blocking files. Target: main content visible in under 3 seconds on a phone and page weight under 1.5 MB.</p>
+      <p class="why"><b>Why:</b> Both pages score 38 and 39 on mobile Lighthouse, take about 15 seconds to show their main content on a throttled phone, and weigh 3.3 MB. Google rates landing page experience Below average on 8 of the 9 scored keywords, which raises the cost of every click.</p></li>
+    <li><div class="top"><h3>Build a corporate events page</h3><span class="tag own-web">Web developer</span><span class="tag own-gp">Good &amp; Proper</span><span class="tag eff">3 to 5 days</span></div>
+      <p>Its own URL, for example <code>/corporate-events/</code>, aimed at year-end functions, family days, conferences and launches. Point every corporate ad here. Spec further down.</p>
+      <p class="why"><b>Why:</b> Corporate is the highest-value booking and currently lands on the general homepage, with the form near the bottom.</p></li>
+    <li><div class="top"><h3>Build a food truck catering Johannesburg page</h3><span class="tag own-web">Web developer</span><span class="tag eff">2 to 3 days</span></div>
+      <p>Aimed at the main campaign's searches: food truck hire, food trucks Johannesburg, food truck catering. Says plainly what is offered, the minimum, and the area served. Replaces <code>/event-catering/</code> as a landing page.</p>
+      <p class="why"><b>Why:</b> <code>/event-catering/</code> is a near copy of the homepage, so the site effectively has one page for every search. A page that repeats the searcher's words in its heading helps Quality Score directly.</p></li>
+    <li><div class="top"><h3>Shorten the form</h3><span class="tag own-web">Web developer</span><span class="tag eff">1 hour</span></div>
+      <p>Move it near the top. Ask for name, phone, email, event date and guest count. Make Company optional except on the corporate page.</p>
+      <p class="why"><b>Why:</b> The current form has 5 required fields including Company, which puts off private buyers. A guest-count field qualifies the lead before anyone calls back.</p></li>
+  </ul>
+</section>
+
+<section class="phase">
+  <div class="phase-head"><span class="when">Phase 4 · From week 6</span><h2>Then grow it</h2></div>
+  <ul class="items">
+    <li><div class="top"><h3>Feed booked value back to Google Ads</h3><span class="tag own-gp">Good &amp; Proper</span><span class="tag own-ads">Ads manager</span><span class="tag eff">Monthly, 30 min</span></div>
+      <p>Each month, upload booked events with their value against the click that produced them (offline conversion import, using the click ID captured by the form). Once there are enough, move the bidding to value-based.</p>
+      <p class="why"><b>Why:</b> Today a 30-person enquiry and a 1,200-person family day count as the same one conversion. Values teach the bidding to prefer the corporate search.</p></li>
+    <li><div class="top"><h3>Decide on budget with clean numbers</h3><span class="tag own-gp">Good &amp; Proper</span><span class="tag eff">Decision</span></div>
+      <p>After four to six weeks of clean tracking, compare cost per real enquiry and cost per booking by campaign. Raise budget only where the cost per booking is acceptable.</p>
+      <p class="why"><b>Why:</b> The main campaign loses 20% of its possible impressions to budget, so there is room. Budgets have not changed since November 2024. More money into today's setup would mostly buy more phone-number taps.</p></li>
+    <li><div class="top"><h3>Plan the year-end season early</h3><span class="tag own-ads">Ads manager</span><span class="tag own-gp">Good &amp; Proper</span><span class="tag eff">Yearly</span></div>
+      <p>Start corporate year-end ads in August, when functions are being planned, and switch copy to the 150-guest minimum from October. Consider a separate year-end budget for August to November.</p>
+      <p class="why"><b>Why:</b> The minimum rises in the busiest season, so the copy has to change with it or the account pays for enquiries it cannot take.</p></li>
+  </ul>
+</section>
+
+<hr>
+
+<section>
+  <h2>Proposed conversion setup</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Action</th><th>Role</th><th>Count</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>Website form (thank-you page)</td><td><span class="pill ok">Primary</span></td><td>One</td><td>Google Ads tag, fired on <code>/thank-you/</code></td></tr>
+      <tr><td>Calls from ads, 60 s or longer</td><td><span class="pill ok">Primary</span></td><td>One</td><td>Already exists; raise the minimum call length</td></tr>
+      <tr><td>Calls to the website number, 60 s or longer</td><td><span class="pill ok">Primary</span></td><td>One</td><td>Currently secondary since 12 Oct</td></tr>
+      <tr><td>Booked event, with value</td><td><span class="pill ok">Primary</span> later</td><td>One</td><td>Offline import from the booking record, Phase 4</td></tr>
+      <tr><td>WhatsApp click</td><td><span class="pill warn">Secondary</span></td><td>One</td><td>New, once the button exists</td></tr>
+      <tr><td>Phone-link tap</td><td><span class="pill warn">Secondary</span></td><td>One</td><td>Currently primary and counted every time</td></tr>
+      <tr><td>GA4 form event</td><td><span class="pill warn">Secondary</span></td><td>One</td><td>Keep for comparison with the Ads tag</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">Expect the number of conversions to drop sharply and the cost per conversion to rise when this goes live. That is the true figure showing, not a fall in performance. Compare against the reconciled enquiry list, not against last month's conversion count.</p>
+</section>
+
+<section>
+  <h2>Example ad copy</h2>
+  <p>For the main campaign. Headlines are 30 characters or fewer, descriptions 90 or fewer.</p>
+  <div class="ad">
+    <span class="sp">Sponsored · goodandproperfoodtrucks.co.za/catering</span>
+    <span class="hl">Food Truck Catering Gauteng | Catering for 80+ Guests | Request a Catering Quote</span>
+    <span class="ds">Food truck catering for corporate events, year-ends and family days. Minimum 80 guests. We bring the trucks, the menu and the team. Full catering only, no truck-only hire.</span>
+  </div>
+  <div class="tbl"><table>
+    <thead><tr><th>Headlines</th><th class="n">Chars</th></tr></thead>
+    <tbody>
+      <tr><td>Food Truck Catering Gauteng</td><td class="n">27</td></tr>
+      <tr><td>Catering for 80+ Guests</td><td class="n">23</td></tr>
+      <tr><td>Johannesburg Event Catering</td><td class="n">27</td></tr>
+      <tr><td>Food Truck Hire, Fully Catered</td><td class="n">30</td></tr>
+      <tr><td>Corporate Year-End Catering</td><td class="n">27</td></tr>
+      <tr><td>Food Trucks for Family Days</td><td class="n">27</td></tr>
+      <tr><td>Request a Catering Quote</td><td class="n">24</td></tr>
+      <tr><td>Full-Service Truck Catering</td><td class="n">27</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">Check guest minimums, area and any price per head with Good &amp; Proper before using. Do not add claims such as response times or star ratings unless they are confirmed.</p>
+</section>
+
+<section>
+  <h2>Starting negative keyword list</h2>
+  <p>Phrase match, as a shared list on both campaigns. Review the search terms report every two weeks and add to it.</p>
+  <div class="chips">
+    <code>rent</code><code>rental</code><code>rentals</code><code>for sale</code><code>buy</code><code>second hand</code><code>used</code><code>trailer</code><code>trailers</code><code>build</code><code>manufacturer</code><code>how to start</code><code>business plan</code><code>permit</code><code>licence</code><code>wedding</code><code>birthday</code><code>kids party</code><code>pizza truck</code><code>coffee truck</code><code>coffee van</code><code>ice cream truck</code><code>jobs</code><code>vacancies</code>
+  </div>
+  <p class="note">Do not add "hire" or "party" on their own: "food truck hire" is the main keyword and "corporate party" is a buyer. Pretoria and other areas depend on where Good &amp; Proper will travel (see the questions below).</p>
+</section>
+
+<section>
+  <h2>Corporate landing page spec</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Part</th><th>What goes there</th></tr></thead>
+    <tbody>
+      <tr><td>Heading</td><td>Food truck catering for corporate events in Gauteng</td></tr>
+      <tr><td>Under the heading</td><td>Year-end functions, family days, conferences and launches. From 80 guests (150 in October to December).</td></tr>
+      <tr><td>Above the fold</td><td>The short form, a WhatsApp button and the phone number as text</td></tr>
+      <tr><td>Proof</td><td>Photos of the actual trucks at real corporate events, the client logo wall, three short reviews</td></tr>
+      <tr><td>Offer</td><td>Truck line-up and sample menus; a price-per-head range if Good &amp; Proper is willing to show one</td></tr>
+      <tr><td>FAQ</td><td>Minimum guests, areas served, how far ahead to book, dietary options, what is included</td></tr>
+      <tr><td>After submit</td><td><code>/thank-you/</code> page with what happens next and when to expect a reply</td></tr>
+      <tr><td>Speed target</td><td>Main content in under 3 seconds on a phone; under 1.5 MB</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <h2>What to track each month</h2>
+  <ul class="tight">
+    <li><b>Real enquiries</b> from the enquiry list, split by campaign</li>
+    <li><b>Qualified enquiries</b>: 80+ guests, in the service area, catering not truck-only hire</li>
+    <li><b>Booked events and booked value</b>, corporate and private separately</li>
+    <li><b>Cost per qualified enquiry and cost per booking</b>, the two numbers that decide budget</li>
+    <li><b>Impression share lost to budget</b> on the main campaign, as the signal for when more budget would help</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Questions for Good &amp; Proper</h2>
+  <ol class="qs">
+    <li>Can you export every enquiry from 12 August to 9 November, with how it came in, the guest count and whether it booked?</li>
+    <li>Are the minimums still 80 guests, and 150 from October to December? Can they appear in the ads?</li>
+    <li>Which areas will you travel to? Pretoria searches are currently getting clicks and no enquiries.</li>
+    <li>Is there a price-per-head range you are comfortable showing on the site or in the ads?</li>
+    <li>Where are bookings recorded, and what is a typical booking worth for corporate and for private events?</li>
+    <li>Are you happy for the conversion goals to be moved into your own Google Ads account?</li>
+    <li>Who builds and maintains the website, and can they take on the speed work and two new pages?</li>
+  </ol>
+</section>
+
+<section>
+  <h2>What this does not promise</h2>
+  <ul class="tight">
+    <li>No forecast of extra bookings. Without the real enquiry list there is no reliable baseline to forecast from.</li>
+    <li>The R2,000 a month on non-converting searches is measured against conversions that are mostly phone taps. Some of those searches may have produced real calls that were never tracked.</li>
+    <li>Landing page speed figures come from one lab test on a throttled mobile profile, not from real visitor data.</li>
+  </ul>
+  <p class="note">Based on Google Ads account 455-376-7888 and the website goodandproperfoodtrucks.co.za, both reviewed on 10 Nov 2026. Full evidence is in the companion audit.</p>
+</section>
+
+</div>

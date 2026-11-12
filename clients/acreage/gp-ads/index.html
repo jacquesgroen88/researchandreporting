@@ -1,0 +1,267 @@
+<title>Good &amp; Proper Ads Audit</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: single reading column, verdict first, then evidence sections; tables scroll inside their own frame */
+:root{
+  --bg:#f6f7f4; --surface:#ffffff; --fg:#1d2420; --muted:#5d6a62; --line:#dde2dc;
+  --accent:#1f6b4f; --accent-soft:#e3efe8;
+  --bad:#b3261e; --bad-soft:#f8e4e1; --warn:#9a6400; --warn-soft:#f6ecd6; --ok:#1f6b4f; --ok-soft:#e3efe8;
+  --display:"Archivo",system-ui,sans-serif; --body:"Source Sans 3",system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#121614; --surface:#1a201d; --fg:#e6ebe7; --muted:#9aa8a0; --line:#2c3531;
+  --accent:#5cc59a; --accent-soft:#1d3329;
+  --bad:#f08a80; --bad-soft:#3a1f1c; --warn:#e2b45a; --warn-soft:#352a16; --ok:#5cc59a; --ok-soft:#1d3329; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121614; --surface:#1a201d; --fg:#e6ebe7; --muted:#9aa8a0; --line:#2c3531;
+  --accent:#5cc59a; --accent-soft:#1d3329;
+  --bad:#f08a80; --bad-soft:#3a1f1c; --warn:#e2b45a; --warn-soft:#352a16; --ok:#5cc59a; --ok-soft:#1d3329; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:17px;line-height:1.55}
+.wrap{max-width:900px;margin:0 auto;padding-block:40px 80px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:44px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.15;margin:0}
+h1{font-size:clamp(30px,5vw,44px);font-weight:800;letter-spacing:-.01em}
+h2{font-size:24px;font-weight:700}
+h3{font-size:18px;font-weight:700}
+p{margin:0;max-width:68ch}
+section{display:flex;flex-direction:column;gap:14px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.meta{display:flex;flex-wrap:wrap;gap:6px 18px;font-family:var(--mono);font-size:13px;color:var(--muted)}
+.lede{font-size:19px;max-width:64ch}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.kpi{background:var(--surface);padding:14px 16px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.kpi b{font-family:var(--display);font-size:24px;font-variant-numeric:tabular-nums}
+.kpi span{font-size:13px;color:var(--muted)}
+.findings{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.findings li{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:14px 16px}
+.findings li p{grid-column:2}
+.sev{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:3px;height:fit-content;white-space:nowrap}
+.sev.high{background:var(--bad-soft);color:var(--bad)}
+.sev.med{background:var(--warn-soft);color:var(--warn)}
+.sev.ok{background:var(--ok-soft);color:var(--ok)}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14.5px;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:8px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-family:var(--mono);font-size:11.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);background:var(--bg)}
+td.n,th.n{text-align:right}
+tr:last-child td{border-bottom:0}
+tr.total td{font-weight:600}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:1px 7px;border-radius:3px}
+.pill.bad{background:var(--bad-soft);color:var(--bad)} .pill.warn{background:var(--warn-soft);color:var(--warn)} .pill.ok{background:var(--ok-soft);color:var(--ok)}
+.note{font-size:14.5px;color:var(--muted)}
+blockquote{margin:0;border-left:3px solid var(--accent);padding:4px 0 4px 14px;font-style:italic;max-width:64ch}
+.bars{display:grid;grid-template-columns:repeat(24,1fr);gap:3px;align-items:end;height:120px;padding:10px 12px 0;background:var(--surface);border:1px solid var(--line);border-radius:6px 6px 0 0}
+.bars div{background:var(--accent);border-radius:2px 2px 0 0;min-height:2px;position:relative}
+.bars-x{display:grid;grid-template-columns:repeat(24,1fr);gap:3px;padding:4px 12px 8px;font-family:var(--mono);font-size:10px;color:var(--muted);background:var(--surface);border:1px solid var(--line);border-top:0;border-radius:0 0 6px 6px}
+.bars-x span{text-align:center;overflow:hidden}
+ol.plan{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:12px;max-width:70ch}
+ol.plan li::marker{font-family:var(--mono);font-weight:600;color:var(--accent)}
+ul.tight{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;max-width:70ch}
+code{font-family:var(--mono);font-size:.88em;background:var(--accent-soft);padding:1px 5px;border-radius:3px}
+hr{border:0;border-top:1px solid var(--line);margin:0}
+</style>
+
+<div class="wrap">
+
+<header style="display:flex;flex-direction:column;gap:12px">
+  <div class="eyebrow">Google Ads audit · Read-only seat</div>
+  <h1>Good &amp; Proper Ads Audit</h1>
+  <div class="meta"><span>Account 455-376-7888</span><span>Pulled 10 Nov 2026</span><span>History Sep 2019 to Nov 2026</span><span>Managed by Launch Digital</span></div>
+  <p style="margin:2px 0 0"><a href="./improvements.html" style="color:#C44830;font-weight:600;text-decoration:none;border-bottom:1px solid currentColor">What to change, and in what order →</a></p>
+  <p class="lede">The account is tidy but it is optimising toward the wrong thing. Smart bidding is chasing taps on a phone number, the ads buy "food truck hire" traffic the website turns away, and both landing pages take about 15 seconds to show on a phone. Spend is not the problem. What the money is pointed at is.</p>
+</header>
+
+<section>
+  <div class="kpis">
+    <div class="kpi"><b>R308.6k</b><span>Spent since Sep 2019</span></div>
+    <div class="kpi"><b>R95.1k</b><span>Spent 2026 to date</span></div>
+    <div class="kpi"><b>R9,569</b><span>Last 30 days</span></div>
+    <div class="kpi"><b>R159</b><span>Cost per "conversion", 30 days</span></div>
+    <div class="kpi"><b>67%</b><span>Search impression share, 30 days</span></div>
+  </div>
+  <p class="note">Last 30 days = 11 Oct to 9 Nov 2026. "Conversion" is in quotes on purpose: see finding 1.</p>
+</section>
+
+<section>
+  <h2>The findings, in order of cost</h2>
+  <ol class="findings">
+    <li><span class="sev high">High</span><h3>Most "conversions" are taps on a phone number</h3>
+      <p>Over the last 90 days the two primary conversion actions recorded 112 phone-link taps and 60 form events, both imported from GA4 and both counted every time they fire. A tap is not a call. Google's own call tracking logged 1 call from ads and 3 calls from the website number in the same period. Google's native form tag logged 17 forms where GA4 logged 60. Roughly two in three conversions the bidding learns from are taps, and none carry a booking value.</p></li>
+    <li><span class="sev high">High</span><h3>The ads sell truck hire. The website says it does not do truck hire.</h3>
+      <p>The biggest keyword ever is "food truck hire" (R67.7k). The website FAQ says Good &amp; Proper only provides catering and does not hire out trucks on their own, the form says no weddings and no truck hire to vendors, and the minimum is 80 guests (150 from October to December). Every hire-intent click is paid for and then told no.</p></li>
+    <li><span class="sev high">High</span><h3>Landing pages are slow and generic</h3>
+      <p>71% of 90-day spend lands on the homepage, 27% on <code>/event-catering/</code>, which is a near copy. Mobile Lighthouse scores 38 and 39, with the main content taking about 15 seconds to paint on a throttled phone. Google rates landing page experience <span class="pill bad">Below average</span> on 8 of the 9 live keywords that have a score.</p></li>
+    <li><span class="sev med">Medium</span><h3>The corporate campaign is mostly buying generic searches</h3>
+      <p>It spent R6,703 of visible search-term spend in 90 days on 18 conversions (R372 each). Its biggest term is "food truck for hire" (R1,558), a close variant also served by the main campaign at half the price. Searches that actually say corporate cost R123. There is no corporate landing page; its ads point at the homepage.</p></li>
+    <li><span class="sev med">Medium</span><h3>Conversion tracking is controlled from outside the account</h3>
+      <p>The account shows "Conversion goals and actions are managed by manager account". The goals sit with the managing agency's account, so changing or replacing the agency would also move or break the signal the bidding relies on.</p></li>
+    <li><span class="sev med">Medium</span><h3>Management has slowed to light maintenance</h3>
+      <p>Launch Digital made 311 of the 316 changes in the two years Google keeps. That was about 25 a month in early 2025 and about 5 a month in 2026, mostly negative keywords. Budgets last changed in November 2024, ad copy last changed on 1 June 2026, and nothing has changed since 20 October.</p></li>
+    <li><span class="sev ok">Fine</span><h3>Hygiene is good</h3>
+      <p>Search network only, no display or search partners, Gauteng targeting, tight exact and phrase match, a steady stream of negatives. Clicks are cheap (R20 to R24) and click-through is high (19%). The problems are strategy and measurement, not neglect.</p></li>
+  </ol>
+</section>
+
+<hr>
+
+<section>
+  <h2>Spend and results by year</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Campaign</th><th>Year</th><th class="n">Cost</th><th class="n">Clicks</th><th class="n">Conv.</th><th class="n">Cost / conv.</th><th class="n">Impr. share</th></tr></thead>
+    <tbody>
+      <tr><td>Smart campaign (old)</td><td>2019 to 2021</td><td class="n">R8,064</td><td class="n">4,740</td><td class="n">1</td><td class="n">n/a</td><td class="n">16 to 28%</td></tr>
+      <tr><td>Gauteng Catering</td><td>2024 (stopped)</td><td class="n">R20,199</td><td class="n">1,825</td><td class="n">124</td><td class="n">R162</td><td class="n">16%</td></tr>
+      <tr><td>Food Truck Hire (main)</td><td>2024</td><td class="n">R57,403</td><td class="n">3,387</td><td class="n">359</td><td class="n">R160</td><td class="n">58%</td></tr>
+      <tr><td>Food Truck Hire (main)</td><td>2025</td><td class="n">R83,413</td><td class="n">4,271</td><td class="n">549</td><td class="n">R152</td><td class="n">60%</td></tr>
+      <tr><td>Food Truck Hire (main)</td><td>2026 to date</td><td class="n">R71,913</td><td class="n">3,600</td><td class="n">493</td><td class="n">R146</td><td class="n">60%</td></tr>
+      <tr><td>Corporate</td><td>2024</td><td class="n">R19,232</td><td class="n">486</td><td class="n">35</td><td class="n">R549</td><td class="n">73%</td></tr>
+      <tr><td>Corporate</td><td>2025</td><td class="n">R25,117</td><td class="n">689</td><td class="n">55</td><td class="n">R457</td><td class="n">32%</td></tr>
+      <tr><td>Corporate</td><td>2026 to date</td><td class="n">R23,201</td><td class="n">452</td><td class="n">68</td><td class="n">R340</td><td class="n">84%</td></tr>
+      <tr class="total"><td>Account total</td><td>Sep 2019 to Nov 2026</td><td class="n">R308,620</td><td class="n">19,452</td><td class="n">1,684</td><td class="n">R183</td><td class="n"></td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">The falling cost per conversion since mid 2025 is partly a counting change. On 16 July 2025 phone-link taps were made a primary conversion, so 2025 and 2026 count something 2024 did not. A Maverick Legal &amp; Advisory smart campaign (R78, 2019) also sits in this account, paused.</p>
+</section>
+
+<section>
+  <h2>Conversion tracking</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Conversion action</th><th>Source</th><th>Role</th><th>Counts</th><th class="n">Last 90 days</th></tr></thead>
+    <tbody>
+      <tr><td>LD_call_click (tap on phone link)</td><td>GA4 import</td><td><span class="pill bad">Primary</span></td><td>Every</td><td class="n">112</td></tr>
+      <tr><td>LD_callmeback_submit (form)</td><td>GA4 import</td><td><span class="pill warn">Primary</span></td><td>Every</td><td class="n">60</td></tr>
+      <tr><td>Lead, Website Form (Google Ads tag)</td><td>Google Ads</td><td>Secondary</td><td>One</td><td class="n">17</td></tr>
+      <tr><td>Calls from ads</td><td>Google call tracking</td><td>Primary</td><td>Every</td><td class="n">1</td></tr>
+      <tr><td>Call from website, forwarding 072 229 7122</td><td>Google call tracking</td><td>Secondary (since 12 Oct)</td><td>One</td><td class="n">3</td></tr>
+      <tr><td>LD_andrew_call_click / LD_jade_call_click</td><td>GA4 import</td><td>Secondary</td><td>Every</td><td class="n">5 / 0</td></tr>
+    </tbody>
+  </table></div>
+  <ul class="tight">
+    <li>The two form counts disagree by 3.5 times (60 against 17). One of them is wrong. Until that is settled with Jade's actual enquiry list, nobody knows the real cost per lead.</li>
+    <li>No action carries the value of a booking. A 30-person birthday enquiry and a 1,200-person corporate family day count as the same one conversion, so the bidding has no reason to prefer the corporate search.</li>
+    <li>The website has no thank-you page and no WhatsApp button, although the tag manager has a WhatsApp event waiting for one.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Keywords and Quality Score</h2>
+  <p>137 keywords exist. 12 are live; the rest are paused or sit in paused ad groups. Live keywords, last 30 days:</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Keyword</th><th>Campaign</th><th class="n">QS</th><th>Exp. CTR</th><th>Landing page</th><th>Ad relevance</th><th class="n">Cost</th><th class="n">Conv.</th></tr></thead>
+    <tbody>
+      <tr><td>"food truck hire"</td><td>Main</td><td class="n">n/a</td><td></td><td></td><td></td><td class="n">R2,245</td><td class="n">21</td></tr>
+      <tr><td>[food truck event hire]</td><td>Corporate</td><td class="n">7</td><td>Above</td><td><span class="pill bad">Below</span></td><td>Above</td><td class="n">R1,684</td><td class="n">6</td></tr>
+      <tr><td>"food trucks johannesburg"</td><td>Main</td><td class="n">n/a</td><td></td><td></td><td></td><td class="n">R1,189</td><td class="n">10</td></tr>
+      <tr><td>[food trucks]</td><td>Main</td><td class="n">5</td><td>Average</td><td><span class="pill bad">Below</span></td><td>Above</td><td class="n">R1,066</td><td class="n">4</td></tr>
+      <tr><td>[food vendors for events]</td><td>Corporate</td><td class="n">6</td><td>Above</td><td><span class="pill bad">Below</span></td><td>Average</td><td class="n">R1,034</td><td class="n">4</td></tr>
+      <tr><td>[food trucks johannesburg]</td><td>Main</td><td class="n">6</td><td>Above</td><td><span class="pill bad">Below</span></td><td>Average</td><td class="n">R916</td><td class="n">8</td></tr>
+      <tr><td>[food truck hire]</td><td>Main</td><td class="n">7</td><td>Above</td><td><span class="pill bad">Below</span></td><td>Above</td><td class="n">R756</td><td class="n">1</td></tr>
+      <tr><td>[food truck hire johannesburg]</td><td>Main</td><td class="n">7</td><td>Above</td><td><span class="pill warn">Average</span></td><td>Average</td><td class="n">R282</td><td class="n">3</td></tr>
+      <tr><td>[food trucks near me]</td><td>Main</td><td class="n">4</td><td>Average</td><td><span class="pill bad">Below</span></td><td>Average</td><td class="n">R221</td><td class="n">1</td></tr>
+      <tr><td>[food truck catering johannesburg]</td><td>Main</td><td class="n">5</td><td>Above</td><td><span class="pill bad">Below</span></td><td><span class="pill bad">Below</span></td><td class="n">R102</td><td class="n">0</td></tr>
+      <tr><td>[food trucks for hire near me]</td><td>Main</td><td class="n">8</td><td>Above</td><td><span class="pill warn">Average</span></td><td>Above</td><td class="n">R72</td><td class="n">2</td></tr>
+      <tr><td>[food trucks for corporate events]</td><td>Corporate</td><td class="n">8</td><td>Above</td><td><span class="pill warn">Average</span></td><td>Above</td><td class="n">R0</td><td class="n">0</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">Google shows no current score for the two phrase-match keywords; their last recorded score was 7. Expected click-through is strong almost everywhere, so the ads themselves are not the drag. The landing page is.</p>
+</section>
+
+<section>
+  <h2>Search terms, last 90 days</h2>
+  <div class="kpis">
+    <div class="kpi"><b>431</b><span>Search terms shown</span></div>
+    <div class="kpi"><b>R18,971</b><span>Visible cost (65% of the R29,136 spent)</span></div>
+    <div class="kpi"><b>R6,148</b><span>On 128 terms with no conversion</span></div>
+    <div class="kpi"><b>63%</b><span>Of visible cost from close variants</span></div>
+  </div>
+  <ul class="tight">
+    <li>Close variants decide most of the traffic. The exact keyword [food truck hire] also buys "food truck for hire", "food trailers for hire", "catering van to hire" and "mexican food truck hire".</li>
+    <li>Hire and rental wording with no conversions in 90 days: "food trucks for hire" R252, "hire a food truck" R228, "food truck rentals near me" R122, "food trailers for hire" R111, "food trucks to hire" R104.</li>
+    <li>Off-area and off-offer: "food truck catering pretoria" R286, "food truck for parties" R110, 25 pizza-truck terms R355, 8 coffee terms R49.</li>
+    <li>Over the account's life the auction was shared with trailer sellers (diamondtrailers.co.za, foodtrailers.co.za, alibaba.com), so for a long stretch it was bidding against people selling trucks to buyers. In the last 30 days the field is cleaner: The Filthy Moustache (40% impression share, in half of the same auctions), Nyama and The Kitchen Mafia.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Ads</h2>
+  <ul class="tight">
+    <li>18 live responsive search ads: 4 rated Good, 10 Average, 4 Poor. Three of the Poor ones are in the corporate campaign, which spent R3,732 on them in 90 days.</li>
+    <li>Every corporate ad points at the homepage. Display paths like <code>/food-truck/hire</code> and <code>/event/catering</code> do not exist on the site. That is harmless for display only, but it promises pages that are not there.</li>
+    <li>Ad rotation is set to "rotate indefinitely", which works against Maximize Conversions choosing the better ad.</li>
+    <li>Manual bid adjustments for location, device, schedule, age and gender were added through 2025. Under Maximize Conversions most of these are ignored, so they add complexity without control.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Landing pages</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Check</th><th>Homepage</th><th>/event-catering/</th></tr></thead>
+    <tbody>
+      <tr><td>Share of 90-day ad spend</td><td>71% (R20,797)</td><td>27% (R7,901)</td></tr>
+      <tr><td>Mobile Lighthouse score</td><td><span class="pill bad">38</span></td><td><span class="pill bad">39</span></td></tr>
+      <tr><td>Main content visible (LCP, throttled)</td><td>15.6 s</td><td>14.2 s</td></tr>
+      <tr><td>Page weight</td><td>3.3 MB</td><td>3.3 MB</td></tr>
+      <tr><td>Main heading</td><td>Food Truck Catering For Unforgettable Events</td><td>Food Truck Event Catering For Unforgettable Corporate Events</td></tr>
+      <tr><td>Says "hire" or "Johannesburg" in the heading</td><td>No</td><td>No</td></tr>
+      <tr><td>Enquiry form</td><td colspan="2">Near the bottom; 5 required fields including Company; inline message, no thank-you page</td></tr>
+    </tbody>
+  </table></div>
+  <ul class="tight">
+    <li>The site has only these two pages, and they differ by about ten sentences. There is no page for corporate events, year-end functions or family days.</li>
+    <li>Tag manager alone loads about 700 KB and render-blocking files cost about 5.6 seconds. The scores are one lab run on a throttled mobile profile, not field data, because Google's PageSpeed quota was exhausted on the day.</li>
+    <li>Trust is decent: a 30-review widget and a client logo wall. Nothing shows the trucks, the menus, or a price per head.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>How actively the account is run</h2>
+  <p>Changes per month, November 2024 to October 2026 (Google keeps two years):</p>
+  <div>
+    <div class="bars" id="bars" role="img" aria-label="Bar chart of account changes per month, peaking at 36 in January 2025 and falling to between 2 and 8 a month in most of 2026, with one spike of 22 in June 2026."></div>
+    <div class="bars-x" id="barsx"></div>
+  </div>
+  <ul class="tight">
+    <li>Of 316 changes, 311 were made by four Launch Digital logins. The commonest work is negative keywords (about 100 changes) and bid adjustments (about 70).</li>
+    <li>The budgets (R230 and R100 a day) have not changed since November 2024, while the main campaign loses 20% of its possible impressions to budget.</li>
+    <li>Two JCE reporting seats were added on 3 September. Diane's was removed by the system on 1 November.</li>
+  </ul>
+</section>
+
+<hr>
+
+<section>
+  <h2>What to do, in order</h2>
+  <ol class="plan">
+    <li><b>Fix what counts as a lead before touching anything else.</b> Make the Google Ads form tag (counted once) and real calls of 60 seconds or more the primary conversions. Move the phone-link tap to secondary. Reconcile 90 days of form events against Jade's actual enquiries. Then feed booked values back from the quote tool, so a corporate booking is worth more to the bidding than a birthday enquiry.</li>
+    <li><b>Bring the conversion actions into the account itself,</b> so the measurement belongs to Good &amp; Proper whichever agency runs it.</li>
+    <li><b>Make the ads say what the business sells.</b> Food truck catering for events of 80 guests and more, in Johannesburg and Gauteng. Add negatives for hire-only, rental, trailer, wedding, party, birthday and out-of-area wording, and put the minimum in the ad copy so small events filter themselves out before clicking.</li>
+    <li><b>Build two fast landing pages:</b> corporate events (year-end, conferences, family days) and food truck catering Johannesburg. Form near the top, WhatsApp, a thank-you page, photos of the actual trucks, under 3 seconds on a phone.</li>
+    <li><b>Give the corporate campaign only corporate searches.</b> Negative the generic hire terms out of it so it stops paying R36 a click for searches the main campaign buys at R20.</li>
+    <li><b>Then decide on budget.</b> There is room (20% lost to budget), but more money into the current setup buys more phone-number taps.</li>
+  </ol>
+</section>
+
+<section>
+  <h2>Not covered</h2>
+  <ul class="tight">
+    <li>Real lead and booking outcomes. There is no CRM or enquiry data in this audit, so no figure here is a true cost per booking.</li>
+    <li>Whether the form conversion actually fires on submit. Nothing was submitted.</li>
+    <li>Sitelinks, callouts and other assets in detail, plus device and location breakdowns.</li>
+    <li>Anything that needs more than read-only access. Nothing in the account was changed.</li>
+  </ul>
+  <p class="note">Sources: Google Ads account 455-376-7888 (campaigns, keywords with Quality Score, 431 search terms, 38 ads, landing pages, conversion actions, auction insights, 316-entry change history), pulled 10 Nov 2026; website checks on goodandproperfoodtrucks.co.za the same day.</p>
+</section>
+
+</div>
+
+<script>
+(function(){
+  var d=[["N",10],["D",24],["J",36],["F",30],["M",24],["A",32],["M",19],["J",14],["J",14],["A",2],["S",10],["O",22],["N",10],["D",6],["J",3],["F",3],["M",5],["A",7],["M",5],["J",22],["J",2],["A",8],["S",4],["O",4]];
+  var max=36, b=document.getElementById("bars"), x=document.getElementById("barsx");
+  d.forEach(function(p,i){
+    var bar=document.createElement("div"); bar.style.height=(p[1]/max*100)+"%"; bar.title=p[1]+" changes"; b.appendChild(bar);
+    var l=document.createElement("span"); l.textContent=(i===0||i===2||i===14)?(p[0]+(i===0?" 24":i===2?" 25":" 26")):p[0]; x.appendChild(l);
+  });
+})();
+</script>
