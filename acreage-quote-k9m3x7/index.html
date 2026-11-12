@@ -3270,13 +3270,96 @@ function loadExample(mode){
     + 'then <b>' + (mode==="acreage" ? "Suggest the items" : "Suggest the vendors") + '</b>.</p>');
 }
 
+/* ══════════════════ TWO REAL EVENTS, ON A URL ══════════════════
+
+   Showing this to someone means rebuilding one of their own proposals
+   in front of them, and typing twenty six vendors is not a demonstration
+   of anything. Both events below are theirs, off the proposals in
+   data/2026-08-31, and both must come out to the cent:
+
+     ?demo=absa   Alisha Thomas @ Absa, year end at The Acreage,
+                  2 200 pax, 17 Aug 2026  ->  R1 583 000.00, R719.55 pp
+     ?demo=ssq    Nicole Austin @ SSQ Design, family fun day at
+                  Fourways Farmers Market, 1 000 pax, 4 Aug 2026
+                  ->  R355 000.00, R355.00 pp
+
+   SSQ is the useful contrast: a different band, one main a head instead
+   of two, no alcohol, and a venue that is not The Acreage, so the venue
+   page and the Acreage clauses drop out of the document on their own.
+
+   Nothing here is referenced by the interface. It is reachable only by
+   typing the parameter, so a client can never land on it.           */
+
+var DEMOS = {
+  absa:{
+    f:{gName:"Alisha Thomas @ Absa Re: Year End Function", gContact:"Alisha Thomas",
+       gVenue:"The Acreage, Randjesfontein", gDate:"2026-12-02",
+       gWindow:"Service time TBC (10:00 to 18:00)", gPax:2200, gHire:80000},
+    lead:"A corporate year end function",
+    qty:{popcorn:1, bite:1, main:2, dessert:1, cold:2, alc:3, bars:1, coffee:1000, band:2},
+    v:[["Joy Jukes","popcorn",2200],
+       ["Purple Plate","bite",1000],
+       ["Joy Jukes","bite",300,"Nachos served with guacamole, sour cream, tomatoes, onion and jalapenos"],
+       ["Taylamade","bite",300],
+       ["Joy Jukes","bite",300,"Corndogs, pork, chicken or vegetarian sausages available"],
+       ["Bootsbar","bite",300],
+       ["The Wing Republic","main",366],["Seafood Guys","main",366],["Smoke Kings","main",366],
+       ["Meat My Kitchen","main",366],["Engine 67","main",366],["Firecraft","main",366],
+       ["El Hefe","main",366],["Dumplings We Make","main",366],["White Cocoa","main",366],
+       ["Just Jo's","main",366],["Griekse Boertjie","main",365],["Che","main",365],
+       ["Burger & Brew","main",10,"Kosher gourmet burgers & chips"],
+       ["Joy Jukes","dessert",600,"Traditional soft serve ice cream served in a cup or cone with various toppings"],
+       ["Purple Plate (dessert)","dessert",400],["Ice Bombs","dessert",400],
+       ["Good & Proper","dessert",400],["Sweet Scoops","dessert",400],
+       ["The Acreage","cold",4400],["The Acreage (bar)","alc",6600]]
+  },
+  ssq:{
+    f:{gName:"Nicole Austin @ SSQ Design", gContact:"Nicole Austin",
+       gVenue:"Fourways Farmers Market", gDate:"2026-11-28",
+       gWindow:"11:00 to 17:00", gPax:1000, gHire:0},
+    lead:"A family fun day",
+    qty:{popcorn:1, bite:1, main:1, dessert:1, cold:0, alc:0, bars:0, coffee:0, band:1},
+    v:[["Joy Jukes","popcorn",1000],
+       ["Purple Plate","bite",500],
+       ["Bootsbar","bite",250],
+       ["Amelia's Kitchen","bite",250],
+       ["Griekse Boertjie","main",200],["Hangry Chef","main",200],["White Cocoa","main",200],
+       ["Che","main",200],["Firecraft","main",200],
+       ["The Pancake Pantry","dessert",300],["Purple Plate (dessert)","dessert",400],
+       ["Good & Proper","dessert",300]]
+  }
+};
+
+function loadDemo(key){
+  var D=DEMOS[key]; if(!D) return false;
+  setMode("gp");
+  Object.keys(D.f).forEach(function(k){ if($(k)) $(k).value=D.f[k]; });
+  if($("gHireOn")) $("gHireOn").value = D.f.gHire ? "1" : "0";
+  if($("gLead"))   $("gLead").value   = D.lead;
+  S.gp.doc.lead = D.lead;
+  S.gp.qty={}; S.gp.rate={}; S.gp.ovr={}; S.gp.vendors=[];
+  Object.keys(D.qty).forEach(function(k){ S.gp.qty[k]=D.qty[k]; });
+  D.v.forEach(function(r){
+    var known=vendorByName(r[0]);
+    S.gp.vendors.push({n:r[0], s:r[1], pax:r[2], d:r[3]||(known?known.d:"")});
+  });
+  render();
+  return true;
+}
+
 /* ══════════════════ BOOT ══════════════════ */
 (function(){
   try{ var s=JSON.parse(localStorage.getItem("acreageSeq")||"null"); if(s) S.seq=s; }catch(e){}
   ownLoad();
   setMode("acreage");
   aiLoad();
-  phLoad().then(function(){ render(); phPaint(); });
+  phLoad().then(function(){
+    render(); phPaint();
+    /* ?demo=absa or ?demo=ssq rebuilds one of their own events, and
+       &doc=1 goes straight to the finished proposal */
+    var q=new URLSearchParams(location.search);
+    if(q.get("demo") && loadDemo(q.get("demo")) && q.get("doc")) showDoc();
+  });
 })();
 </script>
 </body>
