@@ -1,0 +1,327 @@
+<title>Reptilia Add-on Demos</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=PT+Sans:ital,wght@0,400;0,700;1,400&display=swap">
+<style>
+/* Two working demos for Willem: the WhatsApp assistant and the abandoned cart sequence. Same palette as the year-two proposal: Reptilia yellow + coral on near-black. */
+:root{
+  --yellow:#FFC400; --coral:#D9532F; --leaf:#2F7D5B;
+  --ink:#151511; --body:#3c3b35; --muted:#7a766b; --line:#e6e2d7; --wash:#f6f3ec; --bg:#fffefb; --card:#ffffff;
+  --night:#121210; --nighttext:#e9e6de; --nightmuted:#a9a497; --nightline:#2d2c27; --nightcard:#1b1a17;
+  --wa-bg:#efe7dc; --wa-in:#ffffff; --wa-out:#d9fdd3; --wa-head:#1f5c4a; --wa-text:#111b21; --wa-time:#667781;
+  --display:"Archivo","Arial Narrow",Arial,sans-serif; --text:"PT Sans","Segoe UI",Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --ink:#f3f1ea; --body:#d7d4cb; --muted:#a39f94; --line:#2f2e29; --wash:#1a1916; --bg:#11110f; --card:#181815; --coral:#F07A55; --leaf:#5cc489;
+  --night:#0a0a09; --nightcard:#151513; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --ink:#f3f1ea; --body:#d7d4cb; --muted:#a39f94; --line:#2f2e29; --wash:#1a1916; --bg:#11110f; --card:#181815; --coral:#F07A55; --leaf:#5cc489;
+  --night:#0a0a09; --nightcard:#151513; color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--body);font:17px/1.62 var(--text);-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--display);color:var(--ink);line-height:1.08;margin:0;text-wrap:balance}
+p{margin:0 0 14px}
+a{color:var(--coral)}
+.eyebrow{display:flex;align-items:center;gap:12px;font:700 12.5px/1 var(--text);letter-spacing:.16em;text-transform:uppercase;color:var(--coral);margin-bottom:16px}
+.eyebrow b{display:inline-grid;place-items:center;min-width:30px;height:30px;padding:0 8px;border-radius:15px;background:var(--yellow);color:#111;font-size:13px;letter-spacing:0}
+h2{font-size:clamp(28px,4.4vw,46px);font-weight:900;letter-spacing:-.01em;max-width:22ch}
+.sub{font-size:19px;max-width:62ch;margin-top:16px}
+.src{font-size:12.5px;color:var(--muted);margin-top:10px}
+.chap{padding-block:72px 64px;border-top:1px solid var(--line)}
+.chap.wash{background:var(--wash)}
+
+/* hero */
+.hero{background:var(--night);color:var(--nighttext);padding-block:56px 0;overflow:hidden}
+.hero .k{font:700 12.5px/1 var(--text);letter-spacing:.18em;text-transform:uppercase;color:var(--yellow)}
+.hero h1{color:#fff;font-size:clamp(34px,6vw,66px);font-weight:900;letter-spacing:-.02em;margin-top:18px;max-width:17ch}
+.hero h1 em{font-style:normal;color:var(--yellow)}
+.hero .lead{font-size:20px;max-width:58ch;margin-top:22px}
+.hero .note{display:inline-block;margin-top:14px;font-size:14px;color:var(--nightmuted);border:1px solid var(--nightline);border-radius:20px;padding:6px 14px}
+.scales{height:16px;margin-top:48px;background:radial-gradient(circle at 10px 0,transparent 9px,var(--yellow) 10px) 0 0/20px 16px repeat-x}
+.jump{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:32px;max-width:720px}
+.jump a{display:block;text-decoration:none;background:var(--nightcard);border:1px solid var(--nightline);border-radius:12px;padding:16px 18px;color:var(--nighttext)}
+.jump a b{display:block;color:#fff;font:800 19px/1.2 var(--display)}
+.jump a span{font-size:14.5px;color:var(--nightmuted)}
+.jump a:hover{border-color:var(--yellow)}
+
+/* demo layout */
+.demo{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:48px;align-items:start;margin-top:40px}
+.demo.flip{grid-template-columns:380px minmax(0,1fr)}
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.tabs button{font:700 15px/1 var(--text);border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:22px;padding:11px 16px;cursor:pointer}
+.tabs button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tabs button:focus-visible,.steps button:focus-visible,.replay:focus-visible{outline:3px solid var(--yellow);outline-offset:2px}
+.explain h3{font-size:24px;margin-bottom:10px}
+.explain .why{font-size:17px}
+.ticks{list-style:none;margin:18px 0 0;padding:0;display:grid;gap:10px}
+.ticks li{position:relative;padding-left:30px}
+.ticks li::before{content:"";position:absolute;left:0;top:5px;width:18px;height:18px;border-radius:50%;background:var(--leaf);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 1a11 11 0 1 0 0 22 11 11 0 0 0 0-22zm-1.5 15.5-4.5-4.5 1.6-1.6 2.9 2.9 6.4-6.4 1.6 1.6z'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 1a11 11 0 1 0 0 22 11 11 0 0 0 0-22zm-1.5 15.5-4.5-4.5 1.6-1.6 2.9 2.9 6.4-6.4 1.6 1.6z'/%3E%3C/svg%3E") center/contain no-repeat}
+.ticks.no li::before{background:var(--coral);-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 1a11 11 0 1 0 0 22 11 11 0 0 0 0-22zm4.6 14.2-1.4 1.4L12 13.4l-3.2 3.2-1.4-1.4 3.2-3.2-3.2-3.2 1.4-1.4 3.2 3.2 3.2-3.2 1.4 1.4-3.2 3.2z'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 1a11 11 0 1 0 0 22 11 11 0 0 0 0-22zm4.6 14.2-1.4 1.4L12 13.4l-3.2 3.2-1.4-1.4 3.2-3.2-3.2-3.2 1.4-1.4 3.2 3.2 3.2-3.2 1.4 1.4-3.2 3.2z'/%3E%3C/svg%3E")}
+.box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-top:22px}
+.box b.t{display:block;font:800 13px/1 var(--text);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+
+/* phone */
+.phone{width:100%;max-width:380px;margin-inline:auto;border-radius:34px;background:#0b0b0a;padding:10px;box-shadow:0 24px 60px -24px rgba(0,0,0,.45)}
+.screen{border-radius:26px;overflow:hidden;background:var(--wa-bg);height:620px;display:flex;flex-direction:column}
+.wahead{background:var(--wa-head);color:#fff;display:flex;align-items:center;gap:10px;padding:14px 14px 12px}
+.wahead .av{width:38px;height:38px;border-radius:50%;background:var(--yellow);display:grid;place-items:center;font:900 15px var(--display);color:#111;flex:none}
+.wahead b{display:block;font:700 16px/1.2 var(--text)}
+.wahead small{font-size:12.5px;opacity:.8}
+.chat{flex:1;overflow-y:auto;padding:14px 10px 18px;display:flex;flex-direction:column;gap:6px;
+  background-image:radial-gradient(rgba(0,0,0,.035) 1px,transparent 1px);background-size:14px 14px}
+.day{align-self:center;background:#fff;color:var(--wa-time);font-size:12px;border-radius:8px;padding:4px 10px;margin:4px 0 8px;box-shadow:0 1px 1px rgba(0,0,0,.06)}
+.msg{max-width:84%;padding:7px 10px 18px;border-radius:9px;font:15px/1.38 var(--text);color:var(--wa-text);position:relative;box-shadow:0 1px 1px rgba(0,0,0,.08);white-space:pre-line;animation:pop .22s ease-out}
+.msg.in{align-self:flex-start;background:var(--wa-in);border-top-left-radius:2px}
+.msg.out{align-self:flex-end;background:var(--wa-out);border-top-right-radius:2px}
+.msg .tm{position:absolute;right:9px;bottom:3px;font-size:11px;color:var(--wa-time)}
+.msg .who{display:block;font-size:12px;font-weight:700;color:var(--leaf);margin-bottom:2px}
+.msg.auto .who{color:#8a6d00}
+.msg .lnk{display:block;margin-top:6px;border-left:3px solid var(--wa-head);background:rgba(0,0,0,.04);border-radius:4px;padding:5px 8px;font-size:13.5px;color:#1f5c4a}
+.typing{align-self:flex-start;background:#fff;border-radius:9px;padding:9px 12px;display:flex;gap:4px}
+.typing i{width:7px;height:7px;border-radius:50%;background:#9aa;animation:blink 1s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes pop{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes blink{0%,100%{opacity:.3}50%{opacity:1}}
+@media (prefers-reduced-motion:reduce){.msg{animation:none}.typing i{animation:none}}
+.replay{display:block;margin:12px auto 0;font:700 14px var(--text);background:none;border:0;color:var(--coral);cursor:pointer}
+.ex{font-size:12.5px;color:var(--muted);text-align:center;margin-top:6px}
+
+/* cart sequence */
+.steps{display:grid;gap:10px;position:relative}
+.steps button{all:unset;cursor:pointer;display:grid;grid-template-columns:64px 1fr;gap:16px;align-items:start;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.steps button[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 4px 0 0 var(--yellow)}
+.steps .when{font:900 20px/1 var(--display);color:var(--ink);text-align:center}
+.steps .when small{display:block;font:700 11px/1.2 var(--text);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+.steps h3{font-size:19px}
+.steps p{margin:4px 0 0;font-size:15px}
+.steps .ch{display:inline-block;font:700 11.5px/1 var(--text);letter-spacing:.06em;text-transform:uppercase;border-radius:10px;padding:4px 8px;margin-top:8px}
+.ch.em{background:#fff3c4;color:#5c4700}.ch.wa{background:#d9fdd3;color:#1f5c4a}
+.trigger{background:var(--night);color:var(--nighttext);border-radius:12px;padding:16px 18px;font-size:15px}
+.trigger b{color:var(--yellow)}
+.stop{background:var(--wash);border:1px dashed var(--muted);border-radius:12px;padding:14px 18px;font-size:15px}
+
+/* email mock */
+.mail{width:100%;max-width:380px;margin-inline:auto;background:#fff;color:#222;border-radius:14px;overflow:hidden;box-shadow:0 24px 60px -24px rgba(0,0,0,.4);border:1px solid #ddd;font:15px/1.5 var(--text)}
+.mail .bar{background:#f1f1f1;padding:10px 14px;font-size:12.5px;color:#555;border-bottom:1px solid #e3e3e3}
+.mail .bar b{color:#111}
+.mail .brand{background:#121210;color:#FFC400;font:900 20px/1 var(--display);padding:16px 18px;letter-spacing:.02em}
+.mail .bd{padding:18px}
+.mail h4{font:800 21px/1.2 var(--display);margin:0 0 8px;color:#111}
+.mail .item{display:grid;grid-template-columns:1fr auto;gap:8px;padding:8px 0;border-bottom:1px solid #eee;font-size:14.5px}
+.mail .item span:last-child{font-variant-numeric:tabular-nums}
+.mail .tot{display:flex;justify-content:space-between;font-weight:700;padding-top:10px}
+.mail .btn{display:block;text-align:center;background:#FFC400;color:#111;font:800 16px var(--text);border-radius:8px;padding:12px;margin:16px 0 10px;text-decoration:none}
+.mail .fine{font-size:12px;color:#777;margin-top:14px;border-top:1px solid #eee;padding-top:10px}
+.mail .gift{background:#fff8e0;border:1px solid #f3dc8a;border-radius:8px;padding:10px 12px;font-size:14px;margin-top:10px}
+#preview{min-height:560px}
+
+/* closing */
+.need{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:28px}
+.need div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}
+.need b{display:block;font:800 18px/1.2 var(--display);color:var(--ink);margin-bottom:6px}
+.need span{font-size:15px}
+.dark{background:var(--night);color:var(--nighttext);border-top:0}
+.dark h2{color:#fff}
+.dark .need div{background:var(--nightcard);border-color:var(--nightline)}
+.dark .need b{color:#fff}
+.dark .need span{color:var(--nightmuted)}
+footer{padding:28px 0 40px;font-size:13px;color:var(--muted)}
+
+@media (max-width:860px){
+  .demo,.demo.flip{grid-template-columns:1fr;gap:28px}
+  .demo.flip .seq{order:-1}
+  .need{grid-template-columns:1fr}
+  .jump{grid-template-columns:1fr}
+  .screen{height:560px}
+}
+</style>
+
+<header class="hero"><div class="wrap">
+  <div class="k">Reptilia · Add-on demos · 12 November 2026</div>
+  <h1>Two things you didn't take in year one, <em>shown working.</em></h1>
+  <p class="lead">In November 2025 you chose the website and social media. These are two of the other parts of that proposal, rebuilt for how Reptilia sells today: a WhatsApp assistant that answers when the shop can't, and a cart reminder that brings back people who got as far as checkout and stopped.</p>
+  <span class="note">Demo only. Example messages, nothing has been sent to anyone.</span>
+  <div class="jump">
+    <a href="#whatsapp"><b>1 · WhatsApp assistant</b><span>Instant replies, ordering help, animal reservations</span></a>
+    <a href="#cart"><b>2 · Abandoned cart reminders</b><span>Three messages over three days, then it stops</span></a>
+  </div>
+  <div class="scales" aria-hidden="true"></div>
+</div></header>
+
+<main>
+<!-- WHATSAPP -->
+<section class="chap" id="whatsapp"><div class="wrap">
+  <div class="eyebrow"><b>1</b>WhatsApp assistant</div>
+  <h2>Every WhatsApp gets an answer in seconds, even at 9 at night</h2>
+  <p class="sub">Most of your customers message before they buy. Right now, an evening message waits until someone in the shop picks up a phone the next day, and some of those buyers go to the next shop on Google. The assistant answers the common questions straight away and passes everything else to your staff.</p>
+
+  <div class="demo">
+    <div class="explain">
+      <div class="tabs" role="group" aria-label="Choose a conversation">
+        <button type="button" data-s="afterhours" aria-pressed="true">After hours</button>
+        <button type="button" data-s="order">"How do I order?"</button>
+        <button type="button" data-s="reserve">Reserve an animal</button>
+        <button type="button" data-s="followup">Gentle follow-up</button>
+      </div>
+      <h3 id="sTitle"></h3>
+      <p class="why" id="sWhy"></p>
+      <ul class="ticks">
+        <li>Answers in seconds, day and night, from your own WhatsApp Business number</li>
+        <li>Handles the questions you get every day: how to order, delivery, collection, what's in stock</li>
+        <li>Takes animal reservations from the website's Reserve button and puts them in one list for the shop</li>
+        <li>Sends one polite follow-up when a customer goes quiet, and never more than one</li>
+      </ul>
+      <div class="box">
+        <b class="t">What it doesn't do</b>
+        <ul class="ticks no">
+          <li>It doesn't pretend to be a person. Anything it can't answer goes straight to your staff</li>
+          <li>It doesn't confirm a live animal on its own. Only the shop does that</li>
+          <li>It doesn't message anyone who hasn't messaged you first</li>
+        </ul>
+      </div>
+      <p class="src">It runs on the same system that already sends your Google review requests, so there's no new app for the shop to learn. Your staff see every chat and can step in at any point.</p>
+    </div>
+
+    <div>
+      <div class="phone" aria-label="WhatsApp conversation demo">
+        <div class="screen">
+          <div class="wahead"><div class="av">R</div><div><b>Reptilia</b><small>Business account</small></div></div>
+          <div class="chat" id="chat" aria-live="polite"></div>
+        </div>
+      </div>
+      <button type="button" class="replay" id="replay">↻ Play again</button>
+      <p class="ex">Example layout. Opening hours and wording are placeholders you approve.</p>
+    </div>
+  </div>
+</div></section>
+
+<!-- CART -->
+<section class="chap wash" id="cart"><div class="wrap">
+  <div class="eyebrow"><b>2</b>Abandoned cart reminders</div>
+  <h2>Someone fills a cart and leaves. Three reminders bring them back.</h2>
+  <p class="sub">People start a checkout, get interrupted, and forget. Right now the store doesn't follow up, so those sales just disappear. This sequence sends a short reminder with their cart in it, and stops the moment they pay.</p>
+
+  <div class="demo flip">
+    <div class="seq">
+      <div class="steps">
+        <div class="trigger"><b>Starts when:</b> a customer enters their email or number at checkout and hasn't paid an hour later.</div>
+        <button type="button" data-p="e1" aria-pressed="true"><div class="when">1 hr<small>later</small></div><div><h3>"You left something behind"</h3><p>Their cart, exactly as they left it, and one button back to checkout.</p><span class="ch em">Email</span></div></button>
+        <button type="button" data-p="w1" aria-pressed="false"><div class="when">24 hrs<small>later</small></div><div><h3>A short WhatsApp nudge</h3><p>Only if they ticked "send me order updates on WhatsApp" at checkout.</p><span class="ch wa">WhatsApp</span></div></button>
+        <button type="button" data-p="e2" aria-pressed="false"><div class="when">3 days<small>later</small></div><div><h3>"Need a hand?"</h3><p>An offer to help, and an optional small extra to finish the order. You decide whether to include it.</p><span class="ch em">Email</span></div></button>
+        <div class="stop"><b>Stops when:</b> they pay, they unsubscribe, or after the third message. Live animals are never chased; they go through reservations instead.</div>
+      </div>
+    </div>
+    <div id="preview" aria-live="polite"></div>
+  </div>
+  <p class="src">The example cart uses prices from your store's recent orders. Every recovered order shows up by order number in your weekly update, so you can see exactly what it brought back.</p>
+</div></section>
+
+<!-- WHAT IT TAKES -->
+<section class="chap dark"><div class="wrap">
+  <div class="eyebrow"><b>3</b>What it takes</div>
+  <h2>Two to three weeks to switch on, once you say yes</h2>
+  <div class="need">
+    <div><b>From you</b><span>Your opening hours, the answers to your ten most common questions, and who in the shop confirms reservations.</span></div>
+    <div><b>From us</b><span>Set-up on your WhatsApp Business number, the messages written in your voice for you to approve, and a WhatsApp opt-in tick box at checkout.</span></div>
+    <div><b>The rules</b><span>We only message people who contacted you or started a checkout, and every message has a way out. This keeps you on the right side of POPIA and WhatsApp's own rules.</span></div>
+  </div>
+  <p style="margin-top:26px;color:var(--nightmuted)">Both add-ons are priced separately from the website and social media, and we can agree the prices with you today. They also work with the sales tracking we have just switched on, so every message can be tied to the order it brought in.</p>
+</div></section>
+</main>
+<footer><div class="wrap">JCE Media · 12 November 2026 · Demo for Reptilia. Private, not indexed.</div></footer>
+
+<script>
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var A = 'Reptilia (automatic reply)', S = 'Reptilia shop';
+  var SC = {
+    afterhours:{t:'After hours',w:'A customer messages at 21:14 about a leopard gecko. Instead of silence until morning, they get an answer at once and know when a person will reply.',m:[
+      {d:'Today'},
+      {in:1,x:'Hi, do you have leopard geckos at the moment?',tm:'21:14'},
+      {wait:1,auto:1,x:'Hi! Thanks for messaging Reptilia 🦎\nThe shop is closed right now and we are back at 08:30.\n\nLeave your question here and the first person in will answer you.',tm:'21:14'},
+      {wait:1,auto:1,x:'While you wait, these are the animals in store this week:',lnk:'reptilia.co.za · Live animals in stock',tm:'21:14'},
+      {in:1,x:'Thanks! Normal or tangerine morph if you have',tm:'21:16'},
+      {d:'Tomorrow'},
+      {wait:1,staff:1,x:'Morning! We have two normals and one tangerine in today. Want me to hold one for you? We hold animals for 48 hours.',tm:'08:41'}
+    ]},
+    order:{t:'"How do I order?"',w:'The question the shop answers most often, answered in one message with a choice of options. Replying with a number takes them straight to the right place.',m:[
+      {d:'Today'},
+      {in:1,x:'Hi how do I order frozen mice? I\'m in Bloemfontein',tm:'10:02'},
+      {wait:1,auto:1,x:'Hi! Happy to help. Reply with a number:\n\n1 · Order online, we courier frozen feeders with an ice pack\n2 · Collect in store in Vanderbijlpark\n3 · Talk to someone in the shop',tm:'10:02'},
+      {in:1,x:'1',tm:'10:03'},
+      {wait:1,auto:1,x:'Great. Here are all frozen mice and rats. Add what you need and check out, and we\'ll send your tracking number when it ships.',lnk:'reptilia.co.za · Frozen feeders',tm:'10:03'},
+      {wait:1,auto:1,x:'Tip: order a few sizes up at once and save on courier.',tm:'10:03'}
+    ]},
+    reserve:{t:'Reserve an animal',w:'This is where the website\'s new Reserve button ends up. The animal\'s name arrives already typed in, the assistant logs it for the shop, and only a person confirms.',m:[
+      {d:'Today'},
+      {in:1,x:'Hi, I\'d like to reserve: Leopard gecko (normal), seen on reptilia.co.za',tm:'13:20'},
+      {wait:1,auto:1,x:'Thanks! Your reservation request for a Leopard gecko (normal) is with the shop. Someone will confirm shortly during opening hours.\n\nWould you like the full setup list too? Reply SETUP',tm:'13:20'},
+      {in:1,x:'SETUP',tm:'13:21'},
+      {wait:1,auto:1,x:'Leopard gecko starter setup:\n• Enclosure with ventilation\n• Heat mat with thermostat\n• Two hides, one warm and one cool\n• Water and food dishes\n• Calcium supplement\n• Live insects: crickets, mealworms or roaches\n\nWe can have it all packed for when you collect.',tm:'13:21'},
+      {wait:1,staff:1,x:'Hi, it\'s the Reptilia team. Confirmed, your gecko is held until Saturday 13:00. Shall we pack the setup with it?',tm:'13:34'},
+      {in:1,x:'Yes please! See you Saturday',tm:'13:36'}
+    ]},
+    followup:{t:'Gentle follow-up',w:'A customer asked a question, got an answer, and went quiet. One friendly check-in the next day, and then the assistant stops.',m:[
+      {d:'Yesterday'},
+      {in:1,x:'Do you have a 90cm enclosure for a bearded dragon?',tm:'16:48'},
+      {wait:1,staff:1,x:'We do, in store, and we can put together the lighting and heating with it.',tm:'16:55'},
+      {d:'Today'},
+      {wait:1,auto:1,x:'Hi again 👋 Just checking you found everything you needed for your bearded dragon. If you\'d like us to put the full setup aside, just reply here.',tm:'10:00'},
+      {in:1,x:'Yes please, I\'ll come in tomorrow',tm:'11:12'}
+    ]}
+  };
+  var chat=document.getElementById('chat'), timers=[], cur='afterhours';
+  function clear(){timers.forEach(clearTimeout);timers=[];chat.innerHTML='';}
+  function el(m){
+    if(m.d){var d=document.createElement('div');d.className='day';d.textContent=m.d;return d;}
+    var b=document.createElement('div');b.className='msg '+(m.in?'in':'out')+(m.auto?' auto':'');
+    if(!m.in){var w=document.createElement('span');w.className='who';w.textContent=m.auto?A:S;b.appendChild(w);}
+    b.appendChild(document.createTextNode(m.x));
+    if(m.lnk){var l=document.createElement('span');l.className='lnk';l.textContent='🔗 '+m.lnk;b.appendChild(l);}
+    var t=document.createElement('span');t.className='tm';t.textContent=m.tm;b.appendChild(t);
+    return b;
+  }
+  function play(k){
+    clear(); cur=k; var s=SC[k];
+    document.getElementById('sTitle').textContent=s.t;
+    document.getElementById('sWhy').textContent=s.w;
+    if(reduce){s.m.forEach(function(m){chat.appendChild(el(m));});return;}
+    var at=200;
+    s.m.forEach(function(m){
+      if(m.wait){
+        (function(start){timers.push(setTimeout(function(){var ty=document.createElement('div');ty.className='typing';ty.innerHTML='<i></i><i></i><i></i>';chat.appendChild(ty);chat.scrollTop=chat.scrollHeight;},start));})(at);
+        at+=900;
+        (function(when,msg){timers.push(setTimeout(function(){var ty=chat.querySelector('.typing');if(ty)ty.remove();chat.appendChild(el(msg));chat.scrollTop=chat.scrollHeight;},when));})(at,m);
+      } else {
+        (function(when,msg){timers.push(setTimeout(function(){chat.appendChild(el(msg));chat.scrollTop=chat.scrollHeight;},when));})(at,m);
+      }
+      at+= m.d?250:1100;
+    });
+  }
+  document.querySelectorAll('.tabs button').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.querySelectorAll('.tabs button').forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false');});
+      play(b.dataset.s);
+    });
+  });
+  document.getElementById('replay').addEventListener('click',function(){play(cur);});
+  play('afterhours');
+
+  /* cart previews */
+  var cart='<div class="item"><span>Frozen Mice, Adult × 10</span><span>R155.00</span></div>'+
+           '<div class="item"><span>Frozen Rat, Young/Medium × 2</span><span>R80.00</span></div>'+
+           '<div class="item"><span>Ice Pack × 1</span><span>R25.00</span></div>'+
+           '<div class="tot"><span>Cart total</span><span>R260.00</span></div>';
+  var P={
+    e1:'<div class="mail"><div class="bar"><b>From:</b> Reptilia<br><b>Subject:</b> You left something in your cart, Sam</div><div class="brand">REPTILIA</div><div class="bd"><h4>Still feeding day this week?</h4><p>Hi Sam, your cart is saved exactly as you left it.</p>'+cart+'<a class="btn" href="#cart" onclick="return false">Finish my order</a><p style="font-size:14px">Not sure about sizes? Reply to this email or WhatsApp us and the shop will help.</p><div class="fine">You are receiving this because you started an order at reptilia.co.za. <u>Unsubscribe</u></div></div></div>',
+    w1:'<div class="phone"><div class="screen" style="height:520px"><div class="wahead"><div class="av">R</div><div><b>Reptilia</b><small>Business account</small></div></div><div class="chat"><div class="day">Tomorrow</div><div class="msg out auto"><span class="who">Reptilia (automatic reply)</span>Hi Sam 👋 your frozen mice and rats are still waiting in your cart (R260). Tap below to finish your order and we\'ll send it with an ice pack.<span class="lnk">🔗 reptilia.co.za · Your cart</span><span class="tm">11:00</span></div><div class="msg out auto"><span class="who">Reptilia (automatic reply)</span>Reply STOP and we won\'t message you about this again.<span class="tm">11:00</span></div><div class="msg in">Thanks, payday is Friday, will do it then<span class="tm">11:24</span></div><div class="msg out"><span class="who">Reptilia shop</span>No problem, your cart will still be there 👍<span class="tm">11:31</span></div></div></div></div><p class="ex">Sent only to customers who opted in at checkout.</p>',
+    e2:'<div class="mail"><div class="bar"><b>From:</b> Reptilia<br><b>Subject:</b> Need a hand with your order?</div><div class="brand">REPTILIA</div><div class="bd"><h4>Can we help you finish?</h4><p>Hi Sam, if something stopped you, like delivery costs, sizes or payment, just reply and a person in the shop will sort it out.</p>'+cart+'<div class="gift"><b>Optional, your call:</b> the ice pack is on us if you finish your order this week.</div><a class="btn" href="#cart" onclick="return false">Finish my order</a><div class="fine">This is the last reminder about this cart. <u>Unsubscribe</u></div></div></div>'
+  };
+  var pv=document.getElementById('preview');
+  function show(k){pv.innerHTML=P[k];document.querySelectorAll('.steps button').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.p===k?'true':'false');});}
+  document.querySelectorAll('.steps button').forEach(function(b){b.addEventListener('click',function(){show(b.dataset.p);});});
+  show('e1');
+})();
+</script>
