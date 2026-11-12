@@ -1649,12 +1649,16 @@ function validGp(c){
   if(missing.length) out.push({t:"w",m:"No vendors allocated yet to: "+missing.map(function(r){return r.n;}).join(", ")+"."});
 
   if(S.gp.doc && S.gp.doc.menu){
-    var seen={}, noPic=[];
+    var seen={}, noPic=[], times={};
+    S.gp.vendors.forEach(function(v){ times[v.n]=(times[v.n]||0)+1; });
     S.gp.vendors.forEach(function(v){
-      if(seen[v.n]) return; seen[v.n]=1;
-      if(!rowShots(v).length) noPic.push(v.n);
+      var k=dishKey(v); if(seen[k]) return; seen[k]=1;
+      if(rowShots(v).length) return;
+      noPic.push(times[v.n]>1
+        ? v.n+" ("+String(v.d||"").split(/[,:(]/)[0].trim().slice(0,28)+")"
+        : v.n);
     });
-    if(noPic.length) out.push({t:"w",m:noPic.length+" vendor"+(noPic.length>1?"s have":" has")+" no photograph: "
+    if(noPic.length) out.push({t:"w",m:noPic.length+" dish"+(noPic.length>1?"es have":" has")+" no photograph: "
       +noPic.slice(0,6).join(", ")+(noPic.length>6?" and "+(noPic.length-6)+" more":"")
       +". They print as a menu line with no picture."});
   }
@@ -2345,14 +2349,24 @@ function rowSrc(v){
 }
 function rowShots(v){ return rowSrc(v).u; }
 
+/* the library was keyed off the course bands their proposals print, so
+   the drinks lines all collapse to one band */
+function courseOf(line){
+  return (line==="cold"||line==="alc"||line==="bars") ? "bev" : line;
+}
 function libShots(n, desc, course){
   var ents=GPLIB[n]; if(!ents || !ents.length) return [];
+  if(course){
+    var want=courseOf(course);
+    var same=ents.filter(function(e){ return e.c===want; });
+    if(!same.length) return [];      /* never borrow across the course */
+    ents=same;
+  }
   if(ents.length===1) return ents[0].u;
-  var want=words(desc), best=null, bestScore=-1;
+  var w=words(desc), best=null, bestScore=-1;
   ents.forEach(function(e){
     var have=words(e.d), score=0;
-    want.forEach(function(w){ if(have.indexOf(w)>=0) score++; });
-    if(course && e.c===course) score += 0.5;
+    w.forEach(function(x){ if(have.indexOf(x)>=0) score++; });
     if(score>bestScore){ bestScore=score; best=e; }
   });
   return (best||ents[0]).u;
