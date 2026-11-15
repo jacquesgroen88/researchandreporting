@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Box Shop Digital Audit</title>
+<meta name="description" content="Digital marketing, tracking and CRO audit for Box Shop and Packaging, Bedfordview — prepared by JCE Media, November 2026.">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--navy:#1a3a5c;--orange:#e8502a;--amber:#f0a500;--good:#22c55e;--bg:#0f172a;--txt:#e2e8f0;--mut:#94a3b8}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--txt);line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:var(--amber)}
+.container{max-width:1100px;margin:0 auto;padding:0 24px}
+/* nav */
+.toc{position:sticky;top:0;z-index:50;background:rgba(15,23,42,.92);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.07)}
+.toc .container{display:flex;gap:6px;overflow-x:auto;padding-top:10px;padding-bottom:10px;scrollbar-width:none}
+.toc a{flex:none;font-size:12px;font-weight:700;letter-spacing:.4px;color:var(--mut);text-decoration:none;padding:6px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.08)}
+.toc a:hover{color:#fff;border-color:var(--amber)}
+/* hero */
+.hero{background:radial-gradient(1200px 500px at 50% -10%,rgba(232,80,42,.25),transparent),linear-gradient(135deg,#0f172a 0%,#1a3a5c 100%);padding:72px 0 64px;text-align:center}
+.hero-logo{height:78px;margin:0 auto 26px;display:block;background:#fff;border-radius:12px;padding:10px 16px}
+.eyebrow{display:inline-block;font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--amber);border:1px solid rgba(240,165,0,.4);background:rgba(240,165,0,.1);padding:5px 14px;border-radius:30px;margin-bottom:18px}
+.hero h1{font-size:clamp(28px,5vw,48px);font-weight:800;color:#fff;line-height:1.15;margin-bottom:14px}
+.hero h1 em{font-style:normal;color:var(--orange)}
+.hero-sub{font-size:16px;color:var(--mut);max-width:680px;margin:0 auto}
+.score-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px;margin-top:44px}
+.score-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:24px 16px;text-align:center}
+.score-card.overall{background:linear-gradient(160deg,rgba(232,80,42,.25),rgba(255,255,255,.04));border-color:rgba(232,80,42,.5)}
+.score-number{font-size:54px;font-weight:900;line-height:1}
+.good{color:var(--good)}.mid{color:var(--amber)}.bad{color:var(--orange)}
+.score-label{font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--mut);margin-top:8px}
+.bar{height:5px;border-radius:5px;background:rgba(255,255,255,.08);margin-top:12px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;border-radius:5px;transition:width 1.6s cubic-bezier(.2,.8,.2,1)}
+.meta{margin-top:30px;font-size:13px;color:var(--mut)}
+/* sections */
+.section{padding:72px 0;border-top:1px solid rgba(255,255,255,.04)}
+.section-alt{background:rgba(255,255,255,.02)}
+.section-tag{display:inline-block;background:rgba(240,165,0,.15);border:1px solid rgba(240,165,0,.4);color:var(--amber);font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;padding:4px 12px;border-radius:4px;margin-bottom:16px}
+.section h2{font-size:clamp(24px,4vw,36px);font-weight:800;color:#fff;margin-bottom:12px;line-height:1.2}
+.section h3{font-size:18px;color:#fff;margin:34px 0 14px}
+.section-intro{font-size:16px;color:var(--mut);max-width:720px;margin-bottom:36px}
+.findings-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:18px}
+.finding-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:22px}
+.finding-card.critical{border-left:3px solid var(--orange)}
+.finding-card.warning{border-left:3px solid var(--amber)}
+.finding-card.good{border-left:3px solid var(--good);color:inherit}
+.sev{font-size:10.5px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:6px}
+.critical .sev{color:var(--orange)}.warning .sev{color:var(--amber)}.good .sev{color:var(--good)}
+.finding-title{font-size:15px;font-weight:700;color:#fff;margin-bottom:8px}
+.finding-body{font-size:13.5px;color:var(--mut)}
+.finding-body code,.mono{font-family:Consolas,monospace;font-size:12.5px;background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;color:#cbd5e1}
+.finding-fix{margin-top:12px;padding:10px 14px;background:rgba(240,165,0,.08);border-radius:8px;font-size:13px;color:var(--amber)}
+.finding-fix::before{content:"Fix: ";font-weight:700}
+/* facts */
+.facts{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+.fact{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:16px 18px}
+.fact b{display:block;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--mut);margin-bottom:4px;font-weight:700}
+.fact span{font-size:14.5px;color:#fff}
+/* tables */
+.tbl-wrap{overflow-x:auto;border-radius:12px;border:1px solid rgba(255,255,255,.08)}
+table{width:100%;border-collapse:collapse;min-width:640px}
+th{text-align:left;font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--mut);padding:12px 16px;background:rgba(26,58,92,.5)}
+td{padding:13px 16px;border-top:1px solid rgba(255,255,255,.05);font-size:14px;color:var(--txt);vertical-align:top}
+.score-pill{display:inline-block;padding:2px 10px;border-radius:20px;font-size:12px;font-weight:700;white-space:nowrap}
+.score-pill.high{background:rgba(34,197,94,.15);color:var(--good)}
+.score-pill.mid{background:rgba(240,165,0,.15);color:var(--amber)}
+.score-pill.low{background:rgba(232,80,42,.15);color:var(--orange)}
+.yes{color:var(--good);font-weight:700}.no{color:var(--orange);font-weight:700}.part{color:var(--amber);font-weight:700}
+/* screenshots */
+.shots{display:grid;grid-template-columns:2.4fr 1fr;gap:20px;align-items:start}
+.shot{background:#fff;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,.1)}
+.shot img{display:block;width:100%;height:auto}
+.shot figcaption{background:#111827;color:var(--mut);font-size:12.5px;padding:10px 14px}
+/* callout */
+.callout{background:linear-gradient(135deg,rgba(232,80,42,.15),rgba(26,58,92,.4));border:1px solid rgba(232,80,42,.35);border-radius:14px;padding:26px 28px;margin:30px 0}
+.callout h4{color:#fff;font-size:18px;margin-bottom:8px}
+.callout p{color:#cbd5e1;font-size:14.5px}
+.big-cta{display:inline-block;margin-top:16px;background:var(--orange);color:#fff;text-decoration:none;font-weight:800;padding:13px 24px;border-radius:10px;transition:transform .2s,box-shadow .2s}
+.big-cta:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(232,80,42,.35)}
+/* ads */
+.campaign-block{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:26px;margin-bottom:22px}
+.campaign-head{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:baseline;margin-bottom:6px}
+.campaign-name{font-size:18px;font-weight:800;color:#fff}
+.budget{font-size:12px;font-weight:800;color:var(--amber);background:rgba(240,165,0,.1);padding:3px 10px;border-radius:20px}
+.campaign-goal{font-size:13.5px;color:var(--mut);margin-bottom:14px}
+.kw{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.kw span{font-size:12.5px;background:rgba(26,58,92,.6);border:1px solid rgba(255,255,255,.08);padding:4px 10px;border-radius:6px;color:#cbd5e1}
+.ad-copy-block{background:#fff;border-radius:10px;padding:16px 20px;color:#202124;font-family:Arial,sans-serif}
+.ad-spons{font-size:12px;font-weight:700;color:#202124}
+.ad-url{font-size:13px;color:#202124;margin:2px 0 4px}
+.ad-headline{font-size:19px;color:#1a0dab;line-height:1.3}
+.ad-desc{font-size:14px;color:#4d5156;margin-top:4px}
+/* plan */
+.plan-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px}
+.plan-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:22px}
+.plan-badge{display:inline-block;background:var(--orange);color:#fff;font-size:11px;font-weight:800;padding:3px 10px;border-radius:4px;margin-bottom:12px;letter-spacing:.5px}
+.plan-badge.d30{background:#e8502acc}.plan-badge.d60{background:var(--amber);color:#0f172a}.plan-badge.d90{background:var(--navy);border:1px solid rgba(255,255,255,.25)}
+.plan-card h4{color:#fff;font-size:16px;margin-bottom:8px}
+.plan-items{list-style:none}
+.plan-items li{font-size:13.5px;color:var(--mut);padding:8px 0 8px 22px;border-bottom:1px solid rgba(255,255,255,.05);position:relative}
+.plan-items li::before{content:"";position:absolute;left:2px;top:15px;width:9px;height:9px;border-radius:2px;border:2px solid var(--amber)}
+.lp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px}
+.lp{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:22px}
+.lp h4{color:#fff;margin-bottom:6px}.lp .url{font-family:Consolas,monospace;font-size:12.5px;color:var(--good);margin-bottom:10px}
+.lp ol{padding-left:18px;color:var(--mut);font-size:13.5px}.lp li{margin:4px 0}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
+.reveal.visible{opacity:1;transform:none}
+footer{padding:44px 0;text-align:center;color:var(--mut);font-size:13px;border-top:1px solid rgba(255,255,255,.06)}
+@media(max-width:760px){.shots{grid-template-columns:1fr}.hero{padding:52px 0 44px}.score-number{font-size:42px}.section{padding:52px 0}}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.bar i{transition:none}}
+</style>
+</head>
+<body>
+
+<nav class="toc" aria-label="Report sections"><div class="container">
+<a href="#overview">Overview</a><a href="#website">Website</a><a href="#cro">CRO</a><a href="#analytics">Tracking</a><a href="#seo">SEO</a><a href="#social">Social</a><a href="#competitors">Competitors</a><a href="#ads">Google Ads</a><a href="#landing">Landing Pages</a><a href="#plan">Action Plan</a>
+</div></nav>
+
+<header class="hero">
+<div class="container">
+<img src="./logo.png" alt="Box Shop and Packaging logo" class="hero-logo">
+<div class="eyebrow">Digital Marketing &amp; CRO Audit · November 2026</div>
+<h1>Box Shop and Packaging:<br><em>Strong products, but the website isn't selling them</em></h1>
+<p class="hero-sub">Box Shop has real prices online, ready-made moving kits, its own delivery drivers and 13,000+ Instagram followers. The website sends all of that through a 2011-era Jimdo template, with a pro-forma invoice step instead of a real checkout and tracking that records almost nothing useful.</p>
+<div class="score-grid">
+<div class="score-card overall"><div class="score-number mid" data-target="47">0</div><div class="score-label">Overall</div><div class="bar"><i style="background:var(--amber)" data-w="47"></i></div></div>
+<div class="score-card"><div class="score-number mid" data-target="43">0</div><div class="score-label">Website</div><div class="bar"><i style="background:var(--amber)" data-w="43"></i></div></div>
+<div class="score-card"><div class="score-number mid" data-target="52">0</div><div class="score-label">Analytics &amp; Tracking</div><div class="bar"><i style="background:var(--amber)" data-w="52"></i></div></div>
+<div class="score-card"><div class="score-number mid" data-target="49">0</div><div class="score-label">SEO</div><div class="bar"><i style="background:var(--amber)" data-w="49"></i></div></div>
+<div class="score-card"><div class="score-number mid" data-target="55">0</div><div class="score-label">Social Media</div><div class="bar"><i style="background:var(--amber)" data-w="55"></i></div></div>
+<div class="score-card"><div class="score-number bad" data-target="38">0</div><div class="score-label">Ads Readiness</div><div class="bar"><i style="background:var(--orange)" data-w="38"></i></div></div>
+</div>
+<p class="meta">Prepared by JCE Media · Site audited: boxshopsa.net · Scores: 70+ good · 40–69 needs work · under 40 critical</p>
+</div>
+</header>
+
+<!-- 2. OVERVIEW -->
+<section class="section" id="overview"><div class="container">
+<div class="section-tag reveal">01 · Company Overview</div>
+<h2 class="reveal">Who Box Shop is, as seen from the outside</h2>
+<p class="section-intro reveal">Everything below was pulled from the live website, public registries, directory listings and social profiles. No information was supplied by the business.</p>
+<div class="facts reveal">
+<div class="fact"><b>Trading name</b><span>Box Shop and Packaging</span></div>
+<div class="fact"><b>Registered entity</b><span>Close corporation, reg. 2011/039432/23 (est. 2011)</span></div>
+<div class="fact"><b>Location</b><span>Unit 1B, 11 North Reef Rd, cnr George Allen Rd, Wilbart, Bedfordview / Germiston</span></div>
+<div class="fact"><b>Contact</b><span>011 455 5191 · Office &amp; WhatsApp 082 633 1367 · no public email</span></div>
+<div class="fact"><b>What they sell</b><span>Moving boxes and kits, stock boxes (SWB/DWB), protective packaging, tape, gift and retail packaging, industrial supplies</span></div>
+<div class="fact"><b>Customers</b><span>Home movers, office movers, small businesses and e-commerce, industrial buyers</span></div>
+<div class="fact"><b>Fulfilment</b><span>In-house delivery team (Mon–Fri, 9:00–16:30), in-store collection, sister moving service (loadit.africa)</span></div>
+<div class="fact"><b>Catalogue online</b><span>135+ priced products, 6 moving kits (R1,060.83 to R4,521.69 incl. VAT)</span></div>
+<div class="fact"><b>Tech stack</b><span>Jimdo Creator (legacy), Jimdo store, Cloudflare</span></div>
+<div class="fact"><b>Social</b><span>Instagram @box_shop_sa (13.1K followers), Facebook, TikTok @box_shop_sa, YouTube</span></div>
+<div class="fact"><b>Positioning on site</b><span>"Whatever you're packing, we can help!" · "Pack it · Wrap it · Send it"</span></div>
+<div class="fact"><b>Biggest untapped asset</b><span>Moving kits, the highest-value product, sit below the fold, behind a R2.50 core-cap carousel</span></div>
+</div>
+</div></section>
+
+<!-- 3. WEBSITE -->
+<section class="section section-alt" id="website"><div class="container">
+<div class="section-tag reveal">02 · Website Audit · 43/100</div>
+<h2 class="reveal">The first screen sells a R2.50 core cap, not a R2,288 moving kit</h2>
+<p class="section-intro reveal">Screenshots of the live site taken on 14 Nov 2026. On mobile, the first thing a visitor sees is a cookie panel that covers the whole screen. Behind it, the first products are core caps and graduation tubes.</p>
+<div class="shots reveal">
+<figure class="shot"><img src="./current-desktop.jpg" alt="Current Box Shop homepage on desktop" loading="lazy"><figcaption>Desktop, above the fold: a banner image, two image-buttons ("Buy Now" and "Shop Now" go to similar places) and a carousel of low-value parts.</figcaption></figure>
+<figure class="shot"><img src="./current-mobile.jpg" alt="Current Box Shop homepage on mobile with cookie wall" loading="lazy"><figcaption>Mobile (390px): the cookie panel fills the screen. The homepage is 16,940px tall.</figcaption></figure>
+</div>
+<h3 class="reveal">Findings</h3>
+<div class="findings-grid">
+<div class="finding-card critical reveal"><div class="sev">Critical</div><div class="finding-title">No real online checkout</div><div class="finding-body">The Terms page says online orders get "a pro-forma invoice &amp; banking details along with a delivery fee". The customer has to wait for an email, do an EFT and send proof of payment. Every extra step loses buyers, especially movers on a deadline.</div><div class="finding-fix">Take card, Instant EFT and SnapScan at checkout through PayFast, Yoco or Ozow, with the delivery fee worked out live from the suburb.</div></div>
+<div class="finding-card critical reveal"><div class="sev">Critical</div><div class="finding-title">"Free shipping" appears on every product, but delivery is charged</div><div class="finding-body">Every product card carries the Jimdo default "Free shipping to the following countries: South Africa". The T&amp;Cs say a delivery fee is added. When a customer sees that mismatch at the invoice stage, it damages trust and invites disputes.</div><div class="finding-fix">Remove the default label and show a clear rule instead, for example "Free delivery over R1,500 in our zones, otherwise from R__".</div></div>
+<div class="finding-card critical reveal"><div class="sev">Critical</div><div class="finding-title">Phone and WhatsApp aren't tappable</div><div class="finding-body">The live site has 0 <code>tel:</code> links and 0 WhatsApp links. The numbers are plain text or part of a banner image, so mobile visitors have to copy them by hand.</div><div class="finding-fix">Add tap-to-call and a click-to-WhatsApp link with a pre-filled message, plus a sticky bar on mobile.</div></div>
+<div class="finding-card warning reveal"><div class="sev">Warning</div><div class="finding-title">The navigation repeats itself</div><div class="finding-body">"Products" and "Shop Online" are two near-identical lists of about 55 items each, in alphabetical order rather than by need. A mover has to know that "Stock 6 SWB" is the box they want.</div><div class="finding-fix">Organise the menu by need: Moving · Boxes · Protect · Tape &amp; Seal · Gift &amp; Retail · Business/Bulk. Add search.</div></div>
+<div class="finding-card warning reveal"><div class="sev">Warning</div><div class="finding-title">Every page loads hundreds of products</div><div class="finding-body">The homepage loads 204 resources and 159 images, and the Moving Boxes page is 932 KB of HTML. Each page also carries the full product carousel, so pages are heavy and very long on mobile.</div><div class="finding-fix">Show only relevant products on each page, lazy-load images, and use WebP images that are around 30% of the current size.</div></div>
+<div class="finding-card warning reveal"><div class="sev">Warning</div><div class="finding-title">Nothing shows customers what other customers think</div><div class="finding-body">There are no reviews, star ratings or "since 2011" claim, and the 13K Instagram following isn't mentioned. The registration shows 15 years in business, which a new visitor never finds out.</div><div class="finding-fix">Add a Google review widget, "Trusted since 2011", the Instagram follower count and photos of the delivery fleet.</div></div>
+<div class="finding-card warning reveal"><div class="sev">Warning</div><div class="finding-title">The logo is still in Christmas mode, and the store's look is dated</div><div class="finding-body">The Santa-hat logo is live in mid-November and stays up year-round unless someone swaps it. The image-text "Buy Now" buttons date from about 2015 and can't be read by screen readers.</div><div class="finding-fix">Make seasonal elements a scheduled banner, and turn image buttons into real HTML buttons.</div></div>
+<div class="finding-card warning reveal"><div class="sev">Warning</div><div class="finding-title">A broken widget is throwing errors on the homepage</div><div class="finding-body">The browser console on the live homepage logs: <code>eapps.Platform … WIDGET_NOT_FOUND</code>. An Elfsight widget, typically a reviews or Instagram feed, has been deleted or expired but is still embedded. Visitors see an empty block, and the page wastes a request.</div><div class="finding-fix">Remove the embed, or replace it with a native Google reviews block (included in the redesign).</div></div>
+<div class="finding-card good reveal"><div class="sev">Working</div><div class="finding-title">Real prices and real product photography</div><div class="finding-body">Box Shop publishes clear VAT-inclusive prices and its own branded product shots. Many competitors only say "call for a quote". That transparency is a real advantage and should be made much more visible.</div></div>
+</div>
+</div></section>
+
+<!-- 4. CRO -->
+<section class="section" id="cro"><div class="container">
+<div class="section-tag reveal">03 · Conversion Rate Optimisation · 36/100</div>
+<h2 class="reveal">8-point CRO assessment</h2>
+<p class="section-intro reveal">Each point is scored out of 10. Together they show how easily a cold visitor (a mover who googled "moving boxes Bedfordview") can turn into a paid order.</p>
+<div class="tbl-wrap reveal"><table>
+<thead><tr><th>Point</th><th>Score</th><th>Key finding</th></tr></thead>
+<tbody>
+<tr><td>1. Five-second test</td><td><span class="score-pill low">4/10</span></td><td>The logo makes the business clear, but there's no headline promise, no "who it's for" and no single next step. Two competing image buttons.</td></tr>
+<tr><td>2. CTA audit</td><td><span class="score-pill low">4/10</span></td><td>The CTAs are images ("Buy Now", "Shop Now") pointing to similar places. There's no "Get my moving kit" and no CTA after the content sections.</td></tr>
+<tr><td>3. Trust signals</td><td><span class="score-pill low">2/10</span></td><td>No reviews, years in business, delivery-fleet proof or guarantees. The address only appears in the footer.</td></tr>
+<tr><td>4. Contact friction</td><td><span class="score-pill low">3/10</span></td><td>No tap-to-call, no WhatsApp link and no email address. The contact form sits on a separate page.</td></tr>
+<tr><td>5. Mobile experience</td><td><span class="score-pill mid">4/10</span></td><td>No horizontal scroll, but the cookie panel takes the whole screen, the page is 16,940px long and product text is tiny.</td></tr>
+<tr><td>6. Page speed signals</td><td><span class="score-pill mid">4/10</span></td><td>204 requests, 159 images, no lazy loading, two legacy analytics libraries, and a carousel on every page.</td></tr>
+<tr><td>7. Value proposition</td><td><span class="score-pill mid">4/10</span></td><td>"Affordable", "competitively priced" and "friendly" are generic. The real advantages (own drivers, transparent prices, ready kits, 15 years) are never stated.</td></tr>
+<tr><td>8. User journey</td><td><span class="score-pill mid">4/10</span></td><td>"I'm moving a 2-bed flat, what do I need?" takes 3+ clicks and reading SKU lists. There's no kit finder, no size guide and no "add tape and bubble wrap" prompt.</td></tr>
+<tr><td><b>Overall CRO score</b></td><td><span class="score-pill low">29/80 = 36/100</span></td><td></td></tr>
+</tbody></table></div>
+<div class="callout reveal"><h4>Top 3 CRO fixes (biggest revenue impact)</h4><p><b>1. Turn moving kits into the hero.</b> Add a 2-question "Kit Finder" (home size and fragile items) that recommends a kit and offers add-ons: mattress bags, TV box, glass box. The average order is likely to move from tens of rands to thousands.<br><b>2. Replace the pro-forma step with a real checkout.</b> Card, Instant EFT, delivery-or-collect, and a delivery fee shown live, with a free-delivery threshold to lift basket size.<br><b>3. Add cross-sells everywhere.</b> "Frequently bought together" on every box (tape, marker, fragile labels, bubble wrap) and "Don't forget" prompts in the cart. These are low-cost, high-margin items customers already need.</p>
+<a class="big-cta" href="#plan">See the action plan ↓</a></div>
+</div></section>
+
+<!-- 5. ANALYTICS -->
+<section class="section section-alt" id="analytics"><div class="container">
+<div class="section-tag reveal">04 · Analytics &amp; Tracking · 52/100</div>
+<h2 class="reveal">The tags are installed, but almost nothing useful is measured</h2>
+<p class="section-intro reveal">We scanned the page source and the live Google Tag Manager container. The tags exist, but there are no sales events, the GTM container is empty, and one tag is from a product Google shut down years ago.</p>
+<div class="tbl-wrap reveal"><table>
+<thead><tr><th>Tool</th><th>Status</th><th>ID found</th><th>What it means</th></tr></thead>
+<tbody>
+<tr><td>Google Analytics 4</td><td class="part">Installed, page views only</td><td class="mono">G-CTRYC5TZ75</td><td>Hard-coded gtag. No <code>view_item</code>, <code>add_to_cart</code> or <code>purchase</code> events, so GA4 can't tell which products or kits sell.</td></tr>
+<tr><td>Universal Analytics</td><td class="no">Dead code</td><td class="mono">UA-67731025-1</td><td>Google stopped processing UA data in 2023. It still loads <code>analytics.js</code> on every page and collects nothing.</td></tr>
+<tr><td>Google Tag Manager</td><td class="no">Empty container</td><td class="mono">GTM-5CLZ5CQ</td><td>The live container holds only built-in variables and no tags or triggers. It loads but does nothing.</td></tr>
+<tr><td>Meta Pixel</td><td class="part">PageView only</td><td class="mono">2132362890212028</td><td>Fires only after consent, which is good, but sends no AddToCart, InitiateCheckout or Purchase events. Meta can't optimise for buyers or retarget cart abandoners.</td></tr>
+<tr><td>Google Ads conversion tag</td><td class="no">Not found</td><td class="mono">—</td><td>No AW- tag. Any Google Ads spend would be running blind.</td></tr>
+<tr><td>Search Console</td><td class="yes">Verified</td><td class="mono">2 verification tokens</td><td>Good. One token is duplicated in the head and should be cleaned up.</td></tr>
+<tr><td>Heatmaps / session recording</td><td class="no">None</td><td class="mono">—</td><td>No Microsoft Clarity or Hotjar, so there's no way to see where mobile visitors drop off.</td></tr>
+<tr><td>Consent handling</td><td class="part">Partial</td><td class="mono">Jimdo CookieControl</td><td>Meta waits for consent, but GA4 and UA fire before it. That's a POPIA risk, and Consent Mode v2 isn't set up.</td></tr>
+<tr><td>Call / WhatsApp tracking</td><td class="no">None</td><td class="mono">—</td><td>Phone is probably the biggest sales channel, and it's completely unmeasured.</td></tr>
+</tbody></table></div>
+<div class="findings-grid" style="margin-top:22px">
+<div class="finding-card critical reveal"><div class="sev">Critical</div><div class="finding-title">No sales data reaches GA4 or Meta</div><div class="finding-body">Because the "checkout" ends with an emailed pro-forma, no tool knows when a sale happens. Box Shop can't answer "which channel made us money last month?"</div><div class="finding-fix">Move all tags into GTM and send GA4 e-commerce events plus the Meta Conversions API for view_item, add_to_cart, begin_checkout and purchase.</div></div>
+<div class="finding-card warning reveal"><div class="sev">Warning</div><div class="finding-title">Calls and WhatsApps aren't counted</div><div class="finding-body">The most common customer action, a call or WhatsApp to 082 633 1367, leaves no trace in any report.</div><div class="finding-fix">Track tel: and wa.me clicks as GA4 key events and import them into Google Ads.</div></div>
+<div class="finding-card warning reveal"><div class="sev">Warning</div><div class="finding-title">Old scripts still load</div><div class="finding-body">UA, a hard-coded gtag and an empty GTM container all load on every page view. They slow the site and record nothing.</div><div class="finding-fix">Remove UA and the hard-coded gtag, and run everything through one GTM container with Consent Mode v2.</div></div>
+</div>
+</div></section>
+
+<!-- 6. SEO -->
+<section class="section" id="seo"><div class="container">
+<div class="section-tag reveal">05 · SEO · 49/100</div>
+<h2 class="reveal">Strong local intent, but the pages don't make the most of it</h2>
+<p class="section-intro reveal">The sitemap lists 115 URLs. Many are keyword-stuffed paths that read as spam to people and add little for Google.</p>
+<div class="findings-grid">
+<div class="finding-card critical reveal"><div class="sev">Critical</div><div class="finding-title">Keyword-stuffed URLs</div><div class="finding-body">Example: <code>/packaging-boxes/die-cut-boxes/corrugated-boxes/cardboard-boxes/box-shops-gauteng/cheap-moving-boxes/cardboard-boxes/packaging-stores/</code>. That's 8 folder levels for one product page. Google discounts this, and the links look untrustworthy when shared on WhatsApp.</div><div class="finding-fix">Use clean URLs like /moving-boxes/ and /moving-kits/2-bedroom/ with 301 redirects from every old URL.</div></div>
+<div class="finding-card critical reveal"><div class="sev">Critical</div><div class="finding-title">135 of 157 homepage images have no alt text</div><div class="finding-body">That's 86% of images without descriptions. It costs Google Images traffic for searches like "TV box for moving" and fails accessibility.</div><div class="finding-fix">Write descriptive alt text from the product name and size.</div></div>
+<div class="finding-card warning reveal"><div class="sev">Warning</div><div class="finding-title">Duplicated title tag</div><div class="finding-body"><code>Box Shop Johannesburg | Moving Boxes | Box Shops - Box Shop Johannesburg | Packaging Store | Moving Boxes</code>: 98 characters with the brand repeated, so Google cuts it off.</div><div class="finding-fix">"Moving Boxes &amp; Packaging Bedfordview | Box Shop – Delivered in Joburg" (about 60 characters).</div></div>
+<div class="finding-card warning reveal"><div class="sev">Warning</div><div class="finding-title">No LocalBusiness schema</div><div class="finding-body">Only Jimdo's old Product microdata is present. There's no LocalBusiness/Store, opening hours, geo or review markup, which weakens the Map Pack and rich results.</div><div class="finding-fix">Add JSON-LD for Store, Product with Offer, and FAQPage.</div></div>
+<div class="finding-card warning reveal"><div class="sev">Warning</div><div class="finding-title">Two H1s, neither with a keyword</div><div class="finding-body">"WHATEVER YOU'RE PACKING" and "BOX SHOP" are both H1s. Neither says moving boxes or Bedfordview.</div><div class="finding-fix">One H1: "Moving Boxes, Moving Kits &amp; Packaging in Bedfordview".</div></div>
+<div class="finding-card warning reveal"><div class="sev">Warning</div><div class="finding-title">robots.txt slows crawlers</div><div class="finding-body"><code>Crawl-Delay: 5</code> slows Bing and others (Google ignores it), and AhrefsBot and MJ12bot are blocked completely.</div><div class="finding-fix">Remove the crawl-delay. Leave the bot blocks if the owner prefers.</div></div>
+<div class="finding-card good reveal"><div class="sev">Working</div><div class="finding-title">Sitemap, meta description and Search Console</div><div class="finding-body">A sitemap exists, the homepage meta description names the products and phone number, and Search Console is verified. These are a good base to build on.</div></div>
+</div>
+</div></section>
+
+<!-- 7. SOCIAL -->
+<section class="section section-alt" id="social"><div class="container">
+<div class="section-tag reveal">06 · Social Media · 55/100</div>
+<h2 class="reveal">A real audience that the website doesn't use</h2>
+<div class="tbl-wrap reveal"><table>
+<thead><tr><th>Platform</th><th>Status</th><th>Observations</th></tr></thead>
+<tbody>
+<tr><td>Instagram @box_shop_sa</td><td class="yes">Active · 13.1K followers</td><td>The most recent visible posts are from 23 July 2026 (reel and photo), with older posts from 2024. Posting has gone quiet for about 4 months. A strong audience for a local packaging store.</td></tr>
+<tr><td>Facebook /boxshopsa.net</td><td class="part">Exists</td><td>Page "Box Shop – Moving Boxes – Cardboard Boxes | Germiston". Public activity couldn't be checked. A Meta Ad Library keyword search turned up no Box Shop ads.</td></tr>
+<tr><td>TikTok @box_shop_sa</td><td class="part">Exists</td><td>Linked from the site. Packing hacks and "how many boxes do I need" videos suit TikTok well.</td></tr>
+<tr><td>YouTube</td><td class="part">Linked</td><td>Linked in the footer, activity unknown.</td></tr>
+<tr><td>LinkedIn</td><td class="no">No company page</td><td>Missed B2B channel for office moves and industrial packaging buyers. Store manager Lisa Els has a personal profile.</td></tr>
+<tr><td>Google Business Profile</td><td class="part">Listed</td><td>Appears in directories under the correct address. Review volume isn't shown anywhere on the website.</td></tr>
+</tbody></table></div>
+<div class="callout reveal"><h4>Opportunity: 13,100 followers, 0 retargeting</h4><p>Because the Meta Pixel only records PageView, Box Shop can't show "you left a 2-bedroom kit in your cart" ads to the people who already follow them. With e-commerce events, the Instagram audience becomes a remarketing list on day one.</p></div>
+</div></section>
+
+<!-- 8. COMPETITORS -->
+<section class="section" id="competitors"><div class="container">
+<div class="section-tag reveal">07 · Competitor Landscape</div>
+<h2 class="reveal">Who a Bedfordview mover compares you with</h2>
+<p class="section-intro reveal">Competitors named in East Rand packaging directories (WiseMove, June 2026) and national search results. We only audited The Boxman's site in depth.</p>
+<div class="tbl-wrap reveal"><table>
+<thead><tr><th>Competitor</th><th>Strength</th><th>Digital weakness</th><th>Box Shop opportunity</th></tr></thead>
+<tbody>
+<tr><td><b>The Boxman</b> (national, Shopify)</td><td>Real Shopify checkout, "Mover Kits" collection (about R810 / R1,395 / R2,300), national shipping in 2–3 days, GTM in use</td><td>Franchise feel, smaller kits, national courier rather than its own drivers</td><td>Bigger kits with full itemised contents, own delivery team, a local store to collect from. Show what's in each kit so the higher price makes sense.</td></tr>
+<tr><td><b>Eco Box</b> (Founders Hill, Edenvale)</td><td>3 km away, eco positioning</td><td>Not audited</td><td>Box Shop already sells Eco Boxes and Eco Paper Tape, so it can claim the eco message too.</td></tr>
+<tr><td><b>Time Pack</b> (Meadowbrook, Germiston)</td><td>Directory listing mentions free delivery on bulk orders</td><td>Not audited</td><td>Match it with a published free-delivery threshold.</td></tr>
+<tr><td><b>K-PAK Supplies</b> (Alrode, Alberton)</td><td>Industrial focus</td><td>Not audited</td><td>A Business/Bulk landing page with account pricing.</td></tr>
+<tr><td><b>House of Boxes</b> (Ravenswood, Boksburg)</td><td>East Rand neighbour</td><td>Not audited</td><td>Win on suburb landing pages and Google Ads coverage.</td></tr>
+</tbody></table></div>
+</div></section>
+
+<!-- 9. GOOGLE ADS -->
+<section class="section section-alt" id="ads"><div class="container">
+<div class="section-tag reveal">08 · Google Ads Strategy · Ads Readiness 38/100</div>
+<h2 class="reveal">Three campaigns to switch on once tracking is fixed</h2>
+<p class="section-intro reveal">Suggested starting budget: R9,000/month, geo-targeted to about 25 km around Bedfordview (Edenvale, Kempton Park, Boksburg, Benoni, Sandton, Germiston, Alberton, Joburg East). Don't spend until conversion tracking is live.</p>
+<div class="campaign-block reveal"><div class="campaign-head"><div class="campaign-name">1 · Brand Protection</div><span class="budget">15% · ~R1,350/mo</span></div><div class="campaign-goal">Own searches for the Box Shop name so competitors and directories can't take them.</div>
+<div class="kw"><span>box shop</span><span>box shop bedfordview</span><span>boxshopsa</span><span>box shop and packaging</span><span>box shop germiston</span><span>box shop north reef road</span></div>
+<div class="ad-copy-block"><div class="ad-spons">Sponsored</div><div class="ad-url">boxshopsa.net</div><div class="ad-headline">Box Shop Bedfordview | Official Online Store</div><div class="ad-desc">Moving boxes, kits and packaging since 2011. Shop online, collect in-store or get it delivered by our own drivers.</div></div></div>
+<div class="campaign-block reveal"><div class="campaign-head"><div class="campaign-name">2 · Moving Kits &amp; Moving Boxes (core)</div><span class="budget">60% · ~R5,400/mo</span></div><div class="campaign-goal">Catch people about to move. A kit order is worth R1,000 to R4,500, so the cost per click is easily covered.</div>
+<div class="kw"><span>moving boxes johannesburg</span><span>buy moving boxes</span><span>moving kit 2 bedroom</span><span>moving boxes edenvale</span><span>cardboard boxes near me</span><span>bubble wrap johannesburg</span><span>packaging supplies east rand</span><span>tv box for moving</span><span>mattress bags</span></div>
+<div class="ad-copy-block"><div class="ad-spons">Sponsored</div><div class="ad-url">boxshopsa.net/moving-kits</div><div class="ad-headline">2-Bedroom Moving Kit R2,288 | Delivered by Our Own Drivers</div><div class="ad-desc">33 boxes, bubble wrap, 5 tapes, dispenser, labels and pallet wrap in one order. Collect in Bedfordview or get it delivered Mon–Fri.</div></div></div>
+<div class="campaign-block reveal"><div class="campaign-head"><div class="campaign-name">3 · Urgency &amp; Business</div><span class="budget">25% · ~R2,250/mo</span></div><div class="campaign-goal">People who need boxes today or this week, and businesses that buy every month.</div>
+<div class="kw"><span>boxes needed today</span><span>moving boxes near me today</span><span>packaging supplier germiston</span><span>bulk cardboard boxes</span><span>pallet wrap supplier</span><span>office moving boxes</span><span>archive boxes</span></div>
+<div class="ad-copy-block"><div class="ad-spons">Sponsored</div><div class="ad-url">boxshopsa.net/business</div><div class="ad-headline">Need Boxes This Week? | Call 011 455 5191</div><div class="ad-desc">In stock in Bedfordview. Office moving kits from R1,060. Bulk and account pricing for businesses. WhatsApp us for a quote in minutes.</div></div></div>
+</div></section>
+
+<!-- 10. LANDING PAGES -->
+<section class="section" id="landing"><div class="container">
+<div class="section-tag reveal">09 · Landing Page Strategy</div>
+<h2 class="reveal">One page per buyer intent</h2>
+<div class="lp-grid">
+<div class="lp reveal"><h4>Moving Kits</h4><div class="url">/moving-kits/</div><ol><li>Kit Finder: bedrooms plus fragile items</li><li>Kit comparison table with full contents</li><li>Add-ons: mattress bags, TV box, glass box</li><li>Delivery vs collect, free-delivery bar</li><li>FAQ and reviews</li></ol></div>
+<div class="lp reveal"><h4>Moving Boxes à la carte</h4><div class="url">/moving-boxes/</div><ol><li>Box size guide (what fits in each)</li><li>SWB vs DWB toggle on each box</li><li>"Frequently bought together" tape, labels and marker</li><li>Pack-of-20 option</li></ol></div>
+<div class="lp reveal"><h4>Business &amp; Bulk</h4><div class="url">/business/</div><ol><li>Industries served: e-commerce, retail, warehousing</li><li>4-field quote form and WhatsApp</li><li>Custom branded tape (already sold)</li><li>Account and recurring orders</li></ol></div>
+<div class="lp reveal"><h4>Suburb pages</h4><div class="url">/moving-boxes-edenvale/ etc.</div><ol><li>Unique local copy plus delivery-zone details</li><li>Distance from the Bedfordview store</li><li>Kit CTA and a map</li></ol></div>
+</div>
+<div class="callout reveal"><h4>We've already built a working demo</h4><p>The redesign prototype that comes with this report shows all of the above working: kit finder, cross-sells, cart drawer with a free-delivery bar, a tracking event log and a mobile sticky bar, using Box Shop's real products, prices and photos.</p></div>
+<h3 class="reveal">The maths: what break-even looks like</h3>
+<div class="facts reveal">
+<div class="fact"><b>1 extra 2-bed kit per week</b><span>4 × R2,287.58 = <b style="color:var(--amber)">R9,150/month</b> in extra revenue</span></div>
+<div class="fact"><b>1 kit upgrade a week (2 → 3 bed)</b><span>4 × R1,344.15 = <b style="color:var(--amber)">R5,377/month</b> in extra basket value</span></div>
+<div class="fact"><b>Add-ons on 20 kit orders/month</b><span>A TV box + 2 mattress bags is R597.79 per order, so 20 orders = <b style="color:var(--amber)">R11,956/month</b></span></div>
+<div class="fact"><b>What it takes</b><span>None of these needs more traffic. They come from converting and upselling the visitors Box Shop already gets.</span></div>
+</div>
+<p class="reveal" style="font-size:12.5px;color:var(--mut);margin-top:12px">Illustrative arithmetic using Box Shop's own published prices. Actual results depend on traffic and margins, and will show up in GA4 once tracking is fixed.</p>
+</div></section>
+
+<!-- 11. PLAN -->
+<section class="section section-alt" id="plan"><div class="container">
+<div class="section-tag reveal">10 · Priority Action Plan</div>
+<h2 class="reveal">What to fix, in order</h2>
+<div class="plan-grid">
+<div class="plan-card reveal"><span class="plan-badge">QUICK WINS · WEEK 1</span><h4>Stop the leaks</h4><ul class="plan-items"><li>Remove the "Free shipping" label from every product</li><li>Add tap-to-call and click-to-WhatsApp sitewide</li><li>Fix the title tag and use one H1</li><li>Remove the UA and duplicate GSC tags</li><li>Install Microsoft Clarity (free)</li><li>Add LocalBusiness schema</li></ul></div>
+<div class="plan-card reveal"><span class="plan-badge d30">30 DAYS</span><h4>Rebuild the storefront</h4><ul class="plan-items"><li>Move to a modern e-commerce platform (Shopify or WooCommerce)</li><li>Real checkout: card, Instant EFT, SnapScan</li><li>Kit Finder and cross-sell engine</li><li>Clean URLs with 301 redirects</li><li>GTM, GA4 e-commerce, Meta CAPI, Consent Mode v2</li></ul></div>
+<div class="plan-card reveal"><span class="plan-badge d60">60 DAYS</span><h4>Switch on demand</h4><ul class="plan-items"><li>Launch the 3 Google Ads campaigns</li><li>Meta retargeting to cart abandoners and the IG audience</li><li>Review drive: SMS or WhatsApp after each delivery</li><li>Abandoned-cart email and WhatsApp flow</li></ul></div>
+<div class="plan-card reveal"><span class="plan-badge d90">90 DAYS</span><h4>Scale what works</h4><ul class="plan-items"><li>Suburb landing pages across the East Rand</li><li>Business accounts and recurring orders</li><li>Monthly CRO tests: kit pricing, bundles, free-delivery threshold</li><li>Monthly report: revenue by channel</li></ul></div>
+</div>
+</div></section>
+
+<footer><div class="container">Prepared by <b>JCE Media</b> · Audit of boxshopsa.net · 14 November 2026<br>Data comes from public sources: the live website, page source, the GTM container, directory listings and social profiles. Scores follow the JCE Media audit rubric.</div></footer>
+
+<script>
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target)}}),{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+function count(el){const t=+el.dataset.target,s=performance.now();(function f(n){const p=Math.min((n-s)/1600,1);el.textContent=Math.round((1-Math.pow(1-p,3))*t);if(p<1)requestAnimationFrame(f)})(s)}
+window.addEventListener('load',()=>{document.querySelectorAll('[data-target]').forEach(count);document.querySelectorAll('.bar i').forEach(b=>b.style.width=b.dataset.w+'%')});
+</script>
+</body>
+</html>
