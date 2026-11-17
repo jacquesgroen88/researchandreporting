@@ -100,8 +100,12 @@
       });
     }
     doc.addEventListener('click', function (e) { if (openTrigger && !nav.contains(e.target)) closeMega(false); });
+    // each panel sits inside its trigger's <li>, so Tab walks trigger -> panel links -> next item.
+    // Focus leaving that <li> closes the panel.
     nav.addEventListener('focusout', function (e) {
-      if (openTrigger && e.relatedTarget && !nav.contains(e.relatedTarget)) closeMega(false);
+      if (!openTrigger) return;
+      var li = openTrigger.parentNode;
+      if (e.relatedTarget && !li.contains(e.relatedTarget)) closeMega(false);
     });
     doc.addEventListener('keydown', function (e) { if (e.key === 'Escape' && openTrigger) closeMega(true); });
   }
@@ -226,7 +230,7 @@
     ["s","Steel strapping tensioner 19 to 32mm, heavy duty","2042819093178","R4,785.00","products/strapping-and-pallet.html","strap strapping pallet pp pet tensioner corner protector netting wrap"],
     ["s","PET/PP strapping dispenser 13 to 32mm","2046959833717","R3,850.00","products/strapping-and-pallet.html","strap strapping pallet pp pet tensioner corner protector netting wrap"],
     ["s","Pallet divider sheets 1000 x 1000, 350gsm B-flute SFK","2086720205695","R7.88","products/strapping-and-pallet.html","strap strapping pallet pp pet tensioner corner protector netting wrap"],
-    ["s","Machine pallet wrap 450mm, 23mic, clear","2034735646682","R718.00","products/strapping-and-pallet.html","strap strapping pallet pp pet tensioner corner protector netting wrap"],
+    ["s","Machine pallet wrap 450mm, 23mic, clear","2034735646682","R718.00","products/strapping-and-pallet.html","pallet wrap stretch wrap stretch film machine wrap"],
     ["s","Cellophane gift wrap, 1m wide x 100m roll","2070320602206","R498.00","products/gift-packaging.html","gift wrap wrapping paper cellophane gift box tissue christmas"],
     ["s","Clear tape, pack of 6, 48mm x 100m","2085503735619","R238.00","products/gift-packaging.html","gift wrap wrapping paper cellophane gift box tissue christmas"],
     ["s","Christmas gift wrap, 500mm x 100m","2092359669647","R544.00","products/gift-packaging.html","gift wrap wrapping paper cellophane gift box tissue christmas"],
@@ -249,21 +253,21 @@
     ["s","Shredded newsprint bale, small, about 25kg, unprinted","2098012603294","R385.00","products/void-fill.html","void fill bubble wrap bubblewrap corro-shred corroshred foam dunnage shredded"],
     ["s","Handy Foam #100 expanding foam bag, about 580 x 650 x 150 expanded","2035161869782","R98.00","products/void-fill.html","void fill bubble wrap bubblewrap corro-shred corroshred foam dunnage shredded"],
     ["s","Handy Foam #80 expanding foam bag, about 530 x 620 x 150 expanded","2013132442325","R80.00","products/void-fill.html","void fill bubble wrap bubblewrap corro-shred corroshred foam dunnage shredded"],
-    ["s","Water bottle 1000ml, clear, CSD design, packed 216, sold per bottle","2018709591994","R4.85","products/bottles-and-shrink-seals.html","bottle bottles cap caps lid water juice honey tampa tamper neck seal shrink seal sleeve"],
-    ["s","Water bottle 500ml, clear, CSD design, packed 345, sold per bottle","2021287435048","R3.15","products/bottles-and-shrink-seals.html","bottle bottles cap caps lid water juice honey tampa tamper neck seal shrink seal sleeve"],
-    ["s","Cap 28mm flat, white, for water bottles","2018912860290","R0.47","products/bottles-and-shrink-seals.html","bottle bottles cap caps lid water juice honey tampa tamper neck seal shrink seal sleeve"],
-    ["s","Juice bottle 3 litre, packed 60, sold per bottle","2057783763569","R7.35","products/bottles-and-shrink-seals.html","bottle bottles cap caps lid water juice honey tampa tamper neck seal shrink seal sleeve"],
-    ["s","Juice bottle 1.5 litre, packed 143, sold per bottle","2091568944538","R6.20","products/bottles-and-shrink-seals.html","bottle bottles cap caps lid water juice honey tampa tamper neck seal shrink seal sleeve"],
-    ["s","Juice bottle 1 litre, packed 168, sold per bottle","2072836988003","R4.94","products/bottles-and-shrink-seals.html","bottle bottles cap caps lid water juice honey tampa tamper neck seal shrink seal sleeve"],
-    ["s","Juice bottle 500ml, packed 284, sold per bottle","2062946413595","R3.70","products/bottles-and-shrink-seals.html","bottle bottles cap caps lid water juice honey tampa tamper neck seal shrink seal sleeve"],
-    ["s","Honey bottle 500ml (takes 28mm honey lid), packed 348, sold per bottle","2012952585021","R3.05","products/bottles-and-shrink-seals.html","bottle bottles cap caps lid water juice honey tampa tamper neck seal shrink seal sleeve"],
-    ["s","Honey bottle 300ml (takes 38mm honey lid), packed 156, sold per bottle","2094417391286","R2.75","products/bottles-and-shrink-seals.html","bottle bottles cap caps lid water juice honey tampa tamper neck seal shrink seal sleeve"],
-    ["s","Honey lid 38mm, yellow, for 300ml honey bottle","2048333652310","R1.30","products/bottles-and-shrink-seals.html","bottle bottles cap caps lid water juice honey tampa tamper neck seal shrink seal sleeve"],
-    ["s","Honey lid 28mm, yellow","20196508375","Price on request","products/bottles-and-shrink-seals.html","bottle bottles cap caps lid water juice honey tampa tamper neck seal shrink seal sleeve"],
-    ["s","Tampa neck seal 55mm lay flat, clear, fits 85 to 105mm circumference, 80mm high","2099018255043","R395.00","products/bottles-and-shrink-seals.html","bottle bottles cap caps lid water juice honey tampa tamper neck seal shrink seal sleeve"],
-    ["s","Tampa neck seal 55mm lay flat, red / green / yellow (same spec)","2045972755372 / 2016833209686 / 2099818922237","R395.00","products/bottles-and-shrink-seals.html","bottle bottles cap caps lid water juice honey tampa tamper neck seal shrink seal sleeve"],
-    ["s","Tampa neck seal 45mm lay flat, yellow, fits 55 to 89mm circumference, 80mm high","2073745800561","R395.00","products/bottles-and-shrink-seals.html","bottle bottles cap caps lid water juice honey tampa tamper neck seal shrink seal sleeve"],
-    ["s","PVC shrink tubing 260mm, 30mic","2040982682205","R1,987.00","products/bottles-and-shrink-seals.html","bottle bottles cap caps lid water juice honey tampa tamper neck seal shrink seal sleeve"],
+    ["s","Water bottle 1000ml, clear, CSD design, packed 216, sold per bottle","2018709591994","R4.85","products/bottles-and-shrink-seals.html","bottle bottles cap caps lid water juice honey tamper tamper-evident neck seal shrink seal sleeve"],
+    ["s","Water bottle 500ml, clear, CSD design, packed 345, sold per bottle","2021287435048","R3.15","products/bottles-and-shrink-seals.html","bottle bottles cap caps lid water juice honey tamper tamper-evident neck seal shrink seal sleeve"],
+    ["s","Cap 28mm flat, white, for water bottles","2018912860290","R0.47","products/bottles-and-shrink-seals.html","bottle bottles cap caps lid water juice honey tamper tamper-evident neck seal shrink seal sleeve"],
+    ["s","Juice bottle 3 litre, packed 60, sold per bottle","2057783763569","R7.35","products/bottles-and-shrink-seals.html","bottle bottles cap caps lid water juice honey tamper tamper-evident neck seal shrink seal sleeve"],
+    ["s","Juice bottle 1.5 litre, packed 143, sold per bottle","2091568944538","R6.20","products/bottles-and-shrink-seals.html","bottle bottles cap caps lid water juice honey tamper tamper-evident neck seal shrink seal sleeve"],
+    ["s","Juice bottle 1 litre, packed 168, sold per bottle","2072836988003","R4.94","products/bottles-and-shrink-seals.html","bottle bottles cap caps lid water juice honey tamper tamper-evident neck seal shrink seal sleeve"],
+    ["s","Juice bottle 500ml, packed 284, sold per bottle","2062946413595","R3.70","products/bottles-and-shrink-seals.html","bottle bottles cap caps lid water juice honey tamper tamper-evident neck seal shrink seal sleeve"],
+    ["s","Honey bottle 500ml (takes 28mm honey lid), packed 348, sold per bottle","2012952585021","R3.05","products/bottles-and-shrink-seals.html","bottle bottles cap caps lid water juice honey tamper tamper-evident neck seal shrink seal sleeve"],
+    ["s","Honey bottle 300ml (takes 38mm honey lid), packed 156, sold per bottle","2094417391286","R2.75","products/bottles-and-shrink-seals.html","bottle bottles cap caps lid water juice honey tamper tamper-evident neck seal shrink seal sleeve"],
+    ["s","Honey lid 38mm, yellow, for 300ml honey bottle","2048333652310","R1.30","products/bottles-and-shrink-seals.html","bottle bottles cap caps lid water juice honey tamper tamper-evident neck seal shrink seal sleeve"],
+    ["s","Honey lid 28mm, yellow","20196508375","Price on request","products/bottles-and-shrink-seals.html","bottle bottles cap caps lid water juice honey tamper tamper-evident neck seal shrink seal sleeve"],
+    ["s","Tamper-evident neck seal 55mm lay flat, clear, fits 85 to 105mm circumference, 80mm high","2099018255043","R395.00","products/bottles-and-shrink-seals.html","bottle bottles cap caps lid water juice honey tamper tamper-evident neck seal shrink seal sleeve"],
+    ["s","Tamper-evident neck seal 55mm lay flat, red / green / yellow (same spec)","2045972755372 / 2016833209686 / 2099818922237","R395.00","products/bottles-and-shrink-seals.html","bottle bottles cap caps lid water juice honey tamper tamper-evident neck seal shrink seal sleeve"],
+    ["s","Tamper-evident neck seal 45mm lay flat, yellow, fits 55 to 89mm circumference, 80mm high","2073745800561","R395.00","products/bottles-and-shrink-seals.html","bottle bottles cap caps lid water juice honey tamper tamper-evident neck seal shrink seal sleeve"],
+    ["s","PVC shrink tubing 260mm, 30mic","2040982682205","R1,987.00","products/bottles-and-shrink-seals.html","bottle bottles cap caps lid water juice honey tamper tamper-evident neck seal shrink seal sleeve"],
     ["s","Moving boxes, 1 bedroom house, new","2027658211983","R1,040.00","products/moving.html","moving boxes kit kits removal mattress cover bundle"],
     ["s","Second-hand moving boxes, medium mixed (sizes 5, 6, 7), bundle of 20 to 30","2048610170759","R345.00","products/moving.html","moving boxes kit kits removal mattress cover bundle"],
     ["s","Hanger box TVL 9 for clothing, 500 x 400 x 655mm","2014967192621","R46.24","products/moving.html","moving boxes kit kits removal mattress cover bundle"],
@@ -281,6 +285,23 @@
     ["s","Second-hand moving boxes, large (sizes 6, 7, 8), bundle","2030882965843","R425.00","products/moving.html","moving boxes kit kits removal mattress cover bundle"],
     ["s","Mattress cover bag, base + queen, blue, 45mic","2040573531288","R105.00","products/moving.html","moving boxes kit kits removal mattress cover bundle"],
     ["s","Mattress cover bag, base + king, red, 45mic","2046016352991","R98.00","products/moving.html","moving boxes kit kits removal mattress cover bundle"],
+    ["s","POF shrink film, centre fold, 200mm x 750m, 25mic","2078288992797","R973.00","wa","shrink film shrink plastic shrink wrap pof centre center fold wrapping plastic"],
+    ["s","POF shrink film, centre fold, 300mm x 750m, 25mic","2045434304964","R1,445.00","wa","shrink film shrink plastic shrink wrap pof centre center fold wrapping plastic"],
+    ["s","POF shrink film, centre fold, 400mm x 750m, 25mic","2038870737601","R1,917.00","wa","shrink film shrink plastic shrink wrap pof centre center fold wrapping plastic"],
+    ["s","POF shrink film, centre fold, 450mm x 750m, 25mic","2063692280974","R2,155.00","wa","shrink film shrink plastic shrink wrap pof centre center fold wrapping plastic"],
+    ["s","POF shrink film, centre fold, 500mm x 750m, 25mic","2013045441484","R2,392.00","wa","shrink film shrink plastic shrink wrap pof centre center fold wrapping plastic"],
+    ["s","POF shrink film, centre fold, 150mm x 1000m, 19mic","2072544078812","R741.00","wa","shrink film shrink plastic shrink wrap pof centre center fold wrapping plastic"],
+    ["s","POF shrink film, centre fold, 400mm x 1000m, 19mic","2062862019161","R1,948.50","wa","shrink film shrink plastic shrink wrap pof centre center fold wrapping plastic"],
+    ["s","POF shrink film, centre fold, 900mm x 1000m, 19mic","2025786476557","R4,362.50","wa","shrink film shrink plastic shrink wrap pof centre center fold wrapping plastic"],
+    ["s","POF shrink film, centre fold, 400mm x 1250m, 15mic","","R1,932.00","wa","shrink film shrink plastic shrink wrap pof centre center fold wrapping plastic"],
+    ["s","Shrink plastic lay flat roll, 450mm x 40mic (bottle pack wrapping)","2096609335139","R1,950.00","wa","shrink film shrink plastic shrink wrap pof centre center fold wrapping plastic lay flat bottle pack"],
+    ["s","Shrink plastic lay flat roll, 500mm x 60/70mic (bottle pack wrapping)","2051987424141","R2,250.00","wa","shrink film shrink plastic shrink wrap pof centre center fold wrapping plastic lay flat bottle pack"],
+    ["s","Shrink plastic lay flat roll, 550mm x 60/70mic (18, 20 and 24 packs of water)","2055012920851","R2,520.00","wa","shrink film shrink plastic shrink wrap pof centre center fold wrapping plastic lay flat bottle pack water"],
+    ["s","Hand pallet wrap, clear, 400mm x 400m, 20mic, extended core","2096982923299","R225.00","wa","pallet wrap stretch wrap stretch film hand wrap cling"],
+    ["s","Hand pallet wrap, clear, 400mm x 400m, 17mic, extended core","2069174305098","R190.00","wa","pallet wrap stretch wrap stretch film hand wrap cling"],
+    ["s","Hand pallet wrap, black, 400mm x 400m, 20mic, standard core","2086056962835","R485.00","wa","pallet wrap stretch wrap stretch film hand wrap black"],
+    ["s","Food cling film roll, 300mm x 1200m, 10mic","2069524617383","R462.00","wa","cling film clingfilm food wrap catering"],
+    ["s","Food cling film roll, 380mm x 1200m, 10mic","2019003892503","R585.00","wa","cling film clingfilm food wrap catering"],
     ["s","Egg selling business start-up kit (500 trays, POF shrink roll, SKA 450 wrapper, heat gun)","","R9,850","machines/turnkey-lines.html#egg","egg kit start-up turnkey"],
     ["m","Bottle filling machine 3 in 1, CGF series, water, 2500 bph (XGDF8 CGF8)","","R585,000","machines/filling-and-bottling.html","wash fill cap water bottling bottle filling water plant"],
     ["m","Automatic tube filling and sealing machine FWJ-60A","","R680,000","machines/filling-and-bottling.html","tube filler sealer cream"],
@@ -311,7 +332,7 @@
     ["m","High speed automatic L-sealer DQL5545PEG, for shoe cases","","R233,475","machines/shrink-wrapping.html","shrink l sealer shoe"],
     ["m","L-sealer FQL380, sealing size 35 x 50cm","","R8,000","machines/shrink-wrapping.html","shrink l sealer l-sealer manual"],
     ["m","Shrink gun, gas model, pallet and machine wrapping","","R26,500","machines/shrink-wrapping.html","shrink gun gas pallet heat"],
-    ["m","Heat shrink electric hand gun 1600W to 2000W","","R985","machines/shrink-wrapping.html","heat gun shrink tampa hot air"],
+    ["m","Heat shrink electric hand gun 1600W to 2000W","","R985","machines/shrink-wrapping.html","heat gun shrink tamper neck seal hot air"],
     ["m","Door and window sleeve wrapper + tunnel, pack 1200 x 250mm","","R1,055,000","machines/shrink-wrapping.html","sleeve wrapper door window"],
     ["m","Door and window sleeve wrapper + tunnel, pack 1500 x 500mm","","R1,150,000","machines/shrink-wrapping.html","sleeve wrapper door window"],
     ["m","Side sealer DQL6025G + DSE6030A tunnel","","R350,200","machines/shrink-wrapping.html","shrink side sealer tunnel"],
@@ -368,7 +389,7 @@
     ["p","Strapping and pallet supplies","","","products/strapping-and-pallet.html","strap strapping pallet pp pet tensioner corner protector netting wrap"],
     ["p","Gift packaging and wrapping paper","","","products/gift-packaging.html","gift wrap wrapping paper cellophane gift box tissue christmas"],
     ["p","Void fill and protective wrap","","","products/void-fill.html","void fill bubble wrap bubblewrap corro-shred corroshred foam dunnage shredded"],
-    ["p","Plastic bottles, caps and tamper seals","","","products/bottles-and-shrink-seals.html","bottle bottles cap caps lid water juice honey tampa tamper neck seal shrink seal sleeve"],
+    ["p","Plastic bottles, caps and tamper seals","","","products/bottles-and-shrink-seals.html","bottle bottles cap caps lid water juice honey tamper tamper-evident neck seal shrink seal sleeve"],
     ["p","Moving boxes and moving kits","","","products/moving.html","moving boxes kit kits removal mattress cover bundle"],
     ["p","Packaging machines and production lines","","","machines/index.html","machines machinery equipment catalogue"],
     ["p","Filling, capping and bottling machines","","","machines/filling-and-bottling.html","filler filling capping capper bottling water plant bottle filling liquid powder"],
@@ -406,8 +427,24 @@
     for (var i = 0; i < words.length; i++) if (words[i] && words[i].indexOf(tok) === 0) return true;
     return false;
   }
+  // buyer words -> catalogue words (applied to the whole query before tokenising)
+  var SYNONYMS = [
+    [/\bshrink ?wrap(ping)? (film|plastic|roll)s?\b/g, 'shrink film'],
+    [/\bshrink plastic\b/g, 'shrink film'],
+    [/\bcling ?wrap\b/g, 'cling film'],
+    [/\bclingfilm\b/g, 'cling film'],
+    [/\bstretch ?(wrap|film)\b/g, 'pallet wrap'],
+    [/\bbubblewrap\b/g, 'bubble wrap'],
+    [/\btampa\b/g, 'tamper'],
+    [/\bsellotape\b/g, 'tape']
+  ];
+  function expand(q) {
+    var s = norm(q);
+    SYNONYMS.forEach(function (p) { s = s.replace(p[0], p[1]); });
+    return s;
+  }
   function search(q, scope) {
-    var toks = norm(q).split(' ').filter(Boolean);
+    var toks = expand(q).split(' ').filter(Boolean);
     if (!toks.length) return [];
     var nq = toks.join(' ');
     var res = [];
@@ -415,25 +452,31 @@
       var r = it.r;
       if (scope === 'supplies' && !(r[0] === 's' || (r[0] === 'p' && r[4].indexOf('products/') === 0))) return;
       if (scope === 'machines' && !(r[0] === 'm' || (r[0] === 'p' && r[4].indexOf('machines/') === 0))) return;
-      var score = 0;
+      var score = 0, nameHits = 0;
       for (var i = 0; i < toks.length; i++) {
         var t = toks[i];
-        if (hasPrefix(it.name, t)) score += 4;
+        if (hasPrefix(it.name, t)) { score += 4; nameHits++; }
         else if (hasPrefix(it.sku, t)) score += 4;
         else if (hasPrefix(it.kw, t)) score += 1;
         else return;
       }
       if (it.full.indexOf(nq) === 0) score += 6;
       else if (it.full.indexOf(nq) > -1) score += 3;
-      if (r[0] === 'p') score += 2;
+      // type order: pages, then supplies, then machines. A one-word category query
+      // ("box", "tape", "egg") should land on the category page before any single item.
+      if (r[0] === 'p') score += toks.length === 1 ? (nameHits ? 12 : 5) : 2;
+      else if (r[0] === 's') score += 1;
       res.push({ it: it, score: score });
     });
     res.sort(function (a, b) { return b.score - a.score || a.it.r[1].length - b.it.r[1].length; });
+    // keep at most 3 category pages so items still show
+    var pages = 0;
+    res = res.filter(function (x) { return x.it.r[0] !== 'p' || ++pages <= 3; });
     return res.slice(0, 8).map(function (x) { return x.it.r; });
   }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function highlight(name, q) {
-    var toks = norm(q).split(' ').filter(function (t) { return t.length > 1; });
+    var toks = (norm(q) + ' ' + expand(q)).split(' ').filter(function (t, i, a) { return t.length > 1 && a.indexOf(t) === i; });
     var out = esc(name);
     toks.forEach(function (t) {
       var re = new RegExp('(^|[^a-z0-9])(' + t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'ig');
@@ -478,14 +521,19 @@
           esc(waLink('Hi Glenpak, I\'m looking for: ' + q.trim())) + '" target="_blank" rel="noopener">Ask us on WhatsApp</a></li>';
       } else {
         res.forEach(function (r, i) {
-          var t = r[0], page = r[4].split('#')[0];
-          var where = t === 'p' ? (r[4].indexOf('machines/') === 0 ? 'Machines' : r[4].indexOf('products/') === 0 ? 'Packaging supplies' : 'Glenpak') : (PAGE_NAMES[page] || '');
+          var t = r[0], page = r[4].split('#')[0], viaWa = r[4] === 'wa';
+          var where = t === 'p' ? (r[4].indexOf('machines/') === 0 ? 'Machines' : r[4].indexOf('products/') === 0 ? 'Packaging supplies' : 'Glenpak')
+            : viaWa ? 'Order on WhatsApp' : (PAGE_NAMES[page] || '');
           if (t !== 'p' && r[2]) where += ' · SKU ' + r[2];
+          // land on the exact row: owners give each product row/card id="sku-<SKU>"
+          var skuId = r[2] ? String(r[2]).split(/[\s\/]+/)[0].replace(/[^A-Za-z0-9-]/g, '') : '';
+          var href = viaWa ? waLink('Hi Glenpak, I\'d like to order: ' + r[1] + (r[2] ? ' (SKU ' + r[2] + ')' : '') + '. Quantity: ')
+            : ROOT + r[4] + (t !== 'p' && skuId && r[4].indexOf('#') < 0 ? '#sku-' + skuId : '');
           var price = '';
           if (r[3]) price = /request/i.test(r[3]) ? '<span class="finder__price"><small>Price on request</small></span>'
             : '<span class="finder__price">' + esc(r[3]) + '<small>Excl VAT</small></span>';
           html += '<li role="option" id="' + list.id + '-o' + i + '" aria-selected="false">' +
-            '<a class="finder__result" href="' + esc(ROOT + r[4]) + '" tabindex="-1">' +
+            '<a class="finder__result" href="' + esc(href) + '" tabindex="-1"' + (viaWa ? ' target="_blank" rel="noopener"' : '') + '>' +
             '<span class="finder__type finder__type--' + (t === 'm' ? 'machine' : t === 'p' ? 'page' : 'supply') + '">' + TYPE_LABEL[t] + '</span>' +
             '<span class="finder__name">' + highlight(r[1], q) + '</span>' + price +
             '<span class="finder__where">' + esc(where) + '</span></a></li>';
@@ -503,7 +551,12 @@
       else if (e.key === 'ArrowUp') { e.preventDefault(); if (items.length) setActive(Math.max(active - 1, -1)); }
       else if (e.key === 'Enter') {
         var target = items[active > -1 ? active : 0];
-        if (target && !list.hidden) { e.preventDefault(); window.location.href = target.firstChild.getAttribute('href'); }
+        if (target && !list.hidden) {
+          e.preventDefault();
+          var a = target.firstChild;
+          if (a.getAttribute('target') === '_blank') window.open(a.getAttribute('href'), '_blank', 'noopener');
+          else window.location.href = a.getAttribute('href');
+        }
       }
       else if (e.key === 'Escape') { if (!list.hidden) { e.preventDefault(); e.stopPropagation(); close(); } }
     });
@@ -519,6 +572,32 @@
       if (target) { e.preventDefault(); target.focus(); }
     });
   });
+
+  /* ---------- product cards: "Order on WhatsApp" collapses to "WhatsApp" on small phones ---------- */
+  $$('.product-card .btn--wa').forEach(function (b) {
+    var last = b.lastChild;
+    if (last && last.nodeType === 3 && /^\s*Order on WhatsApp\s*$/.test(last.nodeValue)) {
+      var span = doc.createElement('span'); span.className = 'btn__long'; span.textContent = 'Order on ';
+      b.insertBefore(span, last); last.nodeValue = 'WhatsApp';
+    }
+  });
+
+  /* ---------- floating WhatsApp appears after the first screen (desktop) ---------- */
+  var waFloat = $('.wa-float');
+  if (waFloat) {
+    var onWaScroll = function () { waFloat.classList.toggle('is-visible', window.scrollY > 400); };
+    window.addEventListener('scroll', onWaScroll, { passive: true });
+    onWaScroll();
+  }
+
+  /* ---------- machine detail: sticky aside price card waits for the hero buy box to leave ---------- */
+  var heroBuy = $('.buy-box'), asideCta = $('aside .detail-cta');
+  if (heroBuy && asideCta && 'IntersectionObserver' in window) {
+    asideCta.classList.add('is-deferred');
+    new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) { asideCta.classList.toggle('is-deferred', en.isIntersecting || en.boundingClientRect.top > 0); });
+    }).observe(heroBuy);
+  }
 
   /* ---------- sticky bar hides while typing (mobile keyboard) ---------- */
   var bar = $('.sticky-bar');
