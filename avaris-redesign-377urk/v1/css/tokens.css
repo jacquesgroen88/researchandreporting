@@ -1,0 +1,134 @@
+/* ==========================================================================
+   Avaris (PTY) LTD redesign, round 1: design tokens
+   Source: BRIEF.md section 5 (live CSS + logo). Demo prototype by JCE Media.
+
+   WCAG 2.1 contrast, computed 17 Nov 2026 (AA = 4.5:1 body, 3:1 large text / UI):
+   LIGHT SECTIONS
+     --ink        #232122 on --paper #FFFFFF   16.00  body text          AAA
+     --ink        #232122 on --stone #F6F3EE   14.46  body text          AAA
+     --muted      #5B5550 on --paper            7.34  secondary text     AAA
+     --muted      #5B5550 on --stone            6.63  secondary text     AA
+     --orange-text #B4501A on --paper           5.12  links, eyebrows    AA
+     --orange-text #B4501A on --stone           4.62  links, eyebrows    AA
+     --error      #B3261E on --paper            6.54  form errors        AA
+     --ink        #232122 on --note-bg #FFF4D6 14.60  demo note          AAA
+     --bronze     #B0791E on --paper            3.75  borders only (UI 3:1 pass, never text)
+     --bronze     #B0791E on --stone            3.39  borders only (UI 3:1 pass, never text)
+     --orange     #DA6522 on --paper            3.58  FAILS body text. Fills, rules, icons only
+   BUTTONS
+     #000000 text on --orange #DA6522           5.87  primary button     AA
+     --night #131A20 on --gold #FFD057         12.05  gold button        AAA
+     --gold  #FFD057 on --night #131A20        12.05  dark button        AAA
+     #0A2E17 icon on WhatsApp #25D366           7.48  WhatsApp FAB       AA (white would be 1.98, fails)
+   DARK SECTIONS (--night #131A20, --night-2 #1C252D, --black #000000)
+     #FFFFFF on --night                        17.55  headings, body     AAA
+     --mist #C9C2B8 on --night                  9.94  secondary text     AAA
+     --mist #C9C2B8 on --night-2                8.80  secondary text     AAA
+     --mist #C9C2B8 on --black                 11.89  top bar text       AAA
+     --gold #FFD057 on --night                 12.05  links, focus ring  AAA
+     --amber #FEB255 on --night                 9.79  highlights         AAA
+     --orange #DA6522 on --night                4.90  accents, large type AA
+     --bronze #B0791E on --night                4.68  hairlines          AA
+   Rule: never --orange or --amber text on white. Never --bronze as text.
+   ========================================================================== */
+
+:root {
+  /* ---- Brand colour ---- */
+  --black: #000000;          /* top strapline bar */
+  --night: #131A20;          /* hero, dark bands, footer */
+  --night-2: #1C252D;        /* raised surfaces on dark (cards, header on scroll) */
+  --ink: #232122;            /* body text on light */
+  --muted: #5B5550;          /* derived: secondary text on light */
+  --mist: #C9C2B8;           /* derived: secondary text on dark */
+  --orange: #DA6522;         /* primary accent: button fills, rules, icons */
+  --orange-hover: #E77A3A;   /* derived: button hover (black text 6.9:1) */
+  --orange-text: #B4501A;    /* derived: orange text/links on light */
+  --amber: #FEB255;          /* highlights on dark only */
+  --gold: #FFD057;           /* small accents on dark, focus ring on dark */
+  --bronze: #B0791E;         /* borders, dividers, seal ring motif */
+  --paper: #FFFFFF;          /* page background */
+  --stone: #F6F3EE;          /* derived: alternate light sections */
+  --stone-2: #EDE7DD;        /* derived: chips, hairlines on stone */
+  --line: #E2DBD0;           /* derived: card borders on light */
+  --error: #B3261E;
+  --note-bg: #FFF4D6;        /* demo-only note background */
+  --wa: #25D366;             /* WhatsApp brand green (demo element) */
+  --wa-ink: #0A2E17;
+
+  /* ---- Gradients (echo the gold streak banners) ---- */
+  --grad-gold: linear-gradient(135deg, #FFD057 0%, #DA6522 55%, #B0791E 100%);
+  --grad-rule: linear-gradient(90deg, #B0791E, #FFD057 50%, #DA6522);
+
+  /* ---- Type ---- */
+  --font-display: "Playfair Display", Georgia, "Times New Roman", serif;
+  --font-body: "Montserrat", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+  /* Fluid scale (1.25 ratio on mobile, about 1.333 on desktop), 360px to 1280px */
+  --fs-xs: 0.8125rem;                                    /* 13px  meta, chips */
+  --fs-sm: 0.875rem;                                     /* 14px  hints, footer */
+  --fs-base: 1rem;                                       /* 16px  body */
+  --fs-md: 1.125rem;                                     /* 18px  lead, card body */
+  --fs-lg: clamp(1.25rem, 1.15rem + 0.45vw, 1.5rem);     /* 20-24 h4 / card h3 */
+  --fs-xl: clamp(1.5rem, 1.3rem + 0.9vw, 2rem);          /* 24-32 h3 */
+  --fs-2xl: clamp(1.875rem, 1.5rem + 1.6vw, 2.75rem);    /* 30-44 h2 */
+  --fs-3xl: clamp(2.25rem, 1.6rem + 2.9vw, 4rem);        /* 36-64 h1 */
+
+  --lh-tight: 1.12;
+  --lh-snug: 1.3;
+  --lh-body: 1.6;
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+  --tracking-caps: 0.12em;
+
+  /* ---- Spacing (4px base) ---- */
+  --sp-1: 0.25rem;  /* 4 */
+  --sp-2: 0.5rem;   /* 8 */
+  --sp-3: 0.75rem;  /* 12 */
+  --sp-4: 1rem;     /* 16 */
+  --sp-5: 1.5rem;   /* 24 */
+  --sp-6: 2rem;     /* 32 */
+  --sp-7: 3rem;     /* 48 */
+  --sp-8: 4rem;     /* 64 */
+  --sp-9: 6rem;     /* 96 */
+  --section-y: clamp(3rem, 2rem + 4vw, 6rem);
+  --gutter: clamp(1rem, 0.5rem + 2vw, 2rem);
+  --container: 1200px;
+  --container-narrow: 760px;
+
+  /* ---- Radius ---- */
+  --r-sm: 4px;
+  --r-md: 8px;
+  --r-lg: 14px;
+  --r-pill: 999px;
+
+  /* ---- Shadow ---- */
+  --sh-1: 0 1px 2px rgba(19, 26, 32, 0.08), 0 1px 1px rgba(19, 26, 32, 0.04);
+  --sh-2: 0 6px 18px rgba(19, 26, 32, 0.10), 0 2px 4px rgba(19, 26, 32, 0.06);
+  --sh-3: 0 18px 40px rgba(19, 26, 32, 0.18), 0 4px 10px rgba(19, 26, 32, 0.08);
+  --sh-glow: 0 0 0 1px rgba(255, 208, 87, 0.25), 0 10px 30px rgba(218, 101, 34, 0.25);
+
+  /* ---- Motion ---- */
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --dur-fast: 150ms;
+  --dur: 250ms;
+
+  /* ---- Layers ---- */
+  --z-header: 50;
+  --z-fab: 60;
+  --z-bar: 55;
+  --z-menu: 70;
+
+  /* ---- Component sizes ---- */
+  --topbar-h: 36px;
+  --header-h: 72px;
+  --mbar-h: 64px;
+  --tap: 44px;               /* minimum touch target */
+
+  /* ---- Contextual (overridden inside .on-dark) ---- */
+  --focus-ring: var(--night);
+  --link: var(--orange-text);
+  --text: var(--ink);
+  --text-2: var(--muted);
+}
