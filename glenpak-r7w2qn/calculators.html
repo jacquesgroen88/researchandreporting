@@ -1,0 +1,899 @@
+<!doctype html>
+<html lang="en-ZA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Packaging Calculators: Bags, Rolls, Paper, Boxes | Glenpak</title>
+<meta name="description" content="Free packaging calculators: plastic bag weight and cost, plastic roll length and weight, paper roll to sheets, and box board size. Estimates in seconds, then ask for a quote.">
+<link rel="icon" type="image/png" href="assets/img/glenpak-icon-gp.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/styles.css">
+<script src="assets/js/main.js" defer></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "name": "Packaging Calculators: Bags, Rolls, Paper, Boxes",
+      "description": "Plastic bag weight and cost, plastic roll, paper roll to sheet and box board size calculators."
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "index.html" },
+        { "@type": "ListItem", "position": 2, "name": "Packaging calculators" }
+      ]
+    }
+  ]
+}
+</script>
+<style>
+.page-calculators .calc-picker{display:grid;gap:var(--s-3);grid-template-columns:repeat(2,minmax(0,1fr));list-style:none;margin:0;padding:0}
+@media (min-width:960px){.page-calculators .calc-picker{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.page-calculators .calc-picker a{display:flex;flex-direction:column;gap:var(--s-2);height:100%;padding:var(--s-4);background:var(--white);border:1px solid var(--line);border-radius:var(--r-md);text-decoration:none;color:var(--ink);transition:border-color .15s var(--ease),box-shadow .15s var(--ease)}
+.page-calculators .calc-picker a:hover{border-color:var(--navy);box-shadow:var(--shadow-1)}
+.page-calculators .calc-picker strong{font:600 var(--fs-base)/1.3 var(--font-head);color:var(--navy-deep)}
+.page-calculators .calc-picker span{font-size:var(--fs-xs);color:var(--muted)}
+.page-calculators .calc-picker .icon{color:var(--navy)}
+.page-calculators .calc{padding:0;overflow:hidden}
+.page-calculators .calc__head{display:flex;gap:var(--s-4);align-items:flex-start;padding:var(--s-5) var(--s-5) var(--s-4);border-bottom:1px solid var(--line)}
+.page-calculators .calc__head h2{margin:0 0 var(--s-1)}
+.page-calculators .calc__head p{margin:0;color:var(--muted);font-size:var(--fs-sm);max-width:68ch}
+.page-calculators .calc__num{flex:none;width:44px;height:44px;border-radius:var(--r-md);display:grid;place-items:center;background:var(--navy);color:var(--white);font:600 var(--fs-md)/1 var(--font-head)}
+.page-calculators .calc__body{display:grid;grid-template-columns:1fr}
+@media (min-width:960px){.page-calculators .calc__body{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)}}
+.page-calculators .calc__inputs{padding:var(--s-5)}
+.page-calculators .calc__grid{display:grid;gap:0 var(--s-4);grid-template-columns:1fr}
+@media (min-width:640px){.page-calculators .calc__grid{grid-template-columns:repeat(2,minmax(0,1fr))}.page-calculators .calc__grid .field--full{grid-column:1/-1}}
+@media (min-width:640px){.page-calculators .calc__grid--3{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.page-calculators .unit-input{position:relative}
+.page-calculators .unit-input .field__input{padding-right:56px}
+.page-calculators .unit-input__unit{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:var(--fs-sm);color:var(--muted);pointer-events:none}
+.page-calculators .calc__results{background:var(--navy-tint);padding:var(--s-5);display:flex;flex-direction:column;gap:var(--s-4)}
+.page-calculators .calc__results h3{font-size:var(--fs-sm);text-transform:uppercase;letter-spacing:.08em;color:var(--navy);margin:0}
+.page-calculators .result-main{background:var(--white);border-radius:var(--r-md);padding:var(--s-4)}
+.page-calculators .result-main .result__label{font-size:var(--fs-xs);color:var(--muted);display:block;margin-bottom:var(--s-1)}
+.page-calculators .calc .result-main output{font-size:var(--fs-xl)}
+.page-calculators .result-list{margin:0;display:grid;gap:0}
+.page-calculators .result-list div{display:flex;justify-content:space-between;align-items:baseline;gap:var(--s-3);padding:var(--s-2) 0;border-bottom:1px solid var(--line)}
+.page-calculators .result-list div:last-child{border-bottom:0}
+.page-calculators .result-list dt{font-size:var(--fs-sm);color:var(--muted)}
+.page-calculators .result-list dd{margin:0;text-align:right}
+.page-calculators .calc .result-list output{font-size:var(--fs-base)}
+.page-calculators .calc__disclaimer{font-size:var(--fs-xs);color:var(--muted);margin:0}
+.page-calculators .calc__actions{display:flex;flex-wrap:wrap;gap:var(--s-3);margin-top:auto}
+.page-calculators .calc__actions .btn{flex:1 1 auto}
+.page-calculators .calc__formula{font-size:var(--fs-xs);color:var(--muted);margin:var(--s-2) 0 0}
+.page-calculators .calc__formula code{font-family:inherit;background:var(--surface);padding:1px 6px;border-radius:var(--r-sm)}
+.page-calculators .solve-for{margin:0 0 var(--s-4);border:0;padding:0;min-width:0}
+.page-calculators .solve-for legend{padding:0;margin-bottom:var(--s-2);width:100%}
+.page-calculators .solve-for .chip{cursor:pointer}
+.page-calculators .solve-for input{position:absolute;opacity:0;pointer-events:none}
+.page-calculators .solve-for label:has(input:checked){background:var(--navy);border-color:var(--navy);color:var(--white)}
+.page-calculators .solve-for label:has(input:focus-visible){box-shadow:var(--focus)}
+.page-calculators .field.is-solved .field__input{background:var(--surface);border-style:dashed}
+.page-calculators .field.is-solved .field__label::after{content:" (calculated)";font-weight:400;color:var(--blue)}
+.page-calculators .box-diagram{display:block;width:100%;max-width:340px;height:auto;margin:var(--s-2) auto 0}
+.page-calculators .bd-lines{fill:none;stroke:var(--navy-deep);stroke-width:1.5}
+.page-calculators .bd-panel{fill:var(--navy-tint)}
+.page-calculators .bd-flap{fill:var(--surface)}
+.page-calculators .bd-text{font:500 12px var(--font-body);fill:var(--ink)}
+.page-calculators .bd-text .bd-sub{font-size:10px;fill:var(--muted)}
+.page-calculators .calc-note{margin-top:var(--s-4)}
+@media print{
+  .page-calculators .page-head .cluster,.page-calculators .calc-picker-wrap,.page-calculators .calc__actions,.page-calculators .no-print{display:none !important}
+  .page-calculators.print-one .calc-section:not(.is-printing){display:none !important}
+  .page-calculators .calc{box-shadow:none;border-color:var(--line)}
+  .page-calculators .calc__body{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body class="page-calculators" data-root="" data-section="calculators">
+<!-- HEADER:START -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></symbol>
+    <symbol id="i-wa" viewBox="0 0 24 24"><path d="M3.5 20.5l1.3-4.2A8.6 8.6 0 1 1 8 19.3z"/><path d="M9.1 8.5c.2-.4.5-.5.8-.5h.4c.2 0 .4.1.5.4l.7 1.6c.1.2 0 .5-.1.6l-.5.6c.6 1.2 1.6 2.2 2.8 2.8l.6-.5c.2-.2.4-.2.6-.1l1.6.7c.3.1.4.3.4.5v.4c0 .3-.1.6-.5.8-.6.3-1.5.5-2.6.1a8.7 8.7 0 0 1-4.6-4.6c-.4-1.1-.2-2 .1-2.6z"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><rect x="2.5" y="4.5" width="19" height="15" rx="2"/><path d="m3 6.5 9 6.5 9-6.5"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></symbol>
+    <symbol id="i-truck" viewBox="0 0 24 24"><path d="M1.5 4.5h13v11h-13zM14.5 8.5h4l3 3.5v3.5h-7z"/><circle cx="5.5" cy="18" r="2.2"/><circle cx="17.5" cy="18" r="2.2"/></symbol>
+    <symbol id="i-box" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.7l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.7l7 4a2 2 0 0 0 2 0l7-4a2 2 0 0 0 1-1.7z"/><path d="M3.3 7 12 12l8.7-5M12 22V12"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+    <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7.5"/><path d="m20.5 20.5-4.2-4.2"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></symbol>
+    <symbol id="i-calc" viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8M8 11h.01M12 11h.01M16 11h.01M8 15h.01M12 15h.01M16 15h.01M8 18.5h.01M12 18.5h.01M16 18.5h.01"/></symbol>
+    <symbol id="i-factory" viewBox="0 0 24 24"><path d="M2 21h20M3 21V10l5 3v-3l5 3v-3l5 3V3h3v18"/><path d="M7 17h2M12 17h2"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5"/><path d="M12 6.5V12l3.5 2"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></symbol>
+    <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.5 19 2c1 2 2 4.2 2 8 0 5.5-4.8 10-10 10Z"/><path d="M2 21c0-3 1.9-5.4 5.1-6C9.5 14.5 12 13 13 12"/></symbol>
+    <symbol id="i-print" viewBox="0 0 24 24"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></symbol>
+    <symbol id="i-roll" viewBox="0 0 24 24"><ellipse cx="7" cy="12" rx="4" ry="8"/><path d="M7 4h10c2.2 0 4 3.6 4 8s-1.8 8-4 8H7"/><ellipse cx="7" cy="12" rx="1.2" ry="2.4"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-fb" viewBox="0 0 24 24"><path d="M15 3h-2.5A4.5 4.5 0 0 0 8 7.5V10H5.5v3.5H8V21h3.5v-7.5H14l.7-3.5h-3.2V7.8c0-.7.5-1.3 1.3-1.3H15z"/></symbol>
+    <symbol id="i-ig" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></symbol>
+    <symbol id="i-yt" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="4"/><path d="m10 9 5 3-5 3z"/></symbol>
+  </defs>
+</svg>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="utility-bar">
+  <div class="container utility-bar__inner">
+    <p class="utility-bar__own"><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg>BBBEE Level 2 · 51% black owned</p>
+    <ul class="utility-bar__links">
+      <li><a href="tel:+27118367125"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg>011 836 7125</a></li>
+      <li><a href="mailto:info@glenpak.co.za"><svg class="icon" aria-hidden="true"><use href="#i-mail"/></svg>info@glenpak.co.za</a></li>
+      <li><a href="https://wa.me/27790974115?text=Hi%20Glenpak%2C%20I%20have%20a%20packaging%20question." data-wa="Hi Glenpak, I have a packaging question." target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-wa"/></svg>WhatsApp sales Mon to Fri 09:00 to 17:00</a></li>
+    </ul>
+  </div>
+</div>
+<header class="site-header" id="site-header">
+  <div class="container site-header__bar">
+    <a href="index.html" class="brand"><img src="assets/img/glenpak-logo.png" alt="Glenpak Packaging" width="170" height="52"></a>
+    <div class="finder finder--header" data-finder>
+      <label class="visually-hidden" for="finder-header">Search products, machines or SKU</label>
+      <svg class="icon finder__icon" aria-hidden="true"><use href="#i-search"/></svg>
+      <input class="finder__input" id="finder-header" type="search" placeholder="Search products, machines or SKU" autocomplete="off" spellcheck="false">
+      <ul class="finder__results" id="finder-header-results" role="listbox" aria-label="Search results" hidden></ul>
+    </div>
+    <div class="site-header__actions">
+      <button class="header-search" type="button" data-open-search aria-label="Search products, machines or SKU"><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg></button>
+      <a class="header-phone" href="tel:+27118367125" aria-label="Call Glenpak on 011 836 7125"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg><span class="header-phone__text"><small>Call sales</small>011 836 7125</span></a>
+      <a class="btn btn--quote btn--sm header-quote" href="quote.html" data-nav="quote">Request a quote</a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="Open menu"><svg class="icon" aria-hidden="true"><use href="#i-menu"/></svg><span>Menu</span></button>
+    </div>
+  </div>
+  <nav class="main-nav" aria-label="Main">
+    <div class="container main-nav__inner">
+      <ul class="main-nav__list">
+        <li><a class="main-nav__link main-nav__trigger" href="products/index.html" data-nav="supplies" data-mega="mega-supplies">Packaging supplies<svg class="icon main-nav__caret" aria-hidden="true"><use href="#i-chevron"/></svg></a></li>
+        <li><a class="main-nav__link main-nav__trigger" href="machines/index.html" data-nav="machines" data-mega="mega-machines">Machines and lines<svg class="icon main-nav__caret" aria-hidden="true"><use href="#i-chevron"/></svg></a></li>
+        <li><a class="main-nav__link" href="machines/turnkey-lines.html">Turnkey start-ups</a></li>
+        <li><a class="main-nav__link" href="services.html" data-nav="services">Services</a></li>
+        <li><a class="main-nav__link" href="calculators.html" data-nav="calculators" aria-current="page">Calculators</a></li>
+        <li><a class="main-nav__link" href="about.html" data-nav="about">About</a></li>
+        <li><a class="main-nav__link" href="contact.html" data-nav="contact">Contact</a></li>
+      </ul>
+      <p class="main-nav__note"><svg class="icon" aria-hidden="true"><use href="#i-truck"/></svg>Free Gauteng delivery over R3,000 Excl VAT</p>
+    </div>
+
+    <div class="mega" id="mega-supplies" hidden>
+      <div class="container mega__inner">
+        <div class="mega__col">
+          <p class="mega__title">Bag, wrap and fill</p>
+          <ul class="mega__list">
+            <li><a href="products/bags-and-pouches.html">Bags and pouches<span>Doy pouches, coffee, bakery, vacuum</span></a></li>
+            <li><a href="products/void-fill.html">Void fill and protective wrap<span>Corro-Shred, bubble wrap, foam, dunnage</span></a></li>
+            <li><a href="products/gift-packaging.html">Gift packaging<span>Gift wrap rolls, cellophane, gift boxes</span></a></li>
+          </ul>
+        </div>
+        <div class="mega__col">
+          <p class="mega__title">Box, seal and ship</p>
+          <ul class="mega__list">
+            <li><a href="products/corrugated-boxes.html">Corrugated boxes<span>New and used boxes, pizza and bin boxes</span></a></li>
+            <li><a href="products/tapes-and-labels.html">Tapes, labels and tags<span>Box tape, fragile tape, gum tape, labels</span></a></li>
+            <li><a href="products/strapping-and-pallet.html">Strapping and pallet supplies<span>PP and PET strapping, tools, corners</span></a></li>
+            <li><a href="products/moving.html">Moving boxes and kits<span>Kits by home size, second-hand bundles</span></a></li>
+          </ul>
+        </div>
+        <div class="mega__col">
+          <p class="mega__title">Food and production</p>
+          <ul class="mega__list">
+            <li><a href="products/egg-and-poultry.html">Egg trays and egg packaging<span>30s, 18s, 2 x 6 trays, outers, carriers</span></a></li>
+            <li><a href="products/bottles-and-shrink-seals.html">Plastic bottles, caps and tamper seals<span>Water, juice, honey bottles, tampa seals</span></a></li>
+            <li><a href="products/kraft-and-paper.html">Kraft, newsprint and paper<span>Newsprint sheets, greaseproof, SFK rolls</span></a></li>
+          </ul>
+        </div>
+        <div class="mega__promo">
+          <p class="mega__promo-title">Buying in bulk?</p>
+          <p>Prices online are Excl VAT. Free Gauteng delivery on orders over R3,000 Excl VAT.</p>
+          <a class="btn btn--quote btn--sm" href="quote.html?type=supplies">Get a bulk quote</a>
+          <a class="link-arrow" href="products/index.html">All supplies<svg class="icon" aria-hidden="true"><use href="#i-chevron"/></svg></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="mega" id="mega-machines" hidden>
+      <div class="container mega__inner">
+        <div class="mega__col">
+          <p class="mega__title">By job</p>
+          <ul class="mega__list mega__list--compact">
+            <li><a href="machines/filling-and-bottling.html">Filling and bottling</a></li>
+            <li><a href="machines/pouch-and-form-fill-seal.html">Pouch and form fill seal</a></li>
+            <li><a href="machines/shrink-wrapping.html">Shrink wrapping</a></li>
+            <li><a href="machines/sealers.html">Sealers</a></li>
+            <li><a href="machines/carton-and-end-of-line.html">Carton sealing, strapping and pallet wrapping</a></li>
+            <li><a href="machines/coding-and-labelling.html">Coding and labelling</a></li>
+          </ul>
+        </div>
+        <div class="mega__col">
+          <p class="mega__title">Turnkey start-up lines</p>
+          <ul class="mega__list mega__list--compact">
+            <li><a href="machines/bf2000-water-bottling-lines.html">BF2000 water bottling lines</a></li>
+            <li><a href="machines/lolly-turnkey-kit.html">Lolly business kit</a></li>
+            <li><a href="machines/turnkey-lines.html#egg">Egg selling start-up kit</a></li>
+            <li><a href="machines/carton-packing-line.html">Carton packing line</a></li>
+            <li><a href="machines/turnkey-lines.html">All turnkey lines</a></li>
+          </ul>
+        </div>
+        <div class="mega__col">
+          <p class="mega__title">Popular machines</p>
+          <ul class="mega__list mega__list--compact">
+            <li><a href="machines/l-sealer-shrink-tunnel-combos.html">L-sealer and shrink tunnel combos</a></li>
+            <li><a href="machines/mr8-230f-doy-pouch-machine.html">MR8-230F doy pouch machine</a></li>
+            <li><a href="machines/ky-co3-sack-stitcher.html">KY-CO3 sack stitcher</a></li>
+            <li><a href="machines/kis-900-cup-filler-sealer.html">KIS-900 cup filler and sealer</a></li>
+          </ul>
+        </div>
+        <div class="mega__promo">
+          <p class="mega__promo-title">Not sure which machine?</p>
+          <p>Tell us what you pack and how many per hour.</p>
+          <a class="btn btn--quote btn--sm" href="quote.html?type=machine">Request a quote</a>
+          <a class="link-arrow" href="https://glenpak.co.za/wp-content/uploads/2025/06/Glenpak-%E7%9B%AE%E5%BD%95%E5%86%8C.pdf" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-download"/></svg>Machine catalogue (PDF, 18 MB)</a>
+          <a class="link-arrow" href="machines/index.html">All machines<svg class="icon" aria-hidden="true"><use href="#i-chevron"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<div class="mobile-nav" id="mobile-nav" hidden>
+  <div class="mobile-nav__backdrop" data-close-nav></div>
+  <div class="mobile-nav__panel" role="dialog" aria-modal="true" aria-label="Menu">
+    <div class="mobile-nav__head">
+      <img src="assets/img/glenpak-logo.png" alt="Glenpak Packaging" width="132" height="40">
+      <button class="mobile-nav__close" type="button" data-close-nav aria-label="Close menu"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+    </div>
+    <div class="finder finder--mobile" data-finder>
+      <label class="visually-hidden" for="finder-mobile">Search products, machines or SKU</label>
+      <svg class="icon finder__icon" aria-hidden="true"><use href="#i-search"/></svg>
+      <input class="finder__input" id="finder-mobile" type="search" placeholder="Search products, machines or SKU" autocomplete="off" spellcheck="false">
+      <ul class="finder__results" id="finder-mobile-results" role="listbox" aria-label="Search results" hidden></ul>
+    </div>
+    <details class="mobile-nav__group">
+      <summary>Packaging supplies</summary>
+      <ul>
+        <li><a href="products/index.html"><strong>All supplies</strong></a></li>
+        <li><a href="products/bags-and-pouches.html">Bags and pouches</a></li>
+        <li><a href="products/void-fill.html">Void fill and protective wrap</a></li>
+        <li><a href="products/gift-packaging.html">Gift packaging</a></li>
+        <li><a href="products/corrugated-boxes.html">Corrugated boxes</a></li>
+        <li><a href="products/tapes-and-labels.html">Tapes, labels and tags</a></li>
+        <li><a href="products/strapping-and-pallet.html">Strapping and pallet supplies</a></li>
+        <li><a href="products/moving.html">Moving boxes and kits</a></li>
+        <li><a href="products/egg-and-poultry.html">Egg trays and egg packaging</a></li>
+        <li><a href="products/bottles-and-shrink-seals.html">Plastic bottles, caps and tamper seals</a></li>
+        <li><a href="products/kraft-and-paper.html">Kraft, newsprint and paper</a></li>
+      </ul>
+    </details>
+    <details class="mobile-nav__group">
+      <summary>Machines and lines</summary>
+      <ul>
+        <li><a href="machines/index.html"><strong>All machines</strong></a></li>
+        <li><a href="machines/filling-and-bottling.html">Filling and bottling</a></li>
+        <li><a href="machines/pouch-and-form-fill-seal.html">Pouch and form fill seal</a></li>
+        <li><a href="machines/shrink-wrapping.html">Shrink wrapping</a></li>
+        <li><a href="machines/sealers.html">Sealers</a></li>
+        <li><a href="machines/carton-and-end-of-line.html">Carton sealing, strapping and pallet wrapping</a></li>
+        <li><a href="machines/coding-and-labelling.html">Coding and labelling</a></li>
+        <li><a href="machines/turnkey-lines.html"><strong>Turnkey start-up lines</strong></a></li>
+        <li><a href="machines/bf2000-water-bottling-lines.html">BF2000 water bottling lines</a></li>
+        <li><a href="machines/lolly-turnkey-kit.html">Lolly business kit</a></li>
+        <li><a href="machines/turnkey-lines.html#egg">Egg selling start-up kit</a></li>
+        <li><a href="machines/carton-packing-line.html">Carton packing line</a></li>
+      </ul>
+    </details>
+    <ul class="mobile-nav__links">
+      <li><a href="services.html" data-nav="services">Services</a></li>
+      <li><a href="calculators.html" data-nav="calculators" aria-current="page">Calculators</a></li>
+      <li><a href="about.html" data-nav="about">About</a></li>
+      <li><a href="contact.html" data-nav="contact">Contact</a></li>
+    </ul>
+    <div class="mobile-nav__ctas">
+      <a class="btn btn--ghost btn--block" href="tel:+27118367125"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg>Call 011 836 7125</a>
+      <a class="btn btn--wa btn--block" href="https://wa.me/27790974115?text=Hi%20Glenpak%2C%20I%20have%20a%20packaging%20question." data-wa="Hi Glenpak, I have a packaging question." target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-wa"/></svg>WhatsApp sales</a>
+      <a class="btn btn--quote btn--block" href="quote.html">Request a quote</a>
+    </div>
+    <p class="mobile-nav__own">BBBEE Level 2 · 51% black owned</p>
+  </div>
+</div>
+<!-- HEADER:END -->
+<main id="main">
+
+  <section class="page-head">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ol>
+          <li><a href="index.html">Home</a></li>
+          <li><span aria-current="page">Calculators</span></li>
+        </ol>
+      </nav>
+      <p class="eyebrow">Tools</p>
+      <h1>Packaging calculators</h1>
+      <p class="lead">Work out bag weights and costs, plastic roll lengths, how many sheets a paper reel gives, and the board size for a box. Then send the numbers to us for a price.</p>
+      <div class="cluster">
+        <a class="btn btn--quote" href="quote.html?type=supplies">Request a quote</a>
+        <a class="btn btn--wa" href="https://wa.me/27790974115?text=Hi%20Glenpak%2C%20I%20have%20a%20packaging%20question." data-wa="Hi Glenpak, I have a packaging question." target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-wa"/></svg>WhatsApp sales</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tight calc-picker-wrap" aria-label="Choose a calculator">
+    <div class="container">
+      <ul class="calc-picker" role="list">
+        <li><a href="#bag"><svg class="icon" aria-hidden="true"><use href="#i-calc"/></svg><strong>Plastic bag weight and cost</strong><span>Grams per bag, kg and cost per 1,000</span></a></li>
+        <li><a href="#roll"><svg class="icon" aria-hidden="true"><use href="#i-roll"/></svg><strong>Plastic roll, tubing or sheet</strong><span>Solve for length, weight, width or microns</span></a></li>
+        <li><a href="#paper"><svg class="icon" aria-hidden="true"><use href="#i-roll"/></svg><strong>Paper roll to sheets</strong><span>Metres, sheets and reams from a reel</span></a></li>
+        <li><a href="#box"><svg class="icon" aria-hidden="true"><use href="#i-box"/></svg><strong>Box board size</strong><span>Blank size and board area for a regular slotted box</span></a></li>
+      </ul>
+      <noscript><p class="notice calc-note">The calculators need JavaScript. You can still send us your sizes on WhatsApp or by email at info@glenpak.co.za and we will work it out.</p></noscript>
+    </div>
+  </section>
+
+  <!-- 1. Bag -->
+  <section class="section section--surface calc-section" aria-labelledby="bag-title">
+    <div class="container">
+      <form class="calc" id="bag" novalidate data-calc="bag">
+        <div class="calc__head">
+          <span class="calc__num" aria-hidden="true">1</span>
+          <div>
+            <h2 id="bag-title">Plastic bag weight and cost</h2>
+            <p>Enter the flat size of the bag and its thickness in microns. Add your price per kg to see the cost per 1,000 bags and per bag.</p>
+          </div>
+        </div>
+        <div class="calc__body">
+          <div class="calc__inputs">
+            <div class="calc__grid">
+              <div class="field field--full">
+                <label class="field__label" for="bag-type">Plastic type</label>
+                <select class="field__input" id="bag-type" name="type">
+                  <option value="5432">LDPE standard</option>
+                  <option value="5325">LDPE alternative</option>
+                  <option value="5263">HDPE crinkly (estimated)</option>
+                  <option value="custom">Custom divisor</option>
+                </select>
+              </div>
+              <div class="field field--full" id="bag-custom-wrap" hidden>
+                <label class="field__label" for="bag-divisor">Custom divisor</label>
+                <input class="field__input" id="bag-divisor" name="divisor" type="number" inputmode="decimal" min="1" step="any" value="5432" aria-describedby="bag-divisor-hint">
+                <p class="field__hint" id="bag-divisor-hint">Width x height x microns is divided by this number to give kg per 1,000 bags.</p>
+              </div>
+              <div class="field">
+                <label class="field__label" for="bag-w">Width</label>
+                <div class="unit-input"><input class="field__input" id="bag-w" name="w" type="number" inputmode="decimal" min="0" step="any" value="30"><span class="unit-input__unit">cm</span></div>
+              </div>
+              <div class="field">
+                <label class="field__label" for="bag-h">Height</label>
+                <div class="unit-input"><input class="field__input" id="bag-h" name="h" type="number" inputmode="decimal" min="0" step="any" value="45"><span class="unit-input__unit">cm</span></div>
+              </div>
+              <div class="field">
+                <label class="field__label" for="bag-mic">Thickness</label>
+                <div class="unit-input"><input class="field__input" id="bag-mic" name="mic" type="number" inputmode="decimal" min="0" step="any" value="30"><span class="unit-input__unit">mic</span></div>
+              </div>
+              <div class="field">
+                <label class="field__label" for="bag-qty">Quantity</label>
+                <div class="unit-input"><input class="field__input" id="bag-qty" name="qty" type="number" inputmode="numeric" min="0" step="1" value="1000"><span class="unit-input__unit">bags</span></div>
+              </div>
+              <div class="field field--full">
+                <label class="field__label" for="bag-cost">Cost per kg <span class="opt">(optional, Excl VAT)</span></label>
+                <div class="unit-input"><input class="field__input" id="bag-cost" name="cost" type="number" inputmode="decimal" min="0" step="any" placeholder="e.g. 45"><span class="unit-input__unit">R/kg</span></div>
+              </div>
+            </div>
+            <button class="btn btn--primary no-print" type="submit"><svg class="icon" aria-hidden="true"><use href="#i-calc"/></svg>Calculate</button>
+            <p class="calc__formula">Formula: <code>width x height x microns / divisor = kg per 1,000 bags</code>. The same number is the weight of one bag in grams.</p>
+          </div>
+          <div class="calc__results" aria-live="polite">
+            <h3>Your estimate</h3>
+            <div class="result-main">
+              <span class="result__label">Weight per 1,000 bags</span>
+              <output id="bag-out-kg" for="bag-w bag-h bag-mic bag-type">Enter your sizes</output>
+            </div>
+            <dl class="result-list">
+              <div><dt>Weight per bag</dt><dd><output id="bag-out-g">-</output></dd></div>
+              <div><dt>Weight for your quantity</dt><dd><output id="bag-out-total">-</output></dd></div>
+              <div><dt>Cost per 1,000, Excl VAT</dt><dd><output id="bag-out-c1000">-</output></dd></div>
+              <div><dt>Cost per 1,000, Incl VAT (15%)</dt><dd><output id="bag-out-c1000i">-</output></dd></div>
+              <div><dt>Cost per bag, Excl VAT</dt><dd><output id="bag-out-unit">-</output></dd></div>
+              <div><dt>Cost for your quantity, Excl VAT</dt><dd><output id="bag-out-ctotal">-</output></dd></div>
+            </dl>
+            <p class="calc__disclaimer">Estimates only. Ask us for an exact quote.</p>
+            <div class="calc__actions">
+              <a class="btn btn--quote" id="bag-quote" href="quote.html?type=supplies&amp;category=bags-and-pouches">Get a price for this</a>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- 2. Roll -->
+  <section class="section calc-section" aria-labelledby="roll-title">
+    <div class="container">
+      <form class="calc" id="roll" novalidate data-calc="roll">
+        <div class="calc__head">
+          <span class="calc__num" aria-hidden="true">2</span>
+          <div>
+            <h2 id="roll-title">Plastic roll (tubing or sheet)</h2>
+            <p>Pick what you want to find, fill in the other three, and choose the plastic. Tick tubing for lay-flat tube (two layers).</p>
+          </div>
+        </div>
+        <div class="calc__body">
+          <div class="calc__inputs">
+            <fieldset class="solve-for cluster" aria-describedby="roll-solve-hint">
+              <legend class="field__label">I want to find the</legend>
+              <label class="chip"><input type="radio" name="solve" value="weight" checked>Weight</label>
+              <label class="chip"><input type="radio" name="solve" value="length">Length</label>
+              <label class="chip"><input type="radio" name="solve" value="width">Width</label>
+              <label class="chip"><input type="radio" name="solve" value="mic">Microns</label>
+            </fieldset>
+            <p class="field__hint visually-hidden" id="roll-solve-hint">The chosen value is calculated from the other inputs.</p>
+            <div class="calc__grid">
+              <div class="field" data-key="length">
+                <label class="field__label" for="roll-length">Length</label>
+                <div class="unit-input"><input class="field__input" id="roll-length" name="length" type="number" inputmode="decimal" min="0" step="any" value="500"><span class="unit-input__unit">m</span></div>
+              </div>
+              <div class="field" data-key="width">
+                <label class="field__label" for="roll-width">Width (lay-flat)</label>
+                <div class="unit-input"><input class="field__input" id="roll-width" name="width" type="number" inputmode="decimal" min="0" step="any" value="500"><span class="unit-input__unit">mm</span></div>
+              </div>
+              <div class="field" data-key="mic">
+                <label class="field__label" for="roll-mic">Thickness</label>
+                <div class="unit-input"><input class="field__input" id="roll-mic" name="mic" type="number" inputmode="decimal" min="0" step="any" value="40"><span class="unit-input__unit">mic</span></div>
+              </div>
+              <div class="field" data-key="weight">
+                <label class="field__label" for="roll-weight">Roll weight</label>
+                <div class="unit-input"><input class="field__input" id="roll-weight" name="weight" type="number" inputmode="decimal" min="0" step="any" value="10"><span class="unit-input__unit">kg</span></div>
+              </div>
+              <div class="field">
+                <label class="field__label" for="roll-density">Plastic</label>
+                <select class="field__input" id="roll-density" name="density">
+                  <option value="0.92">LDPE (0.92 g/cm³)</option>
+                  <option value="0.95">HDPE (0.95 g/cm³)</option>
+                  <option value="0.90">PP (0.90 g/cm³)</option>
+                  <option value="0.92" data-label="Pallet wrap (LLDPE)">Pallet wrap, LLDPE (0.92 g/cm³)</option>
+                </select>
+              </div>
+              <div class="field field--check">
+                <span class="field__label" aria-hidden="true">&nbsp;</span>
+                <label for="roll-tube"><input type="checkbox" id="roll-tube" name="tube"> <span>Tubing (2 layers)</span></label>
+              </div>
+            </div>
+            <button class="btn btn--primary no-print" type="submit"><svg class="icon" aria-hidden="true"><use href="#i-calc"/></svg>Calculate</button>
+            <p class="calc__formula">Formula: <code>kg = length m x width m x microns x density x layers / 1000</code></p>
+          </div>
+          <div class="calc__results" aria-live="polite">
+            <h3>Your estimate</h3>
+            <div class="result-main">
+              <span class="result__label" id="roll-main-label">Roll weight</span>
+              <output id="roll-out-main">Enter your sizes</output>
+            </div>
+            <dl class="result-list">
+              <div><dt>Length</dt><dd><output id="roll-out-length">-</output></dd></div>
+              <div><dt>Width</dt><dd><output id="roll-out-width">-</output></dd></div>
+              <div><dt>Thickness</dt><dd><output id="roll-out-mic">-</output></dd></div>
+              <div><dt>Weight</dt><dd><output id="roll-out-weight">-</output></dd></div>
+              <div><dt>Metres per kg</dt><dd><output id="roll-out-mpk">-</output></dd></div>
+            </dl>
+            <p class="calc__disclaimer">Estimates only. Ask us for an exact quote.</p>
+            <div class="calc__actions">
+              <a class="btn btn--quote" id="roll-quote" href="quote.html?type=supplies&amp;category=plastic-rolls">Get a price for this</a>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- 3. Paper -->
+  <section class="section section--surface calc-section" aria-labelledby="paper-title">
+    <div class="container">
+      <form class="calc" id="paper" novalidate data-calc="paper">
+        <div class="calc__head">
+          <span class="calc__num" aria-hidden="true">3</span>
+          <div>
+            <h2 id="paper-title">Roll to sheet (paper)</h2>
+            <p>See how many metres, sheets and reams a paper reel gives you. Useful before you order <a href="services.html#splitting">reel splitting</a> or <a href="services.html#sheeting">sheeting</a>.</p>
+          </div>
+        </div>
+        <div class="calc__body">
+          <div class="calc__inputs">
+            <div class="calc__grid">
+              <div class="field">
+                <label class="field__label" for="paper-kg">Roll weight</label>
+                <div class="unit-input"><input class="field__input" id="paper-kg" name="kg" type="number" inputmode="decimal" min="0" step="any" value="500"><span class="unit-input__unit">kg</span></div>
+              </div>
+              <div class="field">
+                <label class="field__label" for="paper-gsm">Paper weight</label>
+                <div class="unit-input"><input class="field__input" id="paper-gsm" name="gsm" type="number" inputmode="decimal" min="0" step="any" value="45"><span class="unit-input__unit">gsm</span></div>
+              </div>
+              <div class="field">
+                <label class="field__label" for="paper-width">Roll width</label>
+                <div class="unit-input"><input class="field__input" id="paper-width" name="width" type="number" inputmode="decimal" min="0" step="any" value="840"><span class="unit-input__unit">mm</span></div>
+              </div>
+              <div class="field">
+                <label class="field__label" for="paper-sheet">Sheet length</label>
+                <div class="unit-input"><input class="field__input" id="paper-sheet" name="sheet" type="number" inputmode="decimal" min="0" step="any" value="594"><span class="unit-input__unit">mm</span></div>
+              </div>
+              <div class="field field--full">
+                <label class="field__label" for="paper-ream">Sheets per ream</label>
+                <div class="unit-input"><input class="field__input" id="paper-ream" name="ream" type="number" inputmode="numeric" min="1" step="1" value="500"><span class="unit-input__unit">sheets</span></div>
+              </div>
+            </div>
+            <button class="btn btn--primary no-print" type="submit"><svg class="icon" aria-hidden="true"><use href="#i-calc"/></svg>Calculate</button>
+            <p class="calc__formula">Formula: <code>metres = kg x 1000 / (gsm x width m)</code>, then sheets = metres / sheet length.</p>
+          </div>
+          <div class="calc__results" aria-live="polite">
+            <h3>Your estimate</h3>
+            <div class="result-main">
+              <span class="result__label">Sheets from this roll</span>
+              <output id="paper-out-sheets">Enter your sizes</output>
+            </div>
+            <dl class="result-list">
+              <div><dt>Linear length</dt><dd><output id="paper-out-m">-</output></dd></div>
+              <div><dt>Reams</dt><dd><output id="paper-out-reams">-</output></dd></div>
+              <div><dt>Weight per ream</dt><dd><output id="paper-out-rkg">-</output></dd></div>
+              <div><dt>Sheet size</dt><dd><output id="paper-out-size">-</output></dd></div>
+            </dl>
+            <p class="calc__disclaimer">Estimates only. Ask us for an exact quote.</p>
+            <div class="calc__actions">
+              <a class="btn btn--quote" id="paper-quote" href="quote.html?type=supplies&amp;category=kraft-and-paper">Get a price for this</a>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- 4. Box -->
+  <section class="section calc-section" aria-labelledby="box-title" id="box-section">
+    <div class="container">
+      <form class="calc" id="box" novalidate data-calc="box">
+        <div class="calc__head">
+          <span class="calc__num" aria-hidden="true">4</span>
+          <div>
+            <h2 id="box-title">Box board size (regular slotted box)</h2>
+            <p>Enter the inside length, width and height of the box. We work out the flat blank size and how much board you need.</p>
+          </div>
+        </div>
+        <div class="calc__body">
+          <div class="calc__inputs">
+            <div class="calc__grid calc__grid--3">
+              <div class="field">
+                <label class="field__label" for="box-l">Length (inside)</label>
+                <div class="unit-input"><input class="field__input" id="box-l" name="l" type="number" inputmode="decimal" min="0" step="any" value="400"><span class="unit-input__unit">mm</span></div>
+              </div>
+              <div class="field">
+                <label class="field__label" for="box-w">Width (inside)</label>
+                <div class="unit-input"><input class="field__input" id="box-w" name="w" type="number" inputmode="decimal" min="0" step="any" value="300"><span class="unit-input__unit">mm</span></div>
+              </div>
+              <div class="field">
+                <label class="field__label" for="box-h">Height (inside)</label>
+                <div class="unit-input"><input class="field__input" id="box-h" name="h" type="number" inputmode="decimal" min="0" step="any" value="250"><span class="unit-input__unit">mm</span></div>
+              </div>
+            </div>
+            <div class="calc__grid">
+              <div class="field">
+                <label class="field__label" for="box-board">Board</label>
+                <select class="field__input" id="box-board" name="board">
+                  <option>Single wall</option>
+                  <option>Double wall</option>
+                  <option>Single face</option>
+                </select>
+              </div>
+              <div class="field">
+                <label class="field__label" for="box-qty">Quantity</label>
+                <div class="unit-input"><input class="field__input" id="box-qty" name="qty" type="number" inputmode="numeric" min="0" step="1" value="100"><span class="unit-input__unit">boxes</span></div>
+              </div>
+            </div>
+            <button class="btn btn--primary no-print" type="submit"><svg class="icon" aria-hidden="true"><use href="#i-calc"/></svg>Calculate</button>
+            <p class="calc__formula">Formula: <code>blank length = 2L + 2W + 35mm glue flap</code>, <code>blank width = H + W</code> (top and bottom flaps W/2 each).</p>
+            <svg class="box-diagram" viewBox="0 0 340 150" role="img" aria-labelledby="box-diag-t">
+              <title id="box-diag-t">Flat box blank: four panels L, W, L, W plus a glue flap, with flaps above and below</title>
+              <g class="bd-lines">
+                <rect x="10" y="40" width="80" height="70" class="bd-panel"/>
+                <rect x="90" y="40" width="60" height="70" class="bd-panel"/>
+                <rect x="150" y="40" width="80" height="70" class="bd-panel"/>
+                <rect x="230" y="40" width="60" height="70" class="bd-panel"/>
+                <path d="M290 46 L320 52 L320 98 L290 104 Z" class="bd-flap"/>
+                <path d="M10 10h280M10 140h280M10 10v30M90 10v30M150 10v30M230 10v30M290 10v30M10 110v30M90 110v30M150 110v30M230 110v30M290 110v30"/>
+              </g>
+              <g class="bd-text" text-anchor="middle">
+                <text x="50" y="80">L</text><text x="120" y="80">W</text><text x="190" y="80">L</text><text x="260" y="80">W</text><text x="306" y="80" font-size="10">35</text>
+                <text x="50" y="29" class="bd-sub">flap W/2</text><text x="50" y="129" class="bd-sub">flap W/2</text>
+              </g>
+            </svg>
+          </div>
+          <div class="calc__results" aria-live="polite">
+            <h3>Your estimate</h3>
+            <div class="result-main">
+              <span class="result__label">Flat blank size (length x width)</span>
+              <output id="box-out-blank">Enter your sizes</output>
+            </div>
+            <dl class="result-list">
+              <div><dt>Board area per box</dt><dd><output id="box-out-area">-</output></dd></div>
+              <div><dt>Total board area</dt><dd><output id="box-out-total">-</output></dd></div>
+              <div><dt>Board</dt><dd><output id="box-out-board">-</output></dd></div>
+              <div><dt>Inside size</dt><dd><output id="box-out-inside">-</output></dd></div>
+            </dl>
+            <p class="calc__disclaimer">Estimates only. Ask us for an exact quote.</p>
+            <div class="calc__actions">
+              <a class="btn btn--quote" id="box-quote" href="quote.html?type=supplies&amp;category=corrugated-boxes">Get a price for this</a>
+              <button class="btn btn--ghost" type="button" id="box-print"><svg class="icon" aria-hidden="true"><use href="#i-print"/></svg>Print summary</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <section class="section section--tight section--surface" aria-label="Related">
+    <div class="container">
+      <div class="notice notice--info">
+        <svg class="icon" aria-hidden="true"><use href="#i-calc"/></svg>
+        <div>
+          <p><strong>Know your size already?</strong> Browse bags, boxes and paper with prices online Excl VAT, or ask us for a size we don't list.</p>
+          <div class="cluster">
+            <a class="btn btn--primary btn--sm" href="products/index.html">Shop supplies</a>
+            <a class="link-arrow" href="services.html">Reel splitting and printing<svg class="icon" aria-hidden="true"><use href="#i-chevron"/></svg></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-band" aria-labelledby="cta-title">
+    <div class="container cta-band__inner">
+      <div>
+        <h2 id="cta-title">Got your numbers? Get a real price.</h2>
+        <p>Send us the sizes, material and quantity. Prices are Excl VAT.</p>
+      </div>
+      <div class="cluster">
+        <a class="btn btn--quote btn--lg" href="quote.html?type=supplies">Request a quote</a>
+        <a class="btn btn--wa btn--lg" href="https://wa.me/27790974115?text=Hi%20Glenpak%2C%20I%20have%20a%20packaging%20question." data-wa="Hi Glenpak, I have a packaging question." target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-wa"/></svg>WhatsApp Jayson</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+<!-- FOOTER:START -->
+<section class="footer-cta" aria-label="Talk to Glenpak">
+  <div class="container footer-cta__inner">
+    <p class="footer-cta__text"><strong>Questions about a product or machine?</strong> <span>Our sales team is on WhatsApp Mon to Fri, 09:00 to 17:00.</span></p>
+    <div class="cluster">
+      <a class="btn btn--ghost btn--sm" href="tel:+27118367125"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg>011 836 7125</a>
+      <a class="btn btn--wa btn--sm" href="https://wa.me/27790974115?text=Hi%20Glenpak%2C%20I%20have%20a%20packaging%20question." data-wa="Hi Glenpak, I have a packaging question." target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-wa"/></svg>WhatsApp</a>
+      <a class="btn btn--quote btn--sm" href="quote.html">Request a quote</a>
+    </div>
+  </div>
+</section>
+<footer class="site-footer">
+  <div class="container site-footer__grid">
+    <div class="site-footer__brand">
+      <span class="monogram-tile"><img src="assets/img/glenpak-icon-gp.png" alt="Glenpak" width="48" height="48" loading="lazy" decoding="async"></span>
+      <p class="site-footer__name">Glenpak CC</p>
+      <p>Packaging supplies, machines and turnkey lines. Newtown, Johannesburg.</p>
+      <div class="cluster">
+        <span class="badge badge--bbbee">BBBEE Level 2</span>
+        <span class="badge badge--bbbee">51% black owned</span>
+      </div>
+    </div>
+    <div class="site-footer__col">
+      <p class="site-footer__title">Supplies</p>
+      <ul>
+        <li><a href="products/bags-and-pouches.html">Bags and pouches</a></li>
+        <li><a href="products/egg-and-poultry.html">Egg trays and egg packaging</a></li>
+        <li><a href="products/corrugated-boxes.html">Corrugated boxes</a></li>
+        <li><a href="products/kraft-and-paper.html">Kraft, newsprint and paper</a></li>
+        <li><a href="products/tapes-and-labels.html">Tapes, labels and tags</a></li>
+        <li><a href="products/strapping-and-pallet.html">Strapping and pallet supplies</a></li>
+        <li><a href="products/gift-packaging.html">Gift packaging</a></li>
+        <li><a href="products/void-fill.html">Void fill and protective wrap</a></li>
+        <li><a href="products/bottles-and-shrink-seals.html">Bottles, caps and tamper seals</a></li>
+        <li><a href="products/moving.html">Moving boxes and kits</a></li>
+        <li><a href="products/index.html"><strong>All supplies</strong></a></li>
+      </ul>
+    </div>
+    <div class="site-footer__col">
+      <p class="site-footer__title">Machines</p>
+      <ul>
+        <li><a href="machines/filling-and-bottling.html">Filling and bottling</a></li>
+        <li><a href="machines/pouch-and-form-fill-seal.html">Pouch and form fill seal</a></li>
+        <li><a href="machines/shrink-wrapping.html">Shrink wrapping</a></li>
+        <li><a href="machines/sealers.html">Sealers</a></li>
+        <li><a href="machines/carton-and-end-of-line.html">Carton and end of line</a></li>
+        <li><a href="machines/coding-and-labelling.html">Coding and labelling</a></li>
+        <li><a href="machines/turnkey-lines.html">Turnkey start-up lines</a></li>
+        <li><a href="quote.html">Request a quote</a></li>
+        <li><a href="https://glenpak.co.za/wp-content/uploads/2025/06/Glenpak-%E7%9B%AE%E5%BD%95%E5%86%8C.pdf" target="_blank" rel="noopener">Machine catalogue (PDF)</a></li>
+      </ul>
+    </div>
+    <div class="site-footer__col">
+      <p class="site-footer__title">Company</p>
+      <ul>
+        <li><a href="about.html">About</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="calculators.html" aria-current="page">Calculators</a></li>
+        <li><a href="sustainability.html">Sustainability</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+    <div class="site-footer__col site-footer__contact">
+      <p class="site-footer__title">Contact</p>
+      <ul>
+        <li><svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg><span>10-14 Gwigwi Mrwebi Street, Newtown, Johannesburg<br><small>P O Box 60010, Langlaagte, 2102</small></span></li>
+        <li><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg><a href="tel:+27118367125">011 836 7125</a></li>
+        <li><svg class="icon" aria-hidden="true"><use href="#i-wa"/></svg><a href="https://wa.me/27790974115?text=Hi%20Glenpak%2C%20I%20have%20a%20packaging%20question." data-wa="Hi Glenpak, I have a packaging question." target="_blank" rel="noopener">Jayson 079 097 4115</a></li>
+        <li><svg class="icon" aria-hidden="true"><use href="#i-wa"/></svg><a href="https://wa.me/27712229146?text=Hi%20Glenpak%2C%20I%20have%20a%20packaging%20question." data-wa="Hi Glenpak, I have a packaging question." data-wa-to="charlene" target="_blank" rel="noopener">Charlene 071 222 9146</a></li>
+        <li><svg class="icon" aria-hidden="true"><use href="#i-mail"/></svg><a href="mailto:info@glenpak.co.za">info@glenpak.co.za</a></li>
+        <li><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg><span>WhatsApp sales: Mon to Fri, 09:00 to 17:00</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="site-footer__bottom">
+    <div class="container site-footer__bottom-inner">
+      <p>© <span data-year>2026</span> Glenpak CC. All prices shown Excl VAT.</p>
+      <ul class="site-footer__legal">
+        <li><a href="https://glenpak.co.za/wp-content/uploads/2021/07/Terms-and-Conditions.pdf" target="_blank" rel="noopener">Terms and conditions (PDF)</a></li>
+        <li><a href="https://glenpak.co.za/wp-content/uploads/2021/07/About-POPI.pdf" target="_blank" rel="noopener">About POPI (PDF)</a></li>
+      </ul>
+      <ul class="site-footer__social">
+        <li><a href="https://www.facebook.com/glenpakmachineryandpackaging" target="_blank" rel="noopener" aria-label="Glenpak on Facebook"><svg class="icon" aria-hidden="true"><use href="#i-fb"/></svg></a></li>
+        <li><a href="https://www.instagram.com/glenpak1" target="_blank" rel="noopener" aria-label="Glenpak on Instagram"><svg class="icon" aria-hidden="true"><use href="#i-ig"/></svg></a></li>
+        <li><a href="https://www.youtube.com/channel/UCy3X6Je5u0PLwXqxmLU1w7g" target="_blank" rel="noopener" aria-label="Glenpak on YouTube"><svg class="icon" aria-hidden="true"><use href="#i-yt"/></svg></a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+<nav class="sticky-bar" aria-label="Quick contact">
+  <a href="tel:+27118367125"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg>Call</a>
+  <a class="sticky-bar__wa" href="https://wa.me/27790974115?text=Hi%20Glenpak%2C%20I%20have%20a%20packaging%20question." data-wa="Hi Glenpak, I have a packaging question." target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-wa"/></svg>WhatsApp</a>
+  <a class="sticky-bar__quote" href="quote.html"><svg class="icon" aria-hidden="true"><use href="#i-mail"/></svg>Quote</a>
+</nav>
+<a class="wa-float" href="https://wa.me/27790974115?text=Hi%20Glenpak%2C%20I%20have%20a%20packaging%20question." data-wa="Hi Glenpak, I have a packaging question." target="_blank" rel="noopener" aria-label="WhatsApp sales"><svg class="icon" aria-hidden="true"><use href="#i-wa"/></svg><span class="wa-float__tip">WhatsApp sales</span></a>
+<!-- FOOTER:END -->
+<script>
+(function () {
+  'use strict';
+  var VAT = 0.15;
+  function $(id) { return document.getElementById(id); }
+  function num(id) { var el = $(id); if (!el) return NaN; var v = parseFloat(String(el.value).replace(',', '.')); return isFinite(v) ? v : NaN; }
+  function ok() { for (var i = 0; i < arguments.length; i++) { if (!(arguments[i] > 0)) return false; } return true; }
+  function fmt(n, dp) {
+    if (!isFinite(n)) return '-';
+    var parts = Math.abs(n).toFixed(dp).split('.');
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return (n < 0 ? '-' : '') + parts.join('.');
+  }
+  function smart(n) { return fmt(n, n >= 100 ? 1 : n >= 10 ? 2 : 3); }
+  function rand(n) { return isFinite(n) ? 'R' + fmt(n, n < 1 ? 4 : 2) : '-'; }
+  function set(id, txt) { var el = $(id); if (el) el.textContent = txt; }
+  function quoteLink(id, category, note) {
+    var a = $(id); if (!a) return;
+    a.href = 'quote.html?type=supplies&category=' + encodeURIComponent(category) + '&note=' + encodeURIComponent(note);
+  }
+  var EMPTY = 'Enter your sizes';
+
+  /* 1. Plastic bag */
+  function bag() {
+    var type = $('bag-type').value;
+    $('bag-custom-wrap').hidden = type !== 'custom';
+    var div = type === 'custom' ? num('bag-divisor') : parseFloat(type);
+    var w = num('bag-w'), h = num('bag-h'), mic = num('bag-mic'), qty = num('bag-qty'), cost = num('bag-cost');
+    var outs = ['bag-out-g', 'bag-out-total', 'bag-out-c1000', 'bag-out-c1000i', 'bag-out-unit', 'bag-out-ctotal'];
+    if (!ok(div, w, h, mic)) { set('bag-out-kg', EMPTY); outs.forEach(function (o) { set(o, '-'); }); return; }
+    var kg1000 = w * h * mic / div;
+    set('bag-out-kg', smart(kg1000) + ' kg');
+    set('bag-out-g', smart(kg1000) + ' g');
+    set('bag-out-total', qty > 0 ? smart(kg1000 * qty / 1000) + ' kg' : '-');
+    var hasCost = cost > 0;
+    var c1000 = kg1000 * cost;
+    set('bag-out-c1000', hasCost ? rand(c1000) : 'Add a cost per kg');
+    set('bag-out-c1000i', hasCost ? rand(c1000 * (1 + VAT)) : '-');
+    set('bag-out-unit', hasCost ? rand(c1000 / 1000) : '-');
+    set('bag-out-ctotal', hasCost && qty > 0 ? rand(c1000 / 1000 * qty) : '-');
+    var label = $('bag-type').options[$('bag-type').selectedIndex].text;
+    quoteLink('bag-quote', 'bags-and-pouches', 'Bag calculator: ' + label + ', ' + w + ' x ' + h + ' cm, ' + mic + ' micron, quantity ' + (qty > 0 ? qty : '-') + '. Estimated ' + smart(kg1000) + ' kg per 1,000 bags.');
+  }
+
+  /* 2. Plastic roll */
+  var rollLabels = { weight: 'Roll weight', length: 'Roll length', width: 'Width (lay-flat)', mic: 'Thickness' };
+  function roll() {
+    var solve = (document.querySelector('#roll input[name="solve"]:checked') || {}).value || 'weight';
+    ['length', 'width', 'mic', 'weight'].forEach(function (k) {
+      var field = document.querySelector('#roll .field[data-key="' + k + '"]');
+      var input = $('roll-' + k);
+      var solved = k === solve;
+      field.classList.toggle('is-solved', solved);
+      input.readOnly = solved;
+      input.setAttribute('aria-readonly', solved ? 'true' : 'false');
+    });
+    var dSel = $('roll-density'), d = parseFloat(dSel.value);
+    var layers = $('roll-tube').checked ? 2 : 1;
+    var L = num('roll-length'), Wmm = num('roll-width'), mic = num('roll-mic'), kg = num('roll-weight');
+    var W = Wmm / 1000, res = NaN;
+    if (solve === 'weight' && ok(L, W, mic)) { kg = L * W * mic * d * layers / 1000; res = kg; }
+    if (solve === 'length' && ok(kg, W, mic)) { L = kg * 1000 / (W * mic * d * layers); res = L; }
+    if (solve === 'width' && ok(kg, L, mic)) { W = kg * 1000 / (L * mic * d * layers); Wmm = W * 1000; res = Wmm; }
+    if (solve === 'mic' && ok(kg, L, W)) { mic = kg * 1000 / (L * W * d * layers); res = mic; }
+    set('roll-main-label', rollLabels[solve]);
+    if (!isFinite(res)) {
+      set('roll-out-main', EMPTY);
+      ['length', 'width', 'mic', 'weight', 'mpk'].forEach(function (k) { set('roll-out-' + k, '-'); });
+      return;
+    }
+    var units = { weight: ' kg', length: ' m', width: ' mm', mic: ' mic' };
+    var shown = solve === 'mic' ? fmt(res, 1) : solve === 'width' ? fmt(res, 0) : smart(res);
+    set('roll-out-main', shown + units[solve]);
+    $('roll-' + solve).value = solve === 'mic' ? res.toFixed(1) : solve === 'width' ? res.toFixed(0) : res.toFixed(2);
+    set('roll-out-length', fmt(L, 0) + ' m');
+    set('roll-out-width', fmt(Wmm, 0) + ' mm' + (layers === 2 ? ' tube' : ''));
+    set('roll-out-mic', fmt(mic, 1) + ' mic');
+    set('roll-out-weight', smart(kg) + ' kg');
+    set('roll-out-mpk', kg > 0 ? smart(L / kg) + ' m' : '-');
+    var plastic = dSel.options[dSel.selectedIndex].text.replace(/\s*\(.*\)$/, '');
+    quoteLink('roll-quote', 'plastic-rolls', 'Plastic roll calculator: ' + plastic + (layers === 2 ? ' tubing' : ' sheet') + ', ' + fmt(Wmm, 0) + ' mm wide, ' + fmt(mic, 1) + ' micron, ' + fmt(L, 0) + ' m, about ' + smart(kg) + ' kg per roll.');
+  }
+
+  /* 3. Paper roll to sheet */
+  function paper() {
+    var kg = num('paper-kg'), gsm = num('paper-gsm'), wmm = num('paper-width'), smm = num('paper-sheet'), ream = num('paper-ream');
+    if (!ok(kg, gsm, wmm, smm)) { set('paper-out-sheets', EMPTY); ['m', 'reams', 'rkg', 'size'].forEach(function (k) { set('paper-out-' + k, '-'); }); return; }
+    var w = wmm / 1000, s = smm / 1000;
+    var metres = kg * 1000 / (gsm * w);
+    var sheets = Math.floor(metres / s);
+    set('paper-out-sheets', fmt(sheets, 0) + ' sheets');
+    set('paper-out-m', fmt(metres, 0) + ' m');
+    if (ream > 0) {
+      var full = Math.floor(sheets / ream), left = sheets - full * ream;
+      set('paper-out-reams', fmt(sheets / ream, 1) + ' (' + fmt(full, 0) + ' full' + (left ? ' + ' + fmt(left, 0) + ' sheets' : '') + ')');
+      set('paper-out-rkg', smart(gsm * w * s * ream / 1000) + ' kg');
+    } else { set('paper-out-reams', '-'); set('paper-out-rkg', '-'); }
+    set('paper-out-size', fmt(wmm, 0) + ' x ' + fmt(smm, 0) + ' mm');
+    quoteLink('paper-quote', 'kraft-and-paper', 'Paper calculator: ' + kg + ' kg roll, ' + gsm + ' gsm, ' + wmm + ' mm wide, sheets ' + wmm + ' x ' + smm + ' mm, about ' + fmt(sheets, 0) + ' sheets.');
+  }
+
+  /* 4. Box board size */
+  function box() {
+    var L = num('box-l'), W = num('box-w'), H = num('box-h'), qty = num('box-qty'), board = $('box-board').value;
+    if (!ok(L, W, H)) { set('box-out-blank', EMPTY); ['area', 'total', 'board', 'inside'].forEach(function (k) { set('box-out-' + k, '-'); }); return; }
+    var bl = 2 * L + 2 * W + 35, bw = H + W;
+    var area = bl * bw / 1e6;
+    set('box-out-blank', fmt(bl, 0) + ' x ' + fmt(bw, 0) + ' mm');
+    set('box-out-area', fmt(area, 3) + ' m²');
+    set('box-out-total', qty > 0 ? fmt(area * qty, 2) + ' m²' : '-');
+    set('box-out-board', board);
+    set('box-out-inside', fmt(L, 0) + ' x ' + fmt(W, 0) + ' x ' + fmt(H, 0) + ' mm');
+    quoteLink('box-quote', 'corrugated-boxes', 'Box calculator: ' + board + ' RSC, inside ' + L + ' x ' + W + ' x ' + H + ' mm, quantity ' + (qty > 0 ? qty : '-') + '. Blank ' + fmt(bl, 0) + ' x ' + fmt(bw, 0) + ' mm, ' + fmt(area, 3) + ' m² per box.');
+  }
+
+  var calcs = { bag: bag, roll: roll, paper: paper, box: box };
+  Object.keys(calcs).forEach(function (key) {
+    var form = $(key); if (!form) return;
+    var run = function () { try { calcs[key](); } catch (e) { /* keep page usable */ } };
+    form.addEventListener('input', function (e) {
+      if (key === 'roll' && e.target && e.target.readOnly) return;
+      run();
+    });
+    form.addEventListener('change', run);
+    form.addEventListener('submit', function (e) { e.preventDefault(); run(); });
+    run();
+  });
+
+  var printBtn = $('box-print');
+  if (printBtn) printBtn.addEventListener('click', function () {
+    var sec = $('box-section');
+    document.body.classList.add('print-one');
+    if (sec) sec.classList.add('is-printing');
+    var done = function () { document.body.classList.remove('print-one'); if (sec) sec.classList.remove('is-printing'); window.removeEventListener('afterprint', done); };
+    window.addEventListener('afterprint', done);
+    window.print();
+    setTimeout(done, 1000);
+  });
+})();
+</script>
+</body>
+</html>
