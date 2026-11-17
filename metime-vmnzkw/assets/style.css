@@ -18,7 +18,7 @@ h1,h2,h3{font-family:var(--disp);font-weight:600;line-height:1.04;letter-spacing
 h2{font-size:clamp(34px,4.8vw,58px);margin:14px 0 18px}
 h2 em,h1 em{font-style:italic;font-weight:500;color:var(--plum)}
 .lead{font-size:clamp(16.5px,1.5vw,18.5px);color:var(--ink-2);max-width:58ch}
-.sec{padding:clamp(76px,10vw,140px) 0}
+.sec{padding:var(--sec) 0}
 section{position:relative}
 
 /* buttons */
@@ -147,7 +147,7 @@ section{position:relative}
 .pnote{font-size:13px;color:var(--mute);margin-top:18px}
 
 /* whole property */
-.whole{padding:0 0 clamp(76px,10vw,140px);background:#fff}
+.whole{padding:0 0 var(--sec);background:#fff}
 .wcard{position:relative;border-radius:30px;overflow:hidden;background:var(--navy);color:#fff;display:grid;grid-template-columns:1.05fr 1fr;min-height:460px}
 .wcard .txt{padding:clamp(30px,5vw,64px);display:flex;flex-direction:column;justify-content:center;position:relative;z-index:2}
 .wcard h2{color:#fff}
@@ -192,9 +192,9 @@ section{position:relative}
 .gtabs{display:flex;gap:6px;flex-wrap:wrap}
 .gtabs button{padding:9px 16px;border-radius:999px;font-size:14px;font-weight:700;background:#fff;border:1px solid var(--line);color:var(--navy);transition:background .25s,color .25s}
 .gtabs button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
-.ggrid{columns:4 240px;column-gap:14px}
-.ggrid button{display:block;width:100%;margin-bottom:14px;border-radius:16px;overflow:hidden;break-inside:avoid;position:relative}
-.ggrid img{width:100%;height:auto;transition:transform .8s var(--ease)}
+.ggrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.ggrid button{display:block;width:100%;aspect-ratio:4/3;border-radius:16px;overflow:hidden;position:relative;background:var(--sand-2)}
+.ggrid img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease)}
 .ggrid button:hover img{transform:scale(1.05)}
 .ggrid button[hidden]{display:none}
 .gmore{text-align:center;margin-top:20px}
@@ -265,7 +265,7 @@ details[open] summary i{transform:rotate(45deg);background:var(--plum);color:#ff
 details p{padding:0 22px 20px;color:var(--ink-2);font-size:15px}
 
 /* cta */
-.cta{padding:0 0 clamp(76px,10vw,120px)}
+.cta{padding:0 0 var(--sec)}
 .cta .box{position:relative;border-radius:32px;overflow:hidden;min-height:440px;display:flex;align-items:center;color:#fff}
 .cta .box>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .cta .box::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,rgba(19,65,74,.94) 0%,rgba(19,65,74,.7) 45%,rgba(125,42,91,.25))}
@@ -301,7 +301,7 @@ footer .bot{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.12);padding-
 .concept b{color:var(--sun)}
 
 /* reveal */
-.js .rv{opacity:0;transform:translateY(30px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.js .rv{opacity:0;transform:translateY(18px);transition:opacity .55s var(--ease),transform .55s var(--ease)}
 .js .rv.shown{opacity:1;transform:none}
 .js .d1{transition-delay:.08s}.js .d2{transition-delay:.16s}.js .d3{transition-delay:.24s}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.js .rv{opacity:1;transform:none}}
@@ -581,3 +581,26 @@ footer .fcontact a[href^="mailto"]{overflow-wrap:break-word}
 }
 @media (max-width:340px){footer .wrap.fgrid{grid-template-columns:1fr}}
 footer{overflow-x:clip}
+
+/* ---- 17 Nov pass 3: one spacing rhythm, compact hero on phones, tidy room-card footer ---- */
+:root{--sec:clamp(64px,8vw,112px)}
+@media (max-width:1060px){.ggrid{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:760px){
+  :root{--sec:64px}
+  .ggrid{grid-template-columns:repeat(2,1fr);gap:10px}
+  .ggrid button{border-radius:12px}
+  .hero .wrap{padding:96px 0 124px}
+  .chips{flex-wrap:nowrap;gap:6px;margin-bottom:16px}
+  .chip{font-size:12px;padding:5px 10px 5px 5px;gap:6px;white-space:nowrap}
+  .chip i{height:22px;min-width:22px;font-size:11px;padding:0 6px}
+  .hero h1{font-size:clamp(40px,12vw,52px)}
+  .hero p.sub{font-size:15.5px;line-height:1.55;margin:14px 0 22px}
+  .hero .ctas{flex-wrap:nowrap;gap:8px}
+  .hero .ctas .btn{padding:14px 10px;font-size:14.5px;justify-content:center;white-space:nowrap}
+  .hero .ctas .btn svg{display:none}
+  .unit .ft{flex-wrap:wrap;align-items:center}
+  .unit .ft .price{flex:1 1 100%}
+  .unit .ft .links{flex:1 1 100%}
+  .unit .ft .links .btn{flex:1;justify-content:center}
+}
+@media (max-width:400px){.chip>span b{display:none}}

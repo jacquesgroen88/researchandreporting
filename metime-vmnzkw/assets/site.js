@@ -33,17 +33,15 @@ if(sl.length){const dots=$('#dots');let si=0,st;
   db.forEach((b,i)=>b.onclick=()=>{clearInterval(st);go(i);st=setInterval(nextS,5500)});}
 
 /* ---------- hero video (home): the poster is the loading screen. The video only fades in once
-   enough of it has buffered to play without stalling, fades back to the poster if the network
-   stalls, and pauses while scrolled out of view. Skipped on data saver / reduced motion. ---------- */
+   enough of it has buffered to play without stalling, stays up once shown (no flicker back to the poster), and pauses while scrolled out of view. Skipped on data saver / reduced motion. ---------- */
 const hv=$('#heroVid');
 if(hv){const conn=navigator.connection||{};
   if(!conn.saveData&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
     hv.style.cssText='opacity:0;transition:opacity 1s ease';
     let ready=false,inView=true;
-    const show=()=>{hv.style.opacity=1},hide=()=>{hv.style.opacity=0};
+    const show=()=>{hv.style.opacity=1};
     const start=()=>{if(ready)return;ready=true;if(inView)hv.play().catch(()=>{})};
     hv.addEventListener('playing',show);
-    hv.addEventListener('waiting',hide);
     hv.addEventListener('canplaythrough',start,{once:true});
     hv.addEventListener('progress',()=>{try{if(hv.buffered.length&&hv.buffered.end(0)>=8)start()}catch(e){}});
     const go=()=>{hv.preload='auto';hv.querySelectorAll('source').forEach(s=>s.src=s.dataset.src);hv.load();setTimeout(start,9000)};
@@ -116,7 +114,7 @@ $$('.car').forEach(car=>{
 /* ---------- galleries with data-g items ---------- */
 const gg=$('#ggrid');
 if(gg&&window.GALLERY){const G=window.GALLERY;let gf='all',expanded=!!gg.dataset.all;
-  gg.innerHTML=G.map(([k,c,cap],i)=>`<button data-c="${c}" data-i="${i}"><img src="${R}img/${k}-sm.webp" alt="${cap}" loading="lazy"></button>`).join('');
+  gg.innerHTML=G.map(([k,c,cap],i)=>`<button data-c="${c}" data-i="${i}"><img src="${R}img/${k}-sm.webp" alt="${cap}" loading="lazy" decoding="async"></button>`).join('');
   const more=$('#gmore');
   const applyG=()=>{let n=0;$$('#ggrid button').forEach(b=>{const m=gf==='all'||b.dataset.c.includes(gf);b.hidden=!(m&&(expanded||gf!=='all'||n<12));if(m)n++});
     if(more)more.parentElement.style.display=(gf==='all'&&!expanded)?'':'none'};
@@ -130,9 +128,10 @@ if(ug){const items=$$('.ugal button');const L=items.map(b=>[b.dataset.full,b.que
 $$('[data-lb]').forEach(im=>im.onclick=()=>openLb([[im.dataset.lb||im.src,im.alt]],0));
 
 /* ---------- reveal + score bars ---------- */
-const els=$$('.rv');
+$$('.hero .rv,.phead .rv,.bw .rv,.bw.rv').forEach(e=>e.classList.add('shown'));
+const els=$$('.rv:not(.shown)');
 const reveal=el=>{el.classList.add('shown');el.querySelectorAll('[data-w]').forEach(i=>i.style.width=i.dataset.w+'%')};
-if('IntersectionObserver' in window){const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){reveal(e.target);io.unobserve(e.target)}}),{rootMargin:'0px 0px -8% 0px'});els.forEach(el=>io.observe(el))}
+if('IntersectionObserver' in window){const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){reveal(e.target);io.unobserve(e.target)}}),{rootMargin:'0px 0px 12% 0px'});els.forEach(el=>io.observe(el))}
 setTimeout(()=>els.forEach(el=>{if(el.getBoundingClientRect().top<innerHeight)reveal(el)}),1200);
 setTimeout(()=>els.forEach(reveal),4000);
 
