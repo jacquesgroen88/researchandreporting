@@ -32,13 +32,23 @@ if(sl.length){const dots=$('#dots');let si=0,st;
   addEventListener('load',()=>{sl.forEach(s=>{if(s.dataset.src)s.src=s.dataset.src});st=setInterval(nextS,5500)});
   db.forEach((b,i)=>b.onclick=()=>{clearInterval(st);go(i);st=setInterval(nextS,5500)});}
 
-/* ---------- hero video (home): load after first paint, skip on data saver / reduced motion ---------- */
+/* ---------- hero video (home): the poster is the loading screen. The video only fades in once
+   enough of it has buffered to play without stalling, fades back to the poster if the network
+   stalls, and pauses while scrolled out of view. Skipped on data saver / reduced motion. ---------- */
 const hv=$('#heroVid');
 if(hv){const conn=navigator.connection||{};
   if(!conn.saveData&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
-    const go=()=>{hv.querySelectorAll('source').forEach(s=>s.src=s.dataset.src);hv.load();hv.play().then(()=>{hv.style.opacity=1}).catch(()=>{})};
-    hv.style.cssText='opacity:0;transition:opacity 1.2s';
-    if(document.readyState==='complete')setTimeout(go,300);else addEventListener('load',()=>setTimeout(go,300));}}
+    hv.style.cssText='opacity:0;transition:opacity 1s ease';
+    let ready=false,inView=true;
+    const show=()=>{hv.style.opacity=1},hide=()=>{hv.style.opacity=0};
+    const start=()=>{if(ready)return;ready=true;if(inView)hv.play().catch(()=>{})};
+    hv.addEventListener('playing',show);
+    hv.addEventListener('waiting',hide);
+    hv.addEventListener('canplaythrough',start,{once:true});
+    hv.addEventListener('progress',()=>{try{if(hv.buffered.length&&hv.buffered.end(0)>=8)start()}catch(e){}});
+    const go=()=>{hv.preload='auto';hv.querySelectorAll('source').forEach(s=>s.src=s.dataset.src);hv.load();setTimeout(start,9000)};
+    if('IntersectionObserver' in window)new IntersectionObserver(e=>{inView=e[0].isIntersecting;if(!ready)return;inView?hv.play().catch(()=>{}):hv.pause()}).observe(hv);
+    if(document.readyState==='complete')setTimeout(go,200);else addEventListener('load',()=>setTimeout(go,200));}}
 
 /* ---------- video tours open in the lightbox ---------- */
 function openVideo(src,cap){const lb=$('#lb');$('#lbImg').style.display='none';$$('.lb .pv,.lb .nx').forEach(b=>b.style.display='none');
