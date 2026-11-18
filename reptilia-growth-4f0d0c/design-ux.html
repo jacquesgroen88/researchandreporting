@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Reptilia Design and UX</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800;900&family=PT+Sans:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* Design + UX scorecard for reptilia.co.za, current vs proposed, with mobile mockups of the six templates that matter. */
+:root{--ink:#14200E;--green:#1E6B23;--green2:#3E9B2E;--lime:#A9D63C;--buy:#ED6744;--promo:#FFC400;--body:#3c3b35;--muted:#77756c;--line:#e4e2da;--soft:#f4f6f0;--bg:#fffefb;--card:#fff;--bad:#c4472b;--ok:#b58a00;--good:#2f7d3b;--display:"Archivo",Arial,sans-serif;--text:"PT Sans","Segoe UI",Arial,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--body:#d8d6cc;--muted:#a29f94;--line:#2f2e29;--soft:#1b1d18;--bg:#111210;--card:#181915;color-scheme:dark}}
+:root[data-theme="dark"]{--body:#d8d6cc;--muted:#a29f94;--line:#2f2e29;--soft:#1b1d18;--bg:#111210;--card:#181915;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--body);font:16.5px/1.6 var(--text)}
+.wrap{max-width:1180px;margin:0 auto;padding:40px 16px 80px}
+h1,h2,h3{font-family:var(--display);line-height:1.12;margin:0;text-wrap:balance}
+h1{font-size:clamp(30px,5vw,46px);font-weight:900;max-width:24ch}
+h2{font-size:26px;font-weight:800;margin:56px 0 8px}
+h3{font-size:18px;font-weight:800;margin:0 0 6px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) h1,:root:not([data-theme="light"]) h2,:root:not([data-theme="light"]) h3{color:#f2f0e8}}
+.k{font:700 12px/1 var(--text);letter-spacing:.16em;text-transform:uppercase;color:var(--buy);margin-bottom:14px}
+p{max-width:74ch;margin:8px 0 12px}
+.muted{color:var(--muted)}.src{font-size:13px;color:var(--muted)}
+a{color:var(--green2)}
+table{width:100%;border-collapse:collapse;font-size:15px;margin-top:14px}
+th{text-align:left;font:700 12px var(--text);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border-bottom:2px solid var(--line);padding:8px}
+td{border-bottom:1px solid var(--line);padding:9px 8px;vertical-align:top}
+td.n{text-align:center;font:900 18px var(--display);white-space:nowrap}
+.s1{color:var(--bad)}.s2{color:var(--ok)}.s3{color:var(--good)}
+.scroll{overflow-x:auto}
+.score{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px}
+.score div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px}
+.score b{display:block;font:900 40px/1 var(--display)}
+.score span{font-size:14px;color:var(--muted)}
+.shots{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:16px}
+.shots figure{margin:0;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.shots img{display:block;width:100%;height:420px;object-fit:cover;object-position:top}
+.shots figcaption{padding:10px 12px;font-size:13.5px}
+.callout{background:var(--soft);border-left:5px solid var(--promo);border-radius:8px;padding:16px 18px;margin-top:20px}
+/* ---------- mockups ---------- */
+.mocks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;margin-top:20px;align-items:start}
+.mk h3{margin-bottom:4px}.mk .why{font-size:14px;color:var(--muted);margin:0 0 10px}
+.phone{width:100%;max-width:360px;border:10px solid #1c1c1c;border-radius:34px;overflow:hidden;background:#fff;color:#2b2b25;font:14px/1.45 var(--text);box-shadow:0 12px 30px rgba(0,0,0,.12);color-scheme:light}
+.phone *{color-scheme:light}
+.ann{background:var(--promo);color:#14200E;font:700 12px/1.3 var(--text);text-align:center;padding:7px 10px}
+.hdr{background:#fff;border-bottom:1px solid #ecebe5;padding:10px 12px}
+.hdr .row{display:flex;align-items:center;justify-content:space-between}
+.logo{height:34px}
+.ic{display:flex;gap:14px;font-size:18px;color:#14200E}
+.srch{margin-top:8px;display:flex;border:1.5px solid #14200E;border-radius:10px;overflow:hidden}
+.srch span{flex:1;padding:8px 10px;color:#8a887f;font-size:13px}
+.srch b{background:#14200E;color:#fff;padding:8px 12px;font-size:13px}
+.hero{background:linear-gradient(180deg,rgba(20,32,14,.15),rgba(20,32,14,.85)),url(https://reptilia.co.za/wp-content/uploads/2026/06/jungle-bold-eclipse-lg.jpeg) center/cover;color:#fff;padding:70px 16px 18px}
+.hero h4{font:900 24px/1.1 var(--display);margin:0 0 6px}
+.hero p{margin:0 0 12px;font-size:13.5px;opacity:.95}
+.btn{display:block;text-align:center;border-radius:10px;padding:11px 12px;font:700 14px var(--text);text-decoration:none}
+.btn.buy{background:var(--buy);color:#fff}.btn.dark{background:#14200E;color:#fff}.btn.out{border:1.5px solid #1E6B23;color:#1E6B23;background:#fff}.btn.wa{background:#1E6B23;color:#fff}
+.btn+.btn{margin-top:8px}
+.trust{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:10px 12px;background:#f4f6f0;font-size:12px}
+.trust div{background:#fff;border-radius:8px;padding:6px 8px}
+.trust b{display:block;color:#14200E;font-size:12.5px}
+.sec{padding:14px 12px}
+.sec h5{font:800 16px/1.2 var(--display);color:#14200E;margin:0 0 8px;display:flex;justify-content:space-between;align-items:baseline}
+.sec h5 a{font:700 12px var(--text);color:#1E6B23;text-decoration:none}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tile{border:1px solid #ecebe5;border-radius:10px;overflow:hidden;background:#fff}
+.tile img{display:block;width:100%;aspect-ratio:1;object-fit:cover}
+.tile div{padding:6px 8px;font-size:12.5px;line-height:1.3}
+.tile b{display:block;color:#14200E}
+.tile .p{color:#14200E;font-weight:700;margin-top:2px}
+.chip{display:inline-block;font:700 10.5px var(--text);border-radius:20px;padding:2px 7px;margin:3px 3px 0 0}
+.c-g{background:#e4f1dd;color:#1E6B23}.c-y{background:#fff3c4;color:#6b5300}.c-r{background:#fde3da;color:#9a3418}.c-d{background:#eceae3;color:#4b493f}
+.pills{display:flex;flex-wrap:wrap;gap:6px}
+.pill{border:1px solid #d8d6ce;border-radius:20px;padding:5px 10px;font-size:12.5px;color:#14200E;background:#fff}
+.pill.on{background:#14200E;color:#fff;border-color:#14200E}
+.gal{position:relative}.gal img{display:block;width:100%;aspect-ratio:1/0.85;object-fit:cover}
+.gal .dots{position:absolute;bottom:8px;left:0;right:0;text-align:center;font-size:10px;color:#fff;letter-spacing:3px}
+.ttl{padding:12px 12px 4px}
+.ttl .crumb{font-size:11px;color:#8a887f}
+.ttl h4{font:900 20px/1.15 var(--display);color:#14200E;margin:4px 0}
+.price{font:900 22px var(--display);color:#14200E}
+.box{margin:10px 12px;border:1px solid #e3e1d9;border-radius:12px;padding:10px 12px;background:#fff}
+.box.soft{background:#f4f6f0;border-color:#e2e8da}
+.box h6{font:800 13.5px var(--text);color:#14200E;margin:0 0 6px}
+.li{display:flex;gap:8px;align-items:flex-start;font-size:12.5px;margin:5px 0}
+.li i{font-style:normal;color:#1E6B23;font-weight:700}
+.field{border:1px solid #d6d4cc;border-radius:8px;padding:8px 10px;color:#9a988f;font-size:12.5px;margin-top:6px;background:#fff}
+.kit{display:flex;align-items:center;gap:8px;border-top:1px solid #efeee8;padding:7px 0;font-size:12.5px}
+.kit img{width:38px;height:38px;object-fit:cover;border-radius:6px}
+.kit span{flex:1}.kit b{color:#14200E}
+.cb{width:16px;height:16px;border:1.5px solid #1E6B23;border-radius:4px;display:inline-grid;place-items:center;color:#fff;font-size:11px;flex:none}
+.cb.on{background:#1E6B23}
+.acc{border-top:1px solid #ecebe5;padding:9px 12px;font-weight:700;color:#14200E;font-size:13px;display:flex;justify-content:space-between}
+.sticky{position:relative;border-top:1px solid #e4e2da;background:#fff;padding:8px 10px;display:flex;gap:8px;align-items:center}
+.sticky .pr{font:900 16px var(--display);color:#14200E;white-space:nowrap}
+.sticky .btn{flex:1;padding:10px}
+.soldimg{filter:grayscale(.6) opacity(.65)}
+.badge{position:absolute;top:10px;left:10px;background:#14200E;color:#fff;font:700 11px var(--text);padding:4px 8px;border-radius:6px}
+.qty{display:flex;align-items:center;gap:8px;margin-top:8px}
+.qty span{border:1px solid #d6d4cc;border-radius:8px;padding:6px 12px;font-weight:700;color:#14200E}
+.drawer{background:#fff}
+.dhead{display:flex;justify-content:space-between;padding:12px;border-bottom:1px solid #ecebe5;font:800 15px var(--display);color:#14200E}
+.line{display:flex;gap:10px;padding:10px 12px;border-bottom:1px solid #f0efe9;font-size:12.5px}
+.line img{width:52px;height:52px;object-fit:cover;border-radius:8px}
+.line div{flex:1}.line b{color:#14200E}
+.bump{margin:10px 12px;border:2px dashed #ED6744;border-radius:12px;padding:10px;display:flex;gap:10px;align-items:center;background:#fff8f5;font-size:12.5px}
+.bump img{width:44px;height:44px;border-radius:8px;object-fit:cover}
+.mini{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:0 12px 10px}
+.mini div{border:1px solid #ecebe5;border-radius:8px;font-size:11px;line-height:1.25;padding:5px;text-align:center}
+.mini img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:6px}
+.mini b{display:block;color:#14200E}
+.mini em{display:block;font-style:normal;margin-top:3px;background:#14200E;color:#fff;border-radius:6px;padding:2px}
+.tot{padding:10px 12px;font-size:13px}
+.tot div{display:flex;justify-content:space-between;margin:3px 0}
+.tot .g{font:900 16px var(--display);color:#14200E}
+.step{margin:10px 12px;border:1px solid #e3e1d9;border-radius:12px;padding:10px 12px}
+.step h6{font:800 13.5px var(--text);color:#14200E;margin:0 0 4px;display:flex;gap:8px;align-items:center}
+.step h6 i{font-style:normal;background:#14200E;color:#fff;border-radius:50%;width:20px;height:20px;display:inline-grid;place-items:center;font-size:11px}
+.opt{border:1.5px solid #d6d4cc;border-radius:10px;padding:8px 10px;margin-top:6px;font-size:12.5px;display:flex;justify-content:space-between}
+.opt.on{border-color:#1E6B23;background:#f1f7ee}
+.foot{background:#14200E;color:#cfd8c6;font-size:11.5px;padding:12px;text-align:center}
+.notes{font-size:14px;margin-top:10px}
+.notes li{margin-bottom:4px}
+@media (max-width:980px){.mocks{grid-template-columns:repeat(2,minmax(0,1fr))}.shots{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:640px){.mocks,.score{grid-template-columns:1fr}.phone{max-width:340px;margin:0 auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="k">Reptilia · Design and user experience · 19 November 2026</div>
+<h1>What the site looks like now, what it should look like, and how much it costs us</h1>
+<p class="muted">I scored the live site on a real phone-sized screen (390px, logged out), on the five journeys that make money, against what a good South African specialist pet shop should have. I didn't change anything on the site. Everything below the scores is a mockup built from Reptilia's real products, prices and photos.</p>
+
+<div class="score">
+<div><b class="s1">4.1/10</b><span>The live site today, averaged across 13 areas</span></div>
+<div><b class="s2">6.5/10</b><span>The homepage v3 preview we built in August, on the areas it covers</span></div>
+<div><b class="s3">8.5/10</b><span>The target once the templates on this page are live</span></div>
+</div>
+
+<h2>1. The scorecard</h2>
+<p>1 to 10. Each "why" is something I saw on screen or measured, not a judgement call.</p>
+<div class="scroll"><table>
+<tr><th>Area</th><th>Now</th><th>Why it scores that</th><th>Target</th><th>What gets it there</th></tr>
+<tr><td>Visual consistency</td><td class="n s1">3</td><td>Three different design languages. The site is black with yellow and mint-green buttons, the checkout is cream with dark green and orange, and the homepage mixes AI-style stock art with the Black Friday poster. Button styles vary from page to page.</td><td class="n s3">9</td><td>One system: white background, one dark brand green, orange used only for "buy", yellow only for deals. Same buttons everywhere.</td></tr>
+<tr><td>Brand clarity</td><td class="n s2">5</td><td>Good logo and genuinely good animal photos on white backgrounds. But the hero says "Welcome to the Reptilia family!" and nothing tells a visitor that this is a real shop in Vanderbijlpark trading since 2006.</td><td class="n s3">9</td><td>Lead with what's true and rare: a real shop, live and frozen feed, animals you can see before you buy.</td></tr>
+<tr><td>Navigation and findability</td><td class="n s2">5</td><td>The Sprint 1 dropdown and search fixes helped. Categories still sit 4 levels deep (live feed lives under food-feeding/reptiles/feeders/live-feed), and 26 categories are empty. A typical buyer looks at 10 pages before buying.</td><td class="n s3">8</td><td>"Shop by animal" and "restock feed" entry points one tap from home, and empty categories hidden.</td></tr>
+<tr><td>Homepage merchandising</td><td class="n s1">3</td><td>The featured products slot shows a R30 "Pet Inducer Defecation Spray". There are no best sellers (frozen rats, crickets, marmoset food), no animals in stock, no prices above the fold, and large grey blocks while images load.</td><td class="n s3">9</td><td>Restock tiles with prices, animals in store now, starter kits, reviews.</td></tr>
+<tr><td>Product page (animals)</td><td class="n s1">2</td><td>One photo, price and "Add to cart". The description just repeats the name ("Normal Ball Python Hatchling"). Nothing says how the animal gets home, there's no care information, no way to ask a question, and no setup list. Below that come <b>30 related products stacked one per row: a 13,500px page on a phone</b>.</td><td class="n s3">9</td><td>Reserve-and-collect, a delivery panel, a quick enquiry, "complete the setup", a care sheet, and 4 related animals, not 30.</td></tr>
+<tr><td>Product page (feed and supplies)</td><td class="n s2">4</td><td>The variation picker works and "bought together" exists (Sprint 2), but there's no description, no reorder hook, and no ice-pack prompt on frozen feed.</td><td class="n s3">8</td><td>Size chips, an ice-pack prompt, "remind me to reorder", and bought-together with prices.</td></tr>
+<tr><td>Out-of-stock experience</td><td class="n s1">1</td><td>The long-haired guinea pig (368 Google clicks) shows a faded photo and "Out of stock". No alternatives, no "tell me when it's back", nothing to do but leave.</td><td class="n s3">9</td><td>Back-in-stock sign-up by email or WhatsApp, plus similar animals in stock.</td></tr>
+<tr><td>Trust signals</td><td class="n s1">2</td><td>No reviews (switched off), no Google rating, and <b>no WhatsApp anywhere</b>. My earlier note said WhatsApp was on the homepage; that match was an image file name, so the correction is that there is none. The phone number only appears as plain text in the footer, not as a tap-to-call link. The email is a Gmail address.</td><td class="n s3">8</td><td>Tap-to-call and WhatsApp in the header, Google rating, product reviews, a shop@ email address.</td></tr>
+<tr><td>Side cart and cart</td><td class="n s1">3</td><td>The side cart is mostly empty white space with "View cart" and "Checkout". The cart page has no product image and no cross-sells, and local pickup is preselected with no explanation.</td><td class="n s3">9</td><td>Ice-pack bump, 3 "often added" items, a clear delivery choice.</td></tr>
+<tr><td>Checkout</td><td class="n s2">5</td><td>Styled and clear, but email is the <b>last</b> field (so nothing can be recovered if they leave), phone is optional, and a coupon box at the top sends people off hunting for codes. A red warning about a "30% handling fee" sits right next to the pay button.</td><td class="n s3">8</td><td>Email and phone first, delivery chosen before the address, the warning moved into the terms, the coupon field small at the bottom.</td></tr>
+<tr><td>Speed</td><td class="n s3">8</td><td>Cached pages load in 0.03 to 0.2 seconds from the server. Cart and checkout take about 1 second. Real-world speed is fine now.</td><td class="n s3">9</td><td>Keep the cache on, and trim the 30-product grids that bloat pages.</td></tr>
+<tr><td>Search</td><td class="n s3">7</td><td>The August Relevanssi fix works. People mostly search for animal names (ball python, gecko, hamster, bearded dragon, tortoise).</td><td class="n s3">8</td><td>Searches for animals not in stock should land on "ask us / join the list" instead of "nothing found".</td></tr>
+<tr><td>Retention hooks</td><td class="n s1">1</td><td>No email sign-up, no back-in-stock, no reorder reminder, no account perks.</td><td class="n s3">8</td><td>The flows in <a href="messages.html">messages.html</a>.</td></tr>
+</table></div>
+<p class="src">Average now 4.1. The homepage v3 preview (page 39774, built 25 Aug) already fixes the hero, the search and a "Restocking feed?" shortcut. It's the right direction, but it covers the homepage only, and the biggest losses are on product pages, the side cart and out-of-stock pages.</p>
+
+<h2>2. The five journeys that make money, rated</h2>
+<div class="scroll"><table>
+<tr><th>Journey</th><th>Now</th><th>Where it breaks today</th><th>Fixed by</th></tr>
+<tr><td><b>Animal buyer</b> from Google ("ball python for sale", "teddy bear hamster")</td><td class="n s1">2</td><td>Lands on the product page, can't tell how to get the animal home, and checkout offers parcel courier anyway. If it's sold out, it's a dead end. About 2,450 clicks in 90 days produced 4 animal orders.</td><td>Mockups A and B</td></tr>
+<tr><td><b>Feeder regular</b> (frozen rats, crickets, every 3 to 5 weeks)</td><td class="n s2">4</td><td>Has to search or browse every time, nothing reminds them, and the ice pack isn't prompted.</td><td>Mockups C and D, reorder flow</td></tr>
+<tr><td><b>New keeper</b> (first reptile or small pet, often a gift)</td><td class="n s1">3</td><td>No starter kits (the homepage promises them), no care guidance on product pages, no "what do I need" list.</td><td>Mockup A setup list, kits, welcome flow</td></tr>
+<tr><td><b>Local shopper</b> checking what's in stock before visiting</td><td class="n s2">5</td><td>Hours and map are on every page (good), but nothing shows "animals in store now", and there's no WhatsApp to ask.</td><td>Mockup E, WhatsApp</td></tr>
+<tr><td><b>Small-order courier buyer</b> (R150 to R300 of goods)</td><td class="n s2">4</td><td>Sees R160 delivery for the first time on the cart page, and the warning at checkout adds friction.</td><td>Mockups D and F, delivery shown on the product page</td></tr>
+</table></div>
+
+<h2>3. The live site today</h2>
+<p class="muted">Logged-out screenshots at phone size, taken 18 November.</p>
+<div class="shots">
+<figure><img src="assets/current/m-home.jpg" alt="Current homepage on mobile"><figcaption><b>Home.</b> Generic hero, Black Friday poster, and grey blocks where the category images haven't loaded. The featured product is a R30 spray.</figcaption></figure>
+<figure><img src="assets/current/m-animal.jpg" alt="Current animal product page"><figcaption><b>Ball python page.</b> Price and "Add to cart", then 30 related products, one per row.</figcaption></figure>
+<figure><img src="assets/current/m-oos.jpg" alt="Current sold-out page"><figcaption><b>Sold-out guinea pig.</b> 368 Google clicks in 90 days. Nothing to do here.</figcaption></figure>
+<figure><img src="assets/current/m-checkout.jpg" alt="Current checkout"><figcaption><b>Checkout.</b> A different look from the rest of the site. Email is asked for last.</figcaption></figure>
+</div>
+
+<h2>4. What it should look like</h2>
+<p>Six templates, phone first because 75% of orders are placed on a phone. One brand green (<code>#14200E</code> / <code>#1E6B23</code>), orange <code>#ED6744</code> only on buy buttons, yellow <code>#FFC400</code> only for deals, PT Sans throughout. These are the existing site's own colours and font, used with discipline. The photos and prices are real; anything that needs Willem to confirm it is marked.</p>
+
+<div class="mocks">
+
+<div class="mk"><h3>A · Animal page</h3><p class="why">Catches the enquiry even if they never buy online.</p>
+<div class="phone">
+<div class="hdr"><div class="row"><img class="logo" src="https://reptilia.co.za/wp-content/uploads/2026/08/reptilia-logo-300x208.png" onerror="this.outerHTML='<b style=&quot;font:900 18px var(--display);color:#1E6B23&quot;>REPTILIA</b>'" alt="Reptilia"><div class="ic">☏ ✆ 🛒</div></div></div>
+<div class="gal"><img src="https://reptilia.co.za/wp-content/uploads/2026/06/Normal-Ball-Python-Hatchling.jpg" alt=""><div class="dots">● ○ ○</div></div>
+<div class="ttl"><div class="crumb">Animals › Snakes › Ball pythons</div><h4>Normal Ball Python Hatchling (male)</h4>
+<div class="price">R650</div>
+<span class="chip c-g">1 available</span><span class="chip c-d">Hatchling</span><span class="chip c-y">See him in store</span></div>
+<div style="padding:4px 12px 0"><a class="btn buy">Reserve and collect in store</a><a class="btn out">Ask about him on WhatsApp</a></div>
+<div class="box soft"><h6>How you get him home</h6>
+<div class="li"><i>✓</i><span><b>Collect free</b> at 107 Piet Retief Blvd, Vanderbijlpark. Mon–Fri 8:00–17:30, Sat 8:00–14:00, Sun 8:30–13:00.</span></div>
+<div class="li"><i>✓</i><span><b>We deliver</b> in Vereeniging, Sasolburg and Vanderbijlpark.</span></div>
+<div class="li"><i>→</i><span><b>Further away?</b> Live animals can't go by parcel courier. Ask us and we'll help you arrange a specialist pet courier.</span></div></div>
+<div class="box"><h6>Got a question first?</h6>
+<div class="field">Your name</div><div class="field">WhatsApp or phone number</div><div class="field">e.g. Is he feeding? Can you hold him until Saturday?</div>
+<a class="btn dark" style="margin-top:8px">Send my question</a>
+<div style="font-size:11px;color:#8a887f;margin-top:6px">We reply the same day during shop hours.</div></div>
+<div class="box"><h6>Complete the setup <span style="font-weight:400;color:#8a887f">(everything he needs)</span></h6>
+<div class="kit"><span class="cb on">✓</span><img src="https://reptilia.co.za/wp-content/uploads/2026/02/IMG_6188.png" alt=""><span><b>Cage Budget</b><br>from R335</span></div>
+<div class="kit"><span class="cb on">✓</span><img src="https://reptilia.co.za/wp-content/uploads/2026/07/Heating-Blanket.jpg" alt=""><span><b>Heat Blanket</b><br>from R125</span></div>
+<div class="kit"><span class="cb on">✓</span><img src="https://reptilia.co.za/wp-content/uploads/2026/02/cave-hide-medium-scaled-1.jpg" alt=""><span><b>Cave Hide</b><br>from R55</span></div>
+<div class="kit"><span class="cb on">✓</span><img src="https://reptilia.co.za/wp-content/uploads/2026/02/20220805_005313-scaled-1.jpg" alt=""><span><b>Water Bowl</b><br>from R29.50</span></div>
+<div class="kit"><span class="cb on">✓</span><img src="https://reptilia.co.za/wp-content/uploads/2026/02/MICEA.jpg" alt=""><span><b>Frozen Mice</b><br>from R7 each</span></div>
+<a class="btn out" style="margin-top:6px">Reserve the full setup with him</a></div>
+<div class="acc">Ball python care sheet <span>›</span></div><div class="acc">Feeding and handling <span>›</span></div><div class="acc">Permits by province <span>›</span></div>
+<div class="sec"><h5>More ball pythons <a>See all</a></h5><div class="grid2">
+<div class="tile"><img src="https://reptilia.co.za/wp-content/uploads/2026/06/jungle-bold-eclipse-lg.jpeg" alt=""><div><b>Similar animal</b><span class="p">R…</span></div></div>
+<div class="tile"><img src="https://reptilia.co.za/wp-content/uploads/2026/02/Special-Morph-1-scaled-1.jpg" alt=""><div><b>Similar animal</b><span class="p">R…</span></div></div></div></div>
+<div class="sticky"><span class="pr">R650</span><a class="btn buy">Reserve</a><a class="btn wa" style="flex:.6">WhatsApp</a></div>
+</div>
+<ul class="notes"><li>"Reserve" creates an order for in-store collection only, so no parcel courier option ever shows for an animal.</li><li>The form goes to info@ and is <b>stored</b> (Flamingo), so no enquiry gets lost.</li><li>Only 4 related animals, not 30.</li><li><b>Willem confirms:</b> the WhatsApp number, how long reservations are held, and the pet-courier wording.</li></ul></div>
+
+<div class="mk"><h3>B · Sold-out animal</h3><p class="why">Turns a dead end into a waiting list.</p>
+<div class="phone">
+<div class="hdr"><div class="row"><b style="font:900 18px var(--display);color:#1E6B23">REPTILIA</b><div class="ic">☏ ✆ 🛒</div></div></div>
+<div class="gal"><img class="soldimg" src="https://reptilia.co.za/wp-content/uploads/2026/07/guinea-pig-breeds-sheba-1549313864.jpg" alt=""><span class="badge">Sold out for now</span></div>
+<div class="ttl"><div class="crumb">Animals › Small animals › Guinea pigs</div><h4>Guinea Pig, Long Hair</h4><div class="price" style="color:#8a887f">R150</div></div>
+<div class="box soft"><h6>Be first when they're back</h6>
+<div style="font-size:12.5px">We'll let you know the moment new long-haired guinea pigs arrive. One message, no spam.</div>
+<div class="field">Email address</div><div class="field">WhatsApp number (optional)</div>
+<a class="btn buy" style="margin-top:8px">Notify me</a>
+<div style="font-size:11px;color:#8a887f;margin-top:6px">32 people are waiting <span style="color:#c4472b">(shown only once the count is real)</span></div></div>
+<div class="sec"><h5>In store now</h5><div class="grid2">
+<div class="tile"><img src="https://reptilia.co.za/wp-content/uploads/2026/07/teddy-bear-hamster.jpg" alt=""><div><b>Teddy Bear Hamster</b><span class="p">R85</span><span class="chip c-g">In stock</span></div></div>
+<div class="tile"><img src="https://reptilia.co.za/wp-content/uploads/2026/02/HC2.jpg" alt=""><div><b>Hamster Cage Funky Tubes</b><span class="p">R480</span></div></div></div></div>
+<div class="box"><h6>Getting a guinea pig ready?</h6><div class="li"><i>✓</i>Cage, hay, bedding and food are all in stock now. Set up before your pet arrives.</div><a class="btn out" style="margin-top:6px">Shop guinea pig supplies</a></div>
+<div class="foot">Reptilia · Vanderbijlpark · since 2006</div>
+</div>
+<ul class="notes"><li>Back In Stock Notifier (free plugin) sends the email automatically when stock goes above 0.</li><li>The waitlist also shows Willem demand per animal, so he knows what to order.</li><li>The Fiji iguana (404, 107 clicks) and the frogs category (empty, 167 clicks) get this same treatment.</li></ul></div>
+
+<div class="mk"><h3>C · Feed page</h3><p class="why">Built for the regular who buys every 4 weeks.</p>
+<div class="phone">
+<div class="hdr"><div class="row"><b style="font:900 18px var(--display);color:#1E6B23">REPTILIA</b><div class="ic">☏ ✆ 🛒</div></div></div>
+<div class="gal"><img src="https://reptilia.co.za/wp-content/uploads/2026/02/MICEA.jpg" alt=""></div>
+<div class="ttl"><div class="crumb">Feed › Frozen feed</div><h4>Frozen Mice</h4><div class="price">R7 <span style="font:400 13px var(--text);color:#8a887f">each, pinkies</span></div></div>
+<div style="padding:4px 12px"><div style="font-size:12px;font-weight:700;color:#14200E;margin-bottom:6px">Size</div>
+<div class="pills"><span class="pill on">Pinkies</span><span class="pill">Fuzzies</span><span class="pill">Hoppers</span><span class="pill">Weaners</span><span class="pill">Adults</span></div>
+<div class="qty"><span>−</span><span>10</span><span>+</span><span style="border:none;color:#8a887f;font-weight:400">10 is the usual order</span></div></div>
+<div class="box soft" style="font-size:12.5px"><div class="li"><span class="cb on">✓</span><span><b>Add an ice pack (R25)</b>: recommended for courier orders of frozen feed</span></div>
+<div class="li"><span class="cb"></span><span><b>Remind me to reorder</b> in <u>4 weeks</u> by email or WhatsApp</span></div></div>
+<div style="padding:0 12px"><a class="btn buy">Add to cart · R95</a></div>
+<div class="box"><h6>Usually bought together</h6>
+<div class="kit"><img src="https://reptilia.co.za/wp-content/uploads/2026/02/p02r91q0.jpg" alt=""><span><b>Frozen Rat</b><br>from R14</span><span class="pill">+ Add</span></div>
+<div class="kit"><img src="https://reptilia.co.za/wp-content/uploads/2026/06/CRICKETS.jpg" alt=""><span><b>Crickets</b><br>from R33</span><span class="pill">+ Add</span></div>
+<div class="kit"><img src="https://reptilia.co.za/wp-content/uploads/2026/02/Coco-Husk-Chips.jpg" alt=""><span><b>Coco Husk Chips</b><br>from R37</span><span class="pill">+ Add</span></div></div>
+<div class="box soft" style="font-size:12.5px"><b>Delivery:</b> free collection in Vanderbijlpark, or R160 courier anywhere in SA. <a style="color:#1E6B23">How we ship frozen feed</a></div>
+<div class="acc">Which size for my snake? <span>›</span></div>
+</div>
+<ul class="notes"><li>Size chips replace the dropdown (the same variations, easier to tap).</li><li>The "usually bought together" pairs come from 5 years of orders (Blueprint leak 7 map: frozen rats and mice are bought with ice packs 42 times).</li><li>"Remind me" adds the customer to the reorder flow with their own timing.</li><li><b>Willem confirms:</b> the typical pack size and how frozen feed is packed for courier.</li></ul></div>
+
+<div class="mk"><h3>D · Side cart</h3><p class="why">The most valuable empty space on the site.</p>
+<div class="phone">
+<div class="drawer">
+<div class="dhead"><span>Your basket (2)</span><span>✕</span></div>
+<div class="line"><img src="https://reptilia.co.za/wp-content/uploads/2026/02/p02r91q0.jpg" alt=""><div><b>Frozen Rat, Young/Medium</b><br>8 × R14<br><span class="chip c-d">Frozen</span></div><b>R112</b></div>
+<div class="line"><img src="https://reptilia.co.za/wp-content/uploads/2026/02/IMG_7130-scaled-1.jpg" alt=""><div><b>Marmoset Monkey Chow 1kg</b><br>1 × R190</div><b>R190</b></div>
+<div class="bump"><img src="https://reptilia.co.za/wp-content/uploads/2026/06/ice-pack.jpg" alt=""><div style="flex:1"><b>Frozen feed in your basket</b><br>Add an ice pack so it arrives cold. R25</div><span class="pill on">Add</span></div>
+<div style="padding:0 12px 4px;font:800 13px var(--display);color:#14200E">Often added</div>
+<div class="mini">
+<div><img src="https://reptilia.co.za/wp-content/uploads/2026/02/MICEA.jpg" alt=""><b>Frozen Mice</b>from R7<em>+ Add</em></div>
+<div><img src="https://reptilia.co.za/wp-content/uploads/2026/02/calcium-POWDER.jpg" alt=""><b>Calcium</b>from R58<em>+ Add</em></div>
+<div><img src="https://reptilia.co.za/wp-content/uploads/2026/02/MEAL150.jpg" alt=""><b>Mealworms</b>from R25<em>+ Add</em></div></div>
+<div class="tot"><div><span>Subtotal</span><b>R302</b></div><div><span>Delivery</span><span>Free collection, or R160 courier</span></div></div>
+<div style="padding:0 12px 12px"><a class="btn buy">Checkout</a><a class="btn out">Questions? WhatsApp us</a></div>
+</div></div>
+<ul class="notes"><li>The ice-pack bump only appears when frozen feed is in the basket.</li><li>"Often added" uses WooCommerce cross-sells, filled from the order-history map, so there's no guessing.</li><li>No "free delivery over R…" bar: the August model showed it loses money. The cheaper small-parcel option goes here once Willem gives us the courier cost.</li></ul></div>
+
+<div class="mk"><h3>E · Homepage</h3><p class="why">Shows the shop's best stuff first.</p>
+<div class="phone">
+<div class="ann">Black Friday weekend · 27–29 Nov · in store and online</div>
+<div class="hdr"><div class="row"><b style="font:900 18px var(--display);color:#1E6B23">REPTILIA</b><div class="ic">☏ ✆ 🛒</div></div><div class="srch"><span>Search crickets, frozen mice, UVB…</span><b>Search</b></div></div>
+<div class="hero"><h4>Live feed, frozen feed and healthy animals.</h4><p>A real shop in Vanderbijlpark since 2006. Collect for free or we courier your supplies anywhere in SA.</p><a class="btn buy">Restock my feed</a><a class="btn out" style="background:transparent;color:#fff;border-color:#fff">See animals in store now</a></div>
+<div class="trust"><div><b>Collect free</b>Vanderbijlpark</div><div><b>R160 courier</b>supplies, anywhere in SA</div><div><b>PayFast</b>secure checkout</div><div><b>WhatsApp us</b>same-day replies</div></div>
+<div class="sec"><h5>Restock in one tap <a>All feed</a></h5><div class="grid2">
+<div class="tile"><img src="https://reptilia.co.za/wp-content/uploads/2026/02/p02r91q0.jpg" alt=""><div><b>Frozen Rat</b><span class="p">from R14</span></div></div>
+<div class="tile"><img src="https://reptilia.co.za/wp-content/uploads/2026/06/CRICKETS.jpg" alt=""><div><b>Crickets</b><span class="p">from R33</span></div></div>
+<div class="tile"><img src="https://reptilia.co.za/wp-content/uploads/2026/02/MICEA.jpg" alt=""><div><b>Frozen Mice</b><span class="p">from R7</span></div></div>
+<div class="tile"><img src="https://reptilia.co.za/wp-content/uploads/2026/02/IMG_7130-scaled-1.jpg" alt=""><div><b>Marmoset Chow 1kg</b><span class="p">R190</span></div></div></div></div>
+<div class="sec" style="background:#f4f6f0"><h5>Animals in store now <a>All 135</a></h5><div class="grid2">
+<div class="tile"><img src="https://reptilia.co.za/wp-content/uploads/2026/02/Special-Morph-1-scaled-1.jpg" alt=""><div><b>Bearded Dragon, Special Morph</b><span class="p">R1,150</span><span class="chip c-y">Collect in store</span></div></div>
+<div class="tile"><img src="https://reptilia.co.za/wp-content/uploads/2026/07/teddy-bear-hamster.jpg" alt=""><div><b>Teddy Bear Hamster</b><span class="p">R85</span><span class="chip c-y">Collect in store</span></div></div></div>
+<a class="btn out" style="margin-top:8px">Looking for something specific? Ask us</a></div>
+<div class="sec"><h5>Shop by animal</h5><div class="pills"><span class="pill">Snakes</span><span class="pill">Geckos</span><span class="pill">Bearded dragons</span><span class="pill">Tortoises</span><span class="pill">Hamsters &amp; guinea pigs</span><span class="pill">Spiders</span><span class="pill">Marmosets</span><span class="pill">Fish</span></div></div>
+<div class="sec" style="background:#14200E;color:#e7eddf"><h5 style="color:#fff">First pet starter kits</h5><div style="font-size:12.5px">Hamster, guinea pig, leopard gecko, bearded dragon. Everything in one basket.</div><a class="btn buy" style="margin-top:8px">See the kits</a></div>
+<div class="sec"><h5>What keepers say</h5><div style="font-size:12.5px"><b>★ 4.6 on Google</b> <span style="color:#c4472b">(confirm the live rating)</span><br>"…a real customer review quoted here…"</div></div>
+<div class="box soft"><h6>Feed reminders and stock alerts</h6><div style="font-size:12.5px">New animals in, feed reminders, and Black Friday first.</div><div class="field">Email address</div><a class="btn dark" style="margin-top:6px">Join</a></div>
+<div class="foot">107 Piet Retief Blvd, Vanderbijlpark · ☏ 016 982 3064</div>
+</div>
+<ul class="notes"><li>Builds on the v3 preview's hero, search and "restocking feed?" ideas.</li><li>The top 4 sellers by revenue go above the fold.</li><li>"Animals in store now" pulls live stock automatically.</li></ul></div>
+
+<div class="mk"><h3>F · Checkout</h3><p class="why">Captures the email first, so nothing can be lost.</p>
+<div class="phone">
+<div class="hdr"><div class="row"><b style="font:900 18px var(--display);color:#1E6B23">REPTILIA</b><span style="font-size:12px;color:#1E6B23">🔒 Secure checkout</span></div></div>
+<div class="step"><h6><i>1</i>Your details</h6><div class="field">Email (for your receipt and updates)</div><div class="field">Cell number (we WhatsApp when it's ready)</div><div class="field">First and last name</div></div>
+<div class="step"><h6><i>2</i>How do you want it?</h6>
+<div class="opt on"><span><b>Collect in store</b><br>Vanderbijlpark, ready same day</span><b>Free</b></div>
+<div class="opt"><span><b>Courier to your door</b><br>anywhere in South Africa</span><b>R160</b></div>
+<div style="font-size:11.5px;color:#8a887f;margin-top:6px">Address fields only appear if you choose courier.</div></div>
+<div class="step"><h6><i>3</i>Pay</h6><div class="opt on"><span>PayFast: card, Instant EFT, SnapScan and more</span></div>
+<div class="tot" style="padding:8px 0 0"><div><span>Frozen Rat ×8, Monkey Chow, Ice Pack</span><span>R327</span></div><div><span>Collect in store</span><span>R0</span></div><div class="g"><span>Total</span><span>R327</span></div></div>
+<a class="btn buy" style="margin-top:8px">Pay R327 securely</a>
+<div style="font-size:11px;color:#8a887f;margin-top:6px">By paying you agree to our <u>terms</u>. Have a code? <u>Add it here</u>.</div></div>
+<div class="box soft" style="font-size:12px">Questions before you pay? <b>WhatsApp us</b> and a real person answers.</div>
+</div>
+<ul class="notes"><li>Email and cell first: the abandoned-checkout plugin captures them as they're typed.</li><li>The 30% fee wording moves into the terms. It stays legally valid without scaring people off at the pay button.</li><li>This is red-lane checkout work: build it on staging first, then test-order every delivery method.</li><li>Payment wording: confirm which PayFast methods are switched on.</li></ul></div>
+
+</div>
+
+<div class="callout"><b>How this gets built without breaking anything.</b>
+<ul style="margin:6px 0 0;padding-left:18px">
+<li>Green lane: the animal-page delivery panel, enquiry form, WhatsApp buttons, care accordions, homepage content and Product markup. These change no checkout code. Snapshot first, then go live.</li>
+<li>Red lane: the reserve-and-collect rule, checkout field order, side-cart bump, related-products count and the back-in-stock plugin. These go to staging first and need a test order for each delivery method.</li>
+<li>Diane builds in the 10Web/Elementor templates, so she keeps the ability to edit everything.</li>
+</ul>
+Effort estimate: 6 to 8 build days in total across both lanes. The detailed spec, plugins and code are in <a href="build-pack.html">build-pack.html</a>.</div>
+
+<p class="src" style="margin-top:28px">← <a href="index.html">Back to the plan</a> · Screenshots in <code>assets/current/</code> · Mockup images load from reptilia.co.za</p>
+</div>
+</body>
+</html>

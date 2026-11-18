@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Reptilia Build Pack</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800;900&family=PT+Sans:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* Implementation spec for Diane: plugins, settings, DNS, cron, code, tests. Nothing here is installed yet. */
+:root{--ink:#14200E;--buy:#ED6744;--promo:#FFC400;--body:#3c3b35;--muted:#77756c;--line:#e4e2da;--soft:#f4f6f0;--bg:#fffefb;--card:#fff;--display:"Archivo",Arial,sans-serif;--text:"PT Sans","Segoe UI",Arial,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ink:#eef2e8;--body:#d8d6cc;--muted:#a29f94;--line:#2f2e29;--soft:#1b1d18;--bg:#111210;--card:#181915;color-scheme:dark}}
+:root[data-theme="dark"]{--ink:#eef2e8;--body:#d8d6cc;--muted:#a29f94;--line:#2f2e29;--soft:#1b1d18;--bg:#111210;--card:#181915;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--body);font:16px/1.6 var(--text)}
+.wrap{max-width:1060px;margin:0 auto;padding:40px 16px 80px}
+h1,h2,h3{font-family:var(--display);color:var(--ink);line-height:1.12;margin:0;text-wrap:balance}
+h1{font-size:clamp(28px,5vw,42px);font-weight:900;max-width:26ch}
+h2{font-size:24px;font-weight:800;margin:50px 0 8px}
+h3{font-size:17px;font-weight:800;margin:20px 0 6px}
+.k{font:700 12px/1 var(--text);letter-spacing:.16em;text-transform:uppercase;color:var(--buy);margin-bottom:14px}
+p{max-width:76ch;margin:8px 0 12px}
+.muted,.src{color:var(--muted)}.src{font-size:13px}
+a{color:#3E9B2E}
+table{width:100%;border-collapse:collapse;font-size:14.5px;margin-top:12px}
+th{text-align:left;font:700 12px var(--text);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border-bottom:2px solid var(--line);padding:8px}
+td{border-bottom:1px solid var(--line);padding:8px;vertical-align:top}
+.scroll{overflow-x:auto}
+pre{background:#14200E;color:#e6eedc;border-radius:10px;padding:14px;overflow-x:auto;font-size:13px;line-height:1.5}
+code{background:var(--soft);padding:1px 5px;border-radius:4px;font-size:13.5px}
+pre code{background:none;padding:0}
+.tag{display:inline-block;font-size:11px;font-weight:700;border-radius:10px;padding:2px 8px}
+.g{background:#e2efe8;color:#1f5a40}.r{background:#fde3da;color:#8a2e14}.w{background:#e6e3f7;color:#3b2f86}
+.callout{background:var(--soft);border-left:5px solid var(--promo);border-radius:8px;padding:14px 18px;margin-top:18px}
+ol li,ul li{margin-bottom:5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="k">Reptilia · Build pack · for Diane · 19 November 2026</div>
+<h1>What to install, how to set it up, and how to test it</h1>
+<p class="muted">Everything is free except the optional WhatsApp automation. Nothing here is installed yet. <span class="tag g">Green</span> = snapshot, then live. <span class="tag r">Red</span> = staging first and a test order for each delivery method. <span class="tag w">Willem</span> = needs his answer first. Code is in <code>build/</code>, email HTML is in <code>emails/</code>.</p>
+
+<h2>1. The stack</h2>
+<div class="scroll"><table>
+<tr><th>Job</th><th>Tool</th><th>Cost</th><th>Why this one</th><th>Lane</th></tr>
+<tr><td>Send all website email reliably</td><td><b>FluentSMTP</b> (free) → <b>Brevo</b> SMTP (free tier: 300 emails a day, unlimited contacts)</td><td>R0</td><td>Order emails go out through the server's own mail today, with no logs and no fallback. FluentSMTP adds logs, a fallback connection and failure alerts. Brevo signs the mail properly.</td><td><span class="tag r">Red</span></td></tr>
+<tr><td>See and recover abandoned checkouts</td><td><b>Cart Abandonment Recovery</b> by CartFlows (free, 300k+ installs)</td><td>R0</td><td>Captures the email the moment it's typed at checkout, lists every abandoned basket in wp-admin, sends timed emails, and can generate single-use coupons.</td><td><span class="tag r">Red</span></td></tr>
+<tr><td>"Notify me when back"</td><td><b>Back In Stock Notifier for WooCommerce</b> (cwginstock, free, updated Nov 2026)</td><td>R0</td><td>Form on sold-out simple and variable products, automatic email on restock, subscriber list per product, GDPR checkbox, captcha option.</td><td><span class="tag r">Red</span></td></tr>
+<tr><td>Welcome, post-purchase, reorder, win-back and broadcasts</td><td><b>MailPoet</b> (free up to 1,000 subscribers; WooCommerce's own)</td><td>R0 now; paid tier above 1,000</td><td>WooCommerce purchase triggers are free, it sends through our own SMTP, and the data stays on the VPS. FluentCRM was ruled out: its WooCommerce triggers need Pro ($129/yr).</td><td><span class="tag r">Red</span></td></tr>
+<tr><td>Animal enquiries that never get lost</td><td><b>Contact Form 7</b> (already active) + <b>Flamingo</b> (free)</td><td>R0</td><td>Flamingo stores every submission in wp-admin, which gives you a demand list as well.</td><td><span class="tag g">Green</span></td></tr>
+<tr><td>WhatsApp, stage 1</td><td>WhatsApp Business app on the shop's cell + <code>wa.me</code> links</td><td>R0</td><td>The site has no WhatsApp at all today.</td><td><span class="tag w">Willem</span> number</td></tr>
+<tr><td>WhatsApp, stage 2 (later)</td><td>Cloud API plugin, e.g. "Order Notifications on WhatsApp" (WooCommerce.com)</td><td>~$79/yr + per message</td><td>Automated cart, back-in-stock and order-ready messages. Only to people who opted in.</td><td><span class="tag r">Red</span></td></tr>
+</table></div>
+<div class="callout"><b>Two systems, one abandoned-cart sender.</b> Cart Abandonment Recovery sends AC1 to AC3. MailPoet's own abandoned-cart automation stays <b>off</b>, so nobody gets two sets of reminders.</div>
+
+<h2>2. Email that actually arrives (do this first)</h2>
+<p>Current DNS (checked 18 Nov): SPF <code>v=spf1 +mx +a +ip4:102.209.87.152 +include:spf-c.mailbaby.net -all</code>, DKIM selector <code>default</code> present, DMARC <code>p=none</code>. The <code>-all</code> means <b>any sender not listed is rejected</b>, so Brevo must be added before the first email goes out.</p>
+<ol>
+<li>Create the Brevo account in Reptilia's name (Willem's email), then add and verify the sender <code>sales@reptilia.co.za</code>, with replies to <code>info@reptilia.co.za</code>.</li>
+<li>Add Brevo's DNS records (Brevo › Senders &amp; IP › Domains shows the exact values). Expected SPF:
+<pre><code>v=spf1 +mx +a +ip4:102.209.87.152 +include:spf-c.mailbaby.net include:spf.brevo.com -all</code></pre>
+Check the include value Brevo shows before saving: older accounts use <code>spf.sendinblue.com</code>. Add the two DKIM CNAMEs and the <code>brevo-code</code> TXT exactly as shown. Squirrel Media manages the DNS.</li>
+<li>DMARC: keep <code>p=none</code> but add reporting: <code>v=DMARC1; p=none; rua=mailto:dmarc@reptilia.co.za; fo=1</code>. Move to <code>p=quarantine</code> after 30 clean days.</li>
+<li>FluentSMTP: primary connection Brevo SMTP (smtp-relay.brevo.com, port 587, TLS, SMTP key). Fallback connection is the server's own mail. Turn logging on. Failure alert to Diane.</li>
+<li>Send a test to Gmail and Outlook, open "show original", and confirm SPF, DKIM and DMARC all say PASS.</li>
+<li>WP Mail Logging can then be removed (FluentSMTP logs instead).</li>
+</ol>
+
+<h2>3. Ask Squirrel Media for a real server cron</h2>
+<p>Abandoned-cart capture and the MailPoet timers depend on scheduled tasks. CartFlows' own docs: if the task isn't running, abandoned orders aren't recorded. On a VPS this is a two-minute job for the host:</p>
+<pre><code># wp-config.php
+define( 'DISABLE_WP_CRON', true );
+
+# crontab for the site user (every 5 minutes)
+*/5 * * * * cd /home/reptiliaco/public_html &amp;&amp; /usr/local/bin/php wp-cron.php &gt;/dev/null 2&gt;&amp;1</code></pre>
+<p class="src">Path from the Plugins screen: <code>/home/reptiliaco/public_html</code>. The PHP binary path is the host's to confirm.</p>
+
+<h2>4. Settings, plugin by plugin</h2>
+<h3>Cart Abandonment Recovery</h3>
+<ul>
+<li>Cart abandoned cut-off: <b>15 minutes</b>. Exclude orders with status processing or completed.</li>
+<li>Emails: AC1 at 1 hour, AC2 at 24 hours, AC3 at 72 hours. Paste the HTML from <code>emails/ac1…</code>, <code>ac2…</code>, <code>ac3…</code>. Their merge tags (<code>{{customer.firstname}}</code>, <code>{{cart.product.table}}</code>, <code>{{cart.checkout_url}}</code>, <code>{{cart.coupon_code}}</code>) are this plugin's syntax; confirm them against the plugin's tag list on install.</li>
+<li>Coupon in AC3: <b>off</b> until Willem approves an amount. If approved: single use, 48-hour expiry, percentage capped.</li>
+<li>Admin notification: on, to the shop, for recovered carts.</li>
+<li>Staging test: abandon at the checkout form, and also go to PayFast and close the tab. Both must appear as abandoned.</li>
+</ul>
+<h3>Back In Stock Notifier</h3>
+<ul>
+<li>Show the form on out-of-stock products (simple and variations). Fields: email, plus an optional WhatsApp number (custom field), and a GDPR/POPIA checkbox: "Email me when this is back. No other marketing."</li>
+<li>Subscribe confirmation: short, on screen. Restock email: <code>emails/bis-back-in-stock.html</code> (map <code>{product_name}</code>, <code>{product_link}</code> to the plugin's placeholders).</li>
+<li>Captcha: Turnstile on (bots are 3 in 4 sessions on this site).</li>
+<li><b>Test with "hide out of stock items" ON</b> (the current setting). Sold-out product pages are still reachable by URL (checked: the long-haired guinea pig), so the form should show, but confirm it.</li>
+</ul>
+<h3>MailPoet</h3>
+<ul>
+<li>Sending method: "Other", using the FluentSMTP/Brevo route. Throttle about 150 an hour for the first 2 weeks.</li>
+<li>WooCommerce: "Opt-in on checkout" <b>on</b>, with label "Send me feed reminders, new animals and specials. Unsubscribe any time." Sync customers to a "WooCommerce Customers" list.</li>
+<li>Import past buyers into a separate list, <b>"Past customers 2021–2026"</b>, from the WooCommerce order export, deduplicated by email. Tag them: <code>feed</code>, <code>smallpets</code>, <code>reptile</code>, <code>repeat</code> (2+ orders), <code>last_order_date</code>.</li>
+<li>Automations: Welcome (wel-1 at 0 days, wel-2 at +3 days), First purchase (pp-1 at +1 day), Purchased in category Frozen Feed (pp-3-reorder-frozen at +25 days), Purchased in Live Feed (pp-3-reorder-live at +18 days), Order completed (pp-2-review at +7 days, once per 60 days).</li>
+<li>Footer: real address and one-click unsubscribe (already in every template). Unsubscribes are honoured across all lists.</li>
+<li>Abandoned-cart automation in MailPoet: <b>off</b> (CartFlows does it).</li>
+</ul>
+<h3>WooCommerce settings</h3>
+<ul>
+<li>Reviews: switch <b>on</b>, "verified owners only" <b>on</b>. <span class="tag w">Willem</span></li>
+<li>Cross-sells: import <code>Blueprint-Execution/data/leak7-crosssell-map.csv</code> (40 products, from co-purchase history; no live animals as targets) with WP Sheet Editor, which is already installed. <span class="tag r">Red</span></li>
+<li>Low-stock and out-of-stock emails: add the shop's address, not only Diane.</li>
+</ul>
+
+<h2>5. Code snippets (WPCode, PHP, "Run Everywhere")</h2>
+<div class="scroll"><table>
+<tr><th>File</th><th>What it does</th><th>Lane</th><th>Roll back</th></tr>
+<tr><td><code>build/01-live-animal-collect-only.php</code></td><td>If a live animal is in the cart, only "Local pickup" is offered, with a note on Vaal delivery and pet couriers. Fails open: never leaves the customer with no delivery method at all.</td><td><span class="tag r">Red</span></td><td>Deactivate the snippet</td></tr>
+<tr><td><code>build/02-animal-page-panel.php</code></td><td>On animal pages only: WhatsApp button with a prefilled message, the "How you get it home" panel, and the enquiry form. Also available as a shortcode <code>[reptilia_animal_panel]</code> for the 10Web template.</td><td><span class="tag g">Green</span> (test on staging: template hooks)</td><td>Deactivate</td></tr>
+<tr><td><code>build/03-product-schema.php</code></td><td>Product markup (name, image, price in ZAR, stock) on every product page. Skips R0 products.</td><td><span class="tag g">Green</span></td><td>Deactivate</td></tr>
+<tr><td><code>build/04-checkout-fields.php</code></td><td>Email first, cell second (required), then names.</td><td><span class="tag r">Red</span></td><td>Deactivate</td></tr>
+<tr><td><code>build/05-related-products-4.php</code></td><td>4 related products instead of 30.</td><td><span class="tag r">Red</span></td><td>Deactivate</td></tr>
+<tr><td><code>build/cf7-animal-enquiry-form.txt</code></td><td>The enquiry form markup, mail and auto-reply setup.</td><td><span class="tag g">Green</span></td><td>Delete the form</td></tr>
+</table></div>
+<p class="src">No PHP interpreter was available here, so the snippets were checked structurally (balanced braces, strings and brackets) but not run. Staging is the real test.</p>
+
+<h2>6. Template work in 10Web/Elementor (Diane)</h2>
+<ul>
+<li>Header: tap-to-call <code>tel:+27169823064</code> and a WhatsApp icon on every page. Add a "Shop by animal" row on mobile.</li>
+<li>Animal product template: place <code>[reptilia_animal_panel]</code> under the price. Add a "Reserve and collect" label on the buy button for animal categories. Add care-sheet accordions.</li>
+<li>Side cart: add WooCommerce cross-sells (3 items), plus the ice-pack prompt when the basket contains the Frozen Feed category.</li>
+<li>Homepage: ship homepage v3 (page 39774) as the base, then add "Animals in store now" (a live product grid, Live Animals category, in stock, newest first), starter-kit and review blocks (mockup E in design-ux.html).</li>
+<li>Checkout: move the "30% handling fee" notice into the terms, and shrink the coupon prompt to a small link under the total.</li>
+<li>Footer: email sign-up field (MailPoet form) on every page.</li>
+</ul>
+
+<h2>7. Test plan before anything goes live</h2>
+<div class="scroll"><table>
+<tr><th>#</th><th>Test</th><th>Pass when</th></tr>
+<tr><td>1</td><td>Mail authentication</td><td>A test to Gmail shows SPF, DKIM and DMARC all PASS from Brevo.</td></tr>
+<tr><td>2</td><td>Order with dry goods, courier</td><td>Flat rate R160 is offered. The PayFast sandbox payment completes, and the order email arrives in the inbox (not spam).</td></tr>
+<tr><td>3</td><td>Order with a live animal</td><td>Only Local pickup is shown, plus the note. A Cape Town address still shows pickup only.</td></tr>
+<tr><td>4</td><td>Abandoned at the form</td><td>Type an email, leave. It appears in Cart Abandonment after 15 minutes, and AC1 arrives at 1 hour.</td></tr>
+<tr><td>5</td><td>Abandoned at PayFast</td><td>Reach PayFast, close the tab. It's recorded as abandoned. Also check whether an unpaid WooCommerce order exists and what happens to it after 60 minutes (it has never been kept since 5 Aug).</td></tr>
+<tr><td>6</td><td>Back in stock</td><td>Sign up on a sold-out product, raise its stock to 1 on staging, and the email arrives.</td></tr>
+<tr><td>7</td><td>Animal enquiry</td><td>The form sends to info@, appears in Flamingo, and the auto-reply arrives. The WhatsApp link opens with the right animal name.</td></tr>
+<tr><td>8</td><td>Schema</td><td>Rich Results Test shows a valid Product for one simple, one variable and one animal product.</td></tr>
+<tr><td>9</td><td>Mobile</td><td>Animal page under 4,000px tall. Every button at least 44px.</td></tr>
+<tr><td>10</td><td>Unsubscribe</td><td>Clicking unsubscribe in a MailPoet email removes the person from every list.</td></tr>
+</table></div>
+
+<p class="src" style="margin-top:26px">← <a href="index.html">Back to the plan</a></p>
+</div>
+</body>
+</html>
