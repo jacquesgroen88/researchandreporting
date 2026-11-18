@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Reptilia Approval List</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800;900&family=PT+Sans:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* Willem's approval list: tick yes / change / not now per item, add a note, copy the answers into WhatsApp. Answers stay in this browser only. */
+:root{--ink:#14200E;--green:#1E6B23;--buy:#ED6744;--deal:#FFC400;--body:#3c3b35;--muted:#77756c;--line:#e4e2da;--soft:#f4f6f0;--bg:#fffefb;--card:#fff;--display:"Archivo",Arial,sans-serif;--text:"PT Sans","Segoe UI",Arial,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ink:#eef2e8;--body:#d8d6cc;--muted:#a29f94;--line:#2f2e29;--soft:#1b1d18;--bg:#111210;--card:#181915;color-scheme:dark}}
+:root[data-theme="dark"]{--ink:#eef2e8;--body:#d8d6cc;--muted:#a29f94;--line:#2f2e29;--soft:#1b1d18;--bg:#111210;--card:#181915;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--body);font:16px/1.55 var(--text)}
+.wrap{max-width:860px;margin:0 auto;padding:36px 16px 120px}
+h1,h2,h3{font-family:var(--display);color:var(--ink);line-height:1.12;margin:0;text-wrap:balance}
+h1{font-size:clamp(28px,5vw,40px);font-weight:900}
+h2{font-size:22px;font-weight:800;margin:40px 0 4px}
+.k{font:700 12px/1 var(--text);letter-spacing:.16em;text-transform:uppercase;color:var(--buy);margin-bottom:12px}
+p{max-width:70ch}
+.muted{color:var(--muted)}
+a{color:#3E9B2E}
+.item{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-top:12px}
+.item .top{display:flex;gap:12px;align-items:flex-start}
+.num{flex:none;width:32px;height:32px;border-radius:50%;background:var(--deal);color:#111;display:grid;place-items:center;font:900 14px var(--display)}
+.item h3{font-size:16.5px;margin-top:4px}
+.item p{margin:4px 0 0;font-size:14.5px}
+.ch{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 0 44px}
+.ch label{border:1.5px solid var(--line);border-radius:20px;padding:6px 12px;font-size:14px;cursor:pointer;color:var(--ink);background:var(--bg)}
+.ch input{position:absolute;opacity:0}
+.ch label:has(input:checked){border-color:var(--green);background:#e2efe8;color:#1f5a40;font-weight:700}
+.ch label.chg:has(input:checked){border-color:#c99a00;background:#fff3c4;color:#5f4a00}
+.ch label.no:has(input:checked){border-color:#b23b1f;background:#fde3da;color:#8a2e14}
+.note{margin:8px 0 0 44px;width:calc(100% - 44px);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font:14.5px var(--text);background:var(--bg);color:var(--body);min-height:38px}
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--ink);color:#fff;padding:12px 16px;display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap;z-index:5}
+.bar button{border:0;border-radius:10px;padding:11px 18px;font:700 15px var(--text);cursor:pointer;background:var(--buy);color:#fff}
+.bar span{font-size:14px;color:#cfd8c6}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="k">Reptilia · For Willem · 19 November 2026</div>
+<h1>What we'd like your OK on</h1>
+<p class="muted">Each item links to what it looks like. Choose <b>Yes</b>, <b>Change</b> (add a note) or <b>Not now</b>, then press <b>Copy my answers</b> at the bottom and paste them into WhatsApp to us. Nothing changes on reptilia.co.za until you've said yes, and anything that touches the checkout is tested on a copy of the site first. Your answers stay on this device only.</p>
+
+<h2>The new look and the pages</h2>
+<div id="a"></div>
+<h2>Decisions only you can make</h2>
+<div id="b"></div>
+<h2>Content we've written for you to check</h2>
+<div id="c"></div>
+</div>
+<div class="bar"><span id="count">0 of 0 answered</span><button id="copy">Copy my answers</button></div>
+<script>
+const G={a:[
+['Overall look','White, one dark green, orange only for buy buttons. Your logo, photos and products. <a href="prototype/index.html">Homepage</a> · <a href="compare.html">before and after</a>'],
+['Animal pages: reserve and collect, WhatsApp, question form','Every animal page explains how to get it home and lets people ask a question. <a href="prototype/product-ball-python.html">Ball python</a>'],
+['"Complete the setup" on animal pages','The enclosure, heat, hide, bowl and food listed with each animal, all addable in one tap. <a href="prototype/product-bearded-dragon.html">Bearded dragon</a>'],
+['"Notify me" on sold-out products','People leave their email or WhatsApp and get one message when it\'s back. <a href="prototype/product-guinea-pig-long-hair.html">Guinea pig</a>'],
+['Feed pages: size buttons, ice-pack prompt, reorder reminder','<a href="prototype/product-frozen-mice.html">Frozen mice</a> · <a href="prototype/product-crickets.html">Crickets</a>'],
+['Category pages with a price guide (snakes first, then geckos, lizards, spiders)','<a href="prototype/category-snakes.html">Snakes</a>'],
+['A hamsters and guinea pigs page for "near me" searches','<a href="prototype/hamsters-guinea-pigs.html">Prototype</a>'],
+['Four starter kits','Hamster, guinea pig, leopard gecko, bearded dragon, at today\'s prices. Kit discount? Put it in the note. <a href="prototype/starter-kits.html">Kits</a>'],
+['Basket add-ons','Ice pack when frozen feed is in the basket, plus 3 "often added" items. <a href="prototype/cart.html">Basket</a> (also click the bag icon on any page)'],
+['Checkout changes','Email and cell first, collect or courier chosen first, the 30% fee wording moved into the terms. <a href="prototype/checkout.html">Checkout</a>']],
+b:[
+['Live animals: collection only at checkout','Parcel courier is no longer offered for animals. Collect, Vaal delivery by arrangement, or a pet courier the customer sends.'],
+['Reservations','Pay online or pay when collecting? How many days do you hold a reserved animal? (Note.)'],
+['The shop WhatsApp number, and who answers it','The number for all the WhatsApp buttons, and who replies during shop hours. (Note.)'],
+['Product reviews on, and the Google review link','Switch reviews on (verified buyers only) and ask customers for a Google review 7 days after their order.'],
+['Black Friday offers (27–29 Nov)','The specials for the email, banner and posts. (Note.)'],
+['A small discount in the last abandoned-basket email','e.g. 5% or a free ice pack, single use, 48 hours. Or none. (Note.)'],
+['Emailing past customers','Email people who bought from you before about similar products, with an unsubscribe in every email, starting with your regulars.'],
+['Courier cost and rough margins','What a courier delivery actually costs you, and rough margin by category. This sets kit prices and the ads stop line. (Note.)'],
+['Restock priorities','Long-haired guinea pigs, normal bearded dragons, Fiji iguana, plus requests we\'ve had: fat-tailed gecko, hognose, chameleons, milk snakes. (Note.)']],
+c:[
+['Care notes on animal pages','Temperatures, feeding and lifespans, written from standard keeping guidance. Please check them. (Note any corrections.)'],
+['Claims: "since 2006", captive bred, permit wording','We only use these once you confirm them. (Note.)'],
+['12 product descriptions and 6 category intros','<a href="extras.html#copy">Read them</a>'],
+['Weekly Google Business posts (8 written)','Your team takes one photo a week in the shop. <a href="extras.html#gbp">See the posts</a>'],
+['Till QR card','Customers join for feed reminders and new-animal alerts. <a href="extras.html#qr">See the card</a>'],
+['Search pages to win back','A leopard gecko page, plus chinchilla, heat and UVB, and spider pages. <a href="search.html">Why</a>. Do you still sell chinchillas? (Note.)']]};
+let n=0;const key='reptilia-approval-v1';let saved={};try{saved=JSON.parse(localStorage.getItem(key)||'{}')}catch(e){}
+for(const sec of ['a','b','c']){document.getElementById(sec).innerHTML=G[sec].map(([t,d])=>{n++;const id='q'+n;const v=saved[id]||{};return `<div class="item" data-id="${id}" data-t="${t.replace(/"/g,'&quot;')}"><div class="top"><span class="num">${n}</span><div><h3>${t}</h3><p>${d}</p></div></div><div class="ch">${['Yes','Change','Not now'].map((o,i)=>`<label class="${['','chg','no'][i]}"><input type="radio" name="${id}" value="${o}"${v.c===o?' checked':''}>${o}</label>`).join('')}</div><input class="note" placeholder="Note (optional)" value="${(v.n||'').replace(/"/g,'&quot;')}"></div>`}).join('')}
+const items=[...document.querySelectorAll('.item')];
+function save(){const s={};items.forEach(it=>{const c=it.querySelector('input:checked');s[it.dataset.id]={c:c?c.value:'',n:it.querySelector('.note').value}});try{localStorage.setItem(key,JSON.stringify(s))}catch(e){}document.getElementById('count').textContent=items.filter(it=>it.querySelector('input:checked')).length+' of '+items.length+' answered'}
+items.forEach(it=>it.addEventListener('input',save));save();
+document.getElementById('copy').addEventListener('click',()=>{const lines=items.map((it,i)=>{const c=it.querySelector('input:checked');const note=it.querySelector('.note').value.trim();return `${i+1}. ${it.dataset.t}: ${c?c.value:'(no answer)'}${note?'. Note: '+note:''}`});const text='Reptilia approvals from Willem\n'+lines.join('\n');const b=document.getElementById('copy');(navigator.clipboard?navigator.clipboard.writeText(text):Promise.reject()).then(()=>{b.textContent='Copied, paste into WhatsApp'},()=>{prompt('Copy this:',text)});setTimeout(()=>b.textContent='Copy my answers',2500)});
+</script>
+</body>
+</html>
