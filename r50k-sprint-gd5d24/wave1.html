@@ -1,0 +1,487 @@
+<!doctype html><html lang="en"><head><meta name="robots" content="noindex,nofollow,noarchive"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"></head><body><p style="margin:0 0 12px;font-family:system-ui"><a href="index.html">&larr; Sprint hub</a></p><title>Guesthouse Test Wave 1</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap">
+<style>
+/* Layout: one narrow reading column; a sticky jump bar; each lead is a self-contained send card. */
+:root{
+  --bg:#f6f4f1; --surface:#ffffff; --fg:#1f1b17; --muted:#6c645c; --line:#e3ddd5;
+  --accent:#c2551a; --accent-soft:#fbe9dd; --ok:#2e7d4f; --warn:#a2611a; --bad:#b03a2e;
+  --display:"Instrument Sans",system-ui,sans-serif; --body:"Inter",system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#171412; --surface:#211d1a; --fg:#f0ebe5; --muted:#a59c92; --line:#3a332d;
+  --accent:#ff9a5c; --accent-soft:#3a261a; --ok:#6cc08b; --warn:#e3a457; --bad:#ef7b6c; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#171412; --surface:#211d1a; --fg:#f0ebe5; --muted:#a59c92; --line:#3a332d;
+  --accent:#ff9a5c; --accent-soft:#3a261a; --ok:#6cc08b; --warn:#e3a457; --bad:#ef7b6c; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font:15px/1.55 var(--body)}
+.wrap{max-width:860px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 64px;display:grid;gap:36px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.2}
+h1{font-size:30px} h2{font-size:21px;margin-bottom:10px} h3{font-size:17px}
+p{margin:0} .muted,.hint{color:var(--muted)} .hint{font-size:13px}
+a{color:var(--accent)}
+.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:600}
+.status{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.pill{border:1px solid var(--line);background:var(--surface);border-radius:99px;padding:4px 12px;font-size:13px}
+.pill b{font-variant-numeric:tabular-nums}
+.pill.warn{border-color:var(--warn);color:var(--warn)}
+nav.jump{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding-block:8px;display:flex;gap:6px;overflow-x:auto}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+nav.jump a{white-space:nowrap;font-size:13px;text-decoration:none;color:var(--fg);padding:4px 10px;border-radius:99px;border:1px solid var(--line);background:var(--surface)}
+section{display:grid;gap:12px;min-width:0}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:grid;gap:10px;min-width:0}
+.check{display:grid;gap:8px} .check label{display:flex;gap:10px;align-items:flex-start}
+.check input,.done input{margin-top:4px;accent-color:var(--accent);width:16px;height:16px;flex:none}
+.tbl{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:14px}
+th,td{text-align:left;vertical-align:top;padding:9px 12px;border-bottom:1px solid var(--line)}
+th{font-size:12px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+tr:last-child td{border-bottom:0}
+.lead{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;display:grid;gap:12px;min-width:0;scroll-margin-top:60px}
+.lh{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start}
+.num{font-family:var(--mono);font-size:12px;color:var(--accent)}
+.town{font-size:13px;color:var(--muted)}
+.rb{font-weight:600} .rb-strong{color:var(--accent)} .rb-none{color:var(--muted)}
+.done{font-size:13px;display:flex;gap:8px;align-items:flex-start;border:1px solid var(--line);border-radius:8px;padding:6px 10px}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px 16px;margin:0}
+.facts div{min-width:0} .facts .wide{grid-column:1/-1}
+dt{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em} dd{margin:0;overflow-wrap:anywhere}
+.sel{user-select:all;font-family:var(--mono);font-size:13px}
+.cb{border:1px solid var(--line);border-radius:8px;overflow:hidden;min-width:0}
+.cbh{display:flex;justify-content:space-between;align-items:center;padding:6px 10px;background:var(--accent-soft);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+pre{margin:0;padding:12px;white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.55 var(--body)}
+button.copy{font:600 13px var(--body);border:1px solid var(--accent);color:var(--accent);background:var(--surface);border-radius:6px;padding:3px 12px;cursor:pointer}
+button.copy:focus-visible,summary:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+details{border-top:1px dashed var(--line);padding-top:8px} summary{cursor:pointer;font-weight:600;font-size:14px}
+details ul{margin:8px 0 0;padding-left:20px;display:grid;gap:4px}
+.fu{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;display:grid;gap:10px}
+ol.steps{margin:0;padding-left:22px;display:grid;gap:8px}
+.callout{border-left:3px solid var(--warn);background:var(--surface);padding:12px 14px;border-radius:0 8px 8px 0}
+code{font-family:var(--mono);font-size:13px}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+
+<div class="wrap">
+<header>
+  <p class="eyebrow">ReviewTap GuestOps · direct outreach</p>
+  <h1>Guesthouse Test Wave 1</h1>
+  <p class="muted" style="margin-top:6px">Everything you need to send, chase and close the first 10 guesthouses. Built 15 Nov 2026. You send from <b>jacques@reviewtap.co.za</b>.</p>
+  <div class="status">
+    <span class="pill"><b>10</b> demos live</span>
+    <span class="pill"><b>0</b> sent</span>
+    <span class="pill">Demos expire <b>31 Jan 2027</b></span>
+    <span class="pill warn">Price not decided yet</span>
+  </div>
+</header>
+
+<nav class="jump" aria-label="Sections">
+  <a href="#before">Before you send</a><a href="#schedule">Schedule</a><a href="#leads">The 10 emails</a><a href="#followups">Follow-ups</a><a href="#call">The call</a><a href="#track">Tracking</a><a href="#files">Where things live</a>
+</nav>
+
+<section id="before">
+  <h2>Before you send</h2>
+  <div class="panel check">
+    <label><input type="checkbox" id="c1" data-k="c1"><span><b>Decide the price you'll quote on the call.</b> Nothing in the emails mentions price. For reference, the last guesthouse you signed, Maison de Blom, took R2,250 upfront, R2,250 on day 14, then R2,499 a month.</span></label>
+    <label><input type="checkbox" id="c2" data-k="c2"><span><b>Block the call slots:</b> Monday 23 November at 14:00 or Tuesday 24 November at 14:00. Your calendar is clear then. Use Wednesday 25 or Thursday 26 November at 14:00 for later replies.</span></label>
+    <label><input type="checkbox" id="c3" data-k="c3"><span><b>Open two demos yourself</b> with the "preview" link on each card (preview views aren't tracked), so you know what they'll see.</span></label>
+    <label><input type="checkbox" id="c4" data-k="c4"><span><b>Send from jacques@reviewtap.co.za,</b> the address named on every demo. Send one at a time, not as a group with the others in CC or BCC.</span></label>
+    <label><input type="checkbox" id="c5" data-k="c5"><span><b>Send Thursday 19 November between 08:00 and 10:00.</b></span></label>
+  </div>
+  <p class="hint">Ticks are saved in this browser only.</p>
+</section>
+
+<section id="schedule">
+  <h2>Schedule</h2>
+  <div class="tbl"><table>
+    <tr><th>When</th><th>What</th><th>Who gets it</th></tr>
+    <tr><td>Thu 19 Nov, 08:00 to 10:00</td><td>Email 1</td><td>All 10</td></tr>
+    <tr><td>Fri 20 Nov</td><td>WhatsApp</td><td>Anyone who hasn't replied</td></tr>
+    <tr><td>Mon 23 / Tue 24 Nov, 14:00</td><td>Live demo calls</td><td>Anyone who said yes</td></tr>
+    <tr><td>Mon 23 Nov</td><td>Email 2A or 2B</td><td>2A if they opened the demo, 2B if they didn't. Check in the admin</td></tr>
+    <tr><td>Tue 1 Dec</td><td>Email 3, the close-out</td><td>Anyone still silent</td></tr>
+    <tr><td>Wed 25 Nov</td><td>Score the wave</td><td>See <a href="#track">Tracking</a></td></tr>
+  </table></div>
+</section>
+
+<section id="leads">
+  <h2>The 10 emails</h2>
+  <p class="muted">Each card has the address, a copy-ready subject and email, the WhatsApp message, what to confirm on the call, and what's wrong with their website. Every email opens with a real problem found on that property's own site.</p>
+  <article class="lead" id="abangane-guest-lodge">
+<header class="lh"><div><span class="num">01</span><h3>Abangane Guest Lodge</h3><p class="town">Hazyview · rebuild case: <b class="rb rb-strong">Strong</b></p></div>
+<label class="done"><input type="checkbox" id="sent-abangane-guest-lodge" data-k="sent-abangane-guest-lodge"> Email sent</label></header>
+<dl class="facts"><div><dt>To</dt><dd><span class="sel">info@abangane.com</span></dd></div><div><dt>Cell</dt><dd><span class="sel">+27 64 530 2538</span></dd></div>
+<div><dt>Demo</dt><dd><a href="https://reviewtap-ops-demos.netlify.app/guestops/abangane-guest-lodge" target="_blank" rel="noopener">reviewtap-ops-demos.netlify.app/guestops/abangane-guest-lodge</a></dd></div>
+<div><dt>Check it yourself</dt><dd><a href="https://reviewtap-ops-demos.netlify.app/guestops/abangane-guest-lodge?preview=1" target="_blank" rel="noopener">preview (not tracked)</a></dd></div>
+<div class="wide"><dt>Scenario</dt><dd>Couple, Thu 14 to Sat 16 Jan, Luxury Room, 22:17, asks about the nearest Kruger gate and a game drive.</dd></div></dl>
+<div class="cb"><div class="cbh"><span>Subject</span><button type="button" class="copy" data-t="s1">Copy</button></div><pre id="s1">A guest messaging Abangane at 22:17</pre></div>
+<div class="cb"><div class="cbh"><span>Email 1</span><button type="button" class="copy" data-t="e1">Copy</button></div><pre id="e1">Good day,
+
+I&#x27;m Jacques from ReviewTap. I built something for Abangane Guest Lodge and I&#x27;d rather you saw it before I explain anything.
+
+Your website takes enquiries by form, email and phone, but there is no WhatsApp, and the rate table on your Rooms and Rates page ends at October 2026. A couple planning a January Kruger trip at night can&#x27;t see a current price and has nobody to ask.
+
+This one-minute demo uses your own rooms, rates and photos. It shows a guest messaging you late at night and getting an answer straight away, the booking request your team would find the next morning, and the Google review request that goes out after they check out:
+https://reviewtap-ops-demos.netlify.app/guestops/abangane-guest-lodge
+
+It works best on your phone. If it&#x27;s useful, I&#x27;ll show you it running live on a 15-minute call. Would Monday 23 November at 14:00 or Tuesday 24 November at 14:00 suit? If it&#x27;s not for you, just reply &quot;no thanks&quot; and I won&#x27;t follow up.
+
+Kind regards,
+Jacques Groenewald
+ReviewTap
+jacques@reviewtap.co.za
+
+P.S. While building it I noticed a few things on your site you may want to know about: the German and French links go to an error page, and the meal sections contradict each other (one says dinner is included, another says you don&#x27;t serve dinner). I also build guesthouse websites and would be glad to show you what a refreshed one could look like.</pre></div>
+<details><summary>WhatsApp (Fri 20 Nov, only if no reply)</summary><div class="cb"><div class="cbh"><span>WhatsApp</span><button type="button" class="copy" data-t="w1">Copy</button></div><pre id="w1">Hi there, it&#x27;s Jacques from ReviewTap. I emailed you yesterday about a short demo I built for Abangane Guest Lodge, using your own rooms and photos. It shows a guest messaging you at night and getting an answer straight away. Here&#x27;s the link if it&#x27;s easier on your phone: https://reviewtap-ops-demos.netlify.app/guestops/abangane-guest-lodge
+If it&#x27;s not for you, just say so and I won&#x27;t message again.</pre></div><p class="hint"><a href="https://wa.me/27645302538?text=Hi%20there%2C%20it%27s%20Jacques%20from%20ReviewTap.%20I%20emailed%20you%20yesterday%20about%20a%20short%20demo%20I%20built%20for%20Abangane%20Guest%20Lodge%2C%20using%20your%20own%20rooms%20and%20photos.%20It%20shows%20a%20guest%20messaging%20you%20at%20night%20and%20getting%20an%20answer%20straight%20away.%20Here%27s%20the%20link%20if%20it%27s%20easier%20on%20your%20phone%3A%20https%3A//reviewtap-ops-demos.netlify.app/guestops/abangane-guest-lodge%0AIf%20it%27s%20not%20for%20you%2C%20just%20say%20so%20and%20I%20won%27t%20message%20again." target="_blank" rel="noopener">Open in WhatsApp with this text</a> (may not open from inside this page; copy instead if it doesn't).</p></details>
+<details><summary>Confirm on the call</summary><ul><li>Rates: Luxury Room R3,500 and Villa R4,300 come from their NightsBridge page for Jan 2027; Honeymoon R2,900 is the expired website rate.</li><li>Is dinner included or R380 per person? The site says both.</li><li>Children: no under 12s, yet a kids&#x27; dinner price is listed.</li><li>Who decides? No owner named; a review mentions a manager, Sharon.</li><li>Check-in and check-out times, parking, pets: not published.</li></ul></details>
+<details><summary>Their website problems</summary><ul><li>Rate table expired (Nov 2025 to Oct 2026)</li><li>German /de/ and French /fr/ links return 404</li><li>Raw HTML visible in the cancellation table</li><li>Typos and the logo line &#x27;BECAUSE YOU WORTH IT&#x27;</li><li>http does not redirect to https</li><li>No WhatsApp</li></ul></details>
+</article><article class="lead" id="centre-ville-guesthouse">
+<header class="lh"><div><span class="num">02</span><h3>Centre-Ville Guesthouse</h3><p class="town">Franschhoek · rebuild case: <b class="rb rb-minor">Minor</b></p></div>
+<label class="done"><input type="checkbox" id="sent-centre-ville-guesthouse" data-k="sent-centre-ville-guesthouse"> Email sent</label></header>
+<dl class="facts"><div><dt>To</dt><dd><span class="sel">info@centre-ville.co.za</span></dd></div><div><dt>Cell</dt><dd><span class="sel">+27 67 943 2673</span></dd></div>
+<div><dt>Demo</dt><dd><a href="https://reviewtap-ops-demos.netlify.app/guestops/centre-ville-guesthouse" target="_blank" rel="noopener">reviewtap-ops-demos.netlify.app/guestops/centre-ville-guesthouse</a></dd></div>
+<div><dt>Check it yourself</dt><dd><a href="https://reviewtap-ops-demos.netlify.app/guestops/centre-ville-guesthouse?preview=1" target="_blank" rel="noopener">preview (not tracked)</a></dd></div>
+<div class="wide"><dt>Scenario</dt><dd>Honeymoon couple, Tue 12 to Fri 15 Jan, Splendour, 22:52, asks for somewhere private to sit outside.</dd></div></dl>
+<div class="cb"><div class="cbh"><span>Subject</span><button type="button" class="copy" data-t="s2">Copy</button></div><pre id="s2">Jaco and Elsa, a guest messaging Centre-Ville at 22:52</pre></div>
+<div class="cb"><div class="cbh"><span>Email 1</span><button type="button" class="copy" data-t="e2">Copy</button></div><pre id="e2">Hi Jaco and Elsa,
+
+I&#x27;m Jacques from ReviewTap. I built something for Centre-Ville Guesthouse and I&#x27;d rather you saw it before I explain anything.
+
+Something you&#x27;ll want to know first: on your website the email and phone in the footer look right, but the links behind them are template placeholders. On a phone, tapping your email opens contact@mysite.com and tapping your number dials 123-456-7890. There&#x27;s also no WhatsApp, so a couple planning a honeymoon late at night has no working way to reach you from your site.
+
+This one-minute demo uses your own rooms, rates and photos. It shows a guest messaging you late at night and getting an answer straight away, the booking request your team would find the next morning, and the Google review request that goes out after they check out:
+https://reviewtap-ops-demos.netlify.app/guestops/centre-ville-guesthouse
+
+It works best on your phone. If it&#x27;s useful, I&#x27;ll show you it running live on a 15-minute call. Would Monday 23 November at 14:00 or Tuesday 24 November at 14:00 suit? If it&#x27;s not for you, just reply &quot;no thanks&quot; and I won&#x27;t follow up.
+
+Kind regards,
+Jacques Groenewald
+ReviewTap
+jacques@reviewtap.co.za
+
+P.S. The footer fix is a five-minute job for whoever looks after your site. If you&#x27;d like us to handle it, along with a WhatsApp button, just say.</pre></div>
+<details><summary>WhatsApp (Fri 20 Nov, only if no reply)</summary><div class="cb"><div class="cbh"><span>WhatsApp</span><button type="button" class="copy" data-t="w2">Copy</button></div><pre id="w2">Hi Jaco and Elsa, it&#x27;s Jacques from ReviewTap. I emailed you yesterday about a short demo I built for Centre-Ville Guesthouse, using your own rooms and photos. It shows a guest messaging you at night and getting an answer straight away. Here&#x27;s the link if it&#x27;s easier on your phone: https://reviewtap-ops-demos.netlify.app/guestops/centre-ville-guesthouse
+If it&#x27;s not for you, just say so and I won&#x27;t message again.</pre></div><p class="hint"><a href="https://wa.me/27679432673?text=Hi%20Jaco%20and%20Elsa%2C%20it%27s%20Jacques%20from%20ReviewTap.%20I%20emailed%20you%20yesterday%20about%20a%20short%20demo%20I%20built%20for%20Centre-Ville%20Guesthouse%2C%20using%20your%20own%20rooms%20and%20photos.%20It%20shows%20a%20guest%20messaging%20you%20at%20night%20and%20getting%20an%20answer%20straight%20away.%20Here%27s%20the%20link%20if%20it%27s%20easier%20on%20your%20phone%3A%20https%3A//reviewtap-ops-demos.netlify.app/guestops/centre-ville-guesthouse%0AIf%20it%27s%20not%20for%20you%2C%20just%20say%20so%20and%20I%20won%27t%20message%20again." target="_blank" rel="noopener">Open in WhatsApp with this text</a> (may not open from inside this page; copy instead if it doesn't).</p></details>
+<details><summary>Confirm on the call</summary><ul><li>Rates are their published Oct to Apr rates; per room or per person is not stated.</li><li>Breakfast is not mentioned anywhere: is it offered?</li><li>Parking only appears on their NightsBridge page.</li><li>Address: the site says 9 Reservoir Street; maps say 9 Dirkie Uys Street.</li><li>Check-in times, pets, children: not published.</li></ul></details>
+<details><summary>Their website problems</summary><ul><li>Footer email and phone links are template placeholders</li><li>No contact page, form or WhatsApp</li><li>Gallery page has no text; rooms page sits at /rooms-2/</li><li>Heading misspells &#x27;Franschoek&#x27;</li><li>10% off pop-up with no terms</li></ul></details>
+</article><article class="lead" id="nyaleti-lodge">
+<header class="lh"><div><span class="num">03</span><h3>Nyaleti Lodge &amp; Villa</h3><p class="town">Hoedspruit · rebuild case: <b class="rb rb-strong">Strong</b></p></div>
+<label class="done"><input type="checkbox" id="sent-nyaleti-lodge" data-k="sent-nyaleti-lodge"> Email sent</label></header>
+<dl class="facts"><div><dt>To</dt><dd><span class="sel">info@nyaletilodge.co.za</span></dd></div><div><dt>Cell</dt><dd><span class="sel">063 783 9441</span></dd></div>
+<div><dt>Demo</dt><dd><a href="https://reviewtap-ops-demos.netlify.app/guestops/nyaleti-lodge" target="_blank" rel="noopener">reviewtap-ops-demos.netlify.app/guestops/nyaleti-lodge</a></dd></div>
+<div><dt>Check it yourself</dt><dd><a href="https://reviewtap-ops-demos.netlify.app/guestops/nyaleti-lodge?preview=1" target="_blank" rel="noopener">preview (not tracked)</a></dd></div>
+<div class="wide"><dt>Scenario</dt><dd>Couple, Mon 28 to Thu 31 Dec, Jacaranda room, 22:41, asks for a Big 5 game drive (R1,130 pp).</dd></div></dl>
+<div class="cb"><div class="cbh"><span>Subject</span><button type="button" class="copy" data-t="s3">Copy</button></div><pre id="s3">Ann and Marlon, a guest messaging Nyaleti at 22:41</pre></div>
+<div class="cb"><div class="cbh"><span>Email 1</span><button type="button" class="copy" data-t="e3">Copy</button></div><pre id="e3">Hi Ann and Marlon,
+
+I&#x27;m Jacques from ReviewTap. I built something for Nyaleti Lodge &amp; Villa and I&#x27;d rather you saw it before I explain anything.
+
+Your website says &quot;We reply within 24 hrs&quot; and explains you&#x27;re a small lodge with no night staff. That&#x27;s honest, and it&#x27;s exactly the gap: a couple planning a Kruger trip at 22:00 usually books whoever answers first, and there&#x27;s no WhatsApp on your site to catch them.
+
+This one-minute demo uses your own rooms, rates and photos. It shows a guest messaging you late at night and getting an answer straight away, the booking request your team would find the next morning, and the Google review request that goes out after they check out:
+https://reviewtap-ops-demos.netlify.app/guestops/nyaleti-lodge
+
+It works best on your phone. If it&#x27;s useful, I&#x27;ll show you it running live on a 15-minute call. Would Monday 23 November at 14:00 or Tuesday 24 November at 14:00 suit? If it&#x27;s not for you, just reply &quot;no thanks&quot; and I won&#x27;t follow up.
+
+Kind regards,
+Jacques Groenewald
+ReviewTap
+jacques@reviewtap.co.za
+
+P.S. In the demo the guest asks about a Big 5 drive and gets your real times and price. I noticed the Eastgate transfer is R250 per person on your FAQ but R300 on your activities page, worth making them match.</pre></div>
+<details><summary>WhatsApp (Fri 20 Nov, only if no reply)</summary><div class="cb"><div class="cbh"><span>WhatsApp</span><button type="button" class="copy" data-t="w3">Copy</button></div><pre id="w3">Hi Ann and Marlon, it&#x27;s Jacques from ReviewTap. I emailed you yesterday about a short demo I built for Nyaleti Lodge &amp; Villa, using your own rooms and photos. It shows a guest messaging you at night and getting an answer straight away. Here&#x27;s the link if it&#x27;s easier on your phone: https://reviewtap-ops-demos.netlify.app/guestops/nyaleti-lodge
+If it&#x27;s not for you, just say so and I won&#x27;t message again.</pre></div><p class="hint"><a href="https://wa.me/27637839441?text=Hi%20Ann%20and%20Marlon%2C%20it%27s%20Jacques%20from%20ReviewTap.%20I%20emailed%20you%20yesterday%20about%20a%20short%20demo%20I%20built%20for%20Nyaleti%20Lodge%20%26%20Villa%2C%20using%20your%20own%20rooms%20and%20photos.%20It%20shows%20a%20guest%20messaging%20you%20at%20night%20and%20getting%20an%20answer%20straight%20away.%20Here%27s%20the%20link%20if%20it%27s%20easier%20on%20your%20phone%3A%20https%3A//reviewtap-ops-demos.netlify.app/guestops/nyaleti-lodge%0AIf%20it%27s%20not%20for%20you%2C%20just%20say%20so%20and%20I%20won%27t%20message%20again." target="_blank" rel="noopener">Open in WhatsApp with this text</a> (may not open from inside this page; copy instead if it doesn't).</p></details>
+<details><summary>Confirm on the call</summary><ul><li>Rates have no season or end date: is R2,850 right for December?</li><li>Transfer price R250 or R300?</li><li>Acacia: self-catering or not, 2 or 3 guests?</li><li>Parking and children policy: not published.</li></ul></details>
+<details><summary>Their website problems</summary><ul><li>Says &#x27;We reply within 24 hrs&#x27;, no WhatsApp</li><li>Contradictory transfer prices</li><li>Self-catering and capacity contradictions</li><li>Copy-paste errors on room pages</li><li>Copyright 2024, heavy pages</li></ul></details>
+</article><article class="lead" id="dreamfields-guest-house">
+<header class="lh"><div><span class="num">04</span><h3>Dreamfields Guest House</h3><p class="town">Hazyview · rebuild case: <b class="rb rb-minor">Minor</b></p></div>
+<label class="done"><input type="checkbox" id="sent-dreamfields-guest-house" data-k="sent-dreamfields-guest-house"> Email sent</label></header>
+<dl class="facts"><div><dt>To</dt><dd><span class="sel">bookings@dreamfields.co.za</span></dd></div><div><dt>Cell</dt><dd><span class="sel">+27 72 337 7810</span></dd></div>
+<div><dt>Demo</dt><dd><a href="https://reviewtap-ops-demos.netlify.app/guestops/dreamfields-guest-house" target="_blank" rel="noopener">reviewtap-ops-demos.netlify.app/guestops/dreamfields-guest-house</a></dd></div>
+<div><dt>Check it yourself</dt><dd><a href="https://reviewtap-ops-demos.netlify.app/guestops/dreamfields-guest-house?preview=1" target="_blank" rel="noopener">preview (not tracked)</a></dd></div>
+<div class="wide"><dt>Scenario</dt><dd>Couple, Thu 17 to Sun 20 Dec, Luxury Queen, 22:41, asks about a take-away breakfast for an early Kruger start.</dd></div></dl>
+<div class="cb"><div class="cbh"><span>Subject</span><button type="button" class="copy" data-t="s4">Copy</button></div><pre id="s4">Fikile and Pinnacle, a guest messaging Dreamfields at 22:41</pre></div>
+<div class="cb"><div class="cbh"><span>Email 1</span><button type="button" class="copy" data-t="e4">Copy</button></div><pre id="e4">Hi Fikile and Pinnacle,
+
+I&#x27;m Jacques from ReviewTap. I built something for Dreamfields Guest House and I&#x27;d rather you saw it before I explain anything.
+
+Your website takes enquiries by form, phone and email, but there&#x27;s no WhatsApp and no rates, so a couple planning a December Kruger trip at night waits until the next day for a price.
+
+This one-minute demo uses your own rooms, rates and photos. It shows a guest messaging you late at night and getting an answer straight away, the booking request your team would find the next morning, and the Google review request that goes out after they check out:
+https://reviewtap-ops-demos.netlify.app/guestops/dreamfields-guest-house
+
+It works best on your phone. If it&#x27;s useful, I&#x27;ll show you it running live on a 15-minute call. Would Monday 23 November at 14:00 or Tuesday 24 November at 14:00 suit? If it&#x27;s not for you, just reply &quot;no thanks&quot; and I won&#x27;t follow up.
+
+Kind regards,
+Jacques Groenewald
+ReviewTap
+jacques@reviewtap.co.za
+
+P.S. One thing to look at today, even if the demo isn&#x27;t for you: your full bank account number and branch code are printed on your public contact page. Fraudsters copy these to send guests fake &quot;updated banking details&quot;. Your rooms page already says bank details are given on request, so it&#x27;s safe to take them off.</pre></div>
+<details><summary>WhatsApp (Fri 20 Nov, only if no reply)</summary><div class="cb"><div class="cbh"><span>WhatsApp</span><button type="button" class="copy" data-t="w4">Copy</button></div><pre id="w4">Hi Fikile and Pinnacle, it&#x27;s Jacques from ReviewTap. I emailed you yesterday about a short demo I built for Dreamfields Guest House, using your own rooms and photos. It shows a guest messaging you at night and getting an answer straight away. Here&#x27;s the link if it&#x27;s easier on your phone: https://reviewtap-ops-demos.netlify.app/guestops/dreamfields-guest-house
+If it&#x27;s not for you, just say so and I won&#x27;t message again.</pre></div><p class="hint"><a href="https://wa.me/27723377810?text=Hi%20Fikile%20and%20Pinnacle%2C%20it%27s%20Jacques%20from%20ReviewTap.%20I%20emailed%20you%20yesterday%20about%20a%20short%20demo%20I%20built%20for%20Dreamfields%20Guest%20House%2C%20using%20your%20own%20rooms%20and%20photos.%20It%20shows%20a%20guest%20messaging%20you%20at%20night%20and%20getting%20an%20answer%20straight%20away.%20Here%27s%20the%20link%20if%20it%27s%20easier%20on%20your%20phone%3A%20https%3A//reviewtap-ops-demos.netlify.app/guestops/dreamfields-guest-house%0AIf%20it%27s%20not%20for%20you%2C%20just%20say%20so%20and%20I%20won%27t%20message%20again." target="_blank" rel="noopener">Open in WhatsApp with this text</a> (may not open from inside this page; copy instead if it doesn't).</p></details>
+<details><summary>Confirm on the call</summary><ul><li>Rates R2,400 and R3,150 come from their NightsBridge page for 17 to 20 Dec.</li><li>Take-away breakfast: the site mentions it for Panorama trips and hosted Kruger drives, not self-drive.</li><li>Email domain dreamfields.co.za differs from the website domain: does it work?</li></ul></details>
+<details><summary>Their website problems</summary><ul><li>Full bank details on the public contact page</li><li>No rates on the site</li><li>Stray &#x27;Room 1&#x27; labels, Room 1 has no photos</li><li>Leftover template menu items</li><li>No WhatsApp</li></ul></details>
+</article><article class="lead" id="muunga-bush-lodge">
+<header class="lh"><div><span class="num">05</span><h3>Muunga Bush Lodge &amp; Spa</h3><p class="town">Hoedspruit · rebuild case: <b class="rb rb-none">None</b></p></div>
+<label class="done"><input type="checkbox" id="sent-muunga-bush-lodge" data-k="sent-muunga-bush-lodge"> Email sent</label></header>
+<dl class="facts"><div><dt>To</dt><dd><span class="sel">bookings@muungalodge.com</span></dd></div><div><dt>Cell</dt><dd><span class="sel">082 522 9359</span></dd></div>
+<div><dt>Demo</dt><dd><a href="https://reviewtap-ops-demos.netlify.app/guestops/muunga-bush-lodge" target="_blank" rel="noopener">reviewtap-ops-demos.netlify.app/guestops/muunga-bush-lodge</a></dd></div>
+<div><dt>Check it yourself</dt><dd><a href="https://reviewtap-ops-demos.netlify.app/guestops/muunga-bush-lodge?preview=1" target="_blank" rel="noopener">preview (not tracked)</a></dd></div>
+<div class="wide"><dt>Scenario</dt><dd>Couple, Thu 14 to Sun 17 Jan, Superior Bush Suite, 22:17, asks for a couples massage.</dd></div></dl>
+<div class="cb"><div class="cbh"><span>Subject</span><button type="button" class="copy" data-t="s5">Copy</button></div><pre id="s5">Ruan and Jenny, a guest messaging Muunga at 22:17</pre></div>
+<div class="cb"><div class="cbh"><span>Email 1</span><button type="button" class="copy" data-t="e5">Copy</button></div><pre id="e5">Hi Ruan and Jenny,
+
+I&#x27;m Jacques from ReviewTap. I built something for Muunga Bush Lodge &amp; Spa and I&#x27;d rather you saw it before I explain anything.
+
+You have a lovely site, and you already invite guests to WhatsApp you. It also says &quot;We answer most messages the same day&quot;, which means a message at 22:00 waits for one of you to pick up the phone. You&#x27;ve earned a 5.0 on Google, from 53 reviews: more of your happy guests could be leaving one.
+
+This one-minute demo uses your own rooms, rates and photos. It shows a guest messaging you late at night and getting an answer straight away, the booking request your team would find the next morning, and the Google review request that goes out after they check out:
+https://reviewtap-ops-demos.netlify.app/guestops/muunga-bush-lodge
+
+It works best on your phone. If it&#x27;s useful, I&#x27;ll show you it running live on a 15-minute call. Would Monday 23 November at 14:00 or Tuesday 24 November at 14:00 suit? If it&#x27;s not for you, just reply &quot;no thanks&quot; and I won&#x27;t follow up.
+
+Kind regards,
+Jacques Groenewald
+ReviewTap
+jacques@reviewtap.co.za
+
+P.S. In the demo an anniversary couple asks for a side-by-side massage and gets your real spa hours, prices and two-day notice rule.</pre></div>
+<details><summary>WhatsApp (Fri 20 Nov, only if no reply)</summary><div class="cb"><div class="cbh"><span>WhatsApp</span><button type="button" class="copy" data-t="w5">Copy</button></div><pre id="w5">Hi Ruan and Jenny, it&#x27;s Jacques from ReviewTap. I emailed you yesterday about a short demo I built for Muunga Bush Lodge &amp; Spa, using your own rooms and photos. It shows a guest messaging you at night and getting an answer straight away. Here&#x27;s the link if it&#x27;s easier on your phone: https://reviewtap-ops-demos.netlify.app/guestops/muunga-bush-lodge
+If it&#x27;s not for you, just say so and I won&#x27;t message again.</pre></div><p class="hint"><a href="https://wa.me/27825229359?text=Hi%20Ruan%20and%20Jenny%2C%20it%27s%20Jacques%20from%20ReviewTap.%20I%20emailed%20you%20yesterday%20about%20a%20short%20demo%20I%20built%20for%20Muunga%20Bush%20Lodge%20%26%20Spa%2C%20using%20your%20own%20rooms%20and%20photos.%20It%20shows%20a%20guest%20messaging%20you%20at%20night%20and%20getting%20an%20answer%20straight%20away.%20Here%27s%20the%20link%20if%20it%27s%20easier%20on%20your%20phone%3A%20https%3A//reviewtap-ops-demos.netlify.app/guestops/muunga-bush-lodge%0AIf%20it%27s%20not%20for%20you%2C%20just%20say%20so%20and%20I%20won%27t%20message%20again." target="_blank" rel="noopener">Open in WhatsApp with this text</a> (may not open from inside this page; copy instead if it doesn't).</p></details>
+<details><summary>Confirm on the call</summary><ul><li>Rates come from their RoomRaccoon page for 14 to 17 Jan.</li><li>Site and booking page disagree on cancellation (21 vs 5 days), balance due and check-in time.</li><li>Suite is &#x27;Luxury&#x27; on the booking page, &#x27;Superior&#x27; on the site.</li></ul></details>
+<details><summary>Their website problems</summary><ul><li>Strong site: do NOT pitch a rebuild</li><li>No rates on the site</li><li>Room names differ from the booking page</li></ul></details>
+</article><article class="lead" id="droom-guesthouse">
+<header class="lh"><div><span class="num">06</span><h3>Droom Guesthouse</h3><p class="town">Franschhoek · rebuild case: <b class="rb rb-strong">Strong</b></p></div>
+<label class="done"><input type="checkbox" id="sent-droom-guesthouse" data-k="sent-droom-guesthouse"> Email sent</label></header>
+<dl class="facts"><div><dt>To</dt><dd><span class="sel">info@droomguesthouse.com</span></dd></div><div><dt>Cell</dt><dd><span class="sel">+27 71 142 2673</span></dd></div>
+<div><dt>Demo</dt><dd><a href="https://reviewtap-ops-demos.netlify.app/guestops/droom-guesthouse" target="_blank" rel="noopener">reviewtap-ops-demos.netlify.app/guestops/droom-guesthouse</a></dd></div>
+<div><dt>Check it yourself</dt><dd><a href="https://reviewtap-ops-demos.netlify.app/guestops/droom-guesthouse?preview=1" target="_blank" rel="noopener">preview (not tracked)</a></dd></div>
+<div class="wide"><dt>Scenario</dt><dd>Couple, Sun 27 to Wed 30 Dec, Honeymoon Suite with hot tub, 22:08, asks for bubbly for their 10th anniversary.</dd></div></dl>
+<div class="cb"><div class="cbh"><span>Subject</span><button type="button" class="copy" data-t="s6">Copy</button></div><pre id="s6">Kathleen and Steven, something hidden on your website</pre></div>
+<div class="cb"><div class="cbh"><span>Email 1</span><button type="button" class="copy" data-t="e6">Copy</button></div><pre id="e6">Hi Kathleen and Steven,
+
+I&#x27;m Jacques from ReviewTap. I built something for Droom Guesthouse and I&#x27;d rather you saw it before I explain anything.
+
+First, something you&#x27;ll want to know: every page of droomguesthouse.com has a hidden link to a Turkish betting site, placed just above the footer. Visitors can&#x27;t see it but Google can. It usually means the WordPress site has been hacked, and it can hurt how Google ranks you, so whoever looks after your site should remove it and update the site.
+
+Separately, I built a short demo for Droom. Your site has no WhatsApp, and couples planning a Winelands anniversary often only get to their enquiry late at night.
+
+This one-minute demo uses your own rooms, rates and photos. It shows a guest messaging you late at night and getting an answer straight away, the booking request your team would find the next morning, and the Google review request that goes out after they check out:
+https://reviewtap-ops-demos.netlify.app/guestops/droom-guesthouse
+
+It works best on your phone. If it&#x27;s useful, I&#x27;ll show you it running live on a 15-minute call. Would Monday 23 November at 14:00 or Tuesday 24 November at 14:00 suit? If it&#x27;s not for you, just reply &quot;no thanks&quot; and I won&#x27;t follow up.
+
+Kind regards,
+Jacques Groenewald
+ReviewTap
+jacques@reviewtap.co.za
+
+P.S. The English pages also still carry Dutch titles and labels (&quot;Kamers&quot;, &quot;Wie zijn wij?&quot;), and the privacy policy refers to Belgian rules rather than POPIA. I build guesthouse websites if a clean rebuild would be easier than patching.</pre></div>
+<details><summary>WhatsApp (Fri 20 Nov, only if no reply)</summary><div class="cb"><div class="cbh"><span>WhatsApp</span><button type="button" class="copy" data-t="w6">Copy</button></div><pre id="w6">Hi Kathleen and Steven, it&#x27;s Jacques from ReviewTap. I emailed you yesterday about a short demo I built for Droom Guesthouse, using your own rooms and photos. It shows a guest messaging you at night and getting an answer straight away. Here&#x27;s the link if it&#x27;s easier on your phone: https://reviewtap-ops-demos.netlify.app/guestops/droom-guesthouse
+If it&#x27;s not for you, just say so and I won&#x27;t message again.</pre></div><p class="hint"><a href="https://wa.me/27711422673?text=Hi%20Kathleen%20and%20Steven%2C%20it%27s%20Jacques%20from%20ReviewTap.%20I%20emailed%20you%20yesterday%20about%20a%20short%20demo%20I%20built%20for%20Droom%20Guesthouse%2C%20using%20your%20own%20rooms%20and%20photos.%20It%20shows%20a%20guest%20messaging%20you%20at%20night%20and%20getting%20an%20answer%20straight%20away.%20Here%27s%20the%20link%20if%20it%27s%20easier%20on%20your%20phone%3A%20https%3A//reviewtap-ops-demos.netlify.app/guestops/droom-guesthouse%0AIf%20it%27s%20not%20for%20you%2C%20just%20say%20so%20and%20I%20won%27t%20message%20again." target="_blank" rel="noopener">Open in WhatsApp with this text</a> (may not open from inside this page; copy instead if it doesn't).</p></details>
+<details><summary>Confirm on the call</summary><ul><li>Rates (R7,950, R7,374, R4,489) are rack rates from their Semper booking engine.</li><li>Parking and pets: not published.</li><li>Bed sizes differ between the site and Semper.</li></ul></details>
+<details><summary>Their website problems</summary><ul><li>Hidden gambling spam link on every page (hacked WordPress)</li><li>Half-translated English site</li><li>Copied Belgian privacy policy, no POPIA</li><li>Copy errors (&#x27;Marc Twain&#x27;, wrong suite specs)</li><li>Contact form only, no WhatsApp</li></ul></details>
+</article><article class="lead" id="cedar-garden">
+<header class="lh"><div><span class="num">07</span><h3>Cedar Garden B&amp;B</h3><p class="town">Underberg · rebuild case: <b class="rb rb-minor">Minor</b></p></div>
+<label class="done"><input type="checkbox" id="sent-cedar-garden" data-k="sent-cedar-garden"> Email sent</label></header>
+<dl class="facts"><div><dt>To</dt><dd><span class="sel">info@cedargarden.co.za</span></dd></div><div><dt>Cell</dt><dd><span class="sel">083 648 4111</span></dd></div>
+<div><dt>Demo</dt><dd><a href="https://reviewtap-ops-demos.netlify.app/guestops/cedar-garden" target="_blank" rel="noopener">reviewtap-ops-demos.netlify.app/guestops/cedar-garden</a></dd></div>
+<div><dt>Check it yourself</dt><dd><a href="https://reviewtap-ops-demos.netlify.app/guestops/cedar-garden?preview=1" target="_blank" rel="noopener">preview (not tracked)</a></dd></div>
+<div class="wide"><dt>Scenario</dt><dd>Family of 4, Mon 28 to Thu 31 Dec, four-sleeper on B&amp;B, 22:14, asks about a Sani Pass day trip.</dd></div></dl>
+<div class="cb"><div class="cbh"><span>Subject</span><button type="button" class="copy" data-t="s7">Copy</button></div><pre id="s7">Monica, your map link sends guests to another B&amp;B</pre></div>
+<div class="cb"><div class="cbh"><span>Email 1</span><button type="button" class="copy" data-t="e7">Copy</button></div><pre id="e7">Hi Monica,
+
+I&#x27;m Jacques from ReviewTap. I built something for Cedar Garden B&amp;B and I&#x27;d rather you saw it before I explain anything.
+
+The &quot;Cedar Garden, Underberg&quot; map link at the top of every page on your website opens the Google Maps listing for Sani Window Bed &amp; Breakfast, not yours, so a guest who taps it to find you lands on a different B&amp;B. Bookings also go through an enquiry form, so a family planning a Sani Pass trip at night waits until morning for an answer.
+
+This one-minute demo uses your own rooms, rates and photos. It shows a guest messaging you late at night and getting an answer straight away, the booking request your team would find the next morning, and the Google review request that goes out after they check out:
+https://reviewtap-ops-demos.netlify.app/guestops/cedar-garden
+
+It works best on your phone. If it&#x27;s useful, I&#x27;ll show you it running live on a 15-minute call. Would Monday 23 November at 14:00 or Tuesday 24 November at 14:00 suit? If it&#x27;s not for you, just reply &quot;no thanks&quot; and I won&#x27;t follow up.
+
+Kind regards,
+Jacques Groenewald
+ReviewTap
+jacques@reviewtap.co.za
+
+P.S. In the demo the family asks about a Sani Pass day trip and gets the Birds and Beyond tour you already recommend. Happy to fix the map link for you, along with a WhatsApp button.</pre></div>
+<details><summary>WhatsApp (Fri 20 Nov, only if no reply)</summary><div class="cb"><div class="cbh"><span>WhatsApp</span><button type="button" class="copy" data-t="w7">Copy</button></div><pre id="w7">Hi Monica, it&#x27;s Jacques from ReviewTap. I emailed you yesterday about a short demo I built for Cedar Garden B&amp;B, using your own rooms and photos. It shows a guest messaging you at night and getting an answer straight away. Here&#x27;s the link if it&#x27;s easier on your phone: https://reviewtap-ops-demos.netlify.app/guestops/cedar-garden
+If it&#x27;s not for you, just say so and I won&#x27;t message again.</pre></div><p class="hint"><a href="https://wa.me/27836484111?text=Hi%20Monica%2C%20it%27s%20Jacques%20from%20ReviewTap.%20I%20emailed%20you%20yesterday%20about%20a%20short%20demo%20I%20built%20for%20Cedar%20Garden%20B%26B%2C%20using%20your%20own%20rooms%20and%20photos.%20It%20shows%20a%20guest%20messaging%20you%20at%20night%20and%20getting%20an%20answer%20straight%20away.%20Here%27s%20the%20link%20if%20it%27s%20easier%20on%20your%20phone%3A%20https%3A//reviewtap-ops-demos.netlify.app/guestops/cedar-garden%0AIf%20it%27s%20not%20for%20you%2C%20just%20say%20so%20and%20I%20won%27t%20message%20again." target="_blank" rel="noopener">Open in WhatsApp with this text</a> (may not open from inside this page; copy instead if it doesn't).</p></details>
+<details><summary>Confirm on the call</summary><ul><li>Rooms aren&#x27;t named on the site: the demo uses descriptive names and computes rates from per-person prices.</li><li>Can the 4 and 8 sleeper units be booked on the B&amp;B rate?</li><li>Capacity 27 or 28?</li><li>Darren and Helga are named for guest requests: who reads enquiries?</li><li>Check-in times, pets, cancellation: not published.</li></ul></details>
+<details><summary>Their website problems</summary><ul><li>Header map link opens another B&amp;B&#x27;s Google listing</li><li>Malformed GPS on the contact page</li><li>Rooms not named, described or photographed individually</li><li>Typos, share image is a .tiff</li><li>Enquiry form only</li></ul></details>
+</article><article class="lead" id="cinzaco-dullstroom">
+<header class="lh"><div><span class="num">08</span><h3>Cinzaco Dullstroom Accommodation</h3><p class="town">Dullstroom · rebuild case: <b class="rb rb-minor">Minor</b></p></div>
+<label class="done"><input type="checkbox" id="sent-cinzaco-dullstroom" data-k="sent-cinzaco-dullstroom"> Email sent</label></header>
+<dl class="facts"><div><dt>To</dt><dd><span class="sel">info@cinzaco.co.za</span></dd></div><div><dt>Cell</dt><dd><span class="sel">+27 64 550 7951</span></dd></div>
+<div><dt>Demo</dt><dd><a href="https://reviewtap-ops-demos.netlify.app/guestops/cinzaco-dullstroom" target="_blank" rel="noopener">reviewtap-ops-demos.netlify.app/guestops/cinzaco-dullstroom</a></dd></div>
+<div><dt>Check it yourself</dt><dd><a href="https://reviewtap-ops-demos.netlify.app/guestops/cinzaco-dullstroom?preview=1" target="_blank" rel="noopener">preview (not tracked)</a></dd></div>
+<div class="wide"><dt>Scenario</dt><dd>Couple with a dog, Fri 8 to Sun 10 Jan, Ukon unit, 22:41, asks if their dog is welcome.</dd></div></dl>
+<div class="cb"><div class="cbh"><span>Subject</span><button type="button" class="copy" data-t="s8">Copy</button></div><pre id="s8">A guest messaging Cinzaco at 22:41</pre></div>
+<div class="cb"><div class="cbh"><span>Email 1</span><button type="button" class="copy" data-t="e8">Copy</button></div><pre id="e8">Good day,
+
+I&#x27;m Jacques from ReviewTap. I built something for Cinzaco Dullstroom Accommodation and I&#x27;d rather you saw it before I explain anything.
+
+Your booking page promises guests a call back &quot;in the next few minutes&quot;. That&#x27;s a great promise in the daytime, but it can&#x27;t hold at 22:00, and there&#x27;s no WhatsApp on the site. With 19 rooms, chalets and houses, that&#x27;s a lot of late-night enquiries waiting until morning.
+
+This one-minute demo uses your own rooms, rates and photos. It shows a guest messaging you late at night and getting an answer straight away, the booking request your team would find the next morning, and the Google review request that goes out after they check out:
+https://reviewtap-ops-demos.netlify.app/guestops/cinzaco-dullstroom
+
+It works best on your phone. If it&#x27;s useful, I&#x27;ll show you it running live on a 15-minute call. Would Monday 23 November at 14:00 or Tuesday 24 November at 14:00 suit? If it&#x27;s not for you, just reply &quot;no thanks&quot; and I won&#x27;t follow up.
+
+Kind regards,
+Jacques Groenewald
+ReviewTap
+jacques@reviewtap.co.za
+
+P.S. In the demo a couple asks whether their dog can come, answered from your own pet-friendly Ukon units. Your Dullstroom Reservations listing says &quot;No Pets Allowed&quot;, which contradicts your site and is turning pet owners away.</pre></div>
+<details><summary>WhatsApp (Fri 20 Nov, only if no reply)</summary><div class="cb"><div class="cbh"><span>WhatsApp</span><button type="button" class="copy" data-t="w8">Copy</button></div><pre id="w8">Hi there, it&#x27;s Jacques from ReviewTap. I emailed you yesterday about a short demo I built for Cinzaco Dullstroom Accommodation, using your own rooms and photos. It shows a guest messaging you at night and getting an answer straight away. Here&#x27;s the link if it&#x27;s easier on your phone: https://reviewtap-ops-demos.netlify.app/guestops/cinzaco-dullstroom
+If it&#x27;s not for you, just say so and I won&#x27;t message again.</pre></div><p class="hint"><a href="https://wa.me/27645507951?text=Hi%20there%2C%20it%27s%20Jacques%20from%20ReviewTap.%20I%20emailed%20you%20yesterday%20about%20a%20short%20demo%20I%20built%20for%20Cinzaco%20Dullstroom%20Accommodation%2C%20using%20your%20own%20rooms%20and%20photos.%20It%20shows%20a%20guest%20messaging%20you%20at%20night%20and%20getting%20an%20answer%20straight%20away.%20Here%27s%20the%20link%20if%20it%27s%20easier%20on%20your%20phone%3A%20https%3A//reviewtap-ops-demos.netlify.app/guestops/cinzaco-dullstroom%0AIf%20it%27s%20not%20for%20you%2C%20just%20say%20so%20and%20I%20won%27t%20message%20again." target="_blank" rel="noopener">Open in WhatsApp with this text</a> (may not open from inside this page; copy instead if it doesn't).</p></details>
+<details><summary>Confirm on the call</summary><ul><li>Rates are published &#x27;from&#x27; rates; weekends may be higher.</li><li>Pets: site says yes for Ukon and houses, their listing says no.</li><li>Who is the owner? A testimonial thanks André.</li><li>Check-in, Wi-Fi and address come only from Dullstroom Reservations.</li></ul></details>
+<details><summary>Their website problems</summary><ul><li>One-page site plus an enquiry form</li><li>Typos (&#x27;Dullsttroom&#x27;, &#x27;SEPERATE&#x27;)</li><li>Contradictory headings</li><li>No address, map, room pages or policies</li><li>Footer still says 2025</li></ul></details>
+</article><article class="lead" id="sabie-town-house">
+<header class="lh"><div><span class="num">09</span><h3>The Sabie Town House Guest Lodge</h3><p class="town">Sabie · rebuild case: <b class="rb rb-minor">Minor</b></p></div>
+<label class="done"><input type="checkbox" id="sent-sabie-town-house" data-k="sent-sabie-town-house"> Email sent</label></header>
+<dl class="facts"><div><dt>To</dt><dd><span class="sel">info@sabietownhouse.co.za</span></dd></div><div><dt>Cell</dt><dd><span class="sel">082 556 7895</span></dd></div>
+<div><dt>Demo</dt><dd><a href="https://reviewtap-ops-demos.netlify.app/guestops/sabie-town-house" target="_blank" rel="noopener">reviewtap-ops-demos.netlify.app/guestops/sabie-town-house</a></dd></div>
+<div><dt>Check it yourself</dt><dd><a href="https://reviewtap-ops-demos.netlify.app/guestops/sabie-town-house?preview=1" target="_blank" rel="noopener">preview (not tracked)</a></dd></div>
+<div class="wide"><dt>Scenario</dt><dd>Family of 4, Mon 11 to Thu 14 Jan, Zebra Luxury Suite, 22:17, asks for a packed breakfast before Kruger.</dd></div></dl>
+<div class="cb"><div class="cbh"><span>Subject</span><button type="button" class="copy" data-t="s9">Copy</button></div><pre id="s9">Greg, your contact form isn&#x27;t showing</pre></div>
+<div class="cb"><div class="cbh"><span>Email 1</span><button type="button" class="copy" data-t="e9">Copy</button></div><pre id="e9">Hi Greg,
+
+I&#x27;m Jacques from ReviewTap. I built something for The Sabie Town House Guest Lodge and I&#x27;d rather you saw it before I explain anything.
+
+The contact page on your website shows a line of code, [forminator_form id=&quot;2010&quot;], where the enquiry form should be, so guests can&#x27;t send an enquiry from it, and there&#x27;s no WhatsApp. A family planning a January Kruger trip at night is left with a phone number and an email address.
+
+This one-minute demo uses your own rooms, rates and photos. It shows a guest messaging you late at night and getting an answer straight away, the booking request your team would find the next morning, and the Google review request that goes out after they check out:
+https://reviewtap-ops-demos.netlify.app/guestops/sabie-town-house
+
+It works best on your phone. If it&#x27;s useful, I&#x27;ll show you it running live on a 15-minute call. Would Monday 23 November at 14:00 or Tuesday 24 November at 14:00 suit? If it&#x27;s not for you, just reply &quot;no thanks&quot; and I won&#x27;t follow up.
+
+Kind regards,
+Jacques Groenewald
+ReviewTap
+jacques@reviewtap.co.za
+
+P.S. The form is usually a quick fix (the quote marks in that code were changed to curly quotes). Your Reviews page is also empty, despite 230 Google reviews. We can sort both.</pre></div>
+<details><summary>WhatsApp (Fri 20 Nov, only if no reply)</summary><div class="cb"><div class="cbh"><span>WhatsApp</span><button type="button" class="copy" data-t="w9">Copy</button></div><pre id="w9">Hi Greg, it&#x27;s Jacques from ReviewTap. I emailed you yesterday about a short demo I built for The Sabie Town House Guest Lodge, using your own rooms and photos. It shows a guest messaging you at night and getting an answer straight away. Here&#x27;s the link if it&#x27;s easier on your phone: https://reviewtap-ops-demos.netlify.app/guestops/sabie-town-house
+If it&#x27;s not for you, just say so and I won&#x27;t message again.</pre></div><p class="hint"><a href="https://wa.me/27825567895?text=Hi%20Greg%2C%20it%27s%20Jacques%20from%20ReviewTap.%20I%20emailed%20you%20yesterday%20about%20a%20short%20demo%20I%20built%20for%20The%20Sabie%20Town%20House%20Guest%20Lodge%2C%20using%20your%20own%20rooms%20and%20photos.%20It%20shows%20a%20guest%20messaging%20you%20at%20night%20and%20getting%20an%20answer%20straight%20away.%20Here%27s%20the%20link%20if%20it%27s%20easier%20on%20your%20phone%3A%20https%3A//reviewtap-ops-demos.netlify.app/guestops/sabie-town-house%0AIf%20it%27s%20not%20for%20you%2C%20just%20say%20so%20and%20I%20won%27t%20message%20again." target="_blank" rel="noopener">Open in WhatsApp with this text</a> (may not open from inside this page; copy instead if it doesn't).</p></details>
+<details><summary>Confirm on the call</summary><ul><li>Rates come from NightsBridge with their 10% direct discount applied.</li><li>Breakfast confirmed as included only for Zebra.</li><li>Pets: home page says &#x27;by arrangement&#x27;, terms say &#x27;no pets&#x27;.</li><li>Bank details are also published on their terms page (raise only if the call goes well).</li></ul></details>
+<details><summary>Their website problems</summary><ul><li>Contact form shows raw code instead of a form</li><li>Empty Reviews page despite 230 Google reviews</li><li>No rates, direct discount not mentioned</li><li>Pets policy contradicts itself</li><li>Bank details on the terms page</li></ul></details>
+</article><article class="lead" id="the-art-guesthouse">
+<header class="lh"><div><span class="num">10</span><h3>The Art Guesthouse</h3><p class="town">Hartbeespoort · rebuild case: <b class="rb rb-strong">Strong</b></p></div>
+<label class="done"><input type="checkbox" id="sent-the-art-guesthouse" data-k="sent-the-art-guesthouse"> Email sent</label></header>
+<dl class="facts"><div><dt>To</dt><dd><span class="sel">deleneb12@gmail.com</span></dd></div><div><dt>Cell</dt><dd><span class="sel">078 198 8449</span></dd></div>
+<div><dt>Demo</dt><dd><a href="https://reviewtap-ops-demos.netlify.app/guestops/the-art-guesthouse" target="_blank" rel="noopener">reviewtap-ops-demos.netlify.app/guestops/the-art-guesthouse</a></dd></div>
+<div><dt>Check it yourself</dt><dd><a href="https://reviewtap-ops-demos.netlify.app/guestops/the-art-guesthouse?preview=1" target="_blank" rel="noopener">preview (not tracked)</a></dd></div>
+<div class="wide"><dt>Scenario</dt><dd>Couple, Fri 15 to Sun 17 Jan, Smokey Charcoal, 22:41, asks if the art is for sale.</dd></div></dl>
+<div class="cb"><div class="cbh"><span>Subject</span><button type="button" class="copy" data-t="s10">Copy</button></div><pre id="s10">Elsa, a guest asking to buy one of your paintings</pre></div>
+<div class="cb"><div class="cbh"><span>Email 1</span><button type="button" class="copy" data-t="e10">Copy</button></div><pre id="e10">Hi Elsa,
+
+I&#x27;m Jacques from ReviewTap. I built something for The Art Guesthouse and I&#x27;d rather you saw it before I explain anything.
+
+Your website has no WhatsApp, and the Room 4 and Room 5 links on your home page go to a &quot;No Results Found&quot; page. A couple dreaming about a weekend among your paintings often only gets to their enquiry late at night.
+
+This one-minute demo uses your own rooms, rates and photos. It shows a guest messaging you late at night and getting an answer straight away, the booking request your team would find the next morning, and the Google review request that goes out after they check out:
+https://reviewtap-ops-demos.netlify.app/guestops/the-art-guesthouse
+
+It works best on your phone. If it&#x27;s useful, I&#x27;ll show you it running live on a 15-minute call. Would Monday 23 November at 14:00 or Tuesday 24 November at 14:00 suit? If it&#x27;s not for you, just reply &quot;no thanks&quot; and I won&#x27;t follow up.
+
+Kind regards,
+Jacques Groenewald
+ReviewTap
+jacques@reviewtap.co.za
+
+P.S. In the demo the guest asks whether the art is for sale and is passed straight to you. Your guesthouse deserves a website as distinctive as the rooms, and I&#x27;d love to show you what that could look like.</pre></div>
+<details><summary>WhatsApp (Fri 20 Nov, only if no reply)</summary><div class="cb"><div class="cbh"><span>WhatsApp</span><button type="button" class="copy" data-t="w10">Copy</button></div><pre id="w10">Hi Elsa, it&#x27;s Jacques from ReviewTap. I emailed you yesterday about a short demo I built for The Art Guesthouse, using your own rooms and photos. It shows a guest messaging you at night and getting an answer straight away. Here&#x27;s the link if it&#x27;s easier on your phone: https://reviewtap-ops-demos.netlify.app/guestops/the-art-guesthouse
+If it&#x27;s not for you, just say so and I won&#x27;t message again.</pre></div><p class="hint"><a href="https://wa.me/27781988449?text=Hi%20Elsa%2C%20it%27s%20Jacques%20from%20ReviewTap.%20I%20emailed%20you%20yesterday%20about%20a%20short%20demo%20I%20built%20for%20The%20Art%20Guesthouse%2C%20using%20your%20own%20rooms%20and%20photos.%20It%20shows%20a%20guest%20messaging%20you%20at%20night%20and%20getting%20an%20answer%20straight%20away.%20Here%27s%20the%20link%20if%20it%27s%20easier%20on%20your%20phone%3A%20https%3A//reviewtap-ops-demos.netlify.app/guestops/the-art-guesthouse%0AIf%20it%27s%20not%20for%20you%2C%20just%20say%20so%20and%20I%20won%27t%20message%20again." target="_blank" rel="noopener">Open in WhatsApp with this text</a> (may not open from inside this page; copy instead if it doesn't).</p></details>
+<details><summary>Confirm on the call</summary><ul><li>deleneb12@gmail.com is the address on every page; it may be a manager, not Elsa.</li><li>Rates are NightsBridge &#x27;From&#x27; prices.</li><li>Check-in, parking, pets, children: not published.</li><li>Bed sizes differ between the site and NightsBridge.</li></ul></details>
+<details><summary>Their website problems</summary><ul><li>Room 4 and 5 links lead to &#x27;No Results Found&#x27;</li><li>News sidebar from 2016 to 2017</li><li>WordPress 6.0, years out of date</li><li>Empty 2015 shop pages and a sample page still live</li><li>Booking.com link carries a 2020 session</li></ul></details>
+</article>
+</section>
+
+<section id="followups">
+  <h2>Follow-ups</h2>
+  <p class="muted">Reply in the same thread so the first email shows underneath. Replace the bracketed parts.</p>
+  <section class="fu"><h3>Email 2A</h3><p class="hint">Monday 23 Nov: opened the demo, no reply</p><div class="cb"><div class="cbh"><span>Subject</span><button type="button" class="copy" data-t="fs2A">Copy</button></div><pre id="fs2A">Re: [original subject]</pre></div><div class="cb"><div class="cbh"><span>Body</span><button type="button" class="copy" data-t="fb2A">Copy</button></div><pre id="fb2A">Hi [first name],
+
+A quick follow-up on the demo I built for [property].
+
+If something in it didn&#x27;t sound like you, tell me and I&#x27;ll change it. Every answer comes from your own website, so it&#x27;s easy to adjust.
+
+If it did, 15 minutes is enough to show you it running live with your real rooms. Does Wednesday 25 or Thursday 26 November at 14:00 work?
+
+Jacques</pre></div></section><section class="fu"><h3>Email 2B</h3><p class="hint">Monday 23 Nov: never opened it</p><div class="cb"><div class="cbh"><span>Subject</span><button type="button" class="copy" data-t="fs2B">Copy</button></div><pre id="fs2B">Re: [original subject]</pre></div><div class="cb"><div class="cbh"><span>Body</span><button type="button" class="copy" data-t="fb2B">Copy</button></div><pre id="fb2B">Hi [first name],
+
+In case my email got buried, here is the one-minute demo I built for [property] again:
+[demo link]
+
+It shows a guest messaging you at 22:00, getting an answer from your own rooms and rates, and what you&#x27;d find waiting the next morning.
+
+Jacques</pre></div></section><section class="fu"><h3>Email 3</h3><p class="hint">Tuesday 1 Dec: close-out</p><div class="cb"><div class="cbh"><span>Subject</span><button type="button" class="copy" data-t="fs3">Copy</button></div><pre id="fs3">Re: [original subject]</pre></div><div class="cb"><div class="cbh"><span>Body</span><button type="button" class="copy" data-t="fb3">Copy</button></div><pre id="fb3">Hi [first name],
+
+I&#x27;ll leave it here so I&#x27;m not cluttering your inbox. The demo stays live until the end of January if you want to come back to it:
+[demo link]
+
+If December gets busy and the late-night messages pile up, just reply to this email.
+
+Jacques</pre></div></section>
+</section>
+
+<section id="call">
+  <h2>The 15-minute call</h2>
+  <div class="panel">
+    <ol class="steps">
+      <li><b>Two minutes on them.</b> "How do enquiries reach you after dinner, and who answers them?" Let them tell you about the late-night gap in their own words.</li>
+      <li><b>Play their demo on screen.</b> Pause on the special-request answer and say: "That answer came from your website. If it's wrong, that's the first thing we'd fix."</li>
+      <li><b>Show the morning view and the review request.</b> Every guest gets the same Google link, and unhappy guests are not filtered out.</li>
+      <li><b>Run through the "Confirm on the call" list on their card</b> (rates, breakfast, parking), so the live setup is right.</li>
+      <li><b>Say the price and the start date in one sentence,</b> then stop talking.</li>
+      <li><b>Where the rebuild case is "Strong",</b> offer the website as a second step, not the first.</li>
+    </ol>
+  </div>
+  <p class="callout"><b>Don't claim:</b> booking confirmations (the assistant passes requests to the team), review counts you'll get them, or anything their site doesn't publish.</p>
+</section>
+
+<section id="track">
+  <h2>Tracking</h2>
+  <div class="panel">
+    <p><b>Who opened what:</b> <a href="https://reviewtap-ops-demos.netlify.app/admin" target="_blank" rel="noopener">reviewtap-ops-demos.netlify.app/admin</a> → Overview. Each demo moves through Not opened, Opened, Engaged, Completed and Hot (Hot means they clicked "Book a live demo", which emails you).</p>
+    <div class="tbl"><table>
+      <tr><th>Measure by 25 Nov</th><th>Target</th><th>If you miss it</th></tr>
+      <tr><td>Demos opened</td><td>5 of 10</td><td>The email isn't landing. Change the subject and first line, then test again on wave 2</td></tr>
+      <tr><td>Replies</td><td>3 of 10</td><td>They watch but don't answer. Make the ask smaller: offer to send a 2-minute video instead of a call</td></tr>
+      <tr><td>Calls booked</td><td>1 or more</td><td>Review the call ask and the price</td></tr>
+    </table></div>
+    <p><b>Log every reply</b> in the notes column of <code>LEADS.csv</code>. <b>Each booked call</b> goes in the calendar and <code>WAITING-ON.md</code>. <b>Each "no"</b> gets set to Archived in the admin.</p>
+    <p><b>Wave 2:</b> 20 more qualified leads (10 more strong fits plus 10 reserves) are ready in <code>LEADS.html</code>. Ask Claude to "build wave 2 demos" once wave 1 is scored.</p>
+  </div>
+</section>
+
+<section id="files">
+  <h2>Where things live</h2>
+  <div class="tbl"><table>
+    <tr><th>What</th><th>Where</th></tr>
+    <tr><td>This kit (source)</td><td><code>Reviewtap/Demo-Platform/outreach/build_kit.py</code></td></tr>
+    <tr><td>Same copy as plain text</td><td><code>Reviewtap/Demo-Platform/outreach/2026-11-15-direct-test-wave.md</code></td></tr>
+    <tr><td>All 50 leads, scored</td><td><code>Reviewtap/Demo-Outreach-2026-11/LEADS.html</code> and <code>LEADS.csv</code></td></tr>
+    <tr><td>Each demo's facts and sources</td><td><code>Reviewtap/Demo-Platform/prospects/guestops--&lt;name&gt;.json</code> (the notes field)</td></tr>
+    <tr><td>Edit a demo</td><td>Admin → Demos → the demo → Edit. Changes are live immediately</td></tr>
+  </table></div>
+</section>
+</div>
+
+<script>
+document.querySelectorAll('button.copy').forEach(b=>b.addEventListener('click',()=>{
+  const el=document.getElementById(b.dataset.t); const t=el.innerText;
+  const ok=()=>{b.textContent='Copied';setTimeout(()=>b.textContent='Copy',1500)};
+  const fallback=()=>{const r=document.createRange();r.selectNodeContents(el);const s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent='Selected, copy it';setTimeout(()=>b.textContent='Copy',2500)};
+  try{navigator.clipboard.writeText(t).then(ok,fallback)}catch(e){fallback()}
+}));
+document.querySelectorAll('input[data-k]').forEach(i=>{
+  try{i.checked=localStorage.getItem('w1-'+i.dataset.k)==='1'}catch(e){}
+  i.addEventListener('change',()=>{try{localStorage.setItem('w1-'+i.dataset.k,i.checked?'1':'0')}catch(e){}});
+});
+</script>
+</body></html>
