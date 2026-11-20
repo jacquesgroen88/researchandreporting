@@ -100,9 +100,9 @@ Building, importing and testing are all safe, because none of them send anything
 <h2 id="gates">3. What has to be true before go</h2>
 <p>These are not yours to do (except the tests), but the campaign must not start until every box is ticked. If one isn't, tell Jacques and hold.</p>
 <ul class="chk">
-<li><b>Jacques has approved the prices</b> above (R1,049 / R1,598 / R1,049 Card Pack).</li>
+<li><b>Jacques has approved the prices</b> above (R1,049 / R1,598 / R1,049 Card Pack). <b>Done 20 Nov.</b></li>
 <li><b>The Bob Go breach notice has gone to customers</b>, ideally 3 days before B1. A sale email must not reach someone before they have been told about the breach. Jacques decides the timing.</li>
-<li><b>The Shopify side is live</b> (Claude builds it on Jacques's yes): the page <code>reviewtap.co.za/pages/black-friday</code> loads (today it is a 404), the kit discounts work, and the code <code>COUNTER4</code> works. Every Kit button in the emails points at that page, so a 404 kills the campaign.</li>
+<li><b>The Shopify side is live.</b> <b>Done 20 Nov:</b> the page <code>reviewtap.co.za/pages/black-friday</code> is published, both kit discounts and the code <code>COUNTER4</code> are on until 30 Nov 23:59, and Claude has checked the cart prices on the live store. You still run the store checks in 6.4 yourself.</li>
 <li><b>You have passed every test in section 6</b>, including the store tests in 6.4.</li>
 </ul>
 
@@ -187,7 +187,7 @@ Building, importing and testing are all safe, because none of them send anything
 <li>The greeting shows a real first name. Test emails often show a blank, so check this again properly in 6.2.</li>
 <li>The prices match section 1 exactly (R1,049 / R1,487 / R1,598 / R2,036 / R1,676) and the code reads <code>COUNTER4</code>.</li>
 <li>Every image loads (logo, stand photo, card photo).</li>
-<li>Every orange button opens the right page: "Order my 4 cards" goes to the <b>custom card</b> product page, and every Kit button goes to <code>/pages/black-friday</code>. The Kit buttons will 404 until Shopify is live, which is expected for now. Re-check them in 6.4.</li>
+<li>Every orange button opens the right page: "Order my 4 cards" goes to the <b>custom card</b> product page, and every Kit button goes to <code>/pages/black-friday</code>. The Black Friday page is live, so every button should work.</li>
 <li>The WhatsApp link opens a chat with <b>+27 72 688 2952</b>.</li>
 <li>The footer shows an unsubscribe link.</li>
 <li>Nothing looks broken in dark mode (if your phone uses it).</li>
@@ -215,12 +215,12 @@ Building, importing and testing are all safe, because none of them send anything
 <li>Drip mode is on, re-entry is off, and stop on response is on.</li>
 </ul>
 
-<h3>6.4 The store (once Claude says Shopify is live)</h3>
+<h3>6.4 The store (live since 20 Nov)</h3>
 <p>Use a normal browser, not logged in to Shopify admin. Add items to the cart and check what the cart and checkout show. Don't pay: stop at the payment step.</p>
 <div class="tbl"><table>
 <tr><th>Put in the cart</th><th>Should show</th></tr>
 <tr><td>1 custom Google stand + 2 custom Google cards</td><td><b>R1,049</b> total, <b>R0 delivery</b></td></tr>
-<tr><td>2 custom stands + 2 custom cards</td><td><b>R1,598</b>, R0 delivery</td></tr>
+<tr><td>2 custom stands + 2 custom cards (any mix of stand types)</td><td><b>R1,598</b>, R0 delivery (stands show R649 each, cards R150 each)</td></tr>
 <tr><td>4 custom cards + code <code>COUNTER4</code></td><td><b>R1,048</b> (4 x R262), R0 delivery</td></tr>
 <tr><td>1 custom stand on its own</td><td>R649 + R125 delivery (unchanged, no discount)</td></tr>
 <tr><td>2 custom cards on their own</td><td>Normal card pricing, no kit price (cards need a stand in the cart to get R200 each)</td></tr>
@@ -266,10 +266,11 @@ This is the step that actually emails customers.</div>
 <p>Subscribers who have never bought used to get only 2 emails: a launch email on 23 Nov and "ends tonight" on 30 Nov, with nothing for a whole week in between, including Black Friday itself. S3 fills that gap on Black Friday with the three questions that stop people ordering: does it work on my customers' phones, is there a monthly fee, and what if I don't like the design. Its answers are no app, no monthly fee, and design proof before print.</p>
 
 <h2 id="shopify">Appendix: Shopify settings, for testing the store side</h2>
-<p>Claude builds these on Jacques's yes. They are listed here so you know what "right" looks like when you test in 6.4.</p>
+<p>Live since 20 Nov 2026, built by Claude. Listed here so you know what "right" looks like when you test in 6.4. Don't change them; send problems to Jacques.</p>
 <ul>
-<li><b>Counter Kit:</b> automatic "Buy X get Y": buy 1 custom branded stand, get 2 custom branded Google cards at R200 each. 20 Nov to 30 Nov 23:59. One per order. Two stands in the cart are already R599 each through the existing stand tier, which is how the Two-Counter Kit lands on R1,598.</li>
-<li><b>COUNTER4:</b> code, 4+ custom cards at R262 each, once per customer, ends 30 Nov 23:59.</li>
+<li><b>"BF26 Black Friday Counter Kit":</b> automatic "Buy X get Y". Buy 1 custom stand (any platform), get 2 custom Google cards at R200 each (R249 off each). One per order.</li>
+<li><b>"BF26 Two-Counter Kit":</b> automatic "Buy X get Y". Buy 2 custom stands, get 2 custom Google cards at R150 each (R299 off each), so 2 x R649 + 2 x R150 = R1,598. The stands show full price and the saving sits on the cards. That is expected: Shopify allows only one discount per line. When 2 stands are in the cart, Shopify picks this one over the Counter Kit by itself.</li>
+<li><b>COUNTER4:</b> code, 4+ custom Google cards at R262 each (R187 off each), once per customer, ends 30 Nov 23:59.</li>
 <li><b>Free delivery:</b> unchanged. The existing rule (orders over R1,000 deliver free) does it, because every offer lands over R1,000.</li>
 <li><b>Page:</b> <code>/pages/black-friday</code> with the three offers, the real "normally" prices, the 30 Nov deadline and the deliver-by-10-Dec line.</li>
 </ul>
