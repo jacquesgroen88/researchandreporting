@@ -1,0 +1,514 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>AI Visibility Baseline · Innovatr</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0b0d11; --ink2:#12151b; --line:#262b35;
+  --paper:#f2ede3; --dim:#a1a9b8; --dim2:#5d6574;
+  --lime:#d6ff3d; --cream:#f2ede3; --rust:#ff6b3d;
+  --serif:"Inter",-apple-system,"Segoe UI",sans-serif; --sans:"Inter",-apple-system,"Segoe UI",sans-serif; --mono:"Inter",-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--ink);color:var(--paper);font-family:var(--sans);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+::selection{background:var(--lime);color:var(--ink)}
+a{color:var(--lime)}
+.fill{background:var(--lime);color:var(--ink);padding:0 5px;border-radius:3px;font-style:normal;font-weight:500}
+.w{max-width:1180px;margin:0 auto;padding:0 32px}
+@media(max-width:640px){.w{padding:0 20px}}
+.mono{font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+section{padding:120px 0;border-top:1px solid var(--line);position:relative}
+@media(max-width:640px){section{padding:76px 0}}
+.kicker{display:flex;gap:14px;align-items:baseline;margin-bottom:34px}
+.kicker .n{font-family:var(--mono);font-weight:700;font-size:12px;color:var(--lime)}
+.kicker .t{font-family:var(--mono);font-weight:600;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+h2{font-family:var(--serif);font-weight:600;font-size:clamp(34px,4.8vw,64px);line-height:1.06;letter-spacing:-.03em;max-width:18ch}
+h2 em{font-style:normal;color:var(--lime)}
+.lead{font-size:clamp(17px,1.4vw,19.5px);color:#d9d4ca;max-width:62ch;margin-top:26px;line-height:1.55}
+.lead b{color:var(--paper);font-weight:500}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:space-between;padding:28px 0 40px;
+  background:radial-gradient(1100px 600px at 85% 20%,rgba(214,255,61,.08),transparent 60%),radial-gradient(900px 700px at 0% 100%,rgba(255,107,61,.06),transparent 60%),var(--ink)}
+.hero>.w{width:100%}
+.top{display:flex;justify-content:space-between;align-items:center;gap:16px}
+.brand{font-family:var(--mono);font-size:12px;letter-spacing:.2em}
+.brand b{color:var(--lime);font-weight:500}
+.hgrid{display:grid;grid-template-columns:1.05fr .95fr;gap:64px;align-items:center;margin:48px 0}
+@media(max-width:960px){.hgrid{grid-template-columns:1fr;gap:44px}}
+.hero h1{font-family:var(--serif);font-weight:700;font-size:clamp(42px,5.6vw,84px);line-height:1.02;letter-spacing:-.04em}
+.hero h1 em{font-style:normal;color:var(--lime)}
+.hero .sub{margin-top:28px;font-size:19px;color:#d9d4ca;max-width:44ch}
+.meta{display:flex;gap:30px;flex-wrap:wrap}
+.meta div{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.meta b{display:block;color:var(--paper);font-weight:400;margin-top:4px;letter-spacing:.01em;text-transform:none;font-family:var(--sans);font-size:15px}
+.chat{background:linear-gradient(180deg,#151922,#0f1218);border:1px solid #2a303c;border-radius:20px;box-shadow:0 40px 120px rgba(0,0,0,.55);overflow:hidden}
+.chat .bar{display:flex;align-items:center;gap:8px;padding:14px 18px;border-bottom:1px solid #232833}
+.chat .bar i{width:10px;height:10px;border-radius:50%;background:#2c323e;display:block}
+.chat .bar span{margin-left:auto;font-family:var(--mono);font-size:10.5px;color:var(--dim2);letter-spacing:.06em}
+.chat .body{padding:22px 22px 24px}
+.q{margin-left:auto;max-width:88%;background:#232a36;border-radius:16px 16px 4px 16px;padding:12px 16px;font-size:15.5px;min-height:48px}
+.caret{display:inline-block;width:2px;height:1.05em;background:var(--lime);vertical-align:-3px;margin-left:2px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.think{margin-top:20px;font-family:var(--mono);font-size:11.5px;color:var(--dim2);letter-spacing:.04em;margin-bottom:10px;opacity:0;transition:opacity .4s}
+.rank{list-style:none}
+.rank li{display:flex;align-items:center;gap:14px;padding:9px 12px;border-radius:10px;font-size:16px;opacity:0;transform:translateY(8px);transition:opacity .5s,transform .5s}
+.rank li .p{font-family:var(--mono);font-size:12px;color:var(--dim2);width:22px}
+.rank li.top1{background:rgba(242,237,227,.07)} .rank li.top1 .nm{font-weight:600}
+.rank li.you{outline:1.5px solid var(--lime);background:rgba(214,255,61,.07)}
+.rank li.you .nm{color:var(--lime);font-weight:600}
+.rank li .tag{margin-left:auto;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--lime);opacity:0;transition:opacity .6s .5s}
+.rank li.show{opacity:1;transform:none}
+.rank li.you.show .tag{opacity:1}
+.cap{margin-top:16px;font-family:var(--mono);font-size:10.5px;color:var(--dim2);letter-spacing:.05em;line-height:1.6}
+.scroll{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--dim);text-transform:uppercase}
+
+/* OBSERVED */
+.big3{display:grid;grid-template-columns:repeat(3,1fr);margin-top:70px;border-top:1px solid var(--line)}
+@media(max-width:800px){.big3{grid-template-columns:1fr}}
+.big3>div{padding:34px 28px 10px 0;border-right:1px solid var(--line)}
+.big3>div+div{padding-left:28px}
+.big3>div:last-child{border-right:0}
+@media(max-width:800px){.big3>div,.big3>div+div{border-right:0;border-bottom:1px solid var(--line);padding:30px 0}}
+.big3 .v{font-family:var(--serif);font-weight:600;font-size:clamp(64px,8vw,116px);line-height:.9;letter-spacing:-.04em}
+.big3 .v.y{color:var(--lime)}
+.big3 .v small{font-size:.38em;letter-spacing:0;color:var(--dim)}
+.big3 .l{margin-top:16px;color:#cfcabf;font-size:16px;max-width:30ch}
+.dots-wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:60px;margin-top:80px;align-items:center}
+@media(max-width:900px){.dots-wrap{grid-template-columns:1fr;gap:34px}}
+.dots-h{grid-column:1/-1;font-family:var(--serif);font-weight:600;font-size:clamp(26px,2.6vw,36px);line-height:1.15;max-width:30ch}
+.dots-h em{font-style:normal;color:var(--lime)}
+.dots{display:grid;grid-template-columns:repeat(10,1fr);gap:10px;max-width:520px}
+.dots i{aspect-ratio:1;border-radius:50%;background:#262b35;display:block;transform:scale(.2);opacity:0;transition:transform .5s cubic-bezier(.2,.9,.3,1.3),opacity .4s}
+.dots.on i{transform:scale(1);opacity:1}
+.c-OUT{background:var(--cream)!important}
+.c-YOU{background:var(--lime)!important;box-shadow:0 0 18px rgba(214,255,61,.55)}
+.c-none{background:transparent!important;border:1.5px dashed #6b7383}
+.c-other{background:#4a5263!important}
+.legend{list-style:none}
+.legend li{display:flex;align-items:baseline;gap:14px;padding:12px 0;border-bottom:1px solid var(--line)}
+.legend li:last-child{border-bottom:0}
+.legend .sw{width:12px;height:12px;border-radius:50%;flex:0 0 12px;display:inline-block}
+.legend .k{font-family:var(--serif);font-size:34px;font-weight:600;width:58px;line-height:1}
+.legend .d{color:#cfcabf;font-size:15px}
+.eng{margin-top:70px;display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+@media(max-width:800px){.eng{grid-template-columns:1fr}}
+.eng>div{border:1px solid var(--line);border-radius:16px;padding:22px}
+.eng h4{font-family:var(--mono);font-weight:400;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:16px}
+.br{display:grid;grid-template-columns:92px 1fr 58px;gap:12px;align-items:center;font-size:14px;margin:10px 0}
+.br .t{height:10px;background:#1f242d;border-radius:10px;overflow:hidden}
+.br .t span{display:block;height:100%;width:0;border-radius:10px;transition:width 1.4s cubic-bezier(.2,.8,.2,1)}
+.br.o .t span{background:var(--cream)} .br.y .t span{background:var(--lime)} .br.y{color:var(--lime)}
+.br .x{font-family:var(--mono);font-size:12px;color:var(--dim);text-align:right}
+.eng-note{margin-top:14px;font-size:14px;color:var(--dim)}
+
+/* BOXES */
+.boxes{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:64px}
+@media(max-width:860px){.boxes{grid-template-columns:1fr}}
+.box{border-radius:22px;padding:38px 34px}
+.box.out{background:var(--paper);color:var(--ink)}
+.box.you{background:var(--ink2);border:1px solid var(--line)}
+.box .who{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+.box.out .who{color:#6a6152} .box.you .who{color:var(--lime)}
+.box .own{font-family:var(--serif);font-weight:600;font-size:clamp(34px,3.6vw,52px);line-height:1.02;margin:14px 0 26px;letter-spacing:-.02em}
+.box .own em{font-style:normal;text-decoration:underline;text-decoration-thickness:3px;text-underline-offset:6px}
+.quote{padding:16px 0;border-top:1px solid rgba(11,13,17,.14)}
+.box.you .quote{border-top-color:var(--line)}
+.quote p{font-family:var(--serif);font-size:18px;line-height:1.5;font-weight:500}
+.quote p::before{content:"\201C"} .quote p::after{content:"\201D"}
+.quote span{display:block;margin-top:6px;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;opacity:.6}
+.quote.warn p{color:var(--rust)}
+.upside{margin-top:48px;display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:start;border-left:2px solid var(--lime);padding:6px 0 6px 24px;max-width:880px}
+@media(max-width:640px){.upside{grid-template-columns:1fr;gap:8px}}
+.upside .mono{color:var(--lime)} .upside p{color:#dcd7cd;font-size:17px}
+
+/* CALC */
+.calc{display:grid;grid-template-columns:1fr 1fr;gap:56px;margin-top:60px;align-items:start}
+@media(max-width:900px){.calc{grid-template-columns:1fr;gap:36px}}
+.sl{padding:16px 0;border-bottom:1px solid var(--line)}
+.sl .row{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.sl label{font-size:15px;color:#dcd7cd}
+.sl output{font-family:var(--mono);font-size:15px;color:var(--paper);white-space:nowrap}
+.tg{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:999px;margin-left:8px;vertical-align:2px;white-space:nowrap}
+.tg.you{border:1px solid var(--dim2);color:var(--dim)} .tg.obs{background:var(--lime);color:var(--ink)}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:4px;background:#262b35;border-radius:4px;margin-top:14px;outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--lime);border:4px solid var(--ink);box-shadow:0 0 0 1px var(--lime);cursor:pointer}
+input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:var(--lime);border:4px solid var(--ink);cursor:pointer}
+.res{position:sticky;top:30px;border-radius:24px;padding:40px 36px;background:linear-gradient(160deg,#1b2110,#11140c);border:1px solid #3a4520}
+.res .mono{color:var(--lime)}
+.res .v{font-family:var(--serif);font-weight:600;font-size:clamp(52px,6vw,88px);line-height:.95;letter-spacing:-.03em;margin:16px 0 8px;color:var(--lime);word-break:break-word}
+.res .per{font-size:16px;color:#cdd6b0}
+.res .chain{margin-top:26px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.res .chain div{border-top:1px solid #3a4520;padding-top:10px}
+.res .chain b{display:block;font-family:var(--serif);font-weight:600;font-size:28px;color:var(--paper)}
+.res .chain span{font-size:12.5px;color:#a9b38c}
+.res .yr{margin-top:22px;font-size:15px;color:#cdd6b0}
+.small{font-size:14px;color:var(--dim);margin-top:24px;max-width:62ch}
+
+/* OUTCOMES */
+.outs{margin-top:60px}
+.o{display:grid;grid-template-columns:110px 1fr 1fr;gap:36px;padding:38px 0;border-top:1px solid var(--line)}
+@media(max-width:860px){.o{grid-template-columns:1fr;gap:12px}}
+.o .num{font-family:var(--serif);font-weight:600;font-size:64px;line-height:.9;color:var(--lime)}
+.o h3{font-family:var(--serif);font-weight:600;font-size:28px;line-height:1.15;letter-spacing:-.01em}
+.o p{color:#cfcabf;font-size:16px}
+.o .ben{margin-top:14px;font-size:15px;color:var(--paper)}
+.o .ben b{font-family:var(--mono);font-weight:400;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--lime);display:block;margin-bottom:4px}
+
+/* SCOPE */
+.scope{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:56px}
+@media(max-width:860px){.scope{grid-template-columns:1fr}}
+.scope>div{border:1px solid var(--line);border-radius:20px;padding:30px}
+.scope h3{font-family:var(--mono);font-weight:400;font-size:12px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px}
+.scope .in h3{color:var(--lime)} .scope .out h3{color:var(--dim)}
+.scope ul{list-style:none}
+.scope li{padding:11px 0 11px 28px;border-bottom:1px solid var(--line);position:relative;font-size:15.5px;color:#d6d0c3}
+.scope li:last-child{border-bottom:0}
+.scope .in li::before{content:"+";position:absolute;left:0;color:var(--lime);font-family:var(--mono)}
+.scope .out li::before{content:"\2212";position:absolute;left:0;color:var(--dim2);font-family:var(--mono)}
+.scope .out li{color:var(--dim)}
+
+/* METHOD */
+.meth{display:grid;grid-template-columns:repeat(5,1fr);margin-top:56px;border-top:1px solid var(--line)}
+@media(max-width:1000px){.meth{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.meth{grid-template-columns:1fr}}
+.meth>div{padding:28px 22px 10px 0;border-right:1px solid var(--line)}
+.meth>div+div{padding-left:22px}
+.meth>div:last-child{border-right:0}
+@media(max-width:1000px){.meth>div,.meth>div+div{border-right:0;border-bottom:1px solid var(--line);padding:24px 0}}
+.meth .mono{color:var(--lime);margin-bottom:10px}
+.meth h4{font-family:var(--serif);font-weight:600;font-size:22px;line-height:1.15;margin-bottom:10px}
+.meth p{font-size:14.5px;color:var(--dim)}
+
+/* TIMELINE */
+.track{display:grid;grid-template-columns:repeat(3,1fr);margin-top:64px}
+@media(max-width:760px){.track{grid-template-columns:1fr}}
+.track>div{padding:30px 28px 0 0;position:relative}
+.track>div::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:#262b35}
+.track>div::after{content:"";position:absolute;top:-6px;left:0;width:15px;height:15px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 5px var(--ink)}
+.track .mono{color:var(--lime)}
+.track h4{font-family:var(--serif);font-weight:600;font-size:30px;margin:6px 0 8px}
+.track p{font-size:15px;color:var(--dim);max-width:34ch}
+@media(max-width:760px){.track>div{padding-bottom:34px}}
+.effort{margin-top:50px;display:flex;gap:44px;flex-wrap:wrap;padding:26px 30px;border:1px solid var(--line);border-radius:16px}
+.effort div{font-size:15px;color:#dcd7cd}
+.effort b{display:block;font-family:var(--serif);font-weight:600;font-size:42px;color:var(--paper);line-height:1;margin-bottom:4px}
+
+/* HONESTY */
+.honest{background:var(--paper);color:var(--ink);border-top:0}
+.honest .kicker .n{color:#a0441f} .honest .kicker .t{color:#6a6152}
+.honest h2 em{color:#c24b1e}
+.honest .lead{color:#4d463b}
+.hon{display:grid;grid-template-columns:1fr 1fr;margin-top:56px;border-top:1px solid rgba(11,13,17,.15)}
+@media(max-width:800px){.hon{grid-template-columns:1fr}}
+.hon>div{padding:30px 34px 30px 0;border-bottom:1px solid rgba(11,13,17,.15)}
+.hon>div:nth-child(odd){border-right:1px solid rgba(11,13,17,.15)}
+.hon>div:nth-child(even){padding-left:34px}
+@media(max-width:800px){.hon>div:nth-child(odd){border-right:0}.hon>div:nth-child(even){padding-left:0}}
+.hon .mono{color:#a0441f}
+.hon h4{font-family:var(--serif);font-weight:600;font-size:26px;line-height:1.15;margin:8px 0 10px}
+.hon p{color:#4d463b;font-size:15.5px}
+
+/* PRICE */
+.price{display:grid;grid-template-columns:1.15fr .85fr;gap:28px;margin-top:60px}
+@media(max-width:900px){.price{grid-template-columns:1fr}}
+.pc{border-radius:26px;padding:46px 42px;background:radial-gradient(600px 300px at 100% 0%,rgba(214,255,61,.14),transparent 60%),var(--ink2);border:1px solid #333a2a}
+@media(max-width:640px){.pc{padding:34px 26px}}
+.pc .mono{color:var(--lime)}
+.pc .amt{font-family:var(--serif);font-weight:600;font-size:clamp(72px,10vw,140px);line-height:.9;letter-spacing:-.045em;margin:16px 0 14px}
+.pc .amt sup{font-size:.28em;vertical-align:top;letter-spacing:0;color:var(--dim);margin-right:6px;position:relative;top:.5em}
+.pc .terms{color:#dcd7cd;font-size:15.5px;max-width:46ch}
+.pc .credit{margin-top:26px;padding-top:22px;border-top:1px solid var(--line);font-size:16px;color:#dcd7cd}
+.pc .credit b{color:var(--lime);font-weight:500}
+.ctx{border:1px solid var(--line);border-radius:26px;padding:34px}
+.ctx .r{display:flex;justify-content:space-between;align-items:center;gap:18px;padding:16px 0;border-bottom:1px solid var(--line);font-size:15px;color:#dcd7cd}
+.ctx .r:last-child{border-bottom:0}
+.ctx .r b{font-family:var(--serif);font-weight:600;font-size:22px;color:var(--paper);white-space:nowrap}
+.ctx .r b.y{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;color:var(--dim);border:1px solid var(--dim2);border-radius:999px;padding:3px 9px;text-transform:uppercase}
+.guar{margin-top:28px;display:grid;grid-template-columns:auto 1fr;gap:30px;align-items:center;padding:34px 38px;border-radius:26px;background:var(--lime);color:var(--ink)}
+@media(max-width:700px){.guar{grid-template-columns:1fr;gap:12px;padding:30px 26px}}
+.guar .seal{font-family:var(--serif);font-style:normal;font-size:42px;line-height:1;font-weight:400}
+.guar p{font-size:18px;line-height:1.45}
+
+/* PROGRAMME + TEAM */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:70px}
+@media(max-width:900px){.split{grid-template-columns:1fr;gap:56px}}
+.split p{color:#dcd7cd;margin-top:16px}
+.split p b{color:var(--paper);font-weight:500}
+.person{border-top:1px solid var(--line);padding:24px 0}
+.person h4{font-family:var(--serif);font-weight:600;font-size:30px}
+.person .mono{color:var(--lime);margin:4px 0 10px}
+.person p{color:var(--dim);font-size:15.5px;margin:0}
+
+/* NEXT */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:56px}
+@media(max-width:800px){.steps{grid-template-columns:1fr}}
+.steps .k{font-family:var(--serif);font-weight:600;font-size:90px;line-height:.85;color:transparent;-webkit-text-stroke:1px var(--lime)}
+.steps h4{font-family:var(--serif);font-weight:600;font-size:28px;margin:14px 0 8px}
+.steps p{color:var(--dim);font-size:15.5px}
+.why{margin-top:60px;font-family:var(--serif);font-weight:600;font-size:clamp(22px,2.4vw,30px);line-height:1.35;max-width:40ch;color:#d6d0c3}
+.sign{background:var(--paper);color:var(--ink);border-radius:30px;padding:56px 50px;margin-top:80px}
+@media(max-width:640px){.sign{padding:36px 24px}}
+.sign .mono{color:#6a6152}
+.sign h3{font-family:var(--serif);font-weight:600;font-size:clamp(34px,4vw,54px);line-height:1.02;letter-spacing:-.02em;margin-top:12px}
+.sign .t{margin-top:12px;color:#4d463b}
+.lines{display:grid;grid-template-columns:1fr 1fr;gap:40px 40px;margin-top:56px}
+@media(max-width:640px){.lines{grid-template-columns:1fr}}
+.lines div{border-top:1.5px solid var(--ink);padding-top:10px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#6a6152}
+footer{padding:60px 0 70px;text-align:center;font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--dim2);text-transform:uppercase}
+
+.rv{opacity:0;transform:translateY(24px);transition:opacity .9s ease,transform .9s cubic-bezier(.2,.8,.2,1)}
+.rv.on{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}.rv,.rank li,.dots i{opacity:1!important;transform:none!important}}
+@media print{.rv,.rank li,.dots i{opacity:1!important;transform:none!important}.hero{min-height:auto}section{break-inside:avoid}}
+</style>
+<style>
+.tbl{width:100%;border-collapse:collapse;font-size:15px;min-width:640px}
+.tbl th{text-align:left;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);font-weight:600;padding:12px 12px;border-bottom:1px solid var(--line)}
+.tbl td{padding:13px 12px;border-bottom:1px solid var(--line);vertical-align:top;color:#dcd7cd}
+.tbl td b{color:var(--paper)}
+.scroll-x{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:44px}
+.tbl td.z,.z{color:var(--rust);font-weight:600;white-space:nowrap}
+.y{color:var(--lime);font-weight:600;white-space:nowrap}
+.bars{margin-top:50px}
+.bar{display:grid;grid-template-columns:150px 1fr 120px;gap:16px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line);font-size:15px}
+@media(max-width:640px){.bar{grid-template-columns:100px 1fr 74px;font-size:13.5px}}
+.bar .t{height:12px;background:#1f242d;border-radius:12px;overflow:hidden}
+.bar .t span{display:block;height:100%;background:var(--cream);border-radius:12px}
+.bar.you .t span{background:var(--lime)}
+.bar.you{color:var(--lime);font-weight:600}
+.bar .x{text-align:right;color:var(--dim);font-size:13.5px;white-space:nowrap}
+.crawl{margin-top:44px;border:1px solid var(--line);border-radius:20px;overflow:hidden}
+.crawl .h{padding:14px 20px;border-bottom:1px solid var(--line);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);font-weight:600;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.crawl .b{padding:40px 20px;text-align:center;font-size:clamp(40px,8vw,90px);font-weight:700;letter-spacing:-.04em}
+.crawl .f{padding:14px 20px;border-top:1px solid var(--line);font-size:14px;color:var(--dim)}
+.fixes{margin-top:50px}
+.fx{display:grid;grid-template-columns:70px 1fr;gap:24px;padding:30px 0;border-top:1px solid var(--line)}
+@media(max-width:640px){.fx{grid-template-columns:1fr;gap:6px}}
+.fx .n{font-size:44px;font-weight:600;color:var(--lime);line-height:1}
+.fx h3{font-size:22px;font-weight:600;letter-spacing:-.01em;margin-bottom:8px}
+.fx p{color:#cfcabf;font-size:16px}
+.fx .who{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border-radius:999px;margin-bottom:10px}
+.who.g{background:var(--lime);color:var(--ink)} .who.a{border:1px solid #e8a33d;color:#e8a33d} .who.r{border:1px solid var(--rust);color:var(--rust)}
+.pos{margin-top:40px;display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+@media(max-width:860px){.pos{grid-template-columns:1fr}}
+.pos>div{border:1px solid var(--line);border-radius:18px;padding:24px}
+.pos h4{font-size:18px;font-weight:600;margin:6px 0 8px}
+.pos p{font-size:15px;color:var(--dim)}
+.note{font-size:14px;color:var(--dim);margin-top:22px;max-width:70ch}
+</style>
+</head>
+<body>
+
+<header class="hero" style="min-height:92vh">
+  <div class="w top">
+    <div class="brand">AI <b>VISIBILITY</b> INDEX</div>
+    <div class="mono">Baseline · 18 November 2026</div>
+  </div>
+  <div class="w" style="margin:56px auto">
+    <div class="mono" style="color:var(--lime);margin-bottom:22px">Prepared for Richard, Innovatr</div>
+    <h1 style="max-width:15ch">Asked 120 times who to call, <em>AI never said Innovatr.</em></h1>
+    <p class="sub" style="max-width:60ch">We asked ChatGPT, Claude, Gemini and Google the questions your buyers ask about concept testing and consumer research in South Africa. Innovatr came up only when we typed its name.</p>
+  </div>
+  <div class="w">
+    <div class="meta">
+      <div>Questions<b>15</b></div>
+      <div>Answers recorded<b>150</b></div>
+      <div>Engines<b>ChatGPT · Claude · Gemini · Google AI Overviews</b></div>
+      <div>Observed<b>18 November 2026</b></div>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="w">
+    <div class="kicker rv"><span class="n">01</span><span class="t">The baseline</span></div>
+    <h2 class="rv">Your buyers ask. <em>Your competitors answer.</em></h2>
+    <div class="big3 rv">
+      <div><div class="v y">0<small>/120</small></div><div class="l">answers to open buyer questions named Innovatr, on any engine. These are questions like "who can test concepts in 24 hours".</div></div>
+      <div><div class="v">16<small>/100</small></div><div class="l">Visibility Score. That puts Innovatr in the lowest band, "invisible": the category conversation happens without you.</div></div>
+      <div><div class="v y">8</div><div class="l">characters of text that AI crawlers read on every innovatr.co.za page. The word "Innovatr". Nothing else.</div></div>
+    </div>
+    <p class="lead rv">This isn't a judgement on the work. Asked directly, every engine describes Innovatr fairly as fast, affordable and well suited to screening ideas. The problem is that a buyer who doesn't already know your name never hears it. The rest of this page shows who they hear instead, why, and what moves it.</p>
+  </div>
+</section>
+
+<section>
+  <div class="w">
+    <div class="kicker rv"><span class="n">02</span><span class="t">Who gets named instead</span></div>
+    <h2 class="rv">Share of answer, <em>open questions.</em></h2>
+    <p class="lead rv">How often each company was named across 120 answers to the 12 questions that don't mention any brand (ChatGPT 36, Claude 36, Gemini 36, Google 12).</p>
+    <div class="bars rv">
+      <div class="bar"><span>Kantar</span><div class="t"><span style="width:60%"></span></div><span class="x">72/120 · 60%</span></div>
+      <div class="bar"><span>Ipsos</span><div class="t"><span style="width:51%"></span></div><span class="x">61/120 · 51%</span></div>
+      <div class="bar"><span>Ask Afrika</span><div class="t"><span style="width:35%"></span></div><span class="x">42/120 · 35%</span></div>
+      <div class="bar"><span>Sagaci Research</span><div class="t"><span style="width:28%"></span></div><span class="x">34/120 · 28%</span></div>
+      <div class="bar"><span>GeoPoll</span><div class="t"><span style="width:28%"></span></div><span class="x">34/120 · 28%</span></div>
+      <div class="bar"><span>NielsenIQ</span><div class="t"><span style="width:26%"></span></div><span class="x">31/120 · 26%</span></div>
+      <div class="bar"><span>African Response</span><div class="t"><span style="width:23%"></span></div><span class="x">28/120 · 23%</span></div>
+      <div class="bar"><span>KLA</span><div class="t"><span style="width:20%"></span></div><span class="x">24/120 · 20%</span></div>
+      <div class="bar"><span>Toluna</span><div class="t"><span style="width:19%"></span></div><span class="x">23/120 · 19%</span></div>
+      <div class="bar"><span>BMi Research</span><div class="t"><span style="width:18%"></span></div><span class="x">21/120 · 18%</span></div>
+      <div class="bar"><span>Meraki Research</span><div class="t"><span style="width:17%"></span></div><span class="x">20/120 · 17%</span></div>
+      <div class="bar"><span>Plus 94</span><div class="t"><span style="width:17%"></span></div><span class="x">20/120 · 17%</span></div>
+      <div class="bar"><span>Consulta</span><div class="t"><span style="width:15%"></span></div><span class="x">18/120 · 15%</span></div>
+      <div class="bar"><span>Borderless Access</span><div class="t"><span style="width:15%"></span></div><span class="x">18/120 · 15%</span></div>
+      <div class="bar"><span>Market Instinct</span><div class="t"><span style="width:13%"></span></div><span class="x">16/120 · 13%</span></div>
+      <div class="bar"><span>Columinate</span><div class="t"><span style="width:13%"></span></div><span class="x">16/120 · 13%</span></div>
+      <div class="bar you"><span>Innovatr</span><div class="t"><span style="width:0.6%"></span></div><span class="x">0/120 · 0%</span></div>
+    </div>
+    <p class="note rv">Also named: Yazi, GfK, Zappi, TGM, MMR, Beyond Insights, Insight Survey, neon octopus and more than 30 others. Every competitor you listed (Kantar, Ipsos, Nielsen, BMi, KLA and Info Quest, which is likely the "IQ" in your list) shows up. Innovatr doesn't.</p>
+  </div>
+</section>
+
+<section>
+  <div class="w">
+    <div class="kicker rv"><span class="n">03</span><span class="t">Question by question</span></div>
+    <h2 class="rv">The questions you should own <em>go to someone else.</em></h2>
+    <p class="lead rv">Each of these maps to something you told us Innovatr wants to be known for. Innovatr's count is out of 10 answers per question: 3 ChatGPT, 3 Claude, 3 Gemini and 1 Google.</p>
+    <div class="scroll-x rv"><table class="tbl">
+      <tr><th>Buyer question</th><th>What you want to own</th><th>Innovatr</th><th>Who the engines name</th></tr>
+      <tr><td><b>Which research companies in South Africa can test product concepts in 24 hours?</b></td><td>Speed: Test24</td><td class="z">0/10</td><td>Google: "Kantar Marketplace offers rapid, automated concept testing with results delivered in 24 hours". ChatGPT: Market Instinct, Experipanel, Info Quest, Sagaci. Claude: Kantar ConceptEvaluate and Borderless Access, and "almost nobody in South Africa promises real-consumer concept tests in 24 hours"</td></tr>
+      <tr><td><b>Which South African agencies use AI for consumer research, like AI personas or AI-moderated interviews?</b></td><td>First in Africa with AI Persona Testing and AI Qual</td><td class="z">0/10</td><td>Claude: "Clear fits: neon octopus (AI personas) ... Yazi (AI-moderated interviews)". ChatGPT: Beyond Insights, Yazi ("200 Gen Z interviews in under 24 hours"), Columinate, KLA</td></tr>
+      <tr><td><b>Who has the largest consumer research panel in South Africa?</b></td><td>1.5M panel, largest in South Africa</td><td class="z">0/10</td><td>Google: "moweb research ... 230,198 consumer panellists". Claude, 3 of 3: Kantar Worldpanel, "South Africa's biggest ever consumer panel"</td></tr>
+      <tr><td><b>What is the most affordable way for an FMCG brand to do concept testing?</b></td><td>About 60% cheaper than competitors</td><td class="z">0/10</td><td>Market Instinct, Meraki, Dootsa, Yazi, GeoPoll, SurveyMonkey</td></tr>
+      <tr><td><b>How much does concept testing cost in South Africa?</b></td><td>Published pricing</td><td class="z">0/10</td><td>Claude: "There's no public rate card for concept testing in South Africa" (2 of 3). ChatGPT cites Market Instinct's own pricing guide</td></tr>
+      <tr><td><b>Our agency takes six weeks. How can we test concepts faster?</b></td><td>The problem Innovatr solves</td><td class="z">0/10</td><td>Kantar, Meraki, Springvale, GeoPoll, Toluna, Zappi, SurveyMonkey</td></tr>
+      <tr><td><b>Research is too slow and expensive for our Joburg team. Alternatives?</b></td><td>The problem Innovatr solves</td><td class="z">0/10</td><td>Dootsa, African Response, KLA, GeoPoll, Yazi, Attest</td></tr>
+      <tr><td><b>Which research agencies can run surveys across several African markets?</b></td><td>78-market reach</td><td class="z">0/10</td><td>Sagaci, GeoPoll, Ipsos, Kantar, NielsenIQ, Meraki</td></tr>
+      <tr><td><b>Best market research companies / concept testing companies / alternatives to Kantar</b></td><td>Being on the shortlist</td><td class="z">0/30</td><td>Kantar, Ipsos, Ask Afrika, Plus 94, BMi, KLA, African Response, Consulta, NielsenIQ</td></tr>
+    </table></div>
+  </div>
+</section>
+
+<section>
+  <div class="w">
+    <div class="kicker rv"><span class="n">04</span><span class="t">When the buyer already knows your name</span></div>
+    <h2 class="rv">Known, but <em>boxed in and doubted.</em></h2>
+    <p class="lead rv">Once a buyer types "Innovatr", every engine finds you. All four put you in the same box, and they repeat numbers you don't use.</p>
+    <div class="boxes">
+      <div class="box out rv"><div class="who">What the engines say, Innovatr vs Kantar</div><div class="own">The <em>quick, cheap</em> option.</div>
+        <div class="quote"><p>Kantar for high-stakes, strategic concept testing; Innovatr for fast, cost-effective concept screening and early-stage innovation</p><span>ChatGPT · same verdict in 3 of 3 runs</span></div>
+        <div class="quote"><p>Kantar is the stronger choice when you need rigorous, benchmarked quantitative validation ... Innovatr is better suited for agile, cost-effective concept iteration</p><span>Gemini · same verdict in 3 of 3 runs</span></div>
+        <div class="quote"><p>Use Kantar for big-money decisions ... Expect Innovatr to be meaningfully cheaper</p><span>Claude · "neither is better in general" in 3 of 3 runs</span></div>
+        <div class="quote"><p>Neither is universally better ... Innovatr best for fast, high-volume concept screening</p><span>Google AI Overview</span></div></div>
+      <div class="box you rv"><div class="who">What the engines get wrong</div><div class="own">Doubt and <em>wrong numbers.</em></div>
+        <div class="quote warn"><p>Advertises access to a consumer panel of over 44 million across 25 markets</p><span>ChatGPT · in 5 of 6 Innovatr answers. Your site says 37M+ and 78 markets</span></div>
+        <div class="quote warn"><p>The "44M consumer panel" figure in Innovatr's marketing is almost certainly a reach number from a panel partner, not their own panel</p><span>Claude · advises buyers to ask who supplies the sample</span></div>
+        <div class="quote warn"><p>Neither publishes South African prices</p><span>Claude · wrong: your site says from R5,000 per concept</span></div>
+        <div class="quote warn"><p>an agile innovation agency ... Innovatr in a Box, Innovatr Consult, Innovatr Academy</p><span>Claude · describes your old business in 2 of 3 answers</span></div>
+        <div class="quote warn"><p>Three different companies operate under the exact name Innovatr, two based in South Africa</p><span>Gemini · it names INNOVATR by KTH Tech and innovatr.com</span></div>
+        <div class="quote warn"><p>I found no client reviews, named clients, or third-party write-ups</p><span>Claude · ChatGPT says "limited independent customer feedback"</span></div>
+        <div class="quote warn"><p>buyers should verify how its AI-scraped panels align with their target demographics</p><span>Gemini · describes the panel as "AI-scraped"</span></div></div>
+    </div>
+    <div class="upside rv"><div class="mono">Also</div><p>Google treats the name as a typo. "What does Innovatr do?" returns <b style="color:var(--paper)">"Did you mean: What does Innovation do"</b> and no AI Overview. Asked "Who is Dig Insights' partner in Africa?", Google and one Gemini run correctly answer Innovatr. All three ChatGPT runs, all three Claude runs and the other two Gemini runs say they can't find one. Claude: <b style="color:var(--paper)">"I couldn't find any public record of Dig Insights having an Africa partner, so I won't guess a name."</b></p></div>
+  </div>
+</section>
+
+<section>
+  <div class="w">
+    <div class="kicker rv"><span class="n">05</span><span class="t">Where the answers come from</span></div>
+    <h2 class="rv">The engines quote <em>376 sources.</em> Nine are yours.</h2>
+    <p class="lead rv">Every answer above was built from web pages the engine read. We logged every link ChatGPT and Claude cited, plus the sources Google showed. This is the reading list that decides who gets named.</p>
+    <div class="bars rv">
+      <div class="bar"><span>Research firms' own sites</span><div class="t"><span style="width:61%"></span></div><span class="x">230 · 61%</span></div>
+      <div class="bar"><span>Trade press</span><div class="t"><span style="width:21%"></span></div><span class="x">78 · 21%</span></div>
+      <div class="bar"><span>Directories</span><div class="t"><span style="width:12%"></span></div><span class="x">44 · 12%</span></div>
+      <div class="bar"><span>Blogs and guides</span><div class="t"><span style="width:4%"></span></div><span class="x">15 · 4%</span></div>
+      <div class="bar you"><span>Innovatr's own pages</span><div class="t"><span style="width:2.4%"></span></div><span class="x">9 · 2%</span></div>
+    </div>
+    <div class="scroll-x rv"><table class="tbl">
+      <tr><th>Source</th><th>Type</th><th>Times cited</th><th>What it tells you</th></tr>
+      <tr><td><b>kantar.com</b> (Marketplace concept-testing pages)</td><td>Competitor site</td><td>25</td><td>One plain page that says "concept testing, results in 24 hours, South Africa" wins the speed question for Kantar.</td></tr>
+      <tr><td><b>sagaciresearch.com</b> (Product Testing Africa, Online Panel South Africa)</td><td>Competitor site</td><td>24</td><td>Sagaci has a page for each question: panel, product testing, Africa. Claude cites it 20 times.</td></tr>
+      <tr><td><b>ipsos.com/en-za</b></td><td>Competitor site</td><td>22</td><td>Local pages on fast DIY surveys and AI product testing.</td></tr>
+      <tr><td><b>bizcommunity.com</b> (articles and company press offices)</td><td>Trade press</td><td>19+</td><td>The most-cited source that isn't a research firm. Ask Afrika, BMi and Emax get quoted from their Bizcommunity press offices.</td></tr>
+      <tr><td><b>greenbook.org</b> directory</td><td>Directory</td><td>12</td><td>Claude checks firms against GreenBook listings. We couldn't find an Innovatr listing.</td></tr>
+      <tr><td><b>africanresponse.co.za, geopoll.com</b></td><td>Competitor sites</td><td>23</td><td>Panel pages that put a number and a name on the panel.</td></tr>
+      <tr><td><b>marketinstinct.co.za</b> (pricing guide)</td><td>Competitor site</td><td>10</td><td>ChatGPT's main source on what research costs. One published price page.</td></tr>
+      <tr><td><b>research-live.com, mrweb.com</b></td><td>Trade press (UK)</td><td>12</td><td>Where Claude looks for Dig Insights' partners. The Innovatr partnership isn't there.</td></tr>
+      <tr><td><b>goodfirms.co, themanifest.com, sayellow.com</b></td><td>Directories</td><td>9</td><td>Lists of "top market research companies in South Africa". Innovatr isn't on them.</td></tr>
+      <tr><td><b>zoominfo.com, rocketreach.co, syncgtm.com</b></td><td>Company data</td><td>6</td><td>Where Claude gets "1-10 employees" and "revenue under $5 million". They shape the "tiny" framing.</td></tr>
+      <tr><td><b>innovatr.co.za</b> and Innovatr's LinkedIn</td><td>Yours</td><td>9</td><td>All nine appeared only when the buyer had already typed your name.</td></tr>
+    </table></div>
+    <p class="note rv">Gemini rarely shows links, so its sources are under-counted here. Counts are links per answer, so one page cited in five answers counts five times.</p>
+  </div>
+</section>
+
+<section>
+  <div class="w">
+    <div class="kicker rv"><span class="n">06</span><span class="t">Why</span></div>
+    <h2 class="rv">The engines <em>can't read your website.</em></h2>
+    <p class="lead rv">innovatr.co.za is built so the page only appears once a browser runs its code. People see the full site. AI crawlers such as OpenAI's, Anthropic's and Perplexity's mostly don't run that code, so they get an empty page. We fetched it the way they do:</p>
+    <div class="crawl rv">
+      <div class="h"><span>innovatr.co.za, as an AI crawler sees it</span><span>Same on /research, /test24-pro, /case-study/discovery</span></div>
+      <div class="b">Innovatr</div>
+      <div class="f">That is the entire readable text. 8 characters. The 37M+ panel, Test24, the Dig Insights partnership, the pricing, the case studies and the 13 Pulse insight reports on your homepage aren't there.</div>
+    </div>
+    <p class="lead rv">Everything people see on your site is the evidence the engines are looking for. Take the Pulse report "Insurance &amp; Digital Banking in South Africa" (1,172 consumer voices): engines can't read it, so they can't cite it. Meanwhile Market Instinct's pricing guide, Yazi's "200 Gen Z interviews in under 24 hours" case study and Kantar Marketplace's concept-testing page are all readable, and they are what gets quoted.</p>
+    <p class="lead rv">The numbers also don't agree with each other. Your site and deck say 37M+ panellists, 78 markets, 200+ studies and from R5,000 per concept. Your note to us says a 1.5M South African panel and from R1,000 per test. ChatGPT says 44M. We traced that one: it comes from your own earlier LinkedIn ad ("Fast. Smart. Affordable.: 24 hour insights, from R3k per concept, a 44M consumer panel"), which is described on a former marketer's portfolio page. So the engines are repeating you, just an older version of you. That leaves three panel sizes (1.5M, 37M+ and 44M) and three starting prices (R1,000, R3,000 and R5,000) in public. Engines discount a company whose facts conflict, and Claude now tells buyers to question the panel figure.</p>
+    <p class="lead rv">One more detail: every page on the site has the same title ("Innovatr") and the same description. Even where a search engine does render the page, nothing tells it that /test24-pro is about 24-hour concept testing and /research is about the panel.</p>
+  </div>
+</section>
+
+<section>
+  <div class="w">
+    <div class="kicker rv"><span class="n">07</span><span class="t">What moves the number</span></div>
+    <h2 class="rv">Seven fixes, <em>in order.</em></h2>
+    <p class="lead rv">These marks show who controls each fix: <b>you</b> (Innovatr can do it alone), <b>influence</b> (needs someone else to act) or <b>earn</b> (takes time and third parties). The engines decide the outcome, so these are inputs, not promises.</p>
+    <div class="fixes">
+      <div class="fx rv"><div class="n">1</div><div><span class="who g">You</span><h3>Make the website readable</h3><p>Have the site render its text on the server (or pre-render each page) so a plain fetch returns the real content. This one change unlocks every page, case study and Pulse report at once. It's the biggest single lever on this list, and nothing below works without it.</p></div></div>
+      <div class="fx rv"><div class="n">2</div><div><span class="who g">You</span><h3>One set of numbers, everywhere</h3><p>Agree the panel size, market count, study count and starting price. Then make the website, deck, LinkedIn and every directory say exactly that. Retire the 44M and R3k figures from your old LinkedIn ads, and ask the portfolio page that describes them to mark them as out of date. Only claim "largest in South Africa" with a figure someone can check: Kantar publicly owns "South Africa's biggest ever consumer panel".</p></div></div>
+      <div class="fx rv"><div class="n">3</div><div><span class="who g">You</span><h3>Tell the engines which Innovatr you are</h3><p>Add a full company profile in the site's structured data (registered name, founder, Johannesburg address, LinkedIn, the Dig Insights partner page) and a short "About" page. That separates you from INNOVATR by KTH Tech and innovatr.com.</p></div></div>
+      <div class="fx rv"><div class="n">4</div><div><span class="who g">You</span><h3>Publish a page for each question you lose</h3><p>"24-hour concept testing in South Africa", "How much concept testing costs in South Africa" (your R5,000 per concept is a real answer, and almost nobody else publishes one), "AI personas and AI qual in South Africa", and "Multi-market research across Africa". Write them as straight answers with numbers, not brochure copy.</p></div></div>
+      <div class="fx rv"><div class="n">5</div><div><span class="who a">Influence</span><h3>Get the Dig Insights partnership on the record</h3><p>Google already knows the partnership through Insight Platforms. ChatGPT and Claude can't find it, and Claude looks for it in Research Live and MrWeb. Ask Dig to list Innovatr on its partner page and announce it in those two trade titles.</p></div></div>
+      <div class="fx rv"><div class="n">6</div><div><span class="who a">Influence</span><h3>Be on the pages the engines already read</h3><p>A Bizcommunity press office carrying your Pulse findings, a GreenBook listing, and entries on GoodFirms and The Manifest. Correct the employee and revenue data on ZoomInfo. Keep posting Pulse numbers on LinkedIn, which Google already cites.</p></div></div>
+      <div class="fx rv"><div class="n">7</div><div><span class="who r">Earn</span><h3>Independent proof</h3><p>Engines hold back because there's "limited independent customer feedback". Named client case studies (your site lists Discovery Bank, Rain and Namibian Breweries, but engines can't read it), trade press coverage and reviews on platforms buyers check close that gap. This takes quarters, not weeks.</p></div></div>
+    </div>
+    <p class="note rv">Separately: you told us there is no Google Analytics or Search Console on the site. Without them nobody can see which pages get found or what traffic AI sends you. Setting them up takes about an hour and should happen alongside fix 1.</p>
+  </div>
+</section>
+
+<section class="honest">
+  <div class="w">
+    <div class="kicker rv"><span class="n">08</span><span class="t">What's already working</span></div>
+    <h2 class="rv">When the engines find you, <em>they get you right.</em></h2>
+    <div class="pos">
+      <div class="rv"><div class="mono">Positioning</div><h4>Speed and value land</h4><p>Every engine, unprompted, frames Innovatr around 24-hour turnaround, agility and cost. That is the positioning you chose.</p></div>
+      <div class="rv"><div class="mono">Facts</div><h4>Gemini and Claude know the detail</h4><p>Gemini: your founder, Test24's swipe method, Upsiide by Dig Insights, memberships from R6,500 a month and R5,000 per concept. Claude: the Test24 Pro tier, built-in AI qual, and clients such as Rain, Discovery Bank and Namibian Breweries. All correct.</p></div>
+      <div class="rv"><div class="mono">Partnership</div><h4>Google names you as Dig's partner</h4><p>"Innovatr is Dig Insights' exclusive partner in Africa." It's the one question where Google answers with your name.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="w">
+    <div class="kicker rv"><span class="n">09</span><span class="t">Method and limits</span></div>
+    <h2 class="rv" style="font-size:clamp(30px,3.6vw,46px)">How this was <em>measured.</em></h2>
+    <p class="lead rv"><b>Questions:</b> 15, written from your answers about buyers and services, and frozen so they can be re-run exactly. 12 don't mention any brand. 3 do: Innovatr vs Kantar, "What does Innovatr do?", and Dig Insights' African partner.</p>
+    <p class="lead rv"><b>Engines:</b> ChatGPT (logged out, web search, 3 fresh runs per question). Gemini (temporary chat with no history, 3 fresh runs per question; two runs were discarded and redone after an input error). Claude (claude.ai incognito chat with web search, 3 fresh runs per question). Google AI Overviews (google.com set to South Africa, 1 run per question). Perplexity isn't included: it now refuses every question without a signed-in account, so we'll add it from a clean account at the first re-measure.</p>
+    <p class="lead rv"><b>Scoring:</b> a company counts as named when the answer text mentions it. The Visibility Score (16/100) adds four parts. Presence: named in 21 of 150 answers, 5.6 of 40. Position: never named on an open question, 0 of 20. Accuracy: 9 of 21 mentions carried a wrong, outdated or conflicting fact, 8.6 of 15. Source ownership: 5 of about 73 sources cited in answers that named Innovatr were Innovatr's own, 1.7 of 25. AI answers change between runs and week to week, so treat every figure as a count on 18 November 2026, not a permanent verdict. This report doesn't estimate traffic or sales.</p>
+  </div>
+</section>
+
+<footer>AI Visibility Index · Innovatr baseline · observed 18 November 2026</footer>
+
+<script>
+(function(){
+  var els=[].slice.call(document.querySelectorAll('.rv'));
+  function on(el){el.classList.add('on')}
+  if(!('IntersectionObserver' in window)||(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)){els.forEach(on)}else{
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){on(e.target);io.unobserve(e.target)}})},{threshold:.1});
+    els.forEach(function(el){io.observe(el)});
+  }
+  window.addEventListener('beforeprint',function(){els.forEach(on)});
+})();
+</script>
+</body>
+</html>
