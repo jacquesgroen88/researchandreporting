@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>Innovatr Execution Playbook</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,600&display=swap">
+<style>
+/* Layout: one reading column with a sticky section rail on wide screens; tables scroll in their own boxes. */
+:root{
+  --bg:#f6f7f5; --panel:#ffffff; --fg:#17201c; --muted:#59645f; --line:#dde2de;
+  --accent:#0f6b5c; --accent-soft:#e3f0ec; --warn:#8a5a00; --warn-soft:#fbf0d9; --bad:#9b2c2c; --bad-soft:#f8e3e3; --ok:#1d6b34; --ok-soft:#e2f2e6;
+  --display:"Fraunces", Georgia, serif; --body:"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif; --mono:"IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#111614; --panel:#182019; --fg:#e4ebe7; --muted:#9aa8a1; --line:#2b3530;
+  --accent:#5cc4ae; --accent-soft:#1c3530; --warn:#e0b25a; --warn-soft:#3a2f19; --bad:#ec8f8f; --bad-soft:#3a2020; --ok:#7fd096; --ok-soft:#1b3322; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111614; --panel:#182019; --fg:#e4ebe7; --muted:#9aa8a1; --line:#2b3530;
+  --accent:#5cc4ae; --accent-soft:#1c3530; --warn:#e0b25a; --warn-soft:#3a2f19; --bad:#ec8f8f; --bad-soft:#3a2020; --ok:#7fd096; --ok-soft:#1b3322; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:15.5px/1.6 var(--body);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:220px minmax(0,1fr);gap:48px;padding-block:40px 80px}
+nav.rail{position:sticky;top:calc(env(safe-area-inset-top,0px) + 24px);align-self:start;font-size:13px;display:flex;flex-direction:column;gap:2px}
+nav.rail a{color:var(--muted);text-decoration:none;padding:4px 8px;border-radius:4px}
+nav.rail a:hover,nav.rail a:focus-visible{color:var(--fg);background:var(--accent-soft);outline:none}
+nav.rail .lbl{font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:0 8px 8px}
+main{min-width:0;display:flex;flex-direction:column;gap:56px}
+header .eyebrow{font:500 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+h1{font:600 clamp(30px,4.4vw,44px)/1.1 var(--display);margin:8px 0 12px;text-wrap:balance}
+h2{font:600 26px/1.2 var(--display);margin:0 0 10px;text-wrap:balance}
+h3{font:600 17px/1.35 var(--body);margin:0 0 6px}
+p{margin:0 0 10px;max-width:72ch}
+.lead{font-size:17px;color:var(--muted);max-width:68ch}
+section{display:flex;flex-direction:column;gap:14px;scroll-margin-top:24px}
+.banner{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.chip{font:500 12px var(--mono);padding:3px 9px;border-radius:999px;background:var(--accent-soft);color:var(--accent);white-space:nowrap}
+.chip.warn{background:var(--warn-soft);color:var(--warn)}
+.chip.bad{background:var(--bad-soft);color:var(--bad)}
+.chip.ok{background:var(--ok-soft);color:var(--ok)}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:16px 18px;min-width:0}
+.card p:last-child{margin-bottom:0}
+.k{font:500 11px var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.big{font:600 28px/1.1 var(--display);margin:4px 0 6px}
+.tbl-box{overflow-x:auto;border:1px solid var(--line);border-radius:8px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:720px}
+th,td{text-align:left;vertical-align:top;padding:10px 12px;border-bottom:1px solid var(--line)}
+th{font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:var(--bg)}
+tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.week{display:grid;grid-template-columns:110px minmax(0,1fr);gap:18px;padding:18px 0;border-top:1px solid var(--line)}
+.week:first-of-type{border-top:0}
+.when{font:500 13px var(--mono);color:var(--accent)}
+.when small{display:block;color:var(--muted);font-size:11px;margin-top:4px}
+ol.steps,ul.list{margin:6px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:6px;max-width:80ch}
+ol.steps li::marker{font:500 12px var(--mono);color:var(--muted)}
+.own{font:500 11px var(--mono);padding:1px 6px;border-radius:3px;background:var(--bg);border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.done{margin-top:8px;font-size:13.5px;color:var(--muted)}
+.done b{color:var(--fg)}
+code{font:13px var(--mono);background:var(--bg);border:1px solid var(--line);padding:1px 5px;border-radius:3px;word-break:break-word}
+pre{font:12.5px/1.5 var(--mono);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 14px;overflow-x:auto;margin:0}
+.note{font-size:13.5px;color:var(--muted)}
+.callout{border-left:3px solid var(--warn);background:var(--warn-soft);padding:12px 16px;border-radius:0 6px 6px 0}
+.callout p{margin:0}
+.comp{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.comp .card h3{display:flex;justify-content:space-between;gap:8px;align-items:baseline;flex-wrap:wrap}
+.comp dl{margin:8px 0 0;display:grid;grid-template-columns:78px minmax(0,1fr);gap:4px 10px;font-size:14px}
+.comp dt{font:500 11px var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--muted);padding-top:3px}
+.comp dd{margin:0}
+a{color:var(--accent)}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media (max-width:900px){.wrap{grid-template-columns:minmax(0,1fr);gap:24px;padding-block:24px 60px}nav.rail{position:static;flex-direction:row;flex-wrap:wrap}nav.rail .lbl{width:100%}.week{grid-template-columns:minmax(0,1fr);gap:6px}}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<nav class="rail" aria-label="Sections">
+  <div class="lbl">Playbook</div>
+  <a href="#success">What success means</a>
+  <a href="#access">Week 0: access</a>
+  <a href="#plan">Action plan</a>
+  <a href="#analytics">Analytics setup</a>
+  <a href="#listings">Listings and citations</a>
+  <a href="#pages">Answer pages</a>
+  <a href="#terms">Terms that sell</a>
+  <a href="#sales">Leads into sales</a>
+  <a href="#competitors">Competitors</a>
+  <a href="#dig">Dig Insights</a>
+  <a href="#costs">Costs</a>
+  <a href="#risks">Risks</a>
+  <a href="#decisions">Open decisions</a>
+</nav>
+
+<main>
+<header>
+  <div class="eyebrow">Internal · JCE Media · do not share with Innovatr</div>
+  <h1>Innovatr AI visibility: how we execute it</h1>
+  <p class="lead">Every step from signature to day 90: what we do, who does it, how we know it is done, what it costs. Built on the 18 Nov baseline (150 runs, score 16/100, named in 0 of 120 open answers) and research done on 20 Nov.</p>
+  <div class="banner">
+    <span class="chip warn">Deal not signed</span>
+    <span class="chip warn">Price is a draft</span>
+    <span class="chip">Rates: USD/ZAR 17.50 (x-rates, 20 Nov)</span>
+    <span class="chip">Owners: Jacques · Diane · Claude · Innovatr</span>
+  </div>
+</header>
+
+<section id="success">
+  <h2>What success means</h2>
+  <p>Visibility is only the first link. Richard pays for tests sold, so the plan is judged on four links in a chain. If any link is broken, the earlier ones are wasted.</p>
+  <div class="grid">
+    <div class="card"><div class="k">1 · Readable</div><div class="big">Day 21</div><p>Every page returns its full text to a plain fetch, with its own title. GA4, Search Console, Bing and Clarity are recording.</p></div>
+    <div class="card"><div class="k">2 · Named</div><div class="big">Day 90</div><p>Named in an open buyer answer on at least 2 of 5 engines (the guarantee line). Indicative score: 16 to 35+.</p></div>
+    <div class="card"><div class="k">3 · Enquiries</div><div class="big">Measured</div><p>AI-referred visits and enquiries counted every month through the GA4 AI channel, the free-text source field and a CRM tag. No volume promises.</p></div>
+    <div class="card"><div class="k">4 · Tests sold</div><div class="big">1 hour</div><p>Every AI-referred enquiry gets a call within one business hour. We report enquiries to calls to Test24s sold, every month.</p></div>
+  </div>
+  <div class="tbl-box"><table>
+    <tr><th>Day-90 scoreboard</th><th>Baseline (18 Nov)</th><th>Target</th><th>Source</th></tr>
+    <tr><td>Open answers naming Innovatr</td><td>0 of 120</td><td>Named on 2 or more of 5 engines</td><td>Monthly re-run of the frozen 15 questions</td></tr>
+    <tr><td>Visibility Score</td><td>16 / 100</td><td>35+ (indicative, not promised)</td><td>Same scoring as the baseline</td></tr>
+    <tr><td>Wrong facts in answers that name them</td><td>9 of 21</td><td>3 or fewer</td><td>Accuracy checks on each run</td></tr>
+    <tr><td>Innovatr's share of cited sources</td><td>2% (9 of 376)</td><td>10%+</td><td>Citation log</td></tr>
+    <tr><td>Pages Google has indexed with unique titles</td><td>Not measured (no GSC)</td><td>All core routes plus 6 answer pages</td><td>Search Console page indexing report</td></tr>
+    <tr><td>Third-party listings live</td><td>Not found on GreenBook, Clutch, GoodFirms, Bizcommunity</td><td>10+</td><td>Listings tracker (section 5)</td></tr>
+    <tr><td>Dig partnership documented by a third party</td><td>No</td><td>Yes (Dig site or trade-press note)</td><td>Claude and ChatGPT stop saying they can't find it</td></tr>
+    <tr><td>AI-referred enquiries called within 1 business hour</td><td>No process</td><td>100%</td><td>CRM timestamps</td></tr>
+  </table></div>
+</section>
+
+<section id="access">
+  <h2>Week 0: access and facts before kickoff</h2>
+  <p>Nothing in Phase 1 can start without these. Send this list with the signed scope and chase it daily. One missing item, usually the code repo, can block the project for weeks.</p>
+  <div class="tbl-box"><table>
+    <tr><th>What we need</th><th>From</th><th>Why</th><th>Level</th></tr>
+    <tr><td>Code repository (GitHub or similar) for innovatr.co.za</td><td>Their developer</td><td>Pre-render, titles, schema</td><td>Write, or a branch and pull requests</td></tr>
+    <tr><td>Google Cloud Run project, or a named developer who deploys our pull requests</td><td>Their developer</td><td>Ship the site fix</td><td>Deploy, or a deploy contact with a 48-hour SLA</td></tr>
+    <tr><td>DNS registrar login, or someone who adds TXT records the same day</td><td>Richard</td><td>Search Console and Bing verification</td><td>One TXT record</td></tr>
+    <tr><td>Google account that will OWN GA4 and Search Console (theirs, not ours)</td><td>Richard</td><td>They keep the data if we part ways</td><td>We get Editor / Full user</td></tr>
+    <tr><td>LinkedIn company page admin</td><td>Richard</td><td>Fix the About section, post Pulse data</td><td>Content admin</td></tr>
+    <tr><td>Forms and CRM (where enquiries land today)</td><td>Richard</td><td>Source field, alerts, CRM tag</td><td>Admin</td></tr>
+    <tr><td>The fact sheet, signed off (template below)</td><td>Richard</td><td>One version of every number, everywhere</td><td>Written approval</td></tr>
+    <tr><td>Clients we may name, plus 5 clients willing to leave a review</td><td>Richard</td><td>Case studies, Clutch and Google reviews</td><td>Named contact and email per client</td></tr>
+    <tr><td>Contact at Dig Insights (partnerships or marketing)</td><td>Richard</td><td>Get the partnership documented</td><td>Intro email</td></tr>
+  </table></div>
+  <div class="card">
+    <h3>Fact sheet: the questions Richard must answer once</h3>
+    <ul class="list">
+      <li>Legal name, registration number, founding year, address, founder and leadership names with titles.</li>
+      <li>Panel: one number for South Africa, one for global, the source (own panel, Dig/partner panel, or both), and how often it is refreshed. Retire 44M and 37M+ unless they can be sourced.</li>
+      <li>Prices: Test24 Basic member and non-member, Test24 Pro, memberships, AI Qual, consulting. Which are public? Retire "from R1,000" and "from R3k" or confirm them.</li>
+      <li>Speed: what exactly is delivered in 24 hours, sample size, and which markets.</li>
+      <li>Markets covered (the "78 markets" claim): which are fielded directly and which through partners.</li>
+      <li>Proof behind "largest panel in South Africa", "up to 80% accuracy", "first in Africa with AI Persona Testing". Anything without proof gets reworded.</li>
+      <li>Team size today (ZoomInfo says 1-10, which drives Claude's "tiny" framing).</li>
+    </ul>
+  </div>
+</section>
+
+<section id="plan">
+  <h2>Action plan, start to finish</h2>
+  <p>Week 1 is the week after access arrives, not the signing date. Each step has an owner and a "done when" line, so anyone on the team can pick it up.</p>
+
+  <div class="week"><div class="when">Week 1<small>Measure first</small></div><div>
+    <h3>Turn on measurement before anything changes</h3>
+    <ol class="steps">
+      <li>Create GA4, Search Console, Bing Webmaster Tools and Clarity on Innovatr's own Google and Microsoft accounts. Full steps are in the analytics setup section. <span class="own">Claude + Richard</span></li>
+      <li>Check <code>robots.txt</code> lets the AI crawlers in: GPTBot, OAI-SearchBot, ChatGPT-User, ClaudeBot, Claude-SearchBot, PerplexityBot, Google-Extended, Bingbot. <span class="own">Claude</span></li>
+      <li>Add "Where did you hear about us?" (free text) and hidden fields for UTM source, referrer and landing page on every form. <span class="own">Claude</span></li>
+      <li>Set up the enquiry alert to Richard (email plus WhatsApp) and a CRM tag <code>source: AI assistant</code>. <span class="own">Claude</span></li>
+      <li>Send Richard the fact-sheet questions and book a 30-minute call to go through them. <span class="own">Jacques</span></li>
+    </ol>
+    <p class="done"><b>Done when:</b> a test enquiry shows up in GA4 as a key event, lands in the CRM with its source, and alerts Richard within a minute.</p>
+  </div></div>
+
+  <div class="week"><div class="when">Weeks 1-3<small>Phase 1</small></div><div>
+    <h3>Make the site readable</h3>
+    <ol class="steps">
+      <li>Pre-render every route at build time with <code>vite-react-ssg</code> (free, MIT, supports React 18/19 and Vite 6-8). Fallbacks: Express serving per-route static HTML, or Prerender.io at $59/month (about R1,030) if the codebase fights us. <span class="own">Claude</span></li>
+      <li>Give every route its own <code>&lt;title&gt;</code>, meta description, self-canonical and Open Graph tags. Today every page is titled "Innovatr". <span class="own">Claude</span></li>
+      <li>Add JSON-LD: <code>Organization</code> (legal name, founder, address, logo, <code>sameAs</code> pointing to LinkedIn, Crunchbase, GreenBook and Clutch as they go live); <code>Service</code> with a ZAR <code>Offer</code> price for Test24 and Test24 Pro; <code>FAQPage</code> on the answer pages; <code>BreadcrumbList</code>. <span class="own">Claude</span></li>
+      <li>Generate <code>sitemap.xml</code> with real <code>lastmod</code> dates, and submit it in Search Console and Bing. Turn on IndexNow in Bing. <span class="own">Claude</span></li>
+      <li>Publish the signed-off fact sheet at <code>/about/facts</code> and make the homepage, deck and LinkedIn match it. <span class="own">Diane</span></li>
+      <li>Rewrite the LinkedIn About section to the fact sheet, including the Dig Insights partnership line. <span class="own">Diane</span></li>
+    </ol>
+    <p class="done"><b>Done when:</b> <code>curl -s https://innovatr.co.za/research | wc -c</code> returns the page's text (today it returns 8 characters of body text), Rich Results Test validates the schema, and Search Console's URL Inspection shows the rendered page for each core route.</p>
+  </div></div>
+
+  <div class="week"><div class="when">Week 4<small>Phase 3 starts</small></div><div>
+    <h3>Fix the identity layer (all free)</h3>
+    <ol class="steps">
+      <li>Google Business Profile, category "Market research firm", verified. <span class="own">Diane + Richard</span></li>
+      <li>Bing Places: import from Google, then verify. Bing's index feeds Copilot and ChatGPT search. <span class="own">Diane</span></li>
+      <li>Crunchbase: free account using an @innovatr.co.za email to get edit control; fix the overview, founding year and team size. <span class="own">Diane + Richard</span></li>
+      <li>ZoomInfo: claim the company profile and correct employee count and description. RocketReach has no claim flow; it re-crawls once LinkedIn and the site are correct (within weeks). <span class="own">Diane</span></li>
+    </ol>
+    <p class="done"><b>Done when:</b> the same name, address, phone, description and numbers appear on all four.</p>
+  </div></div>
+
+  <div class="week"><div class="when">Weeks 3-8<small>Phase 2</small></div><div>
+    <h3>Publish the six answer pages, one a week</h3>
+    <ol class="steps">
+      <li>Week 3: 24-hour concept testing in South Africa.</li>
+      <li>Week 4: What concept testing costs in South Africa (with real prices).</li>
+      <li>Week 5: AI personas and AI qual in South Africa, with the limits stated.</li>
+      <li>Week 6: The panel: size, source, coverage.</li>
+      <li>Week 7: Innovatr or a global agency? An honest guide.</li>
+      <li>Week 8: Research across African markets.</li>
+      <li>Alongside: three Innovatr Pulse reports turned into readable pages, plus two named case studies (Discovery Bank and Rain or Namibian Breweries, with written permission).</li>
+    </ol>
+    <p class="note">Claude drafts, Diane edits and loads, and Richard approves each page within 48 hours. The page template is in section 6.</p>
+    <p class="done"><b>Done when:</b> each page is live, pre-rendered, in the sitemap, indexed in Search Console and linked from the main navigation or the relevant service page.</p>
+  </div></div>
+
+  <div class="week"><div class="when">Weeks 4-6<small>Listings</small></div><div>
+    <h3>Get on the reading list the engines already use</h3>
+    <ol class="steps">
+      <li>Free directories, in this order: GreenBook (Claude cited it 12 times), Clutch (this also creates The Manifest profile), GoodFirms, Bizcommunity company directory, Quirk's SourceBook, Insight Platforms, SA Yellow. Full steps are in section 5. <span class="own">Diane</span></li>
+      <li>Reviews: Richard emails 5 clients. Clutch verifies reviews itself, by phone or form, and Verified status needs 3 or more. Ask the same clients for a Google review. <span class="own">Richard, Diane chases</span></li>
+      <li>Dig Insights: send the drafted partnership note and ask for three things: an Innovatr mention on Dig's site, a joint news item to Research Live and MrWeb (editorial is free), and a LinkedIn post from both company pages. <span class="own">Jacques drafts, Richard sends</span></li>
+    </ol>
+  </div></div>
+
+  <div class="week"><div class="when">Weeks 6, 9, 12<small>Press</small></div><div>
+    <h3>Three Bizcommunity releases built on Pulse data</h3>
+    <ol class="steps">
+      <li>Each release carries one finding from Innovatr's own Pulse data, a quote from Richard, the fact-sheet boilerplate and a link to the matching answer page. <span class="own">Claude drafts, Diane submits</span></li>
+      <li>Submit through Bizcommunity at R2,500 excl. VAT per release. This is how Ask Afrika, KLA and BMi get quoted: from their Bizcommunity press offices, not from their own sites. <span class="own">Diane</span></li>
+      <li>Send the same story free to Research Live (editorial@mrs.org.uk) and MrWeb (editor@mrweb.com). Both refuse AI-written copy, so Richard's own words and a human edit come first. <span class="own">Diane</span></li>
+    </ol>
+  </div></div>
+
+  <div class="week"><div class="when">Monthly<small>Weeks 4, 8, 12</small></div><div>
+    <h3>Re-measure and report</h3>
+    <ol class="steps">
+      <li>Re-run the frozen 15 questions, 3 runs each, on ChatGPT, Claude, Gemini and Google AIO. Add Perplexity from a clean signed-in account. Add the 6 new tracked terms from section 7 as a separate set so the baseline stays comparable. <span class="own">Claude</span></li>
+      <li>Pull the GA4 AI-assistant channel, Search Console queries and clicks for the answer pages, Clarity AI-crawler activity, and the CRM funnel (enquiries, calls within an hour, tests sold). <span class="own">Claude</span></li>
+      <li>One-page scoreboard to Richard plus a 30-minute call. Jacques picks the next month's top three moves. <span class="own">Jacques</span></li>
+    </ol>
+  </div></div>
+
+  <div class="week"><div class="when">Day 90<small>Review</small></div><div>
+    <h3>Close-out or renew</h3>
+    <ol class="steps">
+      <li>Final re-run and scoreboard against the day-90 targets. Check the guarantee line (named on 2 of 5 engines). <span class="own">Claude</span></li>
+      <li>Decide what comes next: hold-the-ground retainer, more answer pages, paid listings (only where the data says a source gets cited), or Wikidata once independent coverage exists. <span class="own">Jacques</span></li>
+    </ol>
+  </div></div>
+</section>
+
+<section id="analytics">
+  <h2>Analytics setup: yes, all four, and all free</h2>
+  <p>Innovatr owns every account; we are added as users. Each one answers a different question.</p>
+  <div class="tbl-box"><table>
+    <tr><th>Tool</th><th>Answers</th><th>Exact steps</th></tr>
+    <tr><td><b>Google Analytics 4</b></td><td>Who arrives from ChatGPT, Claude, Perplexity or Gemini, and do they enquire?</td><td>
+      <ol class="steps">
+        <li>Create a property (Africa/Johannesburg, ZAR) and a web data stream. Turn on enhanced measurement, including "page changes based on browser history events" (needed for an SPA).</li>
+        <li>Install through Google Tag Manager in <code>index.html</code>, behind a POPIA consent banner.</li>
+        <li>Events: <code>generate_lead</code> on form success, <code>book_call</code>, <code>start_test24</code>. Mark all three as key events.</li>
+        <li>Admin, Data display, Channel groups: copy the default group, add a channel "AI assistants" placed ABOVE Referral, with source matching the regex below.</li>
+        <li>Set data retention to 14 months and link Search Console.</li>
+      </ol></td></tr>
+    <tr><td><b>Google Search Console</b></td><td>Is Google indexing each page, and which queries show it?</td><td>Add a Domain property, add the DNS TXT record, submit <code>sitemap.xml</code>, then run URL Inspection on each core route and answer page. Check page indexing weekly in Phase 1.</td></tr>
+    <tr><td><b>Bing Webmaster Tools</b></td><td>Is Bing (which feeds Copilot and ChatGPT search) indexing it?</td><td>"Import from Google Search Console" (two clicks), submit the sitemap, turn on IndexNow so new pages are pushed the day they go live.</td></tr>
+    <tr><td><b>Microsoft Clarity</b></td><td>What do AI-referred visitors do on the page? Which AI bots crawl it?</td><td>Add the snippet through GTM. Connect its AI Visibility and bot-activity features if their hosting lets us verify the domain (Cloud Run without a CDN may limit this). Watch session recordings of AI-referred visits on the answer pages.</td></tr>
+  </table></div>
+  <pre>AI assistants channel, source matches regex:
+chatgpt\.com|chat\.openai\.com|openai\.com|perplexity\.ai|claude\.ai|gemini\.google\.com|bard\.google\.com|copilot\.microsoft\.com|edgeservices\.bing\.com|you\.com|phind\.com</pre>
+  <p class="note">Google AI Overview clicks arrive as normal Google organic traffic and can't be separated in GA4. That is why the free-text "where did you hear about us" field matters: it catches the buyer who says "ChatGPT told me".</p>
+</section>
+
+<section id="listings">
+  <h2>Listings and citations: what, how, and what it costs</h2>
+  <div class="callout"><p><b>Will listings cost money?</b> The core plan needs <b>R0 for listings</b>. The only paid item we recommend is Bizcommunity press releases: <b>R2,500 excl. VAT each, three planned, R7,500 excl. VAT (R8,625 incl.)</b>. Everything else below is either free or an optional upgrade we only buy if the monthly citation data says that source matters.</p></div>
+  <div class="tbl-box"><table>
+    <tr><th>Source</th><th>Why it matters (baseline)</th><th>Cost</th><th>How</th><th>Week</th></tr>
+    <tr><td><b>GreenBook</b></td><td>Claude cited it 12 times; it checks firms against it. African Response's profile is Claude's go-to.</td><td><span class="chip ok">Free</span> basic. Paid tiers: price on request.</td><td>greenbook.org/create-company-listing, then enter the website and pick up to 3 services (concept testing, online panel, AI research). The free tier shows competitor suggestions on your page. Join the free "Recommended by Clients" review programme.</td><td class="num">4</td></tr>
+    <tr><td><b>Clutch + The Manifest</b></td><td>Manifest and GoodFirms "top research companies in SA" lists were cited; Innovatr is on none.</td><td><span class="chip ok">Free</span> profile. Verified badge $499/yr (about R8,730), optional.</td><td>clutch.co/get-listed, profile (about 20 minutes), then submit 5 client references; Clutch contacts the clients. The free profile creates the Manifest listing automatically.</td><td class="num">4</td></tr>
+    <tr><td><b>GoodFirms</b></td><td>Cited in "top firms in SA" answers (5 times).</td><td><span class="chip ok">Free</span>. Pro $1,500/yr (about R26,250), skip.</td><td>goodfirms.co/get-listed, then register, fill in the profile and invite reviews.</td><td class="num">4</td></tr>
+    <tr><td><b>Bizcommunity company directory</b></td><td>The directory page itself is cited (the "Emax" pages Claude quoted are directory listing pages).</td><td><span class="chip ok">Free</span> listing; ask when buying the first release.</td><td>Ask sales@bizcommunity.com (+27 21 404 1460) to list Innovatr under Marketing and Media, Research.</td><td class="num">4</td></tr>
+    <tr><td><b>Bizcommunity press releases</b></td><td>19+ citations. The route Ask Afrika, KLA and BMi use to get named.</td><td><span class="chip warn">R2,500 excl. VAT each</span>. Press Office packages: price on request.</td><td>Submit through bizcommunity.com/advertise. Start with single releases; only buy a Press Office package if the releases get cited by month 3.</td><td class="num">6 · 9 · 12</td></tr>
+    <tr><td><b>Research Live (MRS)</b></td><td>Claude looks for Dig's partners here.</td><td><span class="chip ok">Free</span> editorial.</td><td>Email editorial@mrs.org.uk with a real news item (the Dig partnership, a Pulse finding). No AI-written copy.</td><td class="num">6+</td></tr>
+    <tr><td><b>MrWeb / Daily Research News</b></td><td>Claude checks Dig news here; Kantar's 24-hour launch was covered here.</td><td><span class="chip ok">Free</span> editorial. Paid banners from $1,470/mo, skip.</td><td>Email editor@mrweb.com with the same story.</td><td class="num">6+</td></tr>
+    <tr><td><b>Quirk's SourceBook</b></td><td>Global buyer directory; long-standing free basic listing.</td><td><span class="chip ok">Free</span> basic.</td><td>quirks.com, Companies, My Company, then claim or add.</td><td class="num">5</td></tr>
+    <tr><td><b>Insight Platforms</b></td><td>Google's correct Dig-partner answer showed an Insight Platforms source.</td><td><span class="chip ok">Free</span> basic. Featured $1,950/yr (about R34,000), skip.</td><td>Free sign-up through partners.insightplatforms.com. Check in a browser whether it already names Innovatr (our fetch was blocked).</td><td class="num">5</td></tr>
+    <tr><td><b>SA Yellow</b></td><td>Cited in local "research companies" lists.</td><td><span class="chip ok">Free</span> basic.</td><td>sayellow.com, add business.</td><td class="num">5</td></tr>
+    <tr><td><b>Google Business Profile, Bing Places, Crunchbase, ZoomInfo</b></td><td>ZoomInfo and RocketReach drive "1-10 employees, under $5M".</td><td><span class="chip ok">Free</span></td><td>See week 4 of the action plan.</td><td class="num">4</td></tr>
+    <tr><td><b>G2 / Capterra</b></td><td>Only if Test24 is sold as self-serve software.</td><td><span class="chip ok">Free</span> profile. Paid: skip.</td><td>Claim the profile; only if Richard positions Test24 as a platform.</td><td class="num">Later</td></tr>
+    <tr><td><b>SAMRA membership</b></td><td>Local credibility. The members page lists names only, so its AI value is low. Innovatr is not listed today.</td><td><span class="chip warn">Fee not published</span>, banded by turnover.</td><td>Ask info@samra.co.za for the fee; Richard decides. Needs the CIPC certificate.</td><td class="num">Optional</td></tr>
+    <tr><td><b>ESOMAR directory</b></td><td>Global trust mark.</td><td><span class="chip bad">€1,270 listing (about R24,300) plus membership</span></td><td>Needs corporate membership or one individual member on staff. Hold.</td><td class="num">Hold</td></tr>
+    <tr><td><b>Wikidata</b></td><td>Entity record the engines use.</td><td><span class="chip ok">Free</span></td><td>Only after independent press exists. Self-created items with no references get deleted. Revisit at day 90.</td><td class="num">Day 90+</td></tr>
+  </table></div>
+  <p class="note">Prices checked 20 Nov 2026. GreenBook, Bizcommunity Press Office, Quirk's enhanced, SAMRA and MRS do not publish their paid prices; we have not guessed them.</p>
+</section>
+
+<section id="pages">
+  <h2>How each answer page is built</h2>
+  <p>The engines quote plain, single-purpose pages: Kantar's 24-hour page, Sagaci's one page per country, Market Instinct's how-to guide. Every answer page follows the same pattern.</p>
+  <div class="grid">
+    <div class="card"><h3>Structure</h3><ol class="steps">
+      <li>H1 is the buyer's question in their words.</li>
+      <li>The first two sentences answer it with a number: "Innovatr tests concepts with 100 South African consumers in 24 hours, from R5,000 per concept."</li>
+      <li>A price table, then how it works, then what it can't do (the limits section builds trust and gets quoted).</li>
+      <li>4 to 6 FAQ questions, marked up as <code>FAQPage</code>.</li>
+      <li>One action: "Book a 15-minute scoping call" or "Start a Test24", behind a work-email form.</li>
+      <li>Author box (Richard, credentials), and a "Last updated" date.</li>
+    </ol></div>
+    <div class="card"><h3>Rules</h3><ul class="list">
+      <li>900 to 1,500 words. Plain HTML text, never inside an image or a carousel.</li>
+      <li>Every number matches the fact sheet.</li>
+      <li>Name competitors fairly where the buyer asks for a comparison; engines trust pages that do.</li>
+      <li>Link each page from the service page it supports, and from the other answer pages.</li>
+      <li>Re-date and refresh each page at least once a quarter.</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="terms">
+  <h2>Terms most likely to turn into paid work</h2>
+  <p>We could not pull search volumes: Google's Keyword Planner refused our API access, which is explorer-level only. The ranking below is by buying intent and by what the baseline showed. Volumes get added from Search Console once it has 4 to 6 weeks of data.</p>
+  <div class="tbl-box"><table>
+    <tr><th>Priority</th><th>Term or question</th><th>Intent</th><th>Who owns it today</th><th>Our page</th></tr>
+    <tr><td><span class="chip">1</span></td><td>concept testing in 24 hours South Africa</td><td>Urgent launch</td><td>Kantar (Google AIO gave the 24-hour claim to Kantar alone), Info Quest</td><td>Page 1</td></tr>
+    <tr><td><span class="chip">1</span></td><td>how much does concept testing cost South Africa · concept testing price per concept</td><td>Ready to buy</td><td>Market Instinct guide, Kantar's $3,600 price. Claude wrongly says no SA firm publishes prices.</td><td>Page 2</td></tr>
+    <tr><td><span class="chip">1</span></td><td>Upsiide South Africa · Dig Insights Africa partner</td><td>Navigational</td><td>Nobody. Innovatr should own it outright.</td><td>Fact sheet + Dig note</td></tr>
+    <tr><td><span class="chip">1</span></td><td>test product concepts before launch South Africa</td><td>Problem-aware</td><td>Kantar, Ipsos</td><td>Page 1</td></tr>
+    <tr><td><span class="chip">2</span></td><td>alternatives to Kantar South Africa · Ipsos alternative for concept testing · Kantar ConceptEvaluate alternative</td><td>Switching</td><td>Ask Afrika, Ipsos</td><td>Page 5</td></tr>
+    <tr><td><span class="chip">2</span></td><td>FMCG packaging test South Africa · test new pack design with consumers</td><td>Category</td><td>Market Instinct, Sagaci</td><td>Page 1 section + Pulse page</td></tr>
+    <tr><td><span class="chip">2</span></td><td>ad pre-testing South Africa · test TV ad before launch</td><td>Category</td><td>Kantar, Ipsos</td><td>New page in month 3</td></tr>
+    <tr><td><span class="chip">2</span></td><td>affordable market research for FMCG brands South Africa · market research too slow and expensive</td><td>Price-sensitive</td><td>GeoPoll, Market Instinct</td><td>Page 2</td></tr>
+    <tr><td><span class="chip">2</span></td><td>AI personas consumer research South Africa · synthetic respondents accuracy · AI-moderated interviews</td><td>Curious buyer</td><td>Ipsos, Toluna, Human8 (Research Live coverage)</td><td>Page 3</td></tr>
+    <tr><td><span class="chip">3</span></td><td>online survey panel South Africa · largest consumer panel South Africa</td><td>Sample buyer</td><td>Sagaci, GeoPoll, Info Quest, Kantar Worldpanel</td><td>Page 4</td></tr>
+    <tr><td><span class="chip">3</span></td><td>bank or fintech product concept testing South Africa · new flavour concept test</td><td>Vertical</td><td>Nobody specific</td><td>Case studies (Discovery Bank, Rain, Namibian Breweries)</td></tr>
+    <tr><td><span class="chip">3</span></td><td>consumer research across African markets · concept testing Kenya Nigeria</td><td>Multi-market</td><td>Sagaci (Claude's default), GeoPoll</td><td>Page 6</td></tr>
+    <tr><td><span class="chip">3</span></td><td>focus group cost South Africa · how to choose a market research agency South Africa</td><td>Early research</td><td>Mixed</td><td>Page 2 and Page 5</td></tr>
+  </table></div>
+  <p class="note">New tracked set for monthly re-runs, kept apart from the frozen 15: price per concept, Kantar ConceptEvaluate alternative, FMCG packaging test, ad pre-testing, bank product concept testing, online survey panel South Africa.</p>
+</section>
+
+<section id="sales">
+  <h2>Turning enquiries into tests sold</h2>
+  <p>Their LinkedIn report says it plainly: R63,335 spent, 52 leads, 1,811 nurture emails, zero genuine replies, and no human hand-off. If AI-referred enquiries go into the same machine, the project will "work" and Richard will still see no sales.</p>
+  <div class="grid">
+    <div class="card"><div class="k">Minute 0</div><h3>Enquiry lands</h3><p>Form success fires <code>generate_lead</code>. The CRM tags the source. Richard gets an email and WhatsApp alert with name, company, the question they asked and the page they came from.</p></div>
+    <div class="card"><div class="k">Within 1 business hour</div><h3>A human calls</h3><p>Richard or a named team member calls. The script: what are you launching, by when, how many concepts, who decides. Offer a Test24 slot this week.</p></div>
+    <div class="card"><div class="k">Same day</div><h3>Scoped quote</h3><p>One-page quote from the published prices, plus a sample Upsiide dashboard. Follow-up on day 2 and day 5 by a person, not a sequence.</p></div>
+    <div class="card"><div class="k">Month end</div><h3>Funnel review</h3><p>We report AI-referred visits, enquiries, calls within the hour, quotes, and Test24s sold with their value. A missed hour gets flagged by name.</p></div>
+  </div>
+  <p class="note">Quick win to offer Richard: call the 52 LinkedIn leads from April to July personally. It is outside the scope, but it costs nothing and tests the call script before AI traffic arrives.</p>
+</section>
+
+<section id="competitors">
+  <h2>The competitors and why the engines name them</h2>
+  <p>Share of answer is out of 120 open-question answers. Two routes win citations. The first is a plain single-purpose page on your own site (Kantar, Sagaci, GeoPoll, Market Instinct). The second is press and directories (Ask Afrika, KLA, BMi). Innovatr has neither today.</p>
+  <div class="comp">
+    <div class="card"><h3>Kantar <span class="chip">72 / 120</span></h3><dl>
+      <dt>Who</dt><dd>Global group, majority Bain Capital with WPP at 40%, being broken up and sold in parts. Kantar Marketplace is its self-serve arm.</dd>
+      <dt>Overlap</dt><dd>ConceptEvaluate AI, results "in as few as 24 hours", published from $3,600 (about R63,000).</dd>
+      <dt>Why named</dt><dd>Huge brand authority, about 14 citations of its single-purpose Marketplace concept-testing page, and MrWeb and Bizcommunity press for launches.</dd>
+      <dt>Our angle</dt><dd>R5,000 per concept against $3,600, plus local strategists. A priced 24-hour page takes back the speed claim.</dd></dl></div>
+    <div class="card"><h3>Ipsos South Africa <span class="chip">61 / 120</span></h3><dl>
+      <dt>Who</dt><dd>SA arm of the Paris-listed group, Bryanston. New country manager Feb 2026.</dd>
+      <dt>Overlap</dt><dd>Ipsos.Digital DIY surveys, an AI-driven product testing page, AI personas.</dd>
+      <dt>Why named</dt><dd>Local <code>/en-za/</code> pages written in the buyer's words: "fast response", "DIY", "AI-driven product testing". About 22 citations.</dd>
+      <dt>Our angle</dt><dd>Same-grade method (Upsiide), a published price and a 24-hour deadline. Ipsos publishes no SA prices.</dd></dl></div>
+    <div class="card"><h3>Ask Afrika <span class="chip">42 / 120</span></h3><dl>
+      <dt>Who</dt><dd>Founded 1995 by Andrea Rademeyer; calls itself SA's largest independent research house (about 300 staff).</dd>
+      <dt>Overlap</dt><dd>Full-service custom research, brand and CX studies, TGI.</dd>
+      <dt>Why named</dt><dd>Only 2 own-site citations. Named through heavy Bizcommunity press office output and Research Live. The clearest proof that press beats the website.</dd>
+      <dt>Our angle</dt><dd>Faster and cheaper; copy its press cadence with Pulse releases.</dd></dl></div>
+    <div class="card"><h3>Sagaci Research <span class="chip">34 / 120</span></h3><dl>
+      <dt>Who</dt><dd>Founded 2012 by ex-BCG founders, operations in Nairobi, 34 countries.</dd>
+      <dt>Overlap</dt><dd>SagaPoll panel, concept, pack, price and ad pre-tests across Africa.</dd>
+      <dt>Why named</dt><dd>One URL per country and per method (online panel South Africa, product testing Africa). About 24 citations, 20 from Claude. Its SA page only claims "10,000+ daily", so it wins on structure, not size.</dd>
+      <dt>Our angle</dt><dd>Copy the structure with stated, evidenced numbers.</dd></dl></div>
+    <div class="card"><h3>GeoPoll <span class="chip">34 / 120</span></h3><dl>
+      <dt>Who</dt><dd>Part of Mobile Accord (Denver), operations in Kenya, office in Johannesburg.</dd>
+      <dt>Overlap</dt><dd>Mobile and SMS surveys, fast multi-country fieldwork.</dd>
+      <dt>Why named</dt><dd>A dedicated SA panel page and a published per-complete price. Named in all four engines' "affordable" and Africa answers.</dd>
+      <dt>Our angle</dt><dd>GeoPoll sells data; Innovatr sells the answer (diagnostics plus strategy).</dd></dl></div>
+    <div class="card"><h3>NielsenIQ <span class="chip">31 / 120</span></h3><dl>
+      <dt>Who</dt><dd>Retail measurement giant, Advent International backed.</dd>
+      <dt>Overlap</dt><dd>BASES concept and volumetric testing. The BASES AI Screener rollout does not list SA.</dd>
+      <dt>Why named</dt><dd>Brand authority and training data; only about 3 own-site citations.</dd>
+      <dt>Our angle</dt><dd>Test24 is the screen you run before you spend BASES money.</dd></dl></div>
+    <div class="card"><h3>African Response <span class="chip">28 / 120</span></h3><dl>
+      <dt>Who</dt><dd>Bryanston, around 2000, B-BBEE Level 1, MzansiVoice community panel.</dd>
+      <dt>Overlap</dt><dd>Custom quant and qual, mass-market reach.</dd>
+      <dt>Why named</dt><dd>Its panel page, its GreenBook profile (Claude's go-to), a Bizcommunity press office and steady press.</dd>
+      <dt>Our angle</dt><dd>Different job. Copy the GreenBook move, which is free.</dd></dl></div>
+    <div class="card"><h3>KLA <span class="chip">24 / 120</span></h3><dl>
+      <dt>Who</dt><dd>Johannesburg boutique, YouGov's exclusive sub-Saharan partner since 2020.</dd>
+      <dt>Overlap</dt><dd>Brand health, YouGov data, custom research.</dd>
+      <dt>Why named</dt><dd>A quarterly Bizcommunity data release ("The Quarterly Buzz"), and the YouGov partnership documented by YouGov and Research Live.</dd>
+      <dt>Our angle</dt><dd>This is the model to copy: a documented global partner plus a recurring branded data release.</dd></dl></div>
+    <div class="card"><h3>Toluna <span class="chip">23 / 120</span></h3><dl>
+      <dt>Who</dt><dd>Global panel and DIY platform; has bought Harris Interactive, GutCheck, MetrixLab and others.</dd>
+      <dt>Overlap</dt><dd>Toluna Start concept and ad testing, synthetic personas.</dd>
+      <dt>Why named</dt><dd>Almost all Gemini (18 of 23), from training data; 1 own-site citation.</dd>
+      <dt>Our angle</dt><dd>Same speed with a local team and SA personas.</dd></dl></div>
+    <div class="card"><h3>BMi Research <span class="chip">21 / 120</span></h3><dl>
+      <dt>Who</dt><dd>Est. 2008, owned by JSE-listed Cognition Holdings, Bruma.</dd>
+      <dt>Overlap</dt><dd>Custom research and the Roots syndicated survey.</dd>
+      <dt>Why named</dt><dd>A Bizcommunity press office with regular Roots data releases, and a listed parent.</dd>
+      <dt>Our angle</dt><dd>Sidestep on speed and price.</dd></dl></div>
+    <div class="card"><h3>Market Instinct <span class="chip">~17 / 120</span></h3><dl>
+      <dt>Who</dt><dd>Gauteng, since 1998, product, pack and ad testing.</dd>
+      <dt>Overlap</dt><dd>The same FMCG buyer, with concept, product and pack tests.</dd>
+      <dt>Why named</dt><dd>Plain, crawlable FMCG pages plus a how-to guide that ChatGPT uses for research costs. A small firm punching far above its size.</dd>
+      <dt>Our angle</dt><dd>Publish the cost guide with real rand prices, which it doesn't have.</dd></dl></div>
+    <div class="card"><h3>Borderless Access <span class="chip">~18 / 120</span></h3><dl>
+      <dt>Who</dt><dd>Bangalore HQ, SA panel since 2011 (claims 300,000+).</dd>
+      <dt>Overlap</dt><dd>Panel sample, a DIY agile platform.</dd>
+      <dt>Why named</dt><dd>Named SA case studies and a stated SA panel number; Claude pairs it with Kantar for 24-hour testing.</dd>
+      <dt>Our angle</dt><dd>Local team plus named SA case studies.</dd></dl></div>
+    <div class="card"><h3>Info Quest · Columinate <span class="chip">~8 · ~16</span></h3><dl>
+      <dt>Info Quest</dt><dd>Joburg since 2005, "Tell Us About It" panel (about 50k). Named because one page states a 24-hour claim in plain text. Probably Richard's "IQ"; confirm.</dd>
+      <dt>Columinate</dt><dd>Bought by InSites in 2018, renamed in 2020, now Human8. Engines still name a brand retired six years ago, from old press. Shows how long press keeps a name alive.</dd></dl></div>
+  </div>
+  <div class="callout"><p><b>Corrected in our baseline report (20 Nov).</b> "Emax" is not a company. The Bizcommunity URLs Claude cited (<code>emax-19</code>, <code>emax-9</code>) are page numbers in the Bizcommunity directory. The baseline now names KLA instead, and notes that the directory pages themselves get cited.</p></div>
+</section>
+
+<section id="dig">
+  <h2>Who Dig Insights is</h2>
+  <div class="grid">
+    <div class="card"><div class="k">Company</div><p>Toronto research firm founded in 2010 by Paul Gaudette (CEO), Michael Edwards, Ian Ash and Dominic Atkinson. About 200 to 250 staff, offices in Toronto, Chicago and London. Beringer Capital took a majority stake in September 2022.</p></div>
+    <div class="card"><div class="k">Upsiide</div><p>The idea-testing platform behind Test24, launched in 2020. Respondents swipe right or left on ideas (Interest), then pick between ideas they liked (Commitment), which gives an Idea Score, an Idea Map and a market simulator. Dig claims a 0.80 correlation with in-market sales (vendor figure). Starter plan listed at US$6,000 a year.</p></div>
+    <div class="card"><div class="k">Growth</div><p>Bought Ignite 360 (qual) and Ebco Trends in 2024 and OneCliq (AI social listening) in 2025, now bundled as Dig One. Partnered with Woxi for volume forecasting. "First access to new AI tools" in Innovatr's deck probably means this stack.</p></div>
+  </div>
+  <div class="card">
+    <h3>The partnership gap, and how we close it</h3>
+    <p>The partnership appears only on Innovatr's own site and deck. It is not on diginsights.com, upsiide.com, Dig's GreenBook profile, Research Live or MrWeb. Claude searched exactly those places and failed 3 times out of 3, and so did ChatGPT. Dig has no public partner programme, so the ask has to be specific and easy to say yes to.</p>
+    <ol class="steps">
+      <li>Richard introduces us to Dig's marketing or partnerships lead (week 0).</li>
+      <li>We send a drafted 150-word news item: "Dig Insights names Innovatr exclusive Upsiide partner for Africa", with quotes ready for both CEOs to approve (week 5).</li>
+      <li>Ask Dig for: (a) a line naming Innovatr on its site or Upsiide page, (b) the news item sent to Research Live and MrWeb, the route KLA and YouGov used, (c) a LinkedIn post from Dig's page, which Innovatr reshares.</li>
+      <li>Add Dig's page to Innovatr's <code>sameAs</code> and the fact sheet once it is live.</li>
+    </ol>
+  </div>
+</section>
+
+<section id="costs">
+  <h2>Costs by part of the project</h2>
+  <p>Our fee is the draft in the proposal: R34,000 once-off plus R14,500 a month for 3 months, R77,500 over 90 days, invoiced by JSG with no VAT. The hours are our estimate of the work. Third-party costs are passed through to Innovatr at cost, unless Jacques decides to absorb them.</p>
+  <div class="tbl-box"><table>
+    <tr><th>Part</th><th>What it covers</th><th class="num">Our hours (est.)</th><th class="num">Fee allocation</th><th class="num">Third-party cost</th></tr>
+    <tr><td>Week 0 + measurement setup</td><td>Access, fact sheet, GA4, GSC, Bing, Clarity, forms, alerts, CRM tag</td><td class="num">14</td><td class="num">R6,000</td><td class="num">R0</td></tr>
+    <tr><td>Phase 1 · readable site</td><td>Pre-rendering, titles, schema, sitemap, robots, facts page, LinkedIn About</td><td class="num">26</td><td class="num">R10,000</td><td class="num">R0 (R1,030/mo if Prerender.io is needed)</td></tr>
+    <tr><td>Phase 2 · answer pages</td><td>6 pages, 3 Pulse pages, 2 case studies</td><td class="num">50</td><td class="num">R18,000</td><td class="num">R0</td></tr>
+    <tr><td>Phase 3 · identity + listings</td><td>GBP, Bing Places, Crunchbase, ZoomInfo, 7 directories, reviews</td><td class="num">16</td><td class="num" rowspan="3">R43,500<br><span class="note">(retainer, 3 × R14,500)</span></td><td class="num">R0</td></tr>
+    <tr><td>Phase 3 · press + Dig</td><td>3 releases, trade-press pitches, Dig partnership note</td><td class="num">14</td><td class="num">R7,500 excl. VAT</td></tr>
+    <tr><td>Measurement + reporting</td><td>3 monthly re-runs (5 engines), scoreboard, calls, day-90 review</td><td class="num">30</td><td class="num">R0</td></tr>
+    <tr><td><b>Total</b></td><td></td><td class="num"><b>150</b></td><td class="num"><b>R77,500</b></td><td class="num"><b>R7,500 excl. VAT</b></td></tr>
+  </table></div>
+  <p class="note">At 150 hours, R77,500 works out to about R517 an hour, which is thin. The biggest scope risk is Phase 1: if their codebase is not a standard Vite build or deploy access drags, pre-rendering can double. Our tools cost nothing extra: existing ChatGPT and Claude subscriptions, plus the free Firecrawl, Keenable and Valyu accounts set up on 20 Nov.</p>
+  <div class="tbl-box"><table>
+    <tr><th>Optional spend (only if the data justifies it)</th><th class="num">Cost</th><th>When to consider it</th></tr>
+    <tr><td>Clutch Verified badge</td><td class="num">$499/yr · about R8,730</td><td>If Clutch shows up in month-2 citations</td></tr>
+    <tr><td>Insight Platforms Featured</td><td class="num">$1,950/yr · about R34,000</td><td>Only if it is cited in Dig-partner answers</td></tr>
+    <tr><td>GoodFirms Pro</td><td class="num">$1,500/yr · about R26,250</td><td>Unlikely to be worth it</td></tr>
+    <tr><td>ESOMAR directory</td><td class="num">€1,270 · about R24,300 plus membership</td><td>Hold; needs membership first</td></tr>
+    <tr><td>SAMRA membership</td><td class="num">Not published</td><td>Richard's call for local credibility</td></tr>
+    <tr><td>Bizcommunity Press Office package</td><td class="num">Price on request</td><td>If the single releases get cited by month 3</td></tr>
+    <tr><td>Prerender.io Starter</td><td class="num">$59/mo · about R1,030</td><td>Only if build-time pre-rendering fails</td></tr>
+  </table></div>
+</section>
+
+<section id="risks">
+  <h2>Risks and how we handle them</h2>
+  <div class="tbl-box"><table>
+    <tr><th>Risk</th><th>Effect</th><th>What we do</th></tr>
+    <tr><td>Slow access to the repo or Cloud Run</td><td>Phase 1 slips and everything after it slips</td><td>Week 1 starts only on access. If we have nothing by day 10, fall back to briefing their developer with exact pull requests.</td></tr>
+    <tr><td>Richard can't sign off numbers</td><td>Answer pages stall; conflicting numbers keep hurting accuracy</td><td>48-hour approval rule in the scope. Pages ship with only the numbers he has approved.</td></tr>
+    <tr><td>Dig won't publish anything</td><td>Claude and ChatGPT keep failing the partner question</td><td>Innovatr's own release via Bizcommunity and Research Live, a GreenBook listing that names Upsiide, and the facts page.</td></tr>
+    <tr><td>Engine answers move around run to run</td><td>Month-to-month scores look noisy</td><td>3 runs per question per engine, trend reported, not single answers.</td></tr>
+    <tr><td>Traffic arrives but nobody calls</td><td>Visibility without sales; the client churns</td><td>The 1-hour rule written into the scope, the alert, and misses reported by name.</td></tr>
+    <tr><td>No search volume data</td><td>Term priorities rest on judgement</td><td>Re-rank from Search Console at week 6.</td></tr>
+  </table></div>
+</section>
+
+<section id="decisions">
+  <h2>Open decisions for Jacques</h2>
+  <ol class="steps">
+    <li><b>Price.</b> R34,000 plus R14,500 a month for 3 months is a draft, and 150 hours makes it thin.</li>
+    <li><b>Guarantee.</b> "Named on 2 of 5 engines at day 90, or month 4 is free": keep, soften or drop.</li>
+    <li><b>Marcus.</b> His share, and whose name goes on the proposal.</li>
+    <li><b>Who does the site fix.</b> We do it (the price assumes this), or their developer briefed by us.</li>
+    <li><b>Third-party costs.</b> Pass the R7,500 through to Innovatr, or absorb it.</li>
+    <li><b>Send.</b> The baseline and proposal are published unlisted and not sent. The Emax line is fixed.</li>
+  </ol>
+</section>
+
+<p class="note">Sources: baseline <code>AEO/2026-11-18/runs.log</code> (150 runs), Innovatr pitch deck and LinkedIn report (18 Nov), vendor pricing pages and trade press checked 20 Nov 2026. Internal file: <code>JCE Media/prospects/Innovatr/PLAYBOOK.html</code>.</p>
+</main>
+</div>
+</body>
+</html>
