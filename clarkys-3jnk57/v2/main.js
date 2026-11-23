@@ -65,8 +65,7 @@
   });
 
   // Booking enquiry.
-  // When the ReviewTap system endpoint is set on the form (data-booking-endpoint), the enquiry posts there.
-  // Until then it opens WhatsApp with the details filled in, so no enquiry is lost.
+  // Every enquiry posts to the ReviewTap system (data-booking-endpoint) and opens WhatsApp with the details filled in.
   var WA = { bucketlist: '27785719280', lakeside: '27615066214', pride: '27729228530' };
   var MAIL = { bucketlist: 'info@clarkysbucketlist.co.za', lakeside: '', pride: '' };
   var LABEL = { bucketlist: "Clarky's Bucketlist", lakeside: 'Clarkys Lakeside Restaurant', pride: "Clarky's Pride Lodge" };
@@ -153,12 +152,11 @@
       e.preventDefault();
       if (!check()) return;
       var data = Object.fromEntries(new FormData(f).entries());
+      // The enquiry goes into the ReviewTap system (Enquiries board) AND opens WhatsApp, so Clarky's sees it either way.
+      // WhatsApp must open inside the click itself or phones block it, so the post runs alongside with keepalive.
       var endpoint = f.dataset.bookingEndpoint;
       if (endpoint) {
-        fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) })
-          .then(function (r) { if (!r.ok) throw 0; done(f, data, false); })
-          .catch(function () { openWA(data); done(f, data, true); });
-        return;
+        try { fetch(endpoint, { method: 'POST', keepalive: true, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }).catch(function () {}); } catch (err) {}
       }
       openWA(data);
       done(f, data, true);
