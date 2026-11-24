@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Call Cockpit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f5f8fe;--card:#fff;--ink:#101a2e;--mut:#5b6b86;--line:#e7edf8;--blue:#2f6bf6;--violet:#6366f1;--grad:linear-gradient(135deg,#2f6bf6,#6366f1,#8b5cf6);--warm:linear-gradient(135deg,#ff6a45,#ffb020);--ok:#10a36b;--okbg:#e6f7f0;--bad:#e5484d;--badbg:#fdecec;--amb:#b7791f;--ambbg:#fdf4e3;--sh:0 6px 18px rgba(38,66,120,.07);--r:16px}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Inter,system-ui,sans-serif}
+h1,h2,h3,.sg{font-family:"Space Grotesk",Inter,sans-serif;letter-spacing:-.01em}
+a{color:var(--blue)}
+button{font:inherit;cursor:pointer}
+.wrap{max-width:1240px;margin:0 auto;padding:0 16px 80px}
+header.top{background:var(--grad);color:#fff;padding:18px 0 64px}
+header.top .wrap{padding-bottom:0;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+header.top h1{margin:0;font-size:26px}
+header.top .sub{opacity:.85;font-size:14px}
+header.top .sp{flex:1}
+.sync{font-size:13px;background:rgba(255,255,255,.16);padding:6px 12px;border-radius:999px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:-46px}
+.stat{background:var(--card);border-radius:var(--r);box-shadow:var(--sh);padding:14px 16px}
+.stat .k{font-size:12px;color:var(--mut);text-transform:uppercase;letter-spacing:.04em;font-weight:600}
+.stat .v{font:700 28px "Space Grotesk";margin-top:2px}
+.stat .v small{font-size:14px;color:var(--mut);font-weight:500}
+.bar{height:6px;background:var(--line);border-radius:9px;margin-top:8px;overflow:hidden}.bar i{display:block;height:100%;background:var(--grad);border-radius:9px}
+nav.tabs{display:flex;gap:6px;margin:20px 0 14px;overflow-x:auto;padding-bottom:4px}
+nav.tabs button{border:1px solid var(--line);background:var(--card);padding:9px 16px;border-radius:999px;font-weight:600;color:var(--mut);white-space:nowrap}
+nav.tabs button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.card{background:var(--card);border-radius:var(--r);box-shadow:var(--sh);padding:18px}
+.grid2{display:grid;grid-template-columns:330px 1fr;gap:16px;align-items:start}
+@media(max-width:900px){.grid2{grid-template-columns:1fr}.queue{max-height:none!important}}
+.queue{max-height:calc(100vh - 120px);overflow:auto;position:sticky;top:12px;padding:10px}
+.qhead{display:flex;align-items:center;gap:8px;padding:6px 8px 10px;flex-wrap:wrap}
+.qhead b{font-family:"Space Grotesk"}
+.qi{display:flex;gap:10px;align-items:flex-start;padding:10px;border-radius:12px;cursor:pointer;border:1px solid transparent}
+.qi:hover{background:#f3f6fd}.qi.on{background:#eef3ff;border-color:#cddcff}
+.qi .n{font:600 12px Inter;color:var(--mut);min-width:20px;padding-top:2px}
+.qi .t{font-weight:600;line-height:1.3}.qi .m{font-size:12.5px;color:var(--mut)}
+.qi.done{opacity:.45}
+.pill{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:600;padding:2px 9px;border-radius:999px;background:#eef2fb;color:#3a4a66;white-space:nowrap}
+.pill.hot{background:var(--warm);color:#fff}.pill.ok{background:var(--okbg);color:var(--ok)}.pill.bad{background:var(--badbg);color:var(--bad)}.pill.amb{background:var(--ambbg);color:var(--amb)}.pill.blue{background:#e8efff;color:var(--blue)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:5px 11px;font-size:13px;color:var(--mut)}
+.chip.on{background:#e8efff;border-color:#bcd0ff;color:var(--blue);font-weight:600}
+.lead h2{margin:0;font-size:26px;line-height:1.15}
+.lead .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:8px}
+.callbar{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}
+.btn{border:0;border-radius:999px;padding:11px 18px;font-weight:600;background:#eef2fb;color:var(--ink);text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+.btn.call{background:var(--grad);color:#fff;font-size:18px;padding:13px 22px}
+.btn.wa{background:#1fae5b;color:#fff}
+.btn.sm{padding:7px 13px;font-size:13px}
+.btn.dark{background:var(--ink);color:#fff}
+.box{border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-top:12px}
+.box h3{margin:0 0 6px;font-size:15px}
+.say{background:#f3f6ff;border-left:4px solid var(--violet);border-radius:10px;padding:12px 14px;font-size:16px;line-height:1.55}
+.say+.say{margin-top:8px}
+.say .lbl{display:block;font:600 11.5px Inter;text-transform:uppercase;letter-spacing:.05em;color:var(--violet);margin-bottom:3px}
+ul.why{margin:6px 0 0;padding-left:18px}ul.why li{margin:3px 0}
+.outs{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-top:10px}
+.out{border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px;font-weight:600;text-align:left}
+.out kbd{float:right;font:600 11px Inter;color:var(--mut);border:1px solid var(--line);border-radius:5px;padding:0 5px}
+.out.on{outline:2px solid var(--blue);background:#eef3ff}
+.out.g{border-color:#bfe8d6}.out.r{border-color:#f5c9cb}
+textarea,input,select{font:inherit;border:1px solid var(--line);border-radius:10px;padding:10px 12px;width:100%;background:#fff;color:var(--ink)}
+textarea{min-height:84px;resize:vertical}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media(max-width:600px){.f2{grid-template-columns:1fr}}
+label.l{font-size:12.5px;font-weight:600;color:var(--mut);display:block;margin:10px 0 4px}
+.hist{font-size:13.5px}.hist div{padding:7px 0;border-top:1px solid var(--line)}.hist div:first-child{border-top:0}
+.muted{color:var(--mut)}.small{font-size:13px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--mut);padding:8px;border-bottom:1px solid var(--line);position:sticky;top:0;background:#fff;cursor:pointer}
+td{padding:9px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+tr.click{cursor:pointer}tr.click:hover td{background:#f6f8fe}
+.kan{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.col h3{margin:0 0 8px;font-size:14px;display:flex;justify-content:space-between}
+.oc{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px;margin-bottom:8px;font-size:13.5px}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 18px;border-radius:12px;box-shadow:var(--sh);z-index:9;font-weight:500;max-width:90vw}
+.gate{max-width:420px;margin:12vh auto;text-align:center}
+.md h1{font-size:24px}.md h2{font-size:20px;margin-top:28px}.md h3{font-size:16px}.md li{margin:4px 0}.md blockquote{border-left:4px solid var(--violet);margin:10px 0;padding:6px 14px;background:#f3f6ff;border-radius:8px}
+.md table{margin:10px 0}.md td,.md th{border:1px solid var(--line)}
+.nstat{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.hide{display:none!important}
+.kbdhelp{font-size:12px;color:var(--mut);margin-top:10px}
+</style>
+</head>
+<body>
+<div id="gate" class="gate card hide">
+  <h2 class="sg">Call Cockpit</h2>
+  <p class="muted">Enter the passcode to load your leads.</p>
+  <input id="pw" type="password" placeholder="Passcode" autocomplete="current-password">
+  <p><button class="btn call" style="width:100%;justify-content:center" onclick="unlock()">Open</button></p>
+  <p id="gerr" class="small" style="color:var(--bad)"></p>
+</div>
+
+<div id="app" class="hide">
+<header class="top"><div class="wrap">
+  <div><h1>Call Cockpit</h1><div class="sub" id="today"></div></div>
+  <div class="sp"></div>
+  <span class="sync" id="syncst">Connecting</span>
+  <button class="btn sm" onclick="reload()">Refresh</button>
+</div></header>
+<div class="wrap">
+  <div class="stats" id="stats"></div>
+  <nav class="tabs" id="tabs"></nav>
+  <section id="v-today"></section>
+  <section id="v-leads" class="hide"></section>
+  <section id="v-pipe" class="hide"></section>
+  <section id="v-niches" class="hide"></section>
+  <section id="v-play" class="hide"></section>
+  <section id="v-add" class="hide"></section>
+</div>
+</div>
+
+<script>
+const API = "https://plinxeaiapsskkvblbar.supabase.co/functions/v1/call-cockpit";
+const DAILY = 30;
+const PLAYBOOK_MD = {"core": "# How to run 30 calls a day\n\n**The goal for the next 30 days is cash, so the only number that matters on this page is meetings booked.** A meeting is where the R7,500 deposit gets asked for. Dials and conversations are just how you get there.\n\n## The offer, in one breath\n\nWebsite for a small business that is losing customers to a bad or missing site: **R7,500 once-off plus R249 a month for hosting** (the Glen Eden package). For guesthouses the hook is direct bookings: every guest who books through Booking.com or LekkeSlaap pays a platform first. For past ReviewTap buyers the hook is that their Google reviews send people to a site that lets them down.\n\nThe give that earns the meeting: **a free concept of their new site, built from their own photos and listing.** Where the card says \"What we built for them\", it already exists. Where it does not, you build it after they say yes to the meeting, never before.\n\n## The day\n\n| Time | Block | Dials |\n|---|---|---|\n| Night before | Open the cockpit, skim the first 30 cards. Fix any missing first names. | 0 |\n| 08:00 to 08:30 | Callbacks and follow-ups due today (they sit at the top of the list) | 5 |\n| 08:30 to 10:00 | Past ReviewTap buyers: dealers, clinics, salons (their quiet window) | 5 |\n| 10:00 to 11:00 | Build concepts for meetings you booked. No guesthouse calls: it is check-out. | 0 |\n| 11:00 to 13:30 | **Guesthouse power block.** Owners are doing admin while rooms are serviced. | 15 |\n| 13:30 to 14:00 | Send invites and WhatsApp confirmations, tidy notes | 0 |\n| 15:00 to 16:30 | Restaurants, second attempts, meetings | 5 |\n\nThe list puts the niches whose window is open right now at the top, so you can just work down it.\n\n## Every call, same shape\n\n1. **Name and company.** \"Hi, is that Annelie? Annelie, it's Jacques from JCE Media.\"\n2. **Own it.** \"This is a cold call, I'll be quick.\" Or, for a buyer: \"You got the review stand from us.\"\n3. **Reason, specific to them.** The card gives you the one line about their site. Say it.\n4. **The give.** The concept, free.\n5. **The ask, with two times.** \"Tomorrow at 11:30 or Thursday at 12:00?\" Never \"when suits you\".\n6. **Lock it before you hang up.** Send the invite while they are on the line. \"Can I WhatsApp you the reminder?\" That yes is your WhatsApp permission, so note it.\n7. **If it is a no:** \"Shall I take you off my list?\" If yes, log **Opted out**. That lead never comes back.\n\n## Never\n\n- Never open with \"Did I catch you at a bad time?\" (worst opener in Gong's data).\n- Never pretend to be a guest to get past reception.\n- Never send the concept before the meeting, unless they refuse the meeting.\n- Never WhatsApp someone cold off a listing number. WhatsApp only after a spoken yes.\n- Never call on Sundays or public holidays (16, 25 and 26 December), Saturdays outside 09:00 to 13:00, or any day outside 08:00 to 20:00. The list warns you.\n\n## Cadence\n\nFive tries over about ten working days, at different times, then the lead rests. The cockpit schedules the next try for you when you log No answer or Voicemail. Leave a voicemail only on tries 1 and 3, under 20 seconds.\n\n## What syncs to your pipeline\n\n- **Any conversation** (gatekeeper, callback, interested, meeting, proposal, won, not interested) creates or updates the contact in the JCE Media Group CRM, adds a note, and moves the deal in **Jacques Personal Pipeline**: Contacted, Interested, Discovery Booked, Proposal Sent, Won or Lost. Deals never move backwards.\n- **Any note you type** is added to the contact, whatever the outcome.\n- **No answer and voicemail with no note** stay in the cockpit, so the pipeline is not flooded with dials.\n- The Pipeline tab reads your CRM live, so a deal you move in the CRM shows here on refresh.\n\n## Judge it after 3 days, not before\n\nPublished benchmarks are US enterprise desk lines and say roughly 250 to 400 dials per meeting. Owner-answered guesthouse mobiles and your own past buyers should do far better, but nobody has measured it. After 3 days, read the Niches tab: below 1 meeting per 40 dials in a niche, change the opener before you drop the niche.", "niches": "# Niche playbook\n\n## Accommodation (guesthouses, B&Bs, small lodges)\n- **Who:** 5 to 25 rooms, good reviews, weak or no website. 4 rooms or fewer: skip.\n- **Window:** 11:00 to 13:30, and 16:30 to 17:30 for lodges.\n- **Hook:** direct bookings. \"Roughly what does Booking.com take from you?\" Let them say the number. Since the Competition Commission's 2023 ruling, Booking.com can no longer stop SA properties offering a better rate on their own site.\n- **Timing line:** late November is the run into peak season. The site is ready for the January bookings; the WhatsApp assistant (GuestOps) answers December enquiries while they serve breakfast.\n\n## Past ReviewTap buyers (every niche)\n- **Why they come first:** they know your name and already paid you once. Start with \"How's the stand going, are people tapping it?\" and mean it.\n- **Hook:** their reviews send people to Google, and Google sends them to a site that is broken, parked, not mobile friendly, or missing.\n- **Cards marked \"emailed 19 Nov\"** got a concept or demo by email. Open with \"I emailed you last week, did you get a chance to look?\"\n- **Cards marked \"Check site\"** had no domain on their order. Google them for 20 seconds before you dial. If they have a good site, log Not interested with the note \"site is fine\" and move on.\n\n## Beauty and salons\n- **Window:** 08:00 to 09:00 before the first client, or 14:00 to 16:00. Never Saturdays.\n- **Hook:** clients find them on Instagram and Google but cannot see prices or book online. A site that books is the pitch.\n\n## Medical and aesthetics\n- **Window:** before 08:30 or around lunch. Reception is busy mid-morning.\n- **Hook:** patients check credentials online before they book. A coming-soon page or a Gmail address loses them.\n- **Careful:** HPCSA advertising rules. Never promise outcomes or use testimonials in their name.\n\n## Car dealers\n- **Window:** weekday mornings 08:30 to 10:30. Avoid month-end.\n- **Hook:** they sell R400,000 cars on AutoTrader and cars.co.za, and their own domain is dead or empty, so every buyer who searches the dealership name lands on a portal with their competitors.\n\n## Restaurants and food\n- **Window:** 10:00 to 11:30 or 15:00 to 17:00. Never during lunch or dinner service.\n- **Hook:** menu, hours and a booking button on a phone. Most bookings come from someone standing outside or searching \"near me\".\n\n## Trades, professional services, retail, other\n- **Window:** early morning or late afternoon for trades (they are on site in the day); office hours for the rest.\n- **Hook:** the enquiry. \"When someone finds you on Google, where do they go?\""};
+const RESEARCH_MD = "\nResearched 24 Nov 2026 for the Call Cockpit. Offer: website rebuild (about R7,500 deposit level) and WhatsApp booking assistant. Targets: guesthouses and lodges (5 to 25 rooms), plus past ReviewTap buyers (salons, clinics, car dealers, restaurants). Volume: 30 dials a day. Goal: cash in 30 days.\n\nHow to read this file:\n- Every number has a named source and year. Vendor sources (Gong, Orum, Cognism, Belkins, Calendly) sell dialers, data or scheduling tools, so their numbers lean towards \"calling works if you buy our tool\". Treat them as directional.\n- Almost all calling data is US/UK B2B, mostly SDRs calling managers at software and services companies. None of it is about South African guesthouse owners. Where I reason rather than cite, I say \"Reasoning\".\n- Compliance section is research, not legal advice.\n\n---\n\n## 10 rules for the call block\n\n1. **Run the numbers on yourself, not on the internet.** Published B2B benchmarks say roughly 250 to 370 dials per meeting (Gong 2024, Belkins 2025). That is enterprise desk-line data. Owner-answered guesthouse mobiles should connect far better, but nobody has published that. Log every dial for 3 days, then plan from your own connect and book rates.\n2. **Name, reason, permission, in that order, inside 15 seconds.** Gong (2018) found stating the reason for the call carried a 2.1x higher success rate. Never open with \"Did I catch you at a bad time?\" (Gong's worst opener in both its 2018 and 2024 studies).\n3. **Lead with the give, not the ask.** \"I've already mocked up a version of your site from your Booking.com listing. Can I show you on a 15-minute call?\" The give is the reason to say yes and the reason to show up.\n4. **Ask for a specific slot, not \"sometime\".** Offer two concrete times within the next 48 hours. Specific when-and-where plans roughly double follow-through in the psychology research (Gollwitzer and Sheeran 2006), though that research is not about sales calls.\n5. **Lock it before you hang up.** Calendar invite sent while they are on the line, then a WhatsApp confirmation (ask permission to WhatsApp first: that is also your WhatsApp opt-in). Reminder the day before and one hour before.\n6. **Ask the consent question on every cold call.** The Information Regulator's position (Guidance Note, Dec 2024) is that a phone call is electronic direct marketing under POPIA s69 and you may approach someone once to ask consent. Ask it, log the answer, and honour every \"no\" permanently.\n7. **Five attempts, then stop.** Cognism (2025) found three calls capture 93% of all conversations and five capture 98.6%. Vary the time of day across attempts. Leave at most two voicemails (Gong 2024: three or more voicemails made email replies worse than none).\n8. **Call around the guest day, not into it.** Reasoning: avoid breakfast service, check-out (about 10:00 to 11:00) and check-in (about 14:00 to 16:00). Best guesthouse window is late morning to early afternoon after check-out. ReviewTap buyers each have their own quiet window (section 6).\n9. **Every objection gets one short reply and one re-ask, then you let go.** Arguing twice burns the lead and, under the Regulator's reading of POPIA, possibly your one approach.\n10. **Warm before cold.** Your fastest cash is paying clients and past ReviewTap buyers (they know you, and POPIA's existing-customer route may apply), then stale proposals, then cold guesthouses. Work the list in that order (section 8).\n\n---\n\n## 1. Benchmarks\n\n### Dial-to-connect and connect-to-meeting\n\n| Source (year) | Dataset | Connect | Meeting rate | Dials per meeting |\n|---|---|---|---|---|\n| Gong Labs, \"The hidden power of cold calling\" (published July 2024) | 300M+ calls on Gong | Average rep 5.4% of dials answered; top quartile 13.3% | Set rate (meetings per conversation): average 4.6%, top reps 16.7% | Average rep about 2 meetings per 800 dials a month (about 400 dials per meeting); top rep about 18 per 800 (about 44 per meeting). My arithmetic from Gong's figures |\n| Belkins, \"B2B cold calling statistics 2026\" (published June 2026, 2025 data) | 175,000+ dials, Nooks dialer + 5 client campaigns | 9.9% per dial; 24.5% per prospect after about 3 attempts | Conversation-to-meeting 4.6% | About 370 |\n| Belkins, same report, by geography | as above | US 9.0% live rate; UK 14.7%; other non-US 12% to 16% | Positive outcome rate: US 0.55% of dials, UK 2.84% | not stated |\n| Cognism, \"Cold Calling Report 2025\" (data from WHAM, an outsourced SDR firm) | 41,936 connected calls, 27,513 conversations | not stated as a single figure | 2024: 4.82% of conversations booked a meeting. 2025: \"almost half\" that (exact figure only in a chart; about 2.4% is my inference). Cognism-data users: 6.7% | not stated |\n| Orum (2023 average, cited in Orum's blog) | Orum platform | 5.35% | not stated | not stated |\n\nVendor bias flags:\n- Gong, Orum, Cognism and Belkins all sell tools or services that make calling look worth doing. Cognism's 6.7% figure is \"teams using Cognism data\", which is a sales claim.\n- Definitions differ. \"Connect\" is sometimes \"answered by anyone\" and sometimes \"reached the target person\". \"Success\" is sometimes per dial, sometimes per conversation. Do not mix them.\n- Gong's own opener figures are inconsistent across its pages (see section 2).\n\nCommonly quoted stats I could not trace, so I have not used them:\n- \"It takes 330 cold calls to book one appointment\" (quoted by Martal, no named study).\n- \"80% of sales calls go to voicemail\" (repeated widely, no primary source found).\n- \"Each additional voicemail raises callback probability by 10%\" (ZoomInfo, no source given).\n\n**Reasoning, for Jacques's list:** the B2B numbers above are mostly SDRs calling managers' desk lines and switchboards. Cognism (2025) quotes Jason Bay saying desk-line pickup is \"probably sub 1%\" and mobiles raise pickup roughly 4x to 10x. A 5 to 25 room guesthouse usually publishes the owner's or manager's mobile, and past ReviewTap buyers already know your name. Expect connect rates well above 10%, but there is no published figure to plan on. Measure it.\n\nA planning grid to fill in after day 3 (these are placeholders, not data):\n\n| Your measured rate | Day 1-3 actual | 30 dials/day x 20 days = 600 dials gives |\n|---|---|---|\n| Connect rate (reached the decision maker) | __% | __ conversations |\n| Book rate (meetings per conversation) | __% | __ meetings |\n| Show rate | __% | __ meetings held |\n| Close rate on held meetings | __% | __ deposits |\n\n### Best days and times (mostly US B2B, conflicting)\n\n- Gong's cold call stats page (published 2021, updated 2026) says Wednesday and Thursday, citing older InsideSales.com data.\n- Cognism 2025 (WHAM data): Tuesday had the most bookings. Friday is among the worst for bookings but among the best for conversations. Best hour 10:00 to 11:00, then 14:00 to 15:00. Dips at 07:00 to 09:00, 12:00 and 17:00.\n- Belkins 2025 data: best day Wednesday (0.95% positive outcome rate per dial), then Monday, Thursday, Tuesday, Friday last (0.51%). Best hours 15:00 to 16:00 and 18:00.\n- ZoomInfo (1.4M call dataset): Tuesday and Wednesday together account for 44% of demos booked.\n\nHonest read: the sources disagree on hours and roughly agree that midweek beats Friday. None of them studied hospitality owners, whose day is shaped by guest movements, not office hours. Section 6 reasons out windows for this list.\n\nSeasonal note from Belkins 2025: meeting rates were lowest in July to September (2.7% to 3.2%) and high in November (6.5%). This is US/UK B2B seasonality, not SA hospitality. **Reasoning:** for SA guesthouses, December to January is peak season. Owners are busy and full right now, so pitch \"be ready for the December enquiry flood\" (WhatsApp assistant) and \"get the new site live before next season\", not \"fill your empty rooms\".\n\n---\n\n## 2. Openers that work\n\n### What the data says\n\n- **State the reason for the call.** Gong Labs (2018 study of 90,380 cold calls) found a 2.1x higher success rate when the rep gave a reason for calling. This is the most consistently repeated Gong finding.\n- **Avoid \"Did I catch you at a bad time?\"** Gong 2018 said it was 40% less likely to book a meeting. Gong's 2024 re-analysis (300M+ calls) still put it last of the openers it tested, at 2.15%.\n- **\"How have you been?\"** Gong 2018 reported 10.01% success, 6.6x a 1.5% baseline. Caution: it only works where there is a relationship. On a true cold call it is a fake-familiar line and many owners will hear it as a trick. Use it only with past ReviewTap buyers who genuinely know you.\n- **Permission-based opener** (context, own that it is a cold call, then ask for permission to explain): Gong 2024 reported 11.18%. **\"Heard the name tossed around?\"** 11.24% in one Gong post (11.18% in another version). The figures shift between Gong's own pages and Gong does not define \"success\" in that post, so treat the ranking as directional, not the decimals.\n- **Call length:** Gong found successful calls are about twice as long as unsuccessful ones; Orum says calls that book meetings last around six minutes versus under one minute for those that do not; Belkins 2025 puts meeting-booking calls at 3.7 minutes. The point: the opener's only job is to earn the next 60 seconds.\n\n### The shape of every opener\n\n1. Name and company (3 seconds).\n2. Own it: \"This is a cold call\" or \"You bought a ReviewTap stand from us\".\n3. Reason, specific to them, proving you looked.\n4. The give (the concept site, already made).\n5. Permission: \"Can I take 30 seconds to tell you what I noticed?\"\n\n### Script A: guesthouse with a dated website\n\n> \"Hi, is that Annelie? Annelie, it's Jacques from JCE Media in the Vaal. I'll be honest, this is a cold call, so I'll be quick. I was looking at [Guesthouse] on Booking.com, your reviews are excellent, 9.1, but when I went to your own website it doesn't really show that off, and on my phone the booking button is hard to find. So I took your Booking.com photos and reviews and built a quick concept of what your site could look like. It's already done, no charge. Can I take 30 seconds to tell you why I did it?\"\n>\n> If yes: \"Every guest who books direct instead of through Booking.com saves you the commission. The concept is built to get those direct bookings. Could I show it to you on a 15-minute call, say tomorrow at 11:30, or Thursday at 12:00?\"\n\n### Script B: past ReviewTap buyer with no or weak website\n\n> \"Hi Thabo, it's Jacques from ReviewTap, you got the Google review stand from us for the salon. How's it been going, are people tapping it? [Listen. This is where 'How have you been' is honest, because you know them.] The reason I'm calling: your Google reviews are growing, but when someone clicks through from Google there's no proper website to land on, so you're losing some of the people the reviews bring in. I've put together a one-page concept for [Salon] using your Google profile. Can I show you on a quick 15-minute call, tomorrow at 9:00 before your first client, or Wednesday afternoon?\"\n\n### Script C: guesthouse with no website (books via LekkeSlaap or Booking.com only)\n\n> \"Hi, is that Pieter? Pieter, Jacques from JCE Media. Quick cold call, I'll keep it short. I found [Lodge] on LekkeSlaap and the reviews are great, but I couldn't find a website of your own anywhere, so every guest who finds you pays a platform first. I built a concept site for you from your listing, photos, rooms, reviews, and a WhatsApp button so guests can book you direct. It's done already. Can I take 30 seconds to explain?\"\n>\n> Then: \"Since the Competition Commission ruling, Booking.com can no longer stop South African properties from offering a better rate on their own site. So a direct-booking site is worth more than it used to be. Can I show you the concept, 15 minutes, tomorrow at 12:00 or Friday at 11:30?\"\n\nFact check for Script C: the Competition Commission's Online Intermediation Platforms Market Inquiry final report (31 July 2023) required Booking.com to remove its wide and narrow price parity clauses for South African accommodation providers. LekkeSlaap's base commission is reported as 15% (18% for a ranking boost) in a NightsBridge integration tutorial with no date, so confirm the current figure with the owner rather than quoting it. Booking.com commission varies by property (15% is often quoted as a global average by third-party host-software blogs, not a confirmed SA rate). Best practice on the call: ask \"roughly what does Booking.com take from you?\" and let the owner say the number.\n\n---\n\n## 3. Getting past gatekeepers at small guesthouses\n\nNo published study covers guesthouse gatekeepers. Belkins 2025 found gatekeepers were 13.4% of non-booking outcomes in B2B calling. The rest of this section is reasoning and standard practice.\n\n- **Get the first name before you dial.** Sources: the owner's name in Google Business Profile reply signatures (\"Thanks, Annelie\"), LekkeSlaap and Booking.com host profiles (\"Your host: Pieter\"), TripAdvisor management responses, Facebook page \"About\", CIPC director names. Put it in the lead record.\n- **Ask for them by first name, casually and confidently:** \"Hi, is Annelie around?\" not \"May I speak to the owner?\" The second sounds like a sales call; the first sounds like someone she knows.\n- **If asked \"What is it regarding?\":** tell the truth, briefly and specifically. \"It's about the website. I've made her a concept version from the Booking.com listing and wanted to show her.\" Never pretend to be a guest. That is deceptive, it breaks trust in a small-town market, and it likely breaches CPA and POPIA fairness duties.\n- **Recruit the receptionist:** \"What's the best time to catch her, after check-out?\" Then call at that time and say \"Lerato said 11:30 was best.\" Receptionists in small properties usually feel the pain of the old website (booking enquiries by phone, double-handling) and can be allies.\n- **If the owner is never in:** ask for the owner's mobile or WhatsApp. If refused, ask \"Could you ask her to expect my call tomorrow at 11:30?\" A promised call is warmer than a cold one.\n- **Owner answers (the common case at 5 to 25 rooms):** skip straight to the opener. Do not ask \"Are you the owner?\"; ask \"Is that Annelie?\"\n- **Note the gatekeeper's name** in the lead record so call 2 sounds familiar.\n\n---\n\n## 4. The ask, the give, and locking the meeting\n\n### Specific time versus open-ended\n\n- There is no rigorous published sales study isolating \"offer a specific time\" versus \"when suits you\". I could not find one, so I am not quoting a number.\n- The closest real evidence is psychology: Gollwitzer and Sheeran (2006) meta-analysis of 94 studies and 8,000+ participants found that forming specific \"when and where\" plans (implementation intentions) had a medium-to-large effect on actually following through (d = 0.65). This supports both offering a specific slot and getting them to say it out loud.\n- Practice: offer two slots within 48 hours, in their quiet window. \"Tomorrow at 11:30 or Thursday at 12:00?\" If neither: \"What does your Thursday look like after check-out?\" Never \"I'll email you some times.\"\n\n### Lead with a give\n\n- The \"concept site built from your own listing\" turns the call from \"may I sell to you\" into \"I already made you something, may I show you\". It also gives the meeting a concrete reason to exist and a reason to show up.\n- Make the give real and cheap: build concepts in batches, only for leads that say yes, or pre-build for the top 20% of leads (best reviews, worst site). Reasoning: pre-building for everyone at 30 dials a day is not sustainable.\n- Do not send the concept link before the meeting unless they refuse a meeting. If you send it first, there is no reason to meet. If they refuse the meeting, send it anyway (with consent to WhatsApp) as a last try.\n\n### Locking it while on the call\n\n1. \"I'm sending you a calendar invite right now, it'll come from jacques@... Can you see it?\" Wait while they check.\n2. \"And can I WhatsApp you a reminder and the link? Is this number on WhatsApp?\" This yes is your WhatsApp opt-in (section 7). Log it.\n3. Send the WhatsApp immediately: \"Hi Annelie, Jacques from JCE Media. Thanks for your time. Confirmed: Thursday 12:00, 15 min, I'll show you the [Guesthouse] concept. Reply STOP anytime.\"\n4. Reminder the day before and one hour before.\n5. Book within 48 hours where possible. Reasoning: interest decays. The related evidence is HBR (Oldroyd, McElheran, Elkington 2011, 1.25 million leads), which found inbound online leads contacted within an hour were about 7 times more likely to be qualified than those contacted later. That is about inbound response speed, not meeting lead time, so treat it as a hint, not proof.\n\n### No-show reduction: what the evidence says\n\n- **Text reminders, independent evidence:** Cochrane review (latest update, 7 studies, 5,841 participants, healthcare appointments) found text reminders improved attendance versus no reminder (risk ratio 1.14). Evidence quality rated low to moderate. Healthcare, not sales, but it is the only controlled evidence.\n- **Vendor evidence:** Calendly reports that 88% of its sales users said no-shows decreased with automated reminders, and average no-show rates dropped 28% (email and text combined, self-reported survey). Salesmsg case study (SaaS Academy) claims a 20% reduction in demo no-shows from SMS. Both are vendors selling the tool.\n- Practices with sense behind them (reasoning): short meeting (15 minutes), clear agenda (\"I'll show you the concept\"), confirm by the channel they actually read (WhatsApp in SA), a reminder they can reply to, and a same-day reschedule offer if they miss (\"No stress, can we do 14:00 tomorrow instead?\").\n\n---\n\n## 5. Objection handling: six likely objections\n\nCognism 2025 (WHAM) lists the top five cold call objections as: \"I'm not interested\", \"I don't have the problem\", \"I already have a solution\", \"I'm busy, call back\", \"Could you email me instead?\". The six below match that list closely.\n\nRule: acknowledge, one short reply, one re-ask. If it is still no, accept it, ask the consent question, and log.\n\n**1. \"Send me an email.\"**\n> \"Happy to. Honestly though, an email with a website concept is hard to judge without seeing it on your own phone. It takes 15 minutes, I show you, and if it's not for you, that's it. Thursday 12:00?\"\n> If still email: \"Sure. Is WhatsApp better than email for you? I'll send the concept link there.\" (Get the WhatsApp yes, send it, follow up in 2 days.)\n\n**2. \"We're happy with our site.\"**\n> \"Good, then this will be a quick no. I'm not saying it's bad. The concept just shows how many more direct bookings the same site could get on a phone. Worth 15 minutes to compare side by side?\"\n\n**3. \"We get our bookings through Booking.com / LekkeSlaap.\"**\n> \"That makes sense, they bring you guests. The question is just what they cost. Roughly what does Booking.com take per booking? [Let them say it.] The site isn't to replace them, it's so the guests who already know you, returners and referrals, book direct and you keep that commission. Can I show you how that looks?\"\n\n**4. \"No budget\" / \"It's quiet season.\"**\n(Reasoning: in late November most SA guesthouses are going into peak, so \"quiet\" is less likely right now than \"too busy\".)\n> Quiet: \"That's exactly why the timing works: it's built while you're quiet, ready when guests start searching. And the deposit is [R7,500], not the full amount upfront. Can I show you first and you decide after?\"\n> Busy: \"Then the WhatsApp assistant is for you, it answers the December enquiries while you're running breakfasts. 15 minutes in January or a quick look now?\"\n\n**5. \"My nephew / a friend does our website.\"**\n> \"That's great, keep him involved. I'm happy to hand him the concept so he can use whatever is useful. Can I show you both? Then you can decide whether he builds it or we do.\"\n\n**6. \"Not interested.\"**\n> \"Fair enough. Can I ask, is it the website side or the timing? [Listen once.] Understood. One last thing: I've already made the concept for [Guesthouse]. Would you like me to WhatsApp it to you anyway, no follow-up unless you reply?\"\n> If no: \"No problem. I'll take you off my list. Thanks for your time.\" Mark do-not-contact. (Under the Regulator's POPIA reading, this was your one consent approach.)\n\n---\n\n## 6. Cadence and the daily structure\n\n### Attempts and spacing\n\n- Cognism 2025 (WHAM): conversations drop 73% from call 1 to call 2 and 60% from call 2 to call 3. Three calls capture 93% of conversations; five capture 98.6%.\n- Belkins 2025: 24.5% of prospects were reached after an average of about 3 attempts.\n- Gong 2024: average reps needed 19 dials per conversation; top-quartile reps 8.\n\nRecommendation: up to 5 call attempts over about 10 working days, at different times of day, then stop.\n\n### Voicemail\n\n- Orum study of 7.8M calls (2021 to 2022): prospects who got a voicemail called back 2.54% of the time versus about 2.28% without, so callbacks are rare either way.\n- Gong Labs (published Aug 2024, 300M+ calls): one or two voicemails roughly doubled the email reply rate (2.73% to 5.87%). Three or more dropped it to 2.2%, below no voicemail.\n- Gong 2024: calling also lifts email replies even when you don't connect (3.44% vs 1.81%).\n- So: voicemail only on attempts 1 and 3, short (under 20 seconds), pointing to a message: \"Jacques from JCE Media, I made a concept website for [Guesthouse] from your Booking.com listing. I'll try you Thursday after check-out, or call me on 0xx.\"\n\n### Multi-touch sequence per lead\n\n| Day | Touch | Note |\n|---|---|---|\n| 1 | Call 1 (+ voicemail 1 if no answer) | late morning window |\n| 1 | Email (if address is public) | one line + one question: \"Can I show you the concept?\" No attachments |\n| 3 | Call 2 | different window (early afternoon) |\n| 5 | Call 3 (+ voicemail 2) | |\n| 8 | Call 4 | try a different day of week |\n| 10 to 12 | Call 5, then close the loop by email: \"I'll stop here. If direct bookings become a priority, reply and I'll send the concept.\" | then rest the lead for 60 to 90 days |\n\nWhatsApp is not in the cold sequence. WhatsApp only after a spoken yes or if they messaged you first (section 7). Once you have the opt-in, WhatsApp replaces email.\n\nStop when: 5 attempts with no conversation; an explicit no or opt-out (permanent); wrong number; property closed or sold.\n\n### Daily structure for 30 dials (reasoning, not data)\n\nPrep the night before: 30 leads with first name, review score, one specific site problem, and whether a concept exists. Without prep, 30 dials takes all day.\n\nGuesthouse day (reasoning from typical SA guesthouse operations; check against what owners tell you):\n- 07:00 to 09:30: breakfast service, often the owner cooking. Bad.\n- About 10:00 to 11:00: check-out and payments. Bad.\n- 11:00 to 13:30: rooms being serviced, owner doing admin. **Best window.**\n- 14:00 to 16:00: check-in starts (often later in practice). Bad.\n- 16:30 to 17:30: possible for lodges with late arrivals settled; test it.\n- After 18:00: dinner and arrivals at lodges; avoid, and keep weekdays before 20:00 (see CPA rules below).\n\nReviewTap buyers (reasoning):\n- Salons: before the first client (08:00 to 09:00) or mid-afternoon weekdays. Avoid Saturdays.\n- Restaurants: 10:00 to 11:30 or 15:00 to 17:00. Never 12:00 to 14:00 or dinner service.\n- Car dealers: weekday mornings 08:30 to 10:30; month-end is bad.\n- Clinics: before 08:30 or around lunch; reception is always busy mid-morning.\n\nProposed day (30 dials, about 3 hours on the phone):\n\n| Time | Block | Dials |\n|---|---|---|\n| 08:00 to 08:30 | Prep check, warm list first (callbacks, ReviewTap buyers: salons, dealers) | 5 |\n| 08:30 to 10:00 | ReviewTap buyers (dealers, clinics) + send yesterday's concept links | 5 |\n| 10:00 to 11:00 | Build or tweak concepts for booked meetings; no guesthouse calls | 0 |\n| 11:00 to 13:30 | Guesthouse power block | 15 |\n| 13:30 to 14:00 | Log, invites, WhatsApp confirmations | 0 |\n| 15:00 to 16:30 | Restaurants + second attempts + meetings held | 5 |\n\nNote: this sits awkwardly with DAILY-OPERATING-SPEC.md's 08:00 to 10:00 ask block. Calls are asks, so the morning blocks fit it; the guesthouse block deliberately runs later because that is when owners are free.\n\nLegal hours: CPA prohibited times for direct marketing aimed at a consumer at home (Notice under s12(2), GN 293 of 2011): never Sundays or public holidays; Saturdays only 09:00 to 13:00; other days not between 20:00 and 08:00. Remaining December public holidays: 16, 25 and 26 December.\n\n---\n\n## 7. South African compliance (research, not legal advice)\n\n### POPIA s69: does it cover live voice calls?\n\n- Section 69 bans processing personal information for direct marketing \"by means of any form of electronic communication\" unless the person has consented or is an existing customer (s69(3)).\n- **Regulator's position:** the Information Regulator's Guidance Note on Direct Marketing (published 3 December 2024) treats an outbound telephone call, including VoIP, as electronic communication. Per DLA Piper, Cliffe Dekker Hofmeyr and Michalsons summaries: you may approach a person whose consent is needed **only once** to ask for consent, and only if they have not already refused; during the call the marketer must read out the content of Form 4 (the prescribed consent request); and the call should be recorded.\n- **Status:** the Guidance Note says it is non-binding, and where it conflicts with POPIA, POPIA wins. Werksmans and a Wits paper argue that live calls are not \"electronic communication\" under the Act's wording. No court has settled it as far as I found. The Regulator's first direct marketing enforcement notice (FT Rams Consulting, 27 Feb 2024, per ENS) was about emails, but its order also barred unsolicited telephone marketing to non-consenting people.\n- **B2B:** POPIA's personal information definition includes \"existing juristic persons\", and \"person\" includes juristic persons. So a guesthouse company is still a data subject. A Juta (2022) article argues s69 therefore covers B2B. No regulatory ruling on this was found.\n- **Past ReviewTap buyers:** s69(3) allows marketing to an existing customer if their details were obtained in the context of a sale, the marketing is for your **own similar** products or services, and they were given a chance to object when details were collected and in every message. Whether a website rebuild is \"similar\" to a review stand is debatable. Safest: treat the first call as a consent call and offer the opt-out.\n\nPractical rules for this campaign:\n1. On every cold call, after the reason and before the pitch ends, ask the consent question in plain words, for example: \"Is it OK if I contact you about this by phone, WhatsApp or email? You can say no any time.\" I have not read Form 4's full text; get it from the POPIA Regulations and build a short spoken version.\n2. Record calls if your dialer allows it, and tell the person you are recording.\n3. Keep a permanent do-not-contact list across all JCE brands (including ReviewTap). One no means no from every brand.\n4. Log the source of every number (Google Business Profile, LekkeSlaap listing).\n\n### CPA s11 and the National Opt-Out Registry\n\n- The Consumer Protection Act Amendment Regulations, 2026 (in effect from 15 April 2026, per Werksmans) set up an NCC-run National Opt-Out Registry. NCC launch statement (7 Oct 2026, gov.za):\n  - Phase 1: direct marketers register, 15 September to December 2026 (Bowmans says by 31 December 2026). Failing to register \"may constitute a contravention of section 11\".\n  - Phase 2: free list cleansing, December 2026 to April 2027. From May 2027 cleansing carries a fee (draft guidelines: R0.12 per blocked entry; a cleansed list is valid 30 days).\n  - Consumers can register blocks from May 2027.\n- **Not yet in force:** s11(4)(b)(ii), the ban on marketing to people with a registered block, has no commencement date yet (Bowmans, 13 Oct 2026). Bowmans expects it on or before 30 April 2027.\n- **Penalties:** administrative fines of up to the greater of R1 million or 10% of annual turnover (Michalsons; Bowmans quotes \"the greater of ZAR 100 000 or 10%\", so the floor differs between sources; check the Act's s112).\n- **B2B scope is uncertain.** The CPA defines \"person\" to include juristic persons. Section 5(2)(b) says the CPA does not apply to transactions where the consumer is a juristic person with assets or turnover of R2 million or more (GN 294 of 1 April 2011). Many 5 to 25 room guesthouses will fall under R2 million. A June 2026 Polity/SchoemanLaw piece argues the registry likely reaches B2B marketing. Unsettled.\n- **Recommendation:** register JCE Media (and JSG if it is the selling entity) as a direct marketer before 31 December 2026. It is free and the downside of not registering is a possible s11 contravention.\n\n### WhatsApp Business policy on cold messages\n\n- WhatsApp Business Messaging Policy (last updated 23 September 2026, covers both the WhatsApp Business App and the Platform): \"You may only contact people on WhatsApp if: (a) they have given you their mobile phone number ... and (b) you have received opt-in permission from the recipient confirming that they wish to receive subsequent messages.\" It also says you must respect all opt-out requests and must not \"spam, or surprise people\".\n- A number on a Booking.com or Google listing is not \"given to you\" with opt-in. Cold WhatsApp blasts break the policy, and recipients blocking or reporting you puts the account at risk (Meta's opt-in documentation; Infobip and 360dialog summaries).\n- **The fix is the phone call:** \"Can I WhatsApp you the concept?\" said yes on a call is an opt-in. Log the date, time and wording. Put \"Reply STOP anytime\" in the first message.\n- If you later send from the WhatsApp Business Platform (API), business-initiated messages must use approved templates.\n\n---\n\n## 8. Quick wins to fill the calendar in 30 days, ranked by speed to cash\n\nRanking is reasoning: closest to money first.\n\n1. **Paying clients: upsell and ask for intros (days 1 to 7).** They already trust you and pay you. Offer the WhatsApp assistant or a site refresh to current clients, and ask each for two named introductions: \"Who else in your town runs a guesthouse or salon that would want this?\" Evidence for the value of referrals: Schmitt, Skiera and Van den Bulte (Journal of Marketing, 2011) found referred customers were at least 16% more valuable than comparable non-referred customers. Do not use the widely repeated \"83% of satisfied customers will refer, only 29% do\" stat: it is attributed to Texas Tech everywhere but I could not find the original study.\n2. **Past ReviewTap buyers (days 1 to 14).** Warm, they know the name, and the existing-customer route under POPIA may apply. Lead with \"how's the stand working?\" and the Google profile to website gap. Check delivery and order status first (memory: never pitch someone whose order was not delivered).\n3. **Re-activate stale proposals and old leads (days 1 to 10).** Anyone who got a proposal or quote and went quiet: one call, one new reason (\"I've built the concept\", \"price held until 15 Dec\"). Read WAITING-ON.md and the GHL pipelines first. Re-activation is cheaper than cold because the need was already confirmed once.\n4. **Inbound speed (ongoing).** Any enquiry from the sites, Google profile or ads: call back within the hour. Oldroyd et al. (HBR 2011) found leads contacted within an hour were about 7 times more likely to be qualified.\n5. **Cold guesthouse list with the concept-site give (days 3 to 30).** The main engine, but slowest to cash: book, meet, deposit.\n6. **Local tourism associations and booking-software ecosystems (days 14 to 30+, slower).** Local tourism offices and associations (for example the Vaal area's local tourism body) hold member lists and meetings where you can do a 10-minute talk: \"how to get more direct bookings\". One talk can produce several warm calls. Booking system vendors (NightsBridge, used by many SA guesthouses) and LekkeSlaap host communities are partnership plays, likely too slow for 30-day cash but worth starting.\n7. **Facebook groups for SA guesthouse and B&B owners (days 7 to 30).** Answer questions about direct bookings and Booking.com costs, then call people who engage. Slow and indirect; do it only after the call blocks.\n\n---\n\n## Sources\n\nBenchmarks and openers\n- Gong Labs, \"The hidden power of cold calling: insights from 300M calls\" (July 2024): https://www.gong.io/blog/the-hidden-power-of-cold-calling-insights-from-300m-calls\n- Gong Labs, \"The best and worst cold call openers (300M calls)\" (July 2024): https://www.gong.io/blog/the-best-and-worst-cold-call-openers-backed-by-data-from-300m-calls\n- Gong, \"Cold call stats\" (2021, updated 2026): https://www.gong.io/blog/cold-call-stats\n- Gong, \"Cold call opening lines\" (2018 study): https://www.gong.io/blog/cold-call-opening-lines\n- Gong Labs, \"Should you leave voicemails when cold calling?\" (Aug 2024): https://www.gong.io/blog/should-you-leave-voicemails-when-cold-calling-heres-what-the-data-says\n- Cognism, \"Cold Calling Report 2025\" (WHAM data): https://www.cognism.com/cold-calling-report-2025\n- Belkins, \"B2B cold calling statistics 2026\" (2025 data): https://belkins.io/blog/cold-calling-benchmarks\n- Orum, \"The State of Cold Calling\": https://www.orum.com/reports-and-guides/the-state-of-cold-calling\n- Orum, voicemail study: https://www.orum.com/blog/voicemails-influence-prospect-engagement\n- ZoomInfo, \"Best days to cold call\": https://pipeline.zoominfo.com/sales/best-days-to-cold-call\n\nMeetings, no-shows, referrals, leads\n- Gollwitzer and Sheeran (2006), implementation intentions meta-analysis: https://www.socmot.uni-konstanz.de/publications/implementation-intentions-and-goal-achievement-meta-analysis-effects-and-processes\n- Cochrane review CD007458, text message reminders for appointments: https://www.cochrane.org/CD007458/EPOC_mobile-phone-text-messaging-reminders-attendance-healthcare-appointments\n- Calendly, reducing sales no-shows: https://calendly.com/blog/reduce-no-show-rates-sales\n- Salesmsg, SaaS Academy case study: https://www.salesmessage.com/stories/saas-academy\n- Schmitt, Skiera, Van den Bulte (2011), Referral Programs and Customer Value: https://faculty.wharton.upenn.edu/wp-content/uploads/2012/04/Schmitt-Skiera-vandenBulte-2011-Referral-Programs-Customer-Value.pdf\n- Oldroyd, McElheran, Elkington (HBR 2011), The Short Life of Online Sales Leads: https://scholarsarchive.byu.edu/facpub/9711\n- Extole (repeats untraced Texas Tech referral stat): https://www.extole.com/blog/the-real-reason-your-customers-arent-referring-their-friends-and-how-to-fix-it/\n\nSA hospitality context\n- Competition Commission OIPMI final report notice (July 2023): https://www.gov.za/documents/notices/competition-act-final-report-and-decision-online-intermediation-platforms-market\n- Tourism Update on the Booking.com parity ruling: https://www.tourismupdate.com/article/how-sas-independent-hotels-can-capitalise-on-the-bookingcom-price-parity-ruling\n- NightsBridge tutorial on LekkeSlaap commission (undated): https://bridgeit.screenstepslive.com/a/1615273-lekkeslaap-rates-commission-and-child-policy\n\nCompliance\n- Michalsons, Guidance Note on direct marketing (Dec 2024): https://www.michalsons.com/blog/guidance-note-on-direct-marketing-in-south-africa/51168\n- DLA Piper, Guidance Note on direct marketing (Jan 2025): https://www.dlapiper.com/insights/publications/2025/01/data-protection-guidance-note-on-direct-marketing\n- Cliffe Dekker Hofmeyr, Navigating the Guidance Note (Jan 2025): https://www.cliffedekkerhofmeyr.com/en/news/publications/2025/Sectors/Technology-Communications/Technology-and-Communications-Alert-29-january-Navigating-the-Information-Regulators-guidance-note-on-direct-marketing\n- Werksmans, Guidance Note commentary: https://www.werksmans.com/legal-updates-and-opinions/direct-marketing-guidance-note-issued-but-only-the-future-will-tell/\n- Wits paper on s69 and telemarketing: https://wiredspace.wits.ac.za/bitstreams/839320fa-e203-4b85-bb4a-d84041dedd93/download\n- ENS, Regulator's first enforcement notice (2024): https://www.ensafrica.com/news/detail/8174/information-regulators-first-enforcement-noti\n- Juta, B2B direct marketing (2022): https://cms.juta.co.za/documents/42/Issue_no_2_B2B_Direct_Marketing_July_2022.pdf\n- Linklaters, Data Protected South Africa: https://www.linklaters.com/insights/data-protected/data-protected---south-africa\n- NCC launches National Opt-Out Registry (gov.za, 7 Oct 2026): https://www.gov.za/news/media-statements/national-consumer-commission-launches-national-opt-out-registry-07-oct-2026\n- Bowmans via Bizcommunity, what direct marketers need to know (13 Oct 2026): https://www.bizcommunity.com/article/ncc-launches-national-opt-out-registry-what-direct-marketers-need-to-know-747212a\n- Werksmans, 2026 CPA amendment regulations (Apr 2026): https://werksmans.com/do-not-call-me-ill-call-you-south-africas-2026-cpa-amendment-regulations-operationalising-the-national-opt%E2%80%91out-regime-for-direct-marketing-and-shifting-day/\n- Michalsons, opt-out registry guidelines: https://www.michalsons.com/blog/guidelines-for-compliance-with-opt-out-registry-regulations/83193\n- Polity, national opt-out system and B2B marketing (June 2026): https://polity.org.za/article/direct-marketing-a-national-opt-out-system-and-the-effect-on-b2b-marketing-2026-06-29\n- CPA prohibited times for contacting consumers (acts.co.za): https://source.acts.co.za/consumer-protection-act-2008/r293_prohibited_time_for_contacting_consumers.php\n- CPA juristic person threshold, GN 294 of 2011: https://www.gov.za/documents/consumer-protection-act-determination-threshold-applicable-size-juristic-person\n- WhatsApp Business Messaging Policy (updated 23 Sep 2026): https://whatsappbusiness.com/policy/\n- Meta, Get opt-in for WhatsApp: https://developers.facebook.com/docs/whatsapp/overview/getting-opt-in\n";
+let PASS = null, S = {leads:[], events:[], opps:[]}, cur = null, sel = null, filt = {niche:'all', src:'all'}, tab='today', qExtra = 0;
+
+const OUT = [
+ {k:'no_answer', t:'No answer', key:'1'},
+ {k:'voicemail', t:'Voicemail', key:'2'},
+ {k:'gatekeeper', t:'Gatekeeper', key:'3'},
+ {k:'callback', t:'Call back later', key:'4', date:true},
+ {k:'interested', t:'Interested: send info', key:'5', date:true, g:1},
+ {k:'booked', t:'Meeting booked', key:'6', meet:true, g:1},
+ {k:'proposal', t:'Proposal sent', key:'7', date:true, g:1},
+ {k:'won', t:'Won', key:'8', g:1},
+ {k:'not_interested', t:'Not interested', key:'9', r:1},
+ {k:'wrong_number', t:'Wrong number', key:'0', r:1},
+ {k:'dnc', t:'Opted out: never call', key:'-', r:1},
+];
+const LABEL = Object.fromEntries(OUT.map(o=>[o.k,o.t])); LABEL.note='Note';
+const NICHES = {accommodation:'Accommodation', beauty:'Beauty & salons', medical:'Medical & aesthetics', auto:'Car dealers', food:'Restaurants & food', trades:'Trades', professional:'Professional services', retail:'Retail', other:'Other businesses'};
+const CONVO = new Set(['gatekeeper','callback','interested','booked','proposal','won','not_interested']);
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const todayISO = () => new Date(Date.now() + 2*3600e3).toISOString().slice(0,10); // SAST
+const isToday = ts => ts && new Date(new Date(ts).getTime()+2*3600e3).toISOString().slice(0,10) === todayISO();
+function addBiz(days){ const d = new Date(Date.now()+2*3600e3); let n=0; while(n<days){ d.setUTCDate(d.getUTCDate()+1); if(d.getUTCDay()%6) n++; } return d.toISOString().slice(0,10); }
+function toast(m, ms=2600){ const t=document.createElement('div'); t.className='toast'; t.textContent=m; document.body.appendChild(t); setTimeout(()=>t.remove(), ms); }
+
+async function api(body){
+  const r = await fetch(API, {method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify({...body, pass: PASS})});
+  const j = await r.json().catch(()=>({error:'bad response'}));
+  if (r.status === 401) { try{localStorage.removeItem('cc_pass')}catch(e){}; showGate('Passcode not accepted.'); throw new Error('401'); }
+  if (!r.ok || j.error) throw new Error(j.error || r.status);
+  return j;
+}
+function showGate(msg){ $('#app').classList.add('hide'); $('#gate').classList.remove('hide'); $('#gerr').textContent = msg||''; }
+async function unlock(){ PASS = $('#pw').value.trim(); try{ await reload(); try{localStorage.setItem('cc_pass', PASS)}catch(e){} }catch(e){ if(e.message!=='401') $('#gerr').textContent='Could not load: '+e.message; } }
+$('#pw').addEventListener('keydown', e => { if (e.key==='Enter') unlock(); });
+
+async function reload(){
+  $('#syncst') && ($('#syncst').textContent = 'Loading');
+  const j = await api({action:'load'});
+  S = j;
+  $('#gate').classList.add('hide'); $('#app').classList.remove('hide');
+  $('#syncst').textContent = j.ghlError ? 'Pipeline read failed' : `Synced with your pipeline · ${new Date().toLocaleTimeString('en-ZA',{hour:'2-digit',minute:'2-digit'})}`;
+  if (j.ghlError) console.warn(j.ghlError);
+  render();
+}
+
+// ---------- derived ----------
+function evToday(){ return S.events.filter(e => isToday(e.created_at)); }
+function weekStart(){ const d=new Date(Date.now()+2*3600e3); const w=(d.getUTCDay()+6)%7; d.setUTCDate(d.getUTCDate()-w); return d.toISOString().slice(0,10); }
+function lead(id){ return S.leads.find(l => l.id===id); }
+function first(l){ return l.data.contact_first || (l.data.owner||'').split(' ')[0] || ''; }
+const CLOSED = new Set(['dead','bad','won','booked','proposal','parked','dnc']);
+const MAX_TRIES = 5;
+// best call windows by niche, SAST (research section 6: reasoning, not data)
+const WINDOWS = {accommodation:[[11,0,13,30],[16,30,17,30]], beauty:[[8,0,9,0],[14,0,16,0]], food:[[10,0,11,30],[15,0,17,0]], auto:[[8,30,10,30]], medical:[[7,30,8,30],[12,0,14,0]], trades:[[7,30,9,0],[16,0,17,30]], professional:[[9,0,11,0],[14,0,16,0]], retail:[[9,0,11,0],[14,0,16,0]], other:[[9,0,11,0],[14,0,16,0]]};
+function sastNow(){ const d=new Date(Date.now()+2*3600e3); return {dow:d.getUTCDay(), m:d.getUTCHours()*60+d.getUTCMinutes()}; }
+function inWindow(n){ const {m}=sastNow(); return (WINDOWS[n]||WINDOWS.other).some(([a,b,c,e])=>m>=a*60+b && m<=c*60+e); }
+function legalNow(){ const {dow,m}=sastNow(); const t=todayISO().slice(5); if (['12-16','12-25','12-26','01-01'].includes(t)) return 'Public holiday: no marketing calls today.'; if (dow===0) return 'Sunday: no direct-marketing calls today (CPA).'; if (dow===6 && (m<540||m>780)) return 'Saturday: marketing calls only 09:00 to 13:00 (CPA).'; if (m<480||m>=1200) return 'Outside 08:00 to 20:00: no marketing calls right now (CPA).'; return null; }
+
+function queue(){
+  const t = todayISO();
+  const due = [], fresh = [];
+  const calledToday = new Set(evToday().filter(e=>e.outcome!=='note').map(e=>e.lead_id));
+  for (const l of S.leads){
+    const d = l.data;
+    if (filt.niche!=='all' && d.niche!==filt.niche) continue;
+    if (filt.src!=='all' && srcGroup(d)!==filt.src) continue;
+    if (calledToday.has(l.id)) continue;
+    if (l.next_action_at && l.next_action_at <= t && !['dead','bad','won'].includes(l.status)) { due.push(l); continue; }
+    if (CLOSED.has(l.status) || ['interested','callback'].includes(l.status)) continue;
+    if (l.next_action_at && l.next_action_at > t) continue;
+    if (l.attempts >= MAX_TRIES) continue;
+    fresh.push(l);
+  }
+  const score = l => (l.data.priority||0) - l.attempts*6 + (inWindow(l.data.niche)?15:0);
+  due.sort((a,b)=> (a.next_action_at||'').localeCompare(b.next_action_at||'') || score(b)-score(a));
+  fresh.sort((a,b)=> score(b)-score(a));
+  const done = [...calledToday].map(lead).filter(Boolean);
+  const left = Math.max(0, DAILY - done.length) + qExtra;
+  return {due, fresh: fresh.slice(0, Math.max(0, left - due.length)), done, freshTotal: fresh.length};
+}
+function srcGroup(d){ return d.past_buyer ? 'buyers' : (d.source==='coastal-list' ? 'coastal' : (d.source||'').startsWith('new-') ? 'new' : 'manual'); }
+
+// ---------- stats ----------
+function renderStats(){
+  const ev = evToday(), dials = ev.filter(e=>e.outcome!=='note');
+  const convos = dials.filter(e=>CONVO.has(e.outcome)).length;
+  const ws = weekStart();
+  const weekEv = S.events.filter(e => e.created_at.slice(0,10) >= ws);
+  const booked = weekEv.filter(e=>e.outcome==='booked').length;
+  const openOpps = S.opps.filter(o=>o.status==='open');
+  const hot = openOpps.filter(o=>['Interested','Discovery Booked','Proposal Sent','Negotiating'].includes(o.stage));
+  const meetToday = S.leads.filter(l => l.meeting_at && isToday(l.meeting_at)).length;
+  const pct = Math.min(100, dials.length/DAILY*100);
+  $('#stats').innerHTML = `
+   <div class="stat"><div class="k">Dials today</div><div class="v">${dials.length}<small> / ${DAILY}</small></div><div class="bar"><i style="width:${pct}%"></i></div></div>
+   <div class="stat"><div class="k">Conversations today</div><div class="v">${convos}</div><div class="small muted">${dials.length? Math.round(convos/dials.length*100):0}% connect</div></div>
+   <div class="stat"><div class="k">Meetings booked this week</div><div class="v">${booked}</div><div class="small muted">${meetToday} on the calendar today</div></div>
+   <div class="stat"><div class="k">Live deals in pipeline</div><div class="v">${hot.length}<small> hot</small></div><div class="small muted">${openOpps.length} open in total</div></div>
+   <div class="stat"><div class="k">Leads ready</div><div class="v">${S.leads.filter(l=>!CLOSED.has(l.status)&&l.attempts<MAX_TRIES).length}</div><div class="small muted">${S.leads.length} in the cockpit</div></div>`;
+}
+
+// ---------- tabs ----------
+const TABS = [['today','Today’s calls'],['leads','All leads'],['pipe','Pipeline'],['niches','Niches'],['play','Playbook'],['add','Add a lead']];
+function renderTabs(){ $('#tabs').innerHTML = TABS.map(([k,t])=>`<button class="${tab===k?'on':''}" onclick="go('${k}')">${t}</button>`).join(''); }
+function go(k){ tab=k; for (const [t] of TABS) $('#v-'+t).classList.toggle('hide', t!==k); renderTabs(); ({today:renderToday,leads:renderLeads,pipe:renderPipe,niches:renderNiches,play:renderPlay,add:renderAdd})[k](); window.scrollTo({top:0}); }
+function render(){ renderStats(); renderTabs(); go(tab); }
+
+// ---------- today ----------
+function chips(){
+  const n = Object.keys(NICHES).filter(k => S.leads.some(l=>l.data.niche===k));
+  const srcs = [['all','All sources'],['buyers','Past ReviewTap buyers'],['coastal','Coastal list'],['new','New accommodation'],['manual','Added by you']];
+  return `<div class="chips" style="margin-bottom:6px">${['all',...n].map(k=>`<button class="chip ${filt.niche===k?'on':''}" onclick="filt.niche='${k}';qExtra=0;sel=null;renderToday()">${k==='all'?'All niches':NICHES[k]}</button>`).join('')}</div>
+  <div class="chips">${srcs.map(([k,t])=>`<button class="chip ${filt.src===k?'on':''}" onclick="filt.src='${k}';qExtra=0;sel=null;renderToday()">${t}</button>`).join('')}</div>`;
+}
+function qItem(l,i,cls=''){
+  const d=l.data;
+  const tag = l.next_action_at && l.next_action_at <= todayISO() ? `<span class="pill amb">${l.status==='callback'?'Callback':'Follow up'} ${l.next_action_at===todayISO()?'today':l.next_action_at}</span>` : (d.past_buyer?'<span class="pill blue">Past buyer</span>':'');
+  return `<div class="qi ${cls} ${sel===l.id?'on':''}" onclick="pick('${l.id}')"><div class="n">${i}</div><div><div class="t">${esc(d.name)}</div><div class="m">${esc(d.town||'')} · ${NICHES[d.niche]||d.niche}${l.attempts?` · try ${l.attempts+1}`:''}</div><div style="margin-top:4px;display:flex;gap:4px;flex-wrap:wrap">${tag}${sitePill(d)}</div></div></div>`;
+}
+function sitePill(d){
+  const m = {broken:['bad','Site broken'], hacked:['bad','Site hacked'], none:['amb','No website'], dated:['amb','Dated site'], unverified:['','Check site']}[d.site_status];
+  return m ? `<span class="pill ${m[0]}">${m[1]}</span>` : '';
+}
+function renderToday(){
+  const q = queue();
+  const list = [...q.due, ...q.fresh];
+  if (!sel || !list.find(l=>l.id===sel) && !q.done.find(l=>l.id===sel)) sel = list[0]?.id || null;
+  $('#v-today').innerHTML = `<div class="grid2">
+   <div class="card queue">
+     ${(()=>{const w=legalNow(); if(w) return `<div class="pill bad" style="margin:4px 8px 8px;white-space:normal">${w}</div>`; const now=Object.keys(NICHES).filter(inWindow); return now.length?`<div class="small" style="padding:0 8px 8px">Best window right now: <b>${now.map(k=>NICHES[k]).join(', ')}</b>. These float to the top.</div>`:'';})()}
+     <div class="qhead"><b>Your call list</b><span class="pill">${list.length} to go</span><span class="pill ok">${q.done.length} done</span></div>
+     ${chips()}
+     <div style="margin-top:10px">
+     ${q.due.length?'<div class="small muted" style="padding:4px 8px">Due now</div>':''}
+     ${q.due.map((l,i)=>qItem(l,i+1)).join('')}
+     ${q.fresh.length?'<div class="small muted" style="padding:8px 8px 4px">Fresh, best first</div>':''}
+     ${q.fresh.map((l,i)=>qItem(l,q.due.length+i+1)).join('')}
+     ${!list.length?'<p class="muted" style="padding:8px">Daily target reached, or nothing left in this filter. Nice work.</p>':''}
+     <p style="padding:6px 8px"><button class="btn sm" onclick="qExtra+=10;renderToday()">Add 10 more to today</button></p>
+     ${q.done.length?'<div class="small muted" style="padding:8px 8px 4px">Called today</div>'+q.done.map((l,i)=>qItem(l,'✓','done')).join(''):''}
+     </div>
+   </div>
+   <div id="leadpane">${sel?leadPane(lead(sel)):'<div class="card muted">Pick a lead.</div>'}</div>
+  </div>`;
+  bindPane();
+}
+function pick(id){ sel=id; cur=null; if (tab!=='today'){ tab='today'; go('today'); } else { renderToday(); } if (innerWidth<900) $('#leadpane').scrollIntoView({behavior:'smooth'}); }
+
+function waNum(p){ let d=(p||'').replace(/\D/g,''); if(d.startsWith('0')) d='27'+d.slice(1); return d; }
+function slots(){
+  const a = addBiz(1), b = addBiz(2);
+  const f = s => new Date(s+'T12:00:00').toLocaleDateString('en-ZA',{weekday:'long', day:'numeric', month:'short'});
+  return [`${f(a)} at 10:00`, `${f(b)} at 14:00`];
+}
+function siteIssue(d){
+  const p = (d.site_problems||[])[0] || '';
+  const short = p.split(/[;.]/)[0].trim();
+  return short.length > 8 ? short.charAt(0).toLowerCase()+short.slice(1) : null;
+}
+function opener(l){
+  const d=l.data, fn=first(l), [s1,s2]=slots();
+  const issue = siteIssue(d), built = !!d.kit_link, demo = built && d.kit_link.includes('guestops');
+  const what = demo ? 'a WhatsApp assistant that answers your booking enquiries after hours' : 'a concept of a new website, from your own photos and listing';
+  const hi = fn ? `Hi, is that ${fn}? ${fn}, ` : 'Hi there, ';
+  const L = [];
+  if (d.past_buyer){
+    L.push(['Open (warm)', `${hi}it\u2019s Jacques from ReviewTap, you got the Google review stand from us${d.last_order?` in ${new Date(d.last_order).toLocaleDateString('en-ZA',{month:'long',year:'numeric'})}`:''}. How\u2019s it been going, are people tapping it?`]);
+    L.push(['Reason', d.emailed && built ? `The reason I\u2019m calling: I emailed you last week, I built ${d.name} ${what}. Did you get a chance to look at it?`
+      : `The reason I\u2019m calling: ${issue?`I noticed ${issue}`:`when someone clicks through from your Google reviews, there\u2019s no proper website to land on`}, so you\u2019re losing some of the people the reviews bring in.`]);
+    L.push(['The give', built ? `It\u2019s already built, no charge, from your own info.` : `I\u2019d like to put together a one-page concept for ${d.name} from your Google profile, no charge.`]);
+  } else {
+    L.push(['Open (cold)', `${hi}it\u2019s Jacques from JCE Media in the Vaal. I\u2019ll be honest, this is a cold call, so I\u2019ll be quick.`]);
+    L.push(['Reason', d.site_status==='none'
+      ? `I found ${d.name} online${d.google_rating?`, ${d.google_rating} on Google${d.google_reviews?` from ${d.google_reviews} reviews`:''}`:''}, but I couldn\u2019t find a website of your own, so every guest who finds you pays a platform first.`
+      : `I was looking at ${d.name}${d.google_rating?`, your reviews are excellent, ${d.google_rating} on Google`:''}, but your own website doesn\u2019t show that off${issue?`: ${issue}`:''}.`]);
+    L.push(['The give', `I\u2019ll build you a concept of what the site could look like, from your own photos and reviews, no charge. Can I take 30 seconds to tell you why?`]);
+    if (d.opener) L.push(['Researched opener (alternative)', d.opener]);
+  }
+  L.push(['The ask', `Can I show it to you on a 15-minute call, ${s1} or ${s2}?`]);
+  L.push(['Lock it', `I\u2019m sending you the invite now. Can I WhatsApp you the reminder and the link, is this number on WhatsApp? (That yes is your WhatsApp opt-in: note it.)`]);
+  L.push(['If it\u2019s a no', `No problem. Shall I take you off my list so I don\u2019t call again? (If yes, log "Opted out".)`]);
+  return L;
+}
+const OBJ = [
+ ['Send me an email', 'Happy to. Honestly though, a website concept is hard to judge in an email. It takes 15 minutes, I show you on your own phone, and if it\u2019s not for you, that\u2019s it. {slot}? If still email: is WhatsApp better than email? I\u2019ll send it there.'],
+ ['We\u2019re happy with our site', 'Good, then this will be a quick no. I\u2019m not saying it\u2019s bad. The concept just shows how many more direct bookings the same site could get on a phone. Worth 15 minutes side by side?'],
+ ['We get bookings through Booking.com / LekkeSlaap', 'Makes sense, they bring you guests. Roughly what does Booking.com take per booking? (Let them say it.) The site isn\u2019t to replace them, it\u2019s so returners and referrals book direct and you keep that commission.'],
+ ['No budget / quiet season', 'That\u2019s why the timing works: it\u2019s built while you\u2019re quiet and ready when guests search. It\u2019s R7,500 once-off and R249 a month hosting, and you see it before you decide. If busy: the WhatsApp assistant answers December enquiries while you run breakfasts.'],
+ ['My nephew does our website', 'Great, keep him involved. I\u2019m happy to hand him the concept so he can use whatever is useful. Can I show you both? Then you decide whether he builds it or we do.'],
+ ['Not interested', 'Fair enough. Is it the website side or the timing? (Listen once.) Understood. Would you like me to WhatsApp the concept anyway, no follow-up unless you reply? If no: I\u2019ll take you off my list. Log Opted out.'],
+];
+function voicemailHint(l){
+  if (![0,2].includes(l.attempts)) return 'No voicemail on this attempt (only on tries 1 and 3).';
+  return `Voicemail (under 20 seconds): "${first(l)?first(l)+', ':''}Jacques from ${l.data.past_buyer?'ReviewTap':'JCE Media'}. I ${l.data.kit_link?'made':'want to make'} a concept ${l.data.kit_link&&l.data.kit_link.includes('guestops')?'WhatsApp assistant':'website'} for ${l.data.name}. I\u2019ll try you again ${new Date(addBiz(2)+'T12:00:00').toLocaleDateString('en-ZA',{weekday:'long'})}${l.data.niche==='accommodation'?' after check-out':''}."`;
+}
+function leadPane(l){
+  if (!l) return '';
+  const d=l.data, fn=first(l);
+  const hist = S.events.filter(e=>e.lead_id===l.id);
+  const opp = l.ghl_opp_id && S.opps.find(o=>o.id===l.ghl_opp_id);
+  const wa = waNum(d.whatsapp||d.phone);
+  const waText = encodeURIComponent(`Hi ${fn||''}, it's Jacques${d.past_buyer?' from ReviewTap':' from JCE Media'}. I just tried to call you about ${d.name}'s website. ${d.kit_link?'Here is what I built for you: '+d.kit_link+' . ':''}When is a good time for a quick 15-minute call?`);
+  const why = (d.site_problems||[]).filter(Boolean);
+  return `<div class="card lead">
+   <div class="row" style="margin-top:0">${d.past_buyer?'<span class="pill hot">Bought from ReviewTap</span>':''}<span class="pill">${NICHES[d.niche]||d.niche}</span>${sitePill(d)}${opp?`<span class="pill ok">Pipeline: ${esc(opp.stage)}</span>`:''}${l.status!=='new'?`<span class="pill">${esc(l.status)}</span>`:''}<span class="pill">Priority ${d.priority}</span></div>
+   <h2 style="margin-top:10px">${esc(d.name)}</h2>
+   <div class="muted">${esc([d.kind, d.town, d.province].filter(Boolean).join(' · '))}</div>
+   <div class="row">
+     ${fn?`<span><b>Ask for:</b> ${esc(fn)} ${esc(d.contact_last||'')}${d.owner&&d.owner.split(' ')[0]!==fn?` (owner: ${esc(d.owner)})`:''}</span>`:(d.owner?`<span><b>Owner:</b> ${esc(d.owner)}</span>`:'<span class="muted">Owner not known: ask "who looks after the website?"</span>')}
+     ${d.google_rating?`<span class="pill">Google ${d.google_rating}${d.google_reviews?` (${d.google_reviews})`:''}</span>`:''}
+     ${d.rooms?`<span class="pill">${esc(String(d.rooms)).slice(0,40)} rooms</span>`:''}
+   </div>
+   <div class="callbar">
+     <a class="btn call" href="tel:${esc((d.phone||'').replace(/\s/g,''))}">☎ ${esc(d.phone)}</a>
+     ${(d.alt_phones||[]).map(p=>`<a class="btn" href="tel:${esc(p.replace(/\s/g,''))}">${esc(p)}</a>`).join('')}
+     <a class="btn wa" target="_blank" href="https://wa.me/${wa}?text=${waText}">WhatsApp after a missed call</a>
+     ${d.website?`<a class="btn" target="_blank" href="${esc(d.website)}">Open their site</a>`:`<a class="btn" target="_blank" href="https://www.google.com/search?q=${encodeURIComponent(d.name+' '+(d.town||''))}">Google them</a>`}
+     ${d.kit_link?`<a class="btn dark" target="_blank" href="${esc(d.kit_link)}">What we built for them</a>`:''}
+   </div>
+   ${d.past_buyer?`<div class="small muted">ReviewTap order history: ${esc(d.orders||'?')} order(s)${d.spent?`, R${Math.round(d.spent).toLocaleString('en-ZA')}`:''}${d.last_order?`, last ${esc(d.last_order)}`:''}${d.emailed?' · emailed a concept 19 Nov':''}${d.email?` · ${esc(d.email)}`:''}</div>`:(d.email?`<div class="small muted">${esc(d.email)}</div>`:'')}
+   ${d.angle?`<div class="box"><h3>The one-line angle</h3><div>${esc(d.angle)}</div></div>`:''}
+   <div class="box"><h3>Say this</h3>${opener(l).map(([k,v])=>`<div class="say"><span class="lbl">${k}</span>${esc(v)}</div>`).join('')}</div>
+   <div class="box"><h3>Objections</h3>${OBJ.map(([q,a])=>`<details style="margin:4px 0"><summary><b>${esc(q)}</b></summary><div class="say" style="margin-top:6px">${esc(a.replace('{slot}', slots()[0]))}</div></details>`).join('')}<div class="small muted" style="margin-top:8px">${esc(voicemailHint(l))}</div></div>
+   ${why.length?`<div class="box"><h3>Why their site is losing them business</h3><ul class="why">${why.slice(0,6).map(w=>`<li>${esc(w)}</li>`).join('')}</ul>${d.booking_method?`<div class="small muted" style="margin-top:6px">Books via: ${esc(d.booking_method)}</div>`:''}</div>`:''}
+   <div class="box"><h3>Log the call</h3>
+     <div class="outs">${OUT.map(o=>`<button class="out ${o.g?'g':''} ${o.r?'r':''} ${cur===o.k?'on':''}" data-o="${o.k}">${o.t}<kbd>${o.key}</kbd></button>`).join('')}</div>
+     <div id="extra"></div>
+     <label class="l">Notes (anything you type here goes to your pipeline as a contact note)</label>
+     <textarea id="note" placeholder="Who you spoke to, what they said, what to do next"></textarea>
+     <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+       <button class="btn call" style="font-size:16px" id="save">Save${' '}&amp; next</button>
+       <button class="btn" id="saveNote">Save note only</button>
+     </div>
+     <div class="kbdhelp">Keys: 1 to 0 and - pick an outcome, Ctrl+Enter saves. No answer and voicemail stay in the cockpit unless you add a note; every conversation syncs to Jacques Personal Pipeline.</div>
+   </div>
+   <div class="box"><h3>History</h3><div class="hist">${hist.length?hist.map(e=>`<div><b>${LABEL[e.outcome]||e.outcome}</b> <span class="muted">${new Date(e.created_at).toLocaleString('en-ZA',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</span>${e.ghl_synced?' <span class="pill ok">in pipeline</span>':''}${e.ghl_error?' <span class="pill bad" title="'+esc(e.ghl_error)+'">sync failed</span>':''}${e.meeting_at?` · meeting ${esc(e.meeting_at.replace('T',' ').slice(0,16))}`:''}${e.next_action_at?` · next ${esc(e.next_action_at)}`:''}${e.note?`<br>${esc(e.note)}`:''}</div>`).join(''):'<span class="muted">No calls yet.</span>'}</div></div>
+   ${(d.sources||[]).length?`<div class="small muted" style="margin-top:10px">Research sources: ${d.sources.slice(0,4).map(u=>`<a target=_blank href="${esc(u)}">${esc(u.replace(/^https?:\/\/(www\.)?/,'').slice(0,40))}</a>`).join(' · ')}</div>`:''}
+  </div>`;
+}
+function extraFor(k){
+  const o = OUT.find(x=>x.k===k); if(!o) return '';
+  const def = {callback:addBiz(1), interested:addBiz(2), proposal:addBiz(3)}[k] || '';
+  if (o.meet) return `<div class="f2"><div><label class="l">Meeting date and time</label><input type="datetime-local" id="meet" value="${addBiz(1)}T10:00"></div><div><label class="l">Then follow up on</label><input type="date" id="next" value="${addBiz(1)}"></div></div><p class="small muted">Before you hang up: say you will WhatsApp a confirmation now, and send it while they are on the line.</p>`;
+  if (o.date) return `<div class="f2"><div><label class="l">${k==='callback'?'Call back on':'Follow up on'}</label><input type="date" id="next" value="${def}"></div><div><label class="l">What to do then</label><input id="nexta" placeholder="${k==='interested'?'Send concept, then call':''}"></div></div>`;
+  return '';
+}
+function bindPane(){
+  document.querySelectorAll('.out').forEach(b => b.onclick = () => choose(b.dataset.o));
+  const s=$('#save'); if (s) s.onclick = () => save(false);
+  const n=$('#saveNote'); if (n) n.onclick = () => save(true);
+  if (cur) $('#extra').innerHTML = extraFor(cur);
+}
+function choose(k){ cur=k; document.querySelectorAll('.out').forEach(b=>b.classList.toggle('on', b.dataset.o===k)); $('#extra').innerHTML = extraFor(k); }
+document.addEventListener('keydown', e => {
+  if (tab!=='today' || !sel) return;
+  if ((e.ctrlKey||e.metaKey) && e.key==='Enter') { e.preventDefault(); save(false); return; }
+  if (['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)) return;
+  const o = OUT.find(x=>x.key===e.key); if (o) choose(o.k);
+});
+let saving=false;
+async function save(noteOnly){
+  if (saving) return;
+  const l = lead(sel); if (!l) return;
+  const note = $('#note').value.trim();
+  if (noteOnly && !note) return toast('Type a note first.');
+  if (!noteOnly && !cur) return toast('Pick what happened on the call first.');
+  const k = noteOnly ? 'note' : (cur==='dnc' ? 'not_interested' : cur);
+  const body = {action:'log', lead_id:l.id, outcome:k, note: cur==='dnc' && !noteOnly ? ('OPTED OUT: asked not to be contacted again. ' + note).trim() : note};
+  const nx = $('#next'), na = $('#nexta'), mt = $('#meet');
+  if (!noteOnly){
+    if (nx) body.next_action_at = nx.value || null;
+    else if (k==='no_answer' || k==='voicemail') body.next_action_at = addBiz([2,2,3,2,2][l.attempts] || 2);
+    else body.next_action_at = null;
+    if (na && na.value) body.next_action = na.value;
+    if (mt && mt.value) body.meeting_at = mt.value;
+  }
+  saving = true; $('#save') && ($('#save').textContent='Saving');
+  try{
+    const j = await api(body);
+    if (cur==='dnc' && !noteOnly){ const e2 = await api({action:'edit', lead_id:l.id, status:'dnc'}); j.lead = e2.lead; }
+    const i = S.leads.findIndex(x=>x.id===l.id); S.leads[i] = j.lead; S.events.unshift({...j.event, ghl_synced: j.sync.synced, ghl_error: j.sync.error||null});
+    toast(j.sync.synced ? `Saved and synced to your pipeline${k==='booked'?'. Meeting is in Discovery Booked.':''}` : (j.sync.error ? 'Saved here, but the pipeline sync failed: '+j.sync.error.slice(0,90) : 'Saved (no answer stays in the cockpit)'), 3200);
+    if (j.sync.synced && j.sync.opp && !S.opps.find(o=>o.id===j.sync.opp)) S.opps.push({id:j.sync.opp, name:`${first(j.lead)} - ${j.lead.data.name}`, stage: ({gatekeeper:'Contacted',callback:'Contacted',interested:'Interested',booked:'Discovery Booked',proposal:'Proposal Sent',won:'Won'})[k]||'New Lead', status:k==='won'?'won':'open', value:7500});
+    cur = null;
+    if (!noteOnly){ const q=queue(); sel = [...q.due,...q.fresh][0]?.id || sel; }
+    renderStats(); renderToday();
+  }catch(e){ if(e.message!=='401') toast('Not saved: '+e.message, 4000); }
+  saving=false;
+}
+
+// ---------- all leads ----------
+let lq='', lsort='priority';
+function renderLeads(){
+  const rows = S.leads.filter(l => {
+    const d=l.data; if (filt.niche!=='all' && d.niche!==filt.niche) return false;
+    if (filt.src!=='all' && srcGroup(d)!==filt.src) return false;
+    if (!lq) return true; return JSON.stringify(d).toLowerCase().includes(lq.toLowerCase());
+  }).sort((a,b)=> lsort==='priority' ? (b.data.priority-a.data.priority) : lsort==='name' ? a.data.name.localeCompare(b.data.name) : lsort==='status' ? a.status.localeCompare(b.status) : (b.last_called_at||'').localeCompare(a.last_called_at||''));
+  $('#v-leads').innerHTML = `<div class="card">${chips()}<div style="display:flex;gap:10px;margin:12px 0"><input id="lq" placeholder="Search name, town, email, anything" value="${esc(lq)}"><span class="pill" style="align-self:center">${rows.length}</span></div>
+  <div style="overflow:auto;max-height:70vh"><table><thead><tr><th onclick="lsort='name';renderLeads()">Business</th><th>Niche</th><th>Town</th><th onclick="lsort='status';renderLeads()">Status</th><th>Site</th><th onclick="lsort='last';renderLeads()">Last call</th><th onclick="lsort='priority';renderLeads()">Priority</th></tr></thead><tbody>
+  ${rows.slice(0,400).map(l=>`<tr class="click" onclick="pick('${l.id}')"><td><b>${esc(l.data.name)}</b>${l.data.past_buyer?' <span class="pill blue">buyer</span>':''}<div class="small muted">${esc(l.data.phone||'')}</div></td><td>${NICHES[l.data.niche]||''}</td><td>${esc(l.data.town||'')}</td><td>${esc(l.status)}${l.attempts?` <span class="muted small">(${l.attempts})</span>`:''}${l.next_action_at?`<div class="small muted">next ${l.next_action_at}</div>`:''}</td><td>${sitePill(l.data)}</td><td class="small">${l.last_called_at?new Date(l.last_called_at).toLocaleDateString('en-ZA'):''}${l.last_outcome?'<br>'+LABEL[l.last_outcome]:''}</td><td>${l.data.priority}</td></tr>`).join('')}
+  </tbody></table>${rows.length>400?'<p class="muted small">Showing the first 400. Search to narrow.</p>':''}</div></div>`;
+  const i=$('#lq'); i.oninput = () => { lq=i.value; const p=i.selectionStart; renderLeads(); const n=$('#lq'); n.focus(); n.setSelectionRange(p,p); };
+}
+
+// ---------- pipeline (live from GHL) ----------
+function renderPipe(){
+  const stages = ['New Lead','Contacted','Interested','Discovery Booked','Proposal Sent','Negotiating','Won','Lost'];
+  const by = s => S.opps.filter(o => s==='Lost' ? o.status==='lost' : s==='Won' ? (o.status==='won'||o.stage==='Won') : (o.stage===s && o.status==='open'));
+  const fromCockpit = new Set(S.leads.map(l=>l.ghl_opp_id).filter(Boolean));
+  const meetings = S.leads.filter(l=>l.meeting_at && l.status==='booked').sort((a,b)=>a.meeting_at.localeCompare(b.meeting_at));
+  $('#v-pipe').innerHTML = `
+   <div class="card" style="margin-bottom:14px"><h3 style="margin:0 0 6px">Upcoming meetings from the cockpit</h3>${meetings.length?meetings.map(l=>`<div class="small" style="padding:4px 0"><b>${esc(l.meeting_at.replace('T',' ').slice(0,16))}</b> · <a href="#" onclick="pick('${l.id}');return false">${esc(l.data.name)}</a> · ${esc(l.data.phone)}</div>`).join(''):'<span class="muted small">None booked yet. Every "Meeting booked" lands here and in Discovery Booked.</span>'}</div>
+   <p class="small muted">Live from Jacques Personal Pipeline (JCE Media Group). Moving a deal in the CRM shows here on refresh; deals the cockpit created are marked.</p>
+   <div class="kan">${stages.map(s=>{ const os=by(s); return `<div class="col"><h3>${s}<span class="pill">${os.length}</span></h3>${os.map(o=>`<div class="oc"><b>${esc(o.name)}</b>${o.value?`<div class="small muted">R${Number(o.value).toLocaleString('en-ZA')}</div>`:''}${fromCockpit.has(o.id)?'<span class="pill blue" style="margin-top:4px">from cockpit</span>':''}</div>`).join('')}</div>`; }).join('')}</div>`;
+}
+
+// ---------- niches ----------
+function renderNiches(){
+  const rows = Object.keys(NICHES).map(k => {
+    const L = S.leads.filter(l=>l.data.niche===k); if(!L.length) return null;
+    const ids = new Set(L.map(l=>l.id)); const E = S.events.filter(e=>ids.has(e.lead_id) && e.outcome!=='note');
+    const dialed = new Set(E.map(e=>e.lead_id)).size, convo = E.filter(e=>CONVO.has(e.outcome)).length, booked = E.filter(e=>e.outcome==='booked').length, interested=E.filter(e=>e.outcome==='interested').length;
+    return {k, n:L.length, buyers:L.filter(l=>l.data.past_buyer).length, dialed, dials:E.length, convo, booked, interested, ready:L.filter(l=>!CLOSED.has(l.status)&&l.attempts<MAX_TRIES).length};
+  }).filter(Boolean).sort((a,b)=>b.n-a.n);
+  $('#v-niches').innerHTML = `<div class="card" style="margin-bottom:14px"><h3 style="margin:0 0 6px">Which niche is working</h3><p class="small muted" style="margin-top:0">Judge a niche after about 40 dials. Below 1 meeting per 40 dials, change the opener before you drop the niche.</p>
+   <div style="overflow:auto"><table><thead><tr><th>Niche</th><th>Leads</th><th>Past buyers</th><th>Ready</th><th>Dials</th><th>Connect rate</th><th>Interested</th><th>Meetings</th><th>Dials per meeting</th></tr></thead><tbody>
+   ${rows.map(r=>`<tr class="click" onclick="filt.niche='${r.k}';go('today')"><td><b>${NICHES[r.k]}</b></td><td>${r.n}</td><td>${r.buyers}</td><td>${r.ready}</td><td>${r.dials}</td><td>${r.dials?Math.round(r.convo/r.dials*100)+'%':'-'}</td><td>${r.interested}</td><td>${r.booked}</td><td>${r.booked?Math.round(r.dials/r.booked):'-'}</td></tr>`).join('')}
+   </tbody></table></div></div>
+   <div class="card md">${md(PLAYBOOK_MD.niches)}</div>`;
+}
+
+// ---------- playbook ----------
+function renderPlay(){
+  $('#v-play').innerHTML = `<div class="card md" style="margin-bottom:14px">${md(PLAYBOOK_MD.core)}</div>
+   <div class="card md"><h1>The research behind it</h1>${RESEARCH_MD?md(RESEARCH_MD):'<p class="muted">Research pending.</p>'}</div>
+   <div class="card" style="margin-top:14px"><h3 style="margin-top:0">End-of-day numbers</h3><p class="small muted">Copy into your notes or WhatsApp.</p><textarea id="eod" readonly></textarea><p><button class="btn sm" onclick="navigator.clipboard.writeText($('#eod').value);toast('Copied')">Copy</button></p></div>`;
+  const ev=evToday(), d=ev.filter(e=>e.outcome!=='note');
+  $('#eod').value = `Calls ${todayISO()}: ${d.length} dials, ${d.filter(e=>CONVO.has(e.outcome)).length} conversations, ${d.filter(e=>e.outcome==='interested').length} interested, ${d.filter(e=>e.outcome==='booked').length} meetings booked.`;
+}
+function md(src){
+  if (!src) return '';
+  const lines = src.replace(/\r/g,'').split('\n'); let out='', inList=null, inTable=false, para=[];
+  const inl = s => esc(s).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/\*(.+?)\*/g,'<i>$1</i>').replace(/`(.+?)`/g,'<code>$1</code>').replace(/\[([^\]]+)\]\((https?:[^)]+)\)/g,'<a target=_blank href="$2">$1</a>').replace(/(^|\s)(https?:\/\/[^\s<]+)/g,'$1<a target=_blank href="$2">$2</a>');
+  const flush = () => { if (para.length){ out+=`<p>${inl(para.join(' '))}</p>`; para=[]; } };
+  const closeL = () => { if (inList){ out+=`</${inList}>`; inList=null; } };
+  for (const ln of lines){
+    if (/^\|/.test(ln)){ flush(); closeL(); const cells=ln.split('|').slice(1,-1).map(c=>c.trim()); if (cells.every(c=>/^:?-+:?$/.test(c))) continue; if(!inTable){out+='<div style="overflow:auto"><table>'; inTable=true; out+='<tr>'+cells.map(c=>`<th>${inl(c)}</th>`).join('')+'</tr>'; } else out+='<tr>'+cells.map(c=>`<td>${inl(c)}</td>`).join('')+'</tr>'; continue; }
+    if (inTable){ out+='</table></div>'; inTable=false; }
+    let m;
+    if ((m=ln.match(/^(#{1,4})\s+(.*)/))){ flush(); closeL(); const h=Math.min(3,m[1].length+ (m[1].length===1?0:0)); out+=`<h${h}>${inl(m[2])}</h${h}>`; continue; }
+    if ((m=ln.match(/^\s*[-*]\s+(.*)/))){ flush(); if(inList!=='ul'){closeL(); out+='<ul>'; inList='ul';} out+=`<li>${inl(m[1])}</li>`; continue; }
+    if ((m=ln.match(/^\s*\d+[.)]\s+(.*)/))){ flush(); if(inList!=='ol'){closeL(); out+='<ol>'; inList='ol';} out+=`<li>${inl(m[1])}</li>`; continue; }
+    if ((m=ln.match(/^>\s?(.*)/))){ flush(); closeL(); out+=`<blockquote>${inl(m[1])}</blockquote>`; continue; }
+    if (!ln.trim()){ flush(); closeL(); continue; }
+    para.push(ln.trim());
+  }
+  flush(); closeL(); if (inTable) out+='</table></div>';
+  return out;
+}
+
+// ---------- add ----------
+function renderAdd(){
+  $('#v-add').innerHTML = `<div class="card" style="max-width:720px"><h3 style="margin-top:0">Add a new opportunity</h3><p class="small muted" style="margin-top:0">It goes into your call list straight away. It reaches your pipeline the first time you log a conversation or a note on it.</p>
+   <div class="f2"><div><label class="l">Business name *</label><input id="a_name"></div><div><label class="l">Phone *</label><input id="a_phone" inputmode="tel"></div>
+   <div><label class="l">Contact first name</label><input id="a_first"></div><div><label class="l">Contact surname</label><input id="a_last"></div>
+   <div><label class="l">Email</label><input id="a_email" type="email"></div><div><label class="l">Website</label><input id="a_web" placeholder="https://"></div>
+   <div><label class="l">Town</label><input id="a_town"></div><div><label class="l">Niche</label><select id="a_niche">${Object.entries(NICHES).map(([k,v])=>`<option value="${k}">${v}</option>`).join('')}</select></div>
+   <div><label class="l">Website situation</label><select id="a_site"><option value="none">No website</option><option value="dated">Dated site</option><option value="broken">Broken site</option><option value="unverified">Not checked</option></select></div><div><label class="l">Priority (0 to 100)</label><input id="a_pri" type="number" value="70"></div></div>
+   <label class="l">The angle (why they need you, one line)</label><input id="a_angle">
+   <label class="l">What is wrong with their site (one per line)</label><textarea id="a_probs"></textarea>
+   <p><button class="btn call" style="font-size:16px" onclick="addLead()">Add to my call list</button></p></div>`;
+}
+async function addLead(){
+  const v = id => $('#'+id).value.trim();
+  const data = {name:v('a_name'), phone:v('a_phone'), contact_first:v('a_first')||null, contact_last:v('a_last')||null, email:v('a_email')||null, website:v('a_web')||null, town:v('a_town')||null, niche:v('a_niche'), site_status:v('a_site'), priority:Number(v('a_pri'))||60, angle:v('a_angle')||null, site_problems:v('a_probs').split('\n').map(s=>s.trim()).filter(Boolean), offer:'website', offer_label:'Website', value:7500, past_buyer:false};
+  if (!data.name || !data.phone) return toast('Business name and phone are required.');
+  try{ const j = await api({action:'add', data}); S.leads.push(j.lead); toast('Added. It is in today’s list.'); sel=j.lead.id; go('today'); }catch(e){ toast('Not added: '+e.message); }
+}
+
+// ---------- boot ----------
+$('#today').textContent = new Date().toLocaleDateString('en-ZA',{weekday:'long', day:'numeric', month:'long', year:'numeric'});
+try{ PASS = localStorage.getItem('cc_pass'); }catch(e){}
+if (PASS) reload().catch(e=>{ if(e.message!=='401') showGate('Could not load: '+e.message); }); else showGate();
+</script>
+</body>
+</html>
