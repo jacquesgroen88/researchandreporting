@@ -332,6 +332,7 @@ function leadPane(l){
    <div class="row">
      ${fn?`<span><b>Ask for:</b> ${esc(fn)} ${esc(d.contact_last||'')}${d.owner&&d.owner.split(' ')[0]!==fn?` (owner: ${esc(d.owner)})`:''}</span>`:(d.owner?`<span><b>Owner:</b> ${esc(d.owner)}</span>`:'<span class="muted">Owner not known: ask "who looks after the website?"</span>')}
      ${d.google_rating?`<span class="pill">Google ${d.google_rating}${d.google_reviews?` (${d.google_reviews})`:''}</span>`:''}
+     ${d.listing_rating?`<span class="pill">${esc(d.listing_rating)}</span>`:''}
      ${d.rooms?`<span class="pill">${esc(String(d.rooms)).slice(0,40)} rooms</span>`:''}
    </div>
    <div class="callbar">
@@ -341,6 +342,7 @@ function leadPane(l){
      ${d.website?`<a class="btn" target="_blank" href="${esc(d.website)}">Open their site</a>`:`<a class="btn" target="_blank" href="https://www.google.com/search?q=${encodeURIComponent(d.name+' '+(d.town||''))}">Google them</a>`}
      ${d.kit_link?`<a class="btn dark" target="_blank" href="${esc(d.kit_link)}">What we built for them</a>`:''}
    </div>
+   ${d.phone_note?`<div class="small" style="color:var(--amb);margin-bottom:6px">${esc(d.phone_note)}</div>`:''}
    ${d.past_buyer?`<div class="small muted">ReviewTap order history: ${esc(d.orders||'?')} order(s)${d.spent?`, R${Math.round(d.spent).toLocaleString('en-ZA')}`:''}${d.last_order?`, last ${esc(d.last_order)}`:''}${d.emailed?' · emailed a concept 19 Nov':''}${d.email?` · ${esc(d.email)}`:''}</div>`:(d.email?`<div class="small muted">${esc(d.email)}</div>`:'')}
    ${d.angle?`<div class="box"><h3>The one-line angle</h3><div>${esc(d.angle)}</div></div>`:''}
    <div class="box"><h3>Say this</h3>${opener(l).map(([k,v])=>`<div class="say"><span class="lbl">${k}</span>${esc(v)}</div>`).join('')}</div>
