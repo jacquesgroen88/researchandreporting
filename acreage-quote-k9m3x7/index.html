@@ -352,8 +352,9 @@ table.gpv col.cv{width:118px} table.gpv col.cs{width:76px} table.gpv col.cp{widt
 table.gpv thead{display:table-header-group}
 table.gpv tr.gtot td{background:#E9E5D8;font-weight:600;text-align:right}
 tr.ln-popcorn td{background:#FEF8DC} tr.ln-bite td{background:#EAF4E2}
-tr.ln-main    td{background:#FDF0DF} tr.ln-dessert td{background:#FBE8E8}
-tr.ln-cold td,tr.ln-alc td,tr.ln-bars td,tr.ln-coffee td{background:#E8F0F8}
+tr.ln-main    td,tr.ln-braai td{background:#FDF0DF} tr.ln-dessert td{background:#FBE8E8}
+tr.ln-cold td,tr.ln-alc td,tr.ln-cocktail td,tr.ln-bars td,tr.ln-coffee td{background:#E8F0F8}
+tr.gor td{background:transparent;font-style:italic;color:var(--gp-coral-ink,#9a4a3a);padding-top:2px;padding-bottom:2px}
 tr.ln-band td{background:#F1EFEA} tr.ln-hire td{background:#F3EADB}
 
 /* costing */
@@ -622,7 +623,7 @@ textarea.vd:focus{outline:2px solid var(--gp-coral);outline-offset:-1px;border-c
   content:"";position:absolute;left:0;top:9px;bottom:9px;width:3px;
   background:var(--tab,var(--gp-line2));
 }
-.ln-popcorn{--tab:#E0A92E} .ln-bite{--tab:#79924F} .ln-main{--tab:#E07A2C}
+.ln-popcorn{--tab:#E0A92E} .ln-bite{--tab:#79924F} .ln-main{--tab:#E07A2C} .ln-braai{--tab:#B5541F} .ln-cocktail{--tab:#5B4A8A}
 .ln-dessert{--tab:#C4506A} .ln-cold{--tab:#4E7FA8} .ln-alc{--tab:#38577E}
 .ln-bars{--tab:#6B82A0} .ln-coffee{--tab:#7B5B3C} .ln-band{--tab:#9A8F7A}
 .ln-hire{--tab:#B08A45}
@@ -785,6 +786,26 @@ body.printing #doc{display:block}
   .item{grid-template-columns:1fr auto;grid-template-areas:"nm pr" "qty qty";gap:8px}
   .item .nm{grid-area:nm}.item .pr{grid-area:pr}.item .qty{grid-area:qty;justify-self:start}
 }
+
+/* ── costing sheet import ── */
+.impdrop{border:1.5px dashed var(--line);border-radius:10px;padding:16px 14px;text-align:center;cursor:pointer;
+  transition:background .15s,border-color .15s}
+.impdrop:hover,.impdrop:focus-visible,.impdrop.over{border-color:var(--ink);background:rgba(0,0,0,.03);outline:none}
+.impbrowse{text-decoration:underline;cursor:pointer}
+.impwhich{margin-top:12px}
+#impOut{margin-top:12px;font-size:13px}
+#impOut details{margin-top:8px;border-top:1px solid var(--line-soft,var(--line));padding-top:6px}
+#impOut summary{cursor:pointer;font-weight:600}
+.imphead{margin-bottom:8px}
+.impchk{padding:8px 10px;border-radius:8px;margin:6px 0 4px;font-size:13px}
+.impchk.ok{background:#E7F3EA;color:#1D5E33}
+.impchk.bad{background:#FBE3E1;color:#9B1C12;font-weight:600}
+.impbad{color:#9B1C12;font-weight:600}
+table.imp td,table.imp th{font-size:12px;padding:4px 6px}
+tr.bad td{color:#9B1C12;font-weight:600}
+.impl{margin:6px 0 0 18px;padding:0}
+.impl li{margin:2px 0}
+.impl.bad li{color:#9B1C12}
 </style>
 </head>
 <body>
@@ -929,6 +950,27 @@ body.printing #doc{display:block}
     </div>
   </div>
 
+  <div class="card" id="impCard">
+    <h3>Import a costing sheet <span class="tag">.xlsx</span></h3>
+    <div class="pad">
+      <div class="impdrop" id="impDrop" tabindex="0" role="button" aria-label="Import a costing sheet">
+        <b>Drop Andrew&rsquo;s costing sheet here</b>, or <label for="impFile" class="impbrowse">choose the file</label>
+        <input type="file" id="impFile" accept=".xlsx,.xls" hidden>
+        <div class="hint" style="margin-top:6px">The sheet he already builds: vendors, PAX, costing. It fills the event,
+          the vendors and the costing below, and checks the total against the sheet&rsquo;s own.
+          Vendor cost, p/l and margin are read for the check and never printed.</div>
+      </div>
+      <div class="impwhich" id="impPickRow" hidden>
+        <label class="f"><span>This sheet holds more than one event. Which one?</span>
+          <select id="impPick"></select></label>
+      </div>
+      <div id="impOut"></div>
+      <div class="airow" style="margin-top:10px">
+        <button class="btn t sm" id="impClearBtn" hidden onclick="impClear()">Price on the rate engine instead</button>
+      </div>
+    </div>
+  </div>
+
   <div class="card">
     <h3>The event <span class="tag" id="gpNo">GP-0001</span></h3>
     <div class="pad"><div class="grid g2">
@@ -951,6 +993,12 @@ body.printing #doc{display:block}
       </tr></thead><tbody></tbody></table></div>
       <p class="hint">Rates pre-fill from the band above. Edit any of them and the line is flagged as overridden.
         Coffee is a cup count, not a per person quantity.</p>
+      <div id="impStructBox" hidden style="margin-top:12px">
+        <label class="f"><span>&ldquo;Structured as follows&rdquo;, as it prints. One line each, edit freely</span>
+          <textarea id="impStruct" rows="6" spellcheck="false" oninput="setStruct(this.value)"></textarea></label>
+        <p class="hint">Written from the sheet&rsquo;s costing lines and the vendors&rsquo; own menu wording
+          (halaal, kosher, vegetarian and so on are only claimed where a vendor&rsquo;s line says so).</p>
+      </div>
     </div>
   </div>
 
@@ -961,7 +1009,9 @@ body.printing #doc{display:block}
         <input type="number" id="gHire" min="0" value="80000" oninput="render()"></label>
       <label class="f"><span>Show on the proposal</span>
         <select id="gHireOn" onchange="render()"><option value="1">Yes</option><option value="0">No</option></select></label>
-    </div></div>
+    </div>
+    <p class="hint" id="gHireNote" hidden>Not used while a costing sheet is loaded. If the sheet has a venue hire line, that line is the hire.</p>
+    </div>
   </div>
 
   <div class="card">
@@ -1274,8 +1324,28 @@ var RATES = {
     {k:"alc",     n:"Alcoholic drinks",    qty:3, b:[40,40,40]},
     {k:"bars",    n:"Bar set ups",         qty:1, b:[20,20,20], flatPerHead:true},
     {k:"coffee",  n:"Coffee",              qty:1000, b:[40,40,40], cups:true},
-    {k:"band",    n:"Wristbands",          qty:2, b:[20,20,15]}
+    {k:"band",    n:"Wristbands",          qty:2, b:[20,20,15]},
+    /* Two lines their November 2026 costing sheets carry and the three
+       August proposals did not. Both start at quantity 0, so no existing
+       quote changes. Rates are null wherever no sheet shows one, and the
+       tool asks rather than guessing.
+       - Welcome cocktail: R55 a head at 2 000 PAX, Lesaka YEF costing
+         sheet, 20 Nov 2026 (Good & Proper vintage cocktail caravans).
+       - Braai: two different vendor-specific rates at 400 PAX on the
+         Superior Choices sheet, 28 Nov 2026 (R255 halaal braai, R200
+         braai box), so there is no single band rate to hold. */
+    {k:"cocktail",n:"Welcome cocktail",    qty:0, b:[null,null,55]},
+    {k:"braai",   n:"Braai",               qty:0, b:[null,null,null]}
   ],
+  /* Rates seen on the four November 2026 costing sheets, recorded and NOT
+     applied to the band defaults above, because they disagree with the
+     August evidence the Absa regression rests on. Andrew's call.
+       Lesaka 2 000 PAX:   starter 55, main 180, dessert 50, coffee 40, wristband 20
+       Wesbank 1 800 PAX:  main 175 each (350 for two), dessert 65
+       Superior 400 PAX:   main 162 each (405 for 2.5), dessert 55
+       Saxon 150/300 PAX:  lite bite 70, main 165, dessert 55, soft drink 25 each
+     Under 500 PAX the dessert default (R80, CAB 250) is now R55 on three
+     events running. */
   bands:[{t:"Under 500 PAX",i:0},{t:"500 to 1 500 PAX",i:1},{t:"Over 1 500 PAX",i:2}],
 
   vendors:[
@@ -1307,8 +1377,42 @@ var RATES = {
     {n:"The Pancake Pantry", s:"dessert", d:"Gourmet pancakes with a scoop of vanilla bean ice cream"},
     {n:"The Acreage", s:"cold", d:"Popular cold drinks, still & sparkling water"},
     {n:"The Acreage (bar)", s:"alc", d:"Local bottled & draught beers, ciders and coolers. Cash bar also available"},
-    {n:"The Acreage (coffee)", s:"coffee", d:"Selection of artisan coffees and other hot beverages"}
+    {n:"The Acreage (coffee)", s:"coffee", d:"Selection of artisan coffees and other hot beverages"},
+    /* Added 26 Nov 2026 from the four costing sheets Steph sent on 20 Nov
+       (data/2026-11-20-gp-costing-sheets). Wording is theirs, shortened. */
+    {n:"Bang Bang", s:"main", d:"Crispy chicken bao buns and goujon chicken bowls with Asian slaw, sweet chilli, mayo and fries"},   // Saxon, Superior Choices
+    {n:"The Flip Side", s:"main", d:"Plant based vegan burgers and tofu bliss bowls with veggie crisps or rainbow slaw"},            // Lesaka, Wesbank
+    {n:"Burger & Brew", s:"main", d:"Kosher gourmet burgers & chips"},                                                               // Lesaka
+    {n:"Jang", s:"main", d:"Halaal Korean chicken: spicy wings or boneless fillet, sweet potato fries or multigrain rice"},           // Wesbank
+    {n:"Fuji", s:"main", d:"Poke bowls with purple sushi rice, avocado and edamame, with salmon, Korean chicken or crispy tofu"},     // Wesbank
+    {n:"Filthy Moustache", s:"main", d:"Full range of gourmet burgers & gourmet hotdogs"},                                          // Wesbank
+    {n:"Braai Box", s:"braai", d:"Traditional shisanyama braai plate: wors, chicken, beef chuck, pap & chakalaka, coleslaw, roll"},  // Superior Choices
+    {n:"White Cocoa (braai)", s:"braai", d:"Halaal traditional braai: 1/4 chicken, wors, beef chuck, pap & chakalaka, potato salad, roll"}, // Superior Choices
+    {n:"Whisk Away", s:"dessert", d:"Handmade ice cream tacos: triple chocolate, milk tart, dulce de leche"},                        // Wesbank
+    {n:"Good & Proper (cocktails)", s:"cocktail", d:"Vintage cocktail caravans serving 350ml welcome cocktails on tap"},             // Lesaka
+    {n:"Good & Proper (cold drinks)", s:"cold", d:"Selection of popular cold drinks & still & sparkling water"}                     // Saxon
   ]
+};
+
+/* Sheet names that are the same supplier as a roster entry, so an imported
+   row finds its photographs. Their own sheets spell vendors several ways
+   ("Smoke King" and "Smoke Kings", "Che" and "Che Argentinian"). The name
+   PRINTS as the sheet wrote it; this only picks the roster key. */
+var GP_ALIAS = {
+  "bootsbar thai":"Bootsbar", "wing republic":"The Wing Republic",
+  "smoke king":"Smoke Kings", "che argentinian":"Che", "just jo":"Just Jo's",
+  "we make dumplings":"Dumplings We Make", "firecraft pizza":"Firecraft",
+  "pancake pantry":"The Pancake Pantry", "bangbang":"Bang Bang",
+  "flip side cafe":"The Flip Side", "flip side café":"The Flip Side"
+};
+/* the same supplier on a different course has its own roster row */
+var GP_ALIAS_BY_LINE = {
+  "Purple Plate|dessert":"Purple Plate (dessert)",
+  "White Cocoa|braai":"White Cocoa (braai)",
+  "Good & Proper|cocktail":"Good & Proper (cocktails)",
+  "Good & Proper|cold":"Good & Proper (cold drinks)",
+  "The Acreage|coffee":"The Acreage (coffee)",
+  "The Acreage|alc":"The Acreage (bar)"
 };
 
 
@@ -1410,9 +1514,9 @@ var GPDOC = {
   courses:[
     {k:"popcorn", lbl:"Popcorn"},
     {k:"bite",    lbl:"Light Bites"},
-    {k:"main",    lbl:"Main"},
+    {k:"main",    lbl:"Main", lines:["main","braai"]},  /* Superior Choices prints MAINS & BRAAIS as one band */
     {k:"dessert", lbl:"Desserts"},
-    {k:"bev",     lbl:"Beverages", lines:["cold","alc","bars","coffee"]}
+    {k:"bev",     lbl:"Beverages", lines:["cold","alc","cocktail","bars","coffee"]}
   ],
 
   terms:[
@@ -1600,6 +1704,7 @@ function validAcr(c){
 
 /* ══════════════════ G&P CALC ══════════════════ */
 function calcGp(){
+  if(sheetOn()) return calcSheet();
   var pax=Math.max(1,num("gPax")), b=band(pax), lines=[], total=0;
   RATES.gpLines.forEach(function(l){
     var q = S.gp.qty[l.k]; if(q===undefined) q=l.qty;
@@ -1619,6 +1724,7 @@ function calcGp(){
 }
 
 function vendorBalance(){
+  if(sheetOn()) return sheetBalance();
   var pax=Math.max(1,num("gPax")), rows=[];
   RATES.gpLines.forEach(function(l){
     if(l.cups||l.flatPerHead||l.k==="band") return;
@@ -1632,8 +1738,16 @@ function vendorBalance(){
 }
 
 function validGp(c){
+  if(sheetOn()) return validSheet(c);
   var out=[], pax=c.pax;
   if(!val("gName").trim()) out.push({t:"e",m:"Client name is needed."});
+  /* a line switched on with no rate on record: ask, never guess */
+  RATES.gpLines.forEach(function(l){
+    var q=S.gp.qty[l.k]; if(!q) return;
+    var r=S.gp.ovr[l.k] ? S.gp.rate[l.k] : l.b[c.band];
+    if(r===null||r===undefined||r===0)
+      out.push({t:"e",m:l.n+" has a quantity but no rate on record for this PAX band. Type the rate."});
+  });
   if(!val("gDate")) out.push({t:"e",m:"Event date is needed."});
   if(pax<GP_MIN) out.push({t:"w",m:pax+" pax is below the "+GP_MIN+" pax minimum. Decide the policy before sending: surcharge, minimum spend, or decline."});
   if(!c.total) out.push({t:"e",m:"No priced lines yet."});
@@ -1648,6 +1762,17 @@ function validGp(c){
   });
   if(missing.length) out.push({t:"w",m:"No vendors allocated yet to: "+missing.map(function(r){return r.n;}).join(", ")+"."});
 
+  photoChecks(out);
+
+  var ovr=Object.keys(S.gp.ovr).filter(function(k){return S.gp.ovr[k];});
+  if(ovr.length) out.push({t:"w",m:ovr.length+" rate"+(ovr.length>1?"s":"")+" overridden off the band default. Andrew should sign that off."});
+
+  if(!out.length) out.push({t:"o",m:"Everything reconciles. Ready to send."});
+  return out;
+}
+
+/* shared by the rate engine and an imported sheet */
+function photoChecks(out){
   if(S.gp.doc && S.gp.doc.menu){
     var seen={}, noPic=[], times={};
     S.gp.vendors.forEach(function(v){ times[v.n]=(times[v.n]||0)+1; });
@@ -1662,13 +1787,642 @@ function validGp(c){
       +noPic.slice(0,6).join(", ")+(noPic.length>6?" and "+(noPic.length-6)+" more":"")
       +". They print as a menu line with no picture."});
   }
+}
 
-  var ovr=Object.keys(S.gp.ovr).filter(function(k){return S.gp.ovr[k];});
-  if(ovr.length) out.push({t:"w",m:ovr.length+" rate"+(ovr.length>1?"s":"")+" overridden off the band default. Andrew should sign that off."});
+/* ══════════════════ IMPORT A GOOD & PROPER COSTING SHEET ══════════════════
 
-  if(!out.length) out.push({t:"o",m:"Everything reconciles. Ready to send."});
+   Andrew already prices every event in one spreadsheet, the same shape
+   every time (four real ones in data/2026-11-20-gp-costing-sheets):
+
+     header      client, venue, date and time, or the event in free text
+     vendors     Vendor | Service | Menu | Units/PAX | cost per unit | total |
+                 client cost per head | client total per vendor | p/l | Comments
+                 with "OR" rows between alternatives and a "Guests" row
+                 (R10 a guest, internal, "allocate to mains")
+     PAX row     the guest count and the internal sums
+     summary     Total Cost, Price per head, Price to Client, G&P profit,
+                 G&P Margin. INTERNAL, never printed
+     costing     Service | Rate | Total ex VAT, the table the client sees,
+                 closed by a Total row
+
+   Import fills the quote from it and the sheet wins: its vendors, its
+   wording, its PAX and its own costing lines replace the band defaults
+   for this quote. Vendor cost, p/l, the guests levy and the margin are
+   read for the on-screen check and never reach the proposal. Every row
+   is accounted for: used, kept internal, or listed as not mapped.
+
+   The reader is SheetJS, loaded from cdnjs only when a sheet is dropped,
+   so the tool still opens offline and only the import needs a network. */
+
+var XLSX_SRC = "https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js";
+var IMP = null;      /* the parsed workbook, so the event picker can switch */
+var IMP_PAINTED = null;  /* the sheet the report was last drawn for */
+
+function sheetOn(){ return !!(S.gp && S.gp.sheet && S.gp.sheet.on); }
+
+function gpFresh(){
+  var g={ qty:{}, rate:{}, ovr:{}, vendors:[],
+          doc:{ lead:"A corporate year end function", profile:true, venue:true,
+                vendors:true, menu:true, terms:true, lbl:{} } };
+  RATES.gpLines.forEach(function(l){ g.qty[l.k]=l.qty; });
+  return g;
+}
+
+function impSay(html){ var e=$("impOut"); if(e) e.innerHTML=html; }
+
+function xlsxReady(cb){
+  if(window.XLSX) return cb();
+  var s=document.createElement("script");
+  s.src=XLSX_SRC;
+  s.onload=function(){ cb(); };
+  s.onerror=function(){
+    impSay('<p class="impbad">The spreadsheet reader could not load. It comes from cdnjs, so the '
+      +'first import needs an internet connection. Nothing on the quote has changed.</p>');
+  };
+  document.head.appendChild(s);
+}
+
+function impFiles(files){
+  var f=files && files[0]; if(!f) return;
+  if(!/\.xlsx?$/i.test(f.name)){
+    impSay('<p class="impbad">'+esc(f.name)+' is not an Excel file. Import takes the .xlsx costing sheet.</p>');
+    return;
+  }
+  impSay('<p class="hint">Reading '+esc(f.name)+'&hellip;</p>');
+  xlsxReady(function(){
+    var rd=new FileReader();
+    rd.onload=function(e){
+      try{
+        var wb=XLSX.read(new Uint8Array(e.target.result), {type:"array", cellFormula:true});
+        impWorkbook(wb, f.name);
+      }catch(err){
+        impSay('<p class="impbad">Could not read '+esc(f.name)+': '+esc(err && err.message || err)+'</p>');
+      }
+    };
+    rd.readAsArrayBuffer(f);
+  });
+}
+
+/* ── reading ── */
+
+/* their file has lost two characters itself (Jalape?os, Caf?): the real
+   proposals print Jalapeños and Café, so those are put back. Anything
+   else that is lost is reported, not guessed. */
+function impText(s){
+  return String(s).replace(/Jalape�o/g,"Jalapeño").replace(/Caf�/g,"Café")
+                  .replace(/ /g," ").replace(/[ \t]+\n/g,"\n");
+}
+function low(v){ return String(v==null?"":v).replace(/\s+/g," ").trim().toLowerCase(); }
+function nOf(v){
+  if(typeof v==="number") return v;
+  if(v==null) return null;
+  var t=String(v).replace(/[R\s]/g,"").replace(/,(\d{2})$/,".$1").replace(/,/g,"");
+  var n=parseFloat(t); return isNaN(n)?null:n;
+}
+function sameMoney(a,b){ return a!==null && b!==null && Math.abs(a-b)<0.005; }
+
+function impRows(ws){
+  var ref=ws["!ref"]; if(!ref) return [];
+  var R=XLSX.utils.decode_range(ref), rows=[], last=Math.max(R.e.c, 9);
+  for(var r=R.s.r; r<=R.e.r; r++){
+    var cells=[], any=false;
+    for(var c=0; c<=last; c++){
+      var a=XLSX.utils.encode_cell({r:r,c:c}), cell=ws[a];
+      var v = cell && cell.v!==undefined ? cell.v : null;
+      if(typeof v==="string"){ v=impText(v); if(!v.trim()) v=null; }
+      cells.push({v:v, f:cell && cell.f ? cell.f : null, a:a});
+      if(v!==null) any=true;
+    }
+    rows.push({r:r, n:r+1, c:cells, any:any});
+  }
+  return rows;
+}
+
+function impColumns(hdr){
+  var m={vendor:0, svc:1, menu:2, units:3, cost:4, total:5, cph:6, ctot:7, pl:8, comm:9};
+  hdr.c.forEach(function(x,i){
+    var t=low(x.v); if(!t) return;
+    if(t==="vendor") m.vendor=i;
+    else if(/^(service|course)/.test(t)) m.svc=i;
+    else if(/^menu/.test(t)) m.menu=i;
+    else if(t==="units"||t==="pax") m.units=i;
+    else if(/cost per unit/.test(t)) m.cost=i;
+    else if(t==="total") m.total=i;
+    else if(/client cost per head/.test(t)) m.cph=i;
+    else if(/client total/.test(t)) m.ctot=i;
+    else if(t==="p/l") m.pl=i;
+    else if(/comment/.test(t)) m.comm=i;
+  });
+  return m;
+}
+
+/* a block is one event: a sheet can carry two (Saxon prices 8 and 9 Dec) */
+function impBlocks(rows){
+  var heads=[];
+  rows.forEach(function(row,i){
+    if(low(row.c[0].v)==="vendor" && row.c.some(function(x){ return /cost per unit/.test(low(x.v)); }))
+      heads.push(i);
+  });
+  var blocks=[];
+  heads.forEach(function(h,bi){
+    var top=h;                                  /* the header text sits just above */
+    for(var j=h-1; j>=Math.max(0,h-3); j--){ if(rows[j].any){ top=j; break; } }
+    if(bi>0 && top<=blocks[bi-1].hdr) top=h;
+    blocks.push({top:top, hdr:h});
+  });
+  blocks.forEach(function(b,i){ b.end = i+1<blocks.length ? blocks[i+1].top-1 : rows.length-1; });
+  return blocks;
+}
+
+var GP_INTERNAL = ["total cost","price per head","price to client","g&p profit","g&p margin"];
+
+function impBlock(rows, blk, sheetName){
+  var col=impColumns(rows[blk.hdr]);
+  var out={ sheet:sheetName, head:"", client:"", vendors:[], lines:[], used:[], internal:[], unmapped:[],
+            pax:null, total:null, totalCell:"", ptc:null, ptcHead:null, levy:null, alt:false,
+            sums:{cost:null, client:null, pl:null}, lost:0 };
+  var top=rows[blk.top];
+  if(blk.top!==blk.hdr){
+    top.c.forEach(function(x,i){
+      if(x.v===null) return;
+      var s=String(x.v);
+      if(i===0) out.client = s;                       /* column A: who it is for */
+      else out.head = out.head ? out.head+"\n"+s : s;  /* the event text */
+    });
+    out.used.push({row:top.n, what:"Event header"});
+  }
+  out.used.push({row:rows[blk.hdr].n, what:"Column headings"});
+
+  var state="vendors", pendingOr=false, lastV=null;
+  for(var i=blk.hdr+1; i<=blk.end; i++){
+    var row=rows[i]; if(!row.any) continue;
+    var C=function(k){ return row.c[col[k]] ? row.c[col[k]].v : null; };
+    var A=row.c[0].v, B=row.c[1].v, Cc=row.c[2];
+    var txt=row.c.map(function(x){ return x.v===null?"":String(x.v); }).join(" ").replace(/\s+/g," ").trim();
+    if(/�/.test(txt)) out.lost++;
+
+    if(state==="vendors"){
+      if(low(C("vendor"))==="pax"){
+        out.pax=nOf(B);
+        out.sums={cost:nOf(row.c[col.total].v), client:nOf(row.c[col.ctot].v), pl:nOf(row.c[col.pl].v)};
+        out.internal.push({row:row.n, what:"PAX "+out.pax+", vendor cost "+money(out.sums.cost)
+          +", client cost "+money(out.sums.client)+", p/l "+money(out.sums.pl)});
+        state="summary"; continue;
+      }
+      if(C("vendor")===null && low(C("menu"))==="or"){
+        out.alt=true; pendingOr=true; if(lastV) lastV.alt=true;
+        out.used.push({row:row.n, what:"OR, the rows either side are alternatives"});
+        continue;
+      }
+      if(C("vendor")===null && low(C("menu"))==="guests"){
+        out.levy={pax:nOf(C("units")), rate:nOf(C("cost")), total:nOf(C("ctot")), note:C("comm")};
+        out.internal.push({row:row.n, what:"Guests row: "+money(out.levy.rate)+" x "+out.levy.pax+" = "
+          +money(out.levy.total)+(out.levy.note?" ("+out.levy.note+")":"")});
+        continue;
+      }
+      if(C("vendor")!==null && C("menu")!==null){
+        var v={ row:row.n, sheetName:String(C("vendor")).replace(/\s+/g," ").trim(),
+                svc:String(C("svc")||"").replace(/\s+/g," ").trim(),
+                d:String(C("menu")).replace(/\s*\n\s*/g," ").replace(/\s+/g," ").trim(),
+                pax:nOf(C("units")), cost:nOf(C("cost")), cph:nOf(C("cph")), ctot:nOf(C("ctot")),
+                comm:C("comm") ? String(C("comm")).trim() : "" };
+        if(pendingOr){ v.alt=true; v.orBefore=true; pendingOr=false; }
+        out.vendors.push(v); lastV=v; continue;
+      }
+      out.unmapped.push({row:row.n, text:txt}); continue;
+    }
+
+    /* below the PAX row: the internal summary, then the client costing */
+    var a=low(A);
+    if(state!=="costing" && GP_INTERNAL.indexOf(a)>=0){
+      if(a==="price to client"){ out.ptcHead=nOf(B); out.ptc=nOf(Cc.v); }
+      out.internal.push({row:row.n, what:String(A).trim()+": "+(typeof B==="number"&&B<1&&a==="g&p margin"
+        ? (B*100).toFixed(1)+"%" : money(nOf(B)))+(Cc.v!==null&&a!=="g&p margin"?" / "+money(nOf(Cc.v)):"")});
+      continue;
+    }
+    if(state!=="costing" && (a==="service"||a==="item") && /rate|price per head/.test(low(B))){
+      state="costing"; out.used.push({row:row.n, what:"Costing headings"}); continue;
+    }
+    if(state==="costing"){
+      if(a==="total"||low(B)==="total"){
+        out.total=nOf(Cc.v); out.totalCell=Cc.a; state="after";
+        out.used.push({row:row.n, what:"Costing total "+money(out.total)+" ("+Cc.a+")"});
+        continue;
+      }
+      if(A!==null && nOf(B)!==null){
+        out.lines.push({ row:row.n, n:String(A).replace(/\s+/g," ").trim(), rate:nOf(B),
+                         sheetAmt:nOf(Cc.v), cell:Cc.a, f:Cc.f });
+        continue;
+      }
+    }
+    out.unmapped.push({row:row.n, text:txt});
+  }
   return out;
 }
+
+/* ── mapping onto the tool's own lines ── */
+
+function impSvcKey(service, menu){
+  var t=low(service), m=low(menu);
+  if(/popcorn/.test(t)) return "popcorn";
+  if(/braai/.test(t)) return "braai";
+  if(/starter|lite|light|bite|snack/.test(t)) return "bite";
+  if(/main/.test(t)) return "main";
+  if(/dessert/.test(t)) return "dessert";
+  if(/bev|drink/.test(t)){
+    if(/cocktail/.test(m)) return "cocktail";
+    if(/coffee|hot bev/.test(m)) return "coffee";
+    if(/beer|cider|wine|gin|alcohol|spirit/.test(m)) return "alc";
+    return "cold";
+  }
+  if(/consum|wristband/.test(t) || /wristband/.test(m)) return "band";
+  if(/facilit|venue|hire/.test(t)) return "hire";
+  if(/\bbar\b/.test(t)) return "bars";
+  return "other";
+}
+function impLineKey(label, vendors){
+  var l=low(label);
+  var hit=vendors.filter(function(v){ return low(v.n)===l || low(v.k)===l; })[0];
+  if(hit) return hit.s;
+  if(/braai/.test(l)) return "braai";
+  if(/popcorn/.test(l)) return "popcorn";
+  if(/starter|lite bite|light bite|snack|\bbites?\b/.test(l)) return "bite";
+  if(/dessert/.test(l)) return "dessert";
+  if(/cocktail/.test(l)) return "cocktail";
+  if(/coffee/.test(l)) return "coffee";
+  if(/alcoh|beer|wine|\bgin\b|\bbar\b/.test(l)) return "alc";
+  if(/soft drink|cold drink|water|beverage/.test(l)) return "cold";
+  if(/wristband/.test(l)) return "band";
+  if(/hire|venue/.test(l)) return "hire";
+  if(/main|meal/.test(l)) return "main";
+  return "other";
+}
+/* how many of the line each unit carries: "(2pp)", "x 2.5 meals", "x1" */
+function impPer(label){
+  var m=String(label).match(/x\s*(\d+(?:[.,]\d+)?)/i) || String(label).match(/(\d+(?:[.,]\d+)?)\s*pp\b/i);
+  return m ? parseFloat(m[1].replace(",",".")) : 1;
+}
+function impRosterKey(name, s){
+  var base=name.replace(/\s+stall\s+\d+$/i,"").trim();
+  var k=GP_ALIAS[low(base)] || base;
+  var r=roster();
+  var exact=r.filter(function(v){ return low(v.n)===low(k); })[0];
+  if(exact) k=exact.n;
+  return GP_ALIAS_BY_LINE[k+"|"+s] || k;
+}
+
+/* units for a costing line, read off its own formula where it has one:
+   =B40*B32 is the rate times the PAX cell, =B25*200 is 200 people */
+function impUnits(line, rows){
+  var f=String(line.f||"").replace(/\s+/g,"").replace(/^=/,"").replace(/^SUM\((.*)\)$/i,"$1");
+  var m=f.match(/^(\$?[A-Z]+\$?\d+|\d+(?:\.\d+)?)\*(\$?[A-Z]+\$?\d+|\d+(?:\.\d+)?)$/i);
+  if(m){
+    var ops=[m[1],m[2]].map(function(x){ return x.replace(/\$/g,"").toUpperCase(); });
+    var isRate=function(x){ return /^[A-Z]+\d+$/.test(x) && parseInt(x.replace(/^[A-Z]+/,""),10)===line.row; };
+    var other = isRate(ops[0]) ? ops[1] : (isRate(ops[1]) ? ops[0] : null);
+    if(other!==null){
+      if(/^\d/.test(other)) return {u:parseFloat(other), how:"formula, "+other+" people"};
+      var rn=parseInt(other.replace(/^[A-Z]+/,""),10), cc=XLSX.utils.decode_col(other.replace(/\d+$/,""));
+      var row=rows.filter(function(r){ return r.n===rn; })[0];
+      var v=row && row.c[cc] ? nOf(row.c[cc].v) : null;
+      if(v!==null) return {u:v, how:"formula, "+other};
+    }
+  }
+  if(line.rate && line.sheetAmt!==null) return {u:Math.round(line.sheetAmt/line.rate*100)/100, how:"no formula, units inferred"};
+  return {u:null, how:"no rate"};
+}
+
+function impSingular(s){ return s.replace(/\b(\w+?)s\b$/i, function(w,b){ return /ss$/i.test(w)?w:b; }); }
+function impPlural(s){ return /s$/i.test(s) ? s : s+"s"; }
+function impClean(label){
+  return String(label).replace(/\(.*?\)/g,"").replace(/\d+\s*guests?/ig,"").replace(/x\s*[\d.,]+\s*\w*/ig,"")
+                      .replace(/\s+/g," ").trim();
+}
+
+function impDiet(vs){
+  var t=vs.map(function(v){ return low(v.d)+" "+low(v.n); }).join(" "), out=[];
+  if(/halaal|halal/.test(t)) out.push("Halaal");
+  if(/kosher/.test(t)) out.push("Kosher");
+  if(/fish|seafood|salmon|hake|prawn/.test(t)) out.push("Pescatarian");
+  if(/vegetarian|veg option|veg\b/.test(t)) out.push("Vegetarian");
+  if(/vegan|plant based/.test(t)) out.push("Vegan");
+  if(!out.length) return "";
+  return " ("+(out.length>1 ? out.slice(0,-1).join(", ")+" & "+out[out.length-1] : out[0])+" guests catered for)";
+}
+
+/* the "structured as follows" list, in the words their proposals use */
+function impStruct(lines, vendors, pax){
+  var out=[], done={};
+  lines.forEach(function(l){
+    var byVendor = vendors.some(function(v){ return low(v.n)===low(l.n); });
+    if(byVendor){
+      if(done[l.k]) return; done[l.k]=1;
+      var v=vendors.filter(function(x){ return x.s===l.k; })[0];
+      var w=l.k==="main" ? "Main meal" : impSingular(v && v.svc ? v.svc : l.n);
+      out.push("1 x "+w+" per person"+(l.k==="main"?impDiet(vendors.filter(function(x){return x.s==="main";})):""));
+      return;
+    }
+    var q=impPer(l.n), base=impClean(l.n);
+    if(l.units===pax){
+      var w2;
+      if(l.k==="main") w2="Main meal";
+      else if(l.k==="cold") w2="Soft Drink";
+      else if(l.k==="band") w2="Wristband";
+      else w2=impSingular(base||l.n);
+      out.push(q+" x "+(q>1?impPlural(w2):w2)+" per person"
+        +(l.k==="main"?impDiet(vendors.filter(function(x){return x.s==="main"||x.s==="braai";})):""));
+    } else if(/\(\s*\d+\s*pax\s*\)/i.test(l.n)){
+      out.push(base+" for "+l.units+" PAX");
+    } else {
+      out.push(l.n);
+    }
+  });
+  return out;
+}
+
+/* the header, labelled ("Client : ...") or free text ("2000PAX @ Fox Junction") */
+var MONTHS=["january","february","march","april","may","june","july","august","september","october","november","december"];
+function impHead(b){
+  var t=b.head||"", lines=t.split(/\n/).map(function(x){return x.trim();}).filter(Boolean);
+  var h={client:"", venue:"", date:"", time:"", title:"", hdrPax:null};
+  var lab=function(k){
+    var m=t.match(new RegExp(k+"\\s*:\\s*([^\\n]+)","i")); return m?m[1].trim():"";
+  };
+  if(/client\s*:/i.test(t)){
+    h.client=lab("client"); h.venue=lab("venue"); h.time=lab("time");
+    h.title=h.client;
+  } else {
+    h.title=lines[0]||"";
+    var cl=String(b.client||"").split(/\n/).map(function(x){return x.trim();}).filter(Boolean).join(" @ ");
+    var ev=h.title.split(/\s+/).filter(function(w){ return low(cl).indexOf(low(w))<0; }).join(" ");
+    h.client = cl + (ev ? " re "+ev : "");
+    lines.forEach(function(x){
+      var m=x.match(/(\d[\d ,]*)\s*PAX\b\s*(?:@\s*)?(.*)$/i);
+      if(m && h.hdrPax===null){
+        h.hdrPax=parseInt(m[1].replace(/[ ,]/g,""),10);
+        h.venue=m[2].replace(/\(.*?\)/g,"").trim();
+      }
+      var tm=x.match(/\d{4}\s*\(([^)]*)\)/);
+      if(tm) h.time=tm[1].trim();
+    });
+  }
+  var dm=t.match(/(\d{1,2})(?:st|nd|rd|th)?\s+(january|february|march|april|may|june|july|august|september|october|november|december)\s+(\d{4})/i);
+  if(dm) h.date=dm[3]+"-"+pad2(MONTHS.indexOf(dm[2].toLowerCase())+1)+"-"+pad2(parseInt(dm[1],10));
+  h.time=h.time.replace(/(\d{1,2})h(\d{2})/g,"$1:$2");
+  var tw=h.time.match(/^(\d{1,2}:\d{2})\s*[-–]\s*(\d{1,2}:\d{2})$/);
+  if(tw) h.time=tw[1]+" to "+tw[2];
+  if(/\btb[ac]\b/i.test(h.time)){
+    var rest=h.time.replace(/\btime\b|\btb[ac]\b|[-–]/ig," ").replace(/\s+/g," ").trim();
+    h.time="To be confirmed"+(rest?", "+rest:"");
+  }
+  return h;
+}
+
+/* ── the whole workbook ── */
+function impWorkbook(wb, name){
+  var found=[];
+  wb.SheetNames.forEach(function(sn){
+    var rows=impRows(wb.Sheets[sn]);
+    impBlocks(rows).forEach(function(blk){
+      var b=impBlock(rows, blk, sn); b.rows=rows; found.push(b);
+    });
+  });
+  if(!found.length){
+    impSay('<p class="impbad">'+esc(name)+' has no vendor table this tool recognises. It looks for a '
+      +'row headed Vendor, Service, Menu, Units, cost per unit. Nothing on the quote has changed.</p>');
+    return;
+  }
+  IMP={name:name, blocks:found};
+  var pick=$("impPick");
+  pick.innerHTML=found.map(function(b,i){
+    var h=impHead(b);
+    return '<option value="'+i+'">'+esc((h.date?gpDateLong(h.date)+" · ":"")+(h.title||("Event "+(i+1)))+" · "+b.pax+" PAX")+'</option>';
+  }).join("");
+  $("impPickRow").hidden = found.length<2;
+  impApply(0);
+}
+
+function impApply(i){
+  var b=IMP.blocks[i], h=impHead(b), rows=b.rows, checks=[];
+  var keep=S.gp.doc;
+  S.gp=gpFresh(); if(keep) S.gp.doc=keep;
+
+  /* vendors */
+  b.vendors.forEach(function(v){
+    var s=impSvcKey(v.svc, v.d), k=impRosterKey(v.sheetName, s);
+    var o={n:v.sheetName, s:s, svc:v.svc, d:v.d, pax:v.pax||0, row:v.row};
+    if(k!==v.sheetName) o.k=k;
+    if(v.alt) o.alt=true;
+    if(v.orBefore) o.orBefore=true;
+    v.key=s; v.roster=vendorByName(k)?k:"";
+    S.gp.vendors.push(o);
+    if(s==="other") checks.push({t:"w",m:"Row "+v.row+": service “"+v.svc+"” is not one the tool knows. "
+      +v.sheetName+" prints in the vendor table as written, but not on the menu pages."});
+    if(!v.pax) checks.push({t:"e",m:"Row "+v.row+": "+v.sheetName+" has no PAX/units."});
+  });
+
+  /* costing lines, recomputed from rate x units, then held against the sheet */
+  var lines=[], tot=0, bad=[];
+  b.lines.forEach(function(l){
+    var u=impUnits(l, rows), k=impLineKey(l.n, S.gp.vendors);
+    var amt = (u.u!==null && l.rate!==null) ? Math.round(l.rate*u.u*100)/100 : null;
+    var ok = sameMoney(amt, l.sheetAmt);
+    lines.push({k:k, n:l.n, rate:l.rate, units:u.u, how:u.how, amt:amt===null?0:amt,
+                sheetAmt:l.sheetAmt, cell:l.cell, row:l.row, ok:ok, per:impPer(l.n)});
+    tot += amt||0;
+    if(!ok){ bad.push(l.n); checks.push({t:"e",m:"Costing row "+l.row+" ("+l.n+"): "+money(l.rate)+" x "+u.u
+      +" = "+money(amt)+" but the sheet shows "+money(l.sheetAmt)+" in "+l.cell+"."}); }
+    if(k==="other") checks.push({t:"w",m:"Costing row "+l.row+" (“"+l.n+"”) does not match a service line. It is priced and printed as written."});
+  });
+  tot=Math.round(tot*100)/100;
+
+  var totOk = sameMoney(tot, b.total);
+  if(b.total===null) checks.push({t:"e",m:"No Total row found under the costing table, so the sheet's own total could not be checked."});
+  else if(!totOk) checks.push({t:"e",m:"The sheet's total in "+b.totalCell+" is "+money(b.total)+" but its lines add to "+money(tot)
+      +". Out by "+money(Math.abs(tot-b.total))+(bad.length?", from: "+bad.join(", "):"; the Total formula does not cover every line")+"."});
+  if(b.ptc!==null && b.total!==null && !sameMoney(b.ptc, b.total))
+    checks.push({t:"e",m:"Price to Client ("+money(b.ptc)+") does not equal the costing total ("+money(b.total)+")."});
+  if(h.hdrPax!==null && b.pax!==null && h.hdrPax!==b.pax)
+    checks.push({t:"w",m:"The sheet's heading says "+h.hdrPax+"PAX but its PAX row says "+b.pax+". The proposal uses "+b.pax+". Confirm which is right."});
+  if(b.alt)
+    checks.push({t:"w",m:"This sheet prices alternatives (OR rows) and its total of "+money(b.total)+" adds every option together. "
+      +"The proposal prints the option lines without a total, the way their Saxon proposal does. Confirm the total once the client picks."});
+  if(b.unmapped.length)
+    checks.push({t:"w",m:b.unmapped.length+" sheet row"+(b.unmapped.length>1?"s":"")+" not recognised and not used: rows "
+      +b.unmapped.map(function(r){return r.row;}).join(", ")+". Listed below."});
+  if(b.lost)
+    checks.push({t:"w",m:b.lost+" row"+(b.lost>1?"s carry":" carries")+" a character the spreadsheet itself has lost (shown as �). Check the wording."});
+
+  S.gp.sheet={ on:true, file:IMP.name, block:i, nblocks:IMP.blocks.length, title:h.title,
+    pax:b.pax, hdrPax:h.hdrPax, lines:lines, total:b.total, totalCell:b.totalCell, recomputed:tot,
+    ptc:b.ptc, ptcHead:b.ptcHead, alt:b.alt, checks:checks,
+    struct:impStruct(lines, S.gp.vendors, b.pax),
+    internal:b.internal, used:b.used, unmapped:b.unmapped,
+    vrows:b.vendors.map(function(v){ return {row:v.row, n:v.sheetName, svc:v.svc, key:v.key, roster:v.roster, pax:v.pax, alt:!!v.alt}; }) };
+
+  /* the event fields. Contact is not on the sheet, so it is left to type */
+  $("gName").value=h.client||"";
+  $("gContact").value="";
+  $("gVenue").value=h.venue||"";
+  $("gDate").value=h.date||"";
+  $("gWindow").value=h.time||"To be confirmed";
+  $("gPax").value=b.pax||"";
+  var lead = /\byef\b|year end/i.test((h.title||"")+" "+(h.client||"")+" "+(b.head||""))
+           ? "A Corporate Year End food truck experience" : "A Corporate food truck event experience";
+  S.gp.doc.lead=lead; $("gLead").value=lead;
+  var firstBite=S.gp.vendors.filter(function(v){return v.s==="bite";})[0];
+  S.gp.doc.lbl={};
+  if(firstBite && firstBite.svc){ S.gp.doc.lbl.bite=impPlural(impSingular(firstBite.svc)); $("lblBite").value=S.gp.doc.lbl.bite; }
+  $("impStruct").value=S.gp.sheet.struct.join("\n");
+  render();
+}
+
+function impClear(){
+  if(S.gp.sheet) S.gp.sheet.on=false;
+  S.gp.sheet=null;
+  impSay('<p class="hint">Back on the rate engine. The vendors from the sheet are still allocated; '
+    +'the band rates now price the quote.</p>');
+  render();
+}
+function setStruct(v){ if(sheetOn()){ S.gp.sheet.struct=String(v).split(/\n/); } }
+
+/* ── priced from the sheet ── */
+function calcSheet(){
+  var sh=S.gp.sheet, pax=Math.max(1,num("gPax")), lines=[], total=0;
+  sh.lines.forEach(function(l){
+    lines.push({k:l.k, n:l.n, rate:l.rate, amt:l.amt, sheet:true});
+    total+=l.amt;
+  });
+  total=Math.round(total*100)/100;
+  return {pax:pax, band:band(pax), lines:lines, total:total, per:total/pax,
+          vat:total*RATES.vat, incl:total*(1+RATES.vat), sheet:true};
+}
+function sheetBalance(){
+  var need={}, got={}, names={}, order=[];
+  S.gp.sheet.lines.forEach(function(l){
+    if(l.k==="hire"||l.k==="other") return;
+    if(need[l.k]===undefined){ need[l.k]=0; order.push(l.k); }
+    need[l.k]+= (l.units||0) * (S.gp.vendors.some(function(v){return low(v.n)===low(l.n);}) ? 1 : l.per);
+  });
+  S.gp.vendors.forEach(function(v){ got[v.s]=(got[v.s]||0)+(v.pax||0); });
+  RATES.gpLines.forEach(function(l){ names[l.k]=l.n; });
+  return order.map(function(k){
+    var n=Math.round(need[k]*100)/100, g=got[k]||0;
+    return {k:k, n:names[k]||k, need:n, got:g, ok:Math.abs(g-n)<0.01, any:g>0};
+  });
+}
+function validSheet(c){
+  var out=[], sh=S.gp.sheet;
+  if(!val("gName").trim()) out.push({t:"e",m:"Client name is needed."});
+  if(!val("gDate")) out.push({t:"e",m:"Event date is needed. The sheet did not give one in a form the tool could read."});
+  if(!val("gContact").trim()) out.push({t:"w",m:"Contact is not on the sheet. Type the client contact before sending."});
+  if(sh.pax && c.pax!==sh.pax) out.push({t:"e",m:"PAX is now "+c.pax+" but the sheet priced "+sh.pax+". The sheet's lines are fixed: change the sheet and import it again."});
+  sh.checks.forEach(function(x){ out.push(x); });
+  sheetBalance().forEach(function(r){
+    if(!r.ok) out.push({t:"w",m:r.n+": vendor PAX comes to "+r.got+" against "+r.need+" on the costing. Out by "+Math.abs(r.need-r.got)+"."});
+  });
+  if(sheetChoiceNote()) out.push({t:"o",m:"Alternatives carried over. The vendor table prints the OR rows and the menu marks the courses as options."});
+  photoChecks(out);
+  if(!out.some(function(x){return x.t==="e";}) && sameMoney(sh.recomputed, sh.total))
+    out.unshift({t:"o",m:"Recomputed total "+money(sh.recomputed)+" matches the sheet's own total in "+sh.totalCell+"."});
+  return out;
+}
+/* "Client to choose a single lite bite and a single main vendor ..." */
+function sheetChoiceNote(){
+  if(!sheetOn() || !S.gp.sheet.alt) return "";
+  var alt=[], rest=[];
+  S.gp.vendors.forEach(function(v){
+    var w=low(impSingular(v.svc||v.s));
+    if(v.alt){ if(alt.indexOf(w)<0) alt.push(w); }
+  });
+  S.gp.vendors.forEach(function(v){
+    var w=low(impSingular(v.svc||v.s));
+    if(!v.alt && alt.indexOf(w)<0 && rest.indexOf(w)<0) rest.push(w);
+  });
+  if(!alt.length) return "";
+  var j=function(a){ return a.length>1 ? a.slice(0,-1).join(", ")+" and "+a[a.length-1] : a[0]; };
+  return "Client to choose a single "+alt.join(" and a single ")+" vendor from the list below"
+       + (rest.length ? ", in addition to the "+j(rest)+" vendor"+(rest.length>1?"s":"") : "")+".";
+}
+
+/* ── painting ── */
+function impPaintMode(){
+  var on=sheetOn();
+  if($("impStructBox")) $("impStructBox").hidden=!on;
+  if($("impClearBtn")) $("impClearBtn").hidden=!on;
+  if($("gHireNote")) $("gHireNote").hidden=!on;
+  /* drawn only when the sheet changes, so an open section stays open while typing */
+  if(on && IMP_PAINTED!==S.gp.sheet){ impReport(); IMP_PAINTED=S.gp.sheet; }
+  if(!on) IMP_PAINTED=null;
+}
+function renderSheetTbl(pax){
+  var sh=S.gp.sheet;
+  $("bandNote").innerHTML='<b>Priced from the sheet.</b> '+esc(sh.file)
+    +(sh.nblocks>1?' (event '+(sh.block+1)+' of '+sh.nblocks+')':'')
+    +'. These are the sheet’s own lines and rates, recomputed as rate times units and held against '
+    +'its total. The band defaults are not used on this quote. To change a rate, change the sheet and import again.';
+  var h="";
+  sh.lines.forEach(function(l){
+    h+='<tr class="'+(l.ok?'':'bad')+'"><td><b>'+esc(l.n)+'</b><div class="sub">'+esc(l.cell)+' · '+esc(l.how)+'</div></td>'
+     + '<td class="r num">'+(l.units===null?'—':l.units)+'</td>'
+     + '<td class="r num">'+money(l.rate)+'</td>'
+     + '<td class="r num">'+money(l.amt)+(l.ok?'':'<span class="ovrflag">sheet shows '+money(l.sheetAmt)+'</span>')+'</td></tr>';
+  });
+  $("gpTbl").querySelector("tbody").innerHTML=h;
+}
+function impReport(){
+  var sh=S.gp.sheet; if(!sh) return;
+  var ok=sameMoney(sh.recomputed, sh.total), h="";
+  h+='<div class="imphead"><b>'+esc(sh.file)+'</b>'+(sh.nblocks>1?' · event '+(sh.block+1)+' of '+sh.nblocks:'')
+    +' · '+sh.vrows.length+' vendor rows · '+sh.lines.length+' costing lines</div>';
+  h+='<div class="impchk '+(ok?'ok':'bad')+'">'
+    +'Sheet total <b>'+money(sh.total)+'</b> ('+esc(sh.totalCell||"not found")+') · '
+    +'recomputed <b>'+money(sh.recomputed)+'</b> · '+(ok?'match ✓':'DO NOT MATCH')+'</div>';
+
+  h+='<details open><summary>Costing lines, as they print</summary><div class="tscroll"><table class="t imp"><thead><tr>'
+    +'<th>Row</th><th>Line, printed as written</th><th>Tool line (colour, checks)</th><th class="r">Rate</th><th class="r">Units</th><th class="r">Total</th></tr></thead><tbody>';
+  sh.lines.forEach(function(l){
+    var ln=RATES.gpLines.filter(function(x){return x.k===l.k;})[0];
+    h+='<tr class="'+(l.ok?'':'bad')+'"><td>'+l.row+'</td><td>'+esc(l.n)+'</td><td>'+esc(ln?ln.n:(l.k==="hire"?"Venue hire":"not matched"))+'</td>'
+      +'<td class="r num">'+money(l.rate)+'</td><td class="r num">'+l.units+'</td>'
+      +'<td class="r num">'+money(l.amt)+(l.ok?'':' <b>sheet '+money(l.sheetAmt)+'</b>')+'</td></tr>';
+  });
+  h+='</tbody></table></div></details>';
+
+  h+='<details><summary>Vendor rows mapped ('+sh.vrows.length+')</summary><div class="tscroll"><table class="t imp"><thead><tr>'
+    +'<th>Row</th><th>Vendor</th><th>Sheet service</th><th>Line</th><th>Roster</th><th class="r">PAX</th></tr></thead><tbody>';
+  sh.vrows.forEach(function(v){
+    var ln=RATES.gpLines.filter(function(x){return x.k===v.key;})[0];
+    h+='<tr class="'+(v.key==="other"?'bad':'')+'"><td>'+v.row+'</td><td>'+esc(v.n)+(v.alt?' <span class="sub">(option)</span>':'')+'</td>'
+      +'<td>'+esc(v.svc)+'</td><td>'+esc(ln?ln.n:v.key)+'</td><td>'+(v.roster?esc(v.roster):'<span class="sub">not on roster</span>')+'</td>'
+      +'<td class="r num">'+v.pax+'</td></tr>';
+  });
+  h+='</tbody></table></div></details>';
+
+  h+='<details><summary>Kept off the proposal ('+sh.internal.length+' internal rows, plus vendor cost and p/l on every vendor row)</summary><ul class="impl">';
+  sh.internal.forEach(function(x){ h+='<li>Row '+x.row+': '+esc(x.what)+'</li>'; });
+  h+='</ul></details>';
+
+  h+='<details'+(sh.unmapped.length?' open':'')+'><summary>Not mapped ('+sh.unmapped.length+')</summary>';
+  h+= sh.unmapped.length
+    ? '<ul class="impl bad">'+sh.unmapped.map(function(r){ return '<li>Row '+r.row+': '+esc(r.text.slice(0,140))+'</li>'; }).join("")+'</ul>'
+    : '<p class="hint">Every row on the sheet was used or deliberately kept internal.</p>';
+  h+='</details>';
+  impSay(h);
+}
+
+function impBind(){
+  var d=$("impDrop"), f=$("impFile"); if(!d || d.dataset.bound) return;
+  d.dataset.bound="1";
+  f.addEventListener("change", function(){ impFiles(this.files); this.value=""; });
+  d.addEventListener("click", function(e){ if(e.target.tagName!=="LABEL" && e.target!==f) f.click(); });
+  d.addEventListener("keydown", function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); f.click(); } });
+  ["dragenter","dragover"].forEach(function(t){ d.addEventListener(t, function(e){ e.preventDefault(); d.classList.add("over"); }); });
+  ["dragleave","drop"].forEach(function(t){ d.addEventListener(t, function(e){ e.preventDefault(); d.classList.remove("over"); }); });
+  d.addEventListener("drop", function(e){ impFiles(e.dataTransfer && e.dataTransfer.files); });
+  $("impPick").addEventListener("change", function(){ if(IMP) impApply(parseInt(this.value,10)||0); });
+}
+document.addEventListener("DOMContentLoaded", impBind);
 
 /* ══════════════════ RENDER ══════════════════ */
 var activeCat="braai";
@@ -1780,6 +2534,9 @@ function renderGp(){
   paintPicker();
 
   var pax=Math.max(1,num("gPax")), b=band(pax);
+  impPaintMode();
+  if(sheetOn()){ renderSheetTbl(pax); }
+  else {
   $("bandNote").innerHTML='<b>'+RATES.bands[b].t+'.</b> Rates below are pre-filled from this band, '
     +'derived from their three real proposals: CAB Foods at 250 pax, SSQ Design at 1 000 pax and Absa at 2 200 pax. '
     +'Rates fall as volume rises on every line. Override anything.';
@@ -1788,14 +2545,17 @@ function renderGp(){
   RATES.gpLines.forEach(function(l){
     var q=S.gp.qty[l.k], r=S.gp.ovr[l.k]?S.gp.rate[l.k]:l.b[b];
     var units = l.cups ? q : (l.flatPerHead ? pax : pax*q);
+    var none = (r===null||r===undefined);   /* no rate on record for this band */
     h+='<tr><td><b>'+esc(l.n)+'</b>'+(l.cups?'<div class="sub">cups, not per person</div>':(l.flatPerHead?'<div class="sub">per head, once</div>':''))+'</td>'
      + '<td class="r"><input type="number" class="num" min="0" value="'+q+'" '+(l.flatPerHead?'disabled':'')+' onchange="setGq(\''+l.k+'\',this.value)"></td>'
-     + '<td class="r"><input type="number" class="num'+(S.gp.ovr[l.k]?' ovr':'')+'" min="0" value="'+r+'" onchange="setGr(\''+l.k+'\',this.value)">'
-     +   (S.gp.ovr[l.k]?'<span class="ovrflag">overridden from '+money(l.b[b])+'</span>':'')
-     +   ((!l.cups && q>1) ? '<span class="ovrflag" style="color:var(--muted)">'+money(r*q)+' per head on this line</span>' : '')+'</td>'
-     + '<td class="r num">'+money(units*r)+'</td></tr>';
+     + '<td class="r"><input type="number" class="num'+(S.gp.ovr[l.k]?' ovr':'')+'" min="0" value="'+(none?'':r)+'" placeholder="ask" onchange="setGr(\''+l.k+'\',this.value)">'
+     +   (S.gp.ovr[l.k]?'<span class="ovrflag">'+(l.b[b]===null?'no rate on record for this band':'overridden from '+money(l.b[b]))+'</span>':'')
+     +   (none&&q?'<span class="ovrflag">no rate on record, type it</span>':'')
+     +   ((!l.cups && q>1 && !none) ? '<span class="ovrflag" style="color:var(--muted)">'+money(r*q)+' per head on this line</span>' : '')+'</td>'
+     + '<td class="r num">'+(none?'—':money(units*r))+'</td></tr>';
   });
   tb.innerHTML=h;
+  }
 
   // vendors
   var vt=$("vTbl").querySelector("tbody"), vh="";
@@ -1805,11 +2565,11 @@ function renderGp(){
     VPK[i]=dishKey(v);
     var tag = src.from==="vendor" ? " \u00b7 vendor"
             : src.from==="theirs" ? " \u00b7 theirs" : "";
-    vh+='<tr><td><b>'+esc(v.n)+'</b><div style="margin-top:4px">'
+    vh+='<tr><td><b>'+esc(v.n)+'</b>'+(v.alt?'<div class="sub">option, client picks one</div>':'')+'<div style="margin-top:4px">'
       + '<button class="camb'+(pc?' has':'')+'" onclick="phPickRow('+i+')" '
       + 'title="Photographs for this dish">'
       + (pc?pc+(pc>1?' photos':' photo')+tag:'Add photos')+'</button></div></td>'
-      + '<td>'+esc(line?line.n:v.s)+'</td>'
+      + '<td>'+esc(svcLabel(v))+'</td>'
       + '<td><textarea class="vd" rows="2" spellcheck="false" '
       +   'oninput="setVDesc('+i+',this.value)" onchange="commitVDesc('+i+')" '
       +   'placeholder="What they are serving on this event">'+esc(v.d)+'</textarea></td>'
@@ -2032,9 +2792,10 @@ function newQuote(){
     ["aName","aContact","aDate","aPaste","aHire","aHireExtra"].forEach(function(i){$(i).value="";});
     $("aPax").value=50; $("pasteOut").textContent="";
   } else {
-    S.gp={qty:{},rate:{},ovr:{},vendors:[]};
-    RATES.gpLines.forEach(function(l){ S.gp.qty[l.k]=l.qty; });
+    var keepDoc=S.gp.doc;
+    S.gp=gpFresh(); if(keepDoc) S.gp.doc=keepDoc;   /* the old reset dropped doc, which docGp reads */
     ["gName","gContact","gDate"].forEach(function(i){$(i).value="";});
+    if($("impOut")) $("impOut").innerHTML="";
     $("gPax").value=2200;
   }
   render();
@@ -2276,10 +3037,10 @@ function phPaint(){
   var only=$("phOnly") && $("phOnly").checked;
   var names={}, list=[];
   if(only){
-    S.gp.vendors.forEach(function(v){ if(!names[v.n]){ names[v.n]=1; list.push({n:v.n,s:v.s}); } });
+    S.gp.vendors.forEach(function(v){ var n=vkey(v); if(!names[n]){ names[n]=1; list.push({n:n,s:v.s}); } });
   }else{
     roster().forEach(function(v){ if(!names[v.n]){ names[v.n]=1; list.push(v); } });
-    S.gp.vendors.forEach(function(v){ if(!names[v.n]){ names[v.n]=1; list.push({n:v.n,s:v.s}); } });
+    S.gp.vendors.forEach(function(v){ var n=vkey(v); if(!names[n]){ names[n]=1; list.push({n:n,s:v.s}); } });
   }
   var h="";
   list.forEach(function(v){
@@ -2331,7 +3092,18 @@ function words(s){
    long menu line cannot turn into an unwieldy key. */
 function dishKey(v){
   var d=String(v.d||"").replace(/\s+/g," ").trim().slice(0,70);
-  return d ? v.n+" :: "+d : v.n;
+  var n=vkey(v);
+  return d ? n+" :: "+d : n;
+}
+/* the roster name a row is filed under. An imported row prints the name
+   as the sheet spelt it (v.n) but finds its photographs under v.k. */
+function vkey(v){ return v.k || v.n; }
+/* the service label a row prints: the sheet's own word when imported
+   ("Starter", "Lite Bite", "Main (Crew Meals)"), else the line name */
+function svcLabel(v){
+  if(v.svc) return v.svc;
+  var line=RATES.gpLines.filter(function(l){return l.k===v.s;})[0];
+  return line?line.n:v.s;
 }
 function dishOf(key){
   var i=key.indexOf(" :: ");
@@ -2340,10 +3112,11 @@ function dishOf(key){
 
 /* where a row's pictures come from, in order of authority */
 function rowSrc(v){
-  var k=dishKey(v);
+  var k=dishKey(v), n=vkey(v);
   if(PH[k] && PH[k].length)   return {u:PH[k],        from:"dish",   key:k};
-  if(PH[v.n] && PH[v.n].length) return {u:PH[v.n],    from:"vendor", key:v.n};
-  var lib=libShots(v.n, v.d, v.s);
+  if(PH[n] && PH[n].length)   return {u:PH[n],        from:"vendor", key:n};
+  var twin=S.gp.vendors.filter(function(x){ return vkey(x)===n && courseOf(x.s)===courseOf(v.s); }).length>1;
+  var lib=libShots(n, v.d, v.s, twin);
   if(lib.length)              return {u:lib,          from:"theirs", key:k};
   return {u:[], from:"none", key:k};
 }
@@ -2352,9 +3125,11 @@ function rowShots(v){ return rowSrc(v).u; }
 /* the library was keyed off the course bands their proposals print, so
    the drinks lines all collapse to one band */
 function courseOf(line){
-  return (line==="cold"||line==="alc"||line==="bars") ? "bev" : line;
+  /* braai stays its own course on purpose: no bundled picture is a braai,
+     and borrowing White Cocoa's kebabs for its braai would be wrong */
+  return (line==="cold"||line==="alc"||line==="bars"||line==="cocktail") ? "bev" : line;
 }
-function libShots(n, desc, course){
+function libShots(n, desc, course, strict){
   var ents=GPLIB[n]; if(!ents || !ents.length) return [];
   if(course){
     var want=courseOf(course);
@@ -2362,13 +3137,17 @@ function libShots(n, desc, course){
     if(!same.length) return [];      /* never borrow across the course */
     ents=same;
   }
-  if(ents.length===1) return ents[0].u;
+  if(ents.length===1 && !strict) return ents[0].u;
   var w=words(desc), best=null, bestScore=-1;
   ents.forEach(function(e){
     var have=words(e.d), score=0;
     w.forEach(function(x){ if(have.indexOf(x)>=0) score++; });
     if(score>bestScore){ bestScore=score; best=e; }
   });
+  /* strict: the vendor serves two dishes on this course (Joy Jukes'
+     nachos AND corndogs on Lesaka), so a picture that shares no word
+     with the dish is the other dish, and none beats a wrong one */
+  if(strict && bestScore<1) return [];
   return (best||ents[0]).u;
 }
 function allShots(n){
@@ -2543,6 +3322,10 @@ function fillBand(off, cap, h){
 
 function gpStructList(){
   var out="";
+  if(sheetOn()){
+    (S.gp.sheet.struct||[]).forEach(function(t){ if(String(t).trim()) out+="<li>"+esc(t)+"</li>"; });
+    return out;
+  }
   RATES.gpLines.forEach(function(l){
     var q=S.gp.qty[l.k]; if(!q) return;
     var t;
@@ -2608,7 +3391,8 @@ function gpCover(c){
 function gpEvent(c){
   var incl=GPDOC.incl.base.slice();
   incl.push(isAcreage()?GPDOC.incl.powerAcreage:GPDOC.incl.powerOther);
-  incl.push(S.gp.qty.band?GPDOC.incl.bandYes:GPDOC.incl.bandNo);
+  var hasBand = sheetOn() ? c.lines.some(function(l){ return l.k==="band"; }) : S.gp.qty.band;
+  incl.push(hasBand?GPDOC.incl.bandYes:GPDOC.incl.bandNo);
   incl.push(GPDOC.incl.vat);
   var b = '<div class="gpintro">'
    + '<div><p class="gplede">Good &amp; Proper Food Trucks is pleased to provide our '
@@ -2654,10 +3438,25 @@ function gpVendorBlocks(c){
          + '<td class="vp">'+pax+'</td></tr>'
     });
   }
+  if(sheetOn()){
+    /* an imported sheet prints in the sheet's own order, OR rows and all,
+       which is how their own vendor table reads. Nothing is synthesised:
+       the sheet already carries its own beverage, coffee and wristband rows. */
+    S.gp.vendors.forEach(function(v){
+      if(v.orBefore) out.push({ n:1, html:'<tr class="gor"><td colspan="4">or</td></tr>' });
+      row("ln-"+esc(v.s), esc(v.n), esc(svcLabel(v)), esc(v.d), v.pax);
+    });
+    if(c.lines.some(function(l){return l.k==="hire";}) && !S.gp.vendors.some(function(v){return v.s==="hire";}))
+      row("ln-hire", "The Acreage", "Facilities",
+          "The Acreage venue hire, including set up day, event day and strike half day.", 1);
+    out.push({ n:1, html:'<tr class="gtot"><td colspan="3">Guests</td>'
+                        + '<td class="vp">'+c.pax+'</td></tr>' });
+    return out;
+  }
   S.gp.vendors.slice().sort(function(a,b){ return (order[a.s]||0)-(order[b.s]||0); })
    .forEach(function(v){
     var line=RATES.gpLines.filter(function(l){return l.k===v.s;})[0];
-    row("ln-"+esc(v.s), esc(v.n), esc(line?line.n:v.s), esc(v.d), v.pax);
+    row("ln-"+esc(v.s), esc(v.n), esc(svcLabel(v)), esc(v.d), v.pax);
   });
   RATES.gpLines.forEach(function(l){
     if(!l.cups && !l.flatPerHead) return;
@@ -2683,6 +3482,8 @@ function gpVendorBlocks(c){
 }
 function gpVendors(c){
   var lead='<p class="gpnote" style="margin:0 0 17px">'+GPDOC.sla+'</p>';
+  var pick=sheetChoiceNote();
+  if(pick) lead+='<p class="gpnote" style="margin:-8px 0 17px"><b>'+esc(pick)+'</b></p>';
   var wrap='<table class="gpv">'
    + '<colgroup><col class="cv"><col class="cs"><col><col class="cp"></colgroup>'
    + '<thead><tr><th>Vendor</th><th>Service</th><th>Menu and service</th>'
@@ -2699,9 +3500,21 @@ function gpPrice(c){
        + '<td class="r rt">'+(r===null?"":money(r))+'</td>'
        + '<td class="r">'+money(l.amt)+'</td></tr>';
   });
-  var b='<table class="gpc"><colgroup><col><col style="width:132px"><col style="width:170px"></colgroup>'
+  var tbl='<table class="gpc"><colgroup><col><col style="width:132px"><col style="width:170px"></colgroup>'
    +   '<thead><tr><th>Service</th><th class="c">Rate per head</th>'
-   +   '<th class="c">Total excluding VAT</th></tr></thead><tbody>'+rows+'</tbody></table>'
+   +   '<th class="c">Total excluding VAT</th></tr></thead><tbody>'+rows+'</tbody></table>';
+  /* A sheet that prices alternatives (OR) adds every option into its own
+     total. Their Saxon proposal prints the option lines and no total, so
+     this does the same rather than print a sum nobody will pay. */
+  if(sheetOn() && S.gp.sheet.alt){
+    sec("Costing", c.pax+"PAX", tbl
+      + '<p class="gpnote">Each option is priced for the full '+c.pax+'PAX. The total is confirmed once a single vendor is chosen per course. '
+      + 'Prices exclude VAT and hold for 30 days from the proposal date. '
+      + 'The rate per head covers travel, set up, staff, logistics and the service times stated.</p>',
+      fillBand(3, "On the menu for this event"));
+    return;
+  }
+  var b=tbl
    + '<div class="gpbig"><span class="l">Total excluding VAT</span>'
    +   '<span class="v">'+money(c.total)+'</span></div>'
    + '<div class="gpsplit">'
@@ -2719,7 +3532,7 @@ function plateOf(v, wide){
   if(!p.length) wide=false;        /* nothing to fill the picture half */
   var line=RATES.gpLines.filter(function(l){return l.k===v.s;})[0];
   function say(extra){
-    return '<div class="say"><p class="svc">'+esc(line?line.n:v.s)+'</p>'
+    return '<div class="say"><p class="svc">'+esc(svcLabel(v))+'</p>'
          + '<h4>'+esc(v.n)+'</h4><p>'+esc(v.d)+'</p>'+(extra||"")+'</div>';
   }
   if(!p.length){
@@ -2740,6 +3553,11 @@ function gpMenu(){
     if(!vs.length) return;
     any=true;
     var lbl=(S.gp.doc.lbl && S.gp.doc.lbl[course.k]) || course.lbl;
+    if(course.k==="main" && !(S.gp.doc.lbl && S.gp.doc.lbl.main)){
+      var hasB=vs.some(function(v){return v.s==="braai";}), hasM=vs.some(function(v){return v.s==="main";});
+      if(hasB) lbl = hasM ? "Mains & Braais" : "Braai";
+    }
+    if(vs.some(function(v){return v.alt;})) lbl = lbl.replace(/s$/,"")+" options (client to choose a single vendor)";
     blocks.push({ n:1, keepWithNext:true, noGrow:true,
       html:'<div class="gpcourse"><span class="cl">'+esc(lbl)+'</span>'
          + '<span class="cn">'+vs.length+(vs.length>1?" vendors":" vendor")+'</span></div>' });
