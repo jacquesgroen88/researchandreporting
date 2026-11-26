@@ -183,7 +183,7 @@
     <div class="py-7 px-5 reveal"><div class="font-display font-900 text-4xl text-white"><span class="counter" data-to="20">0</span><span class="text-brand">t</span></div><div class="text-sm text-steel mt-1">Max on-site balance</div></div>
     <div class="py-7 px-5 reveal" data-d="1"><div class="font-display font-900 text-4xl text-white"><span class="counter" data-to="15">0</span><span class="text-brand">+</span></div><div class="text-sm text-steel mt-1">JP machines installed</div></div>
     <div class="py-7 px-5 reveal" data-d="2"><div class="font-display font-900 text-4xl text-white">24/<span class="text-brand">7</span></div><div class="text-sm text-steel mt-1">Breakdown response</div></div>
-    <div class="py-7 px-5 reveal" data-d="3"><div class="font-display font-900 text-4xl text-white">Est. <span class="counter" data-to="2020">0</span></div><div class="text-sm text-steel mt-1">Vaal Triangle workshop</div></div>
+    <div class="py-7 px-5 reveal" data-d="3"><div class="font-display font-900 text-4xl text-white whitespace-nowrap">Est. <span class="counter" data-to="2020" data-plain>0</span></div><div class="text-sm text-steel mt-1">Vaal Triangle workshop</div></div>
   </div>
 </section>
 
@@ -405,7 +405,7 @@
 </section>
 
 <!-- ============ FOOTER ============ -->
-<footer class="border-t border-line py-12">
+<footer class="border-t border-line pt-12 pb-24 lg:pb-12">
   <div class="mx-auto max-w-7xl px-5 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
     <div class="flex items-center gap-2.5">
       <svg width="28" height="28" viewBox="0 0 100 100"><circle cx="50" cy="50" r="20" fill="none" stroke="#E0312A" stroke-width="7"/><circle cx="50" cy="50" r="7" fill="#E0312A"/></svg>
@@ -429,6 +429,7 @@
 </div>
 
 <script>
+  function fmt(el,n){ return el.hasAttribute('data-plain') ? String(n) : n.toLocaleString(); }
   document.getElementById('yr').textContent = new Date().getFullYear();
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -449,13 +450,13 @@
   // Counters
   function runCounter(el){
     var to = +el.dataset.to, dur = 1300, start = null;
-    function step(ts){ if(!start) start=ts; var p=Math.min((ts-start)/dur,1); el.textContent = Math.floor(p*to).toLocaleString(); if(p<1) requestAnimationFrame(step); else el.textContent = to.toLocaleString(); }
+    function step(ts){ if(!start) start=ts; var p=Math.min((ts-start)/dur,1); el.textContent = fmt(el, Math.floor(p*to)); if(p<1) requestAnimationFrame(step); else el.textContent = fmt(el, to); }
     requestAnimationFrame(step);
   }
   var cio = new IntersectionObserver(function(entries){
     entries.forEach(function(e){ if(e.isIntersecting){ runCounter(e.target); cio.unobserve(e.target);} });
   }, {threshold:.6});
-  document.querySelectorAll('.counter').forEach(function(el){ if(reduce){ el.textContent = (+el.dataset.to).toLocaleString(); } else { cio.observe(el); } });
+  document.querySelectorAll('.counter').forEach(function(el){ if(reduce){ el.textContent = fmt(el, +el.dataset.to); } else { cio.observe(el); } });
 
   // ===== Hero vibration analyser (damped oscillation that settles) =====
   (function(){
