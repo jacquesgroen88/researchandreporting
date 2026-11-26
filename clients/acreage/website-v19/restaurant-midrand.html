@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script async src="https://www.googletagmanager.com/gtm.js?id=GTM-WXFTC52R"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#0B4337">
@@ -81,7 +87,6 @@
   f.addEventListener('submit', function(ev){
     ev.preventDefault(); if(!f.reportValidity()) return;
     var fd=new FormData(f);
-    if((fd.get('company-website')||'').trim()){ f.style.display='none'; done.classList.add('show'); return; }
     if(!ENQUIRY_ENDPOINT){ window.location.href=lpMailto(fd); return; }
     btn.disabled=true; btn.textContent='Sending';
     fetch(ENQUIRY_ENDPOINT, {method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body:new URLSearchParams(fd).toString()})

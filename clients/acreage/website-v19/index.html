@@ -1,17 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script async src="https://www.googletagmanager.com/gtm.js?id=GTM-WXFTC52R"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#0B4337">
 <title>The Acreage | Event Venue &amp; Restaurant, Midrand</title>
-<meta name="description" content="An event venue and restaurant on the Randjesfontein racecourse, twenty minutes from Sandton. Functions from 50 to 5,000 guests, and a kitchen open from seven.">
+<meta name="description" content="An event venue &amp; restaurant overlooking the Randjesfontein Horse Racecourse, just twenty minutes from Sandton, hosting everything from intimate gatherings to large corporate events of up to 5,000 guests.">
 <link rel="canonical" href="https://www.acreagevenue.co.za/">
 <link rel="icon" href="assets/The-Acreage_FAVICON.png">
 <meta property="og:type" content="restaurant">
 <meta property="og:title" content="The Acreage | Event Venue &amp; Restaurant, Midrand">
-<meta property="og:description" content="An event venue and restaurant on the Randjesfontein racecourse, twenty minutes from Sandton. Over a thousand horses stabled on the property, and a view of them from the terrace.">
-<meta property="og:image" content="https://www.acreagevenue.co.za/assets/g-tents-full.webp">
+<meta property="og:description" content="An event venue &amp; restaurant overlooking the Randjesfontein Horse Racecourse, just twenty minutes from Sandton, hosting everything from intimate gatherings to large corporate events of up to 5,000 guests.">
+<meta property="og:image" content="https://www.acreagevenue.co.za/assets/og-share.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The Acreage, Restaurant &amp; Event Venue">
 <meta property="og:url" content="https://www.acreagevenue.co.za/">
 <meta name="twitter:card" content="summary_large_image">
 <!-- Set before first paint. Effects that hide content until script runs are
@@ -818,7 +827,10 @@
   .field input:focus,.field select:focus,.field textarea:focus{
     outline:none;border-color:var(--gold);background:#fff;box-shadow:0 0 0 3px rgba(126,95,34,.16)}
   .field input:invalid:not(:placeholder-shown){border-color:#b4544a}
-  .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+  /* The trap is hidden with display:none, NOT moved off-screen. A
+     password manager fills an off-screen field and a real visitor is
+     then treated as a bot. See 2026-11-20-fix-honeypot.py. */
+  .hp{display:none}
   .chk{display:flex;align-items:flex-start;gap:12px;cursor:pointer;
     background:var(--paper);border:1px solid var(--line);padding:15px 17px;
     font-size:14.5px;letter-spacing:0;text-transform:none;font-weight:400;
@@ -1694,7 +1706,7 @@
         <input type="hidden" name="form-name" value="acreage-enquiry">
         <input type="hidden" name="landing_page" value="">
         <p class="hp">
-          <label>Do not fill this in if you are human: <input name="company-website" tabindex="-1" autocomplete="off"></label>
+          <label>Do not fill this in if you are human: <input name="acr_f2" tabindex="-1" autocomplete="off"></label>
         </p>
 
         <div class="frow">
@@ -2476,6 +2488,7 @@
 
     function succeed(){
       form.style.display='none';
+      if (window.gtag) gtag('event', 'generate_lead', {landing_page: location.pathname});
       thanks.classList.add('show');
       thanks.scrollIntoView({behavior:'smooth',block:'center'});
     }
@@ -2507,8 +2520,9 @@
 
       var fd=new FormData(form);
 
-      /* Honeypot. A bot that fills it gets the thank-you and we send nothing. */
-      if((fd.get('company-website')||'').trim()){ succeed(); return; }
+      /* The trap is checked on the server, never here. Deciding it in the
+         browser meant a tripped submission reached nothing and was written
+         down nowhere, so a wrongly caught visitor left no trace. */
 
       var original=btn.innerHTML;
 
