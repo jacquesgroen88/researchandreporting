@@ -13,7 +13,8 @@ const F = {                                          // contact custom fields
   dog: 'TnncNH9PyFcM3UtdNL9P', dinner: 'AzPmdcM5RZ0DSBDNJPjW', pub: 'U20jFw7jbPeepq9DxjgN',
   meal: 'gEIr2zU9T6GPpvllKldX', time: 'N56dCgSmDpETy52rytzI', seat: 'I9RXlwoI2u456Aa0qY5U', notes: 'xYfYidcv30ZvUHrBEur7',
 };
-const PLACE = { bucketlist: 'Bucketlist Cottages', lakeside: 'Lakeside Restaurant', pride: "Clarky's Pride" };
+const PLACE = { bucketlist: 'Bucketlist Cottages', lakeside: 'Lakeside Restaurant', pride: "Clarky's Pride", functions: 'Lakeside Restaurant' };
+// v3 (27 Nov 2026) adds property 'functions' (weddings and functions at the lake) with an occasion field 'kind'.
 const COTTAGES = ['No preference', 'Starlight Serenity', 'Woodland Whisper', 'Meadow Mist', 'Starlight Serenity and Meadow Mist together'];
 
 const json = (status, body) => new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } });
@@ -75,24 +76,25 @@ export default async (req) => {
   if (!contactId) return json(502, { error: 'contact failed' });
 
   // 2. Tags (this endpoint adds, it never removes).
-  const type = prop === 'lakeside' ? 'enquiry-table' : 'enquiry-stay';
-  await ghl('POST', `/contacts/${contactId}/tags`, { tags: [prop, type, 'source-website'] });
+  const kind = clip(d.kind, 60);
+  const type = prop === 'functions' ? (/^wedding/i.test(kind) ? 'enquiry-wedding' : 'enquiry-other') : prop === 'lakeside' ? 'enquiry-table' : 'enquiry-stay';
+  await ghl('POST', `/contacts/${contactId}/tags`, { tags: [prop === 'functions' ? 'lakeside' : prop, type, 'source-website'] });
 
   // 3. A card on the Enquiries board, stage New.
-  const when = prop === 'lakeside' ? arrive : [arrive, depart].filter(Boolean).join(' to ');
+  const when = prop === 'lakeside' || prop === 'functions' ? arrive : [arrive, depart].filter(Boolean).join(' to ');
   const opp = await ghl('POST', '/opportunities/', {
     locationId: LOCATION, pipelineId: PIPELINE, pipelineStageId: STAGE_NEW, contactId, status: 'open',
-    name: [name, PLACE[prop], when].filter(Boolean).join(' · '), source: 'Website',
+    name: [name, prop === 'functions' ? (kind || 'Function') : PLACE[prop], when].filter(Boolean).join(' · '), source: 'Website',
   });
 
   // 4. The whole enquiry as a readable note, so the guest's own words are on the contact.
   const lines = [
-    `Website enquiry: ${PLACE[prop]}`,
+    prop === 'functions' ? `Website enquiry: ${kind || 'Function'} at the Lakeside Restaurant` : `Website enquiry: ${PLACE[prop]}`,
     d.cottage && d.cottage !== 'No preference' ? `Cottage: ${clip(d.cottage, 80)}` : '',
-    arrive ? `${prop === 'lakeside' ? 'Date' : 'Arrive'}: ${arrive}` : '', depart ? `Depart: ${depart}` : '',
+    arrive ? `${prop === 'lakeside' || prop === 'functions' ? 'Date' : 'Arrive'}: ${arrive}` : '', depart ? `Depart: ${depart}` : '',
     d.time ? `Meal: ${clip(d.time, 20)}${d.clock ? ' at ' + clip(d.clock, 10) : ''}` : '',
     d.seat && d.seat !== 'No preference' ? `Seating: ${clip(d.seat, 20)}` : '',
-    `Adults: ${clip(d.guests, 4) || '?'}${+d.kids ? `, children: ${clip(d.kids, 4)}` : ''}`,
+    prop === 'functions' ? `Guests, roughly: ${clip(d.guests, 5) || '?'}` : `Adults: ${clip(d.guests, 4) || '?'}${+d.kids ? `, children: ${clip(d.kids, 4)}` : ''}`,
     d.dog ? 'Bringing a dog' : '', d.dinner ? 'Also wants a dinner table at Lakeside' : '', d.pub ? 'Wants a table at the pub' : '',
     d.message ? `Message: ${clip(d.message, 2000)}` : '',
     opp.ok ? '' : `(Board card not created: ${opp.status}. Add it by hand.)`,
